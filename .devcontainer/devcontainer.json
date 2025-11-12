@@ -1,0 +1,32 @@
+{
+  "name": "app-supportocol",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "app",
+  "workspaceFolder": "/sources/app-supportocol",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-ceintl.vscode-language-pack-ja",
+        "esbenp.prettier-vscode",
+        "golang.go",
+        "redhat.vscode-yaml",
+        "ms-vscode.live-server",
+        "runem.lit-plugin",
+        "Gruntfuggly.todo-tree",
+        "vitest.explorer"
+      ],
+      "mcp": {
+        "servers": {
+          "postgres": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-postgres",
+              "postgresql://postgres:password@db:5432/app-supportocol"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

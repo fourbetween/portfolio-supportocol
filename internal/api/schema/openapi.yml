@@ -1,0 +1,87 @@
+openapi: 3.1.0
+info:
+  title: app-supportocol api
+  version: 1.0.0
+components:
+  securitySchemes:
+    cognito_auth:
+      type: http
+      scheme: bearer
+  schemas:
+    id:
+      type: string
+      minLength: 26
+      maxLength: 26
+    workbook:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        title:
+          type: string
+        status:
+          type: string
+      required:
+        - id
+        - title
+        - status
+    error:
+      type: object
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+      required:
+        - code
+        - message
+  parameters: {}
+paths:
+  /workbooks:
+    get:
+      description: get workbooks
+      security:
+        - cognito_auth: []
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/workbook"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /errors:
+    post:
+      description: post an error
+      security:
+        - cognito_auth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+webhooks: {}

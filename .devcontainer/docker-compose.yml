@@ -1,0 +1,29 @@
+services:
+  web:
+    image: 008544129142.dkr.ecr.ap-northeast-1.amazonaws.com/web-dev:0.0.2
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+    ports:
+      - ${IP}:80:80
+      - ${IP}:443:443
+  app:
+    build:
+      context: ./app
+    env_file:
+      - ./.env
+    volumes:
+      - sources:/sources
+      - ~/.aws:/root/.aws
+    tty: true
+  db:
+    image: postgres:17
+    ports:
+      - ${IP}:5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+volumes:
+  sources:
+    external: true
+  dbdata:

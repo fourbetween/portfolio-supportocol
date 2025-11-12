@@ -1,0 +1,10 @@
+{
+  "hosted-zone:account=008544129142:domainName=hick-r.com:region=us-east-1": {
+    "Id": "/hostedzone/Z0505746KXIR8XKLAT0T",
+    "Name": "hick-r.com."
+  },
+  "hosted-zone:account=008544129142:domainName=hick-r.com:region=ap-northeast-1": {
+    "Id": "/hostedzone/Z0505746KXIR8XKLAT0T",
+    "Name": "hick-r.com."
+  }
+}

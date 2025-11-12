@@ -1,0 +1,6 @@
+{
+  "chat.promptFilesRecommendations": {
+    "go-backend": true,
+    "lit-frontend": true
+  }
+}

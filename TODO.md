@@ -1,0 +1,5 @@
+- [x] tmpl-app をアプリ名に置換する
+- [x] .env 内の IP を変更する
+- [ ] `make builddeploy`
+- [ ] `make upgradeviewpkgs`
+- [x] AGENTS.md 内のアプリの概要・目的を埋める

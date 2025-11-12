@@ -1,0 +1,42 @@
+{
+  "name": "app-supportocol",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode=$npm_config_mode",
+    "build": "tsc && vite build --mode=$npm_config_mode",
+    "preview": "vite preview",
+    "gen": "npx tsx ./src/api/schema/gen.ts && npx openapi-typescript ../internal/api/schema/openapi.yml -o ./src/api/schema.d.ts",
+    "test": "vitest --run",
+    "storybook": "storybook dev -p 6006 --no-open",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@awesome.me/webawesome": "^3.0.0",
+    "@lit-labs/router": "^0.1.4",
+    "@lit/task": "^1.0.3",
+    "aws-amplify": "^6.15.8",
+    "lit": "^3.3.1",
+    "openapi-fetch": "^0.15.0",
+    "ulid": "^3.0.1",
+    "urlpattern-polyfill": "^10.1.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.1.0",
+    "@chromatic-com/storybook": "^4.1.2",
+    "@storybook/addon-a11y": "^10.0.6",
+    "@storybook/addon-docs": "^10.0.6",
+    "@storybook/addon-vitest": "^10.0.6",
+    "@storybook/web-components-vite": "^10.0.6",
+    "@vitest/browser-playwright": "^4.0.8",
+    "@vitest/coverage-v8": "^4.0.8",
+    "playwright": "^1.56.1",
+    "storybook": "^10.0.6",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.2",
+    "vite-plugin-pwa": "^1.1.0",
+    "vitest": "^4.0.8"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "upstash/context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "aws-knowledge-mcp": {
+      "type": "http",
+      "url": "https://knowledge-mcp.global.api.aws"
+    }
+  }
+}
