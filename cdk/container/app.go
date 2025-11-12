@@ -80,6 +80,10 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 	c.buildDNS()
 	c.buildMainRecord()
 
+	if c.stage == "dev" {
+		c.setParam("db/dsn", fmt.Sprintf("postgresql://postgres:password@db:5432/%s?sslmode=disable", c.appName))
+	}
+
 	return c
 }
 
