@@ -10,5 +10,13 @@ package table
 // UseSchema sets a new schema name for all generated table SQL builder types. It is recommended to invoke
 // this method only once at the beginning of the program.
 func UseSchema(schema string) {
+	CommentTypePaths = CommentTypePaths.FromSchema(schema)
+	CommentTypes = CommentTypes.FromSchema(schema)
+	Comments = Comments.FromSchema(schema)
+	Discussions = Discussions.FromSchema(schema)
+	GroupMembers = GroupMembers.FromSchema(schema)
+	Groups = Groups.FromSchema(schema)
+	Issues = Issues.FromSchema(schema)
+	Notes = Notes.FromSchema(schema)
 	Workbooks = Workbooks.FromSchema(schema)
 }
