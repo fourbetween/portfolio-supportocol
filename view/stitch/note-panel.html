@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Notes Panel UI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#0d6cd9",
+              "background-light": "#f5f7f8",
+              "background-dark": "#101822",
+              "github-blue": "#0969DA",
+              "github-gray-bg": "#F6F8FA",
+              "github-border": "#D0D7DE",
+              "github-text-secondary": "#57606A",
+              "github-text-primary": "#24292F",
+              "github-green": "#1A7F37",
+              "github-orange": "#D29922",
+              "github-red": "#D73A49",
+              "dark-bg": "#0d1117",
+              "dark-border": "#30363d",
+              "dark-text-primary": "#c9d1d9",
+              "dark-text-secondary": "#8b949e",
+              "dark-panel-bg": "#161b22",
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display flex items-center justify-center min-h-screen p-4"
+  >
+    <!-- The UI is designed to be a side panel or modal. This container simulates that view. -->
+    <div
+      class="w-full max-w-sm rounded-lg border border-github-border dark:border-dark-border bg-github-gray-bg dark:bg-dark-panel-bg shadow-lg flex flex-col h-[700px]"
+    >
+      <!-- Header -->
+      <header
+        class="flex items-center justify-between p-3 border-b border-github-border dark:border-dark-border shrink-0"
+      >
+        <h3
+          class="text-github-text-primary dark:text-dark-text-primary text-base font-semibold"
+        >
+          Notes
+        </h3>
+        <div class="flex items-center gap-1">
+          <button
+            aria-label="Add new note"
+            class="p-1.5 rounded text-github-text-secondary dark:text-dark-text-secondary hover:bg-black/10 dark:hover:bg-white/10"
+          >
+            <span class="material-symbols-outlined">add</span>
+          </button>
+          <button
+            aria-label="Close panel"
+            class="p-1.5 rounded text-github-text-secondary dark:text-dark-text-secondary hover:bg-black/10 dark:hover:bg-white/10"
+          >
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+      </header>
+      <!-- Main Content Area -->
+      <div class="flex flex-col flex-grow overflow-hidden">
+        <!-- Note Input Area -->
+        <div class="p-4 border-b border-github-border dark:border-dark-border">
+          <div class="flex flex-col gap-2">
+            <label class="sr-only" for="note-input">Jot down an idea...</label>
+            <textarea
+              class="form-textarea w-full resize-none rounded-lg text-github-text-primary dark:text-dark-text-primary bg-white dark:bg-dark-bg border-github-border dark:border-dark-border focus:ring-2 focus:ring-github-blue focus:border-github-blue placeholder:text-github-text-secondary dark:placeholder:text-dark-text-secondary p-2 text-sm min-h-[80px]"
+              id="note-input"
+              placeholder="Jot down an idea..."
+            ></textarea>
+            <button
+              class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-3 bg-github-green text-white text-sm font-semibold leading-normal hover:bg-green-700 disabled:opacity-50"
+            >
+              Add Note
+            </button>
+          </div>
+        </div>
+        <!-- Notes List Area -->
+        <div class="flex-grow overflow-y-auto p-2 space-y-1">
+          <p
+            class="text-xs text-github-text-secondary dark:text-dark-text-secondary px-2 py-1"
+          >
+            Drag a note to add it as a comment
+          </p>
+          <!-- List Item 1 -->
+          <div
+            class="flex items-start gap-2 bg-white dark:bg-dark-bg p-2 rounded-md border border-transparent hover:border-github-border dark:hover:border-dark-border group cursor-grab"
+          >
+            <div
+              class="shrink-0 text-github-text-secondary dark:text-dark-text-secondary pt-0.5"
+            >
+              <span class="material-symbols-outlined text-base">
+                drag_indicator
+              </span>
+            </div>
+            <p
+              class="text-github-text-primary dark:text-dark-text-primary text-sm font-normal leading-normal flex-1"
+            >
+              Review the new API documentation for potential issues, especially
+              regarding authentication endpoints.
+            </p>
+            <div
+              class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <button
+                aria-label="Note options"
+                class="p-1 rounded text-github-text-secondary dark:text-dark-text-secondary hover:bg-black/10 dark:hover:bg-white/10"
+              >
+                <span class="material-symbols-outlined text-base">
+                  more_horiz
+                </span>
+              </button>
+            </div>
+          </div>
+          <!-- List Item 2 -->
+          <div
+            class="flex items-start gap-2 bg-white dark:bg-dark-bg p-2 rounded-md border border-transparent hover:border-github-border dark:hover:border-dark-border group cursor-grab"
+          >
+            <div
+              class="shrink-0 text-github-text-secondary dark:text-dark-text-secondary pt-0.5"
+            >
+              <span class="material-symbols-outlined text-base">
+                drag_indicator
+              </span>
+            </div>
+            <p
+              class="text-github-text-primary dark:text-dark-text-primary text-sm font-normal leading-normal flex-1"
+            >
+              Add unit tests for the new data validation logic.
+            </p>
+            <div
+              class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <button
+                aria-label="Note options"
+                class="p-1 rounded text-github-text-secondary dark:text-dark-text-secondary hover:bg-black/10 dark:hover:bg-white/10"
+              >
+                <span class="material-symbols-outlined text-base">
+                  more_horiz
+                </span>
+              </button>
+            </div>
+          </div>
+          <!-- List Item 3 -->
+          <div
+            class="flex items-start gap-2 bg-white dark:bg-dark-bg p-2 rounded-md border border-transparent hover:border-github-border dark:hover:border-dark-border group cursor-grab"
+          >
+            <div
+              class="shrink-0 text-github-text-secondary dark:text-dark-text-secondary pt-0.5"
+            >
+              <span class="material-symbols-outlined text-base">
+                drag_indicator
+              </span>
+            </div>
+            <p
+              class="text-github-text-primary dark:text-dark-text-primary text-sm font-normal leading-normal flex-1"
+            >
+              Consider edge case: what happens if the user input is an empty
+              string?
+            </p>
+            <div
+              class="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <button
+                aria-label="Note options"
+                class="p-1 rounded text-github-text-secondary dark:text-dark-text-secondary hover:bg-black/10 dark:hover:bg-white/10"
+              >
+                <span class="material-symbols-outlined text-base">
+                  more_horiz
+                </span>
+              </button>
+            </div>
+          </div>
+          <!-- Empty State Example (commented out for display) -->
+          <!-- 
+                <div class="flex flex-col items-center justify-center text-center py-16 px-4 h-full">
+                    <div class="text-github-text-secondary dark:text-dark-text-secondary mb-3">
+                        <span class="material-symbols-outlined" style="font-size: 48px;">edit_note</span>
+                    </div>
+                    <h4 class="font-semibold text-github-text-primary dark:text-dark-text-primary mb-1">No notes yet</h4>
+                    <p class="text-sm text-github-text-secondary dark:text-dark-text-secondary">Create your first note to get started.</p>
+                </div>
+                -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
