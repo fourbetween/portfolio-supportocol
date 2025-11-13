@@ -14,8 +14,6 @@ func UseSchema(schema string) {
 	CommentTypes = CommentTypes.FromSchema(schema)
 	Comments = Comments.FromSchema(schema)
 	Discussions = Discussions.FromSchema(schema)
-	GroupMembers = GroupMembers.FromSchema(schema)
-	Groups = Groups.FromSchema(schema)
 	Issues = Issues.FromSchema(schema)
 	Notes = Notes.FromSchema(schema)
 	Workbooks = Workbooks.FromSchema(schema)

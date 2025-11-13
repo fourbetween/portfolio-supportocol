@@ -22,7 +22,6 @@ type discussionsTable struct {
 	Background             postgres.ColumnString
 	VisibilityLevel        postgres.ColumnString
 	CommentPermissionLevel postgres.ColumnString
-	GroupID                postgres.ColumnString
 	CreatedBy              postgres.ColumnString
 	CreatedAt              postgres.ColumnTimestamp
 
@@ -71,11 +70,10 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		BackgroundColumn             = postgres.StringColumn("background")
 		VisibilityLevelColumn        = postgres.StringColumn("visibility_level")
 		CommentPermissionLevelColumn = postgres.StringColumn("comment_permission_level")
-		GroupIDColumn                = postgres.StringColumn("group_id")
 		CreatedByColumn              = postgres.StringColumn("created_by")
 		CreatedAtColumn              = postgres.TimestampColumn("created_at")
-		allColumns                   = postgres.ColumnList{IDColumn, ThemeColumn, BackgroundColumn, VisibilityLevelColumn, CommentPermissionLevelColumn, GroupIDColumn, CreatedByColumn, CreatedAtColumn}
-		mutableColumns               = postgres.ColumnList{ThemeColumn, BackgroundColumn, VisibilityLevelColumn, CommentPermissionLevelColumn, GroupIDColumn, CreatedByColumn, CreatedAtColumn}
+		allColumns                   = postgres.ColumnList{IDColumn, ThemeColumn, BackgroundColumn, VisibilityLevelColumn, CommentPermissionLevelColumn, CreatedByColumn, CreatedAtColumn}
+		mutableColumns               = postgres.ColumnList{ThemeColumn, BackgroundColumn, VisibilityLevelColumn, CommentPermissionLevelColumn, CreatedByColumn, CreatedAtColumn}
 		defaultColumns               = postgres.ColumnList{CreatedAtColumn}
 	)
 
@@ -88,7 +86,6 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		Background:             BackgroundColumn,
 		VisibilityLevel:        VisibilityLevelColumn,
 		CommentPermissionLevel: CommentPermissionLevelColumn,
-		GroupID:                GroupIDColumn,
 		CreatedBy:              CreatedByColumn,
 		CreatedAt:              CreatedAtColumn,
 

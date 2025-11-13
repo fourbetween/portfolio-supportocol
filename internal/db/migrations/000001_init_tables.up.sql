@@ -17,25 +17,6 @@ CREATE TABLE projects (
 
 CREATE INDEX projects_created_by_idx ON projects(created_by);
 
--- グループ
-CREATE TABLE groups (
-	id VARCHAR NOT NULL,
-	name VARCHAR NOT NULL,
-	description TEXT NOT NULL,
-	created_by VARCHAR NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT groups_pk PRIMARY KEY (id)
-);
-
--- グループメンバー
-CREATE TABLE group_members (
-	group_id VARCHAR NOT NULL,
-	user_id VARCHAR NOT NULL,
-	joined_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	CONSTRAINT group_members_pk PRIMARY KEY (group_id, user_id),
-	CONSTRAINT group_members_groups_fk FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
-);
-
 -- ルール
 CREATE TABLE rules (
 	id VARCHAR NOT NULL,
@@ -53,16 +34,14 @@ CREATE TABLE discussions (
 	theme VARCHAR NOT NULL,
 	background TEXT NOT NULL,
 	rule_id VARCHAR NOT NULL,
-	visibility_level VARCHAR NOT NULL, -- 'everyone', 'authenticated', 'owner', 'group'
-	comment_permission_level VARCHAR NOT NULL, -- 'everyone', 'authenticated', 'owner', 'group'
-	group_id VARCHAR,
+	visibility_level VARCHAR NOT NULL, -- 'everyone', 'authenticated', 'owner'
+	comment_permission_level VARCHAR NOT NULL, -- 'everyone', 'authenticated', 'owner'
 	created_by VARCHAR NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	status VARCHAR NOT NULL, -- 'open', 'closed', 'archived'
 	CONSTRAINT discussions_pk PRIMARY KEY (id),
 	CONSTRAINT discussions_projects_fk FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL,
-	CONSTRAINT discussions_rules_fk FOREIGN KEY (rule_id) REFERENCES rules(id),
-	CONSTRAINT discussions_groups_fk FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE SET NULL
+	CONSTRAINT discussions_rules_fk FOREIGN KEY (rule_id) REFERENCES rules(id)
 );
 
 -- コメント種類

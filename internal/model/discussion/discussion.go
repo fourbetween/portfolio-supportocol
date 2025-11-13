@@ -19,7 +19,6 @@ type (
 		ruleID                 string
 		visibilityLevel        visibilityLevel
 		commentPermissionLevel commentPermissionLevel
-		groupID                *string
 		createdBy              string
 		createdAt              time.Time
 		status                 discussionStatus
@@ -31,13 +30,11 @@ const (
 	visibilityLevelEveryone      visibilityLevel = "everyone"
 	visibilityLevelAuthenticated visibilityLevel = "authenticated"
 	visibilityLevelOwner         visibilityLevel = "owner"
-	visibilityLevelGroup         visibilityLevel = "group"
 
 	// commentPermissionLevel の定数値
 	commentPermissionLevelEveryone      commentPermissionLevel = "everyone"
 	commentPermissionLevelAuthenticated commentPermissionLevel = "authenticated"
 	commentPermissionLevelOwner         commentPermissionLevel = "owner"
-	commentPermissionLevelGroup         commentPermissionLevel = "group"
 
 	// discussionStatus の定数値
 	discussionStatusOpen     discussionStatus = "open"
@@ -67,10 +64,6 @@ func (d Discussion) VisibilityLevel() visibilityLevel {
 
 func (d Discussion) CommentPermissionLevel() commentPermissionLevel {
 	return d.commentPermissionLevel
-}
-
-func (d Discussion) GroupID() *string {
-	return d.groupID
 }
 
 func (d Discussion) CreatedBy() string {

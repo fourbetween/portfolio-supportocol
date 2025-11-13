@@ -17,7 +17,6 @@ type Discussions struct {
 	Background             string
 	VisibilityLevel        string
 	CommentPermissionLevel string
-	GroupID                *string
 	CreatedBy              string
 	CreatedAt              time.Time
 }

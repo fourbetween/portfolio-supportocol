@@ -25,11 +25,11 @@ export const ErrorSchema = z
 
 // Discussion schemas
 export const VisibilityLevelSchema = z
-  .enum(["everyone", "logged_in", "owner", "group"])
+  .enum(["everyone", "logged_in", "owner"])
   .openapi("visibilityLevel");
 
 export const CommentPermissionLevelSchema = z
-  .enum(["everyone", "logged_in", "owner", "group"])
+  .enum(["everyone", "logged_in", "owner"])
   .openapi("commentPermissionLevel");
 
 export const DiscussionSchema = z
@@ -40,7 +40,6 @@ export const DiscussionSchema = z
     ruleId: IdSchema,
     visibilityLevel: VisibilityLevelSchema,
     commentPermissionLevel: CommentPermissionLevelSchema,
-    groupId: IdSchema.nullable(),
     createdBy: IdSchema,
     createdAt: z.string().openapi({ format: "date-time" }),
     status: z.enum(["open", "closed", "archived"]),
@@ -63,24 +62,6 @@ export const CommentSchema = z
     status: CommentStatusSchema,
   })
   .openapi("comment");
-
-export const GroupSchema = z
-  .object({
-    id: IdSchema,
-    name: z.string(),
-    description: z.string(),
-    createdBy: IdSchema,
-    createdAt: z.string().openapi({ format: "date-time" }),
-  })
-  .openapi("group");
-
-export const GroupMemberSchema = z
-  .object({
-    groupId: IdSchema,
-    userId: IdSchema,
-    joinedAt: z.string().openapi({ format: "date-time" }),
-  })
-  .openapi("groupMember");
 
 export const IssueSchema = z
   .object({
