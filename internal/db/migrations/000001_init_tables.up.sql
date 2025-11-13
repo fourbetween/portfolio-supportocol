@@ -33,6 +33,7 @@ CREATE TABLE discussions (
 	project_id VARCHAR,
 	theme VARCHAR NOT NULL,
 	background TEXT NOT NULL,
+	conclusion TEXT NOT NULL,
 	rule_id VARCHAR NOT NULL,
 	visibility_level VARCHAR NOT NULL, -- 'everyone', 'authenticated', 'owner'
 	comment_permission_level VARCHAR NOT NULL, -- 'everyone', 'authenticated', 'owner'

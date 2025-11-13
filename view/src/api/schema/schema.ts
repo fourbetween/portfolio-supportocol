@@ -37,6 +37,7 @@ export const DiscussionSchema = z
     id: IdSchema,
     theme: z.string(),
     background: z.string(),
+    conclusion: z.string(),
     ruleId: IdSchema,
     visibilityLevel: VisibilityLevelSchema,
     commentPermissionLevel: CommentPermissionLevelSchema,

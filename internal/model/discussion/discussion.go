@@ -16,6 +16,7 @@ type (
 		id                     string
 		theme                  string
 		background             string
+		conclusion             string
 		ruleID                 string
 		visibilityLevel        visibilityLevel
 		commentPermissionLevel commentPermissionLevel
@@ -52,6 +53,10 @@ func (d Discussion) Theme() string {
 
 func (d Discussion) Background() string {
 	return d.background
+}
+
+func (d Discussion) Conclusion() string {
+	return d.conclusion
 }
 
 func (d Discussion) RuleID() string {
