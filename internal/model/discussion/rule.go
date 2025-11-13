@@ -16,6 +16,7 @@ type (
 		RuleID      string
 		Name        string
 		Description string
+		Color       string
 	}
 
 	commentTypePath struct {

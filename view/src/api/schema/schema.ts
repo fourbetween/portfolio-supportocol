@@ -118,6 +118,7 @@ export const CommentTypeSchema = z
     ruleId: IdSchema,
     name: z.string(),
     description: z.string(),
+    color: z.string(),
   })
   .openapi("commentType");
 

@@ -57,6 +57,7 @@ CREATE TABLE comment_types (
 	rule_id VARCHAR NOT NULL,
 	name VARCHAR NOT NULL,
 	description TEXT NOT NULL,
+	color VARCHAR NOT NULL,
 	CONSTRAINT comment_types_pk PRIMARY KEY (id),
 	CONSTRAINT comment_types_rules_fk FOREIGN KEY (rule_id) REFERENCES rules(id) ON DELETE CASCADE
 );
