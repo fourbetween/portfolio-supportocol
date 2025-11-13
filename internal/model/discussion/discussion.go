@@ -3,17 +3,46 @@ package discussion
 import "time"
 
 type (
+	// visibilityLevel は議論の公開レベルを表す
+	visibilityLevel string
+
+	// commentPermissionLevel はコメント許可レベルを表す
+	commentPermissionLevel string
+
+	// discussionStatus は議論の状態を表す
+	discussionStatus string
+
 	Discussion struct {
 		id                     string
 		theme                  string
 		background             string
 		ruleID                 string
-		visibilityLevel        string
-		commentPermissionLevel string
+		visibilityLevel        visibilityLevel
+		commentPermissionLevel commentPermissionLevel
 		groupID                *string
 		createdBy              string
 		createdAt              time.Time
+		status                 discussionStatus
 	}
+)
+
+const (
+	// visibilityLevel の定数値
+	visibilityLevelEveryone      visibilityLevel = "everyone"
+	visibilityLevelAuthenticated visibilityLevel = "authenticated"
+	visibilityLevelOwner         visibilityLevel = "owner"
+	visibilityLevelGroup         visibilityLevel = "group"
+
+	// commentPermissionLevel の定数値
+	commentPermissionLevelEveryone      commentPermissionLevel = "everyone"
+	commentPermissionLevelAuthenticated commentPermissionLevel = "authenticated"
+	commentPermissionLevelOwner         commentPermissionLevel = "owner"
+	commentPermissionLevelGroup         commentPermissionLevel = "group"
+
+	// discussionStatus の定数値
+	discussionStatusOpen     discussionStatus = "open"
+	discussionStatusClosed   discussionStatus = "closed"
+	discussionStatusArchived discussionStatus = "archived"
 )
 
 func (d Discussion) ID() string {
@@ -32,11 +61,11 @@ func (d Discussion) RuleID() string {
 	return d.ruleID
 }
 
-func (d Discussion) VisibilityLevel() string {
+func (d Discussion) VisibilityLevel() visibilityLevel {
 	return d.visibilityLevel
 }
 
-func (d Discussion) CommentPermissionLevel() string {
+func (d Discussion) CommentPermissionLevel() commentPermissionLevel {
 	return d.commentPermissionLevel
 }
 
@@ -50,4 +79,8 @@ func (d Discussion) CreatedBy() string {
 
 func (d Discussion) CreatedAt() time.Time {
 	return d.createdAt
+}
+
+func (d Discussion) Status() discussionStatus {
+	return d.status
 }

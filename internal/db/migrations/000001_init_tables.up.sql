@@ -46,6 +46,7 @@ CREATE TABLE discussions (
 	group_id VARCHAR,
 	created_by VARCHAR NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	status VARCHAR NOT NULL, -- 'open', 'closed', 'archived'
 	CONSTRAINT discussions_pk PRIMARY KEY (id),
 	CONSTRAINT discussions_rules_fk FOREIGN KEY (rule_id) REFERENCES rules(id),
 	CONSTRAINT discussions_groups_fk FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE SET NULL

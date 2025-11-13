@@ -42,7 +42,8 @@ export const DiscussionSchema = z
     commentPermissionLevel: CommentPermissionLevelSchema,
     groupId: IdSchema.nullable(),
     createdBy: IdSchema,
-    createdAt: z.string().datetime(),
+    createdAt: z.string().openapi({ format: "date-time" }),
+    status: z.enum(["open", "closed", "archived"]),
   })
   .openapi("discussion");
 
@@ -58,7 +59,7 @@ export const CommentSchema = z
     commentTypeId: IdSchema,
     content: z.string(),
     postedBy: IdSchema,
-    postedAt: z.string().datetime(),
+    postedAt: z.string().openapi({ format: "date-time" }),
     status: CommentStatusSchema,
   })
   .openapi("comment");
@@ -69,7 +70,7 @@ export const GroupSchema = z
     name: z.string(),
     description: z.string(),
     createdBy: IdSchema,
-    createdAt: z.string().datetime(),
+    createdAt: z.string().openapi({ format: "date-time" }),
   })
   .openapi("group");
 
@@ -77,7 +78,7 @@ export const GroupMemberSchema = z
   .object({
     groupId: IdSchema,
     userId: IdSchema,
-    joinedAt: z.string().datetime(),
+    joinedAt: z.string().openapi({ format: "date-time" }),
   })
   .openapi("groupMember");
 
@@ -88,7 +89,7 @@ export const IssueSchema = z
     issueType: z.string(),
     description: z.string(),
     createdBy: IdSchema,
-    createdAt: z.string().datetime(),
+    createdAt: z.string().openapi({ format: "date-time" }),
   })
   .openapi("issue");
 
@@ -98,7 +99,7 @@ export const NoteSchema = z
     discussionId: IdSchema,
     content: z.string(),
     postedBy: IdSchema,
-    postedAt: z.string().datetime(),
+    postedAt: z.string().openapi({ format: "date-time" }),
   })
   .openapi("note");
 
@@ -108,7 +109,7 @@ export const RuleSchema = z
     name: z.string(),
     description: z.string(),
     createdBy: IdSchema,
-    createdAt: z.string().datetime(),
+    createdAt: z.string().openapi({ format: "date-time" }),
   })
   .openapi("rule");
 
