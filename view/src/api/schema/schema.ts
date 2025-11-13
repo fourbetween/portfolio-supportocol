@@ -22,12 +22,3 @@ export const ErrorSchema = z
     message: z.string(),
   })
   .openapi("error");
-
-// Request/Response schemas
-export const GetWorkbooksResponseSchema = z.array(WorkbookSchema);
-
-export const PostErrorRequestSchema = z.object({
-  message: z.string(),
-});
-
-export const DefaultErrorResponseSchema = ErrorSchema;

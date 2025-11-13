@@ -1,10 +1,7 @@
 import type { RouteConfig } from "@asteasolutions/zod-to-openapi";
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import {
-  DefaultErrorResponseSchema,
-  GetWorkbooksResponseSchema,
-  PostErrorRequestSchema,
-} from "./schema";
+import z from "zod";
+import { ErrorSchema, WorkbookSchema } from "./schema";
 
 // OpenAPIRegistryのインスタンスを作成
 export const registry = new OpenAPIRegistry();
@@ -32,7 +29,7 @@ const routes: RouteConfig[] = [
         description: "success response",
         content: {
           "application/json": {
-            schema: GetWorkbooksResponseSchema,
+            schema: z.array(WorkbookSchema),
           },
         },
       },
@@ -40,7 +37,7 @@ const routes: RouteConfig[] = [
         description: "default error",
         content: {
           "application/json": {
-            schema: DefaultErrorResponseSchema,
+            schema: ErrorSchema,
           },
         },
       },
@@ -56,7 +53,9 @@ const routes: RouteConfig[] = [
         required: true,
         content: {
           "application/json": {
-            schema: PostErrorRequestSchema,
+            schema: z.object({
+              message: z.string(),
+            }),
           },
         },
       },
@@ -69,7 +68,7 @@ const routes: RouteConfig[] = [
         description: "default error",
         content: {
           "application/json": {
-            schema: DefaultErrorResponseSchema,
+            schema: ErrorSchema,
           },
         },
       },
