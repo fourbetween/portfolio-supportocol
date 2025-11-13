@@ -25,38 +25,50 @@ CREATE TABLE group_members (
 	CONSTRAINT group_members_groups_fk FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE
 );
 
+-- ルール
+CREATE TABLE rules (
+	id VARCHAR NOT NULL,
+	name VARCHAR NOT NULL,
+	description TEXT NOT NULL,
+	created_by VARCHAR NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT rules_pk PRIMARY KEY (id)
+);
+
 -- 議論
 CREATE TABLE discussions (
 	id VARCHAR NOT NULL,
 	theme VARCHAR NOT NULL,
 	background TEXT NOT NULL,
+	rule_id VARCHAR NOT NULL,
 	visibility_level VARCHAR NOT NULL, -- 'everyone', 'authenticated', 'owner', 'group'
 	comment_permission_level VARCHAR NOT NULL, -- 'everyone', 'authenticated', 'owner', 'group'
 	group_id VARCHAR,
 	created_by VARCHAR NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT discussions_pk PRIMARY KEY (id),
+	CONSTRAINT discussions_rules_fk FOREIGN KEY (rule_id) REFERENCES rules(id),
 	CONSTRAINT discussions_groups_fk FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE SET NULL
 );
 
 -- コメント種類
 CREATE TABLE comment_types (
 	id VARCHAR NOT NULL,
-	discussion_id VARCHAR NOT NULL,
+	rule_id VARCHAR NOT NULL,
 	name VARCHAR NOT NULL,
 	description TEXT NOT NULL,
 	CONSTRAINT comment_types_pk PRIMARY KEY (id),
-	CONSTRAINT comment_types_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE
+	CONSTRAINT comment_types_rules_fk FOREIGN KEY (rule_id) REFERENCES rules(id) ON DELETE CASCADE
 );
 
 -- コメント種類間の経路
 CREATE TABLE comment_type_paths (
 	id VARCHAR NOT NULL,
-	discussion_id VARCHAR NOT NULL,
+	rule_id VARCHAR NOT NULL,
 	from_comment_type_id VARCHAR NOT NULL,
 	to_comment_type_id VARCHAR NOT NULL,
 	CONSTRAINT comment_type_paths_pk PRIMARY KEY (id),
-	CONSTRAINT comment_type_paths_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE,
+	CONSTRAINT comment_type_paths_rules_fk FOREIGN KEY (rule_id) REFERENCES rules(id) ON DELETE CASCADE,
 	CONSTRAINT comment_type_paths_from_fk FOREIGN KEY (from_comment_type_id) REFERENCES comment_types(id) ON DELETE CASCADE,
 	CONSTRAINT comment_type_paths_to_fk FOREIGN KEY (to_comment_type_id) REFERENCES comment_types(id) ON DELETE CASCADE
 );
