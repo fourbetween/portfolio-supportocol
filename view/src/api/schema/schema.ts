@@ -112,3 +112,13 @@ export const CommentTypePathSchema = z
     toCommentTypeId: IdSchema,
   })
   .openapi("commentTypePath");
+
+// Project schema
+export const ProjectSchema = z
+  .object({
+    id: IdSchema,
+    name: z.string(),
+    createdBy: IdSchema,
+    createdAt: z.string().openapi({ format: "date-time" }),
+  })
+  .openapi("project");

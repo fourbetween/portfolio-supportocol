@@ -1,0 +1,30 @@
+package project
+
+import "time"
+
+type (
+	Project struct {
+		id        string
+		name      string
+		createdBy string
+		createdAt time.Time
+
+		repo Repository
+	}
+)
+
+func (p Project) ID() string {
+	return p.id
+}
+
+func (p Project) Name() string {
+	return p.name
+}
+
+func (p Project) CreatedBy() string {
+	return p.createdBy
+}
+
+func (p Project) CreatedAt() time.Time {
+	return p.createdAt
+}
