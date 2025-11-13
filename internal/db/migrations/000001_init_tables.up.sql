@@ -6,6 +6,17 @@ CREATE TABLE workbooks (
 	CONSTRAINT workbooks_pk PRIMARY KEY (id)
 );
 
+-- プロジェクト
+CREATE TABLE projects (
+	id VARCHAR NOT NULL,
+	name VARCHAR NOT NULL,
+	created_by VARCHAR NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT projects_pk PRIMARY KEY (id)
+);
+
+CREATE INDEX projects_created_by_idx ON projects(created_by);
+
 -- グループ
 CREATE TABLE groups (
 	id VARCHAR NOT NULL,
@@ -38,6 +49,7 @@ CREATE TABLE rules (
 -- 議論
 CREATE TABLE discussions (
 	id VARCHAR NOT NULL,
+	project_id VARCHAR,
 	theme VARCHAR NOT NULL,
 	background TEXT NOT NULL,
 	rule_id VARCHAR NOT NULL,
@@ -48,6 +60,7 @@ CREATE TABLE discussions (
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	status VARCHAR NOT NULL, -- 'open', 'closed', 'archived'
 	CONSTRAINT discussions_pk PRIMARY KEY (id),
+	CONSTRAINT discussions_projects_fk FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL,
 	CONSTRAINT discussions_rules_fk FOREIGN KEY (rule_id) REFERENCES rules(id),
 	CONSTRAINT discussions_groups_fk FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE SET NULL
 );
