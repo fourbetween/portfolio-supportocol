@@ -14,7 +14,7 @@ import (
 type Discussions struct {
 	ID                     string `sql:"primary_key"`
 	Theme                  string
-	Background             *string
+	Background             string
 	VisibilityLevel        string
 	CommentPermissionLevel string
 	GroupID                *string

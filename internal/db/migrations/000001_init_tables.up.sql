@@ -10,7 +10,7 @@ CREATE TABLE workbooks (
 CREATE TABLE groups (
 	id VARCHAR NOT NULL,
 	name VARCHAR NOT NULL,
-	description TEXT,
+	description TEXT NOT NULL,
 	created_by VARCHAR NOT NULL,
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT groups_pk PRIMARY KEY (id)
@@ -29,7 +29,7 @@ CREATE TABLE group_members (
 CREATE TABLE discussions (
 	id VARCHAR NOT NULL,
 	theme VARCHAR NOT NULL,
-	background TEXT,
+	background TEXT NOT NULL,
 	visibility_level VARCHAR NOT NULL, -- 'everyone', 'authenticated', 'owner', 'group'
 	comment_permission_level VARCHAR NOT NULL, -- 'everyone', 'authenticated', 'owner', 'group'
 	group_id VARCHAR,
@@ -44,7 +44,7 @@ CREATE TABLE comment_types (
 	id VARCHAR NOT NULL,
 	discussion_id VARCHAR NOT NULL,
 	name VARCHAR NOT NULL,
-	description TEXT,
+	description TEXT NOT NULL,
 	CONSTRAINT comment_types_pk PRIMARY KEY (id),
 	CONSTRAINT comment_types_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE
 );

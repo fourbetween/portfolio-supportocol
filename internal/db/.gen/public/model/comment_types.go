@@ -11,5 +11,5 @@ type CommentTypes struct {
 	ID           string `sql:"primary_key"`
 	DiscussionID string
 	Name         string
-	Description  *string
+	Description  string
 }

@@ -14,7 +14,7 @@ import (
 type Groups struct {
 	ID          string `sql:"primary_key"`
 	Name        string
-	Description *string
+	Description string
 	CreatedBy   string
 	CreatedAt   time.Time
 }
