@@ -24,6 +24,7 @@ $ARGUMENTS
    - `view/src/component/presenter/list/workbook.test.ts` にある既存のテストコードを参考にしてください。
    - describe 関数の第一引数にはコンポーネントのクラス名を渡してください。
    - it 関数の第一引数であるテストケース名は必ず「〜こと」で終わる日本語にしてください。
+   - コンポーネントのファイルのパスは `view/src/component/presenter/` 以下に、クラス名をディレクトリ階層で表現した形で保存してください。（例：WorkbookListPresenter の場合、`view/src/component/presenter/list/workbook.ts`）
 2. 追加したテストをパスするための最低限のコードを実装してください。
    - Container/Presentational パターンに従ってコンポーネントを実装してください。
    - `view/src/component/presenter/list/workbook.ts` にある既存のコンポーネントを参考にしてください。
@@ -34,6 +35,7 @@ $ARGUMENTS
    - `view/src/component/presenter/list/workbook.stories.ts` にある既存の story を参考にしてください。
 5. chromedevtools/chrome-devtools-mcp を使って Storybook にアクセスし、UI の見た目と動作を確認してください。
    - Storybook URL は`http://localhost:6006/`です。
+   - 上記の URL にアクセスできない場合のみ、`make storybook`を実行して Storybook サーバーを起動してください。
    - もし Storybook URL にアクセスできない場合はこの手順をスキップしてください。
 6. リファクタリングが必要かどうか検討し、必要であれば行ってください。
 7. 1〜6 のステップを繰り返すことで、必要な機能をすべて実装してください。
