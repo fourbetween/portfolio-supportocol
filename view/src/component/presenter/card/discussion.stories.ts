@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
-import type { DiscussionCardProps } from "../../../model/discussion";
 import "./discussion";
-import type { DiscussionCardPresenter } from "./discussion";
+import type {
+  DiscussionCardPresenter,
+  DiscussionCardProps,
+} from "./discussion";
 
 const meta = {
   title: "presenter/card/discussion",

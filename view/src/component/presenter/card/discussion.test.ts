@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
-import type { DiscussionCardProps } from "../../../model/discussion";
-import type { DiscussionCardPresenter } from "./discussion";
+import type {
+  DiscussionCardPresenter,
+  DiscussionCardProps,
+} from "./discussion";
 
 describe("DiscussionCardPresenter", async () => {
   let elem: DiscussionCardPresenter;

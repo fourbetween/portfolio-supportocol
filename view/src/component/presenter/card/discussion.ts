@@ -1,7 +1,15 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import type { DiscussionCardProps } from "../../../model/discussion";
 import { baseStyle } from "../../../style/base";
+
+// DiscussionCardに必要な最小限のプロパティ
+export interface DiscussionCardProps {
+  id: string;
+  theme: string;
+  authorName: string;
+  authorAvatarUrl: string;
+  commentCount: number;
+}
 
 @customElement("discussion-card-presenter")
 export class DiscussionCardPresenter extends LitElement {
