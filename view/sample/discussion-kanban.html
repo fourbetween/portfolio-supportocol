@@ -120,6 +120,12 @@
                 class="text-text-primary-light dark:text-text-primary-dark text-4xl font-black leading-tight tracking-[-0.033em] min-w-72"
               >
                 Discussions
+                <span
+                  id="project-current-label"
+                  class="align-middle ml-3 text-base font-semibold text-text-secondary-light dark:text-text-secondary-dark bg-[#e7edf3] dark:bg-[#21262d] border border-border-light dark:border-border-dark px-2 py-0.5 rounded-lg"
+                >
+                  All Projects
+                </span>
               </p>
             </div>
             <div class="flex flex-col md:flex-row gap-3 px-4 py-3">
@@ -146,7 +152,21 @@
                   </div>
                 </label>
               </div>
-              <div class="flex gap-3 overflow-x-auto">
+              <div class="flex gap-3 overflow-x-auto items-center">
+                <label
+                  class="flex items-center gap-2 text-sm text-text-secondary-light dark:text-text-secondary-dark"
+                >
+                  <span class="hidden md:inline">Project</span>
+                  <select
+                    id="project-select"
+                    class="form-select h-10 rounded-lg border border-border-light dark:border-border-dark bg-[#e7edf3] dark:bg-[#21262d] text-text-primary-light dark:text-text-primary-dark px-3 focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+                  >
+                    <option value="all">All Projects</option>
+                    <option value="alpha">Project Alpha</option>
+                    <option value="beta">Project Beta</option>
+                    <option value="gamma">Project Gamma</option>
+                  </select>
+                </label>
                 <button
                   class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#e7edf3] dark:bg-[#21262d] pl-4 pr-3 border border-border-light dark:border-border-dark hover:bg-slate-200 dark:hover:bg-slate-700"
                 >
@@ -468,5 +488,27 @@
         </div>
       </div>
     </div>
+    <script>
+      (function () {
+        const select = document.getElementById("project-select");
+        const label = document.getElementById("project-current-label");
+        const storageKey = "sample.selectedProject";
+        const names = {
+          all: "All Projects",
+          alpha: "Project Alpha",
+          beta: "Project Beta",
+          gamma: "Project Gamma",
+        };
+        if (!select) return;
+        const saved = localStorage.getItem(storageKey) || "all";
+        select.value = names[saved] ? saved : "all";
+        if (label) label.textContent = names[select.value] || "All Projects";
+        select.addEventListener("change", () => {
+          const v = select.value;
+          localStorage.setItem(storageKey, v);
+          if (label) label.textContent = names[v] || "All Projects";
+        });
+      })();
+    </script>
   </body>
 </html>

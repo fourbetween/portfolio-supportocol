@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html class="light" lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>New Project - Supportocol</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      }
+    </style>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#0d6cd9",
+              "background-light": "#f6f8fa",
+              "background-dark": "#101822",
+              "text-primary-light": "#1f2328",
+              "text-primary-dark": "#e6edf3",
+              "text-secondary-light": "#656d76",
+              "text-secondary-dark": "#8b949e",
+              "border-light": "#d0d7de",
+              "border-dark": "#30363d",
+              success: "#1a7f37",
+              warning: "#d29922",
+              error: "#cf222e",
+            },
+            fontFamily: {
+              display: ["Inter", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.375rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-display">
+    <div
+      class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden"
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <header
+          class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light dark:border-border-dark px-6 md:px-10 py-3 bg-white dark:bg-background-dark"
+        >
+          <div
+            class="flex items-center gap-4 text-text-primary-light dark:text-text-primary-dark"
+          >
+            <div class="size-6 text-[#0d6cd9]">
+              <svg
+                fill="none"
+                viewBox="0 0 48 48"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z"
+                  fill="currentColor"
+                ></path>
+              </svg>
+            </div>
+            <h2
+              class="text-text-primary-light dark:text-text-primary-dark text-lg font-bold leading-tight tracking-[-0.015em]"
+            >
+              New Project
+            </h2>
+          </div>
+          <div class="flex flex-1 justify-end gap-4 md:gap-8">
+            <div class="hidden md:flex items-center gap-9">
+              <a
+                class="text-text-primary-light dark:text-text-primary-dark text-sm font-medium leading-normal"
+                href="#"
+              >
+                Projects
+              </a>
+              <a
+                class="text-text-primary-light dark:text-text-primary-dark text-sm font-medium leading-normal"
+                href="#"
+              >
+                Discussions
+              </a>
+              <a
+                class="text-text-primary-light dark:text-text-primary-dark text-sm font-medium leading-normal"
+                href="#"
+              >
+                Profile
+              </a>
+            </div>
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+              data-alt="User avatar image"
+              style="
+                background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBHz7UI_SkkdU_hdDpeikAoJ3XKORFj5AgfMiQ0qPb-Qe_NmpSvJ8bkKjuLeSj-4ylH9N0Ta6B4JDsZc-LEc8qOaB6OqSqO5egfSQMrTDFD7ZmdX1YzsZ6zqqStQERYjHqfUz3CrHDnJJ0NiAwB69jIHEpLyWTvsgUnXaiQ9sj-KVPXttb-SAAqDb0r3Q1kPLcIdCqh6tNnfe7qbnkRNAQmnmhMKkMbM-fNW0Izfa9dp6c7QVCj5hW2TPWF_uRRO4HRCs2AK4rlRdA');
+              "
+            ></div>
+          </div>
+        </header>
+
+        <div class="px-4 sm:px-6 md:px-10 flex flex-1 justify-center py-5">
+          <div
+            class="layout-content-container flex flex-col w-full max-w-[960px] flex-1"
+          >
+            <!-- Form Header -->
+            <div class="flex items-center gap-3 p-4">
+              <div class="p-2 rounded-lg bg-primary/10 text-primary">
+                <span class="material-symbols-outlined" style="font-size: 28px">
+                  folder
+                </span>
+              </div>
+              <div>
+                <h1
+                  class="text-text-primary-light dark:text-text-primary-dark text-3xl font-bold leading-tight"
+                >
+                  新しいプロジェクトを作成
+                </h1>
+                <p
+                  class="text-text-secondary-light dark:text-text-secondary-dark text-sm"
+                >
+                  プロジェクト名と説明を入力して、議論を整理しましょう
+                </p>
+              </div>
+            </div>
+
+            <!-- Form Content -->
+            <form class="space-y-6 p-4">
+              <!-- Project Details -->
+              <div
+                class="bg-white dark:bg-background-dark rounded-lg border border-border-light dark:border-border-dark p-4"
+              >
+                <h2
+                  class="text-text-primary-light dark:text-text-primary-dark text-lg font-semibold mb-4 flex items-center gap-2"
+                >
+                  <span
+                    class="material-symbols-outlined text-primary"
+                    style="font-size: 20px"
+                  >
+                    info
+                  </span>
+                  基本情報
+                </h2>
+                <div class="space-y-4">
+                  <!-- Project Name -->
+                  <div>
+                    <label
+                      class="block text-text-primary-light dark:text-text-primary-dark text-sm font-medium mb-2"
+                      for="name"
+                    >
+                      プロジェクト名
+                      <span class="text-error">*</span>
+                    </label>
+                    <input
+                      class="form-input w-full rounded-lg text-text-primary-light dark:text-text-primary-dark bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-text-secondary-light dark:placeholder:text-text-secondary-dark px-3 py-2 text-sm"
+                      id="name"
+                      placeholder="例: Webアプリケーション開発"
+                      type="text"
+                      required
+                    />
+                    <p
+                      class="text-text-secondary-light dark:text-text-secondary-dark text-xs mt-1"
+                    >
+                      プロジェクトを識別しやすい名前を入力してください
+                    </p>
+                  </div>
+
+                  <!-- Description -->
+                  <div>
+                    <label
+                      class="block text-text-primary-light dark:text-text-primary-dark text-sm font-medium mb-2"
+                      for="description"
+                    >
+                      説明
+                    </label>
+                    <textarea
+                      class="form-textarea w-full resize-none rounded-lg text-text-primary-light dark:text-text-primary-dark bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary placeholder:text-text-secondary-light dark:placeholder:text-text-secondary-dark px-3 py-2 text-sm min-h-[120px]"
+                      id="description"
+                      placeholder="プロジェクトの目的や内容を説明してください（オプション）"
+                    ></textarea>
+                    <p
+                      class="text-text-secondary-light dark:text-text-secondary-dark text-xs mt-1"
+                    >
+                      マークダウン記法が使用できます
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Project Settings -->
+              <div
+                class="bg-white dark:bg-background-dark rounded-lg border border-border-light dark:border-border-dark p-4"
+              >
+                <h2
+                  class="text-text-primary-light dark:text-text-primary-dark text-lg font-semibold mb-4 flex items-center gap-2"
+                >
+                  <span
+                    class="material-symbols-outlined text-success"
+                    style="font-size: 20px"
+                  >
+                    settings
+                  </span>
+                  プロジェクト設定
+                </h2>
+                <div class="space-y-4">
+                  <!-- Project Icon/Color -->
+                  <div>
+                    <label
+                      class="block text-text-primary-light dark:text-text-primary-dark text-sm font-medium mb-2"
+                    >
+                      プロジェクトカラー
+                    </label>
+                    <div class="flex items-center gap-3">
+                      <input
+                        type="color"
+                        id="project-color"
+                        value="#0d6cd9"
+                        class="w-16 h-10 rounded-lg border border-border-light dark:border-border-dark cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value="#0d6cd9"
+                        class="form-input flex-1 rounded-lg text-text-primary-light dark:text-text-primary-dark bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary font-mono px-3 py-2 text-sm max-w-[120px]"
+                      />
+                      <div class="flex gap-2">
+                        <button
+                          type="button"
+                          class="w-8 h-8 rounded-full bg-[#0d6cd9] border-2 border-border-light dark:border-border-dark hover:scale-110 transition-transform"
+                          onclick="document.getElementById('project-color').value = '#0d6cd9'"
+                        ></button>
+                        <button
+                          type="button"
+                          class="w-8 h-8 rounded-full bg-[#1a7f37] border-2 border-border-light dark:border-border-dark hover:scale-110 transition-transform"
+                          onclick="document.getElementById('project-color').value = '#1a7f37'"
+                        ></button>
+                        <button
+                          type="button"
+                          class="w-8 h-8 rounded-full bg-[#d29922] border-2 border-border-light dark:border-border-dark hover:scale-110 transition-transform"
+                          onclick="document.getElementById('project-color').value = '#d29922'"
+                        ></button>
+                        <button
+                          type="button"
+                          class="w-8 h-8 rounded-full bg-[#cf222e] border-2 border-border-light dark:border-border-dark hover:scale-110 transition-transform"
+                          onclick="document.getElementById('project-color').value = '#cf222e'"
+                        ></button>
+                        <button
+                          type="button"
+                          class="w-8 h-8 rounded-full bg-[#8250df] border-2 border-border-light dark:border-border-dark hover:scale-110 transition-transform"
+                          onclick="document.getElementById('project-color').value = '#8250df'"
+                        ></button>
+                      </div>
+                    </div>
+                    <p
+                      class="text-text-secondary-light dark:text-text-secondary-dark text-xs mt-2"
+                    >
+                      プロジェクトを視覚的に区別するためのカラーを選択してください
+                    </p>
+                  </div>
+
+                  <!-- Default Rule -->
+                  <div>
+                    <label
+                      class="block text-text-primary-light dark:text-text-primary-dark text-sm font-medium mb-2"
+                      for="default-rule"
+                    >
+                      デフォルトルール
+                    </label>
+                    <select
+                      class="form-select w-full rounded-lg text-text-primary-light dark:text-text-primary-dark bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark focus:ring-2 focus:ring-primary focus:border-primary px-3 py-2 text-sm"
+                      id="default-rule"
+                    >
+                      <option value="">
+                        ルールを選択してください（オプション）
+                      </option>
+                      <option value="standard">標準的な議論フロー</option>
+                      <option value="scientific">科学的議論</option>
+                      <option value="business">ビジネス意思決定</option>
+                      <option value="technical">技術的検討</option>
+                    </select>
+                    <p
+                      class="text-text-secondary-light dark:text-text-secondary-dark text-xs mt-2"
+                    >
+                      このプロジェクトで新しい議論を作成する際のデフォルトルール
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Visibility Settings -->
+              <div
+                class="bg-white dark:bg-background-dark rounded-lg border border-border-light dark:border-border-dark p-4"
+              >
+                <h2
+                  class="text-text-primary-light dark:text-text-primary-dark text-lg font-semibold mb-4 flex items-center gap-2"
+                >
+                  <span
+                    class="material-symbols-outlined text-warning"
+                    style="font-size: 20px"
+                  >
+                    visibility
+                  </span>
+                  プライバシー設定
+                </h2>
+                <div class="space-y-4">
+                  <!-- Visibility Level -->
+                  <div>
+                    <label
+                      class="block text-text-primary-light dark:text-text-primary-dark text-sm font-medium mb-2"
+                    >
+                      プロジェクトの公開レベル
+                      <span class="text-error">*</span>
+                    </label>
+                    <div class="space-y-2">
+                      <label
+                        class="flex items-center gap-3 p-3 rounded-lg border border-border-light dark:border-border-dark hover:border-primary cursor-pointer transition-colors"
+                      >
+                        <input
+                          type="radio"
+                          name="visibility"
+                          value="public"
+                          class="form-radio text-primary focus:ring-primary"
+                          checked
+                        />
+                        <div class="flex-1">
+                          <div
+                            class="text-text-primary-light dark:text-text-primary-dark font-medium text-sm"
+                          >
+                            <span
+                              class="material-symbols-outlined align-middle mr-1"
+                              style="font-size: 18px"
+                            >
+                              public
+                            </span>
+                            パブリック
+                          </div>
+                          <p
+                            class="text-text-secondary-light dark:text-text-secondary-dark text-xs"
+                          >
+                            誰でもこのプロジェクトと関連する議論を閲覧できます
+                          </p>
+                        </div>
+                      </label>
+                      <label
+                        class="flex items-center gap-3 p-3 rounded-lg border border-border-light dark:border-border-dark hover:border-primary cursor-pointer transition-colors"
+                      >
+                        <input
+                          type="radio"
+                          name="visibility"
+                          value="private"
+                          class="form-radio text-primary focus:ring-primary"
+                        />
+                        <div class="flex-1">
+                          <div
+                            class="text-text-primary-light dark:text-text-primary-dark font-medium text-sm"
+                          >
+                            <span
+                              class="material-symbols-outlined align-middle mr-1"
+                              style="font-size: 18px"
+                            >
+                              lock
+                            </span>
+                            プライベート
+                          </div>
+                          <p
+                            class="text-text-secondary-light dark:text-text-secondary-dark text-xs"
+                          >
+                            自分だけがこのプロジェクトにアクセスできます
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Additional Options -->
+              <div
+                class="bg-white dark:bg-background-dark rounded-lg border border-border-light dark:border-border-dark p-4"
+              >
+                <h2
+                  class="text-text-primary-light dark:text-text-primary-dark text-lg font-semibold mb-4 flex items-center gap-2"
+                >
+                  <span
+                    class="material-symbols-outlined text-purple-600"
+                    style="font-size: 20px"
+                  >
+                    tune
+                  </span>
+                  追加オプション
+                </h2>
+                <div class="space-y-3">
+                  <!-- Enable AI Assistance -->
+                  <label
+                    class="flex items-start gap-3 p-3 rounded-lg border border-border-light dark:border-border-dark cursor-pointer hover:border-primary transition-colors"
+                  >
+                    <input
+                      type="checkbox"
+                      class="form-checkbox text-primary focus:ring-primary mt-0.5"
+                      checked
+                    />
+                    <div class="flex-1">
+                      <div
+                        class="text-text-primary-light dark:text-text-primary-dark font-medium text-sm"
+                      >
+                        AIアシスタントを有効化
+                      </div>
+                      <p
+                        class="text-text-secondary-light dark:text-text-secondary-dark text-xs"
+                      >
+                        AIが議論の分析やコメントの提案を行います
+                      </p>
+                    </div>
+                  </label>
+
+                  <!-- Enable Notifications -->
+                  <label
+                    class="flex items-start gap-3 p-3 rounded-lg border border-border-light dark:border-border-dark cursor-pointer hover:border-primary transition-colors"
+                  >
+                    <input
+                      type="checkbox"
+                      class="form-checkbox text-primary focus:ring-primary mt-0.5"
+                      checked
+                    />
+                    <div class="flex-1">
+                      <div
+                        class="text-text-primary-light dark:text-text-primary-dark font-medium text-sm"
+                      >
+                        通知を受け取る
+                      </div>
+                      <p
+                        class="text-text-secondary-light dark:text-text-secondary-dark text-xs"
+                      >
+                        このプロジェクトの議論に更新があった場合に通知します
+                      </p>
+                    </div>
+                  </label>
+
+                  <!-- Archive old discussions -->
+                  <label
+                    class="flex items-start gap-3 p-3 rounded-lg border border-border-light dark:border-border-dark cursor-pointer hover:border-primary transition-colors"
+                  >
+                    <input
+                      type="checkbox"
+                      class="form-checkbox text-primary focus:ring-primary mt-0.5"
+                    />
+                    <div class="flex-1">
+                      <div
+                        class="text-text-primary-light dark:text-text-primary-dark font-medium text-sm"
+                      >
+                        古い議論を自動アーカイブ
+                      </div>
+                      <p
+                        class="text-text-secondary-light dark:text-text-secondary-dark text-xs"
+                      >
+                        90日間更新がない議論を自動的にアーカイブします
+                      </p>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Info Box -->
+              <div
+                class="bg-primary/5 dark:bg-primary/10 rounded-lg border border-primary/20 dark:border-primary/30 p-4"
+              >
+                <div class="flex items-start gap-3">
+                  <span
+                    class="material-symbols-outlined text-primary shrink-0"
+                    style="font-size: 20px"
+                  >
+                    lightbulb
+                  </span>
+                  <div>
+                    <h3
+                      class="text-text-primary-light dark:text-text-primary-dark font-medium text-sm mb-1"
+                    >
+                      プロジェクトの活用方法
+                    </h3>
+                    <p
+                      class="text-text-secondary-light dark:text-text-secondary-dark text-xs"
+                    >
+                      プロジェクトを使用すると、関連する議論をまとめて管理できます。例えば、「製品開発」「技術仕様」「マーケティング」などのプロジェクトを作成し、それぞれのテーマに沿った議論を整理することができます。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Actions -->
+              <div
+                class="flex items-center justify-between px-4 py-4 border-t border-border-light dark:border-border-dark"
+              >
+                <button
+                  type="button"
+                  class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-text-secondary-light dark:text-text-secondary-dark hover:bg-background-light dark:hover:bg-background-dark border border-border-light dark:border-border-dark transition-colors"
+                >
+                  キャンセル
+                </button>
+                <div class="flex items-center gap-3">
+                  <button
+                    type="button"
+                    class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-background-light dark:hover:bg-background-dark border border-border-light dark:border-border-dark transition-colors"
+                  >
+                    <span
+                      class="material-symbols-outlined"
+                      style="font-size: 18px"
+                    >
+                      save
+                    </span>
+                    下書き保存
+                  </button>
+                  <button
+                    type="submit"
+                    class="flex items-center gap-2 px-6 py-2 rounded-lg text-sm font-medium bg-success text-white hover:bg-green-700 transition-colors shadow-sm"
+                  >
+                    <span
+                      class="material-symbols-outlined"
+                      style="font-size: 18px"
+                    >
+                      add
+                    </span>
+                    プロジェクトを作成
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toggle Dark Mode (for demo purposes) -->
+    <button
+      class="fixed bottom-6 right-6 p-3 rounded-full bg-text-primary-light dark:bg-text-primary-dark text-white dark:text-background-dark shadow-lg hover:shadow-xl transition-all"
+      onclick="document.documentElement.classList.toggle('dark')"
+      aria-label="Toggle dark mode"
+    >
+      <span class="material-symbols-outlined">dark_mode</span>
+    </button>
+  </body>
+</html>
