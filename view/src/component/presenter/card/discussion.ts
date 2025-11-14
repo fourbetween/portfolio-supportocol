@@ -86,9 +86,7 @@ export class DiscussionCardPresenter extends LitElement {
       }
 
       .icon {
-        font-family: "Material Symbols Outlined";
         font-size: 16px;
-        font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
       }
 
       .comment-count {
