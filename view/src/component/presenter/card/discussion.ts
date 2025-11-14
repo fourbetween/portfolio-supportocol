@@ -94,20 +94,6 @@ export class DiscussionCardPresenter extends LitElement {
         font-weight: 500;
         margin: 0;
       }
-
-      :host([theme="dark"]) .card {
-        background: rgb(16 24 34);
-        border-color: rgb(48 54 61);
-      }
-
-      :host([theme="dark"]) .theme-link {
-        color: rgb(230 237 243);
-      }
-
-      :host([theme="dark"]) .author-info,
-      :host([theme="dark"]) .comment-info {
-        color: rgb(139 148 158);
-      }
     `,
   ];
 }
