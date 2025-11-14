@@ -24,7 +24,7 @@ export class DiscussionCardPresenter extends LitElement {
             <p class="author-name">${this.discussionCard.authorName}</p>
           </div>
           <div class="comment-info">
-            <span class="icon">chat_bubble_outline</span>
+            <span class="icon">💬</span>
             <p class="comment-count">${this.discussionCard.commentCount}</p>
           </div>
         </div>
