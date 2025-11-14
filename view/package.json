@@ -13,7 +13,6 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@awesome.me/webawesome": "^3.0.0",
     "@lit-labs/router": "^0.1.4",
     "@lit/task": "^1.0.3",
     "aws-amplify": "^6.15.8",

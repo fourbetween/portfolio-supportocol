@@ -1,6 +1,3 @@
-import "@awesome.me/webawesome/dist/components/button/button.js";
-import "@awesome.me/webawesome/dist/components/icon/icon.js";
-
 import "./component/container/layout/main";
 import "./component/container/page/front";
 import "./component/presenter/card/discussion";
