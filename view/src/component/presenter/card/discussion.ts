@@ -7,7 +7,6 @@ export interface DiscussionCardProps {
   id: string;
   theme: string;
   authorName: string;
-  authorAvatarUrl: string;
   commentCount: number;
 }
 
@@ -22,11 +21,6 @@ export class DiscussionCardPresenter extends LitElement {
         <a href="#" class="theme-link">${this.discussionCard.theme}</a>
         <div class="card-footer">
           <div class="author-info">
-            <div
-              class="avatar"
-              style="background-image: url('${this.discussionCard
-                .authorAvatarUrl}')"
-            ></div>
             <p class="author-name">${this.discussionCard.authorName}</p>
           </div>
           <div class="comment-info">
@@ -76,15 +70,6 @@ export class DiscussionCardPresenter extends LitElement {
         align-items: center;
         gap: 0.375rem;
         color: rgb(101 109 118);
-      }
-
-      .avatar {
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        border-radius: 9999px;
-        width: 1.25rem;
-        height: 1.25rem;
       }
 
       .author-name {

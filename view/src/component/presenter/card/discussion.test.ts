@@ -11,8 +11,6 @@ describe("DiscussionCardPresenter", async () => {
     id: "01234567890123456789012345",
     theme: "How to improve the filtering logic?",
     authorName: "octocat",
-    authorAvatarUrl:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCYOAwszR78qrnivx9pc-M6avYiFr5NkNFJUUPaAul-xToT_2myEsgKuKZ5-k1r-U1UKCnSo4X4u4fseAOlQhgw9SeWlZx7-kL6JbHXEyHroqYDf_u33yhYENDvAR_g0SYRdpzp_Et1tNSgJm-oU8Roto4gpy9-WIqujVfU5XTxnc9Hj-_cVq0WMQKWBOpC4_BLWSXSw_9kcM35sArc60CTXl21sJqig-Z1oVTBhwxe3BlZn9srrcC_Ixi4r00_KinUOtFbwO8xkB0",
     commentCount: 12,
   };
 
