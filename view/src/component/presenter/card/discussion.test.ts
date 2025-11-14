@@ -39,4 +39,12 @@ describe("DiscussionCardPresenter", async () => {
   it("コメント数が表示されること", async () => {
     await expect.element(page.getByText("12")).toBeInTheDocument();
   });
+
+  it("コメントアイコンが表示されること", async () => {
+    const icon = elem.shadowRoot?.querySelector(
+      ".comment-info .material-symbols-outlined"
+    );
+    expect(icon).toBeTruthy();
+    expect(icon?.textContent).toBe("chat_bubble");
+  });
 });

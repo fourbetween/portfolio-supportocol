@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../style/base";
+import { iconStyle } from "../../../style/icon";
 
 // DiscussionCardに必要な最小限のプロパティ
 export interface DiscussionCardProps {
@@ -24,7 +25,7 @@ export class DiscussionCardPresenter extends LitElement {
             <p class="author-name">${this.discussionCard.authorName}</p>
           </div>
           <div class="comment-info">
-            <span class="icon">💬</span>
+            <span class="material-symbols-outlined">chat_bubble</span>
             <p class="comment-count">${this.discussionCard.commentCount}</p>
           </div>
         </div>
@@ -34,6 +35,7 @@ export class DiscussionCardPresenter extends LitElement {
 
   static styles = [
     baseStyle,
+    iconStyle,
     css`
       .card {
         background: white;
@@ -83,10 +85,6 @@ export class DiscussionCardPresenter extends LitElement {
         align-items: center;
         gap: 0.375rem;
         color: rgb(101 109 118);
-      }
-
-      .icon {
-        font-size: 16px;
       }
 
       .comment-count {
