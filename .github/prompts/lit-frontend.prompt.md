@@ -24,11 +24,11 @@ $ARGUMENTS
    - `view/src/component/presenter/list/workbook.test.ts` にある既存のテストコードを参考にしてください。
    - describe 関数の第一引数にはコンポーネントのクラス名を渡してください。
    - it 関数の第一引数であるテストケース名は必ず「〜こと」で終わる日本語にしてください。
-   - コンポーネントのファイルのパスは `view/src/component/presenter/` 以下に、クラス名をディレクトリ階層で表現した形で保存してください。（例：WorkbookListPresenter の場合、`view/src/component/presenter/list/workbook.ts`）
 2. 追加したテストをパスするための最低限のコードを実装してください。
    - Container/Presentational パターンに従ってコンポーネントを実装してください。
    - `view/src/component/presenter/list/workbook.ts` にある既存のコンポーネントを参考にしてください。
    - ある presenter コンポーネントから、別の container コンポーネントを利用してはいけないことに留意してください。
+   - CSS スタイルは Tailwind のようなクラス名を使わず、セマンティックなクラス名を使ってください。
 3. #runTests コマンドですべてのテストを実行して、パスすることを確認してください。
    - もし #runTests コマンドが使えない環境の場合は、`make testview`を実行してください。
 4. 追加の機能が Storybook の story として必要な場合は、その story を追加してください。
