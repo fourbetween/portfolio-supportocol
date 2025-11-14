@@ -30,7 +30,6 @@ CREATE TABLE rules (
 -- 議論
 CREATE TABLE discussions (
 	id VARCHAR NOT NULL,
-	project_id VARCHAR,
 	theme VARCHAR NOT NULL,
 	background TEXT NOT NULL,
 	conclusion TEXT NOT NULL,
@@ -41,8 +40,17 @@ CREATE TABLE discussions (
 	created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	status VARCHAR NOT NULL, -- 'open', 'closed', 'archived'
 	CONSTRAINT discussions_pk PRIMARY KEY (id),
-	CONSTRAINT discussions_projects_fk FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL,
 	CONSTRAINT discussions_rules_fk FOREIGN KEY (rule_id) REFERENCES rules(id)
+);
+
+-- プロジェクトと議論の関係
+CREATE TABLE project_discussions (
+	project_id VARCHAR NOT NULL,
+	discussion_id VARCHAR NOT NULL,
+	added_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT project_discussions_pk PRIMARY KEY (project_id, discussion_id),
+	CONSTRAINT project_discussions_projects_fk FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+	CONSTRAINT project_discussions_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE
 );
 
 -- コメント種類
