@@ -7,6 +7,7 @@ import "./auth";
 import "./import";
 import { accountMethods } from "./model/account";
 import { baseStyle } from "./style/base";
+// import "./webawesome";
 
 @customElement("app-root")
 export class AppRoot extends LitElement {

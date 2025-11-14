@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
         provider: playwright({}),
       },
       testTimeout: 100,
-      setupFiles: ["./vitest.setup.ts"],
+      setupFiles: [".storybook/vitest.setup.ts"],
     },
   };
 });
