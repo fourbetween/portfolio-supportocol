@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import type { CommentType, CommentTypePath } from "../../../model/rule";
-import "./rule";
 import type { RuleFormPresenter } from "./rule";
 
 describe("RuleFormPresenter", async () => {
