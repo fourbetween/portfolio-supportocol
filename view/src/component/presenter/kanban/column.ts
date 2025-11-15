@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../style/base";
+import { iconStyle } from "../../../style/icon";
 
 @customElement("kanban-column-presenter")
 export class KanbanColumnPresenter extends LitElement {
@@ -31,6 +32,7 @@ export class KanbanColumnPresenter extends LitElement {
 
   static styles = [
     baseStyle,
+    iconStyle,
     css`
       .kanban-column {
         width: 18rem;

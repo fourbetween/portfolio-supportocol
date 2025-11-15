@@ -2,6 +2,7 @@ import "./component/container/layout/main";
 import "./component/container/page/front";
 import "./component/presenter/card/discussion";
 import "./component/presenter/card/project";
+import "./component/presenter/form/project";
 import "./component/presenter/kanban/column";
 import "./component/presenter/layout/header";
 import "./component/presenter/list/workbook";
