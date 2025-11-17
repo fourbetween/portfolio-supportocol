@@ -12,8 +12,8 @@
         "redhat.vscode-yaml",
         "ms-vscode.live-server",
         "runem.lit-plugin",
-        "Gruntfuggly.todo-tree",
-        "vitest.explorer"
+        "vitest.explorer",
+        "GitHub.vscode-pull-request-github"
       ],
       "mcp": {
         "servers": {
