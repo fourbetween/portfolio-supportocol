@@ -1,4 +1,4 @@
-BASE_DIR=/sources/${PROJECT_NAME}
+BASE_DIR=${CURDIR}
 STACK_NAME=$(shell echo ${PROJECT_NAME}-${STAGE}-stack | sed -E 's/-(.)/\U\1/g; s/^(.)/\U\1/')
 
 .PHONY: runapi runview api view builddeploy build deploy destroy fixview gen testapi testview import storybook %
