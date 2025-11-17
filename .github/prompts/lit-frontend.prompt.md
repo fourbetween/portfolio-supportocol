@@ -34,8 +34,7 @@ $ARGUMENTS
 4. 追加の機能が Storybook の story として必要な場合は、その story を追加してください。
    - `view/src/component/presenter/list/workbook.stories.ts` にある既存の story を参考にしてください。
 5. chromedevtools/chrome-devtools-mcp を使って Storybook にアクセスし、UI の見た目と動作を確認してください。
-   - Storybook URL は`http://localhost:6006/`です。
-   - 上記の URL にアクセスできない場合のみ、`make storybook`を実行して Storybook サーバーを起動してください。
-   - もし Storybook URL にアクセスできない場合はこの手順をスキップしてください。
+   - `make storybook`を実行して Storybook サーバーを起動してください。
+   - すでにポートが使用されている場合は、別のポートで起動してください。（例: `PORT=6007 make storybook`）
 6. リファクタリングが必要かどうか検討し、必要であれば行ってください。
 7. 1〜6 のステップを繰り返すことで、必要な機能をすべて実装してください。

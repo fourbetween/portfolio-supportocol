@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "gen": "npx tsx ./src/api/schema/gen.ts && npx openapi-typescript ../internal/api/schema/openapi.yml -o ./src/api/schema.d.ts",
     "test": "vitest --run",
-    "storybook": "storybook dev -p 6006 --no-open",
+    "storybook": "storybook dev --no-open",
     "build-storybook": "storybook build"
   },
   "dependencies": {

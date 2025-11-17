@@ -47,7 +47,7 @@ import:
 	go tool import --importfile=${BASE_DIR}/view/src/import.ts --targetdir=${BASE_DIR}/view/src/component --watch
 storybook:
 	cd ${BASE_DIR}/view && \
-	npm run storybook
+	npm run storybook -- -p $${PORT:-6006}
 upgradetools:
 	go get tool
 upgradegopkgs:
