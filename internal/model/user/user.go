@@ -66,14 +66,14 @@ func (u *User) UpdateProject(params UpdateProjectParams) (project.Project, error
 	return p, nil
 }
 
-func (u *User) LoadWorkbook(workbookID string) (workbook.Workbook, error) {
+func (u *User) LoadWorkbook(workbookID string) (*workbook.Workbook, error) {
 	return u.workbookRepo.Load(workbook.LoadParams{
 		ID:      workbookID,
 		OwnerID: u.id,
 	})
 }
 
-func (u *User) SearchWorkbooks() ([]workbook.Workbook, error) {
+func (u *User) SearchWorkbooks() ([]*workbook.Workbook, error) {
 	return u.workbookRepo.Search(workbook.SearchParams{
 		OwnerID: u.id,
 	})

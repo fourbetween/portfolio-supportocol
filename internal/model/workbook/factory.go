@@ -30,7 +30,7 @@ func NewFactory(
 	}
 }
 
-func (f *Factory) NewWorkbook(params NewWorkbookParams) Workbook {
+func (f *Factory) NewWorkbook(params NewWorkbookParams) *Workbook {
 	id := f.idSrv.Generate()
 	return f.BuildWorkbook(BuildWorkbookParams{
 		ID:                id,
@@ -38,8 +38,8 @@ func (f *Factory) NewWorkbook(params NewWorkbookParams) Workbook {
 	})
 }
 
-func (f *Factory) BuildWorkbook(params BuildWorkbookParams) Workbook {
-	return Workbook{
+func (f *Factory) BuildWorkbook(params BuildWorkbookParams) *Workbook {
+	return &Workbook{
 		id:      params.ID,
 		title:   params.Title,
 		status:  params.Status,

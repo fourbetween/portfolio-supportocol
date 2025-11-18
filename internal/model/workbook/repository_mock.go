@@ -40,10 +40,10 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 }
 
 // Load mocks base method.
-func (m *MockRepository) Load(params LoadParams) (Workbook, error) {
+func (m *MockRepository) Load(params LoadParams) (*Workbook, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Load", params)
-	ret0, _ := ret[0].(Workbook)
+	ret0, _ := ret[0].(*Workbook)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -55,7 +55,7 @@ func (mr *MockRepositoryMockRecorder) Load(params any) *gomock.Call {
 }
 
 // Save mocks base method.
-func (m *MockRepository) Save(workbook Workbook) error {
+func (m *MockRepository) Save(workbook *Workbook) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Save", workbook)
 	ret0, _ := ret[0].(error)
@@ -69,10 +69,10 @@ func (mr *MockRepositoryMockRecorder) Save(workbook any) *gomock.Call {
 }
 
 // Search mocks base method.
-func (m *MockRepository) Search(params SearchParams) ([]Workbook, error) {
+func (m *MockRepository) Search(params SearchParams) ([]*Workbook, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Search", params)
-	ret0, _ := ret[0].([]Workbook)
+	ret0, _ := ret[0].([]*Workbook)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
