@@ -321,3 +321,103 @@ func TestUser_DeleteProject(t *testing.T) {
 		})
 	}
 }
+
+func TestUser_ListProjects(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name   string
+		setup  func(*container) []*project.Project
+		verify func(*testing.T, []*project.Project, error)
+	}{
+		{
+			name: "プロジェクトのリストを取得できること",
+			setup: func(con *container) []*project.Project {
+				expectedProjects := []*project.Project{
+					con.ProjectFac.BuildProject(project.BuildProjectParams{
+						ID: "project-id-1",
+						NewProjectParams: project.NewProjectParams{
+							Name:      "プロジェクト1",
+							CreatedBy: "test-user-id",
+							CreatedAt: fixedTime,
+						},
+					}),
+					con.ProjectFac.BuildProject(project.BuildProjectParams{
+						ID: "project-id-2",
+						NewProjectParams: project.NewProjectParams{
+							Name:      "プロジェクト2",
+							CreatedBy: "test-user-id",
+							CreatedAt: fixedTime.Add(time.Hour),
+						},
+					}),
+				}
+				con.ProjectRepo.EXPECT().Search(project.SearchParams{
+					CreatedBy: "test-user-id",
+				}).Return(expectedProjects, nil)
+				return expectedProjects
+			},
+			verify: func(t *testing.T, got []*project.Project, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("ListProjects() failed: %v", err)
+					return
+				}
+				if len(got) != 2 {
+					t.Errorf("ListProjects() length = %v, want %v", len(got), 2)
+					return
+				}
+				if got[0].ID() != "project-id-1" {
+					t.Errorf("ListProjects()[0].ID() = %v, want %v", got[0].ID(), "project-id-1")
+				}
+				if got[0].Name() != "プロジェクト1" {
+					t.Errorf("ListProjects()[0].Name() = %v, want %v", got[0].Name(), "プロジェクト1")
+				}
+				if got[1].ID() != "project-id-2" {
+					t.Errorf("ListProjects()[1].ID() = %v, want %v", got[1].ID(), "project-id-2")
+				}
+				if got[1].Name() != "プロジェクト2" {
+					t.Errorf("ListProjects()[1].Name() = %v, want %v", got[1].Name(), "プロジェクト2")
+				}
+			},
+		},
+		{
+			name: "プロジェクトが存在しない場合に空のリストを返すこと",
+			setup: func(con *container) []*project.Project {
+				con.ProjectRepo.EXPECT().Search(project.SearchParams{
+					CreatedBy: "test-user-id",
+				}).Return([]*project.Project{}, nil)
+				return []*project.Project{}
+			},
+			verify: func(t *testing.T, got []*project.Project, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("ListProjects() failed: %v", err)
+					return
+				}
+				if len(got) != 0 {
+					t.Errorf("ListProjects() length = %v, want %v", len(got), 0)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.ListProjects()
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}

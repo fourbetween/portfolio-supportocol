@@ -39,6 +39,12 @@ func (u *User) Email() string {
 	return u.email
 }
 
+func (u *User) ListProjects() ([]*project.Project, error) {
+	return u.projectRepo.Search(project.SearchParams{
+		CreatedBy: u.id,
+	})
+}
+
 func (u *User) CreateProject(params CreateProjectParams) (*project.Project, error) {
 	p := u.projectFac.NewProject(project.NewProjectParams{
 		Name:      params.Name,
