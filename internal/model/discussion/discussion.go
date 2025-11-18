@@ -3,14 +3,14 @@ package discussion
 import "time"
 
 type (
-	// visibilityLevel は議論の公開レベルを表す
-	visibilityLevel string
+	// VisibilityLevel は議論の公開レベルを表す
+	VisibilityLevel string
 
-	// commentPermissionLevel はコメント許可レベルを表す
-	commentPermissionLevel string
+	// CommentPermissionLevel はコメント許可レベルを表す
+	CommentPermissionLevel string
 
-	// discussionStatus は議論の状態を表す
-	discussionStatus string
+	// Status は議論の状態を表す
+	Status string
 
 	Discussion struct {
 		id                     string
@@ -18,67 +18,73 @@ type (
 		background             string
 		conclusion             string
 		ruleID                 string
-		visibilityLevel        visibilityLevel
-		commentPermissionLevel commentPermissionLevel
+		visibilityLevel        VisibilityLevel
+		commentPermissionLevel CommentPermissionLevel
 		createdBy              string
 		createdAt              time.Time
-		status                 discussionStatus
+		status                 Status
+
+		repo Repository
 	}
 )
 
 const (
-	// visibilityLevel の定数値
-	visibilityLevelEveryone      visibilityLevel = "everyone"
-	visibilityLevelAuthenticated visibilityLevel = "authenticated"
-	visibilityLevelOwner         visibilityLevel = "owner"
+	// VisibilityLevel の定数値
+	VisibilityLevelEveryone      VisibilityLevel = "everyone"
+	VisibilityLevelAuthenticated VisibilityLevel = "authenticated"
+	VisibilityLevelOwner         VisibilityLevel = "owner"
 
-	// commentPermissionLevel の定数値
-	commentPermissionLevelEveryone      commentPermissionLevel = "everyone"
-	commentPermissionLevelAuthenticated commentPermissionLevel = "authenticated"
-	commentPermissionLevelOwner         commentPermissionLevel = "owner"
+	// CommentPermissionLevel の定数値
+	CommentPermissionLevelEveryone      CommentPermissionLevel = "everyone"
+	CommentPermissionLevelAuthenticated CommentPermissionLevel = "authenticated"
+	CommentPermissionLevelOwner         CommentPermissionLevel = "owner"
 
-	// discussionStatus の定数値
-	discussionStatusOpen     discussionStatus = "open"
-	discussionStatusClosed   discussionStatus = "closed"
-	discussionStatusArchived discussionStatus = "archived"
+	// Status の定数値
+	StatusOpen     Status = "open"
+	StatusClosed   Status = "closed"
+	StatusArchived Status = "archived"
 )
 
-func (d Discussion) ID() string {
+func (d *Discussion) ID() string {
 	return d.id
 }
 
-func (d Discussion) Theme() string {
+func (d *Discussion) Theme() string {
 	return d.theme
 }
 
-func (d Discussion) Background() string {
+func (d *Discussion) Background() string {
 	return d.background
 }
 
-func (d Discussion) Conclusion() string {
+func (d *Discussion) Conclusion() string {
 	return d.conclusion
 }
 
-func (d Discussion) RuleID() string {
+func (d *Discussion) RuleID() string {
 	return d.ruleID
 }
 
-func (d Discussion) VisibilityLevel() visibilityLevel {
+func (d *Discussion) VisibilityLevel() VisibilityLevel {
 	return d.visibilityLevel
 }
 
-func (d Discussion) CommentPermissionLevel() commentPermissionLevel {
+func (d *Discussion) CommentPermissionLevel() CommentPermissionLevel {
 	return d.commentPermissionLevel
 }
 
-func (d Discussion) CreatedBy() string {
+func (d *Discussion) CreatedBy() string {
 	return d.createdBy
 }
 
-func (d Discussion) CreatedAt() time.Time {
+func (d *Discussion) CreatedAt() time.Time {
 	return d.createdAt
 }
 
-func (d Discussion) Status() discussionStatus {
+func (d *Discussion) Status() Status {
 	return d.status
+}
+
+func (d *Discussion) IsOpen() bool {
+	return d.status == StatusOpen
 }
