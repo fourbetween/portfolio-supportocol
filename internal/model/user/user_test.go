@@ -109,3 +109,96 @@ func TestUser_CreateProject(t *testing.T) {
 		})
 	}
 }
+
+func TestUser_UpdateProject(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name   string
+		params user.UpdateProjectParams
+		setup  func(*container)
+		verify func(*testing.T, project.Project, error)
+	}{
+		{
+			name: "プロジェクトを更新できること",
+			params: user.UpdateProjectParams{
+				ProjectID: "existing-project-id",
+				Name:      "更新されたプロジェクト名",
+			},
+			setup: func(con *container) {
+				existingProject := con.ProjectFac.BuildProject(project.BuildProjectParams{
+					ID: "existing-project-id",
+					NewProjectParams: project.NewProjectParams{
+						Name:      "元のプロジェクト名",
+						CreatedBy: "test-user-id",
+						CreatedAt: fixedTime,
+					},
+				})
+				con.ProjectRepo.EXPECT().Load(project.LoadParams{
+					ID:        "existing-project-id",
+					CreatedBy: "test-user-id",
+				}).Return(existingProject, nil)
+				con.ProjectRepo.EXPECT().Save(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, got project.Project, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("UpdateProject() failed: %v", err)
+					return
+				}
+				if got.ID() != "existing-project-id" {
+					t.Errorf("UpdateProject() ID = %v, want %v", got.ID(), "existing-project-id")
+				}
+				if got.Name() != "更新されたプロジェクト名" {
+					t.Errorf("UpdateProject() Name = %v, want %v", got.Name(), "更新されたプロジェクト名")
+				}
+				if got.CreatedBy() != "test-user-id" {
+					t.Errorf("UpdateProject() CreatedBy = %v, want %v", got.CreatedBy(), "test-user-id")
+				}
+			},
+		},
+		{
+			name: "存在しないプロジェクトの場合にエラーを返すこと",
+			params: user.UpdateProjectParams{
+				ProjectID: "non-existent-project-id",
+				Name:      "更新されたプロジェクト名",
+			},
+			setup: func(con *container) {
+				con.ProjectRepo.EXPECT().Load(project.LoadParams{
+					ID:        "non-existent-project-id",
+					CreatedBy: "test-user-id",
+				}).Return(project.Project{}, project.ErrNotFound)
+			},
+			verify: func(t *testing.T, got project.Project, err error) {
+				t.Helper()
+				if err == nil {
+					t.Error("UpdateProject() should return error")
+					return
+				}
+				if err != project.ErrNotFound {
+					t.Errorf("UpdateProject() error = %v, want %v", err, project.ErrNotFound)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.UpdateProject(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}

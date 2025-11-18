@@ -19,6 +19,11 @@ type (
 	CreateProjectParams struct {
 		Name string
 	}
+
+	UpdateProjectParams struct {
+		ProjectID string
+		Name      string
+	}
 )
 
 func (u User) ID() string {
@@ -35,6 +40,24 @@ func (u User) CreateProject(params CreateProjectParams) (project.Project, error)
 		CreatedBy: u.id,
 		CreatedAt: u.clockSrv.Now(),
 	})
+
+	if err := p.Save(); err != nil {
+		return project.Project{}, err
+	}
+
+	return p, nil
+}
+
+func (u User) UpdateProject(params UpdateProjectParams) (project.Project, error) {
+	p, err := u.projectFac.Load(project.LoadParams{
+		ID:        params.ProjectID,
+		CreatedBy: u.id,
+	})
+	if err != nil {
+		return project.Project{}, err
+	}
+
+	p.UpdateName(params.Name)
 
 	if err := p.Save(); err != nil {
 		return project.Project{}, err

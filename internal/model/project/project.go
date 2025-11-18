@@ -1,6 +1,13 @@
 package project
 
-import "time"
+import (
+	"errors"
+	"time"
+)
+
+var (
+	ErrNotFound = errors.New("project not found")
+)
 
 type (
 	Project struct {
@@ -27,6 +34,10 @@ func (p Project) CreatedBy() string {
 
 func (p Project) CreatedAt() time.Time {
 	return p.createdAt
+}
+
+func (p *Project) UpdateName(name string) {
+	p.name = name
 }
 
 func (p Project) Save() error {
