@@ -51,7 +51,3 @@ func (f *Factory) BuildProject(params BuildProjectParams) *Project {
 		repo:      f.repo,
 	}
 }
-
-func (f *Factory) Load(params LoadParams) (*Project, error) {
-	return f.repo.Load(params)
-}

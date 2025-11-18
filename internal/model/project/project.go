@@ -1,14 +1,7 @@
 package project
 
 import (
-	"fmt"
 	"time"
-
-	"github.com/fourbetween/app-supportocol/internal"
-)
-
-var (
-	ErrNotFound = fmt.Errorf("project: %w", internal.ErrNotFound)
 )
 
 type (
