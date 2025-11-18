@@ -9,7 +9,7 @@ package model
 
 type CommentTypePaths struct {
 	ID                string `sql:"primary_key"`
-	DiscussionID      string
+	RuleID            string
 	FromCommentTypeID string
 	ToCommentTypeID   string
 }

@@ -28,3 +28,7 @@ func (p Project) CreatedBy() string {
 func (p Project) CreatedAt() time.Time {
 	return p.createdAt
 }
+
+func (p Project) Save() error {
+	return p.repo.Save(p)
+}

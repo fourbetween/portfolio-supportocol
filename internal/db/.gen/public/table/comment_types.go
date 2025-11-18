@@ -17,10 +17,11 @@ type commentTypesTable struct {
 	postgres.Table
 
 	// Columns
-	ID           postgres.ColumnString
-	DiscussionID postgres.ColumnString
-	Name         postgres.ColumnString
-	Description  postgres.ColumnString
+	ID          postgres.ColumnString
+	RuleID      postgres.ColumnString
+	Name        postgres.ColumnString
+	Description postgres.ColumnString
+	Color       postgres.ColumnString
 
 	AllColumns     postgres.ColumnList
 	MutableColumns postgres.ColumnList
@@ -62,23 +63,25 @@ func newCommentTypesTable(schemaName, tableName, alias string) *CommentTypesTabl
 
 func newCommentTypesTableImpl(schemaName, tableName, alias string) commentTypesTable {
 	var (
-		IDColumn           = postgres.StringColumn("id")
-		DiscussionIDColumn = postgres.StringColumn("discussion_id")
-		NameColumn         = postgres.StringColumn("name")
-		DescriptionColumn  = postgres.StringColumn("description")
-		allColumns         = postgres.ColumnList{IDColumn, DiscussionIDColumn, NameColumn, DescriptionColumn}
-		mutableColumns     = postgres.ColumnList{DiscussionIDColumn, NameColumn, DescriptionColumn}
-		defaultColumns     = postgres.ColumnList{}
+		IDColumn          = postgres.StringColumn("id")
+		RuleIDColumn      = postgres.StringColumn("rule_id")
+		NameColumn        = postgres.StringColumn("name")
+		DescriptionColumn = postgres.StringColumn("description")
+		ColorColumn       = postgres.StringColumn("color")
+		allColumns        = postgres.ColumnList{IDColumn, RuleIDColumn, NameColumn, DescriptionColumn, ColorColumn}
+		mutableColumns    = postgres.ColumnList{RuleIDColumn, NameColumn, DescriptionColumn, ColorColumn}
+		defaultColumns    = postgres.ColumnList{}
 	)
 
 	return commentTypesTable{
 		Table: postgres.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
-		ID:           IDColumn,
-		DiscussionID: DiscussionIDColumn,
-		Name:         NameColumn,
-		Description:  DescriptionColumn,
+		ID:          IDColumn,
+		RuleID:      RuleIDColumn,
+		Name:        NameColumn,
+		Description: DescriptionColumn,
+		Color:       ColorColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

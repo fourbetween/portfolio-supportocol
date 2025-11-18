@@ -16,5 +16,8 @@ func UseSchema(schema string) {
 	Discussions = Discussions.FromSchema(schema)
 	Issues = Issues.FromSchema(schema)
 	Notes = Notes.FromSchema(schema)
+	ProjectDiscussions = ProjectDiscussions.FromSchema(schema)
+	Projects = Projects.FromSchema(schema)
+	Rules = Rules.FromSchema(schema)
 	Workbooks = Workbooks.FromSchema(schema)
 }

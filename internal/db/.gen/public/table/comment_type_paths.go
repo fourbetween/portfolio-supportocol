@@ -18,7 +18,7 @@ type commentTypePathsTable struct {
 
 	// Columns
 	ID                postgres.ColumnString
-	DiscussionID      postgres.ColumnString
+	RuleID            postgres.ColumnString
 	FromCommentTypeID postgres.ColumnString
 	ToCommentTypeID   postgres.ColumnString
 
@@ -63,11 +63,11 @@ func newCommentTypePathsTable(schemaName, tableName, alias string) *CommentTypeP
 func newCommentTypePathsTableImpl(schemaName, tableName, alias string) commentTypePathsTable {
 	var (
 		IDColumn                = postgres.StringColumn("id")
-		DiscussionIDColumn      = postgres.StringColumn("discussion_id")
+		RuleIDColumn            = postgres.StringColumn("rule_id")
 		FromCommentTypeIDColumn = postgres.StringColumn("from_comment_type_id")
 		ToCommentTypeIDColumn   = postgres.StringColumn("to_comment_type_id")
-		allColumns              = postgres.ColumnList{IDColumn, DiscussionIDColumn, FromCommentTypeIDColumn, ToCommentTypeIDColumn}
-		mutableColumns          = postgres.ColumnList{DiscussionIDColumn, FromCommentTypeIDColumn, ToCommentTypeIDColumn}
+		allColumns              = postgres.ColumnList{IDColumn, RuleIDColumn, FromCommentTypeIDColumn, ToCommentTypeIDColumn}
+		mutableColumns          = postgres.ColumnList{RuleIDColumn, FromCommentTypeIDColumn, ToCommentTypeIDColumn}
 		defaultColumns          = postgres.ColumnList{}
 	)
 
@@ -76,7 +76,7 @@ func newCommentTypePathsTableImpl(schemaName, tableName, alias string) commentTy
 
 		//Columns
 		ID:                IDColumn,
-		DiscussionID:      DiscussionIDColumn,
+		RuleID:            RuleIDColumn,
 		FromCommentTypeID: FromCommentTypeIDColumn,
 		ToCommentTypeID:   ToCommentTypeIDColumn,
 

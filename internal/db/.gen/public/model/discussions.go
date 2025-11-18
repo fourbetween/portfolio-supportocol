@@ -15,8 +15,11 @@ type Discussions struct {
 	ID                     string `sql:"primary_key"`
 	Theme                  string
 	Background             string
+	Conclusion             string
+	RuleID                 string
 	VisibilityLevel        string
 	CommentPermissionLevel string
 	CreatedBy              string
 	CreatedAt              time.Time
+	Status                 string
 }

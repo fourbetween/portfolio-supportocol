@@ -7,10 +7,12 @@
 
 package model
 
-type CommentTypes struct {
-	ID          string `sql:"primary_key"`
-	RuleID      string
-	Name        string
-	Description string
-	Color       string
+import (
+	"time"
+)
+
+type ProjectDiscussions struct {
+	ProjectID    string `sql:"primary_key"`
+	DiscussionID string `sql:"primary_key"`
+	AddedAt      time.Time
 }

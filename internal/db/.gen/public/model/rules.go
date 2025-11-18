@@ -7,10 +7,14 @@
 
 package model
 
-type CommentTypes struct {
+import (
+	"time"
+)
+
+type Rules struct {
 	ID          string `sql:"primary_key"`
-	RuleID      string
 	Name        string
 	Description string
-	Color       string
+	CreatedBy   string
+	CreatedAt   time.Time
 }

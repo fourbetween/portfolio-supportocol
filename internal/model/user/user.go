@@ -1,7 +1,9 @@
 package user
 
 import (
+	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/workbook"
+	"github.com/fourbetween/app-supportocol/internal/service/clock"
 )
 
 type (
@@ -10,6 +12,12 @@ type (
 		email string
 
 		workbookRepo workbook.Repository
+		projectFac   *project.Factory
+		clockSrv     clock.Service
+	}
+
+	CreateProjectParams struct {
+		Name string
 	}
 )
 
@@ -19,6 +27,20 @@ func (u User) ID() string {
 
 func (u User) Email() string {
 	return u.email
+}
+
+func (u User) CreateProject(params CreateProjectParams) (project.Project, error) {
+	p := u.projectFac.NewProject(project.NewProjectParams{
+		Name:      params.Name,
+		CreatedBy: u.id,
+		CreatedAt: u.clockSrv.Now(),
+	})
+
+	if err := p.Save(); err != nil {
+		return project.Project{}, err
+	}
+
+	return p, nil
 }
 
 func (u User) LoadWorkbook(workbookID string) (workbook.Workbook, error) {

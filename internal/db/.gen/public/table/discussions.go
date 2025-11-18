@@ -20,10 +20,13 @@ type discussionsTable struct {
 	ID                     postgres.ColumnString
 	Theme                  postgres.ColumnString
 	Background             postgres.ColumnString
+	Conclusion             postgres.ColumnString
+	RuleID                 postgres.ColumnString
 	VisibilityLevel        postgres.ColumnString
 	CommentPermissionLevel postgres.ColumnString
 	CreatedBy              postgres.ColumnString
 	CreatedAt              postgres.ColumnTimestamp
+	Status                 postgres.ColumnString
 
 	AllColumns     postgres.ColumnList
 	MutableColumns postgres.ColumnList
@@ -68,12 +71,15 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		IDColumn                     = postgres.StringColumn("id")
 		ThemeColumn                  = postgres.StringColumn("theme")
 		BackgroundColumn             = postgres.StringColumn("background")
+		ConclusionColumn             = postgres.StringColumn("conclusion")
+		RuleIDColumn                 = postgres.StringColumn("rule_id")
 		VisibilityLevelColumn        = postgres.StringColumn("visibility_level")
 		CommentPermissionLevelColumn = postgres.StringColumn("comment_permission_level")
 		CreatedByColumn              = postgres.StringColumn("created_by")
 		CreatedAtColumn              = postgres.TimestampColumn("created_at")
-		allColumns                   = postgres.ColumnList{IDColumn, ThemeColumn, BackgroundColumn, VisibilityLevelColumn, CommentPermissionLevelColumn, CreatedByColumn, CreatedAtColumn}
-		mutableColumns               = postgres.ColumnList{ThemeColumn, BackgroundColumn, VisibilityLevelColumn, CommentPermissionLevelColumn, CreatedByColumn, CreatedAtColumn}
+		StatusColumn                 = postgres.StringColumn("status")
+		allColumns                   = postgres.ColumnList{IDColumn, ThemeColumn, BackgroundColumn, ConclusionColumn, RuleIDColumn, VisibilityLevelColumn, CommentPermissionLevelColumn, CreatedByColumn, CreatedAtColumn, StatusColumn}
+		mutableColumns               = postgres.ColumnList{ThemeColumn, BackgroundColumn, ConclusionColumn, RuleIDColumn, VisibilityLevelColumn, CommentPermissionLevelColumn, CreatedByColumn, CreatedAtColumn, StatusColumn}
 		defaultColumns               = postgres.ColumnList{CreatedAtColumn}
 	)
 
@@ -84,10 +90,13 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		ID:                     IDColumn,
 		Theme:                  ThemeColumn,
 		Background:             BackgroundColumn,
+		Conclusion:             ConclusionColumn,
+		RuleID:                 RuleIDColumn,
 		VisibilityLevel:        VisibilityLevelColumn,
 		CommentPermissionLevel: CommentPermissionLevelColumn,
 		CreatedBy:              CreatedByColumn,
 		CreatedAt:              CreatedAtColumn,
+		Status:                 StatusColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,
