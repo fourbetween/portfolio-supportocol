@@ -311,7 +311,9 @@ func TestUser_DeleteProject(t *testing.T) {
 				Email: "test@example.com",
 			})
 
-			err := u.DeleteProject(tt.projectID)
+			err := u.DeleteProject(user.DeleteProjectParams{
+				ProjectID: tt.projectID,
+			})
 
 			if tt.verify != nil {
 				tt.verify(t, err)

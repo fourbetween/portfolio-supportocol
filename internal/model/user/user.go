@@ -25,6 +25,10 @@ type (
 		ProjectID string
 		Name      string
 	}
+
+	DeleteProjectParams struct {
+		ProjectID string
+	}
 )
 
 func (u *User) ID() string {
@@ -67,9 +71,9 @@ func (u *User) UpdateProject(params UpdateProjectParams) (*project.Project, erro
 	return p, nil
 }
 
-func (u *User) DeleteProject(projectID string) error {
+func (u *User) DeleteProject(params DeleteProjectParams) error {
 	p, err := u.projectRepo.Load(project.LoadParams{
-		ID:        projectID,
+		ID:        params.ProjectID,
 		CreatedBy: u.id,
 	})
 	if err != nil {
