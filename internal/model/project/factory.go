@@ -34,7 +34,7 @@ func NewFactory(
 	}
 }
 
-func (f *Factory) NewProject(params NewProjectParams) Project {
+func (f *Factory) NewProject(params NewProjectParams) *Project {
 	id := f.idSrv.Generate()
 	return f.BuildProject(BuildProjectParams{
 		ID:               id,
@@ -42,8 +42,8 @@ func (f *Factory) NewProject(params NewProjectParams) Project {
 	})
 }
 
-func (f *Factory) BuildProject(params BuildProjectParams) Project {
-	return Project{
+func (f *Factory) BuildProject(params BuildProjectParams) *Project {
+	return &Project{
 		id:        params.ID,
 		name:      params.Name,
 		createdBy: params.CreatedBy,
@@ -52,6 +52,6 @@ func (f *Factory) BuildProject(params BuildProjectParams) Project {
 	}
 }
 
-func (f *Factory) Load(params LoadParams) (Project, error) {
+func (f *Factory) Load(params LoadParams) (*Project, error) {
 	return f.repo.Load(params)
 }

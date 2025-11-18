@@ -34,7 +34,7 @@ func (u *User) Email() string {
 	return u.email
 }
 
-func (u *User) CreateProject(params CreateProjectParams) (project.Project, error) {
+func (u *User) CreateProject(params CreateProjectParams) (*project.Project, error) {
 	p := u.projectFac.NewProject(project.NewProjectParams{
 		Name:      params.Name,
 		CreatedBy: u.id,
@@ -42,25 +42,25 @@ func (u *User) CreateProject(params CreateProjectParams) (project.Project, error
 	})
 
 	if err := p.Save(); err != nil {
-		return project.Project{}, err
+		return nil, err
 	}
 
 	return p, nil
 }
 
-func (u *User) UpdateProject(params UpdateProjectParams) (project.Project, error) {
+func (u *User) UpdateProject(params UpdateProjectParams) (*project.Project, error) {
 	p, err := u.projectFac.Load(project.LoadParams{
 		ID:        params.ProjectID,
 		CreatedBy: u.id,
 	})
 	if err != nil {
-		return project.Project{}, err
+		return nil, err
 	}
 
 	p.UpdateName(params.Name)
 
 	if err := p.Save(); err != nil {
-		return project.Project{}, err
+		return nil, err
 	}
 
 	return p, nil
