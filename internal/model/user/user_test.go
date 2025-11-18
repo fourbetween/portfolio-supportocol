@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/fourbetween/app-supportocol/internal"
 	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/user"
 	"github.com/fourbetween/app-supportocol/internal/model/workbook"
@@ -34,8 +35,8 @@ func newContainer(t *testing.T) *container {
 	idSrv := id.NewMockService(ctrl)
 	clockSrv := clock.NewMockService(ctrl)
 
-	userFac := user.NewFactory(workbookRepo, projectRepo, idSrv, clockSrv)
 	projectFac := project.NewFactory(projectRepo, idSrv)
+	userFac := user.NewFactory(workbookRepo, projectRepo, projectFac, clockSrv)
 
 	return &container{
 		t:            t,
@@ -206,7 +207,7 @@ func TestUser_UpdateProject(t *testing.T) {
 				con.ProjectRepo.EXPECT().Load(project.LoadParams{
 					ID:        "non-existent-project-id",
 					CreatedBy: "test-user-id",
-				}).Return(nil, project.ErrNotFound)
+				}).Return(nil, internal.ErrNotFound)
 			},
 			verify: func(t *testing.T, got *project.Project, err error) {
 				t.Helper()
@@ -214,8 +215,8 @@ func TestUser_UpdateProject(t *testing.T) {
 					t.Error("UpdateProject() should return error")
 					return
 				}
-				if err != project.ErrNotFound {
-					t.Errorf("UpdateProject() error = %v, want %v", err, project.ErrNotFound)
+				if err != internal.ErrNotFound {
+					t.Errorf("UpdateProject() error = %v, want %v", err, internal.ErrNotFound)
 				}
 			},
 		},

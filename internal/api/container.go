@@ -27,14 +27,14 @@ func NewContainer(tx *sql.Tx) (*Container, error) {
 	)
 	workbookRepo.SetFactory(workbookFac)
 
+	projectRepo := db.NewProjectRepository(tx)
 	projectFac := project.NewFactory(
-		db.NewProjectRepository(tx),
+		projectRepo,
 		idSrv,
 	)
-	projectRepo := db.NewProjectRepository(tx)
 	projectRepo.SetFactory(projectFac)
 
-	userFac := user.NewFactory(workbookRepo, projectRepo, idSrv, clockSrv)
+	userFac := user.NewFactory(workbookRepo, projectRepo, projectFac, clockSrv)
 	return &Container{
 		UserFac: userFac,
 	}, nil

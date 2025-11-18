@@ -12,6 +12,7 @@ type (
 		email string
 
 		workbookRepo workbook.Repository
+		projectRepo  project.Repository
 		projectFac   *project.Factory
 		clockSrv     clock.Service
 	}
@@ -49,7 +50,7 @@ func (u *User) CreateProject(params CreateProjectParams) (*project.Project, erro
 }
 
 func (u *User) UpdateProject(params UpdateProjectParams) (*project.Project, error) {
-	p, err := u.projectFac.Load(project.LoadParams{
+	p, err := u.projectRepo.Load(project.LoadParams{
 		ID:        params.ProjectID,
 		CreatedBy: u.id,
 	})
