@@ -242,3 +242,80 @@ func TestUser_UpdateProject(t *testing.T) {
 		})
 	}
 }
+
+func TestUser_DeleteProject(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name      string
+		projectID string
+		setup     func(*container)
+		verify    func(*testing.T, error)
+	}{
+		{
+			name:      "プロジェクトを削除できること",
+			projectID: "existing-project-id",
+			setup: func(con *container) {
+				existingProject := con.ProjectFac.BuildProject(project.BuildProjectParams{
+					ID: "existing-project-id",
+					NewProjectParams: project.NewProjectParams{
+						Name:      "削除対象のプロジェクト",
+						CreatedBy: "test-user-id",
+						CreatedAt: fixedTime,
+					},
+				})
+				con.ProjectRepo.EXPECT().Load(project.LoadParams{
+					ID:        "existing-project-id",
+					CreatedBy: "test-user-id",
+				}).Return(existingProject, nil)
+				con.ProjectRepo.EXPECT().Delete(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("DeleteProject() failed: %v", err)
+				}
+			},
+		},
+		{
+			name:      "存在しないプロジェクトの場合にエラーを返すこと",
+			projectID: "non-existent-project-id",
+			setup: func(con *container) {
+				con.ProjectRepo.EXPECT().Load(project.LoadParams{
+					ID:        "non-existent-project-id",
+					CreatedBy: "test-user-id",
+				}).Return(nil, internal.ErrNotFound)
+			},
+			verify: func(t *testing.T, err error) {
+				t.Helper()
+				if err == nil {
+					t.Error("DeleteProject() should return error")
+					return
+				}
+				if err != internal.ErrNotFound {
+					t.Errorf("DeleteProject() error = %v, want %v", err, internal.ErrNotFound)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			err := u.DeleteProject(tt.projectID)
+
+			if tt.verify != nil {
+				tt.verify(t, err)
+			}
+		})
+	}
+}

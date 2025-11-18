@@ -67,6 +67,18 @@ func (u *User) UpdateProject(params UpdateProjectParams) (*project.Project, erro
 	return p, nil
 }
 
+func (u *User) DeleteProject(projectID string) error {
+	p, err := u.projectRepo.Load(project.LoadParams{
+		ID:        projectID,
+		CreatedBy: u.id,
+	})
+	if err != nil {
+		return err
+	}
+
+	return p.Delete()
+}
+
 func (u *User) LoadWorkbook(workbookID string) (*workbook.Workbook, error) {
 	return u.workbookRepo.Load(workbook.LoadParams{
 		ID:      workbookID,

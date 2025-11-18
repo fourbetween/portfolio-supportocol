@@ -55,6 +55,18 @@ func (r *ProjectRepository) Save(p *project.Project) error {
 	return nil
 }
 
+func (r *ProjectRepository) Delete(p *project.Project) error {
+	stmt := table.Projects.
+		DELETE().
+		WHERE(table.Projects.ID.EQ(postgres.String(p.ID())))
+
+	if _, err := stmt.Exec(r.db); err != nil {
+		return fmt.Errorf("failed to delete project: %w", err)
+	}
+
+	return nil
+}
+
 func (r *ProjectRepository) Load(params project.LoadParams) (*project.Project, error) {
 	cond := table.Projects.ID.EQ(postgres.String(params.ID))
 	if params.CreatedBy != "" {

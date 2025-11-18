@@ -7,6 +7,7 @@ type (
 		Save(project *Project) error
 		Load(params LoadParams) (*Project, error)
 		Search(params SearchParams) ([]*Project, error)
+		Delete(project *Project) error
 	}
 
 	LoadParams struct {

@@ -38,3 +38,7 @@ func (p *Project) UpdateName(name string) {
 func (p *Project) Save() error {
 	return p.repo.Save(p)
 }
+
+func (p *Project) Delete() error {
+	return p.repo.Delete(p)
+}

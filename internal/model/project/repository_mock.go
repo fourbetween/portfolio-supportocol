@@ -39,6 +39,20 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
+// Delete mocks base method.
+func (m *MockRepository) Delete(project *Project) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", project)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockRepositoryMockRecorder) Delete(project any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), project)
+}
+
 // Load mocks base method.
 func (m *MockRepository) Load(params LoadParams) (*Project, error) {
 	m.ctrl.T.Helper()
