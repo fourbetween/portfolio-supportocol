@@ -48,6 +48,45 @@ func newContainer(t *testing.T) *container {
 	}
 }
 
+func TestUser_IsPointer(t *testing.T) {
+	tests := []struct {
+		name   string
+		verify func(*testing.T, *user.User)
+	}{
+		{
+			name: "Userがポインタで扱われること",
+			verify: func(t *testing.T, got *user.User) {
+				t.Helper()
+				if got == nil {
+					t.Error("User should not be nil")
+					return
+				}
+				if got.ID() != "test-user-id" {
+					t.Errorf("User.ID() = %v, want %v", got.ID(), "test-user-id")
+				}
+				if got.Email() != "test@example.com" {
+					t.Errorf("User.Email() = %v, want %v", got.Email(), "test@example.com")
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+
+			got := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			if tt.verify != nil {
+				tt.verify(t, got)
+			}
+		})
+	}
+}
+
 func TestUser_CreateProject(t *testing.T) {
 	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
 

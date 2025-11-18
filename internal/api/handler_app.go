@@ -88,7 +88,7 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 	}
 }
 
-func (h *appHandler) loadAccount(ctx context.Context, con *Container) user.User {
+func (h *appHandler) loadAccount(ctx context.Context, con *Container) *user.User {
 	au := userFromContext(ctx)
 	return con.UserFac.Build(user.BuildParams{
 		ID:    au.ID,

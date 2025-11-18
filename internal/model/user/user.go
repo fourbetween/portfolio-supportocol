@@ -26,15 +26,15 @@ type (
 	}
 )
 
-func (u User) ID() string {
+func (u *User) ID() string {
 	return u.id
 }
 
-func (u User) Email() string {
+func (u *User) Email() string {
 	return u.email
 }
 
-func (u User) CreateProject(params CreateProjectParams) (project.Project, error) {
+func (u *User) CreateProject(params CreateProjectParams) (project.Project, error) {
 	p := u.projectFac.NewProject(project.NewProjectParams{
 		Name:      params.Name,
 		CreatedBy: u.id,
@@ -48,7 +48,7 @@ func (u User) CreateProject(params CreateProjectParams) (project.Project, error)
 	return p, nil
 }
 
-func (u User) UpdateProject(params UpdateProjectParams) (project.Project, error) {
+func (u *User) UpdateProject(params UpdateProjectParams) (project.Project, error) {
 	p, err := u.projectFac.Load(project.LoadParams{
 		ID:        params.ProjectID,
 		CreatedBy: u.id,
@@ -66,14 +66,14 @@ func (u User) UpdateProject(params UpdateProjectParams) (project.Project, error)
 	return p, nil
 }
 
-func (u User) LoadWorkbook(workbookID string) (workbook.Workbook, error) {
+func (u *User) LoadWorkbook(workbookID string) (workbook.Workbook, error) {
 	return u.workbookRepo.Load(workbook.LoadParams{
 		ID:      workbookID,
 		OwnerID: u.id,
 	})
 }
 
-func (u User) SearchWorkbooks() ([]workbook.Workbook, error) {
+func (u *User) SearchWorkbooks() ([]workbook.Workbook, error) {
 	return u.workbookRepo.Search(workbook.SearchParams{
 		OwnerID: u.id,
 	})

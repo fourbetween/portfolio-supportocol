@@ -34,8 +34,8 @@ func NewFactory(
 	}
 }
 
-func (f *Factory) Build(params BuildParams) User {
-	return User{
+func (f *Factory) Build(params BuildParams) *User {
+	return &User{
 		id:    params.ID,
 		email: params.Email,
 
