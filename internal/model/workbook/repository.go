@@ -4,9 +4,9 @@ package workbook
 
 type (
 	Repository interface {
-		Save(workbook Workbook) error
-		Load(params LoadParams) (Workbook, error)
-		Search(params SearchParams) ([]Workbook, error)
+		Save(workbook *Workbook) error
+		Load(params LoadParams) (*Workbook, error)
+		Search(params SearchParams) ([]*Workbook, error)
 	}
 
 	LoadParams struct {

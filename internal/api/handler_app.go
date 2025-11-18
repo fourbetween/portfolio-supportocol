@@ -33,7 +33,7 @@ type appHandler struct {
 }
 
 func (h *appHandler) WorkbooksGet(ctx context.Context) ([]oas.Workbook, error) {
-	var items []workbook.Workbook
+	var items []*workbook.Workbook
 	var err error
 	if err := h.uowSrv.Do(
 		ctx,
@@ -96,7 +96,7 @@ func (h *appHandler) loadAccount(ctx context.Context, con *Container) *user.User
 	})
 }
 
-func (h *appHandler) toOasWorkbook(item workbook.Workbook) oas.Workbook {
+func (h *appHandler) toOasWorkbook(item *workbook.Workbook) oas.Workbook {
 	return oas.Workbook{
 		ID:     oas.ID(item.ID()),
 		Title:  item.Title(),

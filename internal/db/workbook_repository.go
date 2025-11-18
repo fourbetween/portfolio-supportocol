@@ -28,7 +28,7 @@ func (r *WorkbookRepository) SetFactory(fac *workbook.Factory) {
 	r.fac = fac
 }
 
-func (r *WorkbookRepository) Save(w workbook.Workbook) error {
+func (r *WorkbookRepository) Save(w *workbook.Workbook) error {
 	workbookRecord := model.Workbooks{
 		ID:      w.ID(),
 		Title:   w.Title(),
@@ -55,7 +55,7 @@ func (r *WorkbookRepository) Save(w workbook.Workbook) error {
 	return nil
 }
 
-func (r *WorkbookRepository) Load(params workbook.LoadParams) (workbook.Workbook, error) {
+func (r *WorkbookRepository) Load(params workbook.LoadParams) (*workbook.Workbook, error) {
 	cond := table.Workbooks.ID.EQ(postgres.String(params.ID))
 	if params.OwnerID != "" {
 		cond = cond.AND(table.Workbooks.OwnerID.EQ(postgres.String(params.OwnerID)))
@@ -63,10 +63,10 @@ func (r *WorkbookRepository) Load(params workbook.LoadParams) (workbook.Workbook
 
 	workbooks, err := r.searchByCondition(cond)
 	if err != nil {
-		return workbook.Workbook{}, err
+		return nil, err
 	}
 	if len(workbooks) == 0 {
-		return workbook.Workbook{}, fmt.Errorf(
+		return nil, fmt.Errorf(
 			"workbook id=%s, owner_id=%s not found: %w",
 			params.ID,
 			params.OwnerID,
@@ -76,7 +76,7 @@ func (r *WorkbookRepository) Load(params workbook.LoadParams) (workbook.Workbook
 	return workbooks[0], nil
 }
 
-func (r *WorkbookRepository) Search(params workbook.SearchParams) ([]workbook.Workbook, error) {
+func (r *WorkbookRepository) Search(params workbook.SearchParams) ([]*workbook.Workbook, error) {
 	cond := postgres.Bool(true)
 	if params.OwnerID != "" {
 		cond = cond.AND(table.Workbooks.OwnerID.EQ(postgres.String(params.OwnerID)))
@@ -84,7 +84,7 @@ func (r *WorkbookRepository) Search(params workbook.SearchParams) ([]workbook.Wo
 	return r.searchByCondition(cond)
 }
 
-func (r *WorkbookRepository) searchByCondition(cond postgres.BoolExpression) ([]workbook.Workbook, error) {
+func (r *WorkbookRepository) searchByCondition(cond postgres.BoolExpression) ([]*workbook.Workbook, error) {
 	stmt := postgres.
 		SELECT(table.Workbooks.AllColumns).
 		FROM(table.Workbooks).
@@ -96,10 +96,10 @@ func (r *WorkbookRepository) searchByCondition(cond postgres.BoolExpression) ([]
 	}
 
 	if len(dest) == 0 {
-		return []workbook.Workbook{}, nil
+		return []*workbook.Workbook{}, nil
 	}
 
-	workbooks := make([]workbook.Workbook, len(dest))
+	workbooks := make([]*workbook.Workbook, len(dest))
 	for i, row := range dest {
 		workbooks[i] = r.fac.BuildWorkbook(workbook.BuildWorkbookParams{
 			ID: row.ID,
