@@ -22,19 +22,19 @@ type (
 	}
 )
 
-func (p Project) ID() string {
+func (p *Project) ID() string {
 	return p.id
 }
 
-func (p Project) Name() string {
+func (p *Project) Name() string {
 	return p.name
 }
 
-func (p Project) CreatedBy() string {
+func (p *Project) CreatedBy() string {
 	return p.createdBy
 }
 
-func (p Project) CreatedAt() time.Time {
+func (p *Project) CreatedAt() time.Time {
 	return p.createdAt
 }
 
@@ -42,6 +42,6 @@ func (p *Project) UpdateName(name string) {
 	p.name = name
 }
 
-func (p Project) Save() error {
+func (p *Project) Save() error {
 	return p.repo.Save(p)
 }

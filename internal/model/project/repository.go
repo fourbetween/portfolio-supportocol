@@ -4,9 +4,9 @@ package project
 
 type (
 	Repository interface {
-		Save(project Project) error
-		Load(params LoadParams) (Project, error)
-		Search(params SearchParams) ([]Project, error)
+		Save(project *Project) error
+		Load(params LoadParams) (*Project, error)
+		Search(params SearchParams) ([]*Project, error)
 	}
 
 	LoadParams struct {

@@ -94,7 +94,7 @@ func TestUser_CreateProject(t *testing.T) {
 		name   string
 		params user.CreateProjectParams
 		setup  func(*container)
-		verify func(*testing.T, project.Project, error)
+		verify func(*testing.T, *project.Project, error)
 	}{
 		{
 			name: "プロジェクトを作成できること",
@@ -106,7 +106,7 @@ func TestUser_CreateProject(t *testing.T) {
 				con.IDSrv.EXPECT().Generate().Return("generated-id")
 				con.ProjectRepo.EXPECT().Save(gomock.Any()).Return(nil)
 			},
-			verify: func(t *testing.T, got project.Project, err error) {
+			verify: func(t *testing.T, got *project.Project, err error) {
 				t.Helper()
 				if err != nil {
 					t.Errorf("CreateProject() failed: %v", err)
@@ -156,7 +156,7 @@ func TestUser_UpdateProject(t *testing.T) {
 		name   string
 		params user.UpdateProjectParams
 		setup  func(*container)
-		verify func(*testing.T, project.Project, error)
+		verify func(*testing.T, *project.Project, error)
 	}{
 		{
 			name: "プロジェクトを更新できること",
@@ -179,7 +179,7 @@ func TestUser_UpdateProject(t *testing.T) {
 				}).Return(existingProject, nil)
 				con.ProjectRepo.EXPECT().Save(gomock.Any()).Return(nil)
 			},
-			verify: func(t *testing.T, got project.Project, err error) {
+			verify: func(t *testing.T, got *project.Project, err error) {
 				t.Helper()
 				if err != nil {
 					t.Errorf("UpdateProject() failed: %v", err)
@@ -206,9 +206,9 @@ func TestUser_UpdateProject(t *testing.T) {
 				con.ProjectRepo.EXPECT().Load(project.LoadParams{
 					ID:        "non-existent-project-id",
 					CreatedBy: "test-user-id",
-				}).Return(project.Project{}, project.ErrNotFound)
+				}).Return(nil, project.ErrNotFound)
 			},
-			verify: func(t *testing.T, got project.Project, err error) {
+			verify: func(t *testing.T, got *project.Project, err error) {
 				t.Helper()
 				if err == nil {
 					t.Error("UpdateProject() should return error")

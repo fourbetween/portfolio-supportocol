@@ -28,7 +28,7 @@ func (r *ProjectRepository) SetFactory(fac *project.Factory) {
 	r.fac = fac
 }
 
-func (r *ProjectRepository) Save(p project.Project) error {
+func (r *ProjectRepository) Save(p *project.Project) error {
 	projectRecord := model.Projects{
 		ID:        p.ID(),
 		Name:      p.Name(),
@@ -55,7 +55,7 @@ func (r *ProjectRepository) Save(p project.Project) error {
 	return nil
 }
 
-func (r *ProjectRepository) Load(params project.LoadParams) (project.Project, error) {
+func (r *ProjectRepository) Load(params project.LoadParams) (*project.Project, error) {
 	cond := table.Projects.ID.EQ(postgres.String(params.ID))
 	if params.CreatedBy != "" {
 		cond = cond.AND(table.Projects.CreatedBy.EQ(postgres.String(params.CreatedBy)))
@@ -63,10 +63,10 @@ func (r *ProjectRepository) Load(params project.LoadParams) (project.Project, er
 
 	projects, err := r.searchByCondition(cond)
 	if err != nil {
-		return project.Project{}, err
+		return nil, err
 	}
 	if len(projects) == 0 {
-		return project.Project{}, fmt.Errorf(
+		return nil, fmt.Errorf(
 			"project id=%s, created_by=%s not found: %w",
 			params.ID,
 			params.CreatedBy,
@@ -76,7 +76,7 @@ func (r *ProjectRepository) Load(params project.LoadParams) (project.Project, er
 	return projects[0], nil
 }
 
-func (r *ProjectRepository) Search(params project.SearchParams) ([]project.Project, error) {
+func (r *ProjectRepository) Search(params project.SearchParams) ([]*project.Project, error) {
 	cond := postgres.Bool(true)
 	if params.CreatedBy != "" {
 		cond = cond.AND(table.Projects.CreatedBy.EQ(postgres.String(params.CreatedBy)))
@@ -84,7 +84,7 @@ func (r *ProjectRepository) Search(params project.SearchParams) ([]project.Proje
 	return r.searchByCondition(cond)
 }
 
-func (r *ProjectRepository) searchByCondition(cond postgres.BoolExpression) ([]project.Project, error) {
+func (r *ProjectRepository) searchByCondition(cond postgres.BoolExpression) ([]*project.Project, error) {
 	stmt := postgres.
 		SELECT(table.Projects.AllColumns).
 		FROM(table.Projects).
@@ -96,10 +96,10 @@ func (r *ProjectRepository) searchByCondition(cond postgres.BoolExpression) ([]p
 	}
 
 	if len(dest) == 0 {
-		return []project.Project{}, nil
+		return []*project.Project{}, nil
 	}
 
-	projects := make([]project.Project, len(dest))
+	projects := make([]*project.Project, len(dest))
 	for i, row := range dest {
 		projects[i] = r.fac.BuildProject(project.BuildProjectParams{
 			ID: row.ID,
