@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>議論設定 - Supportocol</title>
+    <style>
+      :root {
+        --color-fg-default: #24292f;
+        --color-fg-muted: #57606a;
+        --color-canvas-default: #ffffff;
+        --color-canvas-subtle: #f6f8fa;
+        --color-border-default: #d0d7de;
+        --color-border-muted: #d8dee4;
+        --color-accent-fg: #0969da;
+        --color-btn-primary-bg: #2da44e;
+        --color-btn-primary-text: #ffffff;
+        --color-danger-fg: #cf222e;
+        --color-danger-border: #fdaeb7;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+          Arial, sans-serif;
+        line-height: 1.5;
+        color: var(--color-fg-default);
+        margin: 0;
+        padding: 0;
+        background-color: var(--color-canvas-subtle);
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Header */
+      .page-header {
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 1px solid var(--color-border-muted);
+        padding-bottom: 16px;
+      }
+
+      .breadcrumb {
+        font-size: 14px;
+        color: var(--color-accent-fg);
+        margin-bottom: 16px;
+      }
+      .breadcrumb a {
+        text-decoration: none;
+        color: var(--color-accent-fg);
+      }
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-block;
+        padding: 5px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        background-color: var(--color-canvas-default);
+        color: var(--color-fg-default);
+        text-decoration: none;
+      }
+
+      .btn:hover {
+        background-color: #f3f4f6;
+        border-color: var(--color-border-muted);
+      }
+
+      .btn-primary {
+        background-color: var(--color-btn-primary-bg);
+        color: var(--color-btn-primary-text);
+        border-color: rgba(27, 31, 36, 0.15);
+      }
+
+      .btn-primary:hover {
+        background-color: #2c974b;
+      }
+
+      .btn-danger {
+        color: var(--color-danger-fg);
+        background-color: var(--color-canvas-default);
+        border-color: var(--color-border-default);
+      }
+
+      .btn-danger:hover {
+        background-color: var(--color-danger-fg);
+        color: #fff;
+        border-color: var(--color-danger-fg);
+      }
+
+      /* Cards & Sections */
+      .section {
+        background-color: var(--color-canvas-default);
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        padding: 24px;
+        margin-bottom: 24px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 0;
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--color-border-muted);
+      }
+
+      /* Forms */
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+        font-size: 14px;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 5px 12px;
+        font-size: 14px;
+        line-height: 20px;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        box-sizing: border-box;
+        background-color: var(--color-canvas-default);
+        color: var(--color-fg-default);
+      }
+
+      .form-control:focus {
+        border-color: var(--color-accent-fg);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
+      }
+
+      textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%2324292f' d='M4.427 7.427l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 7H4.604a.25.25 0 00-.177.427z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        padding-right: 32px;
+      }
+
+      .form-helper {
+        font-size: 12px;
+        color: var(--color-fg-muted);
+        margin-top: 4px;
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 24px;
+      }
+
+      /* Danger Zone */
+      .danger-zone {
+        border: 1px solid var(--color-danger-border);
+        border-radius: 6px;
+        padding: 24px;
+        margin-top: 40px;
+      }
+
+      .danger-zone h2 {
+        color: var(--color-danger-fg);
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 0;
+        margin-bottom: 16px;
+      }
+
+      .danger-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        border-top: 1px solid var(--color-border-muted);
+      }
+
+      .danger-item:first-of-type {
+        border-top: none;
+        padding-top: 0;
+      }
+
+      .danger-item-content h4 {
+        margin: 0 0 4px 0;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .danger-item-content p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--color-fg-muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../pagelist.md">Top</a>
+        /
+        <a href="list.html">議論一覧</a>
+        /
+        <a href="board.html">AIは人間の仕事を奪うか？</a>
+        / 設定
+      </div>
+
+      <div class="page-header">
+        <h1>議論設定</h1>
+      </div>
+
+      <form action="board.html" method="GET">
+        <div class="section">
+          <h2 class="section-title">基本設定</h2>
+
+          <div class="form-group">
+            <label class="form-label" for="theme">テーマ</label>
+            <input
+              type="text"
+              id="theme"
+              name="theme"
+              class="form-control"
+              value="AIは人間の仕事を奪うか？"
+              required
+            />
+            <p class="form-helper">
+              議論の中心となる問いや議題を簡潔に入力してください。
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="background">背景</label>
+            <textarea id="background" name="background" class="form-control">
+近年、生成AIの技術革新により、クリエイティブな領域を含む多くの仕事がAIに代替される可能性が議論されています。この議論では、AIが雇用に与える影響について、ポジティブ・ネガティブ両面から検討します。</textarea
+            >
+            <p class="form-helper">
+              なぜこの議論が必要なのか、前提となる知識や状況を共有しましょう。
+            </p>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">変更を保存</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">アクセス設定</h2>
+
+          <div class="form-group">
+            <label class="form-label" for="visibilityLevel">公開レベル</label>
+            <select
+              id="visibilityLevel"
+              name="visibilityLevel"
+              class="form-control"
+              required
+            >
+              <option value="everyone" selected>全員 (Everyone)</option>
+              <option value="logged_in">ログインユーザー (Logged In)</option>
+              <option value="owner">自分のみ (Owner)</option>
+            </select>
+            <p class="form-helper">この議論を閲覧できる範囲を設定します。</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="commentPermissionLevel">
+              コメント許可レベル
+            </label>
+            <select
+              id="commentPermissionLevel"
+              name="commentPermissionLevel"
+              class="form-control"
+              required
+            >
+              <option value="everyone">全員 (Everyone)</option>
+              <option value="logged_in" selected>
+                ログインユーザー (Logged In)
+              </option>
+              <option value="owner">自分のみ (Owner)</option>
+            </select>
+            <p class="form-helper">
+              この議論にコメントできる範囲を設定します。
+            </p>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">変更を保存</button>
+          </div>
+        </div>
+      </form>
+
+      <div class="danger-zone">
+        <h2>Danger Zone</h2>
+
+        <div class="danger-item">
+          <div class="danger-item-content">
+            <h4>議論をアーカイブする</h4>
+            <p>この議論を読み取り専用にします。</p>
+          </div>
+          <button type="button" class="btn btn-danger">アーカイブ</button>
+        </div>
+
+        <div class="danger-item">
+          <div class="danger-item-content">
+            <h4>議論を削除する</h4>
+            <p>
+              この議論と関連するすべてのコメントを完全に削除します。この操作は取り消せません。
+            </p>
+          </div>
+          <button type="button" class="btn btn-danger">削除</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
