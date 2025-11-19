@@ -22,7 +22,8 @@ $ARGUMENTS
 
 1. `view/sample/pagelist.md`を参照し、アプリに必要なページを確認してください。
 2. `view/src/api/schema/schema.ts`を参照し、関連するデータスキーマを確認してください。
-3. pagelist.md に基づいて、HTML を実装してください。
+3. 既存の HTML サンプルがある場合は、それらを参考にして、スタイルと構造の一貫性を保ってください。
+4. pagelist.md に基づいて、HTML を実装してください。
    - すべての機能を満たす UI にしてください。
    - テーマは Github を参考にしてください。
    - tailwindcss は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
@@ -31,5 +32,5 @@ $ARGUMENTS
      - 例: `view/sample/page/workbook/list.html`
    - dialog などの同時に表示するには不都合な UI コンポーネントは別ディレクトリに HTML ファイルを作成してください。
      - 例: `view/sample/popup/workbook/create.html`
-4. Simple Browser を使って、作成した各 HTML ファイルが pagelist.md の要件を満たしているか確認してください。
+5. Simple Browser を使って、作成した各 HTML ファイルが pagelist.md の要件を満たしているか確認してください。
    - 不足がある場合は手順 3 に戻って修正してください。
