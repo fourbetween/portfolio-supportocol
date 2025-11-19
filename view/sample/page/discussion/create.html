@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>議論作成 - Supportocol</title>
+    <style>
+      :root {
+        --color-fg-default: #24292f;
+        --color-fg-muted: #57606a;
+        --color-canvas-default: #ffffff;
+        --color-canvas-subtle: #f6f8fa;
+        --color-border-default: #d0d7de;
+        --color-border-muted: #d8dee4;
+        --color-accent-fg: #0969da;
+        --color-btn-primary-bg: #2da44e;
+        --color-btn-primary-text: #ffffff;
+        --color-danger-fg: #cf222e;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+          Arial, sans-serif;
+        line-height: 1.5;
+        color: var(--color-fg-default);
+        margin: 0;
+        padding: 0;
+        background-color: var(--color-canvas-subtle);
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Header */
+      .page-header {
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .breadcrumb {
+        font-size: 14px;
+        color: var(--color-accent-fg);
+        margin-bottom: 16px;
+      }
+      .breadcrumb a {
+        text-decoration: none;
+        color: var(--color-accent-fg);
+      }
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-block;
+        padding: 5px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        background-color: var(--color-canvas-default);
+        color: var(--color-fg-default);
+        text-decoration: none;
+      }
+
+      .btn:hover {
+        background-color: #f3f4f6;
+        border-color: var(--color-border-muted);
+      }
+
+      .btn-primary {
+        background-color: var(--color-btn-primary-bg);
+        color: var(--color-btn-primary-text);
+        border-color: rgba(27, 31, 36, 0.15);
+      }
+
+      .btn-primary:hover {
+        background-color: #2c974b;
+      }
+
+      /* Cards & Sections */
+      .section {
+        background-color: var(--color-canvas-default);
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        padding: 24px;
+        margin-bottom: 24px;
+      }
+
+      /* Forms */
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+        font-size: 14px;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 5px 12px;
+        font-size: 14px;
+        line-height: 20px;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        box-sizing: border-box;
+        background-color: var(--color-canvas-default);
+        color: var(--color-fg-default);
+      }
+
+      .form-control:focus {
+        border-color: var(--color-accent-fg);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
+      }
+
+      textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      select.form-control {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%2324292f' d='M4.427 7.427l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 7H4.604a.25.25 0 00-.177.427z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+        padding-right: 32px;
+      }
+
+      .form-helper {
+        font-size: 12px;
+        color: var(--color-fg-muted);
+        margin-top: 4px;
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../pagelist.md">Top</a>
+        /
+        <a href="list.html">議論一覧</a>
+        / 新規作成
+      </div>
+
+      <div class="page-header">
+        <h1>議論の新規作成</h1>
+      </div>
+
+      <form action="list.html" method="GET">
+        <div class="section">
+          <div class="form-group">
+            <label class="form-label" for="theme">テーマ</label>
+            <input
+              type="text"
+              id="theme"
+              name="theme"
+              class="form-control"
+              placeholder="議論のテーマを入力してください"
+              required
+            />
+            <p class="form-helper">
+              議論の中心となる問いや議題を簡潔に入力してください。
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="background">背景</label>
+            <textarea
+              id="background"
+              name="background"
+              class="form-control"
+              placeholder="議論の背景や前提条件を入力してください"
+            ></textarea>
+            <p class="form-helper">
+              なぜこの議論が必要なのか、前提となる知識や状況を共有しましょう。
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="ruleId">ルール</label>
+            <select id="ruleId" name="ruleId" class="form-control" required>
+              <option value="" disabled selected>
+                ルールを選択してください
+              </option>
+              <option value="rule1">ディベート標準ルール</option>
+              <option value="rule2">ブレインストーミング</option>
+              <option value="rule3">意思決定プロセス</option>
+            </select>
+            <p class="form-helper">
+              議論の進行に使用するルールセットを選択します。
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="visibilityLevel">公開レベル</label>
+            <select
+              id="visibilityLevel"
+              name="visibilityLevel"
+              class="form-control"
+              required
+            >
+              <option value="everyone">全員 (Everyone)</option>
+              <option value="logged_in">ログインユーザー (Logged In)</option>
+              <option value="owner">自分のみ (Owner)</option>
+            </select>
+            <p class="form-helper">この議論を閲覧できる範囲を設定します。</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="commentPermissionLevel">
+              コメント許可レベル
+            </label>
+            <select
+              id="commentPermissionLevel"
+              name="commentPermissionLevel"
+              class="form-control"
+              required
+            >
+              <option value="everyone">全員 (Everyone)</option>
+              <option value="logged_in">ログインユーザー (Logged In)</option>
+              <option value="owner">自分のみ (Owner)</option>
+            </select>
+            <p class="form-helper">
+              この議論にコメントできる範囲を設定します。
+            </p>
+          </div>
+
+          <div class="form-actions">
+            <a href="list.html" class="btn">キャンセル</a>
+            <button type="submit" class="btn btn-primary">議論を作成</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
