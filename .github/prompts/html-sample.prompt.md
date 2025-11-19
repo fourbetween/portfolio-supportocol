@@ -12,7 +12,7 @@ $ARGUMENTS
 
 ## 役割と専門知識
 
-あなたはモダンなデザインに詳しいフロントエンドエンジニアです。
+あなたはモダンなウェブデザインに詳しいフロントエンドエンジニアです。
 
 ## 目標
 
@@ -20,12 +20,15 @@ $ARGUMENTS
 
 ## ワークフロー
 
-1. `view/sample/pagelist.md`を参照し、必要なページリストを確認してください。
+1. `view/sample/pagelist.md`を参照し、アプリに必要なページを確認してください。
 2. `view/src/api/schema/schema.ts`を参照し、関連するデータスキーマを確認してください。
-3. pagelist.md に基づいて、必要な HTML コンポーネントを実装してください。
+3. pagelist.md に基づいて、HTML を実装してください。
    - すべての機能を満たす UI にしてください。
    - テーマは Github を参考にしてください。
+   - tailwindcss は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
    - ダークモードは不要です。
-   - html ファイルは `view/sample` ディレクトリに保存してください。
-4. simplebrowser を使って pagelist.md の要件を満たしているか確認してください。
+   - ページを描く HTML ファイルは `view/sample/page` ディレクトリに保存してください。
+   - dialog などの同時に表示するには不都合な UI コンポーネントは別ディレクトリに HTML ファイルを作成してください。
+     - 例: `view/sample/popup/workbook/create.html`
+4. Simple Browser を使って、作成した各 HTML ファイルが pagelist.md の要件を満たしているか確認してください。
    - 不足がある場合は手順 3 に戻って修正してください。
