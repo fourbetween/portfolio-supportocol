@@ -28,6 +28,7 @@ $ARGUMENTS
    - tailwindcss は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
    - ダークモードは不要です。
    - ページを描く HTML ファイルは `view/sample/page` ディレクトリに保存してください。
+     - 例: `view/sample/page/workbook/list.html`
    - dialog などの同時に表示するには不都合な UI コンポーネントは別ディレクトリに HTML ファイルを作成してください。
      - 例: `view/sample/popup/workbook/create.html`
 4. Simple Browser を使って、作成した各 HTML ファイルが pagelist.md の要件を満たしているか確認してください。
