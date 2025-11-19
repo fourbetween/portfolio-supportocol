@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/go-jet/jet/v2/postgres"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
 )
@@ -22,4 +23,13 @@ func NewDB(dsn string) (*sql.DB, error) {
 		return nil, fmt.Errorf("failed to ping pool: %w", err)
 	}
 	return stdlib.OpenDBFromPool(pool), nil
+}
+
+// toPostgresStrings converts a slice of strings to postgres.Expression slice
+func toPostgresStrings(strs []string) []postgres.Expression {
+	result := make([]postgres.Expression, len(strs))
+	for i, s := range strs {
+		result[i] = postgres.String(s)
+	}
+	return result
 }

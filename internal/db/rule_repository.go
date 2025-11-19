@@ -54,6 +54,18 @@ func (r *RuleRepository) Save(rl *rule.Rule) error {
 		return fmt.Errorf("failed to save rule: %w", err)
 	}
 
+	if err := r.deleteCommentTypesAndPaths(rl.ID()); err != nil {
+		return err
+	}
+
+	if err := r.saveCommentTypes(rl.CommentTypes()); err != nil {
+		return err
+	}
+
+	if err := r.saveCommentTypePaths(rl.CommentTypePaths()); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -113,18 +125,164 @@ func (r *RuleRepository) searchByCondition(cond postgres.BoolExpression) ([]*rul
 		return []*rule.Rule{}, nil
 	}
 
+	ruleIDs := extractRuleIDs(dest)
+	commentTypesByRuleID, err := r.fetchCommentTypesByRuleIDs(ruleIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	commentTypePathsByRuleID, err := r.fetchCommentTypePathsByRuleIDs(ruleIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.buildRules(dest, commentTypesByRuleID, commentTypePathsByRuleID), nil
+}
+
+func (r *RuleRepository) deleteCommentTypesAndPaths(ruleID string) error {
+	deleteCommentTypesStmt := table.CommentTypes.
+		DELETE().
+		WHERE(table.CommentTypes.RuleID.EQ(postgres.String(ruleID)))
+	if _, err := deleteCommentTypesStmt.Exec(r.db); err != nil {
+		return fmt.Errorf("failed to delete existing comment types: %w", err)
+	}
+
+	deleteCommentTypePathsStmt := table.CommentTypePaths.
+		DELETE().
+		WHERE(table.CommentTypePaths.RuleID.EQ(postgres.String(ruleID)))
+	if _, err := deleteCommentTypePathsStmt.Exec(r.db); err != nil {
+		return fmt.Errorf("failed to delete existing comment type paths: %w", err)
+	}
+
+	return nil
+}
+
+func (r *RuleRepository) saveCommentTypes(commentTypes []rule.CommentType) error {
+	if len(commentTypes) == 0 {
+		return nil
+	}
+
+	commentTypeRecords := make([]model.CommentTypes, len(commentTypes))
+	for i, ct := range commentTypes {
+		commentTypeRecords[i] = model.CommentTypes{
+			ID:          ct.ID,
+			RuleID:      ct.RuleID,
+			Name:        ct.Name,
+			Description: ct.Description,
+			Color:       ct.Color,
+		}
+	}
+
+	stmt := table.CommentTypes.
+		INSERT(table.CommentTypes.AllColumns).
+		MODELS(commentTypeRecords)
+	if _, err := stmt.Exec(r.db); err != nil {
+		return fmt.Errorf("failed to save comment types: %w", err)
+	}
+
+	return nil
+}
+
+func (r *RuleRepository) saveCommentTypePaths(commentTypePaths []rule.CommentTypePath) error {
+	if len(commentTypePaths) == 0 {
+		return nil
+	}
+
+	commentTypePathRecords := make([]model.CommentTypePaths, len(commentTypePaths))
+	for i, ctp := range commentTypePaths {
+		commentTypePathRecords[i] = model.CommentTypePaths{
+			ID:                ctp.ID,
+			RuleID:            ctp.RuleID,
+			FromCommentTypeID: ctp.FromCommentTypeID,
+			ToCommentTypeID:   ctp.ToCommentTypeID,
+		}
+	}
+
+	stmt := table.CommentTypePaths.
+		INSERT(table.CommentTypePaths.AllColumns).
+		MODELS(commentTypePathRecords)
+	if _, err := stmt.Exec(r.db); err != nil {
+		return fmt.Errorf("failed to save comment type paths: %w", err)
+	}
+
+	return nil
+}
+
+func extractRuleIDs(rules []model.Rules) []string {
+	ruleIDs := make([]string, len(rules))
+	for i, row := range rules {
+		ruleIDs[i] = row.ID
+	}
+	return ruleIDs
+}
+
+func (r *RuleRepository) fetchCommentTypesByRuleIDs(ruleIDs []string) (map[string][]rule.CommentType, error) {
+	stmt := postgres.
+		SELECT(table.CommentTypes.AllColumns).
+		FROM(table.CommentTypes).
+		WHERE(table.CommentTypes.RuleID.IN(toPostgresStrings(ruleIDs)...))
+
+	var records []model.CommentTypes
+	if err := stmt.Query(r.db, &records); err != nil {
+		return nil, fmt.Errorf("failed to query comment types: %w", err)
+	}
+
+	result := make(map[string][]rule.CommentType)
+	for _, ct := range records {
+		result[ct.RuleID] = append(result[ct.RuleID], rule.CommentType{
+			ID:          ct.ID,
+			RuleID:      ct.RuleID,
+			Name:        ct.Name,
+			Description: ct.Description,
+			Color:       ct.Color,
+		})
+	}
+
+	return result, nil
+}
+
+func (r *RuleRepository) fetchCommentTypePathsByRuleIDs(ruleIDs []string) (map[string][]rule.CommentTypePath, error) {
+	stmt := postgres.
+		SELECT(table.CommentTypePaths.AllColumns).
+		FROM(table.CommentTypePaths).
+		WHERE(table.CommentTypePaths.RuleID.IN(toPostgresStrings(ruleIDs)...))
+
+	var records []model.CommentTypePaths
+	if err := stmt.Query(r.db, &records); err != nil {
+		return nil, fmt.Errorf("failed to query comment type paths: %w", err)
+	}
+
+	result := make(map[string][]rule.CommentTypePath)
+	for _, ctp := range records {
+		result[ctp.RuleID] = append(result[ctp.RuleID], rule.CommentTypePath{
+			ID:                ctp.ID,
+			RuleID:            ctp.RuleID,
+			FromCommentTypeID: ctp.FromCommentTypeID,
+			ToCommentTypeID:   ctp.ToCommentTypeID,
+		})
+	}
+
+	return result, nil
+}
+
+func (r *RuleRepository) buildRules(
+	dest []model.Rules,
+	commentTypesByRuleID map[string][]rule.CommentType,
+	commentTypePathsByRuleID map[string][]rule.CommentTypePath,
+) []*rule.Rule {
 	rules := make([]*rule.Rule, len(dest))
 	for i, row := range dest {
 		rules[i] = r.fac.BuildRule(rule.BuildRuleParams{
 			ID: row.ID,
 			NewRuleParams: rule.NewRuleParams{
-				Name:        row.Name,
-				Description: row.Description,
-				CreatedBy:   row.CreatedBy,
-				CreatedAt:   row.CreatedAt,
+				Name:             row.Name,
+				Description:      row.Description,
+				CreatedBy:        row.CreatedBy,
+				CreatedAt:        row.CreatedAt,
+				CommentTypes:     commentTypesByRuleID[row.ID],
+				CommentTypePaths: commentTypePathsByRuleID[row.ID],
 			},
 		})
 	}
-
-	return rules, nil
+	return rules
 }

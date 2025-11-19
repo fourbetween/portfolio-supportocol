@@ -13,10 +13,12 @@ type (
 	}
 
 	NewRuleParams struct {
-		Name        string
-		Description string
-		CreatedBy   string
-		CreatedAt   time.Time
+		Name             string
+		Description      string
+		CreatedBy        string
+		CreatedAt        time.Time
+		CommentTypes     []CommentType
+		CommentTypePaths []CommentTypePath
 	}
 
 	BuildRuleParams struct {
@@ -45,22 +47,26 @@ func (f *Factory) NewRule(params NewRuleParams) *Rule {
 
 func (f *Factory) BuildRule(params BuildRuleParams) *Rule {
 	return &Rule{
-		id:          params.ID,
-		name:        params.Name,
-		description: params.Description,
-		createdBy:   params.CreatedBy,
-		createdAt:   params.CreatedAt,
-		repo:        f.repo,
+		id:               params.ID,
+		name:             params.Name,
+		description:      params.Description,
+		createdBy:        params.CreatedBy,
+		createdAt:        params.CreatedAt,
+		commentTypes:     params.CommentTypes,
+		commentTypePaths: params.CommentTypePaths,
+		repo:             f.repo,
 	}
 }
 
 // BuildRule is a package-level function for testing purposes
 func BuildRule(params BuildRuleParams) *Rule {
 	return &Rule{
-		id:          params.ID,
-		name:        params.Name,
-		description: params.Description,
-		createdBy:   params.CreatedBy,
-		createdAt:   params.CreatedAt,
+		id:               params.ID,
+		name:             params.Name,
+		description:      params.Description,
+		createdBy:        params.CreatedBy,
+		createdAt:        params.CreatedAt,
+		commentTypes:     params.CommentTypes,
+		commentTypePaths: params.CommentTypePaths,
 	}
 }

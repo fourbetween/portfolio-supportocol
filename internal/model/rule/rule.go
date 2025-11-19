@@ -3,11 +3,13 @@ package rule
 import "time"
 
 type Rule struct {
-	id          string
-	name        string
-	description string
-	createdBy   string
-	createdAt   time.Time
+	id               string
+	name             string
+	description      string
+	createdBy        string
+	createdAt        time.Time
+	commentTypes     []CommentType
+	commentTypePaths []CommentTypePath
 
 	repo Repository
 }
@@ -30,6 +32,14 @@ func (r *Rule) CreatedBy() string {
 
 func (r *Rule) CreatedAt() time.Time {
 	return r.createdAt
+}
+
+func (r *Rule) CommentTypes() []CommentType {
+	return r.commentTypes
+}
+
+func (r *Rule) CommentTypePaths() []CommentTypePath {
+	return r.commentTypePaths
 }
 
 func (r *Rule) Save() error {
