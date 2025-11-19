@@ -84,16 +84,6 @@ export const NoteSchema = z
   })
   .openapi("note");
 
-export const RuleSchema = z
-  .object({
-    id: IdSchema,
-    name: z.string(),
-    description: z.string(),
-    createdBy: IdSchema,
-    createdAt: z.string().openapi({ format: "date-time" }),
-  })
-  .openapi("rule");
-
 export const CommentTypeSchema = z
   .object({
     id: IdSchema,
@@ -112,6 +102,18 @@ export const CommentTypePathSchema = z
     toCommentTypeId: IdSchema,
   })
   .openapi("commentTypePath");
+
+export const RuleSchema = z
+  .object({
+    id: IdSchema,
+    name: z.string(),
+    description: z.string(),
+    createdBy: IdSchema,
+    createdAt: z.string().openapi({ format: "date-time" }),
+    commentTypes: z.array(CommentTypeSchema),
+    commentTypePaths: z.array(CommentTypePathSchema),
+  })
+  .openapi("rule");
 
 export const ProjectSchema = z
   .object({
