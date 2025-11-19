@@ -23,7 +23,6 @@ export const ErrorSchema = z
   })
   .openapi("error");
 
-// Discussion schemas
 export const VisibilityLevelSchema = z
   .enum(["everyone", "logged_in", "owner"])
   .openapi("visibilityLevel");
@@ -114,7 +113,6 @@ export const CommentTypePathSchema = z
   })
   .openapi("commentTypePath");
 
-// Project schema
 export const ProjectSchema = z
   .object({
     id: IdSchema,
