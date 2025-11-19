@@ -14,6 +14,13 @@ type Rule struct {
 	repo Repository
 }
 
+type UpdateParams struct {
+	Name             string
+	Description      string
+	CommentTypes     []CommentType
+	CommentTypePaths []CommentTypePath
+}
+
 func (r *Rule) ID() string {
 	return r.id
 }
@@ -40,6 +47,13 @@ func (r *Rule) CommentTypes() []CommentType {
 
 func (r *Rule) CommentTypePaths() []CommentTypePath {
 	return r.commentTypePaths
+}
+
+func (r *Rule) Update(params UpdateParams) {
+	r.name = params.Name
+	r.description = params.Description
+	r.commentTypes = params.CommentTypes
+	r.commentTypePaths = params.CommentTypePaths
 }
 
 func (r *Rule) Save() error {

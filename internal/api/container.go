@@ -5,6 +5,7 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal/db"
 	"github.com/fourbetween/app-supportocol/internal/model/project"
+	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/model/user"
 	"github.com/fourbetween/app-supportocol/internal/model/workbook"
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
@@ -34,7 +35,21 @@ func NewContainer(tx *sql.Tx) (*Container, error) {
 	)
 	projectRepo.SetFactory(projectFac)
 
-	userFac := user.NewFactory(workbookRepo, projectRepo, projectFac, clockSrv)
+	ruleRepo := db.NewRuleRepository(tx)
+	ruleFac := rule.NewFactory(
+		ruleRepo,
+		idSrv,
+	)
+	ruleRepo.SetFactory(ruleFac)
+
+	userFac := user.NewFactory(
+		workbookRepo,
+		projectRepo,
+		ruleRepo,
+		projectFac,
+		ruleFac,
+		clockSrv,
+	)
 	return &Container{
 		UserFac: userFac,
 	}, nil

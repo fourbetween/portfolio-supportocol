@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/fourbetween/app-supportocol/internal/model/project"
+	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/model/workbook"
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
 )
@@ -13,7 +14,9 @@ type (
 
 		workbookRepo workbook.Repository
 		projectRepo  project.Repository
+		ruleRepo     rule.Repository
 		projectFac   *project.Factory
+		ruleFac      *rule.Factory
 		clockSrv     clock.Service
 	}
 
@@ -28,6 +31,25 @@ type (
 
 	DeleteProjectParams struct {
 		ProjectID string
+	}
+
+	CreateRuleParams struct {
+		Name             string
+		Description      string
+		CommentTypes     []rule.CommentType
+		CommentTypePaths []rule.CommentTypePath
+	}
+
+	UpdateRuleParams struct {
+		RuleID           string
+		Name             string
+		Description      string
+		CommentTypes     []rule.CommentType
+		CommentTypePaths []rule.CommentTypePath
+	}
+
+	DeleteRuleParams struct {
+		RuleID string
 	}
 )
 
@@ -87,6 +109,64 @@ func (u *User) DeleteProject(params DeleteProjectParams) error {
 	}
 
 	return p.Delete()
+}
+
+func (u *User) ListRules() ([]*rule.Rule, error) {
+	return u.ruleRepo.Search(rule.SearchParams{
+		CreatedBy: u.id,
+	})
+}
+
+func (u *User) CreateRule(params CreateRuleParams) (*rule.Rule, error) {
+	r := u.ruleFac.NewRule(rule.NewRuleParams{
+		Name:             params.Name,
+		Description:      params.Description,
+		CreatedBy:        u.id,
+		CreatedAt:        u.clockSrv.Now(),
+		CommentTypes:     params.CommentTypes,
+		CommentTypePaths: params.CommentTypePaths,
+	})
+
+	if err := r.Save(); err != nil {
+		return nil, err
+	}
+
+	return r, nil
+}
+
+func (u *User) UpdateRule(params UpdateRuleParams) (*rule.Rule, error) {
+	r, err := u.ruleRepo.Load(rule.LoadParams{
+		ID:        params.RuleID,
+		CreatedBy: u.id,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	r.Update(rule.UpdateParams{
+		Name:             params.Name,
+		Description:      params.Description,
+		CommentTypes:     params.CommentTypes,
+		CommentTypePaths: params.CommentTypePaths,
+	})
+
+	if err := r.Save(); err != nil {
+		return nil, err
+	}
+
+	return r, nil
+}
+
+func (u *User) DeleteRule(params DeleteRuleParams) error {
+	r, err := u.ruleRepo.Load(rule.LoadParams{
+		ID:        params.RuleID,
+		CreatedBy: u.id,
+	})
+	if err != nil {
+		return err
+	}
+
+	return r.Delete()
 }
 
 func (u *User) LoadWorkbook(workbookID string) (*workbook.Workbook, error) {

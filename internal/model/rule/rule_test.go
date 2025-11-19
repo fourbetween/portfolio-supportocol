@@ -165,3 +165,59 @@ func TestRule_CommentTypesAndPaths(t *testing.T) {
 		})
 	}
 }
+
+func TestRule_Update(t *testing.T) {
+	tests := []struct {
+		name   string
+		params rule.UpdateParams
+		verify func(*testing.T, *rule.Rule)
+	}{
+		{
+			name: "ルールを更新できること",
+			params: rule.UpdateParams{
+				Name:        "updated-rule",
+				Description: "updated-description",
+				CommentTypes: []rule.CommentType{
+					{ID: "ct1", RuleID: "test-id", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				},
+				CommentTypePaths: []rule.CommentTypePath{
+					{ID: "ctp1", RuleID: "test-id", FromCommentTypeID: "ct1", ToCommentTypeID: "ct1"},
+				},
+			},
+			verify: func(t *testing.T, r *rule.Rule) {
+				if r.Name() != "updated-rule" {
+					t.Errorf("Name() = %v, want %v", r.Name(), "updated-rule")
+				}
+				if r.Description() != "updated-description" {
+					t.Errorf("Description() = %v, want %v", r.Description(), "updated-description")
+				}
+				if len(r.CommentTypes()) != 1 {
+					t.Errorf("CommentTypes() len = %v, want %v", len(r.CommentTypes()), 1)
+				}
+				if len(r.CommentTypePaths()) != 1 {
+					t.Errorf("CommentTypePaths() len = %v, want %v", len(r.CommentTypePaths()), 1)
+				}
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			r := con.RuleFac.BuildRule(rule.BuildRuleParams{
+				ID: "test-id",
+				NewRuleParams: rule.NewRuleParams{
+					Name:        "test-rule",
+					Description: "test-description",
+					CreatedBy:   "test-user",
+					CreatedAt:   time.Now(),
+				},
+			})
+
+			r.Update(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, r)
+			}
+		})
+	}
+}
