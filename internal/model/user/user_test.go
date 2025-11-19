@@ -6,6 +6,7 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal"
 	"github.com/fourbetween/app-supportocol/internal/model/project"
+	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/model/user"
 	"github.com/fourbetween/app-supportocol/internal/model/workbook"
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
@@ -18,9 +19,11 @@ type container struct {
 
 	UserFac    *user.Factory
 	ProjectFac *project.Factory
+	RuleFac    *rule.Factory
 
 	WorkbookRepo *workbook.MockRepository
 	ProjectRepo  *project.MockRepository
+	RuleRepo     *rule.MockRepository
 	IDSrv        *id.MockService
 	ClockSrv     *clock.MockService
 }
@@ -32,18 +35,22 @@ func newContainer(t *testing.T) *container {
 
 	workbookRepo := workbook.NewMockRepository(ctrl)
 	projectRepo := project.NewMockRepository(ctrl)
+	ruleRepo := rule.NewMockRepository(ctrl)
 	idSrv := id.NewMockService(ctrl)
 	clockSrv := clock.NewMockService(ctrl)
 
 	projectFac := project.NewFactory(projectRepo, idSrv)
-	userFac := user.NewFactory(workbookRepo, projectRepo, projectFac, clockSrv)
+	ruleFac := rule.NewFactory(ruleRepo, idSrv)
+	userFac := user.NewFactory(workbookRepo, projectRepo, ruleRepo, projectFac, ruleFac, clockSrv)
 
 	return &container{
 		t:            t,
 		UserFac:      userFac,
 		ProjectFac:   projectFac,
+		RuleFac:      ruleFac,
 		WorkbookRepo: workbookRepo,
 		ProjectRepo:  projectRepo,
+		RuleRepo:     ruleRepo,
 		IDSrv:        idSrv,
 		ClockSrv:     clockSrv,
 	}
@@ -417,6 +424,330 @@ func TestUser_ListProjects(t *testing.T) {
 
 			if tt.verify != nil {
 				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_ListRules(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name   string
+		setup  func(*container) []*rule.Rule
+		verify func(*testing.T, []*rule.Rule, error)
+	}{
+		{
+			name: "ルールのリストを取得できること",
+			setup: func(con *container) []*rule.Rule {
+				expectedRules := []*rule.Rule{
+					con.RuleFac.BuildRule(rule.BuildRuleParams{
+						ID: "rule-id-1",
+						NewRuleParams: rule.NewRuleParams{
+							Name:      "ルール1",
+							CreatedBy: "test-user-id",
+							CreatedAt: fixedTime,
+						},
+					}),
+					con.RuleFac.BuildRule(rule.BuildRuleParams{
+						ID: "rule-id-2",
+						NewRuleParams: rule.NewRuleParams{
+							Name:      "ルール2",
+							CreatedBy: "test-user-id",
+							CreatedAt: fixedTime.Add(time.Hour),
+						},
+					}),
+				}
+				con.RuleRepo.EXPECT().Search(rule.SearchParams{
+					CreatedBy: "test-user-id",
+				}).Return(expectedRules, nil)
+				return expectedRules
+			},
+			verify: func(t *testing.T, got []*rule.Rule, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("ListRules() failed: %v", err)
+					return
+				}
+				if len(got) != 2 {
+					t.Errorf("ListRules() length = %v, want %v", len(got), 2)
+					return
+				}
+				if got[0].ID() != "rule-id-1" {
+					t.Errorf("ListRules()[0].ID() = %v, want %v", got[0].ID(), "rule-id-1")
+				}
+				if got[0].Name() != "ルール1" {
+					t.Errorf("ListRules()[0].Name() = %v, want %v", got[0].Name(), "ルール1")
+				}
+				if got[1].ID() != "rule-id-2" {
+					t.Errorf("ListRules()[1].ID() = %v, want %v", got[1].ID(), "rule-id-2")
+				}
+				if got[1].Name() != "ルール2" {
+					t.Errorf("ListRules()[1].Name() = %v, want %v", got[1].Name(), "ルール2")
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.ListRules()
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_CreateRule(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name   string
+		params user.CreateRuleParams
+		setup  func(*container)
+		verify func(*testing.T, *rule.Rule, error)
+	}{
+		{
+			name: "ルールを作成できること",
+			params: user.CreateRuleParams{
+				Name:        "テストルール",
+				Description: "テストルールの説明",
+			},
+			setup: func(con *container) {
+				con.ClockSrv.EXPECT().Now().Return(fixedTime)
+				con.IDSrv.EXPECT().Generate().Return("generated-rule-id")
+				con.RuleRepo.EXPECT().Save(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, got *rule.Rule, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("CreateRule() failed: %v", err)
+					return
+				}
+				if got.ID() == "" {
+					t.Error("CreateRule() ID is empty")
+				}
+				if got.Name() != "テストルール" {
+					t.Errorf("CreateRule() Name = %v, want %v", got.Name(), "テストルール")
+				}
+				if got.Description() != "テストルールの説明" {
+					t.Errorf("CreateRule() Description = %v, want %v", got.Description(), "テストルールの説明")
+				}
+				if got.CreatedBy() != "test-user-id" {
+					t.Errorf("CreateRule() CreatedBy = %v, want %v", got.CreatedBy(), "test-user-id")
+				}
+				if got.CreatedAt().IsZero() {
+					t.Error("CreateRule() CreatedAt is zero")
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.CreateRule(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_UpdateRule(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name   string
+		params user.UpdateRuleParams
+		setup  func(*container)
+		verify func(*testing.T, *rule.Rule, error)
+	}{
+		{
+			name: "ルールを更新できること",
+			params: user.UpdateRuleParams{
+				RuleID:      "existing-rule-id",
+				Name:        "更新されたルール名",
+				Description: "更新されたルールの説明",
+			},
+			setup: func(con *container) {
+				existingRule := con.RuleFac.BuildRule(rule.BuildRuleParams{
+					ID: "existing-rule-id",
+					NewRuleParams: rule.NewRuleParams{
+						Name:        "元のルール名",
+						Description: "元のルールの説明",
+						CreatedBy:   "test-user-id",
+						CreatedAt:   fixedTime,
+					},
+				})
+				con.RuleRepo.EXPECT().Load(rule.LoadParams{
+					ID:        "existing-rule-id",
+					CreatedBy: "test-user-id",
+				}).Return(existingRule, nil)
+				con.RuleRepo.EXPECT().Save(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, got *rule.Rule, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("UpdateRule() failed: %v", err)
+					return
+				}
+				if got.ID() != "existing-rule-id" {
+					t.Errorf("UpdateRule() ID = %v, want %v", got.ID(), "existing-rule-id")
+				}
+				if got.Name() != "更新されたルール名" {
+					t.Errorf("UpdateRule() Name = %v, want %v", got.Name(), "更新されたルール名")
+				}
+				if got.Description() != "更新されたルールの説明" {
+					t.Errorf("UpdateRule() Description = %v, want %v", got.Description(), "更新されたルールの説明")
+				}
+				if got.CreatedBy() != "test-user-id" {
+					t.Errorf("UpdateRule() CreatedBy = %v, want %v", got.CreatedBy(), "test-user-id")
+				}
+			},
+		},
+		{
+			name: "存在しないルールの場合にエラーを返すこと",
+			params: user.UpdateRuleParams{
+				RuleID: "non-existent-rule-id",
+				Name:   "更新されたルール名",
+			},
+			setup: func(con *container) {
+				con.RuleRepo.EXPECT().Load(rule.LoadParams{
+					ID:        "non-existent-rule-id",
+					CreatedBy: "test-user-id",
+				}).Return(nil, internal.ErrNotFound)
+			},
+			verify: func(t *testing.T, got *rule.Rule, err error) {
+				t.Helper()
+				if err == nil {
+					t.Error("UpdateRule() should return error")
+					return
+				}
+				if err != internal.ErrNotFound {
+					t.Errorf("UpdateRule() error = %v, want %v", err, internal.ErrNotFound)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.UpdateRule(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_DeleteRule(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name   string
+		ruleID string
+		setup  func(*container)
+		verify func(*testing.T, error)
+	}{
+		{
+			name:   "ルールを削除できること",
+			ruleID: "existing-rule-id",
+			setup: func(con *container) {
+				existingRule := con.RuleFac.BuildRule(rule.BuildRuleParams{
+					ID: "existing-rule-id",
+					NewRuleParams: rule.NewRuleParams{
+						Name:      "削除対象のルール",
+						CreatedBy: "test-user-id",
+						CreatedAt: fixedTime,
+					},
+				})
+				con.RuleRepo.EXPECT().Load(rule.LoadParams{
+					ID:        "existing-rule-id",
+					CreatedBy: "test-user-id",
+				}).Return(existingRule, nil)
+				con.RuleRepo.EXPECT().Delete(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("DeleteRule() failed: %v", err)
+				}
+			},
+		},
+		{
+			name:   "存在しないルールの場合にエラーを返すこと",
+			ruleID: "non-existent-rule-id",
+			setup: func(con *container) {
+				con.RuleRepo.EXPECT().Load(rule.LoadParams{
+					ID:        "non-existent-rule-id",
+					CreatedBy: "test-user-id",
+				}).Return(nil, internal.ErrNotFound)
+			},
+			verify: func(t *testing.T, err error) {
+				t.Helper()
+				if err == nil {
+					t.Error("DeleteRule() should return error")
+					return
+				}
+				if err != internal.ErrNotFound {
+					t.Errorf("DeleteRule() error = %v, want %v", err, internal.ErrNotFound)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			err := u.DeleteRule(user.DeleteRuleParams{
+				RuleID: tt.ruleID,
+			})
+
+			if tt.verify != nil {
+				tt.verify(t, err)
 			}
 		})
 	}
