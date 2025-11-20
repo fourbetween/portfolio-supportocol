@@ -38,7 +38,7 @@ func TestDiscussion_Comments(t *testing.T) {
 	tests := []struct {
 		name    string
 		prepare func(c *container) *discussion.Discussion
-		want    []*discussion.Comment
+		want    []discussion.Comment
 		wantErr bool
 	}{
 		{
@@ -51,12 +51,12 @@ func TestDiscussion_Comments(t *testing.T) {
 					RuleID:     "ruleID",
 					CreatedBy:  "createdBy",
 				})
-				c.DiscussionRepo.EXPECT().FetchComments(d.ID()).Return([]*discussion.Comment{
+				c.DiscussionRepo.EXPECT().FetchComments(d.ID()).Return([]discussion.Comment{
 					{ID: "comment1"},
 				}, nil)
 				return d
 			},
-			want: []*discussion.Comment{
+			want: []discussion.Comment{
 				{ID: "comment1"},
 			},
 			wantErr: false,

@@ -95,7 +95,7 @@ func (d *Discussion) Status() Status {
 	return d.status
 }
 
-func (d *Discussion) Comments() ([]*Comment, error) {
+func (d *Discussion) Comments() ([]Comment, error) {
 	return d.repo.FetchComments(d.id)
 }
 

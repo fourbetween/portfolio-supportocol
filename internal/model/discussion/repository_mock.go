@@ -54,10 +54,10 @@ func (mr *MockRepositoryMockRecorder) Delete(discussion any) *gomock.Call {
 }
 
 // FetchComments mocks base method.
-func (m *MockRepository) FetchComments(discussionID string) ([]*Comment, error) {
+func (m *MockRepository) FetchComments(discussionID string) ([]Comment, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FetchComments", discussionID)
-	ret0, _ := ret[0].([]*Comment)
+	ret0, _ := ret[0].([]Comment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

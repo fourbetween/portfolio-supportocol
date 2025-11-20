@@ -100,7 +100,7 @@ func (r *DiscussionRepository) Delete(d *discussion.Discussion) error {
 	return nil
 }
 
-func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion.Comment, error) {
+func (r *DiscussionRepository) FetchComments(discussionID string) ([]discussion.Comment, error) {
 	stmt := postgres.
 		SELECT(table.Comments.AllColumns).
 		FROM(table.Comments).
@@ -111,7 +111,7 @@ func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion
 		return nil, fmt.Errorf("failed to fetch comments: %w", err)
 	}
 
-	comments := make([]*discussion.Comment, len(dest))
+	comments := make([]discussion.Comment, len(dest))
 	for i, row := range dest {
 		comments[i] = r.toCommentDomain(row)
 	}
@@ -192,8 +192,8 @@ func (r *DiscussionRepository) toModel(d *discussion.Discussion) model.Discussio
 	}
 }
 
-func (r *DiscussionRepository) toCommentDomain(row model.Comments) *discussion.Comment {
-	return &discussion.Comment{
+func (r *DiscussionRepository) toCommentDomain(row model.Comments) discussion.Comment {
+	return discussion.Comment{
 		ID:              row.ID,
 		DiscussionID:    row.DiscussionID,
 		ParentCommentID: row.ParentCommentID,
