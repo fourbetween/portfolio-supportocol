@@ -54,10 +54,10 @@ func (mr *MockRepositoryMockRecorder) Delete(discussion any) *gomock.Call {
 }
 
 // FetchComments mocks base method.
-func (m *MockRepository) FetchComments(discussionID string) ([]*Comment, error) {
+func (m *MockRepository) FetchComments(discussionID string) ([]Comment, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FetchComments", discussionID)
-	ret0, _ := ret[0].([]*Comment)
+	ret0, _ := ret[0].([]Comment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -69,10 +69,10 @@ func (mr *MockRepositoryMockRecorder) FetchComments(discussionID any) *gomock.Ca
 }
 
 // FetchIssues mocks base method.
-func (m *MockRepository) FetchIssues(discussionID string) ([]*Issue, error) {
+func (m *MockRepository) FetchIssues(discussionID string) ([]Issue, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FetchIssues", discussionID)
-	ret0, _ := ret[0].([]*Issue)
+	ret0, _ := ret[0].([]Issue)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -84,10 +84,10 @@ func (mr *MockRepositoryMockRecorder) FetchIssues(discussionID any) *gomock.Call
 }
 
 // FetchNotes mocks base method.
-func (m *MockRepository) FetchNotes(discussionID string) ([]*Note, error) {
+func (m *MockRepository) FetchNotes(discussionID string) ([]Note, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FetchNotes", discussionID)
-	ret0, _ := ret[0].([]*Note)
+	ret0, _ := ret[0].([]Note)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

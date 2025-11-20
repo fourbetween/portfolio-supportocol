@@ -100,7 +100,7 @@ func (r *DiscussionRepository) Delete(d *discussion.Discussion) error {
 	return nil
 }
 
-func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion.Comment, error) {
+func (r *DiscussionRepository) FetchComments(discussionID string) ([]discussion.Comment, error) {
 	stmt := postgres.
 		SELECT(table.Comments.AllColumns).
 		FROM(table.Comments).
@@ -111,7 +111,7 @@ func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion
 		return nil, fmt.Errorf("failed to fetch comments: %w", err)
 	}
 
-	comments := make([]*discussion.Comment, len(dest))
+	comments := make([]discussion.Comment, len(dest))
 	for i, row := range dest {
 		comments[i] = r.toCommentDomain(row)
 	}
@@ -119,7 +119,7 @@ func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion
 	return comments, nil
 }
 
-func (r *DiscussionRepository) FetchIssues(discussionID string) ([]*discussion.Issue, error) {
+func (r *DiscussionRepository) FetchIssues(discussionID string) ([]discussion.Issue, error) {
 	stmt := postgres.
 		SELECT(table.Issues.AllColumns).
 		FROM(
@@ -133,7 +133,7 @@ func (r *DiscussionRepository) FetchIssues(discussionID string) ([]*discussion.I
 		return nil, fmt.Errorf("failed to fetch issues: %w", err)
 	}
 
-	issues := make([]*discussion.Issue, len(dest))
+	issues := make([]discussion.Issue, len(dest))
 	for i, row := range dest {
 		issues[i] = r.toIssueDomain(row)
 	}
@@ -141,7 +141,7 @@ func (r *DiscussionRepository) FetchIssues(discussionID string) ([]*discussion.I
 	return issues, nil
 }
 
-func (r *DiscussionRepository) FetchNotes(discussionID string) ([]*discussion.Note, error) {
+func (r *DiscussionRepository) FetchNotes(discussionID string) ([]discussion.Note, error) {
 	stmt := postgres.
 		SELECT(table.Notes.AllColumns).
 		FROM(table.Notes).
@@ -152,7 +152,7 @@ func (r *DiscussionRepository) FetchNotes(discussionID string) ([]*discussion.No
 		return nil, fmt.Errorf("failed to fetch notes: %w", err)
 	}
 
-	notes := make([]*discussion.Note, len(dest))
+	notes := make([]discussion.Note, len(dest))
 	for i, row := range dest {
 		notes[i] = r.toNoteDomain(row)
 	}
@@ -192,8 +192,8 @@ func (r *DiscussionRepository) toModel(d *discussion.Discussion) model.Discussio
 	}
 }
 
-func (r *DiscussionRepository) toCommentDomain(row model.Comments) *discussion.Comment {
-	return &discussion.Comment{
+func (r *DiscussionRepository) toCommentDomain(row model.Comments) discussion.Comment {
+	return discussion.Comment{
 		ID:              row.ID,
 		DiscussionID:    row.DiscussionID,
 		ParentCommentID: row.ParentCommentID,
@@ -205,8 +205,8 @@ func (r *DiscussionRepository) toCommentDomain(row model.Comments) *discussion.C
 	}
 }
 
-func (r *DiscussionRepository) toIssueDomain(row model.Issues) *discussion.Issue {
-	return &discussion.Issue{
+func (r *DiscussionRepository) toIssueDomain(row model.Issues) discussion.Issue {
+	return discussion.Issue{
 		ID:          row.ID,
 		CommentID:   row.CommentID,
 		IssueType:   discussion.IssueType(row.IssueType),
@@ -216,8 +216,8 @@ func (r *DiscussionRepository) toIssueDomain(row model.Issues) *discussion.Issue
 	}
 }
 
-func (r *DiscussionRepository) toNoteDomain(row model.Notes) *discussion.Note {
-	return &discussion.Note{
+func (r *DiscussionRepository) toNoteDomain(row model.Notes) discussion.Note {
+	return discussion.Note{
 		ID:           row.ID,
 		DiscussionID: row.DiscussionID,
 		Content:      row.Content,

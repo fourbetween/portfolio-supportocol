@@ -38,7 +38,7 @@ func TestDiscussion_Comments(t *testing.T) {
 	tests := []struct {
 		name    string
 		prepare func(c *container) *discussion.Discussion
-		want    []*discussion.Comment
+		want    []discussion.Comment
 		wantErr bool
 	}{
 		{
@@ -51,12 +51,12 @@ func TestDiscussion_Comments(t *testing.T) {
 					RuleID:     "ruleID",
 					CreatedBy:  "createdBy",
 				})
-				c.DiscussionRepo.EXPECT().FetchComments(d.ID()).Return([]*discussion.Comment{
+				c.DiscussionRepo.EXPECT().FetchComments(d.ID()).Return([]discussion.Comment{
 					{ID: "comment1"},
 				}, nil)
 				return d
 			},
-			want: []*discussion.Comment{
+			want: []discussion.Comment{
 				{ID: "comment1"},
 			},
 			wantErr: false,
@@ -84,7 +84,7 @@ func TestDiscussion_Issues(t *testing.T) {
 	tests := []struct {
 		name    string
 		prepare func(c *container) *discussion.Discussion
-		want    []*discussion.Issue
+		want    []discussion.Issue
 		wantErr bool
 	}{
 		{
@@ -97,12 +97,12 @@ func TestDiscussion_Issues(t *testing.T) {
 					RuleID:     "ruleID",
 					CreatedBy:  "createdBy",
 				})
-				c.DiscussionRepo.EXPECT().FetchIssues(d.ID()).Return([]*discussion.Issue{
+				c.DiscussionRepo.EXPECT().FetchIssues(d.ID()).Return([]discussion.Issue{
 					{ID: "issue1"},
 				}, nil)
 				return d
 			},
-			want: []*discussion.Issue{
+			want: []discussion.Issue{
 				{ID: "issue1"},
 			},
 			wantErr: false,
@@ -130,7 +130,7 @@ func TestDiscussion_Notes(t *testing.T) {
 	tests := []struct {
 		name    string
 		prepare func(c *container) *discussion.Discussion
-		want    []*discussion.Note
+		want    []discussion.Note
 		wantErr bool
 	}{
 		{
@@ -143,12 +143,12 @@ func TestDiscussion_Notes(t *testing.T) {
 					RuleID:     "ruleID",
 					CreatedBy:  "createdBy",
 				})
-				c.DiscussionRepo.EXPECT().FetchNotes(d.ID()).Return([]*discussion.Note{
+				c.DiscussionRepo.EXPECT().FetchNotes(d.ID()).Return([]discussion.Note{
 					{ID: "note1"},
 				}, nil)
 				return d
 			},
-			want: []*discussion.Note{
+			want: []discussion.Note{
 				{ID: "note1"},
 			},
 			wantErr: false,

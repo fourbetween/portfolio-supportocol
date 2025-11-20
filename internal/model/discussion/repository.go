@@ -16,8 +16,8 @@ type (
 		Load(params LoadParams) (*Discussion, error)
 		Save(discussion *Discussion) error
 		Delete(discussion *Discussion) error
-		FetchComments(discussionID string) ([]*Comment, error)
-		FetchIssues(discussionID string) ([]*Issue, error)
-		FetchNotes(discussionID string) ([]*Note, error)
+		FetchComments(discussionID string) ([]Comment, error)
+		FetchIssues(discussionID string) ([]Issue, error)
+		FetchNotes(discussionID string) ([]Note, error)
 	}
 )
