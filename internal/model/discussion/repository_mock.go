@@ -39,6 +39,49 @@ func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
 }
 
+// Delete mocks base method.
+func (m *MockRepository) Delete(discussion *Discussion) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", discussion)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockRepositoryMockRecorder) Delete(discussion any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), discussion)
+}
+
+// Load mocks base method.
+func (m *MockRepository) Load(params LoadParams) (*Discussion, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Load", params)
+	ret0, _ := ret[0].(*Discussion)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Load indicates an expected call of Load.
+func (mr *MockRepositoryMockRecorder) Load(params any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Load", reflect.TypeOf((*MockRepository)(nil).Load), params)
+}
+
+// Save mocks base method.
+func (m *MockRepository) Save(discussion *Discussion) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Save", discussion)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Save indicates an expected call of Save.
+func (mr *MockRepositoryMockRecorder) Save(discussion any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockRepository)(nil).Save), discussion)
+}
+
 // Search mocks base method.
 func (m *MockRepository) Search(params SearchParams) ([]*Discussion, error) {
 	m.ctrl.T.Helper()

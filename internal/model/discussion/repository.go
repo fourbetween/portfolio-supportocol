@@ -7,7 +7,14 @@ type (
 		ProjectID string
 	}
 
+	LoadParams struct {
+		ID string
+	}
+
 	Repository interface {
 		Search(params SearchParams) ([]*Discussion, error)
+		Load(params LoadParams) (*Discussion, error)
+		Save(discussion *Discussion) error
+		Delete(discussion *Discussion) error
 	}
 )

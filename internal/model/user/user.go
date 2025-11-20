@@ -19,6 +19,7 @@ type (
 		discussionRepo discussion.Repository
 		projectFac     *project.Factory
 		ruleFac        *rule.Factory
+		discussionFac  *discussion.Factory
 		clockSrv       clock.Service
 	}
 
@@ -56,6 +57,30 @@ type (
 
 	ListDiscussionsParams struct {
 		ProjectID string
+	}
+
+	CreateDiscussionParams struct {
+		Theme                  string
+		Background             string
+		Conclusion             string
+		RuleID                 string
+		VisibilityLevel        discussion.VisibilityLevel
+		CommentPermissionLevel discussion.CommentPermissionLevel
+	}
+
+	UpdateDiscussionParams struct {
+		DiscussionID           string
+		Theme                  string
+		Background             string
+		Conclusion             string
+		RuleID                 string
+		VisibilityLevel        discussion.VisibilityLevel
+		CommentPermissionLevel discussion.CommentPermissionLevel
+		Status                 discussion.Status
+	}
+
+	DeleteDiscussionParams struct {
+		DiscussionID string
 	}
 )
 
@@ -179,6 +204,61 @@ func (u *User) ListDiscussions(params ListDiscussionsParams) ([]*discussion.Disc
 	return u.discussionRepo.Search(discussion.SearchParams{
 		ProjectID: params.ProjectID,
 	})
+}
+
+func (u *User) CreateDiscussion(params CreateDiscussionParams) (*discussion.Discussion, error) {
+	d := u.discussionFac.NewDiscussion(discussion.NewDiscussionParams{
+		Theme:                  params.Theme,
+		Background:             params.Background,
+		Conclusion:             params.Conclusion,
+		RuleID:                 params.RuleID,
+		VisibilityLevel:        params.VisibilityLevel,
+		CommentPermissionLevel: params.CommentPermissionLevel,
+		CreatedBy:              u.id,
+		Status:                 discussion.StatusOpen,
+	})
+
+	if err := d.Save(); err != nil {
+		return nil, err
+	}
+
+	return d, nil
+}
+
+func (u *User) UpdateDiscussion(params UpdateDiscussionParams) (*discussion.Discussion, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	d.Update(discussion.UpdateParams{
+		Theme:                  params.Theme,
+		Background:             params.Background,
+		Conclusion:             params.Conclusion,
+		RuleID:                 params.RuleID,
+		VisibilityLevel:        params.VisibilityLevel,
+		CommentPermissionLevel: params.CommentPermissionLevel,
+		Status:                 params.Status,
+	})
+
+	if err := d.Save(); err != nil {
+		return nil, err
+	}
+
+	return d, nil
+}
+
+func (u *User) DeleteDiscussion(params DeleteDiscussionParams) error {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return err
+	}
+
+	return d.Delete()
 }
 
 func (u *User) LoadWorkbook(workbookID string) (*workbook.Workbook, error) {

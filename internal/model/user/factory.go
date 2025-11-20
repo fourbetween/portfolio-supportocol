@@ -16,6 +16,7 @@ type (
 		discussionRepo discussion.Repository
 		projectFac     *project.Factory
 		ruleFac        *rule.Factory
+		discussionFac  *discussion.Factory
 		clockSrv       clock.Service
 	}
 
@@ -32,6 +33,7 @@ func NewFactory(
 	discussionRepo discussion.Repository,
 	projectFac *project.Factory,
 	ruleFac *rule.Factory,
+	discussionFac *discussion.Factory,
 	clockSrv clock.Service,
 ) *Factory {
 	return &Factory{
@@ -41,6 +43,7 @@ func NewFactory(
 		discussionRepo: discussionRepo,
 		projectFac:     projectFac,
 		ruleFac:        ruleFac,
+		discussionFac:  discussionFac,
 		clockSrv:       clockSrv,
 	}
 }
@@ -56,6 +59,7 @@ func (f *Factory) Build(params BuildParams) *User {
 		discussionRepo: f.discussionRepo,
 		projectFac:     f.projectFac,
 		ruleFac:        f.ruleFac,
+		discussionFac:  f.discussionFac,
 		clockSrv:       f.clockSrv,
 	}
 }

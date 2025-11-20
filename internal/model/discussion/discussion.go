@@ -26,6 +26,16 @@ type (
 
 		repo Repository
 	}
+
+	UpdateParams struct {
+		Theme                  string
+		Background             string
+		Conclusion             string
+		RuleID                 string
+		VisibilityLevel        VisibilityLevel
+		CommentPermissionLevel CommentPermissionLevel
+		Status                 Status
+	}
 )
 
 const (
@@ -87,4 +97,22 @@ func (d *Discussion) Status() Status {
 
 func (d *Discussion) IsOpen() bool {
 	return d.status == StatusOpen
+}
+
+func (d *Discussion) Save() error {
+	return d.repo.Save(d)
+}
+
+func (d *Discussion) Delete() error {
+	return d.repo.Delete(d)
+}
+
+func (d *Discussion) Update(params UpdateParams) {
+	d.theme = params.Theme
+	d.background = params.Background
+	d.conclusion = params.Conclusion
+	d.ruleID = params.RuleID
+	d.visibilityLevel = params.VisibilityLevel
+	d.commentPermissionLevel = params.CommentPermissionLevel
+	d.status = params.Status
 }
