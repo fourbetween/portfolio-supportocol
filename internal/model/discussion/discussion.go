@@ -103,6 +103,10 @@ func (d *Discussion) Issues() ([]*Issue, error) {
 	return d.repo.FetchIssues(d.id)
 }
 
+func (d *Discussion) Notes() ([]*Note, error) {
+	return d.repo.FetchNotes(d.id)
+}
+
 func (d *Discussion) Save() error {
 	return d.repo.Save(d)
 }

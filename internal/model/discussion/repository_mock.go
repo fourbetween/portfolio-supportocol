@@ -83,6 +83,21 @@ func (mr *MockRepositoryMockRecorder) FetchIssues(discussionID any) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchIssues", reflect.TypeOf((*MockRepository)(nil).FetchIssues), discussionID)
 }
 
+// FetchNotes mocks base method.
+func (m *MockRepository) FetchNotes(discussionID string) ([]*Note, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FetchNotes", discussionID)
+	ret0, _ := ret[0].([]*Note)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FetchNotes indicates an expected call of FetchNotes.
+func (mr *MockRepositoryMockRecorder) FetchNotes(discussionID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchNotes", reflect.TypeOf((*MockRepository)(nil).FetchNotes), discussionID)
+}
+
 // Load mocks base method.
 func (m *MockRepository) Load(params LoadParams) (*Discussion, error) {
 	m.ctrl.T.Helper()

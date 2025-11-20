@@ -141,6 +141,25 @@ func (r *DiscussionRepository) FetchIssues(discussionID string) ([]*discussion.I
 	return issues, nil
 }
 
+func (r *DiscussionRepository) FetchNotes(discussionID string) ([]*discussion.Note, error) {
+	stmt := postgres.
+		SELECT(table.Notes.AllColumns).
+		FROM(table.Notes).
+		WHERE(table.Notes.DiscussionID.EQ(postgres.String(discussionID)))
+
+	var dest []model.Notes
+	if err := stmt.Query(r.db, &dest); err != nil {
+		return nil, fmt.Errorf("failed to fetch notes: %w", err)
+	}
+
+	notes := make([]*discussion.Note, len(dest))
+	for i, row := range dest {
+		notes[i] = r.toNoteDomain(row)
+	}
+
+	return notes, nil
+}
+
 func (r *DiscussionRepository) toDomain(row model.Discussions) *discussion.Discussion {
 	return r.fac.BuildDiscussion(discussion.BuildDiscussionParams{
 		ID: row.ID,
@@ -194,5 +213,15 @@ func (r *DiscussionRepository) toIssueDomain(row model.Issues) *discussion.Issue
 		Description: row.Description,
 		CreatedBy:   row.CreatedBy,
 		CreatedAt:   row.CreatedAt,
+	}
+}
+
+func (r *DiscussionRepository) toNoteDomain(row model.Notes) *discussion.Note {
+	return &discussion.Note{
+		ID:           row.ID,
+		DiscussionID: row.DiscussionID,
+		Content:      row.Content,
+		PostedBy:     row.PostedBy,
+		PostedAt:     row.PostedAt,
 	}
 }

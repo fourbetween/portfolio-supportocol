@@ -3,7 +3,7 @@ package discussion
 import "time"
 
 type (
-	note struct {
+	Note struct {
 		ID           string
 		DiscussionID string
 		Content      string

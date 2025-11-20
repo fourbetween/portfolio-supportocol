@@ -125,3 +125,49 @@ func TestDiscussion_Issues(t *testing.T) {
 		})
 	}
 }
+
+func TestDiscussion_Notes(t *testing.T) {
+	tests := []struct {
+		name    string
+		prepare func(c *container) *discussion.Discussion
+		want    []*discussion.Note
+		wantErr bool
+	}{
+		{
+			name: "ノートを取得できること",
+			prepare: func(c *container) *discussion.Discussion {
+				d := c.DiscussionFac.NewDiscussion(discussion.NewDiscussionParams{
+					Theme:      "theme",
+					Background: "background",
+					Conclusion: "conclusion",
+					RuleID:     "ruleID",
+					CreatedBy:  "createdBy",
+				})
+				c.DiscussionRepo.EXPECT().FetchNotes(d.ID()).Return([]*discussion.Note{
+					{ID: "note1"},
+				}, nil)
+				return d
+			},
+			want: []*discussion.Note{
+				{ID: "note1"},
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			c := newContainer(t)
+			d := tt.prepare(c)
+			got, err := d.Notes()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Discussion.Notes() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !tt.wantErr {
+				if diff := cmp.Diff(tt.want, got); diff != "" {
+					t.Errorf("Discussion.Notes() mismatch (-want +got):\n%s", diff)
+				}
+			}
+		})
+	}
+}
