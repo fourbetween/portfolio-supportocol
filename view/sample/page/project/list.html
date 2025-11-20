@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>プロジェクト一覧 - Supportocol</title>
+    <style>
+      :root {
+        --color-fg-default: #24292f;
+        --color-fg-muted: #57606a;
+        --color-canvas-default: #ffffff;
+        --color-canvas-subtle: #f6f8fa;
+        --color-border-default: #d0d7de;
+        --color-border-muted: #d8dee4;
+        --color-accent-fg: #0969da;
+        --color-btn-primary-bg: #2da44e;
+        --color-btn-primary-text: #ffffff;
+        --color-danger-fg: #cf222e;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+          Arial, sans-serif;
+        line-height: 1.5;
+        color: var(--color-fg-default);
+        margin: 0;
+        padding: 0;
+        background-color: var(--color-canvas-subtle);
+      }
+
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Header */
+      .page-header {
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .breadcrumb {
+        font-size: 14px;
+        color: var(--color-accent-fg);
+        margin-bottom: 16px;
+      }
+      .breadcrumb a {
+        text-decoration: none;
+        color: var(--color-accent-fg);
+      }
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-block;
+        padding: 5px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        background-color: var(--color-canvas-default);
+        color: var(--color-fg-default);
+        text-decoration: none;
+      }
+
+      .btn:hover {
+        background-color: #f3f4f6;
+        border-color: var(--color-border-muted);
+      }
+
+      .btn-primary {
+        background-color: var(--color-btn-primary-bg);
+        color: var(--color-btn-primary-text);
+        border-color: rgba(27, 31, 36, 0.15);
+      }
+
+      .btn-primary:hover {
+        background-color: #2c974b;
+      }
+
+      /* Forms */
+      .form-control {
+        padding: 5px 12px;
+        font-size: 14px;
+        line-height: 20px;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        box-sizing: border-box;
+        background-color: var(--color-canvas-default);
+        color: var(--color-fg-default);
+      }
+
+      .form-control:focus {
+        border-color: var(--color-accent-fg);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
+      }
+
+      /* Filter Bar */
+      .filter-bar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+        background-color: var(--color-canvas-subtle);
+        padding: 16px;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .search-input {
+        flex-grow: 1;
+        min-width: 200px;
+      }
+
+      /* Project List */
+      .project-list {
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        background-color: var(--color-canvas-default);
+      }
+
+      .project-item {
+        padding: 16px;
+        border-bottom: 1px solid var(--color-border-muted);
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .project-item:last-child {
+        border-bottom: none;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
+
+      .project-item:hover {
+        background-color: var(--color-canvas-subtle);
+      }
+
+      .project-icon {
+        margin-top: 4px;
+        color: var(--color-fg-muted);
+      }
+
+      .project-content {
+        flex-grow: 1;
+      }
+
+      .project-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--color-fg-default);
+        text-decoration: none;
+        margin-bottom: 4px;
+        display: block;
+      }
+
+      .project-title:hover {
+        color: var(--color-accent-fg);
+        text-decoration: underline;
+      }
+
+      .project-meta {
+        font-size: 12px;
+        color: var(--color-fg-muted);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/dashboard">ダッシュボード</a> / プロジェクト
+      </div>
+
+      <div class="page-header">
+        <h1>プロジェクト一覧</h1>
+        <a
+          href="../../popup/project/create.html"
+          class="btn btn-primary"
+          onclick="window.open(this.href, 'new_project', 'width=500,height=300'); return false;"
+          >新規プロジェクト作成</a
+        >
+      </div>
+
+      <div class="filter-bar">
+        <input
+          type="text"
+          class="form-control search-input"
+          placeholder="プロジェクトを検索..."
+        />
+        <button class="btn">検索</button>
+      </div>
+
+      <div class="project-list">
+        <!-- Project Item 1 -->
+        <div class="project-item">
+          <div class="project-icon">
+            <svg
+              aria-hidden="true"
+              height="16"
+              viewBox="0 0 16 16"
+              version="1.1"
+              width="16"
+              data-view-component="true"
+              class="octicon octicon-project"
+              fill="currentColor"
+            >
+              <path
+                d="M1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0ZM1.5 1.75v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25ZM11.75 3a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm-8.25.75a.75.75 0 0 1 1.5 0v5.5a.75.75 0 0 1-1.5 0v-5.5ZM8 3a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.75.75 0 0 1 .75-.75Z"
+              ></path>
+            </svg>
+          </div>
+          <div class="project-content">
+            <a href="/projects/01H1V2W3X4Y5Z6A7B8C9D0E1F2" class="project-title"
+              >AI倫理ガイドライン策定プロジェクト</AI倫理ガイドライン策定プロジェクト</a
+            >
+            <div class="project-meta">
+              <span class="meta-item">
+                作成者: user_01H1V2W3X4Y5Z6A7B8C9D0E1F2
+              </span>
+              <span class="meta-item"> • </span>
+              <span class="meta-item"> 作成日: 2023-10-27 </span>
+              <span class="meta-item"> • </span>
+              <span class="meta-item"> ID: 01H1V2W3X4Y5Z6A7B8C9D0E1F2 </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project Item 2 -->
+        <div class="project-item">
+          <div class="project-icon">
+            <svg
+              aria-hidden="true"
+              height="16"
+              viewBox="0 0 16 16"
+              version="1.1"
+              width="16"
+              data-view-component="true"
+              class="octicon octicon-project"
+              fill="currentColor"
+            >
+              <path
+                d="M1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0ZM1.5 1.75v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25ZM11.75 3a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm-8.25.75a.75.75 0 0 1 1.5 0v5.5a.75.75 0 0 1-1.5 0v-5.5ZM8 3a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.75.75 0 0 1 .75-.75Z"
+              ></path>
+            </svg>
+          </div>
+          <div class="project-content">
+            <a href="/projects/01H1V2W3X4Y5Z6A7B8C9D0E1F3" class="project-title"
+              >社内システム改善提案</a
+            >
+            <div class="project-meta">
+              <span class="meta-item">
+                作成者: user_01H1V2W3X4Y5Z6A7B8C9D0E1F2
+              </span>
+              <span class="meta-item"> • </span>
+              <span class="meta-item"> 作成日: 2023-11-05 </span>
+              <span class="meta-item"> • </span>
+              <span class="meta-item"> ID: 01H1V2W3X4Y5Z6A7B8C9D0E1F3 </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project Item 3 -->
+        <div class="project-item">
+          <div class="project-icon">
+            <svg
+              aria-hidden="true"
+              height="16"
+              viewBox="0 0 16 16"
+              version="1.1"
+              width="16"
+              data-view-component="true"
+              class="octicon octicon-project"
+              fill="currentColor"
+            >
+              <path
+                d="M1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25V1.75C0 .784.784 0 1.75 0ZM1.5 1.75v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25ZM11.75 3a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm-8.25.75a.75.75 0 0 1 1.5 0v5.5a.75.75 0 0 1-1.5 0v-5.5ZM8 3a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.75.75 0 0 1 .75-.75Z"
+              ></path>
+            </svg>
+          </div>
+          <div class="project-content">
+            <a href="/projects/01H1V2W3X4Y5Z6A7B8C9D0E1F4" class="project-title"
+              >新規事業アイデアソン</a
+            >
+            <div class="project-meta">
+              <span class="meta-item">
+                作成者: user_01H1V2W3X4Y5Z6A7B8C9D0E1F2
+              </span>
+              <span class="meta-item"> • </span>
+              <span class="meta-item"> 作成日: 2023-11-12 </span>
+              <span class="meta-item"> • </span>
+              <span class="meta-item"> ID: 01H1V2W3X4Y5Z6A7B8C9D0E1F4 </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
