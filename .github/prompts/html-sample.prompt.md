@@ -20,10 +20,10 @@ $ARGUMENTS
 
 ## ワークフロー
 
-1. `view/sample/pagelist.md`を参照し、アプリに必要なページを確認してください。
+1. `view/sample/pages.md`を参照し、アプリに必要なページを確認してください。
 2. `view/src/api/schema/schema.ts`を参照し、関連するデータスキーマを確認してください。
 3. `view/sample`以下に既存の HTML サンプルがある場合は、それらを参考にして、スタイルと構造の一貫性を保ってください。
-4. pagelist.md に基づいて、HTML を実装してください。
+4. pages.md に基づいて、HTML を実装してください。
    - 必ずすべての機能を満たす UI にしてください。
    - ページを描く HTML ファイルは`view/sample/page`ディレクトリに保存してください。
      - 例: `view/sample/page/workbook/list.html`
@@ -32,5 +32,5 @@ $ARGUMENTS
    - テーマは Github を参考にしてください。
    - tailwindcss は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
    - ダークモードは不要です。
-5. simplebrowser を使って、pagelist.md の要件を満たしているか確認してください。
+5. simplebrowser を使って、pages.md の要件を満たしているか確認してください。
    - 不足がある場合は前の手順に戻って修正してください。
