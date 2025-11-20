@@ -112,12 +112,15 @@
       }
     </style>
     <script>
-      function selectItem(element) {
-        document
-          .querySelectorAll(".result-item")
-          .forEach((el) => el.classList.remove("selected"));
-        element.classList.add("selected");
-        document.getElementById("add-btn").disabled = false;
+      function toggleItem(element) {
+        element.classList.toggle("selected");
+        const checkbox = element.querySelector('input[type="checkbox"]');
+        checkbox.checked = element.classList.contains("selected");
+
+        const selectedCount = document.querySelectorAll(
+          ".result-item.selected"
+        ).length;
+        document.getElementById("add-btn").disabled = selectedCount === 0;
       }
 
       function closePopup() {
@@ -125,7 +128,10 @@
       }
 
       function addDiscussion() {
-        alert("議論を追加しました");
+        const selectedCount = document.querySelectorAll(
+          ".result-item.selected"
+        ).length;
+        alert(`${selectedCount}件の議論を追加しました`);
         window.close();
       }
     </script>
@@ -138,8 +144,8 @@
     </div>
 
     <div class="search-results">
-      <div class="result-item" onclick="selectItem(this)">
-        <input type="radio" name="discussion" style="pointer-events: none" />
+      <div class="result-item" onclick="toggleItem(this)">
+        <input type="checkbox" name="discussion" style="pointer-events: none" />
         <div>
           <div class="discussion-title">
             リモートワーク推奨期間の延長に関する是非
@@ -147,15 +153,15 @@
           <div class="discussion-meta">#122 opened by user2</div>
         </div>
       </div>
-      <div class="result-item" onclick="selectItem(this)">
-        <input type="radio" name="discussion" style="pointer-events: none" />
+      <div class="result-item" onclick="toggleItem(this)">
+        <input type="checkbox" name="discussion" style="pointer-events: none" />
         <div>
           <div class="discussion-title">2024年度 新規事業アイデア募集</div>
           <div class="discussion-meta">#98 archived by manager</div>
         </div>
       </div>
-      <div class="result-item" onclick="selectItem(this)">
-        <input type="radio" name="discussion" style="pointer-events: none" />
+      <div class="result-item" onclick="toggleItem(this)">
+        <input type="checkbox" name="discussion" style="pointer-events: none" />
         <div>
           <div class="discussion-title">オフィス移転プロジェクト</div>
           <div class="discussion-meta">#85 closed by admin</div>
