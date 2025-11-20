@@ -26,6 +26,7 @@ type container struct {
 	ProjectRepo    *project.MockRepository
 	RuleRepo       *rule.MockRepository
 	DiscussionRepo *discussion.MockRepository
+	DiscussionFac  *discussion.Factory
 	IDSrv          *id.MockService
 	ClockSrv       *clock.MockService
 }
@@ -44,13 +45,15 @@ func newContainer(t *testing.T) *container {
 
 	projectFac := project.NewFactory(projectRepo, idSrv)
 	ruleFac := rule.NewFactory(ruleRepo, idSrv)
-	userFac := user.NewFactory(workbookRepo, projectRepo, ruleRepo, discussionRepo, projectFac, ruleFac, clockSrv)
+	discussionFac := discussion.NewFactory(discussionRepo, idSrv, clockSrv)
+	userFac := user.NewFactory(workbookRepo, projectRepo, ruleRepo, discussionRepo, projectFac, ruleFac, discussionFac, clockSrv)
 
 	return &container{
 		t:              t,
 		UserFac:        userFac,
 		ProjectFac:     projectFac,
 		RuleFac:        ruleFac,
+		DiscussionFac:  discussionFac,
 		WorkbookRepo:   workbookRepo,
 		ProjectRepo:    projectRepo,
 		RuleRepo:       ruleRepo,
@@ -806,6 +809,236 @@ func TestUser_ListDiscussions(t *testing.T) {
 
 			if tt.verify != nil {
 				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_CreateDiscussion(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name   string
+		params user.CreateDiscussionParams
+		setup  func(*container)
+		verify func(*testing.T, *discussion.Discussion, error)
+	}{
+		{
+			name: "議論を作成できること",
+			params: user.CreateDiscussionParams{
+				Theme:                  "テストテーマ",
+				Background:             "テスト背景",
+				Conclusion:             "テスト結論",
+				RuleID:                 "test-rule-id",
+				VisibilityLevel:        discussion.VisibilityLevelEveryone,
+				CommentPermissionLevel: discussion.CommentPermissionLevelEveryone,
+			},
+			setup: func(con *container) {
+				con.ClockSrv.EXPECT().Now().Return(fixedTime)
+				con.IDSrv.EXPECT().Generate().Return("generated-discussion-id")
+				con.DiscussionRepo.EXPECT().Save(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, got *discussion.Discussion, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("CreateDiscussion() failed: %v", err)
+					return
+				}
+				if got.ID() == "" {
+					t.Error("CreateDiscussion() ID is empty")
+				}
+				if got.Theme() != "テストテーマ" {
+					t.Errorf("CreateDiscussion() Theme = %v, want %v", got.Theme(), "テストテーマ")
+				}
+				if got.Background() != "テスト背景" {
+					t.Errorf("CreateDiscussion() Background = %v, want %v", got.Background(), "テスト背景")
+				}
+				if got.Conclusion() != "テスト結論" {
+					t.Errorf("CreateDiscussion() Conclusion = %v, want %v", got.Conclusion(), "テスト結論")
+				}
+				if got.RuleID() != "test-rule-id" {
+					t.Errorf("CreateDiscussion() RuleID = %v, want %v", got.RuleID(), "test-rule-id")
+				}
+				if got.VisibilityLevel() != discussion.VisibilityLevelEveryone {
+					t.Errorf("CreateDiscussion() VisibilityLevel = %v, want %v", got.VisibilityLevel(), discussion.VisibilityLevelEveryone)
+				}
+				if got.CommentPermissionLevel() != discussion.CommentPermissionLevelEveryone {
+					t.Errorf("CreateDiscussion() CommentPermissionLevel = %v, want %v", got.CommentPermissionLevel(), discussion.CommentPermissionLevelEveryone)
+				}
+				if got.CreatedBy() != "test-user-id" {
+					t.Errorf("CreateDiscussion() CreatedBy = %v, want %v", got.CreatedBy(), "test-user-id")
+				}
+				if got.CreatedAt().IsZero() {
+					t.Error("CreateDiscussion() CreatedAt is zero")
+				}
+				if got.Status() != discussion.StatusOpen {
+					t.Errorf("CreateDiscussion() Status = %v, want %v", got.Status(), discussion.StatusOpen)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.CreateDiscussion(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_UpdateDiscussion(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name   string
+		params user.UpdateDiscussionParams
+		setup  func(*container)
+		verify func(*testing.T, *discussion.Discussion, error)
+	}{
+		{
+			name: "議論を更新できること",
+			params: user.UpdateDiscussionParams{
+				DiscussionID:           "existing-discussion-id",
+				Theme:                  "更新されたテーマ",
+				Background:             "更新された背景",
+				Conclusion:             "更新された結論",
+				RuleID:                 "updated-rule-id",
+				VisibilityLevel:        discussion.VisibilityLevelAuthenticated,
+				CommentPermissionLevel: discussion.CommentPermissionLevelAuthenticated,
+				Status:                 discussion.StatusClosed,
+			},
+			setup: func(con *container) {
+				existingDiscussion := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "existing-discussion-id",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:                  "元のテーマ",
+						Background:             "元の背景",
+						Conclusion:             "元の結論",
+						RuleID:                 "original-rule-id",
+						VisibilityLevel:        discussion.VisibilityLevelEveryone,
+						CommentPermissionLevel: discussion.CommentPermissionLevelEveryone,
+						CreatedBy:              "test-user-id",
+						Status:                 discussion.StatusOpen,
+					},
+					CreatedAt: fixedTime,
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID: "existing-discussion-id",
+				}).Return(existingDiscussion, nil)
+				con.DiscussionRepo.EXPECT().Save(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, got *discussion.Discussion, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("UpdateDiscussion() failed: %v", err)
+					return
+				}
+				if got.ID() != "existing-discussion-id" {
+					t.Errorf("UpdateDiscussion() ID = %v, want %v", got.ID(), "existing-discussion-id")
+				}
+				if got.Theme() != "更新されたテーマ" {
+					t.Errorf("UpdateDiscussion() Theme = %v, want %v", got.Theme(), "更新されたテーマ")
+				}
+				if got.Status() != discussion.StatusClosed {
+					t.Errorf("UpdateDiscussion() Status = %v, want %v", got.Status(), discussion.StatusClosed)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.UpdateDiscussion(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_DeleteDiscussion(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name         string
+		discussionID string
+		setup        func(*container)
+		verify       func(*testing.T, error)
+	}{
+		{
+			name:         "議論を削除できること",
+			discussionID: "existing-discussion-id",
+			setup: func(con *container) {
+				existingDiscussion := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "existing-discussion-id",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:                  "削除対象の議論",
+						Background:             "削除対象の背景",
+						Conclusion:             "削除対象の結論",
+						RuleID:                 "rule-id",
+						VisibilityLevel:        discussion.VisibilityLevelEveryone,
+						CommentPermissionLevel: discussion.CommentPermissionLevelEveryone,
+						CreatedBy:              "test-user-id",
+						Status:                 discussion.StatusOpen,
+					},
+					CreatedAt: fixedTime,
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID: "existing-discussion-id",
+				}).Return(existingDiscussion, nil)
+				con.DiscussionRepo.EXPECT().Delete(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("DeleteDiscussion() failed: %v", err)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			err := u.DeleteDiscussion(user.DeleteDiscussionParams{
+				DiscussionID: tt.discussionID,
+			})
+
+			if tt.verify != nil {
+				tt.verify(t, err)
 			}
 		})
 	}

@@ -47,6 +47,7 @@ func NewContainer(tx *sql.Tx) (*Container, error) {
 	discussionFac := discussion.NewFactory(
 		discussionRepo,
 		idSrv,
+		clockSrv,
 	)
 	discussionRepo.SetFactory(discussionFac)
 
@@ -57,6 +58,7 @@ func NewContainer(tx *sql.Tx) (*Container, error) {
 		discussionRepo,
 		projectFac,
 		ruleFac,
+		discussionFac,
 		clockSrv,
 	)
 	return &Container{

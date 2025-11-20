@@ -1,8 +1,10 @@
 package db
 
 import (
+	"errors"
 	"fmt"
 
+	"github.com/fourbetween/app-supportocol/internal"
 	"github.com/fourbetween/app-supportocol/internal/db/.gen/public/model"
 	"github.com/fourbetween/app-supportocol/internal/db/.gen/public/table"
 	"github.com/fourbetween/app-supportocol/internal/model/discussion"
@@ -39,21 +41,93 @@ func (r *DiscussionRepository) Search(params discussion.SearchParams) ([]*discus
 
 	discussions := make([]*discussion.Discussion, len(dest))
 	for i, row := range dest {
-		discussions[i] = r.fac.BuildDiscussion(discussion.BuildDiscussionParams{
-			ID: row.ID,
-			NewDiscussionParams: discussion.NewDiscussionParams{
-				Theme:                  row.Theme,
-				Background:             row.Background,
-				Conclusion:             row.Conclusion,
-				RuleID:                 row.RuleID,
-				VisibilityLevel:        discussion.VisibilityLevel(row.VisibilityLevel),
-				CommentPermissionLevel: discussion.CommentPermissionLevel(row.CommentPermissionLevel),
-				CreatedBy:              row.CreatedBy,
-				Status:                 discussion.Status(row.Status),
-			},
-			CreatedAt: row.CreatedAt,
-		})
+		discussions[i] = r.toDomain(row)
 	}
 
 	return discussions, nil
+}
+
+func (r *DiscussionRepository) Load(params discussion.LoadParams) (*discussion.Discussion, error) {
+	stmt := postgres.
+		SELECT(table.Discussions.AllColumns).
+		FROM(table.Discussions).
+		WHERE(table.Discussions.ID.EQ(postgres.String(params.ID)))
+
+	var dest model.Discussions
+	if err := stmt.Query(r.db, &dest); err != nil {
+		if errors.Is(err, qrm.ErrNoRows) {
+			return nil, internal.ErrNotFound
+		}
+		return nil, fmt.Errorf("failed to load discussion: %w", err)
+	}
+
+	return r.toDomain(dest), nil
+}
+
+func (r *DiscussionRepository) Save(d *discussion.Discussion) error {
+	model := r.toModel(d)
+
+	stmt := table.Discussions.
+		INSERT(table.Discussions.AllColumns).
+		MODEL(model).
+		ON_CONFLICT(table.Discussions.ID).
+		DO_UPDATE(
+			postgres.SET(
+				table.Discussions.Theme.SET(postgres.String(d.Theme())),
+				table.Discussions.Background.SET(postgres.String(d.Background())),
+				table.Discussions.Conclusion.SET(postgres.String(d.Conclusion())),
+				table.Discussions.RuleID.SET(postgres.String(d.RuleID())),
+				table.Discussions.VisibilityLevel.SET(postgres.String(string(d.VisibilityLevel()))),
+				table.Discussions.CommentPermissionLevel.SET(postgres.String(string(d.CommentPermissionLevel()))),
+				table.Discussions.Status.SET(postgres.String(string(d.Status()))),
+			),
+		)
+
+	if _, err := stmt.Exec(r.db); err != nil {
+		return fmt.Errorf("failed to save discussion: %w", err)
+	}
+	return nil
+}
+
+func (r *DiscussionRepository) Delete(d *discussion.Discussion) error {
+	stmt := table.Discussions.
+		DELETE().
+		WHERE(table.Discussions.ID.EQ(postgres.String(d.ID())))
+
+	if _, err := stmt.Exec(r.db); err != nil {
+		return fmt.Errorf("failed to delete discussion: %w", err)
+	}
+	return nil
+}
+
+func (r *DiscussionRepository) toDomain(row model.Discussions) *discussion.Discussion {
+	return r.fac.BuildDiscussion(discussion.BuildDiscussionParams{
+		ID: row.ID,
+		NewDiscussionParams: discussion.NewDiscussionParams{
+			Theme:                  row.Theme,
+			Background:             row.Background,
+			Conclusion:             row.Conclusion,
+			RuleID:                 row.RuleID,
+			VisibilityLevel:        discussion.VisibilityLevel(row.VisibilityLevel),
+			CommentPermissionLevel: discussion.CommentPermissionLevel(row.CommentPermissionLevel),
+			CreatedBy:              row.CreatedBy,
+			Status:                 discussion.Status(row.Status),
+		},
+		CreatedAt: row.CreatedAt,
+	})
+}
+
+func (r *DiscussionRepository) toModel(d *discussion.Discussion) model.Discussions {
+	return model.Discussions{
+		ID:                     d.ID(),
+		Theme:                  d.Theme(),
+		Background:             d.Background(),
+		Conclusion:             d.Conclusion(),
+		RuleID:                 d.RuleID(),
+		VisibilityLevel:        string(d.VisibilityLevel()),
+		CommentPermissionLevel: string(d.CommentPermissionLevel()),
+		CreatedBy:              d.CreatedBy(),
+		CreatedAt:              d.CreatedAt(),
+		Status:                 string(d.Status()),
+	}
 }
