@@ -375,99 +375,116 @@
 
       <style>
         .status-header {
-            font-size: 16px;
-            font-weight: 600;
-            margin-top: 24px;
-            margin-bottom: 8px;
-            color: var(--color-fg-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          margin-top: 24px;
+          margin-bottom: 8px;
+          color: var(--color-fg-muted);
+          display: flex;
+          align-items: center;
+          gap: 8px;
         }
-        
+
         .status-header:first-of-type {
-            margin-top: 0;
+          margin-top: 0;
         }
       </style>
 
       <div class="discussion-list-container">
         <div class="status-header">
-            <svg class="octicon status-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                <path d="M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                <path fill-rule="evenodd" d="M8 0a8 8 0 100 16A8 8 0 008 0zM1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0z"></path>
-            </svg>
-            Open
+          <svg
+            class="octicon status-open"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            width="16"
+            height="16"
+          >
+            <path d="M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
+            <path
+              fill-rule="evenodd"
+              d="M8 0a8 8 0 100 16A8 8 0 008 0zM1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0z"
+            ></path>
+          </svg>
+          Open
         </div>
         <div class="discussion-list">
-            <!-- Item 1: Open -->
-            <div class="discussion-item">
+          <!-- Item 1: Open -->
+          <div class="discussion-item">
             <div class="discussion-icon">
-                <svg
+              <svg
                 class="octicon status-open"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
                 width="16"
                 height="16"
-                >
+              >
                 <path d="M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
                 <path
-                    fill-rule="evenodd"
-                    d="M8 0a8 8 0 100 16A8 8 0 008 0zM1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0z"
+                  fill-rule="evenodd"
+                  d="M8 0a8 8 0 100 16A8 8 0 008 0zM1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0z"
                 ></path>
-                </svg>
+              </svg>
             </div>
             <div class="discussion-content">
-                <a href="../discussion/board.html" class="discussion-title">
+              <a href="../discussion/board.html" class="discussion-title">
                 AI 開発における倫理的ガイドラインの策定について
-                </a>
-                <div class="discussion-meta">
+              </a>
+              <div class="discussion-meta">
                 <span class="status-badge status-open">Open</span>
                 <span class="meta-item">#123 opened 2 hours ago by user1</span>
                 <span class="meta-item">・</span>
                 <span class="meta-item">ルール: ディベート標準</span>
                 <span class="meta-item">・</span>
                 <span class="meta-item">公開: 全員</span>
-                </div>
+              </div>
             </div>
-            </div>
+          </div>
         </div>
 
         <div class="status-header">
-            <svg class="octicon status-closed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
-                <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path>
-            </svg>
-            Closed
+          <svg
+            class="octicon status-closed"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 16 16"
+            width="16"
+            height="16"
+          >
+            <path
+              d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"
+            ></path>
+          </svg>
+          Closed
         </div>
         <div class="discussion-list">
-            <!-- Item 2: Closed -->
-            <div class="discussion-item">
+          <!-- Item 2: Closed -->
+          <div class="discussion-item">
             <div class="discussion-icon">
-                <svg
+              <svg
                 class="octicon status-closed"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
                 width="16"
                 height="16"
-                >
+              >
                 <path
-                    d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"
+                  d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"
                 ></path>
-                </svg>
+              </svg>
             </div>
             <div class="discussion-content">
-                <a href="../discussion/board.html" class="discussion-title">
+              <a href="../discussion/board.html" class="discussion-title">
                 初期ドラフトのレビュー
-                </a>
-                <div class="discussion-meta">
+              </a>
+              <div class="discussion-meta">
                 <span class="status-badge status-closed">Closed</span>
                 <span class="meta-item">#118 closed yesterday by admin</span>
                 <span class="meta-item">・</span>
                 <span class="meta-item">ルール: レビュー</span>
                 <span class="meta-item">・</span>
                 <span class="meta-item">公開: 全員</span>
-                </div>
+              </div>
             </div>
-            </div>
+          </div>
         </div>
       </div>
     </div>
