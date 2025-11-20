@@ -99,11 +99,11 @@ func (d *Discussion) Comments() ([]Comment, error) {
 	return d.repo.FetchComments(d.id)
 }
 
-func (d *Discussion) Issues() ([]*Issue, error) {
+func (d *Discussion) Issues() ([]Issue, error) {
 	return d.repo.FetchIssues(d.id)
 }
 
-func (d *Discussion) Notes() ([]*Note, error) {
+func (d *Discussion) Notes() ([]Note, error) {
 	return d.repo.FetchNotes(d.id)
 }
 

@@ -17,7 +17,7 @@ type (
 		Save(discussion *Discussion) error
 		Delete(discussion *Discussion) error
 		FetchComments(discussionID string) ([]Comment, error)
-		FetchIssues(discussionID string) ([]*Issue, error)
-		FetchNotes(discussionID string) ([]*Note, error)
+		FetchIssues(discussionID string) ([]Issue, error)
+		FetchNotes(discussionID string) ([]Note, error)
 	}
 )
