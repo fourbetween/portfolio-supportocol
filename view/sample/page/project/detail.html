@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>プロジェクト詳細 - Supportocol</title>
+    <style>
+      :root {
+        --color-fg-default: #24292f;
+        --color-fg-muted: #57606a;
+        --color-canvas-default: #ffffff;
+        --color-canvas-subtle: #f6f8fa;
+        --color-border-default: #d0d7de;
+        --color-border-muted: #d8dee4;
+        --color-accent-fg: #0969da;
+        --color-btn-primary-bg: #2da44e;
+        --color-btn-primary-text: #ffffff;
+        --color-danger-fg: #cf222e;
+        --color-btn-danger-text: #ffffff;
+        --color-btn-danger-bg: #da3633;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+          Arial, sans-serif;
+        line-height: 1.5;
+        color: var(--color-fg-default);
+        margin: 0;
+        padding: 0;
+        background-color: var(--color-canvas-subtle);
+      }
+
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Header */
+      .page-header {
+        margin-bottom: 24px;
+        border-bottom: 1px solid var(--color-border-muted);
+        padding-bottom: 16px;
+      }
+
+      .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .breadcrumb {
+        font-size: 14px;
+        color: var(--color-accent-fg);
+        margin-bottom: 16px;
+      }
+      .breadcrumb a {
+        text-decoration: none;
+        color: var(--color-accent-fg);
+      }
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+
+      .project-title-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      h1 {
+        font-size: 32px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .project-meta {
+        margin-top: 8px;
+        font-size: 14px;
+        color: var(--color-fg-muted);
+        display: flex;
+        gap: 16px;
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-block;
+        padding: 5px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        background-color: var(--color-canvas-default);
+        color: var(--color-fg-default);
+        text-decoration: none;
+      }
+
+      .btn:hover {
+        background-color: #f3f4f6;
+        border-color: var(--color-border-muted);
+      }
+
+      .btn-sm {
+        padding: 3px 12px;
+        font-size: 12px;
+      }
+
+      .btn-primary {
+        background-color: var(--color-btn-primary-bg);
+        color: var(--color-btn-primary-text);
+        border-color: rgba(27, 31, 36, 0.15);
+      }
+
+      .btn-primary:hover {
+        background-color: #2c974b;
+      }
+
+      .btn-danger {
+        color: var(--color-danger-fg);
+        background-color: var(--color-canvas-default);
+        border-color: var(--color-border-default);
+      }
+
+      .btn-danger:hover {
+        background-color: var(--color-btn-danger-bg);
+        color: var(--color-btn-danger-text);
+        border-color: rgba(27, 31, 36, 0.15);
+      }
+
+      /* Section */
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        margin-top: 32px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .section-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      /* Discussion List (Reused) */
+      .discussion-list {
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        background-color: var(--color-canvas-default);
+      }
+
+      .discussion-item {
+        padding: 16px;
+        border-bottom: 1px solid var(--color-border-muted);
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .discussion-item:last-child {
+        border-bottom: none;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+      }
+
+      .discussion-item:hover {
+        background-color: var(--color-canvas-subtle);
+      }
+
+      .discussion-icon {
+        margin-top: 4px;
+      }
+
+      .discussion-content {
+        flex-grow: 1;
+      }
+
+      .discussion-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--color-fg-default);
+        text-decoration: none;
+        margin-bottom: 4px;
+        display: block;
+      }
+
+      .discussion-title:hover {
+        color: var(--color-accent-fg);
+        text-decoration: underline;
+      }
+
+      .discussion-meta {
+        font-size: 12px;
+        color: var(--color-fg-muted);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      /* Status Badges */
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 10px;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 18px;
+        border-radius: 2em;
+        border: 1px solid transparent;
+      }
+
+      .status-open {
+        color: #1a7f37;
+        border-color: rgba(26, 127, 55, 0.4);
+        background-color: #dafbe1;
+      }
+
+      .status-closed {
+        color: #8250df;
+        border-color: rgba(130, 80, 223, 0.4);
+        background-color: #f6f1fe;
+      }
+
+      .status-archived {
+        color: #57606a;
+        border-color: rgba(87, 96, 106, 0.4);
+        background-color: #f6f8fa;
+      }
+
+      /* Icons */
+      .octicon {
+        fill: currentColor;
+        vertical-align: text-bottom;
+      }
+
+      /* Edit Form (Hidden by default) */
+      .edit-form {
+        display: none;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .edit-form.active {
+        display: flex;
+      }
+
+      .form-control {
+        padding: 5px 12px;
+        font-size: 16px; /* Match h1 size roughly */
+        line-height: 20px;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        box-sizing: border-box;
+        background-color: var(--color-canvas-default);
+        color: var(--color-fg-default);
+        width: 400px;
+      }
+    </style>
+    <script>
+      function toggleEdit() {
+        const titleWrapper = document.getElementById("project-title-wrapper");
+        const editForm = document.getElementById("project-edit-form");
+
+        if (editForm.classList.contains("active")) {
+          editForm.classList.remove("active");
+          titleWrapper.style.display = "flex";
+        } else {
+          editForm.classList.add("active");
+          titleWrapper.style.display = "none";
+          document.getElementById("project-name-input").focus();
+        }
+      }
+
+      function saveProjectName() {
+        const input = document.getElementById("project-name-input");
+        const title = document.getElementById("project-title-text");
+        title.textContent = input.value;
+        toggleEdit();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/dashboard">ダッシュボード</a>
+        /
+        <a href="list.html">プロジェクト</a>
+        / 詳細
+      </div>
+
+      <div class="page-header">
+        <div class="header-top">
+          <div>
+            <div id="project-title-wrapper" class="project-title-wrapper">
+              <h1 id="project-title-text">
+                AI倫理ガイドライン策定プロジェクト
+              </h1>
+              <button class="btn btn-sm" onclick="toggleEdit()">
+                <svg
+                  aria-hidden="true"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  version="1.1"
+                  width="16"
+                  data-view-component="true"
+                  class="octicon octicon-pencil"
+                >
+                  <path
+                    d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25a1.75 1.75 0 0 1 .445-.758l8.61-8.61Zm1.414 1.06a.25.25 0 0 0-.354 0L10.811 3.75l1.439 1.44 1.263-1.263a.25.25 0 0 0 0-.354l-1.086-1.086ZM11.189 6.25 9.75 4.81l-6.286 6.287a.25.25 0 0 0-.064.108l-.558 1.953 1.953-.558a.249.249 0 0 0 .108-.064l6.286-6.286Z"
+                  ></path>
+                </svg>
+                編集
+              </button>
+            </div>
+            <div id="project-edit-form" class="edit-form">
+              <input
+                type="text"
+                id="project-name-input"
+                class="form-control"
+                value="AI倫理ガイドライン策定プロジェクト"
+              />
+              <button class="btn btn-primary" onclick="saveProjectName()">
+                保存
+              </button>
+              <button class="btn" onclick="toggleEdit()">キャンセル</button>
+            </div>
+
+            <div class="project-meta">
+              <span>作成者: user_01H1V2W3X4Y5Z6A7B8C9D0E1F2</span>
+              <span>作成日: 2023-10-27</span>
+              <span>ID: 01H1V2W3X4Y5Z6A7B8C9D0E1F2</span>
+            </div>
+          </div>
+          <a
+            href="../../popup/project/delete.html"
+            class="btn btn-danger"
+            onclick="window.open(this.href, 'delete_project', 'width=500,height=300'); return false;"
+          >
+            プロジェクトを削除
+          </a>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <h2 class="section-title">議論一覧</h2>
+        <div class="section-actions">
+          <a
+            href="../../popup/project/add_discussion.html"
+            class="btn"
+            onclick="window.open(this.href, 'add_discussion', 'width=600,height=500'); return false;"
+          >
+            既存の議論を追加
+          </a>
+          <a href="../../page/discussion/create.html" class="btn btn-primary">
+            新規議論作成
+          </a>
+        </div>
+      </div>
+
+      <style>
+        .status-header {
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            color: var(--color-fg-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-header:first-of-type {
+            margin-top: 0;
+        }
+      </style>
+
+      <div class="discussion-list-container">
+        <div class="status-header">
+            <svg class="octicon status-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                <path d="M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
+                <path fill-rule="evenodd" d="M8 0a8 8 0 100 16A8 8 0 008 0zM1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0z"></path>
+            </svg>
+            Open
+        </div>
+        <div class="discussion-list">
+            <!-- Item 1: Open -->
+            <div class="discussion-item">
+            <div class="discussion-icon">
+                <svg
+                class="octicon status-open"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+                >
+                <path d="M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
+                <path
+                    fill-rule="evenodd"
+                    d="M8 0a8 8 0 100 16A8 8 0 008 0zM1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0z"
+                ></path>
+                </svg>
+            </div>
+            <div class="discussion-content">
+                <a href="../discussion/board.html" class="discussion-title">
+                AI 開発における倫理的ガイドラインの策定について
+                </a>
+                <div class="discussion-meta">
+                <span class="status-badge status-open">Open</span>
+                <span class="meta-item">#123 opened 2 hours ago by user1</span>
+                <span class="meta-item">・</span>
+                <span class="meta-item">ルール: ディベート標準</span>
+                <span class="meta-item">・</span>
+                <span class="meta-item">公開: 全員</span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="status-header">
+            <svg class="octicon status-closed" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+                <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path>
+            </svg>
+            Closed
+        </div>
+        <div class="discussion-list">
+            <!-- Item 2: Closed -->
+            <div class="discussion-item">
+            <div class="discussion-icon">
+                <svg
+                class="octicon status-closed"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+                >
+                <path
+                    d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"
+                ></path>
+                </svg>
+            </div>
+            <div class="discussion-content">
+                <a href="../discussion/board.html" class="discussion-title">
+                初期ドラフトのレビュー
+                </a>
+                <div class="discussion-meta">
+                <span class="status-badge status-closed">Closed</span>
+                <span class="meta-item">#118 closed yesterday by admin</span>
+                <span class="meta-item">・</span>
+                <span class="meta-item">ルール: レビュー</span>
+                <span class="meta-item">・</span>
+                <span class="meta-item">公開: 全員</span>
+                </div>
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
