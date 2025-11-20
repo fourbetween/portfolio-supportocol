@@ -100,7 +100,7 @@ func (d *Discussion) Comments() ([]*Comment, error) {
 }
 
 func (d *Discussion) Issues() ([]*Issue, error) {
-	return nil, nil
+	return d.repo.FetchIssues(d.id)
 }
 
 func (d *Discussion) Save() error {

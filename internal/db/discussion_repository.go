@@ -119,6 +119,28 @@ func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion
 	return comments, nil
 }
 
+func (r *DiscussionRepository) FetchIssues(discussionID string) ([]*discussion.Issue, error) {
+	stmt := postgres.
+		SELECT(table.Issues.AllColumns).
+		FROM(
+			table.Issues.
+				INNER_JOIN(table.Comments, table.Comments.ID.EQ(table.Issues.CommentID)),
+		).
+		WHERE(table.Comments.DiscussionID.EQ(postgres.String(discussionID)))
+
+	var dest []model.Issues
+	if err := stmt.Query(r.db, &dest); err != nil {
+		return nil, fmt.Errorf("failed to fetch issues: %w", err)
+	}
+
+	issues := make([]*discussion.Issue, len(dest))
+	for i, row := range dest {
+		issues[i] = r.toIssueDomain(row)
+	}
+
+	return issues, nil
+}
+
 func (r *DiscussionRepository) toDomain(row model.Discussions) *discussion.Discussion {
 	return r.fac.BuildDiscussion(discussion.BuildDiscussionParams{
 		ID: row.ID,
@@ -161,5 +183,16 @@ func (r *DiscussionRepository) toCommentDomain(row model.Comments) *discussion.C
 		PostedBy:        row.PostedBy,
 		PostedAt:        row.PostedAt,
 		Status:          discussion.CommentStatus(row.Status),
+	}
+}
+
+func (r *DiscussionRepository) toIssueDomain(row model.Issues) *discussion.Issue {
+	return &discussion.Issue{
+		ID:          row.ID,
+		CommentID:   row.CommentID,
+		IssueType:   discussion.IssueType(row.IssueType),
+		Description: row.Description,
+		CreatedBy:   row.CreatedBy,
+		CreatedAt:   row.CreatedAt,
 	}
 }

@@ -82,29 +82,45 @@ func TestDiscussion_Comments(t *testing.T) {
 
 func TestDiscussion_Issues(t *testing.T) {
 	tests := []struct {
-		name    string // description of this test case
+		name    string
+		prepare func(c *container) *discussion.Discussion
 		want    []*discussion.Issue
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "指摘を取得できること",
+			prepare: func(c *container) *discussion.Discussion {
+				d := c.DiscussionFac.NewDiscussion(discussion.NewDiscussionParams{
+					Theme:      "theme",
+					Background: "background",
+					Conclusion: "conclusion",
+					RuleID:     "ruleID",
+					CreatedBy:  "createdBy",
+				})
+				c.DiscussionRepo.EXPECT().FetchIssues(d.ID()).Return([]*discussion.Issue{
+					{ID: "issue1"},
+				}, nil)
+				return d
+			},
+			want: []*discussion.Issue{
+				{ID: "issue1"},
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			// TODO: construct the receiver type.
-			var d discussion.Discussion
-			got, gotErr := d.Issues()
-			if gotErr != nil {
-				if !tt.wantErr {
-					t.Errorf("Issues() failed: %v", gotErr)
-				}
+			c := newContainer(t)
+			d := tt.prepare(c)
+			got, err := d.Issues()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Discussion.Issues() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if tt.wantErr {
-				t.Fatal("Issues() succeeded unexpectedly")
-			}
-			// TODO: update the condition below to compare got with tt.want.
-			if true {
-				t.Errorf("Issues() = %v, want %v", got, tt.want)
+			if !tt.wantErr {
+				if diff := cmp.Diff(tt.want, got); diff != "" {
+					t.Errorf("Discussion.Issues() mismatch (-want +got):\n%s", diff)
+				}
 			}
 		})
 	}
