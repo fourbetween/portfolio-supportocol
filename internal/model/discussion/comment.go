@@ -3,10 +3,10 @@ package discussion
 import "time"
 
 type (
-	// commentStatus はコメントの状態を表す
-	commentStatus string
+	// CommentStatus はコメントの状態を表す
+	CommentStatus string
 
-	comment struct {
+	Comment struct {
 		ID              string
 		DiscussionID    string
 		ParentCommentID *string
@@ -14,14 +14,14 @@ type (
 		Content         string
 		PostedBy        string
 		PostedAt        time.Time
-		Status          commentStatus
+		Status          CommentStatus
 	}
 )
 
 const (
-	// commentStatus の定数値
-	commentStatusUnassigned commentStatus = "unassigned"
-	commentStatusAssigned   commentStatus = "assigned"
-	commentStatusArchived   commentStatus = "archived"
-	commentStatusDeleted    commentStatus = "deleted"
+	// CommentStatus の定数値
+	CommentStatusUnassigned CommentStatus = "unassigned"
+	CommentStatusAssigned   CommentStatus = "assigned"
+	CommentStatusArchived   CommentStatus = "archived"
+	CommentStatusDeleted    CommentStatus = "deleted"
 )

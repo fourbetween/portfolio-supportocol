@@ -53,6 +53,21 @@ func (mr *MockRepositoryMockRecorder) Delete(discussion any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), discussion)
 }
 
+// FetchComments mocks base method.
+func (m *MockRepository) FetchComments(discussionID string) ([]*Comment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FetchComments", discussionID)
+	ret0, _ := ret[0].([]*Comment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FetchComments indicates an expected call of FetchComments.
+func (mr *MockRepositoryMockRecorder) FetchComments(discussionID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchComments", reflect.TypeOf((*MockRepository)(nil).FetchComments), discussionID)
+}
+
 // Load mocks base method.
 func (m *MockRepository) Load(params LoadParams) (*Discussion, error) {
 	m.ctrl.T.Helper()

@@ -95,8 +95,12 @@ func (d *Discussion) Status() Status {
 	return d.status
 }
 
-func (d *Discussion) IsOpen() bool {
-	return d.status == StatusOpen
+func (d *Discussion) Comments() ([]*Comment, error) {
+	return d.repo.FetchComments(d.id)
+}
+
+func (d *Discussion) Issues() ([]*Issue, error) {
+	return nil, nil
 }
 
 func (d *Discussion) Save() error {

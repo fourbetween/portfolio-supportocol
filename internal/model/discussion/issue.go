@@ -6,7 +6,7 @@ type (
 	// issueType は指摘の種類を表す
 	issueType string
 
-	issue struct {
+	Issue struct {
 		ID          string
 		CommentID   string
 		IssueType   issueType

@@ -100,6 +100,25 @@ func (r *DiscussionRepository) Delete(d *discussion.Discussion) error {
 	return nil
 }
 
+func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion.Comment, error) {
+	stmt := postgres.
+		SELECT(table.Comments.AllColumns).
+		FROM(table.Comments).
+		WHERE(table.Comments.DiscussionID.EQ(postgres.String(discussionID)))
+
+	var dest []model.Comments
+	if err := stmt.Query(r.db, &dest); err != nil {
+		return nil, fmt.Errorf("failed to fetch comments: %w", err)
+	}
+
+	comments := make([]*discussion.Comment, len(dest))
+	for i, row := range dest {
+		comments[i] = r.toCommentDomain(row)
+	}
+
+	return comments, nil
+}
+
 func (r *DiscussionRepository) toDomain(row model.Discussions) *discussion.Discussion {
 	return r.fac.BuildDiscussion(discussion.BuildDiscussionParams{
 		ID: row.ID,
@@ -129,5 +148,18 @@ func (r *DiscussionRepository) toModel(d *discussion.Discussion) model.Discussio
 		CreatedBy:              d.CreatedBy(),
 		CreatedAt:              d.CreatedAt(),
 		Status:                 string(d.Status()),
+	}
+}
+
+func (r *DiscussionRepository) toCommentDomain(row model.Comments) *discussion.Comment {
+	return &discussion.Comment{
+		ID:              row.ID,
+		DiscussionID:    row.DiscussionID,
+		ParentCommentID: row.ParentCommentID,
+		CommentTypeID:   row.CommentTypeID,
+		Content:         row.Content,
+		PostedBy:        row.PostedBy,
+		PostedAt:        row.PostedAt,
+		Status:          discussion.CommentStatus(row.Status),
 	}
 }

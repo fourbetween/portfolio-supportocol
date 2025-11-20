@@ -13,7 +13,7 @@ import (
 type (
 	container struct {
 		DiscussionFac  *discussion.Factory
-		DiscussionRepo discussion.Repository
+		DiscussionRepo *discussion.MockRepository
 	}
 )
 
@@ -34,47 +34,77 @@ func newContainer(t *testing.T) *container {
 	}
 }
 
-func TestDiscussion_IsOpen(t *testing.T) {
+func TestDiscussion_Comments(t *testing.T) {
 	tests := []struct {
-		name   string
-		status discussion.Status
-		want   bool
+		name    string
+		prepare func(c *container) *discussion.Discussion
+		want    []*discussion.Comment
+		wantErr bool
 	}{
 		{
-			name:   "オープン状態の場合にtrueを返すこと",
-			status: discussion.StatusOpen,
-			want:   true,
-		},
-		{
-			name:   "クローズ状態の場合にfalseを返すこと",
-			status: discussion.StatusClosed,
-			want:   false,
-		},
-		{
-			name:   "アーカイブ状態の場合にfalseを返すこと",
-			status: discussion.StatusArchived,
-			want:   false,
+			name: "コメントを取得できること",
+			prepare: func(c *container) *discussion.Discussion {
+				d := c.DiscussionFac.NewDiscussion(discussion.NewDiscussionParams{
+					Theme:      "theme",
+					Background: "background",
+					Conclusion: "conclusion",
+					RuleID:     "ruleID",
+					CreatedBy:  "createdBy",
+				})
+				c.DiscussionRepo.EXPECT().FetchComments(d.ID()).Return([]*discussion.Comment{
+					{ID: "comment1"},
+				}, nil)
+				return d
+			},
+			want: []*discussion.Comment{
+				{ID: "comment1"},
+			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			con := newContainer(t)
-			d := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
-				ID: "test-id",
-				NewDiscussionParams: discussion.NewDiscussionParams{
-					Theme:                  "test-theme",
-					Background:             "test-background",
-					Conclusion:             "test-conclusion",
-					RuleID:                 "test-rule-id",
-					VisibilityLevel:        discussion.VisibilityLevelEveryone,
-					CommentPermissionLevel: discussion.CommentPermissionLevelEveryone,
-					CreatedBy:              "test-user",
-					Status:                 tt.status,
-				},
-			})
-			got := d.IsOpen()
-			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("IsOpen() mismatch (-want +got):\n%s", diff)
+			c := newContainer(t)
+			d := tt.prepare(c)
+			got, err := d.Comments()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Discussion.Comments() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !tt.wantErr {
+				if diff := cmp.Diff(tt.want, got); diff != "" {
+					t.Errorf("Discussion.Comments() mismatch (-want +got):\n%s", diff)
+				}
+			}
+		})
+	}
+}
+
+func TestDiscussion_Issues(t *testing.T) {
+	tests := []struct {
+		name    string // description of this test case
+		want    []*discussion.Issue
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// TODO: construct the receiver type.
+			var d discussion.Discussion
+			got, gotErr := d.Issues()
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("Issues() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("Issues() succeeded unexpectedly")
+			}
+			// TODO: update the condition below to compare got with tt.want.
+			if true {
+				t.Errorf("Issues() = %v, want %v", got, tt.want)
 			}
 		})
 	}
