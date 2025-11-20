@@ -1,5 +1,5 @@
 ---
-description: "Goによるバックエンド開発"
+description: "Goにおけるテスト駆動開発"
 ---
 
 ## 入力

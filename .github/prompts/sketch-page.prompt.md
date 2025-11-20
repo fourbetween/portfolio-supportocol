@@ -1,5 +1,5 @@
 ---
-description: "サンプルHTMLの作成"
+description: "ページのサンプルHTML作成"
 ---
 
 ## 入力
