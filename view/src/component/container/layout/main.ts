@@ -1,7 +1,6 @@
 import { css, html, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../style/base";
-import "../../presenter/layout/header";
 
 @customElement("main-layout-container")
 export class MainLayoutContainer extends LitElement {
@@ -11,7 +10,6 @@ export class MainLayoutContainer extends LitElement {
   render() {
     return html`
       <div class="layout">
-        <header-presenter></header-presenter>
         <main>
           <slot></slot>
         </main>

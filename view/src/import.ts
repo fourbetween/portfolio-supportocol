@@ -1,12 +1,3 @@
 import "./component/container/layout/main";
 import "./component/container/page/front";
-import "./component/presenter/card/discussion";
-import "./component/presenter/card/project";
-import "./component/presenter/form/note";
-import "./component/presenter/form/project";
-import "./component/presenter/form/rule";
-import "./component/presenter/kanban/column";
-import "./component/presenter/layout/header";
-import "./component/presenter/list/note";
 import "./component/presenter/list/workbook";
-import "./component/presenter/select/project";
