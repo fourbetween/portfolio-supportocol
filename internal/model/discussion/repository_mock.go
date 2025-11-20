@@ -10,6 +10,8 @@
 package discussion
 
 import (
+	reflect "reflect"
+
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -35,4 +37,19 @@ func NewMockRepository(ctrl *gomock.Controller) *MockRepository {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
 	return m.recorder
+}
+
+// Search mocks base method.
+func (m *MockRepository) Search(params SearchParams) ([]*Discussion, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Search", params)
+	ret0, _ := ret[0].([]*Discussion)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Search indicates an expected call of Search.
+func (mr *MockRepositoryMockRecorder) Search(params any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockRepository)(nil).Search), params)
 }

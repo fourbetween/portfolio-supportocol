@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/fourbetween/app-supportocol/internal/model/discussion"
 	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/model/workbook"
@@ -12,12 +13,13 @@ type (
 		id    string
 		email string
 
-		workbookRepo workbook.Repository
-		projectRepo  project.Repository
-		ruleRepo     rule.Repository
-		projectFac   *project.Factory
-		ruleFac      *rule.Factory
-		clockSrv     clock.Service
+		workbookRepo   workbook.Repository
+		projectRepo    project.Repository
+		ruleRepo       rule.Repository
+		discussionRepo discussion.Repository
+		projectFac     *project.Factory
+		ruleFac        *rule.Factory
+		clockSrv       clock.Service
 	}
 
 	CreateProjectParams struct {
@@ -50,6 +52,10 @@ type (
 
 	DeleteRuleParams struct {
 		RuleID string
+	}
+
+	ListDiscussionsParams struct {
+		ProjectID string
 	}
 )
 
@@ -167,6 +173,12 @@ func (u *User) DeleteRule(params DeleteRuleParams) error {
 	}
 
 	return r.Delete()
+}
+
+func (u *User) ListDiscussions(params ListDiscussionsParams) ([]*discussion.Discussion, error) {
+	return u.discussionRepo.Search(discussion.SearchParams{
+		ProjectID: params.ProjectID,
+	})
 }
 
 func (u *User) LoadWorkbook(workbookID string) (*workbook.Workbook, error) {

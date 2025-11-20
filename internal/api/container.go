@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/fourbetween/app-supportocol/internal/db"
+	"github.com/fourbetween/app-supportocol/internal/model/discussion"
 	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/model/user"
@@ -42,10 +43,18 @@ func NewContainer(tx *sql.Tx) (*Container, error) {
 	)
 	ruleRepo.SetFactory(ruleFac)
 
+	discussionRepo := db.NewDiscussionRepository(tx)
+	discussionFac := discussion.NewFactory(
+		discussionRepo,
+		idSrv,
+	)
+	discussionRepo.SetFactory(discussionFac)
+
 	userFac := user.NewFactory(
 		workbookRepo,
 		projectRepo,
 		ruleRepo,
+		discussionRepo,
 		projectFac,
 		ruleFac,
 		clockSrv,

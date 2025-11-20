@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal"
+	"github.com/fourbetween/app-supportocol/internal/model/discussion"
 	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/model/user"
@@ -21,11 +22,12 @@ type container struct {
 	ProjectFac *project.Factory
 	RuleFac    *rule.Factory
 
-	WorkbookRepo *workbook.MockRepository
-	ProjectRepo  *project.MockRepository
-	RuleRepo     *rule.MockRepository
-	IDSrv        *id.MockService
-	ClockSrv     *clock.MockService
+	WorkbookRepo   *workbook.MockRepository
+	ProjectRepo    *project.MockRepository
+	RuleRepo       *rule.MockRepository
+	DiscussionRepo *discussion.MockRepository
+	IDSrv          *id.MockService
+	ClockSrv       *clock.MockService
 }
 
 func newContainer(t *testing.T) *container {
@@ -36,23 +38,25 @@ func newContainer(t *testing.T) *container {
 	workbookRepo := workbook.NewMockRepository(ctrl)
 	projectRepo := project.NewMockRepository(ctrl)
 	ruleRepo := rule.NewMockRepository(ctrl)
+	discussionRepo := discussion.NewMockRepository(ctrl)
 	idSrv := id.NewMockService(ctrl)
 	clockSrv := clock.NewMockService(ctrl)
 
 	projectFac := project.NewFactory(projectRepo, idSrv)
 	ruleFac := rule.NewFactory(ruleRepo, idSrv)
-	userFac := user.NewFactory(workbookRepo, projectRepo, ruleRepo, projectFac, ruleFac, clockSrv)
+	userFac := user.NewFactory(workbookRepo, projectRepo, ruleRepo, discussionRepo, projectFac, ruleFac, clockSrv)
 
 	return &container{
-		t:            t,
-		UserFac:      userFac,
-		ProjectFac:   projectFac,
-		RuleFac:      ruleFac,
-		WorkbookRepo: workbookRepo,
-		ProjectRepo:  projectRepo,
-		RuleRepo:     ruleRepo,
-		IDSrv:        idSrv,
-		ClockSrv:     clockSrv,
+		t:              t,
+		UserFac:        userFac,
+		ProjectFac:     projectFac,
+		RuleFac:        ruleFac,
+		WorkbookRepo:   workbookRepo,
+		ProjectRepo:    projectRepo,
+		RuleRepo:       ruleRepo,
+		DiscussionRepo: discussionRepo,
+		IDSrv:          idSrv,
+		ClockSrv:       clockSrv,
 	}
 }
 
@@ -748,6 +752,60 @@ func TestUser_DeleteRule(t *testing.T) {
 
 			if tt.verify != nil {
 				tt.verify(t, err)
+			}
+		})
+	}
+}
+
+func TestUser_ListDiscussions(t *testing.T) {
+	tests := []struct {
+		name      string
+		projectID string
+		setup     func(*container)
+		verify    func(*testing.T, []*discussion.Discussion, error)
+	}{
+		{
+			name:      "プロジェクトIDを指定して議論一覧を取得できること",
+			projectID: "test-project-id",
+			setup: func(c *container) {
+				c.DiscussionRepo.EXPECT().Search(discussion.SearchParams{
+					ProjectID: "test-project-id",
+				}).Return([]*discussion.Discussion{
+					{},
+				}, nil)
+			},
+			verify: func(t *testing.T, got []*discussion.Discussion, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("User.ListDiscussions() error = %v", err)
+					return
+				}
+				if len(got) != 1 {
+					t.Errorf("User.ListDiscussions() len = %v, want %v", len(got), 1)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.ListDiscussions(user.ListDiscussionsParams{
+				ProjectID: tt.projectID,
+			})
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
 			}
 		})
 	}
