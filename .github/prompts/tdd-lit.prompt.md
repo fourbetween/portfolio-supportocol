@@ -1,5 +1,5 @@
 ---
-description: "Litによるフロントエンド開発"
+description: "Litにおけるテスト駆動開発"
 ---
 
 ## 入力

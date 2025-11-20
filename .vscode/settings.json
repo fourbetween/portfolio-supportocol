@@ -1,7 +1,7 @@
 {
   "chat.promptFilesRecommendations": {
-    "go-backend": true,
-    "lit-frontend": true,
-    "html-sample": true
+    "sketch-page": true,
+    "tdd-go": true,
+    "tdd-lit": true
   }
 }
