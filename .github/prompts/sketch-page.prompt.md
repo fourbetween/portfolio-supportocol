@@ -30,7 +30,7 @@ $ARGUMENTS
    - 機能を満たすのに必要だが同時に表示するには不都合な dialog などのコンポーネントは`view/sketch/components`以下に HTML ファイルを作成してください。
      - 例: `view/sketch/components/popup/workbook/create.html`
    - テーマは Github を参考にしてください。
-   - tailwindcss は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
+   - Tailwind CSS は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
    - ダークモードは不要です。
 5. simplebrowser を使って、pages.md の要件を満たしているか確認してください。
    - 不足がある場合は前の手順に戻って修正してください。
