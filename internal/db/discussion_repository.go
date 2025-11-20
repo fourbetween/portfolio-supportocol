@@ -41,20 +41,7 @@ func (r *DiscussionRepository) Search(params discussion.SearchParams) ([]*discus
 
 	discussions := make([]*discussion.Discussion, len(dest))
 	for i, row := range dest {
-		discussions[i] = r.fac.BuildDiscussion(discussion.BuildDiscussionParams{
-			ID: row.ID,
-			NewDiscussionParams: discussion.NewDiscussionParams{
-				Theme:                  row.Theme,
-				Background:             row.Background,
-				Conclusion:             row.Conclusion,
-				RuleID:                 row.RuleID,
-				VisibilityLevel:        discussion.VisibilityLevel(row.VisibilityLevel),
-				CommentPermissionLevel: discussion.CommentPermissionLevel(row.CommentPermissionLevel),
-				CreatedBy:              row.CreatedBy,
-				Status:                 discussion.Status(row.Status),
-			},
-			CreatedAt: row.CreatedAt,
-		})
+		discussions[i] = r.toDomain(row)
 	}
 
 	return discussions, nil
@@ -74,35 +61,11 @@ func (r *DiscussionRepository) Load(params discussion.LoadParams) (*discussion.D
 		return nil, fmt.Errorf("failed to load discussion: %w", err)
 	}
 
-	return r.fac.BuildDiscussion(discussion.BuildDiscussionParams{
-		ID: dest.ID,
-		NewDiscussionParams: discussion.NewDiscussionParams{
-			Theme:                  dest.Theme,
-			Background:             dest.Background,
-			Conclusion:             dest.Conclusion,
-			RuleID:                 dest.RuleID,
-			VisibilityLevel:        discussion.VisibilityLevel(dest.VisibilityLevel),
-			CommentPermissionLevel: discussion.CommentPermissionLevel(dest.CommentPermissionLevel),
-			CreatedBy:              dest.CreatedBy,
-			Status:                 discussion.Status(dest.Status),
-		},
-		CreatedAt: dest.CreatedAt,
-	}), nil
+	return r.toDomain(dest), nil
 }
 
 func (r *DiscussionRepository) Save(d *discussion.Discussion) error {
-	model := model.Discussions{
-		ID:                     d.ID(),
-		Theme:                  d.Theme(),
-		Background:             d.Background(),
-		Conclusion:             d.Conclusion(),
-		RuleID:                 d.RuleID(),
-		VisibilityLevel:        string(d.VisibilityLevel()),
-		CommentPermissionLevel: string(d.CommentPermissionLevel()),
-		CreatedBy:              d.CreatedBy(),
-		CreatedAt:              d.CreatedAt(),
-		Status:                 string(d.Status()),
-	}
+	model := r.toModel(d)
 
 	stmt := table.Discussions.
 		INSERT(table.Discussions.AllColumns).
@@ -135,4 +98,36 @@ func (r *DiscussionRepository) Delete(d *discussion.Discussion) error {
 		return fmt.Errorf("failed to delete discussion: %w", err)
 	}
 	return nil
+}
+
+func (r *DiscussionRepository) toDomain(row model.Discussions) *discussion.Discussion {
+	return r.fac.BuildDiscussion(discussion.BuildDiscussionParams{
+		ID: row.ID,
+		NewDiscussionParams: discussion.NewDiscussionParams{
+			Theme:                  row.Theme,
+			Background:             row.Background,
+			Conclusion:             row.Conclusion,
+			RuleID:                 row.RuleID,
+			VisibilityLevel:        discussion.VisibilityLevel(row.VisibilityLevel),
+			CommentPermissionLevel: discussion.CommentPermissionLevel(row.CommentPermissionLevel),
+			CreatedBy:              row.CreatedBy,
+			Status:                 discussion.Status(row.Status),
+		},
+		CreatedAt: row.CreatedAt,
+	})
+}
+
+func (r *DiscussionRepository) toModel(d *discussion.Discussion) model.Discussions {
+	return model.Discussions{
+		ID:                     d.ID(),
+		Theme:                  d.Theme(),
+		Background:             d.Background(),
+		Conclusion:             d.Conclusion(),
+		RuleID:                 d.RuleID(),
+		VisibilityLevel:        string(d.VisibilityLevel()),
+		CommentPermissionLevel: string(d.CommentPermissionLevel()),
+		CreatedBy:              d.CreatedBy(),
+		CreatedAt:              d.CreatedAt(),
+		Status:                 string(d.Status()),
+	}
 }
