@@ -12,7 +12,8 @@ export const WorkbookSchema = z
   .object({
     id: IdSchema,
     title: z.string(),
-    status: z.string(),
+    status: StatusSchema,
+    ownerId: IdSchema,
   })
   .openapi("workbook");
 
@@ -24,11 +25,11 @@ export const ErrorSchema = z
   .openapi("error");
 
 export const VisibilityLevelSchema = z
-  .enum(["everyone", "logged_in", "owner"])
+  .enum(["everyone", "authenticated", "owner"])
   .openapi("visibilityLevel");
 
 export const CommentPermissionLevelSchema = z
-  .enum(["everyone", "logged_in", "owner"])
+  .enum(["everyone", "authenticated", "owner"])
   .openapi("commentPermissionLevel");
 
 export const DiscussionSchema = z
@@ -47,7 +48,7 @@ export const DiscussionSchema = z
   .openapi("discussion");
 
 export const CommentStatusSchema = z
-  .enum(["pending", "assigned", "archived", "deleted"])
+  .enum(["unassigned", "assigned", "archived", "deleted"])
   .openapi("commentStatus");
 
 export const CommentSchema = z
@@ -67,7 +68,7 @@ export const IssueSchema = z
   .object({
     id: IdSchema,
     commentId: IdSchema,
-    issueType: z.string(),
+    issueType: z.enum(["contradiction", "circular_logic"]),
     description: z.string(),
     createdBy: IdSchema,
     createdAt: z.string().openapi({ format: "date-time" }),
