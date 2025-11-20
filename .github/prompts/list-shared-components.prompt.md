@@ -20,9 +20,9 @@ $ARGUMENTS
 
 ## ワークフロー
 
-1. `view/sample/pages.md`を参照し、アプリに必要なページを把握してください。
-2. `view/sample`以下の HTML ファイルを参照し、画面構成を把握してください。
-3. `view/sample/shared-components.md`に共通化するべきコンポーネントをリストしてください。
+1. `view/sketch/pages.md`を参照し、アプリに必要なページを把握してください。
+2. `view/sketch`以下の HTML ファイルを参照し、画面構成を把握してください。
+3. `view/sketch/shared-components.md`に共通化するべきコンポーネントをリストしてください。
    - 共通化するべきコンポーネントとは複数のページで使用されうる UI 要素を指します。例えば以下のようなものがあります。
      - ヘッダー
      - フッター

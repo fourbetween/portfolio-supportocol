@@ -20,15 +20,15 @@ $ARGUMENTS
 
 ## ワークフロー
 
-1. `view/sample/pages.md`を参照し、アプリに必要なページを確認してください。
+1. `view/sketch/pages.md`を参照し、アプリに必要なページを確認してください。
 2. `view/src/api/schema/schema.ts`を参照し、関連するデータスキーマを確認してください。
-3. `view/sample`以下に既存の HTML サンプルがある場合は、それらを参考にして、スタイルと構造の一貫性を保ってください。
+3. `view/sketch`以下に既存の HTML サンプルがある場合は、それらを参考にして、スタイルと構造の一貫性を保ってください。
 4. pages.md に基づいて、HTML を実装してください。
    - 必ずすべての機能を満たす UI にしてください。
-   - ページを描く HTML ファイルは`view/sample/page`ディレクトリに保存してください。
-     - 例: `view/sample/page/workbook/list.html`
+   - ページを描く HTML ファイルは`view/sketch/page`ディレクトリに保存してください。
+     - 例: `view/sketch/page/workbook/list.html`
    - 機能を満たすのに必要だが、同時に表示するには不都合な dialog などの UI コンポーネントは別ディレクトリに HTML ファイルを作成してください。
-     - 例: `view/sample/popup/workbook/create.html`
+     - 例: `view/sketch/popup/workbook/create.html`
    - テーマは Github を参考にしてください。
    - tailwindcss は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
    - ダークモードは不要です。
