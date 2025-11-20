@@ -23,7 +23,6 @@ export const ErrorSchema = z
   })
   .openapi("error");
 
-// Discussion schemas
 export const VisibilityLevelSchema = z
   .enum(["everyone", "logged_in", "owner"])
   .openapi("visibilityLevel");
@@ -85,16 +84,6 @@ export const NoteSchema = z
   })
   .openapi("note");
 
-export const RuleSchema = z
-  .object({
-    id: IdSchema,
-    name: z.string(),
-    description: z.string(),
-    createdBy: IdSchema,
-    createdAt: z.string().openapi({ format: "date-time" }),
-  })
-  .openapi("rule");
-
 export const CommentTypeSchema = z
   .object({
     id: IdSchema,
@@ -114,7 +103,18 @@ export const CommentTypePathSchema = z
   })
   .openapi("commentTypePath");
 
-// Project schema
+export const RuleSchema = z
+  .object({
+    id: IdSchema,
+    name: z.string(),
+    description: z.string(),
+    createdBy: IdSchema,
+    createdAt: z.string().openapi({ format: "date-time" }),
+    commentTypes: z.array(CommentTypeSchema),
+    commentTypePaths: z.array(CommentTypePathSchema),
+  })
+  .openapi("rule");
+
 export const ProjectSchema = z
   .object({
     id: IdSchema,

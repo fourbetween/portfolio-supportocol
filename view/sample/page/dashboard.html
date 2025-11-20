@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ダッシュボード - Supportocol</title>
+    <style>
+      :root {
+        --color-fg-default: #24292f;
+        --color-fg-muted: #57606a;
+        --color-canvas-default: #ffffff;
+        --color-canvas-subtle: #f6f8fa;
+        --color-border-default: #d0d7de;
+        --color-border-muted: #d8dee4;
+        --color-accent-fg: #0969da;
+        --color-btn-primary-bg: #2da44e;
+        --color-btn-primary-text: #ffffff;
+        --color-danger-fg: #cf222e;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+          Arial, sans-serif;
+        line-height: 1.5;
+        color: var(--color-fg-default);
+        margin: 0;
+        padding: 0;
+        background-color: var(--color-canvas-subtle);
+      }
+
+      /* Global Nav */
+      .header {
+        background-color: #24292f;
+        padding: 16px;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .header-logo {
+        font-weight: bold;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+      }
+      .header-nav a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 14px;
+        margin-right: 16px;
+      }
+      .header-nav a:hover,
+      .header-nav a.active {
+        color: white;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 24px;
+      }
+
+      @media (max-width: 768px) {
+        .dashboard-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card {
+        background-color: var(--color-canvas-default);
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        margin-bottom: 16px;
+      }
+
+      .card-header {
+        padding: 16px;
+        border-bottom: 1px solid var(--color-border-default);
+        background-color: var(--color-canvas-subtle);
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .card-header h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .card-body {
+        padding: 0;
+      }
+
+      .list-group {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .list-group-item {
+        padding: 16px;
+        border-bottom: 1px solid var(--color-border-muted);
+      }
+      .list-group-item:last-child {
+        border-bottom: none;
+      }
+
+      .repo-name {
+        font-weight: 600;
+        color: var(--color-accent-fg);
+        text-decoration: none;
+        font-size: 14px;
+      }
+      .repo-desc {
+        font-size: 12px;
+        color: var(--color-fg-muted);
+        margin-top: 4px;
+      }
+
+      .discussion-item {
+        display: flex;
+        gap: 12px;
+      }
+      .discussion-icon {
+        color: var(--color-btn-primary-bg);
+      }
+      .discussion-content {
+        flex: 1;
+      }
+      .discussion-title {
+        font-weight: 600;
+        color: var(--color-fg-default);
+        text-decoration: none;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .discussion-meta {
+        font-size: 12px;
+        color: var(--color-fg-muted);
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 5px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        user-select: none;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        background-color: var(--color-canvas-default);
+        color: var(--color-fg-default);
+        text-decoration: none;
+      }
+      .btn-primary {
+        background-color: var(--color-btn-primary-bg);
+        color: var(--color-btn-primary-text);
+        border-color: rgba(27, 31, 36, 0.15);
+      }
+      .btn-sm {
+        padding: 3px 12px;
+        font-size: 12px;
+      }
+
+      .sidebar-section {
+        margin-bottom: 24px;
+      }
+      .sidebar-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <a href="/" class="header-logo">Supportocol</a>
+      <nav class="header-nav">
+        <a href="/view/sample/page/dashboard.html" class="active">
+          ダッシュボード
+        </a>
+        <a href="/view/sample/page/project/list.html">プロジェクト</a>
+        <a href="/view/sample/page/discussion/list.html">議論</a>
+        <a href="/view/sample/page/rule/list.html">ルール</a>
+      </nav>
+    </header>
+
+    <div class="container">
+      <div class="dashboard-grid">
+        <!-- Left Sidebar: Projects -->
+        <aside>
+          <div class="sidebar-section">
+            <div class="sidebar-heading">
+              プロジェクト
+              <a
+                href="/view/sample/popup/project/create.html"
+                class="btn btn-primary btn-sm"
+              >
+                新規
+              </a>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <a
+                      href="/view/sample/page/project/detail.html"
+                      class="repo-name"
+                    >
+                      AI倫理ガイドライン策定
+                    </a>
+                    <div class="repo-desc">
+                      社内AI利用に関する倫理規定の議論
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <a
+                      href="/view/sample/page/project/detail.html"
+                      class="repo-name"
+                    >
+                      新規事業アイデア
+                    </a>
+                    <div class="repo-desc">2025年度新規事業案</div>
+                  </li>
+                  <li class="list-group-item">
+                    <a
+                      href="/view/sample/page/project/detail.html"
+                      class="repo-name"
+                    >
+                      オフィス移転計画
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div style="text-align: center; margin-top: 8px">
+              <a
+                href="/view/sample/page/project/list.html"
+                style="font-size: 12px; color: var(--color-fg-muted)"
+              >
+                すべて表示
+              </a>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Content: Recent Discussions -->
+        <main>
+          <div class="sidebar-heading">
+            最近の議論
+            <a
+              href="/view/sample/popup/discussion/create.html"
+              class="btn btn-primary btn-sm"
+            >
+              新しい議論を開始
+            </a>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>最近のアクティビティ</h3>
+            </div>
+            <div class="card-body">
+              <ul class="list-group">
+                <li class="list-group-item discussion-item">
+                  <div class="discussion-icon">
+                    <svg
+                      aria-hidden="true"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      version="1.1"
+                      width="16"
+                      data-view-component="true"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+                      ></path>
+                      <path
+                        d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="discussion-content">
+                    <a
+                      href="/view/sample/page/discussion/detail.html"
+                      class="discussion-title"
+                    >
+                      生成AIの著作権リスクについて
+                    </a>
+                    <div class="discussion-meta">
+                      プロジェクト:
+                      <a href="#">AI倫理ガイドライン策定</a>
+                      • 更新: 2時間前 • コメント: 12
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item discussion-item">
+                  <div class="discussion-icon">
+                    <svg
+                      aria-hidden="true"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      version="1.1"
+                      width="16"
+                      data-view-component="true"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+                      ></path>
+                      <path
+                        d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="discussion-content">
+                    <a
+                      href="/view/sample/page/discussion/detail.html"
+                      class="discussion-title"
+                    >
+                      リモートワーク手当の増額提案
+                    </a>
+                    <div class="discussion-meta">
+                      プロジェクト:
+                      <a href="#">オフィス移転計画</a>
+                      • 更新: 5時間前 • コメント: 8
+                    </div>
+                  </div>
+                </li>
+                <li class="list-group-item discussion-item">
+                  <div
+                    class="discussion-icon"
+                    style="color: var(--color-fg-muted)"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      version="1.1"
+                      width="16"
+                      data-view-component="true"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="discussion-content">
+                    <a
+                      href="/view/sample/page/discussion/detail.html"
+                      class="discussion-title"
+                      style="color: var(--color-fg-muted)"
+                    >
+                      [解決済み] 会議室予約システムの不具合
+                    </a>
+                    <div class="discussion-meta">
+                      プロジェクト: なし • 更新: 1日前 • コメント: 5
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

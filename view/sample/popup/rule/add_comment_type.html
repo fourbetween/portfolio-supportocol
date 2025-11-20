@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>コメント種類の追加 - Supportocol</title>
+    <style>
+      :root {
+        --color-fg-default: #24292f;
+        --color-canvas-default: #ffffff;
+        --color-border-default: #d0d7de;
+        --color-btn-primary-bg: #2da44e;
+        --color-btn-primary-text: #ffffff;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+          Arial, sans-serif;
+        line-height: 1.5;
+        color: var(--color-fg-default);
+        padding: 20px;
+        background-color: var(--color-canvas-default);
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      h2 {
+        font-size: 20px;
+        margin-top: 0;
+        margin-bottom: 16px;
+        border-bottom: 1px solid var(--color-border-default);
+        padding-bottom: 8px;
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 5px 12px;
+        font-size: 14px;
+        line-height: 20px;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        box-sizing: border-box;
+      }
+
+      textarea.form-control {
+        min-height: 80px;
+        resize: vertical;
+      }
+
+      .color-picker {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .color-option {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+      }
+
+      .color-option.selected {
+        border-color: var(--color-fg-default);
+        transform: scale(1.1);
+      }
+
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 24px;
+      }
+
+      .btn {
+        padding: 5px 16px;
+        font-size: 14px;
+        font-weight: 500;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        background-color: #f6f8fa;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background-color: var(--color-btn-primary-bg);
+        color: var(--color-btn-primary-text);
+        border-color: rgba(27, 31, 36, 0.15);
+      }
+    </style>
+  </head>
+  <body>
+    <h2>コメント種類の追加</h2>
+
+    <div class="form-group">
+      <label class="form-label">名前</label>
+      <input type="text" class="form-control" placeholder="例: 補足情報" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">説明</label>
+      <textarea
+        class="form-control"
+        placeholder="このコメント種類の用途を説明してください"
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">色</label>
+      <div class="color-picker">
+        <div class="color-option" style="background-color: #0969da"></div>
+        <div class="color-option" style="background-color: #d29922"></div>
+        <div class="color-option" style="background-color: #1a7f37"></div>
+        <div class="color-option" style="background-color: #cf222e"></div>
+        <div class="color-option" style="background-color: #8250df"></div>
+        <div
+          class="color-option selected"
+          style="background-color: #6e7781"
+        ></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="history.back()">キャンセル</button>
+      <button class="btn btn-primary" onclick="history.back()">追加</button>
+    </div>
+  </body>
+</html>
