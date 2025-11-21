@@ -1,41 +1,18 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import { baseStyle } from "../../../style/base";
 
 @customElement("main-header-presenter")
 export class MainHeaderPresenter extends LitElement {
-  @property({ type: String })
-  currentPath: string = "";
-
   render() {
     return html`
       <header class="header">
         <a href="/" class="header-logo">Supportocol</a>
         <nav class="header-nav">
-          <a
-            href="/dashboard"
-            class="${this.currentPath === "/dashboard" ? "active" : ""}"
-          >
-            ダッシュボード
-          </a>
-          <a
-            href="/projects"
-            class="${this.currentPath === "/projects" ? "active" : ""}"
-          >
-            プロジェクト
-          </a>
-          <a
-            href="/discussions"
-            class="${this.currentPath === "/discussions" ? "active" : ""}"
-          >
-            議論
-          </a>
-          <a
-            href="/rules"
-            class="${this.currentPath === "/rules" ? "active" : ""}"
-          >
-            ルール
-          </a>
+          <a href="/dashboard">ダッシュボード</a>
+          <a href="/projects">プロジェクト</a>
+          <a href="/discussions">議論</a>
+          <a href="/rules">ルール</a>
         </nav>
       </header>
     `;

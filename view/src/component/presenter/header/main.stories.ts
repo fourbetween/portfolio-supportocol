@@ -6,28 +6,16 @@ import type { MainHeaderPresenter } from "./main";
 const meta = {
   title: "presenter/header/main",
   tags: ["autodocs"],
-  render: (args) =>
+  render: () =>
     html`
-      <main-header-presenter
-        .currentPath=${args.currentPath}
-      ></main-header-presenter>
+      <main-header-presenter></main-header-presenter>
     `,
-  argTypes: {
-    currentPath: { control: "text" },
-  },
+  argTypes: {},
 } satisfies Meta<MainHeaderPresenter>;
 
 export default meta;
 type Story = StoryObj<MainHeaderPresenter>;
 
 export const Default: Story = {
-  args: {
-    currentPath: "/view/sample/page/dashboard.html",
-  },
-};
-
-export const ProjectActive: Story = {
-  args: {
-    currentPath: "/view/sample/page/project/list.html",
-  },
+  args: {},
 };
