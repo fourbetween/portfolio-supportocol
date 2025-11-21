@@ -10,11 +10,13 @@ describe("WorkbookListPresenter", async () => {
       id: "id1",
       title: "title1",
       status: "published",
+      ownerId: "owner1",
     },
     {
       id: "id2",
       title: "title2",
       status: "draft",
+      ownerId: "owner2",
     },
   ];
   beforeEach(() => {
