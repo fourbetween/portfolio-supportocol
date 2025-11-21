@@ -21,23 +21,20 @@ $ARGUMENTS
 ## ワークフロー
 
 1. 新しく追加する機能の一部に対して「失敗するテスト」を 1 つだけ書いてください。
-   - `view/src/component/presenter/list/workbook.test.ts` にある既存のテストコードを参考にしてください。
    - describe 関数の第一引数にはコンポーネントのクラス名を渡してください。
    - it 関数の第一引数であるテストケース名は必ず「〜こと」で終わる日本語にしてください。
 2. 追加したテストをパスするための最低限のコードを実装してください。
    - Container/Presentational パターンに従ってコンポーネントを実装してください。
-   - `view/src/component/presenter/list/workbook.ts` にある既存のコンポーネントを参考にしてください。
    - ある presenter コンポーネントから、別の container コンポーネントを利用してはいけないことに留意してください。
    - コンポーネントにわたすデータは`view/src/model`以下にあるモデルを利用してください。
-   - button や input などの共通スタイルは`view/src/style`以下にあるスタイルを利用してください。
    - テーマは Github を参考にしてください。
    - Tailwind CSS は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
 3. 組み込みの runTests コマンドですべてのテストを実行して、パスすることを確認してください。
    - もし runTests コマンドが使えない環境の場合は、`make testview`を実行してください。
 4. 追加の機能が Storybook の story として必要な場合は、その story を追加してください。
-   - `view/src/component/presenter/list/workbook.stories.ts` にある既存の story を参考にしてください。
 5. chromedevtools/chrome-devtools-mcp を使って Storybook にアクセスし、UI の見た目と動作を確認してください。
-   - `make storybook`を実行して Storybook サーバーを起動してください。
+   - 3 秒以上レスポンスがない場合は、`make storybook`を実行して Storybook サーバーを起動してください。
    - すでにポートが使用されている場合は、別のポートで起動してください。（例: `PORT=6007 make storybook`）
-6. リファクタリングが必要かどうか検討し、必要であれば行ってください。
-7. 1〜6 のステップを繰り返すことで、必要な機能をすべて実装してください。
+6. `view/src/style`以下にある共通スタイルを適用して共通化できないか検討してください。
+7. リファクタリングが必要かどうか検討し、必要であれば行ってください。
+8. 1〜7 のステップを繰り返すことで、必要な機能をすべて実装してください。
