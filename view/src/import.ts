@@ -8,3 +8,4 @@ import "./component/presenter/header/main";
 import "./component/presenter/list/discussion";
 import "./component/presenter/list/project";
 import "./component/presenter/popup/base";
+import "./component/presenter/popup/project/create";
