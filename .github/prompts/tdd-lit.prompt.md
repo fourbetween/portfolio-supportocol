@@ -32,8 +32,8 @@ $ARGUMENTS
    - button や input などの共通スタイルは`view/src/style`以下にあるスタイルを利用してください。
    - テーマは Github を参考にしてください。
    - Tailwind CSS は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
-3. #runTests コマンドですべてのテストを実行して、パスすることを確認してください。
-   - もし #runTests コマンドが使えない環境の場合は、`make testview`を実行してください。
+3. 組み込みの runTests コマンドですべてのテストを実行して、パスすることを確認してください。
+   - もし runTests コマンドが使えない環境の場合は、`make testview`を実行してください。
 4. 追加の機能が Storybook の story として必要な場合は、その story を追加してください。
    - `view/src/component/presenter/list/workbook.stories.ts` にある既存の story を参考にしてください。
 5. chromedevtools/chrome-devtools-mcp を使って Storybook にアクセスし、UI の見た目と動作を確認してください。
