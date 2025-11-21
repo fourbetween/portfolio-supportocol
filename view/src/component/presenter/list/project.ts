@@ -60,12 +60,6 @@ export class ProjectListPresenter extends LitElement {
         font-size: 14px;
       }
 
-      .btn-sm {
-        padding: 3px 12px;
-        font-size: 12px;
-        line-height: 20px;
-      }
-
       .card {
         background-color: var(--color-canvas-default);
         border: 1px solid var(--color-border-default);

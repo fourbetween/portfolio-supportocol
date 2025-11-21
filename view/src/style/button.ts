@@ -58,5 +58,11 @@ export const buttonStyle: CSSResultGroup = [
       padding: 12px 24px;
       font-size: 18px;
     }
+
+    .btn-sm {
+      padding: 3px 12px;
+      font-size: 12px;
+      line-height: 20px;
+    }
   `,
 ];
