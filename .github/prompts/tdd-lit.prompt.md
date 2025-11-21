@@ -29,6 +29,7 @@ $ARGUMENTS
    - `view/src/component/presenter/list/workbook.ts` にある既存のコンポーネントを参考にしてください。
    - ある presenter コンポーネントから、別の container コンポーネントを利用してはいけないことに留意してください。
    - テーマは Github を参考にしてください。
+   - button や input などの共通スタイルは`view/src/style`以下にあるスタイルを利用してください。
    - Tailwind CSS は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
 3. #runTests コマンドですべてのテストを実行して、パスすることを確認してください。
    - もし #runTests コマンドが使えない環境の場合は、`make testview`を実行してください。
