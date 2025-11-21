@@ -33,8 +33,8 @@ $ARGUMENTS
    - もし runTests コマンドが使えない環境の場合は、`make testview`を実行してください。
 4. 追加の機能が Storybook の story として必要な場合は、その story を追加してください。
 5. chromedevtools/chrome-devtools-mcp を使って Storybook にアクセスし、UI の見た目と動作を確認してください。
-   - 3 秒以上レスポンスがない場合は、`make storybook`を実行して Storybook サーバーを起動してください。
-   - すでにポートが使用されている場合は、別のポートで起動してください。（例: `PORT=6007 make storybook`）
+   - 3 秒以上レスポンスがない場合は、`make story`を実行して Storybook サーバーを起動してください。
+   - すでにポートが使用されている場合は、別のポートで起動してください。（例: `PORT=6007 make story`）
 6. `view/src/style`以下にある共通スタイルを適用して共通化できないか検討してください。
 7. リファクタリングが必要かどうか検討し、必要であれば行ってください。
 8. 1〜7 のステップを繰り返すことで、必要な機能をすべて実装してください。

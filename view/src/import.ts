@@ -11,3 +11,4 @@ import "./component/presenter/popup/base";
 import "./component/presenter/popup/project/add_discussion";
 import "./component/presenter/popup/project/create";
 import "./component/presenter/popup/project/delete";
+import "./component/presenter/popup/rule/add_comment_type";
