@@ -8,5 +8,6 @@ import "./component/presenter/header/main";
 import "./component/presenter/list/discussion";
 import "./component/presenter/list/project";
 import "./component/presenter/popup/base";
+import "./component/presenter/popup/project/add_discussion";
 import "./component/presenter/popup/project/create";
 import "./component/presenter/popup/project/delete";
