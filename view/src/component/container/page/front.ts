@@ -22,7 +22,11 @@ export class FrontPageContainer extends LitElement {
 
   render() {
     return html`
-      front page
+      <ul>
+        <li>
+          <a href="/dashboard">Go to Dashboard</a>
+        </li>
+      </ul>
     `;
   }
 

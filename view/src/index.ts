@@ -32,6 +32,14 @@ export class AppRoot extends LitElement {
         ></front-page-container>
       `,
     },
+    {
+      path: "/dashboard",
+      render: () => html`
+        <dashboard-page-container
+          .isLoggedIn=${this.isLoggedIn}
+        ></dashboard-page-container>
+      `,
+    },
   ]);
 
   render() {

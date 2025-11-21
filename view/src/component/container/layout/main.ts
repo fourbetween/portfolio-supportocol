@@ -10,6 +10,7 @@ export class MainLayoutContainer extends LitElement {
   render() {
     return html`
       <div class="layout">
+        <main-header-presenter></main-header-presenter>
         <main>
           <slot></slot>
         </main>

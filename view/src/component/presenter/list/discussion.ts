@@ -85,7 +85,7 @@ export class DiscussionListPresenter extends LitElement {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: 8px;
         font-weight: 600;
         font-size: 14px;
       }
