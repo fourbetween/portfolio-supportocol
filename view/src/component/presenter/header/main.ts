@@ -13,35 +13,26 @@ export class MainHeaderPresenter extends LitElement {
         <a href="/" class="header-logo">Supportocol</a>
         <nav class="header-nav">
           <a
-            href="/view/sample/page/dashboard.html"
-            class="${this.currentPath === "/view/sample/page/dashboard.html"
-              ? "active"
-              : ""}"
+            href="/dashboard"
+            class="${this.currentPath === "/dashboard" ? "active" : ""}"
           >
             ダッシュボード
           </a>
           <a
-            href="/view/sample/page/project/list.html"
-            class="${this.currentPath === "/view/sample/page/project/list.html"
-              ? "active"
-              : ""}"
+            href="/projects"
+            class="${this.currentPath === "/projects" ? "active" : ""}"
           >
             プロジェクト
           </a>
           <a
-            href="/view/sample/page/discussion/list.html"
-            class="${this.currentPath ===
-            "/view/sample/page/discussion/list.html"
-              ? "active"
-              : ""}"
+            href="/discussions"
+            class="${this.currentPath === "/discussions" ? "active" : ""}"
           >
             議論
           </a>
           <a
-            href="/view/sample/page/rule/list.html"
-            class="${this.currentPath === "/view/sample/page/rule/list.html"
-              ? "active"
-              : ""}"
+            href="/rules"
+            class="${this.currentPath === "/rules" ? "active" : ""}"
           >
             ルール
           </a>

@@ -40,6 +40,30 @@ export class AppRoot extends LitElement {
         ></dashboard-page-container>
       `,
     },
+    {
+      path: "/projects",
+      render: () => html`
+        <projects-page-container
+          .isLoggedIn=${this.isLoggedIn}
+        ></projects-page-container>
+      `,
+    },
+    {
+      path: "/discussions",
+      render: () => html`
+        <discussions-page-container
+          .isLoggedIn=${this.isLoggedIn}
+        ></discussions-page-container>
+      `,
+    },
+    {
+      path: "/rules",
+      render: () => html`
+        <rules-page-container
+          .isLoggedIn=${this.isLoggedIn}
+        ></rules-page-container>
+      `,
+    },
   ]);
 
   render() {
