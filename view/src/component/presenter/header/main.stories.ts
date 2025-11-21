@@ -1,22 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
-import "./header";
-import type { HeaderPresenter } from "./header";
+import "./main";
+import type { MainHeaderPresenter } from "./main";
 
 const meta = {
-  title: "presenter/header",
+  title: "presenter/header/main",
   tags: ["autodocs"],
   render: (args) =>
     html`
-      <header-presenter .currentPath=${args.currentPath}></header-presenter>
+      <main-header-presenter
+        .currentPath=${args.currentPath}
+      ></main-header-presenter>
     `,
   argTypes: {
     currentPath: { control: "text" },
   },
-} satisfies Meta<HeaderPresenter>;
+} satisfies Meta<MainHeaderPresenter>;
 
 export default meta;
-type Story = StoryObj<HeaderPresenter>;
+type Story = StoryObj<MainHeaderPresenter>;
 
 export const Default: Story = {
   args: {

@@ -2,8 +2,8 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../style/base";
 
-@customElement("header-presenter")
-export class HeaderPresenter extends LitElement {
+@customElement("main-header-presenter")
+export class MainHeaderPresenter extends LitElement {
   @property({ type: String })
   currentPath: string = "";
 

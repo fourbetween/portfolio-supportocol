@@ -1,13 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
-import "./header";
-import type { HeaderPresenter } from "./header";
+import "./main";
+import type { MainHeaderPresenter } from "./main";
 
-describe("HeaderPresenter", async () => {
-  let elem: HeaderPresenter;
+describe("MainHeaderPresenter", async () => {
+  let elem: MainHeaderPresenter;
 
   beforeEach(() => {
-    elem = document.createElement("header-presenter") as HeaderPresenter;
+    elem = document.createElement(
+      "main-header-presenter"
+    ) as MainHeaderPresenter;
     document.body.appendChild(elem);
   });
 
