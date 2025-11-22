@@ -29,7 +29,7 @@ export class AddCommentTypePopupPresenter extends LitElement {
 
     return html`
       <base-popup-presenter>
-        <h2 slot="header">コメント種類の追加</h2>
+        <span slot="header">コメント種類の追加</span>
         <div slot="main">
           <div class="form-group">
             <label class="form-label">名前</label>
@@ -88,10 +88,6 @@ export class AddCommentTypePopupPresenter extends LitElement {
     buttonStyle,
     formStyle,
     css`
-      h2 {
-        margin: 0;
-        font-size: 16px;
-      }
       .color-picker {
         display: flex;
         gap: 8px;

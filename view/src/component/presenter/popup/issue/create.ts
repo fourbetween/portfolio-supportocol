@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
+import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
 import "../base";
@@ -14,14 +15,10 @@ export class CreateIssuePopupPresenter extends LitElement {
     this.basePopup.open();
   }
 
-  close() {
-    this.basePopup.close();
-  }
-
   render() {
     return html`
       <base-popup-presenter>
-        <h2 slot="header">指摘作成</h2>
+        <span slot="header">指摘作成</span>
         <div slot="main">
           <p>選択したコメントに対する論理的な問題を指摘します。</p>
           <form>
@@ -50,6 +47,7 @@ export class CreateIssuePopupPresenter extends LitElement {
   }
 
   static styles = [
+    baseStyle,
     formStyle,
     buttonStyle,
     css`

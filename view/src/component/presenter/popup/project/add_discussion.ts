@@ -44,7 +44,7 @@ export class AddDiscussionPopupPresenter extends LitElement {
   render() {
     return html`
       <base-popup-presenter>
-        <h2 slot="header">既存の議論を追加</h2>
+        <span slot="header">既存の議論を追加</span>
         <div slot="main">
           <div class="form-group">
             <input
@@ -95,10 +95,6 @@ export class AddDiscussionPopupPresenter extends LitElement {
     formStyle,
     buttonStyle,
     css`
-      h2 {
-        margin: 0;
-        font-size: 14px;
-      }
       .search-results {
         border: 1px solid var(--color-border-default);
         border-radius: 6px;

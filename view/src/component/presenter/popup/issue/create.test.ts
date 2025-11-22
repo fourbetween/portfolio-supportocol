@@ -24,4 +24,13 @@ describe("CreateIssuePopupPresenter", () => {
     expect(select).to.exist;
     expect(select.options.length).to.be.greaterThan(0);
   });
+
+  it("ヘッダーのタイトルがspanタグで表示されること", async () => {
+    const headerSlot = element.shadowRoot?.querySelector(
+      '[slot="header"]'
+    ) as HTMLElement;
+    expect(headerSlot).to.exist;
+    expect(headerSlot.tagName).to.equal("SPAN");
+    expect(headerSlot.textContent).to.equal("指摘作成");
+  });
 });

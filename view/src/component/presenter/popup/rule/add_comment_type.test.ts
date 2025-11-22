@@ -18,7 +18,8 @@ describe("AddCommentTypePopupPresenter", () => {
 
   it("タイトルが表示されること", async () => {
     await elem.updateComplete;
-    const title = elem.shadowRoot?.querySelector("h2");
+    const title = elem.shadowRoot?.querySelector('[slot="header"]');
+    expect(title?.tagName).toBe("SPAN");
     expect(title?.textContent).toBe("コメント種類の追加");
   });
 

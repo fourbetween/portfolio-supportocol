@@ -19,8 +19,9 @@ describe("AddDiscussionPopupPresenter", () => {
   it("タイトルが表示されること", async () => {
     await elem.updateComplete;
 
-    const title = elem.shadowRoot?.querySelector("h2");
+    const title = elem.shadowRoot?.querySelector('[slot="header"]');
     expect(title).toBeTruthy();
+    expect(title?.tagName).toBe("SPAN");
     expect(title?.textContent?.trim()).toBe("既存の議論を追加");
   });
 
