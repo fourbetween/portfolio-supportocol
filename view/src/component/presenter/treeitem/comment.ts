@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type { Comment, CommentType } from "../../../model/discussion";
 import { baseStyle } from "../../../style/base";
+import { buttonStyle } from "../../../style/button";
 
 @customElement("comment-treeitem-presenter")
 export class CommentTreeitemPresenter extends LitElement {
@@ -44,6 +45,7 @@ export class CommentTreeitemPresenter extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
     css`
       .comment-card {
         background-color: var(--color-canvas-default);
@@ -86,33 +88,6 @@ export class CommentTreeitemPresenter extends LitElement {
         border-top: 1px solid var(--color-border-muted);
         display: flex;
         gap: 8px;
-      }
-
-      .btn {
-        display: inline-block;
-        padding: 5px 16px;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 20px;
-        white-space: nowrap;
-        vertical-align: middle;
-        cursor: pointer;
-        user-select: none;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        background-color: var(--color-canvas-default);
-        color: var(--color-fg-default);
-        text-decoration: none;
-      }
-
-      .btn:hover {
-        background-color: #f3f4f6;
-        border-color: var(--color-border-muted);
-      }
-
-      .btn-sm {
-        padding: 3px 12px;
-        font-size: 12px;
       }
     `,
   ];
