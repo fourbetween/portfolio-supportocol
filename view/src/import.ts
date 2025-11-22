@@ -4,6 +4,7 @@ import "./component/container/page/discussions";
 import "./component/container/page/front";
 import "./component/container/page/projects";
 import "./component/container/page/rules";
+import "./component/presenter/form/rule/edit";
 import "./component/presenter/header/main";
 import "./component/presenter/list/discussion";
 import "./component/presenter/list/project";
