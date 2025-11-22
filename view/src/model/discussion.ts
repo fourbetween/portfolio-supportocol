@@ -3,6 +3,7 @@ import type {
   CommentPermissionLevelSchema,
   CommentSchema,
   CommentStatusSchema,
+  CommentTypeSchema,
   DiscussionSchema,
   IssueSchema,
   NoteSchema,
@@ -17,6 +18,7 @@ export type CommentPermissionLevel = z.infer<
 
 export type Comment = z.infer<typeof CommentSchema>;
 export type CommentStatus = z.infer<typeof CommentStatusSchema>;
+export type CommentType = z.infer<typeof CommentTypeSchema>;
 
 export type Issue = z.infer<typeof IssueSchema>;
 export type Note = z.infer<typeof NoteSchema>;
