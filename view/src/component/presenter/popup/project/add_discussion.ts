@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { map } from "lit/directives/map.js";
 import type { Discussion } from "../../../../model/discussion";
+import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
 import "../base";
@@ -92,6 +93,7 @@ export class AddDiscussionPopupPresenter extends LitElement {
   }
 
   static styles = [
+    baseStyle,
     formStyle,
     buttonStyle,
     css`

@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
+import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
 import "../base";
@@ -42,5 +43,5 @@ export class CreateProjectPopupPresenter extends LitElement {
     `;
   }
 
-  static styles = [buttonStyle, formStyle];
+  static styles = [baseStyle, buttonStyle, formStyle];
 }

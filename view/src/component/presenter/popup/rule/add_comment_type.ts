@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
+import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
 import "../base";
@@ -85,6 +86,7 @@ export class AddCommentTypePopupPresenter extends LitElement {
   }
 
   static styles = [
+    baseStyle,
     buttonStyle,
     formStyle,
     css`

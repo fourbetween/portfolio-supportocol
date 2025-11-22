@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import type { Project } from "../../../../model/project";
+import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
 import "../base";
@@ -71,6 +72,7 @@ export class DeleteProjectPopupPresenter extends LitElement {
   }
 
   static styles = [
+    baseStyle,
     buttonStyle,
     formStyle,
     css`
