@@ -62,7 +62,9 @@ describe("CommentTreePresenter", () => {
     const tree = elem.shadowRoot?.querySelector(".comment-tree");
     expect(tree).toBeTruthy();
 
-    const presenters = elem.shadowRoot?.querySelectorAll("comment-presenter");
+    const presenters = elem.shadowRoot?.querySelectorAll(
+      "comment-treeitem-presenter"
+    );
     expect(presenters?.length).toBe(2);
   });
 });

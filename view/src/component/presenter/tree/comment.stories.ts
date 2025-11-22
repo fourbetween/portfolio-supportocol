@@ -83,7 +83,7 @@ const commentTypes: CommentType[] = [
 ];
 
 const meta = {
-  title: "presenter/tree/comment-tree",
+  title: "presenter/tree/comment",
   tags: ["autodocs"],
   render: (args) =>
     html`
