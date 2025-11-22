@@ -13,6 +13,7 @@ import "./component/presenter/list/project";
 import "./component/presenter/list/rule";
 import "./component/presenter/popup/base";
 import "./component/presenter/popup/issue/create";
+import "./component/presenter/popup/note/create";
 import "./component/presenter/popup/project/add_discussion";
 import "./component/presenter/popup/project/create";
 import "./component/presenter/popup/project/delete";
