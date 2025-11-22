@@ -1,24 +1,55 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { Comment } from "../../../model/discussion";
+import type { Comment, CommentType } from "../../../model/discussion";
 import "./comment";
-import type { CommentPresenter } from "./comment";
+import type { CommentTreePresenter } from "./comment";
 
-describe("CommentPresenter", () => {
-  let elem: CommentPresenter;
-  const comment: Comment = {
-    id: "01J8Y000000000000000000001",
-    discussionId: "01J8Y000000000000000000000",
-    parentCommentId: null,
-    commentTypeId: "01J8Y000000000000000000001",
-    content: "Test content",
-    postedBy: "user1",
-    postedAt: "2023-01-01T00:00:00Z",
-    status: "assigned",
-  };
+describe("CommentTreePresenter", () => {
+  let elem: CommentTreePresenter;
+  const comments: Comment[] = [
+    {
+      id: "1",
+      discussionId: "d1",
+      parentCommentId: null,
+      commentTypeId: "t1",
+      content: "Root",
+      postedBy: "user1",
+      postedAt: "2023-01-01T00:00:00Z",
+      status: "assigned",
+    },
+    {
+      id: "2",
+      discussionId: "d1",
+      parentCommentId: "1",
+      commentTypeId: "t2",
+      content: "Child",
+      postedBy: "user2",
+      postedAt: "2023-01-01T00:00:00Z",
+      status: "assigned",
+    },
+  ];
+  const commentTypes: CommentType[] = [
+    {
+      id: "t1",
+      ruleId: "r1",
+      name: "Type1",
+      description: "Desc1",
+      color: "#000000",
+    },
+    {
+      id: "t2",
+      ruleId: "r1",
+      name: "Type2",
+      description: "Desc2",
+      color: "#ffffff",
+    },
+  ];
 
   beforeEach(() => {
-    elem = document.createElement("comment-presenter") as CommentPresenter;
-    elem.comment = comment;
+    elem = document.createElement(
+      "comment-tree-presenter"
+    ) as CommentTreePresenter;
+    elem.comments = comments;
+    elem.commentTypes = commentTypes;
     document.body.appendChild(elem);
   });
 
@@ -26,11 +57,12 @@ describe("CommentPresenter", () => {
     elem.remove();
   });
 
-  it("コメントの内容が表示されること", async () => {
-    // Wait for update
+  it("コメントツリーが表示されること", async () => {
     await elem.updateComplete;
-    const content = elem.shadowRoot?.querySelector(".comment-body");
-    expect(content).toBeTruthy();
-    expect(content?.textContent).toContain("Test content");
+    const tree = elem.shadowRoot?.querySelector(".comment-tree");
+    expect(tree).toBeTruthy();
+
+    const presenters = elem.shadowRoot?.querySelectorAll("comment-presenter");
+    expect(presenters?.length).toBe(2);
   });
 });

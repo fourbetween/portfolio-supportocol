@@ -20,4 +20,4 @@ import "./component/presenter/popup/project/create";
 import "./component/presenter/popup/project/delete";
 import "./component/presenter/popup/rule/add_comment_type";
 import "./component/presenter/tree/comment";
-import "./component/presenter/tree/comment-tree";
+import "./component/presenter/treeitem/comment";

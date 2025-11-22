@@ -1,43 +1,86 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type { Comment, CommentType } from "../../../model/discussion";
 import { baseStyle } from "../../../style/base";
+import "../treeitem/comment";
 
-@customElement("comment-presenter")
-export class CommentPresenter extends LitElement {
-  @property({ type: Object })
-  comment?: Comment;
+interface CommentNode {
+  comment: Comment;
+  children: CommentNode[];
+}
 
-  @property({ type: Object })
-  commentType?: CommentType;
+@customElement("comment-tree-presenter")
+export class CommentTreePresenter extends LitElement {
+  @property({ type: Array })
+  comments: Comment[] = [];
+
+  @property({ type: Array })
+  commentTypes: CommentType[] = [];
 
   render() {
-    if (!this.comment) return html``;
+    const tree = this.buildTree(this.comments);
+    return html`
+      <div class="comment-tree">
+        ${tree.map((node) => this.renderNode(node))}
+      </div>
+    `;
+  }
 
-    const badgeStyle = this.commentType
-      ? `background-color: ${this.commentType.color}`
-      : "background-color: #0969da";
-    const badgeName = this.commentType ? this.commentType.name : "Type";
+  private buildTree(comments: Comment[]): CommentNode[] {
+    const map = new Map<string, CommentNode>();
+    const roots: CommentNode[] = [];
+
+    // Initialize nodes
+    comments.forEach((c) => {
+      map.set(c.id, { comment: c, children: [] });
+    });
+
+    // Build tree
+    comments.forEach((c) => {
+      const node = map.get(c.id)!;
+      if (c.parentCommentId) {
+        const parent = map.get(c.parentCommentId);
+        if (parent) {
+          parent.children.push(node);
+        }
+      } else {
+        roots.push(node);
+      }
+    });
+
+    return roots;
+  }
+
+  private renderNode(node: CommentNode): TemplateResult {
+    // Group children by comment type
+    const childrenByType = new Map<string, CommentNode[]>();
+    node.children.forEach((child) => {
+      const typeId = child.comment.commentTypeId;
+      if (!childrenByType.has(typeId)) {
+        childrenByType.set(typeId, []);
+      }
+      childrenByType.get(typeId)!.push(child);
+    });
+
+    const commentType = this.commentTypes.find(
+      (t) => t.id === node.comment.commentTypeId
+    );
 
     return html`
-      <div class="comment-card">
-        <div class="comment-header">
-          <div>
-            <span class="comment-type-badge" style="${badgeStyle}">
-              ${badgeName}
-            </span>
-            <strong>${this.comment.postedBy}</strong>
-            が投稿 • ${this.comment.postedAt}
-          </div>
-          <div>#${this.comment.id}</div>
-        </div>
-        <div class="comment-body">
-          <p>${this.comment.content}</p>
-        </div>
-        <div class="comment-footer">
-          <a href="#" class="btn btn-sm">返信</a>
-          <a href="#" class="btn btn-sm">指摘</a>
-        </div>
+      <div class="comment-node">
+        <comment-treeitem-presenter
+          .comment=${node.comment}
+          .commentType=${commentType}
+        ></comment-treeitem-presenter>
+        ${Array.from(childrenByType.entries()).map(([typeId, children]) => {
+          const type = this.commentTypes.find((t) => t.id === typeId);
+          return html`
+            <div class="comment-group">
+              <div class="comment-group-label">${type?.name || "Unknown"}</div>
+              ${children.map((child) => this.renderNode(child))}
+            </div>
+          `;
+        })}
       </div>
     `;
   }
@@ -45,74 +88,35 @@ export class CommentPresenter extends LitElement {
   static styles = [
     baseStyle,
     css`
-      .comment-card {
-        background-color: var(--color-canvas-default);
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        margin-bottom: 16px;
-        position: relative;
+      .comment-tree {
+        margin-top: 24px;
       }
 
-      .comment-header {
-        padding: 8px 16px;
-        background-color: var(--color-canvas-subtle);
-        border-bottom: 1px solid var(--color-border-default);
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 12px;
-        color: var(--color-fg-muted);
+      .comment-group {
+        margin-left: 20px;
+        padding-left: 20px;
+        border-left: 2px solid var(--color-border-muted);
+        margin-top: 16px;
       }
 
-      .comment-type-badge {
-        display: inline-block;
-        padding: 2px 8px;
-        border-radius: 12px;
+      .comment-group-label {
         font-size: 12px;
         font-weight: 600;
-        color: #fff;
-        margin-right: 8px;
-      }
-
-      .comment-body {
-        padding: 16px;
-        font-size: 14px;
-      }
-
-      .comment-footer {
-        padding: 8px 16px;
-        border-top: 1px solid var(--color-border-muted);
+        color: var(--color-fg-muted);
+        margin-bottom: 12px;
+        position: relative;
         display: flex;
+        align-items: center;
         gap: 8px;
       }
 
-      .btn {
-        display: inline-block;
-        padding: 5px 16px;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 20px;
-        white-space: nowrap;
-        vertical-align: middle;
-        cursor: pointer;
-        user-select: none;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        background-color: var(--color-canvas-default);
-        color: var(--color-fg-default);
-        text-decoration: none;
-      }
-
-      .btn:hover {
-        background-color: #f3f4f6;
-        border-color: var(--color-border-muted);
-      }
-
-      .btn-sm {
-        padding: 3px 12px;
-        font-size: 12px;
+      .comment-group-label::before {
+        content: "";
+        position: absolute;
+        left: -22px;
+        width: 20px;
+        height: 2px;
+        background-color: var(--color-border-muted);
       }
     `,
   ];
