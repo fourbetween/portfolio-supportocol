@@ -49,5 +49,12 @@ export const formStyle: CSSResultGroup = [
       color: var(--color-fg-muted);
       margin-top: 4px;
     }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 24px;
+    }
   `,
 ];

@@ -64,5 +64,17 @@ export const buttonStyle: CSSResultGroup = [
       font-size: 12px;
       line-height: 20px;
     }
+
+    .btn-danger {
+      color: var(--color-danger-fg);
+      background-color: var(--color-canvas-default);
+      border-color: var(--color-border-default);
+    }
+
+    .btn-danger:hover {
+      background-color: var(--color-danger-fg);
+      color: #fff;
+      border-color: var(--color-danger-fg);
+    }
   `,
 ];
