@@ -34,22 +34,20 @@ export class ProjectListPresenter extends LitElement {
           </button>
         </div>
         <div class="card">
-          <div class="card-body">
-            <ul class="list-group">
-              ${this.projects.map(
-                (project) => html`
-                  <li class="list-group-item">
-                    <a
-                      href="/view/sample/page/project/detail.html"
-                      class="repo-name"
-                    >
-                      ${project.name}
-                    </a>
-                  </li>
-                `
-              )}
-            </ul>
-          </div>
+          <ul class="list-group">
+            ${this.projects.map(
+              (project) => html`
+                <li class="list-group-item">
+                  <a
+                    href="/view/sample/page/project/detail.html"
+                    class="repo-name"
+                  >
+                    ${project.name}
+                  </a>
+                </li>
+              `
+            )}
+          </ul>
         </div>
       </div>
       <create-project-popup-presenter

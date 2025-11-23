@@ -2,7 +2,9 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type { Discussion } from "../../../model/discussion";
 import { baseStyle } from "../../../style/base";
+import { buttonStyle } from "../../../style/button";
 import { listStyle } from "../../../style/list";
+import { pageStyle } from "../../../style/page";
 
 @customElement("discussion-list-presenter")
 export class DiscussionListPresenter extends LitElement {
@@ -20,6 +22,10 @@ export class DiscussionListPresenter extends LitElement {
 
     return html`
       <div class="discussion-list-container">
+        <div class="page-header">
+          <h1 class="page-title">議論一覧</h1>
+          <button class="btn btn-primary">新規作成</button>
+        </div>
         ${this.renderGroup("Open", openDiscussions, "status-open")}
         ${this.renderGroup("Closed", closedDiscussions, "status-closed")}
         ${this.renderGroup("Archived", archivedDiscussions, "status-archived")}
@@ -134,6 +140,8 @@ export class DiscussionListPresenter extends LitElement {
   static styles = [
     baseStyle,
     listStyle,
+    buttonStyle,
+    pageStyle,
     css`
       .discussion-list-container {
         max-width: 980px;

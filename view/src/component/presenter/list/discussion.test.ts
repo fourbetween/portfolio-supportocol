@@ -85,4 +85,10 @@ describe("DiscussionListPresenter", async () => {
     expect(headers?.[1].textContent).toContain("Closed");
     expect(headers?.[2].textContent).toContain("Archived");
   });
+
+  it("新規作成ボタンが表示されること", async () => {
+    await expect
+      .element(page.getByRole("button", { name: "新規作成" }))
+      .toBeInTheDocument();
+  });
 });
