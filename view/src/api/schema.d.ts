@@ -263,6 +263,7 @@ export interface paths {
                         name: string;
                         description: string;
                         commentTypes: {
+                            id: components["schemas"]["id"];
                             name: string;
                             description: string;
                             color: string;
@@ -325,6 +326,7 @@ export interface paths {
                         name: string;
                         description: string;
                         commentTypes: {
+                            id: components["schemas"]["id"];
                             name: string;
                             description: string;
                             color: string;

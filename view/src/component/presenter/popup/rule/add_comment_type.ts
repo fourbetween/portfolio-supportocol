@@ -13,20 +13,26 @@ export class AddCommentTypePopupPresenter extends LitElement {
   @state()
   private selectedColorIndex = 5;
 
+  @state()
+  private name = "";
+
+  @state()
+  private description = "";
+
+  private static readonly COLORS = [
+    "#0969da",
+    "#d29922",
+    "#1a7f37",
+    "#cf222e",
+    "#8250df",
+    "#6e7781",
+  ];
+
   open() {
     this.basePopup.open();
   }
 
   render() {
-    const colors = [
-      "#0969da",
-      "#d29922",
-      "#1a7f37",
-      "#cf222e",
-      "#8250df",
-      "#6e7781",
-    ];
-
     return html`
       <base-popup-presenter>
         <span slot="header">コメント種類の追加</span>
@@ -37,6 +43,9 @@ export class AddCommentTypePopupPresenter extends LitElement {
               type="text"
               class="form-control"
               placeholder="例: 補足情報"
+              .value="${this.name}"
+              @input="${(e: Event) =>
+                (this.name = (e.target as HTMLInputElement).value)}"
             />
           </div>
 
@@ -45,13 +54,16 @@ export class AddCommentTypePopupPresenter extends LitElement {
             <textarea
               class="form-control"
               placeholder="このコメント種類の用途を説明してください"
+              .value="${this.description}"
+              @input="${(e: Event) =>
+                (this.description = (e.target as HTMLTextAreaElement).value)}"
             ></textarea>
           </div>
 
           <div class="form-group">
             <label class="form-label">色</label>
             <div class="color-picker">
-              ${colors.map(
+              ${AddCommentTypePopupPresenter.COLORS.map(
                 (color, index) => html`
                   <div
                     class="color-option ${this.selectedColorIndex === index
@@ -80,8 +92,17 @@ export class AddCommentTypePopupPresenter extends LitElement {
       new CustomEvent("add", {
         bubbles: true,
         composed: true,
+        detail: {
+          name: this.name,
+          description: this.description,
+          color: AddCommentTypePopupPresenter.COLORS[this.selectedColorIndex],
+        },
       })
     );
+    this.basePopup.close();
+    this.name = "";
+    this.description = "";
+    this.selectedColorIndex = 5;
   }
 
   static styles = [

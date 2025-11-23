@@ -339,6 +339,8 @@ paths:
                   items:
                     type: object
                     properties:
+                      id:
+                        $ref: "#/components/schemas/id"
                       name:
                         type: string
                       description:
@@ -346,6 +348,7 @@ paths:
                       color:
                         type: string
                     required:
+                      - id
                       - name
                       - description
                       - color
@@ -405,6 +408,8 @@ paths:
                   items:
                     type: object
                     properties:
+                      id:
+                        $ref: "#/components/schemas/id"
                       name:
                         type: string
                       description:
@@ -412,6 +417,7 @@ paths:
                       color:
                         type: string
                     required:
+                      - id
                       - name
                       - description
                       - color

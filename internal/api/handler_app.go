@@ -192,6 +192,7 @@ func (h *appHandler) RulesPost(ctx context.Context, req oas.OptRulesPostReq) (*o
 			cts := make([]rule.CommentType, len(req.Value.CommentTypes))
 			for i, v := range req.Value.CommentTypes {
 				cts[i] = rule.CommentType{
+					ID:          string(v.ID),
 					Name:        v.Name,
 					Description: v.Description,
 					Color:       v.Color,

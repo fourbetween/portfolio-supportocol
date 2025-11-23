@@ -1182,9 +1182,15 @@ func (s *RulesPostReqCommentTypePathsItem) SetToCommentTypeId(val ID) {
 }
 
 type RulesPostReqCommentTypesItem struct {
+	ID          ID     `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Color       string `json:"color"`
+}
+
+// GetID returns the value of ID.
+func (s *RulesPostReqCommentTypesItem) GetID() ID {
+	return s.ID
 }
 
 // GetName returns the value of Name.
@@ -1200,6 +1206,11 @@ func (s *RulesPostReqCommentTypesItem) GetDescription() string {
 // GetColor returns the value of Color.
 func (s *RulesPostReqCommentTypesItem) GetColor() string {
 	return s.Color
+}
+
+// SetID sets the value of ID.
+func (s *RulesPostReqCommentTypesItem) SetID(val ID) {
+	s.ID = val
 }
 
 // SetName sets the value of Name.
@@ -1293,9 +1304,15 @@ func (s *RulesRuleIdPutReqCommentTypePathsItem) SetToCommentTypeId(val ID) {
 }
 
 type RulesRuleIdPutReqCommentTypesItem struct {
+	ID          ID     `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Color       string `json:"color"`
+}
+
+// GetID returns the value of ID.
+func (s *RulesRuleIdPutReqCommentTypesItem) GetID() ID {
+	return s.ID
 }
 
 // GetName returns the value of Name.
@@ -1311,6 +1328,11 @@ func (s *RulesRuleIdPutReqCommentTypesItem) GetDescription() string {
 // GetColor returns the value of Color.
 func (s *RulesRuleIdPutReqCommentTypesItem) GetColor() string {
 	return s.Color
+}
+
+// SetID sets the value of ID.
+func (s *RulesRuleIdPutReqCommentTypesItem) SetID(val ID) {
+	s.ID = val
 }
 
 // SetName sets the value of Name.
