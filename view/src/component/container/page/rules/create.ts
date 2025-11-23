@@ -1,9 +1,9 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { client } from "../../../../api/client";
+import { accountMethods } from "../../../../model/account";
 import type { Rule } from "../../../../model/rule";
 import { baseStyle } from "../../../../style/base";
-import { accountMethods } from "../../../../model/account";
 
 @customElement("create-rules-page-container")
 export class CreateRulesPageContainer extends LitElement {
@@ -27,6 +27,7 @@ export class CreateRulesPageContainer extends LitElement {
         name: rule.name,
         description: rule.description,
         commentTypes: rule.commentTypes.map((ct) => ({
+          id: ct.id,
           name: ct.name,
           description: ct.description,
           color: ct.color,

@@ -19,20 +19,20 @@ export class AddCommentTypePopupPresenter extends LitElement {
   @state()
   private description = "";
 
+  private static readonly COLORS = [
+    "#0969da",
+    "#d29922",
+    "#1a7f37",
+    "#cf222e",
+    "#8250df",
+    "#6e7781",
+  ];
+
   open() {
     this.basePopup.open();
   }
 
   render() {
-    const colors = [
-      "#0969da",
-      "#d29922",
-      "#1a7f37",
-      "#cf222e",
-      "#8250df",
-      "#6e7781",
-    ];
-
     return html`
       <base-popup-presenter>
         <span slot="header">コメント種類の追加</span>
@@ -63,7 +63,7 @@ export class AddCommentTypePopupPresenter extends LitElement {
           <div class="form-group">
             <label class="form-label">色</label>
             <div class="color-picker">
-              ${colors.map(
+              ${AddCommentTypePopupPresenter.COLORS.map(
                 (color, index) => html`
                   <div
                     class="color-option ${this.selectedColorIndex === index
@@ -88,15 +88,6 @@ export class AddCommentTypePopupPresenter extends LitElement {
   }
 
   private handleAdd() {
-    const colors = [
-      "#0969da",
-      "#d29922",
-      "#1a7f37",
-      "#cf222e",
-      "#8250df",
-      "#6e7781",
-    ];
-
     this.dispatchEvent(
       new CustomEvent("add", {
         bubbles: true,
@@ -104,7 +95,7 @@ export class AddCommentTypePopupPresenter extends LitElement {
         detail: {
           name: this.name,
           description: this.description,
-          color: colors[this.selectedColorIndex],
+          color: AddCommentTypePopupPresenter.COLORS[this.selectedColorIndex],
         },
       })
     );

@@ -116,7 +116,7 @@ export class RuleFormPresenter extends LitElement {
       </div>
 
       <add-comment-type-popup-presenter
-        @add="${this._handleAddCommentType}"
+        @add=${this._handleAddCommentType}
       ></add-comment-type-popup-presenter>
     `;
   }

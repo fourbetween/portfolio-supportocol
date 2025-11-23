@@ -213,9 +213,7 @@ const routes: RouteConfig[] = [
             schema: z.object({
               name: z.string(),
               description: z.string(),
-              commentTypes: z.array(
-                CommentTypeSchema.omit({ id: true, ruleId: true })
-              ),
+              commentTypes: z.array(CommentTypeSchema.omit({ ruleId: true })),
               commentTypePaths: z.array(
                 CommentTypePathSchema.omit({ id: true, ruleId: true })
               ),
@@ -258,9 +256,7 @@ const routes: RouteConfig[] = [
             schema: z.object({
               name: z.string(),
               description: z.string(),
-              commentTypes: z.array(
-                CommentTypeSchema.omit({ id: true, ruleId: true })
-              ),
+              commentTypes: z.array(CommentTypeSchema.omit({ ruleId: true })),
               commentTypePaths: z.array(
                 CommentTypePathSchema.omit({ id: true, ruleId: true })
               ),
