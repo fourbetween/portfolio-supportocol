@@ -6,7 +6,7 @@ import { RuleFormPresenter } from "../rule";
 @customElement("create-rule-form-presenter")
 export class CreateRuleFormPresenter extends RuleFormPresenter {
   @property({ attribute: false })
-  createRule!: (rule: Rule) => void;
+  createRule!: (rule: Rule) => Promise<void>;
 
   render() {
     return html`
@@ -31,7 +31,7 @@ export class CreateRuleFormPresenter extends RuleFormPresenter {
     `;
   }
 
-  private _handleCreate() {
-    this.createRule(this.rule);
+  private async _handleCreate() {
+    await this.createRule(this.rule);
   }
 }

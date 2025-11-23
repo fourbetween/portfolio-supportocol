@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type { Rule } from "../../../../model/rule";
 import { baseStyle } from "../../../../style/base";
+import { client } from "../../../../api/client";
 
 @customElement("create-rules-page-container")
 export class CreateRulesPageContainer extends LitElement {
@@ -18,8 +19,27 @@ export class CreateRulesPageContainer extends LitElement {
     `;
   }
 
-  private createRule(rule: Rule) {
-    console.log(rule);
+  private async createRule(rule: Rule) {
+    const { error } = await client.POST("/rules", {
+      body: {
+        name: rule.name,
+        description: rule.description,
+        commentTypes: rule.commentTypes.map((ct) => ({
+          name: ct.name,
+          description: ct.description,
+          color: ct.color,
+        })),
+        commentTypePaths: rule.commentTypePaths.map((ctp) => ({
+          fromCommentTypeId: ctp.fromCommentTypeId,
+          toCommentTypeId: ctp.toCommentTypeId,
+        })),
+      },
+    });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
   }
 
   static styles = [baseStyle, css``];
