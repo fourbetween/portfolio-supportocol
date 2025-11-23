@@ -23,6 +23,19 @@ export class DashboardPageContainer extends LitElement {
     args: () => [],
   });
 
+  private discussionsTask = new Task(this, {
+    task: async ([]) => {
+      const { data, error } = await client.GET("/discussions", {
+        headers: await accountMethods.authHeader(),
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data;
+    },
+    args: () => [],
+  });
+
   render() {
     return html`
       <div class="container">
@@ -40,9 +53,17 @@ export class DashboardPageContainer extends LitElement {
           })}
         </div>
         <div class="main">
-          <discussion-list-presenter
-            .discussions=${[]}
-          ></discussion-list-presenter>
+          ${this.discussionsTask.render({
+            complete: (discussions) => html`
+              <discussion-list-presenter
+                .discussions=${discussions}
+              ></discussion-list-presenter>
+            `,
+            error: (e) =>
+              html`
+                <p>Error: ${e}</p>
+              `,
+          })}
         </div>
       </div>
     `;
