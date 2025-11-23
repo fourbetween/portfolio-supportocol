@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import type { Comment, CommentType } from "../../../model/discussion";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
+import { cardStyle } from "../../../style/card";
 
 @customElement("comment-treeitem-presenter")
 export class CommentTreeitemPresenter extends LitElement {
@@ -21,8 +22,8 @@ export class CommentTreeitemPresenter extends LitElement {
     const badgeName = this.commentType ? this.commentType.name : "Type";
 
     return html`
-      <div class="comment-card">
-        <div class="comment-header">
+      <div class="card">
+        <div class="card-header">
           <div>
             <span class="comment-type-badge" style="${badgeStyle}">
               ${badgeName}
@@ -32,10 +33,10 @@ export class CommentTreeitemPresenter extends LitElement {
           </div>
           <div>#${this.comment.id}</div>
         </div>
-        <div class="comment-body">
+        <div class="card-body">
           <p>${this.comment.content}</p>
         </div>
-        <div class="comment-footer">
+        <div class="card-footer">
           <a href="#" class="btn btn-sm">返信</a>
           <a href="#" class="btn btn-sm">指摘</a>
         </div>
@@ -46,21 +47,13 @@ export class CommentTreeitemPresenter extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
+    cardStyle,
     css`
-      .comment-card {
-        background-color: var(--color-canvas-default);
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        margin-bottom: 16px;
+      .card {
         position: relative;
       }
 
-      .comment-header {
-        padding: 8px 16px;
-        background-color: var(--color-canvas-subtle);
-        border-bottom: 1px solid var(--color-border-default);
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
+      .card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -78,14 +71,11 @@ export class CommentTreeitemPresenter extends LitElement {
         margin-right: 8px;
       }
 
-      .comment-body {
-        padding: 16px;
+      .card-body {
         font-size: 14px;
       }
 
-      .comment-footer {
-        padding: 8px 16px;
-        border-top: 1px solid var(--color-border-muted);
+      .card-footer {
         display: flex;
         gap: 8px;
       }

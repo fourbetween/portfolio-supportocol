@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import type { Rule } from "../../../../model/rule";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
+import { cardStyle } from "../../../../style/card";
 import { formStyle } from "../../../../style/form";
 
 @customElement("edit-rule-form-presenter")
@@ -64,9 +65,9 @@ export class EditRuleFormPresenter extends LitElement {
 
           ${this.rule.commentTypes.map(
             (parentType) => html`
-              <div class="comment-type-card">
+              <div class="card">
                 <div
-                  class="comment-type-header"
+                  class="card-header"
                   style="border-left: 4px solid ${parentType.color}"
                 >
                   <div class="comment-type-title">
@@ -78,7 +79,7 @@ export class EditRuleFormPresenter extends LitElement {
                   </div>
                   <button class="btn-danger-text">削除</button>
                 </div>
-                <div class="comment-type-body">
+                <div class="card-body">
                   <div class="form-group">
                     <label class="form-label">
                       このコメントへの返信として許可するもの
@@ -131,6 +132,7 @@ export class EditRuleFormPresenter extends LitElement {
     baseStyle,
     buttonStyle,
     formStyle,
+    cardStyle,
     css`
       .container {
         max-width: 900px;
@@ -188,17 +190,11 @@ export class EditRuleFormPresenter extends LitElement {
       }
 
       /* Comment Type Card */
-      .comment-type-card {
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        margin-bottom: 16px;
+      .card {
         overflow: hidden;
       }
 
-      .comment-type-header {
-        padding: 12px 16px;
-        background-color: #f6f8fa;
-        border-bottom: 1px solid var(--color-border-default);
+      .card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -217,10 +213,6 @@ export class EditRuleFormPresenter extends LitElement {
         height: 12px;
         border-radius: 50%;
         display: inline-block;
-      }
-
-      .comment-type-body {
-        padding: 16px;
       }
 
       .checkbox-grid {

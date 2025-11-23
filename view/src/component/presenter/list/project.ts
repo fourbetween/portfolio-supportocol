@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import type { Project } from "../../../model/project";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
+import { cardStyle } from "../../../style/card";
 
 @customElement("project-list-presenter")
 export class ProjectListPresenter extends LitElement {
@@ -46,6 +47,7 @@ export class ProjectListPresenter extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
+    cardStyle,
     css`
       .sidebar-section {
         margin-bottom: 24px;
@@ -58,12 +60,6 @@ export class ProjectListPresenter extends LitElement {
         margin-bottom: 8px;
         font-weight: 600;
         font-size: 14px;
-      }
-
-      .card {
-        background-color: var(--color-canvas-default);
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
       }
 
       .list-group {
