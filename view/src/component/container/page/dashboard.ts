@@ -44,6 +44,7 @@ export class DashboardPageContainer extends LitElement {
             complete: (projects) => html`
               <project-list-presenter
                 .projects=${projects}
+                .onCreate=${() => this.createProject()}
               ></project-list-presenter>
             `,
             error: (e) =>
@@ -67,6 +68,10 @@ export class DashboardPageContainer extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  private async createProject() {
+    console.log("ok");
   }
 
   static styles = [

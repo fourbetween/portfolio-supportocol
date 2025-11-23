@@ -52,7 +52,9 @@ export class ProjectListPresenter extends LitElement {
           </div>
         </div>
       </div>
-      <create-project-popup-presenter></create-project-popup-presenter>
+      <create-project-popup-presenter
+        .onCreate=${this.onCreate}
+      ></create-project-popup-presenter>
     `;
   }
 
