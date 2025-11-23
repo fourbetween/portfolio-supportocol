@@ -33,8 +33,20 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 }
 
 var operationRolesCognitoAuth = map[string][]string{
-	ErrorsPostOperation:   []string{},
-	WorkbooksGetOperation: []string{},
+	DiscussionsDiscussionIdDeleteOperation: []string{},
+	DiscussionsDiscussionIdPutOperation:    []string{},
+	DiscussionsGetOperation:                []string{},
+	DiscussionsPostOperation:               []string{},
+	ErrorsPostOperation:                    []string{},
+	ProjectsGetOperation:                   []string{},
+	ProjectsPostOperation:                  []string{},
+	ProjectsProjectIdDeleteOperation:       []string{},
+	ProjectsProjectIdPutOperation:          []string{},
+	RulesGetOperation:                      []string{},
+	RulesPostOperation:                     []string{},
+	RulesRuleIdDeleteOperation:             []string{},
+	RulesRuleIdPutOperation:                []string{},
+	WorkbooksGetOperation:                  []string{},
 }
 
 func (s *Server) securityCognitoAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {

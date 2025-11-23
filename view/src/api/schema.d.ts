@@ -49,6 +49,526 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description get projects */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["project"][];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** @description create project */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        name: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["project"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/projects/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description update project */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    projectId: components["schemas"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        name: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["project"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        /** @description delete project */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    projectId: components["schemas"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description get rules */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["rule"][];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** @description create rule */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        name: string;
+                        description: string;
+                        commentTypes: {
+                            name: string;
+                            description: string;
+                            color: string;
+                        }[];
+                        commentTypePaths: {
+                            fromCommentTypeId: components["schemas"]["id"];
+                            toCommentTypeId: components["schemas"]["id"];
+                        }[];
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["rule"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/rules/{ruleId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description update rule */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    ruleId: components["schemas"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        name: string;
+                        description: string;
+                        commentTypes: {
+                            name: string;
+                            description: string;
+                            color: string;
+                        }[];
+                        commentTypePaths: {
+                            fromCommentTypeId: components["schemas"]["id"];
+                            toCommentTypeId: components["schemas"]["id"];
+                        }[];
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["rule"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        /** @description delete rule */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    ruleId: components["schemas"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/discussions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description get discussions */
+        get: {
+            parameters: {
+                query?: {
+                    projectId?: components["schemas"]["id"];
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["discussion"][];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** @description create discussion */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        theme: string;
+                        background: string;
+                        conclusion: string;
+                        ruleId: components["schemas"]["id"];
+                        visibilityLevel: components["schemas"]["visibilityLevel"];
+                        commentPermissionLevel: components["schemas"]["commentPermissionLevel"];
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["discussion"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/discussions/{discussionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description update discussion */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    discussionId: components["schemas"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: {
+                content: {
+                    "application/json": {
+                        theme: string;
+                        background: string;
+                        conclusion: string;
+                        ruleId: components["schemas"]["id"];
+                        visibilityLevel: components["schemas"]["visibilityLevel"];
+                        commentPermissionLevel: components["schemas"]["commentPermissionLevel"];
+                        /** @enum {string} */
+                        status: "open" | "closed" | "archived";
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["discussion"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        /** @description delete discussion */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    discussionId: components["schemas"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/errors": {
         parameters: {
             query?: never;
@@ -103,14 +623,65 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         id: string;
+        /** @enum {string} */
+        status: "draft" | "published";
         workbook: {
             id: components["schemas"]["id"];
             title: string;
-            status: string;
+            status: components["schemas"]["status"];
+            ownerId: components["schemas"]["id"];
         };
         error: {
             code: number;
             message: string;
+        };
+        project: {
+            id: components["schemas"]["id"];
+            name: string;
+            createdBy: components["schemas"]["id"];
+            /** Format: date-time */
+            createdAt: string;
+        };
+        commentType: {
+            id: components["schemas"]["id"];
+            ruleId: components["schemas"]["id"];
+            name: string;
+            description: string;
+            color: string;
+        };
+        commentTypePath: {
+            id: components["schemas"]["id"];
+            ruleId: components["schemas"]["id"];
+            fromCommentTypeId: components["schemas"]["id"];
+            toCommentTypeId: components["schemas"]["id"];
+        };
+        rule: {
+            id: components["schemas"]["id"];
+            name: string;
+            description: string;
+            createdBy: components["schemas"]["id"];
+            /** Format: date-time */
+            createdAt: string;
+            commentTypes: components["schemas"]["commentType"][];
+            commentTypePaths: components["schemas"]["commentTypePath"][];
+        };
+        /** @enum {string} */
+        visibilityLevel: "everyone" | "authenticated" | "owner";
+        /** @enum {string} */
+        commentPermissionLevel: "everyone" | "authenticated" | "owner";
+        discussion: {
+            id: components["schemas"]["id"];
+            theme: string;
+            background: string;
+            conclusion: string;
+            ruleId: components["schemas"]["id"];
+            visibilityLevel: components["schemas"]["visibilityLevel"];
+            commentPermissionLevel: components["schemas"]["commentPermissionLevel"];
+            createdBy: components["schemas"]["id"];
+            /** Format: date-time */
+            createdAt: string;
+            /** @enum {string} */
+            status: "open" | "closed" | "archived";
         };
     };
     responses: never;

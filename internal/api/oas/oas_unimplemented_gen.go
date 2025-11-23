@@ -13,6 +13,42 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// DiscussionsDiscussionIdDelete implements DELETE /discussions/{discussionId} operation.
+//
+// Delete discussion.
+//
+// DELETE /discussions/{discussionId}
+func (UnimplementedHandler) DiscussionsDiscussionIdDelete(ctx context.Context, params DiscussionsDiscussionIdDeleteParams) error {
+	return ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdPut implements PUT /discussions/{discussionId} operation.
+//
+// Update discussion.
+//
+// PUT /discussions/{discussionId}
+func (UnimplementedHandler) DiscussionsDiscussionIdPut(ctx context.Context, req OptDiscussionsDiscussionIdPutReq, params DiscussionsDiscussionIdPutParams) (r *Discussion, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DiscussionsGet implements GET /discussions operation.
+//
+// Get discussions.
+//
+// GET /discussions
+func (UnimplementedHandler) DiscussionsGet(ctx context.Context, params DiscussionsGetParams) (r []Discussion, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DiscussionsPost implements POST /discussions operation.
+//
+// Create discussion.
+//
+// POST /discussions
+func (UnimplementedHandler) DiscussionsPost(ctx context.Context, req OptDiscussionsPostReq) (r *Discussion, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // ErrorsPost implements POST /errors operation.
 //
 // Post an error.
@@ -20,6 +56,78 @@ var _ Handler = UnimplementedHandler{}
 // POST /errors
 func (UnimplementedHandler) ErrorsPost(ctx context.Context, req *ErrorsPostReq) error {
 	return ht.ErrNotImplemented
+}
+
+// ProjectsGet implements GET /projects operation.
+//
+// Get projects.
+//
+// GET /projects
+func (UnimplementedHandler) ProjectsGet(ctx context.Context) (r []Project, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ProjectsPost implements POST /projects operation.
+//
+// Create project.
+//
+// POST /projects
+func (UnimplementedHandler) ProjectsPost(ctx context.Context, req OptProjectsPostReq) (r *Project, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ProjectsProjectIdDelete implements DELETE /projects/{projectId} operation.
+//
+// Delete project.
+//
+// DELETE /projects/{projectId}
+func (UnimplementedHandler) ProjectsProjectIdDelete(ctx context.Context, params ProjectsProjectIdDeleteParams) error {
+	return ht.ErrNotImplemented
+}
+
+// ProjectsProjectIdPut implements PUT /projects/{projectId} operation.
+//
+// Update project.
+//
+// PUT /projects/{projectId}
+func (UnimplementedHandler) ProjectsProjectIdPut(ctx context.Context, req OptProjectsProjectIdPutReq, params ProjectsProjectIdPutParams) (r *Project, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// RulesGet implements GET /rules operation.
+//
+// Get rules.
+//
+// GET /rules
+func (UnimplementedHandler) RulesGet(ctx context.Context) (r []Rule, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// RulesPost implements POST /rules operation.
+//
+// Create rule.
+//
+// POST /rules
+func (UnimplementedHandler) RulesPost(ctx context.Context, req OptRulesPostReq) (r *Rule, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// RulesRuleIdDelete implements DELETE /rules/{ruleId} operation.
+//
+// Delete rule.
+//
+// DELETE /rules/{ruleId}
+func (UnimplementedHandler) RulesRuleIdDelete(ctx context.Context, params RulesRuleIdDeleteParams) error {
+	return ht.ErrNotImplemented
+}
+
+// RulesRuleIdPut implements PUT /rules/{ruleId} operation.
+//
+// Update rule.
+//
+// PUT /rules/{ruleId}
+func (UnimplementedHandler) RulesRuleIdPut(ctx context.Context, req OptRulesRuleIdPutReq, params RulesRuleIdPutParams) (r *Rule, _ error) {
+	return r, ht.ErrNotImplemented
 }
 
 // WorkbooksGet implements GET /workbooks operation.

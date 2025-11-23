@@ -6,6 +6,18 @@ package oas
 type OperationName = string
 
 const (
-	ErrorsPostOperation   OperationName = "ErrorsPost"
-	WorkbooksGetOperation OperationName = "WorkbooksGet"
+	DiscussionsDiscussionIdDeleteOperation OperationName = "DiscussionsDiscussionIdDelete"
+	DiscussionsDiscussionIdPutOperation    OperationName = "DiscussionsDiscussionIdPut"
+	DiscussionsGetOperation                OperationName = "DiscussionsGet"
+	DiscussionsPostOperation               OperationName = "DiscussionsPost"
+	ErrorsPostOperation                    OperationName = "ErrorsPost"
+	ProjectsGetOperation                   OperationName = "ProjectsGet"
+	ProjectsPostOperation                  OperationName = "ProjectsPost"
+	ProjectsProjectIdDeleteOperation       OperationName = "ProjectsProjectIdDelete"
+	ProjectsProjectIdPutOperation          OperationName = "ProjectsProjectIdPut"
+	RulesGetOperation                      OperationName = "RulesGet"
+	RulesPostOperation                     OperationName = "RulesPost"
+	RulesRuleIdDeleteOperation             OperationName = "RulesRuleIdDelete"
+	RulesRuleIdPutOperation                OperationName = "RulesRuleIdPut"
+	WorkbooksGetOperation                  OperationName = "WorkbooksGet"
 )
