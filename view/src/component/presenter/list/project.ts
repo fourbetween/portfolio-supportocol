@@ -1,26 +1,37 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import type { Project } from "../../../model/project";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
 import { cardStyle } from "../../../style/card";
+import type { CreateProjectPopupPresenter } from "../popup/project/create";
 
 @customElement("project-list-presenter")
 export class ProjectListPresenter extends LitElement {
   @property({ type: Array })
   projects: Project[] = [];
 
+  @property({ attribute: false })
+  onCreate: () => Promise<void> = () => Promise.resolve();
+
+  @query("create-project-popup-presenter")
+  private createProjectPopup!: CreateProjectPopupPresenter;
+
+  private openCreateProjectPopup() {
+    this.createProjectPopup.open();
+  }
+
   render() {
     return html`
       <div class="sidebar-section">
         <div class="sidebar-heading">
           プロジェクト
-          <a
-            href="/view/sample/popup/project/create.html"
+          <button
             class="btn btn-primary btn-sm"
+            @click=${this.openCreateProjectPopup}
           >
             新規
-          </a>
+          </button>
         </div>
         <div class="card">
           <div class="card-body">
@@ -41,6 +52,7 @@ export class ProjectListPresenter extends LitElement {
           </div>
         </div>
       </div>
+      <create-project-popup-presenter></create-project-popup-presenter>
     `;
   }
 

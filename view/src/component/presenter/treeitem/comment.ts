@@ -33,7 +33,7 @@ export class CommentTreeitemPresenter extends LitElement {
           </div>
           <div>#${this.comment.id}</div>
         </div>
-        <div class="card-body">
+        <div class="card-body comment-body">
           <p>${this.comment.content}</p>
         </div>
         <div class="card-footer">

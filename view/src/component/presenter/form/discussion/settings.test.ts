@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
-import "./settings";
 import type { SettingsDiscussionFormPresenter } from "./settings";
 
 describe("SettingsDiscussionFormPresenter", () => {

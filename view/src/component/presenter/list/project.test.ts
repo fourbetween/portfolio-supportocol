@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import type { Project } from "../../../model/project";
-import "./project";
 import type { ProjectListPresenter } from "./project";
 
 describe("ProjectListPresenter", async () => {
@@ -41,5 +40,12 @@ describe("ProjectListPresenter", async () => {
     await expect
       .element(page.getByText("新規事業アイデア"))
       .toBeInTheDocument();
+  });
+
+  it("プロジェクト作成ポップアップが含まれていること", async () => {
+    const popup = elem.shadowRoot?.querySelector(
+      "create-project-popup-presenter"
+    );
+    expect(popup).not.toBeNull();
   });
 });

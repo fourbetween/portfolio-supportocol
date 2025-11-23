@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import type { Discussion } from "../../../model/discussion";
-import "./discussion";
 import type { DiscussionListPresenter } from "./discussion";
 
 const discussions: Discussion[] = [

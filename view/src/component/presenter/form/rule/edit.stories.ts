@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import type { Rule } from "../../../../model/rule";
-import "./edit";
 import type { EditRuleFormPresenter } from "./edit";
 
 const rule: Rule = {

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
-import type { Discussion } from "../../../model/discussion";
-import "./settings";
+import type { Discussion } from "../../../../model/discussion";
 import type { SettingsDiscussionFormPresenter } from "./settings";
 
 const discussion: Discussion = {
@@ -15,6 +14,7 @@ const discussion: Discussion = {
   commentPermissionLevel: "authenticated",
   createdBy: "user1",
   createdAt: "2023-10-01T00:00:00Z",
+  status: "open",
 };
 
 const meta = {
