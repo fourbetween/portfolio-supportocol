@@ -8,10 +8,13 @@ import type { BasePopupPresenter } from "../base";
 @customElement("create-project-popup-presenter")
 export class CreateProjectPopupPresenter extends LitElement {
   @property({ attribute: false })
-  onCreate: () => Promise<void> = () => Promise.resolve();
+  onCreate: (name: string) => Promise<void> = () => Promise.resolve();
 
   @query("base-popup-presenter")
   private basePopup!: BasePopupPresenter;
+
+  @query("#name")
+  private nameInput!: HTMLInputElement;
 
   open() {
     this.basePopup.open();
@@ -47,7 +50,8 @@ export class CreateProjectPopupPresenter extends LitElement {
 
   private async submit(e: Event) {
     e.preventDefault();
-    await this.onCreate();
+    await this.onCreate(this.nameInput.value);
+    this.nameInput.value = "";
     this.basePopup.close();
   }
 

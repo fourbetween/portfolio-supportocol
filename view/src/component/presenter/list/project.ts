@@ -12,7 +12,7 @@ export class ProjectListPresenter extends LitElement {
   projects: Project[] = [];
 
   @property({ attribute: false })
-  onCreate: () => Promise<void> = () => Promise.resolve();
+  onCreate: (name: string) => Promise<void> = () => Promise.resolve();
 
   @query("create-project-popup-presenter")
   private createProjectPopup!: CreateProjectPopupPresenter;

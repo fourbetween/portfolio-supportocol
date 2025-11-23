@@ -44,7 +44,7 @@ export class DashboardPageContainer extends LitElement {
             complete: (projects) => html`
               <project-list-presenter
                 .projects=${projects}
-                .onCreate=${() => this.createProject()}
+                .onCreate=${(name: string) => this.createProject(name)}
               ></project-list-presenter>
             `,
             error: (e) =>
@@ -70,8 +70,16 @@ export class DashboardPageContainer extends LitElement {
     `;
   }
 
-  private async createProject() {
-    console.log("ok");
+  private async createProject(name: string) {
+    const { error } = await client.POST("/projects", {
+      headers: await accountMethods.authHeader(),
+      body: { name },
+    });
+    if (error) {
+      console.error(error);
+      return;
+    }
+    this.projectsTask.run();
   }
 
   static styles = [
