@@ -3,6 +3,10 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { client } from "../../../api/client";
 import { accountMethods } from "../../../model/account";
+import type {
+  CommentPermissionLevel,
+  VisibilityLevel,
+} from "../../../model/discussion";
 import { baseStyle } from "../../../style/base";
 import type { CreateDiscussionData } from "../../presenter/popup/discussion/create";
 
@@ -78,14 +82,9 @@ export class DashboardPageContainer extends LitElement {
       headers: await accountMethods.authHeader(),
       body: {
         ...data,
-        visibilityLevel: data.visibilityLevel as
-          | "everyone"
-          | "authenticated"
-          | "owner",
-        commentPermissionLevel: data.commentPermissionLevel as
-          | "everyone"
-          | "authenticated"
-          | "owner",
+        visibilityLevel: data.visibilityLevel as VisibilityLevel,
+        commentPermissionLevel:
+          data.commentPermissionLevel as CommentPermissionLevel,
         conclusion: "",
       },
     });

@@ -17,7 +17,7 @@ export class RuleListPresenter extends LitElement {
       <div class="container">
         <div class="page-header">
           <h1 class="page-title">ルール一覧</h1>
-          <a href="#" class="btn btn-primary">新規ルール作成</a>
+          <a href="/rules/new" class="btn btn-primary">新規ルール作成</a>
         </div>
 
         <div class="form-group">

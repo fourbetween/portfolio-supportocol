@@ -64,6 +64,14 @@ export class AppRoot extends LitElement {
         ></rules-page-container>
       `,
     },
+    {
+      path: "/rules/new",
+      render: () => html`
+        <create-rules-page-container
+          .isLoggedIn=${this.isLoggedIn}
+        ></create-rules-page-container>
+      `,
+    },
   ]);
 
   render() {
