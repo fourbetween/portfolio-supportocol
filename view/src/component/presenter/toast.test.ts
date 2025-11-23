@@ -126,4 +126,17 @@ describe("ToastPresenter", async () => {
 
     vi.useRealTimers();
   });
+
+  it("空のメッセージは表示されないこと", async () => {
+    const consoleSpy = vi.spyOn(console, "warn");
+
+    elem.show("", "info");
+    await elem.updateComplete;
+
+    const toast = elem.shadowRoot?.querySelector(".toast");
+    expect(toast).toBeNull();
+    expect(consoleSpy).toHaveBeenCalledWith("Toast message cannot be empty");
+
+    consoleSpy.mockRestore();
+  });
 });

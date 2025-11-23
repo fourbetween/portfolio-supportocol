@@ -22,6 +22,11 @@ export class ToastPresenter extends LitElement {
   private timeouts = new Map<string, number>();
 
   show(message: string, type: ToastType = "info", duration?: number) {
+    if (!message || message.trim() === "") {
+      console.warn("Toast message cannot be empty");
+      return;
+    }
+
     const id = crypto.randomUUID();
     const toast: ToastMessage = {
       id,
