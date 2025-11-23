@@ -8,12 +8,84 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// DiscussionsDiscussionIdDelete implements DELETE /discussions/{discussionId} operation.
+	//
+	// Delete discussion.
+	//
+	// DELETE /discussions/{discussionId}
+	DiscussionsDiscussionIdDelete(ctx context.Context, params DiscussionsDiscussionIdDeleteParams) error
+	// DiscussionsDiscussionIdPut implements PUT /discussions/{discussionId} operation.
+	//
+	// Update discussion.
+	//
+	// PUT /discussions/{discussionId}
+	DiscussionsDiscussionIdPut(ctx context.Context, req OptDiscussionsDiscussionIdPutReq, params DiscussionsDiscussionIdPutParams) (*Discussion, error)
+	// DiscussionsGet implements GET /discussions operation.
+	//
+	// Get discussions.
+	//
+	// GET /discussions
+	DiscussionsGet(ctx context.Context, params DiscussionsGetParams) ([]Discussion, error)
+	// DiscussionsPost implements POST /discussions operation.
+	//
+	// Create discussion.
+	//
+	// POST /discussions
+	DiscussionsPost(ctx context.Context, req OptDiscussionsPostReq) (*Discussion, error)
 	// ErrorsPost implements POST /errors operation.
 	//
 	// Post an error.
 	//
 	// POST /errors
 	ErrorsPost(ctx context.Context, req *ErrorsPostReq) error
+	// ProjectsGet implements GET /projects operation.
+	//
+	// Get projects.
+	//
+	// GET /projects
+	ProjectsGet(ctx context.Context) ([]Project, error)
+	// ProjectsPost implements POST /projects operation.
+	//
+	// Create project.
+	//
+	// POST /projects
+	ProjectsPost(ctx context.Context, req OptProjectsPostReq) (*Project, error)
+	// ProjectsProjectIdDelete implements DELETE /projects/{projectId} operation.
+	//
+	// Delete project.
+	//
+	// DELETE /projects/{projectId}
+	ProjectsProjectIdDelete(ctx context.Context, params ProjectsProjectIdDeleteParams) error
+	// ProjectsProjectIdPut implements PUT /projects/{projectId} operation.
+	//
+	// Update project.
+	//
+	// PUT /projects/{projectId}
+	ProjectsProjectIdPut(ctx context.Context, req OptProjectsProjectIdPutReq, params ProjectsProjectIdPutParams) (*Project, error)
+	// RulesGet implements GET /rules operation.
+	//
+	// Get rules.
+	//
+	// GET /rules
+	RulesGet(ctx context.Context) ([]Rule, error)
+	// RulesPost implements POST /rules operation.
+	//
+	// Create rule.
+	//
+	// POST /rules
+	RulesPost(ctx context.Context, req OptRulesPostReq) (*Rule, error)
+	// RulesRuleIdDelete implements DELETE /rules/{ruleId} operation.
+	//
+	// Delete rule.
+	//
+	// DELETE /rules/{ruleId}
+	RulesRuleIdDelete(ctx context.Context, params RulesRuleIdDeleteParams) error
+	// RulesRuleIdPut implements PUT /rules/{ruleId} operation.
+	//
+	// Update rule.
+	//
+	// PUT /rules/{ruleId}
+	RulesRuleIdPut(ctx context.Context, req OptRulesRuleIdPutReq, params RulesRuleIdPutParams) (*Rule, error)
 	// WorkbooksGet implements GET /workbooks operation.
 	//
 	// Get workbooks.

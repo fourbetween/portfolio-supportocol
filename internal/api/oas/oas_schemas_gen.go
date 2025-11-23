@@ -4,6 +4,9 @@ package oas
 
 import (
 	"fmt"
+	"time"
+
+	"github.com/go-faster/errors"
 )
 
 func (s *ErrorStatusCode) Error() string {
@@ -33,6 +36,524 @@ func (s *CognitoAuth) SetToken(val string) {
 // SetRoles sets the value of Roles.
 func (s *CognitoAuth) SetRoles(val []string) {
 	s.Roles = val
+}
+
+// Ref: #/components/schemas/commentPermissionLevel
+type CommentPermissionLevel string
+
+const (
+	CommentPermissionLevelEveryone      CommentPermissionLevel = "everyone"
+	CommentPermissionLevelAuthenticated CommentPermissionLevel = "authenticated"
+	CommentPermissionLevelOwner         CommentPermissionLevel = "owner"
+)
+
+// AllValues returns all CommentPermissionLevel values.
+func (CommentPermissionLevel) AllValues() []CommentPermissionLevel {
+	return []CommentPermissionLevel{
+		CommentPermissionLevelEveryone,
+		CommentPermissionLevelAuthenticated,
+		CommentPermissionLevelOwner,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CommentPermissionLevel) MarshalText() ([]byte, error) {
+	switch s {
+	case CommentPermissionLevelEveryone:
+		return []byte(s), nil
+	case CommentPermissionLevelAuthenticated:
+		return []byte(s), nil
+	case CommentPermissionLevelOwner:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CommentPermissionLevel) UnmarshalText(data []byte) error {
+	switch CommentPermissionLevel(data) {
+	case CommentPermissionLevelEveryone:
+		*s = CommentPermissionLevelEveryone
+		return nil
+	case CommentPermissionLevelAuthenticated:
+		*s = CommentPermissionLevelAuthenticated
+		return nil
+	case CommentPermissionLevelOwner:
+		*s = CommentPermissionLevelOwner
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/commentType
+type CommentType struct {
+	ID          ID     `json:"id"`
+	RuleId      ID     `json:"ruleId"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Color       string `json:"color"`
+}
+
+// GetID returns the value of ID.
+func (s *CommentType) GetID() ID {
+	return s.ID
+}
+
+// GetRuleId returns the value of RuleId.
+func (s *CommentType) GetRuleId() ID {
+	return s.RuleId
+}
+
+// GetName returns the value of Name.
+func (s *CommentType) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *CommentType) GetDescription() string {
+	return s.Description
+}
+
+// GetColor returns the value of Color.
+func (s *CommentType) GetColor() string {
+	return s.Color
+}
+
+// SetID sets the value of ID.
+func (s *CommentType) SetID(val ID) {
+	s.ID = val
+}
+
+// SetRuleId sets the value of RuleId.
+func (s *CommentType) SetRuleId(val ID) {
+	s.RuleId = val
+}
+
+// SetName sets the value of Name.
+func (s *CommentType) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *CommentType) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetColor sets the value of Color.
+func (s *CommentType) SetColor(val string) {
+	s.Color = val
+}
+
+// Ref: #/components/schemas/commentTypePath
+type CommentTypePath struct {
+	ID                ID `json:"id"`
+	RuleId            ID `json:"ruleId"`
+	FromCommentTypeId ID `json:"fromCommentTypeId"`
+	ToCommentTypeId   ID `json:"toCommentTypeId"`
+}
+
+// GetID returns the value of ID.
+func (s *CommentTypePath) GetID() ID {
+	return s.ID
+}
+
+// GetRuleId returns the value of RuleId.
+func (s *CommentTypePath) GetRuleId() ID {
+	return s.RuleId
+}
+
+// GetFromCommentTypeId returns the value of FromCommentTypeId.
+func (s *CommentTypePath) GetFromCommentTypeId() ID {
+	return s.FromCommentTypeId
+}
+
+// GetToCommentTypeId returns the value of ToCommentTypeId.
+func (s *CommentTypePath) GetToCommentTypeId() ID {
+	return s.ToCommentTypeId
+}
+
+// SetID sets the value of ID.
+func (s *CommentTypePath) SetID(val ID) {
+	s.ID = val
+}
+
+// SetRuleId sets the value of RuleId.
+func (s *CommentTypePath) SetRuleId(val ID) {
+	s.RuleId = val
+}
+
+// SetFromCommentTypeId sets the value of FromCommentTypeId.
+func (s *CommentTypePath) SetFromCommentTypeId(val ID) {
+	s.FromCommentTypeId = val
+}
+
+// SetToCommentTypeId sets the value of ToCommentTypeId.
+func (s *CommentTypePath) SetToCommentTypeId(val ID) {
+	s.ToCommentTypeId = val
+}
+
+// Ref: #/components/schemas/discussion
+type Discussion struct {
+	ID                     ID                     `json:"id"`
+	Theme                  string                 `json:"theme"`
+	Background             string                 `json:"background"`
+	Conclusion             string                 `json:"conclusion"`
+	RuleId                 ID                     `json:"ruleId"`
+	VisibilityLevel        VisibilityLevel        `json:"visibilityLevel"`
+	CommentPermissionLevel CommentPermissionLevel `json:"commentPermissionLevel"`
+	CreatedBy              ID                     `json:"createdBy"`
+	CreatedAt              time.Time              `json:"createdAt"`
+	Status                 DiscussionStatus       `json:"status"`
+}
+
+// GetID returns the value of ID.
+func (s *Discussion) GetID() ID {
+	return s.ID
+}
+
+// GetTheme returns the value of Theme.
+func (s *Discussion) GetTheme() string {
+	return s.Theme
+}
+
+// GetBackground returns the value of Background.
+func (s *Discussion) GetBackground() string {
+	return s.Background
+}
+
+// GetConclusion returns the value of Conclusion.
+func (s *Discussion) GetConclusion() string {
+	return s.Conclusion
+}
+
+// GetRuleId returns the value of RuleId.
+func (s *Discussion) GetRuleId() ID {
+	return s.RuleId
+}
+
+// GetVisibilityLevel returns the value of VisibilityLevel.
+func (s *Discussion) GetVisibilityLevel() VisibilityLevel {
+	return s.VisibilityLevel
+}
+
+// GetCommentPermissionLevel returns the value of CommentPermissionLevel.
+func (s *Discussion) GetCommentPermissionLevel() CommentPermissionLevel {
+	return s.CommentPermissionLevel
+}
+
+// GetCreatedBy returns the value of CreatedBy.
+func (s *Discussion) GetCreatedBy() ID {
+	return s.CreatedBy
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Discussion) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetStatus returns the value of Status.
+func (s *Discussion) GetStatus() DiscussionStatus {
+	return s.Status
+}
+
+// SetID sets the value of ID.
+func (s *Discussion) SetID(val ID) {
+	s.ID = val
+}
+
+// SetTheme sets the value of Theme.
+func (s *Discussion) SetTheme(val string) {
+	s.Theme = val
+}
+
+// SetBackground sets the value of Background.
+func (s *Discussion) SetBackground(val string) {
+	s.Background = val
+}
+
+// SetConclusion sets the value of Conclusion.
+func (s *Discussion) SetConclusion(val string) {
+	s.Conclusion = val
+}
+
+// SetRuleId sets the value of RuleId.
+func (s *Discussion) SetRuleId(val ID) {
+	s.RuleId = val
+}
+
+// SetVisibilityLevel sets the value of VisibilityLevel.
+func (s *Discussion) SetVisibilityLevel(val VisibilityLevel) {
+	s.VisibilityLevel = val
+}
+
+// SetCommentPermissionLevel sets the value of CommentPermissionLevel.
+func (s *Discussion) SetCommentPermissionLevel(val CommentPermissionLevel) {
+	s.CommentPermissionLevel = val
+}
+
+// SetCreatedBy sets the value of CreatedBy.
+func (s *Discussion) SetCreatedBy(val ID) {
+	s.CreatedBy = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Discussion) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetStatus sets the value of Status.
+func (s *Discussion) SetStatus(val DiscussionStatus) {
+	s.Status = val
+}
+
+type DiscussionStatus string
+
+const (
+	DiscussionStatusOpen     DiscussionStatus = "open"
+	DiscussionStatusClosed   DiscussionStatus = "closed"
+	DiscussionStatusArchived DiscussionStatus = "archived"
+)
+
+// AllValues returns all DiscussionStatus values.
+func (DiscussionStatus) AllValues() []DiscussionStatus {
+	return []DiscussionStatus{
+		DiscussionStatusOpen,
+		DiscussionStatusClosed,
+		DiscussionStatusArchived,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s DiscussionStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case DiscussionStatusOpen:
+		return []byte(s), nil
+	case DiscussionStatusClosed:
+		return []byte(s), nil
+	case DiscussionStatusArchived:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *DiscussionStatus) UnmarshalText(data []byte) error {
+	switch DiscussionStatus(data) {
+	case DiscussionStatusOpen:
+		*s = DiscussionStatusOpen
+		return nil
+	case DiscussionStatusClosed:
+		*s = DiscussionStatusClosed
+		return nil
+	case DiscussionStatusArchived:
+		*s = DiscussionStatusArchived
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// DiscussionsDiscussionIdDeleteNoContent is response for DiscussionsDiscussionIdDelete operation.
+type DiscussionsDiscussionIdDeleteNoContent struct{}
+
+type DiscussionsDiscussionIdPutReq struct {
+	Theme                  string                              `json:"theme"`
+	Background             string                              `json:"background"`
+	Conclusion             string                              `json:"conclusion"`
+	RuleId                 ID                                  `json:"ruleId"`
+	VisibilityLevel        VisibilityLevel                     `json:"visibilityLevel"`
+	CommentPermissionLevel CommentPermissionLevel              `json:"commentPermissionLevel"`
+	Status                 DiscussionsDiscussionIdPutReqStatus `json:"status"`
+}
+
+// GetTheme returns the value of Theme.
+func (s *DiscussionsDiscussionIdPutReq) GetTheme() string {
+	return s.Theme
+}
+
+// GetBackground returns the value of Background.
+func (s *DiscussionsDiscussionIdPutReq) GetBackground() string {
+	return s.Background
+}
+
+// GetConclusion returns the value of Conclusion.
+func (s *DiscussionsDiscussionIdPutReq) GetConclusion() string {
+	return s.Conclusion
+}
+
+// GetRuleId returns the value of RuleId.
+func (s *DiscussionsDiscussionIdPutReq) GetRuleId() ID {
+	return s.RuleId
+}
+
+// GetVisibilityLevel returns the value of VisibilityLevel.
+func (s *DiscussionsDiscussionIdPutReq) GetVisibilityLevel() VisibilityLevel {
+	return s.VisibilityLevel
+}
+
+// GetCommentPermissionLevel returns the value of CommentPermissionLevel.
+func (s *DiscussionsDiscussionIdPutReq) GetCommentPermissionLevel() CommentPermissionLevel {
+	return s.CommentPermissionLevel
+}
+
+// GetStatus returns the value of Status.
+func (s *DiscussionsDiscussionIdPutReq) GetStatus() DiscussionsDiscussionIdPutReqStatus {
+	return s.Status
+}
+
+// SetTheme sets the value of Theme.
+func (s *DiscussionsDiscussionIdPutReq) SetTheme(val string) {
+	s.Theme = val
+}
+
+// SetBackground sets the value of Background.
+func (s *DiscussionsDiscussionIdPutReq) SetBackground(val string) {
+	s.Background = val
+}
+
+// SetConclusion sets the value of Conclusion.
+func (s *DiscussionsDiscussionIdPutReq) SetConclusion(val string) {
+	s.Conclusion = val
+}
+
+// SetRuleId sets the value of RuleId.
+func (s *DiscussionsDiscussionIdPutReq) SetRuleId(val ID) {
+	s.RuleId = val
+}
+
+// SetVisibilityLevel sets the value of VisibilityLevel.
+func (s *DiscussionsDiscussionIdPutReq) SetVisibilityLevel(val VisibilityLevel) {
+	s.VisibilityLevel = val
+}
+
+// SetCommentPermissionLevel sets the value of CommentPermissionLevel.
+func (s *DiscussionsDiscussionIdPutReq) SetCommentPermissionLevel(val CommentPermissionLevel) {
+	s.CommentPermissionLevel = val
+}
+
+// SetStatus sets the value of Status.
+func (s *DiscussionsDiscussionIdPutReq) SetStatus(val DiscussionsDiscussionIdPutReqStatus) {
+	s.Status = val
+}
+
+type DiscussionsDiscussionIdPutReqStatus string
+
+const (
+	DiscussionsDiscussionIdPutReqStatusOpen     DiscussionsDiscussionIdPutReqStatus = "open"
+	DiscussionsDiscussionIdPutReqStatusClosed   DiscussionsDiscussionIdPutReqStatus = "closed"
+	DiscussionsDiscussionIdPutReqStatusArchived DiscussionsDiscussionIdPutReqStatus = "archived"
+)
+
+// AllValues returns all DiscussionsDiscussionIdPutReqStatus values.
+func (DiscussionsDiscussionIdPutReqStatus) AllValues() []DiscussionsDiscussionIdPutReqStatus {
+	return []DiscussionsDiscussionIdPutReqStatus{
+		DiscussionsDiscussionIdPutReqStatusOpen,
+		DiscussionsDiscussionIdPutReqStatusClosed,
+		DiscussionsDiscussionIdPutReqStatusArchived,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s DiscussionsDiscussionIdPutReqStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case DiscussionsDiscussionIdPutReqStatusOpen:
+		return []byte(s), nil
+	case DiscussionsDiscussionIdPutReqStatusClosed:
+		return []byte(s), nil
+	case DiscussionsDiscussionIdPutReqStatusArchived:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *DiscussionsDiscussionIdPutReqStatus) UnmarshalText(data []byte) error {
+	switch DiscussionsDiscussionIdPutReqStatus(data) {
+	case DiscussionsDiscussionIdPutReqStatusOpen:
+		*s = DiscussionsDiscussionIdPutReqStatusOpen
+		return nil
+	case DiscussionsDiscussionIdPutReqStatusClosed:
+		*s = DiscussionsDiscussionIdPutReqStatusClosed
+		return nil
+	case DiscussionsDiscussionIdPutReqStatusArchived:
+		*s = DiscussionsDiscussionIdPutReqStatusArchived
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type DiscussionsPostReq struct {
+	Theme                  string                 `json:"theme"`
+	Background             string                 `json:"background"`
+	Conclusion             string                 `json:"conclusion"`
+	RuleId                 ID                     `json:"ruleId"`
+	VisibilityLevel        VisibilityLevel        `json:"visibilityLevel"`
+	CommentPermissionLevel CommentPermissionLevel `json:"commentPermissionLevel"`
+}
+
+// GetTheme returns the value of Theme.
+func (s *DiscussionsPostReq) GetTheme() string {
+	return s.Theme
+}
+
+// GetBackground returns the value of Background.
+func (s *DiscussionsPostReq) GetBackground() string {
+	return s.Background
+}
+
+// GetConclusion returns the value of Conclusion.
+func (s *DiscussionsPostReq) GetConclusion() string {
+	return s.Conclusion
+}
+
+// GetRuleId returns the value of RuleId.
+func (s *DiscussionsPostReq) GetRuleId() ID {
+	return s.RuleId
+}
+
+// GetVisibilityLevel returns the value of VisibilityLevel.
+func (s *DiscussionsPostReq) GetVisibilityLevel() VisibilityLevel {
+	return s.VisibilityLevel
+}
+
+// GetCommentPermissionLevel returns the value of CommentPermissionLevel.
+func (s *DiscussionsPostReq) GetCommentPermissionLevel() CommentPermissionLevel {
+	return s.CommentPermissionLevel
+}
+
+// SetTheme sets the value of Theme.
+func (s *DiscussionsPostReq) SetTheme(val string) {
+	s.Theme = val
+}
+
+// SetBackground sets the value of Background.
+func (s *DiscussionsPostReq) SetBackground(val string) {
+	s.Background = val
+}
+
+// SetConclusion sets the value of Conclusion.
+func (s *DiscussionsPostReq) SetConclusion(val string) {
+	s.Conclusion = val
+}
+
+// SetRuleId sets the value of RuleId.
+func (s *DiscussionsPostReq) SetRuleId(val ID) {
+	s.RuleId = val
+}
+
+// SetVisibilityLevel sets the value of VisibilityLevel.
+func (s *DiscussionsPostReq) SetVisibilityLevel(val VisibilityLevel) {
+	s.VisibilityLevel = val
+}
+
+// SetCommentPermissionLevel sets the value of CommentPermissionLevel.
+func (s *DiscussionsPostReq) SetCommentPermissionLevel(val CommentPermissionLevel) {
+	s.CommentPermissionLevel = val
 }
 
 // Ref: #/components/schemas/error
@@ -106,11 +627,804 @@ func (s *ErrorsPostReq) SetMessage(val string) {
 
 type ID string
 
+// NewOptDiscussionsDiscussionIdPutReq returns new OptDiscussionsDiscussionIdPutReq with value set to v.
+func NewOptDiscussionsDiscussionIdPutReq(v DiscussionsDiscussionIdPutReq) OptDiscussionsDiscussionIdPutReq {
+	return OptDiscussionsDiscussionIdPutReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionsDiscussionIdPutReq is optional DiscussionsDiscussionIdPutReq.
+type OptDiscussionsDiscussionIdPutReq struct {
+	Value DiscussionsDiscussionIdPutReq
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionsDiscussionIdPutReq was set.
+func (o OptDiscussionsDiscussionIdPutReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionsDiscussionIdPutReq) Reset() {
+	var v DiscussionsDiscussionIdPutReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionsDiscussionIdPutReq) SetTo(v DiscussionsDiscussionIdPutReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionsDiscussionIdPutReq) Get() (v DiscussionsDiscussionIdPutReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionsDiscussionIdPutReq) Or(d DiscussionsDiscussionIdPutReq) DiscussionsDiscussionIdPutReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDiscussionsPostReq returns new OptDiscussionsPostReq with value set to v.
+func NewOptDiscussionsPostReq(v DiscussionsPostReq) OptDiscussionsPostReq {
+	return OptDiscussionsPostReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionsPostReq is optional DiscussionsPostReq.
+type OptDiscussionsPostReq struct {
+	Value DiscussionsPostReq
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionsPostReq was set.
+func (o OptDiscussionsPostReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionsPostReq) Reset() {
+	var v DiscussionsPostReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionsPostReq) SetTo(v DiscussionsPostReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionsPostReq) Get() (v DiscussionsPostReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionsPostReq) Or(d DiscussionsPostReq) DiscussionsPostReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptID returns new OptID with value set to v.
+func NewOptID(v ID) OptID {
+	return OptID{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptID is optional ID.
+type OptID struct {
+	Value ID
+	Set   bool
+}
+
+// IsSet returns true if OptID was set.
+func (o OptID) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptID) Reset() {
+	var v ID
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptID) SetTo(v ID) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptID) Get() (v ID, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptID) Or(d ID) ID {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptProjectsPostReq returns new OptProjectsPostReq with value set to v.
+func NewOptProjectsPostReq(v ProjectsPostReq) OptProjectsPostReq {
+	return OptProjectsPostReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptProjectsPostReq is optional ProjectsPostReq.
+type OptProjectsPostReq struct {
+	Value ProjectsPostReq
+	Set   bool
+}
+
+// IsSet returns true if OptProjectsPostReq was set.
+func (o OptProjectsPostReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptProjectsPostReq) Reset() {
+	var v ProjectsPostReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptProjectsPostReq) SetTo(v ProjectsPostReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptProjectsPostReq) Get() (v ProjectsPostReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptProjectsPostReq) Or(d ProjectsPostReq) ProjectsPostReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptProjectsProjectIdPutReq returns new OptProjectsProjectIdPutReq with value set to v.
+func NewOptProjectsProjectIdPutReq(v ProjectsProjectIdPutReq) OptProjectsProjectIdPutReq {
+	return OptProjectsProjectIdPutReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptProjectsProjectIdPutReq is optional ProjectsProjectIdPutReq.
+type OptProjectsProjectIdPutReq struct {
+	Value ProjectsProjectIdPutReq
+	Set   bool
+}
+
+// IsSet returns true if OptProjectsProjectIdPutReq was set.
+func (o OptProjectsProjectIdPutReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptProjectsProjectIdPutReq) Reset() {
+	var v ProjectsProjectIdPutReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptProjectsProjectIdPutReq) SetTo(v ProjectsProjectIdPutReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptProjectsProjectIdPutReq) Get() (v ProjectsProjectIdPutReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptProjectsProjectIdPutReq) Or(d ProjectsProjectIdPutReq) ProjectsProjectIdPutReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptRulesPostReq returns new OptRulesPostReq with value set to v.
+func NewOptRulesPostReq(v RulesPostReq) OptRulesPostReq {
+	return OptRulesPostReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptRulesPostReq is optional RulesPostReq.
+type OptRulesPostReq struct {
+	Value RulesPostReq
+	Set   bool
+}
+
+// IsSet returns true if OptRulesPostReq was set.
+func (o OptRulesPostReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptRulesPostReq) Reset() {
+	var v RulesPostReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptRulesPostReq) SetTo(v RulesPostReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptRulesPostReq) Get() (v RulesPostReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptRulesPostReq) Or(d RulesPostReq) RulesPostReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptRulesRuleIdPutReq returns new OptRulesRuleIdPutReq with value set to v.
+func NewOptRulesRuleIdPutReq(v RulesRuleIdPutReq) OptRulesRuleIdPutReq {
+	return OptRulesRuleIdPutReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptRulesRuleIdPutReq is optional RulesRuleIdPutReq.
+type OptRulesRuleIdPutReq struct {
+	Value RulesRuleIdPutReq
+	Set   bool
+}
+
+// IsSet returns true if OptRulesRuleIdPutReq was set.
+func (o OptRulesRuleIdPutReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptRulesRuleIdPutReq) Reset() {
+	var v RulesRuleIdPutReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptRulesRuleIdPutReq) SetTo(v RulesRuleIdPutReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptRulesRuleIdPutReq) Get() (v RulesRuleIdPutReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptRulesRuleIdPutReq) Or(d RulesRuleIdPutReq) RulesRuleIdPutReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// Ref: #/components/schemas/project
+type Project struct {
+	ID        ID        `json:"id"`
+	Name      string    `json:"name"`
+	CreatedBy ID        `json:"createdBy"`
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+// GetID returns the value of ID.
+func (s *Project) GetID() ID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *Project) GetName() string {
+	return s.Name
+}
+
+// GetCreatedBy returns the value of CreatedBy.
+func (s *Project) GetCreatedBy() ID {
+	return s.CreatedBy
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Project) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Project) SetID(val ID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *Project) SetName(val string) {
+	s.Name = val
+}
+
+// SetCreatedBy sets the value of CreatedBy.
+func (s *Project) SetCreatedBy(val ID) {
+	s.CreatedBy = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Project) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+type ProjectsPostReq struct {
+	Name string `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *ProjectsPostReq) GetName() string {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *ProjectsPostReq) SetName(val string) {
+	s.Name = val
+}
+
+// ProjectsProjectIdDeleteNoContent is response for ProjectsProjectIdDelete operation.
+type ProjectsProjectIdDeleteNoContent struct{}
+
+type ProjectsProjectIdPutReq struct {
+	Name string `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *ProjectsProjectIdPutReq) GetName() string {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *ProjectsProjectIdPutReq) SetName(val string) {
+	s.Name = val
+}
+
+// Ref: #/components/schemas/rule
+type Rule struct {
+	ID               ID                `json:"id"`
+	Name             string            `json:"name"`
+	Description      string            `json:"description"`
+	CreatedBy        ID                `json:"createdBy"`
+	CreatedAt        time.Time         `json:"createdAt"`
+	CommentTypes     []CommentType     `json:"commentTypes"`
+	CommentTypePaths []CommentTypePath `json:"commentTypePaths"`
+}
+
+// GetID returns the value of ID.
+func (s *Rule) GetID() ID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *Rule) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *Rule) GetDescription() string {
+	return s.Description
+}
+
+// GetCreatedBy returns the value of CreatedBy.
+func (s *Rule) GetCreatedBy() ID {
+	return s.CreatedBy
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Rule) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetCommentTypes returns the value of CommentTypes.
+func (s *Rule) GetCommentTypes() []CommentType {
+	return s.CommentTypes
+}
+
+// GetCommentTypePaths returns the value of CommentTypePaths.
+func (s *Rule) GetCommentTypePaths() []CommentTypePath {
+	return s.CommentTypePaths
+}
+
+// SetID sets the value of ID.
+func (s *Rule) SetID(val ID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *Rule) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Rule) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetCreatedBy sets the value of CreatedBy.
+func (s *Rule) SetCreatedBy(val ID) {
+	s.CreatedBy = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Rule) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetCommentTypes sets the value of CommentTypes.
+func (s *Rule) SetCommentTypes(val []CommentType) {
+	s.CommentTypes = val
+}
+
+// SetCommentTypePaths sets the value of CommentTypePaths.
+func (s *Rule) SetCommentTypePaths(val []CommentTypePath) {
+	s.CommentTypePaths = val
+}
+
+type RulesPostReq struct {
+	Name             string                             `json:"name"`
+	Description      string                             `json:"description"`
+	CommentTypes     []RulesPostReqCommentTypesItem     `json:"commentTypes"`
+	CommentTypePaths []RulesPostReqCommentTypePathsItem `json:"commentTypePaths"`
+}
+
+// GetName returns the value of Name.
+func (s *RulesPostReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *RulesPostReq) GetDescription() string {
+	return s.Description
+}
+
+// GetCommentTypes returns the value of CommentTypes.
+func (s *RulesPostReq) GetCommentTypes() []RulesPostReqCommentTypesItem {
+	return s.CommentTypes
+}
+
+// GetCommentTypePaths returns the value of CommentTypePaths.
+func (s *RulesPostReq) GetCommentTypePaths() []RulesPostReqCommentTypePathsItem {
+	return s.CommentTypePaths
+}
+
+// SetName sets the value of Name.
+func (s *RulesPostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *RulesPostReq) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetCommentTypes sets the value of CommentTypes.
+func (s *RulesPostReq) SetCommentTypes(val []RulesPostReqCommentTypesItem) {
+	s.CommentTypes = val
+}
+
+// SetCommentTypePaths sets the value of CommentTypePaths.
+func (s *RulesPostReq) SetCommentTypePaths(val []RulesPostReqCommentTypePathsItem) {
+	s.CommentTypePaths = val
+}
+
+type RulesPostReqCommentTypePathsItem struct {
+	FromCommentTypeId ID `json:"fromCommentTypeId"`
+	ToCommentTypeId   ID `json:"toCommentTypeId"`
+}
+
+// GetFromCommentTypeId returns the value of FromCommentTypeId.
+func (s *RulesPostReqCommentTypePathsItem) GetFromCommentTypeId() ID {
+	return s.FromCommentTypeId
+}
+
+// GetToCommentTypeId returns the value of ToCommentTypeId.
+func (s *RulesPostReqCommentTypePathsItem) GetToCommentTypeId() ID {
+	return s.ToCommentTypeId
+}
+
+// SetFromCommentTypeId sets the value of FromCommentTypeId.
+func (s *RulesPostReqCommentTypePathsItem) SetFromCommentTypeId(val ID) {
+	s.FromCommentTypeId = val
+}
+
+// SetToCommentTypeId sets the value of ToCommentTypeId.
+func (s *RulesPostReqCommentTypePathsItem) SetToCommentTypeId(val ID) {
+	s.ToCommentTypeId = val
+}
+
+type RulesPostReqCommentTypesItem struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Color       string `json:"color"`
+}
+
+// GetName returns the value of Name.
+func (s *RulesPostReqCommentTypesItem) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *RulesPostReqCommentTypesItem) GetDescription() string {
+	return s.Description
+}
+
+// GetColor returns the value of Color.
+func (s *RulesPostReqCommentTypesItem) GetColor() string {
+	return s.Color
+}
+
+// SetName sets the value of Name.
+func (s *RulesPostReqCommentTypesItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *RulesPostReqCommentTypesItem) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetColor sets the value of Color.
+func (s *RulesPostReqCommentTypesItem) SetColor(val string) {
+	s.Color = val
+}
+
+// RulesRuleIdDeleteNoContent is response for RulesRuleIdDelete operation.
+type RulesRuleIdDeleteNoContent struct{}
+
+type RulesRuleIdPutReq struct {
+	Name             string                                  `json:"name"`
+	Description      string                                  `json:"description"`
+	CommentTypes     []RulesRuleIdPutReqCommentTypesItem     `json:"commentTypes"`
+	CommentTypePaths []RulesRuleIdPutReqCommentTypePathsItem `json:"commentTypePaths"`
+}
+
+// GetName returns the value of Name.
+func (s *RulesRuleIdPutReq) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *RulesRuleIdPutReq) GetDescription() string {
+	return s.Description
+}
+
+// GetCommentTypes returns the value of CommentTypes.
+func (s *RulesRuleIdPutReq) GetCommentTypes() []RulesRuleIdPutReqCommentTypesItem {
+	return s.CommentTypes
+}
+
+// GetCommentTypePaths returns the value of CommentTypePaths.
+func (s *RulesRuleIdPutReq) GetCommentTypePaths() []RulesRuleIdPutReqCommentTypePathsItem {
+	return s.CommentTypePaths
+}
+
+// SetName sets the value of Name.
+func (s *RulesRuleIdPutReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *RulesRuleIdPutReq) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetCommentTypes sets the value of CommentTypes.
+func (s *RulesRuleIdPutReq) SetCommentTypes(val []RulesRuleIdPutReqCommentTypesItem) {
+	s.CommentTypes = val
+}
+
+// SetCommentTypePaths sets the value of CommentTypePaths.
+func (s *RulesRuleIdPutReq) SetCommentTypePaths(val []RulesRuleIdPutReqCommentTypePathsItem) {
+	s.CommentTypePaths = val
+}
+
+type RulesRuleIdPutReqCommentTypePathsItem struct {
+	FromCommentTypeId ID `json:"fromCommentTypeId"`
+	ToCommentTypeId   ID `json:"toCommentTypeId"`
+}
+
+// GetFromCommentTypeId returns the value of FromCommentTypeId.
+func (s *RulesRuleIdPutReqCommentTypePathsItem) GetFromCommentTypeId() ID {
+	return s.FromCommentTypeId
+}
+
+// GetToCommentTypeId returns the value of ToCommentTypeId.
+func (s *RulesRuleIdPutReqCommentTypePathsItem) GetToCommentTypeId() ID {
+	return s.ToCommentTypeId
+}
+
+// SetFromCommentTypeId sets the value of FromCommentTypeId.
+func (s *RulesRuleIdPutReqCommentTypePathsItem) SetFromCommentTypeId(val ID) {
+	s.FromCommentTypeId = val
+}
+
+// SetToCommentTypeId sets the value of ToCommentTypeId.
+func (s *RulesRuleIdPutReqCommentTypePathsItem) SetToCommentTypeId(val ID) {
+	s.ToCommentTypeId = val
+}
+
+type RulesRuleIdPutReqCommentTypesItem struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Color       string `json:"color"`
+}
+
+// GetName returns the value of Name.
+func (s *RulesRuleIdPutReqCommentTypesItem) GetName() string {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *RulesRuleIdPutReqCommentTypesItem) GetDescription() string {
+	return s.Description
+}
+
+// GetColor returns the value of Color.
+func (s *RulesRuleIdPutReqCommentTypesItem) GetColor() string {
+	return s.Color
+}
+
+// SetName sets the value of Name.
+func (s *RulesRuleIdPutReqCommentTypesItem) SetName(val string) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *RulesRuleIdPutReqCommentTypesItem) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetColor sets the value of Color.
+func (s *RulesRuleIdPutReqCommentTypesItem) SetColor(val string) {
+	s.Color = val
+}
+
+// Ref: #/components/schemas/status
+type Status string
+
+const (
+	StatusDraft     Status = "draft"
+	StatusPublished Status = "published"
+)
+
+// AllValues returns all Status values.
+func (Status) AllValues() []Status {
+	return []Status{
+		StatusDraft,
+		StatusPublished,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s Status) MarshalText() ([]byte, error) {
+	switch s {
+	case StatusDraft:
+		return []byte(s), nil
+	case StatusPublished:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *Status) UnmarshalText(data []byte) error {
+	switch Status(data) {
+	case StatusDraft:
+		*s = StatusDraft
+		return nil
+	case StatusPublished:
+		*s = StatusPublished
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/visibilityLevel
+type VisibilityLevel string
+
+const (
+	VisibilityLevelEveryone      VisibilityLevel = "everyone"
+	VisibilityLevelAuthenticated VisibilityLevel = "authenticated"
+	VisibilityLevelOwner         VisibilityLevel = "owner"
+)
+
+// AllValues returns all VisibilityLevel values.
+func (VisibilityLevel) AllValues() []VisibilityLevel {
+	return []VisibilityLevel{
+		VisibilityLevelEveryone,
+		VisibilityLevelAuthenticated,
+		VisibilityLevelOwner,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s VisibilityLevel) MarshalText() ([]byte, error) {
+	switch s {
+	case VisibilityLevelEveryone:
+		return []byte(s), nil
+	case VisibilityLevelAuthenticated:
+		return []byte(s), nil
+	case VisibilityLevelOwner:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *VisibilityLevel) UnmarshalText(data []byte) error {
+	switch VisibilityLevel(data) {
+	case VisibilityLevelEveryone:
+		*s = VisibilityLevelEveryone
+		return nil
+	case VisibilityLevelAuthenticated:
+		*s = VisibilityLevelAuthenticated
+		return nil
+	case VisibilityLevelOwner:
+		*s = VisibilityLevelOwner
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/workbook
 type Workbook struct {
-	ID     ID     `json:"id"`
-	Title  string `json:"title"`
-	Status string `json:"status"`
+	ID      ID     `json:"id"`
+	Title   string `json:"title"`
+	Status  Status `json:"status"`
+	OwnerId ID     `json:"ownerId"`
 }
 
 // GetID returns the value of ID.
@@ -124,8 +1438,13 @@ func (s *Workbook) GetTitle() string {
 }
 
 // GetStatus returns the value of Status.
-func (s *Workbook) GetStatus() string {
+func (s *Workbook) GetStatus() Status {
 	return s.Status
+}
+
+// GetOwnerId returns the value of OwnerId.
+func (s *Workbook) GetOwnerId() ID {
+	return s.OwnerId
 }
 
 // SetID sets the value of ID.
@@ -139,6 +1458,11 @@ func (s *Workbook) SetTitle(val string) {
 }
 
 // SetStatus sets the value of Status.
-func (s *Workbook) SetStatus(val string) {
+func (s *Workbook) SetStatus(val Status) {
 	s.Status = val
+}
+
+// SetOwnerId sets the value of OwnerId.
+func (s *Workbook) SetOwnerId(val ID) {
+	s.OwnerId = val
 }

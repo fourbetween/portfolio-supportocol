@@ -40,6 +40,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s.notFound(w, r)
 		return
 	}
+	args := [1]string{}
 
 	// Static code generated router with unwrapped path search.
 	switch {
@@ -60,6 +61,64 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'd': // Prefix: "discussions"
+
+				if l := len("discussions"); len(elem) >= l && elem[0:l] == "discussions" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "GET":
+						s.handleDiscussionsGetRequest([0]string{}, elemIsEscaped, w, r)
+					case "POST":
+						s.handleDiscussionsPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "discussionId"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleDiscussionsDiscussionIdDeleteRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						case "PUT":
+							s.handleDiscussionsDiscussionIdPutRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,PUT")
+						}
+
+						return
+					}
+
+				}
+
 			case 'e': // Prefix: "errors"
 
 				if l := len("errors"); len(elem) >= l && elem[0:l] == "errors" {
@@ -78,6 +137,122 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					return
+				}
+
+			case 'p': // Prefix: "projects"
+
+				if l := len("projects"); len(elem) >= l && elem[0:l] == "projects" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "GET":
+						s.handleProjectsGetRequest([0]string{}, elemIsEscaped, w, r)
+					case "POST":
+						s.handleProjectsPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "projectId"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleProjectsProjectIdDeleteRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						case "PUT":
+							s.handleProjectsProjectIdPutRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,PUT")
+						}
+
+						return
+					}
+
+				}
+
+			case 'r': // Prefix: "rules"
+
+				if l := len("rules"); len(elem) >= l && elem[0:l] == "rules" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "GET":
+						s.handleRulesGetRequest([0]string{}, elemIsEscaped, w, r)
+					case "POST":
+						s.handleRulesPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "ruleId"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleRulesRuleIdDeleteRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						case "PUT":
+							s.handleRulesRuleIdPutRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,PUT")
+						}
+
+						return
+					}
+
 				}
 
 			case 'w': // Prefix: "workbooks"
@@ -114,7 +289,7 @@ type Route struct {
 	operationID string
 	pathPattern string
 	count       int
-	args        [0]string
+	args        [1]string
 }
 
 // Name returns ogen operation name.
@@ -194,6 +369,80 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'd': // Prefix: "discussions"
+
+				if l := len("discussions"); len(elem) >= l && elem[0:l] == "discussions" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						r.name = DiscussionsGetOperation
+						r.summary = ""
+						r.operationID = ""
+						r.pathPattern = "/discussions"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = DiscussionsPostOperation
+						r.summary = ""
+						r.operationID = ""
+						r.pathPattern = "/discussions"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "discussionId"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "DELETE":
+							r.name = DiscussionsDiscussionIdDeleteOperation
+							r.summary = ""
+							r.operationID = ""
+							r.pathPattern = "/discussions/{discussionId}"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PUT":
+							r.name = DiscussionsDiscussionIdPutOperation
+							r.summary = ""
+							r.operationID = ""
+							r.pathPattern = "/discussions/{discussionId}"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
+
+				}
+
 			case 'e': // Prefix: "errors"
 
 				if l := len("errors"); len(elem) >= l && elem[0:l] == "errors" {
@@ -216,6 +465,154 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					default:
 						return
 					}
+				}
+
+			case 'p': // Prefix: "projects"
+
+				if l := len("projects"); len(elem) >= l && elem[0:l] == "projects" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						r.name = ProjectsGetOperation
+						r.summary = ""
+						r.operationID = ""
+						r.pathPattern = "/projects"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = ProjectsPostOperation
+						r.summary = ""
+						r.operationID = ""
+						r.pathPattern = "/projects"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "projectId"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "DELETE":
+							r.name = ProjectsProjectIdDeleteOperation
+							r.summary = ""
+							r.operationID = ""
+							r.pathPattern = "/projects/{projectId}"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PUT":
+							r.name = ProjectsProjectIdPutOperation
+							r.summary = ""
+							r.operationID = ""
+							r.pathPattern = "/projects/{projectId}"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
+
+				}
+
+			case 'r': // Prefix: "rules"
+
+				if l := len("rules"); len(elem) >= l && elem[0:l] == "rules" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "GET":
+						r.name = RulesGetOperation
+						r.summary = ""
+						r.operationID = ""
+						r.pathPattern = "/rules"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = RulesPostOperation
+						r.summary = ""
+						r.operationID = ""
+						r.pathPattern = "/rules"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					// Param: "ruleId"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
+						break
+					}
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "DELETE":
+							r.name = RulesRuleIdDeleteOperation
+							r.summary = ""
+							r.operationID = ""
+							r.pathPattern = "/rules/{ruleId}"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PUT":
+							r.name = RulesRuleIdPutOperation
+							r.summary = ""
+							r.operationID = ""
+							r.pathPattern = "/rules/{ruleId}"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
+
 				}
 
 			case 'w': // Prefix: "workbooks"

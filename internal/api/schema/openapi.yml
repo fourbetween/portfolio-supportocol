@@ -12,6 +12,11 @@ components:
       type: string
       minLength: 26
       maxLength: 26
+    status:
+      type: string
+      enum:
+        - draft
+        - published
     workbook:
       type: object
       properties:
@@ -20,11 +25,14 @@ components:
         title:
           type: string
         status:
-          type: string
+          $ref: "#/components/schemas/status"
+        ownerId:
+          $ref: "#/components/schemas/id"
       required:
         - id
         - title
         - status
+        - ownerId
     error:
       type: object
       properties:
@@ -37,6 +45,139 @@ components:
       required:
         - code
         - message
+    project:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        name:
+          type: string
+        createdBy:
+          $ref: "#/components/schemas/id"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - createdBy
+        - createdAt
+    commentType:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        ruleId:
+          $ref: "#/components/schemas/id"
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+      required:
+        - id
+        - ruleId
+        - name
+        - description
+        - color
+    commentTypePath:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        ruleId:
+          $ref: "#/components/schemas/id"
+        fromCommentTypeId:
+          $ref: "#/components/schemas/id"
+        toCommentTypeId:
+          $ref: "#/components/schemas/id"
+      required:
+        - id
+        - ruleId
+        - fromCommentTypeId
+        - toCommentTypeId
+    rule:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        name:
+          type: string
+        description:
+          type: string
+        createdBy:
+          $ref: "#/components/schemas/id"
+        createdAt:
+          type: string
+          format: date-time
+        commentTypes:
+          type: array
+          items:
+            $ref: "#/components/schemas/commentType"
+        commentTypePaths:
+          type: array
+          items:
+            $ref: "#/components/schemas/commentTypePath"
+      required:
+        - id
+        - name
+        - description
+        - createdBy
+        - createdAt
+        - commentTypes
+        - commentTypePaths
+    visibilityLevel:
+      type: string
+      enum:
+        - everyone
+        - authenticated
+        - owner
+    commentPermissionLevel:
+      type: string
+      enum:
+        - everyone
+        - authenticated
+        - owner
+    discussion:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        theme:
+          type: string
+        background:
+          type: string
+        conclusion:
+          type: string
+        ruleId:
+          $ref: "#/components/schemas/id"
+        visibilityLevel:
+          $ref: "#/components/schemas/visibilityLevel"
+        commentPermissionLevel:
+          $ref: "#/components/schemas/commentPermissionLevel"
+        createdBy:
+          $ref: "#/components/schemas/id"
+        createdAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - open
+            - closed
+            - archived
+      required:
+        - id
+        - theme
+        - background
+        - conclusion
+        - ruleId
+        - visibilityLevel
+        - commentPermissionLevel
+        - createdBy
+        - createdAt
+        - status
   parameters: {}
 paths:
   /workbooks:
@@ -53,6 +194,413 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/workbook"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /projects:
+    get:
+      description: get projects
+      security:
+        - cognito_auth: []
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/project"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    post:
+      description: create project
+      security:
+        - cognito_auth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/project"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /projects/{projectId}:
+    put:
+      description: update project
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: projectId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/project"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    delete:
+      description: delete project
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: projectId
+          in: path
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /rules:
+    get:
+      description: get rules
+      security:
+        - cognito_auth: []
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/rule"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    post:
+      description: create rule
+      security:
+        - cognito_auth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                commentTypes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      color:
+                        type: string
+                    required:
+                      - name
+                      - description
+                      - color
+                commentTypePaths:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      fromCommentTypeId:
+                        $ref: "#/components/schemas/id"
+                      toCommentTypeId:
+                        $ref: "#/components/schemas/id"
+                    required:
+                      - fromCommentTypeId
+                      - toCommentTypeId
+              required:
+                - name
+                - description
+                - commentTypes
+                - commentTypePaths
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/rule"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /rules/{ruleId}:
+    put:
+      description: update rule
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: ruleId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                commentTypes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      color:
+                        type: string
+                    required:
+                      - name
+                      - description
+                      - color
+                commentTypePaths:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      fromCommentTypeId:
+                        $ref: "#/components/schemas/id"
+                      toCommentTypeId:
+                        $ref: "#/components/schemas/id"
+                    required:
+                      - fromCommentTypeId
+                      - toCommentTypeId
+              required:
+                - name
+                - description
+                - commentTypes
+                - commentTypePaths
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/rule"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    delete:
+      description: delete rule
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: ruleId
+          in: path
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /discussions:
+    get:
+      description: get discussions
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: false
+          name: projectId
+          in: query
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    post:
+      description: create discussion
+      security:
+        - cognito_auth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                theme:
+                  type: string
+                background:
+                  type: string
+                conclusion:
+                  type: string
+                ruleId:
+                  $ref: "#/components/schemas/id"
+                visibilityLevel:
+                  $ref: "#/components/schemas/visibilityLevel"
+                commentPermissionLevel:
+                  $ref: "#/components/schemas/commentPermissionLevel"
+              required:
+                - theme
+                - background
+                - conclusion
+                - ruleId
+                - visibilityLevel
+                - commentPermissionLevel
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /discussions/{discussionId}:
+    put:
+      description: update discussion
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                theme:
+                  type: string
+                background:
+                  type: string
+                conclusion:
+                  type: string
+                ruleId:
+                  $ref: "#/components/schemas/id"
+                visibilityLevel:
+                  $ref: "#/components/schemas/visibilityLevel"
+                commentPermissionLevel:
+                  $ref: "#/components/schemas/commentPermissionLevel"
+                status:
+                  type: string
+                  enum:
+                    - open
+                    - closed
+                    - archived
+              required:
+                - theme
+                - background
+                - conclusion
+                - ruleId
+                - visibilityLevel
+                - commentPermissionLevel
+                - status
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    delete:
+      description: delete discussion
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+      responses:
+        "204":
+          description: success response
         default:
           description: default error
           content:
