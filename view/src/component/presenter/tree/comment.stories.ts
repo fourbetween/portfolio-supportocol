@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import type { Comment, CommentType } from "../../../model/discussion";
-import "./comment";
 import type { CommentTreePresenter } from "./comment";
 
 const comments: Comment[] = [

@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
-import "./add_comment_type";
 import type { AddCommentTypePopupPresenter } from "./add_comment_type";
 
 const meta = {

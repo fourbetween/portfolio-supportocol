@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
-import "./main";
 import type { MainHeaderPresenter } from "./main";
 
 describe("MainHeaderPresenter", async () => {

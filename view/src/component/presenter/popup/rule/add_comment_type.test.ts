@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import "./add_comment_type";
 import type { AddCommentTypePopupPresenter } from "./add_comment_type";
 
 describe("AddCommentTypePopupPresenter", () => {

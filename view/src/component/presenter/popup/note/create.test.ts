@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
-import "./create";
 import type { CreateNotePopupPresenter } from "./create";
 
 describe("CreateNotePopupPresenter", () => {

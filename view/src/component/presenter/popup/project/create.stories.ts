@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
-import "./create";
 import type { CreateProjectPopupPresenter } from "./create";
 
 const meta = {

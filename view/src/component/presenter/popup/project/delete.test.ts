@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import "./delete";
 import type { DeleteProjectPopupPresenter } from "./delete";
 
 describe("DeleteProjectPopupPresenter", () => {

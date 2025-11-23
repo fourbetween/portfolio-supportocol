@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import type { CommentType } from "../../../../model/rule";
-import "./create";
 import type { CreateCommentPopupPresenter } from "./create";
 
 const commentTypes: CommentType[] = [
