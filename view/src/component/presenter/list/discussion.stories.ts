@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import type { Discussion } from "../../../model/discussion";
-import "./discussion";
 import type { DiscussionListPresenter } from "./discussion";
 
 const discussions: Discussion[] = [
@@ -58,10 +57,14 @@ const discussions: Discussion[] = [
 const meta = {
   title: "presenter/list/discussion",
   tags: ["autodocs"],
+  args: {
+    onCreate: async (data) => console.log("onCreate", data),
+  },
   render: (args) =>
     html`
       <discussion-list-presenter
         .discussions=${args.discussions}
+        .onCreate=${args.onCreate}
       ></discussion-list-presenter>
     `,
   argTypes: {

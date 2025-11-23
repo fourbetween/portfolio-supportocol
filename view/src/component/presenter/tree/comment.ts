@@ -2,7 +2,6 @@ import { LitElement, css, html, type TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type { Comment, CommentType } from "../../../model/discussion";
 import { baseStyle } from "../../../style/base";
-import "../treeitem/comment";
 
 interface CommentNode {
   comment: Comment;

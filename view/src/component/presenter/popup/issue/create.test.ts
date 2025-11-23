@@ -1,5 +1,4 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import "./create";
 import { CreateIssuePopupPresenter } from "./create";
 
 describe("CreateIssuePopupPresenter", () => {

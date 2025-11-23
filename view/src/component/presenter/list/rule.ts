@@ -5,6 +5,7 @@ import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
 import { formStyle } from "../../../style/form";
 import { listStyle } from "../../../style/list";
+import { pageStyle } from "../../../style/page";
 
 @customElement("rule-list-presenter")
 export class RuleListPresenter extends LitElement {
@@ -54,23 +55,12 @@ export class RuleListPresenter extends LitElement {
     listStyle,
     buttonStyle,
     formStyle,
+    pageStyle,
     css`
       .container {
         max-width: 1012px;
         margin: 0 auto;
         padding: 24px;
-      }
-      .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
-      }
-      .page-title {
-        font-size: 24px;
-        font-weight: 600;
-        margin: 0;
-        color: var(--color-fg-default);
       }
       .rule-content {
         flex: 1;

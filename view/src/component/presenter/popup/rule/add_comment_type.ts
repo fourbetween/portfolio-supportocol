@@ -3,7 +3,6 @@ import { customElement, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
-import "../base";
 import type { BasePopupPresenter } from "../base";
 
 @customElement("add-comment-type-popup-presenter")

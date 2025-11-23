@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import type { Discussion } from "../../../model/discussion";
 import type { DiscussionListPresenter } from "./discussion";
@@ -84,5 +84,29 @@ describe("DiscussionListPresenter", async () => {
     expect(headers?.[0].textContent).toContain("Open");
     expect(headers?.[1].textContent).toContain("Closed");
     expect(headers?.[2].textContent).toContain("Archived");
+  });
+
+  it("新規作成ボタンが表示されること", async () => {
+    await expect
+      .element(page.getByRole("button", { name: "新規作成" }))
+      .toBeInTheDocument();
+  });
+
+  it("新規作成ポップアップのonCreateイベントがハンドリングされること", async () => {
+    const spy = vi.fn();
+    elem.onCreate = spy;
+    await elem.updateComplete;
+    const popup = elem.shadowRoot?.querySelector(
+      "create-discussion-popup-presenter"
+    ) as any;
+    await popup.onCreate({ theme: "test" });
+    expect(spy).toHaveBeenCalledWith({ theme: "test" });
+  });
+
+  it("新規作成ポップアップが含まれていること", async () => {
+    const popup = elem.shadowRoot?.querySelector(
+      "create-discussion-popup-presenter"
+    );
+    expect(popup).not.toBeNull();
   });
 });

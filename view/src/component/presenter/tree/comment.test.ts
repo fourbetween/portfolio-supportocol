@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Comment, CommentType } from "../../../model/discussion";
-import "./comment";
 import type { CommentTreePresenter } from "./comment";
 
 describe("CommentTreePresenter", () => {

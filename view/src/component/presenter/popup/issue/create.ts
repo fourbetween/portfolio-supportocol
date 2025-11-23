@@ -3,7 +3,6 @@ import { customElement, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
-import "../base";
 import { BasePopupPresenter } from "../base";
 
 @customElement("create-issue-popup-presenter")

@@ -5,7 +5,6 @@ import type { Discussion } from "../../../../model/discussion";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
-import "../base";
 import type { BasePopupPresenter } from "../base";
 
 @customElement("add-discussion-popup-presenter")

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import type { Project } from "../../../model/project";
-import "./project";
 import type { ProjectListPresenter } from "./project";
 
 const projects: Project[] = [

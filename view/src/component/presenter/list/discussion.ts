@@ -1,13 +1,26 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import type { Discussion } from "../../../model/discussion";
 import { baseStyle } from "../../../style/base";
+import { buttonStyle } from "../../../style/button";
 import { listStyle } from "../../../style/list";
+import { pageStyle } from "../../../style/page";
+import type {
+  CreateDiscussionData,
+  CreateDiscussionPopupPresenter,
+} from "../popup/discussion/create";
 
 @customElement("discussion-list-presenter")
 export class DiscussionListPresenter extends LitElement {
   @property({ type: Array })
   discussions: Discussion[] = [];
+
+  @property({ attribute: false })
+  onCreate: (data: CreateDiscussionData) => Promise<void> = () =>
+    Promise.resolve();
+
+  @query("create-discussion-popup-presenter")
+  private createPopup!: CreateDiscussionPopupPresenter;
 
   render() {
     const openDiscussions = this.discussions.filter((d) => d.status === "open");
@@ -20,9 +33,21 @@ export class DiscussionListPresenter extends LitElement {
 
     return html`
       <div class="discussion-list-container">
+        <div class="page-header">
+          <h1 class="page-title">議論一覧</h1>
+          <button
+            class="btn btn-primary"
+            @click=${() => this.createPopup.open()}
+          >
+            新規作成
+          </button>
+        </div>
         ${this.renderGroup("Open", openDiscussions, "status-open")}
         ${this.renderGroup("Closed", closedDiscussions, "status-closed")}
         ${this.renderGroup("Archived", archivedDiscussions, "status-archived")}
+        <create-discussion-popup-presenter
+          .onCreate=${this.onCreate}
+        ></create-discussion-popup-presenter>
       </div>
     `;
   }
@@ -134,6 +159,8 @@ export class DiscussionListPresenter extends LitElement {
   static styles = [
     baseStyle,
     listStyle,
+    buttonStyle,
+    pageStyle,
     css`
       .discussion-list-container {
         max-width: 980px;

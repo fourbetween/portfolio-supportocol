@@ -1,14 +1,37 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import type { CommentType } from "../../../../model/rule";
-import "./create";
 import type { CreateCommentPopupPresenter } from "./create";
 
 const commentTypes: CommentType[] = [
-  { id: "agreement", name: "賛成", description: "" },
-  { id: "disagreement", name: "反対", description: "" },
-  { id: "question", name: "質問", description: "" },
-  { id: "supplement", name: "補足", description: "" },
+  {
+    id: "agreement",
+    name: "賛成",
+    description: "",
+    ruleId: "rule1",
+    color: "green",
+  },
+  {
+    id: "disagreement",
+    name: "反対",
+    description: "",
+    ruleId: "rule1",
+    color: "red",
+  },
+  {
+    id: "question",
+    name: "質問",
+    description: "",
+    ruleId: "rule1",
+    color: "blue",
+  },
+  {
+    id: "supplement",
+    name: "補足",
+    description: "",
+    ruleId: "rule1",
+    color: "gray",
+  },
 ];
 
 const meta = {

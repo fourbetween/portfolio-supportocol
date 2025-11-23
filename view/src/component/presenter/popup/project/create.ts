@@ -1,15 +1,20 @@
 import { LitElement, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
-import "../base";
 import type { BasePopupPresenter } from "../base";
 
 @customElement("create-project-popup-presenter")
 export class CreateProjectPopupPresenter extends LitElement {
+  @property({ attribute: false })
+  onCreate: (name: string) => Promise<void> = () => Promise.resolve();
+
   @query("base-popup-presenter")
   private basePopup!: BasePopupPresenter;
+
+  @query("#name")
+  private nameInput!: HTMLInputElement;
 
   open() {
     this.basePopup.open();
@@ -19,7 +24,7 @@ export class CreateProjectPopupPresenter extends LitElement {
     return html`
       <base-popup-presenter>
         <span slot="header">新規プロジェクト作成</span>
-        <form slot="main" id="create-project-form">
+        <form slot="main" id="create-project-form" @submit=${this.submit}>
           <div class="form-group">
             <label for="name" class="form-label">プロジェクト名</label>
             <input
@@ -41,6 +46,13 @@ export class CreateProjectPopupPresenter extends LitElement {
         </button>
       </base-popup-presenter>
     `;
+  }
+
+  private async submit(e: Event) {
+    e.preventDefault();
+    await this.onCreate(this.nameInput.value);
+    this.nameInput.value = "";
+    this.basePopup.close();
   }
 
   static styles = [baseStyle, buttonStyle, formStyle];

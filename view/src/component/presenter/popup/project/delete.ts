@@ -4,7 +4,6 @@ import type { Project } from "../../../../model/project";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
-import "../base";
 import type { BasePopupPresenter } from "../base";
 
 @customElement("delete-project-popup-presenter")

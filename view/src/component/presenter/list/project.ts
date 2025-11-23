@@ -1,51 +1,61 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import type { Project } from "../../../model/project";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
+import { cardStyle } from "../../../style/card";
+import type { CreateProjectPopupPresenter } from "../popup/project/create";
 
 @customElement("project-list-presenter")
 export class ProjectListPresenter extends LitElement {
   @property({ type: Array })
   projects: Project[] = [];
 
+  @property({ attribute: false })
+  onCreate: (name: string) => Promise<void> = () => Promise.resolve();
+
+  @query("create-project-popup-presenter")
+  private createProjectPopup!: CreateProjectPopupPresenter;
+
   render() {
     return html`
       <div class="sidebar-section">
         <div class="sidebar-heading">
           プロジェクト
-          <a
-            href="/view/sample/popup/project/create.html"
+          <button
             class="btn btn-primary btn-sm"
+            @click=${() => this.createProjectPopup.open()}
           >
             新規
-          </a>
+          </button>
         </div>
         <div class="card">
-          <div class="card-body">
-            <ul class="list-group">
-              ${this.projects.map(
-                (project) => html`
-                  <li class="list-group-item">
-                    <a
-                      href="/view/sample/page/project/detail.html"
-                      class="repo-name"
-                    >
-                      ${project.name}
-                    </a>
-                  </li>
-                `
-              )}
-            </ul>
-          </div>
+          <ul class="list-group">
+            ${this.projects.map(
+              (project) => html`
+                <li class="list-group-item">
+                  <a
+                    href="/view/sample/page/project/detail.html"
+                    class="repo-name"
+                  >
+                    ${project.name}
+                  </a>
+                </li>
+              `
+            )}
+          </ul>
         </div>
       </div>
+      <create-project-popup-presenter
+        .onCreate=${this.onCreate}
+      ></create-project-popup-presenter>
     `;
   }
 
   static styles = [
     baseStyle,
     buttonStyle,
+    cardStyle,
     css`
       .sidebar-section {
         margin-bottom: 24px;
@@ -58,12 +68,6 @@ export class ProjectListPresenter extends LitElement {
         margin-bottom: 8px;
         font-weight: 600;
         font-size: 14px;
-      }
-
-      .card {
-        background-color: var(--color-canvas-default);
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
       }
 
       .list-group {
