@@ -22,7 +22,7 @@ export class ToastPresenter extends LitElement {
   private timeouts = new Map<string, number>();
 
   show(message: string, type: ToastType = "info", duration?: number) {
-    const id = `toast-${Date.now()}-${Math.random()}`;
+    const id = crypto.randomUUID();
     const toast: ToastMessage = {
       id,
       message,
@@ -36,7 +36,7 @@ export class ToastPresenter extends LitElement {
 
   private scheduleRemoval(toast: ToastMessage) {
     if (toast.duration && toast.duration > 0) {
-      const timeoutId = window.setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         this.removeToast(toast.id);
       }, toast.duration);
       this.timeouts.set(toast.id, timeoutId);
@@ -125,9 +125,19 @@ export class ToastPresenter extends LitElement {
               <button
                 class="toast-close"
                 @click=${() => this.removeToast(toast.id)}
-                aria-label="Close"
+                aria-label="トーストを閉じる"
+                title="閉じる"
               >
-                ×
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 16 16"
+                  width="12"
+                  height="12"
+                >
+                  <path
+                    d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"
+                  ></path>
+                </svg>
               </button>
             </div>
           `
@@ -193,16 +203,18 @@ export class ToastPresenter extends LitElement {
         background: none;
         border: none;
         cursor: pointer;
-        font-size: 20px;
         color: var(--color-fg-muted);
-        padding: 0;
+        padding: 4px;
         width: 20px;
         height: 20px;
-        line-height: 1;
         border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+
+      .toast-close svg {
+        fill: currentColor;
       }
 
       .toast-close:hover {

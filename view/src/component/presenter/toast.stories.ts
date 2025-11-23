@@ -2,6 +2,12 @@ import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import type { ToastPresenter } from "./toast";
 
+function getToastPresenter(event: Event): ToastPresenter | null {
+  const root = (event.target as HTMLElement).closest("div");
+  const toast = root?.querySelector("toast-presenter");
+  return toast ? (toast as unknown as ToastPresenter) : null;
+}
+
 const meta = {
   title: "presenter/toast",
   tags: ["autodocs"],
@@ -15,11 +21,7 @@ const meta = {
           <button
             class="btn btn-primary"
             @click=${(e: Event) => {
-              const root = (e.target as HTMLElement).closest("div");
-              const toast = root?.querySelector("toast-presenter");
-              if (toast) {
-                (toast as unknown as ToastPresenter).show("操作が正常に完了しました", "success");
-              }
+              getToastPresenter(e)?.show("操作が正常に完了しました", "success");
             }}
           >
             成功メッセージ
@@ -28,11 +30,7 @@ const meta = {
             class="btn"
             style="background-color: #cf222e; color: white;"
             @click=${(e: Event) => {
-              const root = (e.target as HTMLElement).closest("div");
-              const toast = root?.querySelector("toast-presenter");
-              if (toast) {
-                (toast as unknown as ToastPresenter).show("エラーが発生しました", "error");
-              }
+              getToastPresenter(e)?.show("エラーが発生しました", "error");
             }}
           >
             エラーメッセージ
@@ -41,11 +39,7 @@ const meta = {
             class="btn"
             style="background-color: #bf8700; color: white;"
             @click=${(e: Event) => {
-              const root = (e.target as HTMLElement).closest("div");
-              const toast = root?.querySelector("toast-presenter");
-              if (toast) {
-                (toast as unknown as ToastPresenter).show("注意してください", "warning");
-              }
+              getToastPresenter(e)?.show("注意してください", "warning");
             }}
           >
             警告メッセージ
@@ -54,11 +48,7 @@ const meta = {
             class="btn"
             style="background-color: #0969da; color: white;"
             @click=${(e: Event) => {
-              const root = (e.target as HTMLElement).closest("div");
-              const toast = root?.querySelector("toast-presenter");
-              if (toast) {
-                (toast as unknown as ToastPresenter).show("情報をお知らせします", "info");
-              }
+              getToastPresenter(e)?.show("情報をお知らせします", "info");
             }}
           >
             情報メッセージ
@@ -66,11 +56,7 @@ const meta = {
           <button
             class="btn"
             @click=${(e: Event) => {
-              const root = (e.target as HTMLElement).closest("div");
-              const toast = root?.querySelector("toast-presenter");
-              if (toast) {
-                (toast as unknown as ToastPresenter).show("これは長いメッセージのサンプルです。複数行にわたる場合でも適切に表示されることを確認します。", "info");
-              }
+              getToastPresenter(e)?.show("これは長いメッセージのサンプルです。複数行にわたる場合でも適切に表示されることを確認します。", "info");
             }}
           >
             長いメッセージ
@@ -78,13 +64,11 @@ const meta = {
           <button
             class="btn"
             @click=${(e: Event) => {
-              const root = (e.target as HTMLElement).closest("div");
-              const toast = root?.querySelector("toast-presenter");
+              const toast = getToastPresenter(e);
               if (toast) {
-                const toastPresenter = toast as unknown as ToastPresenter;
-                toastPresenter.show("メッセージ1", "success");
-                setTimeout(() => toastPresenter.show("メッセージ2", "info"), 500);
-                setTimeout(() => toastPresenter.show("メッセージ3", "warning"), 1000);
+                toast.show("メッセージ1", "success");
+                setTimeout(() => toast.show("メッセージ2", "info"), 500);
+                setTimeout(() => toast.show("メッセージ3", "warning"), 1000);
               }
             }}
           >
