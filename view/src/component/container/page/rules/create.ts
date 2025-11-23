@@ -1,8 +1,9 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { client } from "../../../../api/client";
 import type { Rule } from "../../../../model/rule";
 import { baseStyle } from "../../../../style/base";
-import { client } from "../../../../api/client";
+import { accountMethods } from "../../../../model/account";
 
 @customElement("create-rules-page-container")
 export class CreateRulesPageContainer extends LitElement {
@@ -21,6 +22,7 @@ export class CreateRulesPageContainer extends LitElement {
 
   private async createRule(rule: Rule) {
     const { error } = await client.POST("/rules", {
+      headers: await accountMethods.authHeader(),
       body: {
         name: rule.name,
         description: rule.description,
