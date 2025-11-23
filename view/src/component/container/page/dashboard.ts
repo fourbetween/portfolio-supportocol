@@ -4,6 +4,7 @@ import { customElement, property } from "lit/decorators.js";
 import { client } from "../../../api/client";
 import { accountMethods } from "../../../model/account";
 import { baseStyle } from "../../../style/base";
+import type { CreateDiscussionData } from "../../presenter/popup/discussion/create";
 
 @customElement("dashboard-page-container")
 export class DashboardPageContainer extends LitElement {
@@ -58,6 +59,8 @@ export class DashboardPageContainer extends LitElement {
             complete: (discussions) => html`
               <discussion-list-presenter
                 .discussions=${discussions}
+                .onCreate=${(data: CreateDiscussionData) =>
+                  this.createDiscussion(data)}
               ></discussion-list-presenter>
             `,
             error: (e) =>
@@ -68,6 +71,29 @@ export class DashboardPageContainer extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  private async createDiscussion(data: CreateDiscussionData) {
+    const { error } = await client.POST("/discussions", {
+      headers: await accountMethods.authHeader(),
+      body: {
+        ...data,
+        visibilityLevel: data.visibilityLevel as
+          | "everyone"
+          | "authenticated"
+          | "owner",
+        commentPermissionLevel: data.commentPermissionLevel as
+          | "everyone"
+          | "authenticated"
+          | "owner",
+        conclusion: "",
+      },
+    });
+    if (error) {
+      console.error(error);
+      return;
+    }
+    this.discussionsTask.run();
   }
 
   private async createProject(name: string) {

@@ -17,10 +17,6 @@ export class ProjectListPresenter extends LitElement {
   @query("create-project-popup-presenter")
   private createProjectPopup!: CreateProjectPopupPresenter;
 
-  private openCreateProjectPopup() {
-    this.createProjectPopup.open();
-  }
-
   render() {
     return html`
       <div class="sidebar-section">
@@ -28,7 +24,7 @@ export class ProjectListPresenter extends LitElement {
           プロジェクト
           <button
             class="btn btn-primary btn-sm"
-            @click=${this.openCreateProjectPopup}
+            @click=${() => this.createProjectPopup.open()}
           >
             新規
           </button>

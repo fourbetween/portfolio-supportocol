@@ -57,10 +57,14 @@ const discussions: Discussion[] = [
 const meta = {
   title: "presenter/list/discussion",
   tags: ["autodocs"],
+  args: {
+    onCreate: async (data) => console.log("onCreate", data),
+  },
   render: (args) =>
     html`
       <discussion-list-presenter
         .discussions=${args.discussions}
+        .onCreate=${args.onCreate}
       ></discussion-list-presenter>
     `,
   argTypes: {
