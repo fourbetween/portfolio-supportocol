@@ -1,7 +1,6 @@
 import { customElement } from "lit/decorators.js";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
-import "../popup/rule/add_comment_type";
 import type { AddCommentTypePopupPresenter } from "../popup/rule/add_comment_type";
 import { RuleFormPresenter } from "./rule";
 
@@ -66,5 +65,49 @@ describe("RuleFormPresenter", () => {
 
     // Also check if it is rendered in the list
     await expect.element(page.getByText("New Type").first()).toBeVisible();
+  });
+
+  it("チェックボックスを変更したとき、ruleプロパティのcommentTypePathsが更新されること", async () => {
+    // Setup rule with two comment types
+    const parentType = {
+      id: "parent-id",
+      ruleId: "rule-id",
+      name: "Parent Type",
+      description: "",
+      color: "#ffffff",
+    };
+    const childType = {
+      id: "child-id",
+      ruleId: "rule-id",
+      name: "Child Type",
+      description: "",
+      color: "#000000",
+    };
+
+    elem.rule = {
+      ...elem.rule,
+      commentTypes: [parentType, childType],
+      commentTypePaths: [],
+    };
+    await elem.updateComplete;
+
+    const checkboxLabel = page.getByText("Child Type").first();
+    await checkboxLabel.click();
+
+    await elem.updateComplete;
+
+    // Verify path added
+    expect(elem.rule.commentTypePaths).toHaveLength(1);
+    expect(elem.rule.commentTypePaths[0]).toMatchObject({
+      fromCommentTypeId: "parent-id",
+      toCommentTypeId: "child-id",
+    });
+
+    // Uncheck
+    await checkboxLabel.click();
+    await elem.updateComplete;
+
+    // Verify path removed
+    expect(elem.rule.commentTypePaths).toHaveLength(0);
   });
 });

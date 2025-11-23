@@ -152,13 +152,31 @@ export class RuleFormPresenter extends LitElement {
   }
 
   protected _handlePathChange(e: Event, fromId: string, toId: string) {
-    // TODO: Implement path change logic
-    console.log(
-      "Path changed",
-      fromId,
-      toId,
-      (e.target as HTMLInputElement).checked
-    );
+    const checked = (e.target as HTMLInputElement).checked;
+    if (checked) {
+      this.rule = {
+        ...this.rule,
+        commentTypePaths: [
+          ...this.rule.commentTypePaths,
+          {
+            id: ulid(),
+            ruleId: this.rule.id,
+            fromCommentTypeId: fromId,
+            toCommentTypeId: toId,
+          },
+        ],
+      };
+    } else {
+      this.rule = {
+        ...this.rule,
+        commentTypePaths: this.rule.commentTypePaths.filter(
+          (path) =>
+            !(
+              path.fromCommentTypeId === fromId && path.toCommentTypeId === toId
+            )
+        ),
+      };
+    }
   }
 
   static styles = [

@@ -1,9 +1,13 @@
 import { html } from "lit";
-import { customElement } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
+import type { Rule } from "../../../../model/rule";
 import { RuleFormPresenter } from "../rule";
 
 @customElement("create-rule-form-presenter")
 export class CreateRuleFormPresenter extends RuleFormPresenter {
+  @property({ attribute: false })
+  createRule!: (rule: Rule) => void;
+
   render() {
     return html`
       <div class="container">
@@ -16,12 +20,18 @@ export class CreateRuleFormPresenter extends RuleFormPresenter {
           </div>
           <div class="header-actions">
             <button class="btn">キャンセル</button>
-            <button class="btn btn-primary">作成する</button>
+            <button class="btn btn-primary" @click=${this._handleCreate}>
+              作成する
+            </button>
           </div>
         </div>
 
         ${this.renderForm()}
       </div>
     `;
+  }
+
+  private _handleCreate() {
+    this.createRule(this.rule);
   }
 }
