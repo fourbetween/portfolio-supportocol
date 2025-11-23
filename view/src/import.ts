@@ -22,5 +22,6 @@ import "./component/presenter/popup/project/add_discussion";
 import "./component/presenter/popup/project/create";
 import "./component/presenter/popup/project/delete";
 import "./component/presenter/popup/rule/add_comment_type";
+import "./component/presenter/toast";
 import "./component/presenter/tree/comment";
 import "./component/presenter/treeitem/comment";
