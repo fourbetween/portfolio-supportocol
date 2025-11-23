@@ -1,10 +1,12 @@
 import { LitElement, css, html } from "lit";
-import { property } from "lit/decorators.js";
+import { property, query } from "lit/decorators.js";
+import { ulid } from "ulid";
 import type { Rule } from "../../../model/rule";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
 import { cardStyle } from "../../../style/card";
 import { formStyle } from "../../../style/form";
+import type { AddCommentTypePopupPresenter } from "../popup/rule/add_comment_type";
 
 export class RuleFormPresenter extends LitElement {
   @property({ type: Object })
@@ -17,6 +19,9 @@ export class RuleFormPresenter extends LitElement {
     commentTypes: [],
     commentTypePaths: [],
   };
+
+  @query("add-comment-type-popup-presenter")
+  private _addCommentTypePopup!: AddCommentTypePopupPresenter;
 
   protected renderForm() {
     return html`
@@ -49,7 +54,9 @@ export class RuleFormPresenter extends LitElement {
       <div class="section">
         <div class="section-header">
           <h2 class="section-title">構造定義 (コメント種類と経路)</h2>
-          <a href="#" class="btn btn-sm">+ コメント種類を追加</a>
+          <button class="btn btn-sm" @click="${this._openAddCommentTypePopup}">
+            + コメント種類を追加
+          </button>
         </div>
 
         <p class="helper-text" style="margin-bottom: 16px">
@@ -107,7 +114,31 @@ export class RuleFormPresenter extends LitElement {
           `
         )}
       </div>
+
+      <add-comment-type-popup-presenter
+        @add="${this._handleAddCommentType}"
+      ></add-comment-type-popup-presenter>
     `;
+  }
+
+  private _openAddCommentTypePopup(e: Event) {
+    e.preventDefault();
+    this._addCommentTypePopup.open();
+  }
+
+  private _handleAddCommentType(e: CustomEvent) {
+    const { name, description, color } = e.detail;
+    const newType = {
+      id: ulid(),
+      ruleId: this.rule.id,
+      name,
+      description,
+      color,
+    };
+    this.rule = {
+      ...this.rule,
+      commentTypes: [...this.rule.commentTypes, newType],
+    };
   }
 
   private _handleNameChange(e: Event) {

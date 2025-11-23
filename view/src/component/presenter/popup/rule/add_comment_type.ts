@@ -13,6 +13,12 @@ export class AddCommentTypePopupPresenter extends LitElement {
   @state()
   private selectedColorIndex = 5;
 
+  @state()
+  private name = "";
+
+  @state()
+  private description = "";
+
   open() {
     this.basePopup.open();
   }
@@ -37,6 +43,9 @@ export class AddCommentTypePopupPresenter extends LitElement {
               type="text"
               class="form-control"
               placeholder="例: 補足情報"
+              .value="${this.name}"
+              @input="${(e: Event) =>
+                (this.name = (e.target as HTMLInputElement).value)}"
             />
           </div>
 
@@ -45,6 +54,9 @@ export class AddCommentTypePopupPresenter extends LitElement {
             <textarea
               class="form-control"
               placeholder="このコメント種類の用途を説明してください"
+              .value="${this.description}"
+              @input="${(e: Event) =>
+                (this.description = (e.target as HTMLTextAreaElement).value)}"
             ></textarea>
           </div>
 
@@ -76,12 +88,30 @@ export class AddCommentTypePopupPresenter extends LitElement {
   }
 
   private handleAdd() {
+    const colors = [
+      "#0969da",
+      "#d29922",
+      "#1a7f37",
+      "#cf222e",
+      "#8250df",
+      "#6e7781",
+    ];
+
     this.dispatchEvent(
       new CustomEvent("add", {
         bubbles: true,
         composed: true,
+        detail: {
+          name: this.name,
+          description: this.description,
+          color: colors[this.selectedColorIndex],
+        },
       })
     );
+    this.basePopup.close();
+    this.name = "";
+    this.description = "";
+    this.selectedColorIndex = 5;
   }
 
   static styles = [
