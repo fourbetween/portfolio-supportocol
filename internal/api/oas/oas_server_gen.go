@@ -14,6 +14,12 @@ type Handler interface {
 	//
 	// DELETE /discussions/{discussionId}
 	DiscussionsDiscussionIdDelete(ctx context.Context, params DiscussionsDiscussionIdDeleteParams) error
+	// DiscussionsDiscussionIdGet implements GET /discussions/{discussionId} operation.
+	//
+	// Get discussion.
+	//
+	// GET /discussions/{discussionId}
+	DiscussionsDiscussionIdGet(ctx context.Context, params DiscussionsDiscussionIdGetParams) (*Discussion, error)
 	// DiscussionsDiscussionIdPut implements PUT /discussions/{discussionId} operation.
 	//
 	// Update discussion.
@@ -56,6 +62,12 @@ type Handler interface {
 	//
 	// DELETE /projects/{projectId}
 	ProjectsProjectIdDelete(ctx context.Context, params ProjectsProjectIdDeleteParams) error
+	// ProjectsProjectIdGet implements GET /projects/{projectId} operation.
+	//
+	// Get project.
+	//
+	// GET /projects/{projectId}
+	ProjectsProjectIdGet(ctx context.Context, params ProjectsProjectIdGetParams) (*Project, error)
 	// ProjectsProjectIdPut implements PUT /projects/{projectId} operation.
 	//
 	// Update project.
@@ -80,6 +92,12 @@ type Handler interface {
 	//
 	// DELETE /rules/{ruleId}
 	RulesRuleIdDelete(ctx context.Context, params RulesRuleIdDeleteParams) error
+	// RulesRuleIdGet implements GET /rules/{ruleId} operation.
+	//
+	// Get rule.
+	//
+	// GET /rules/{ruleId}
+	RulesRuleIdGet(ctx context.Context, params RulesRuleIdGetParams) (*Rule, error)
 	// RulesRuleIdPut implements PUT /rules/{ruleId} operation.
 	//
 	// Update rule.

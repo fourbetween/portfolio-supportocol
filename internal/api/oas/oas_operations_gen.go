@@ -7,6 +7,7 @@ type OperationName = string
 
 const (
 	DiscussionsDiscussionIdDeleteOperation OperationName = "DiscussionsDiscussionIdDelete"
+	DiscussionsDiscussionIdGetOperation    OperationName = "DiscussionsDiscussionIdGet"
 	DiscussionsDiscussionIdPutOperation    OperationName = "DiscussionsDiscussionIdPut"
 	DiscussionsGetOperation                OperationName = "DiscussionsGet"
 	DiscussionsPostOperation               OperationName = "DiscussionsPost"
@@ -14,10 +15,12 @@ const (
 	ProjectsGetOperation                   OperationName = "ProjectsGet"
 	ProjectsPostOperation                  OperationName = "ProjectsPost"
 	ProjectsProjectIdDeleteOperation       OperationName = "ProjectsProjectIdDelete"
+	ProjectsProjectIdGetOperation          OperationName = "ProjectsProjectIdGet"
 	ProjectsProjectIdPutOperation          OperationName = "ProjectsProjectIdPut"
 	RulesGetOperation                      OperationName = "RulesGet"
 	RulesPostOperation                     OperationName = "RulesPost"
 	RulesRuleIdDeleteOperation             OperationName = "RulesRuleIdDelete"
+	RulesRuleIdGetOperation                OperationName = "RulesRuleIdGet"
 	RulesRuleIdPutOperation                OperationName = "RulesRuleIdPut"
 	WorkbooksGetOperation                  OperationName = "WorkbooksGet"
 )

@@ -22,6 +22,15 @@ func (UnimplementedHandler) DiscussionsDiscussionIdDelete(ctx context.Context, p
 	return ht.ErrNotImplemented
 }
 
+// DiscussionsDiscussionIdGet implements GET /discussions/{discussionId} operation.
+//
+// Get discussion.
+//
+// GET /discussions/{discussionId}
+func (UnimplementedHandler) DiscussionsDiscussionIdGet(ctx context.Context, params DiscussionsDiscussionIdGetParams) (r *Discussion, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // DiscussionsDiscussionIdPut implements PUT /discussions/{discussionId} operation.
 //
 // Update discussion.
@@ -85,6 +94,15 @@ func (UnimplementedHandler) ProjectsProjectIdDelete(ctx context.Context, params 
 	return ht.ErrNotImplemented
 }
 
+// ProjectsProjectIdGet implements GET /projects/{projectId} operation.
+//
+// Get project.
+//
+// GET /projects/{projectId}
+func (UnimplementedHandler) ProjectsProjectIdGet(ctx context.Context, params ProjectsProjectIdGetParams) (r *Project, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // ProjectsProjectIdPut implements PUT /projects/{projectId} operation.
 //
 // Update project.
@@ -119,6 +137,15 @@ func (UnimplementedHandler) RulesPost(ctx context.Context, req OptRulesPostReq) 
 // DELETE /rules/{ruleId}
 func (UnimplementedHandler) RulesRuleIdDelete(ctx context.Context, params RulesRuleIdDeleteParams) error {
 	return ht.ErrNotImplemented
+}
+
+// RulesRuleIdGet implements GET /rules/{ruleId} operation.
+//
+// Get rule.
+//
+// GET /rules/{ruleId}
+func (UnimplementedHandler) RulesRuleIdGet(ctx context.Context, params RulesRuleIdGetParams) (r *Rule, _ error) {
+	return r, ht.ErrNotImplemented
 }
 
 // RulesRuleIdPut implements PUT /rules/{ruleId} operation.

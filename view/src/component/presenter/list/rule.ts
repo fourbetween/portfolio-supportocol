@@ -33,7 +33,9 @@ export class RuleListPresenter extends LitElement {
             (rule) => html`
               <li class="list-group-item">
                 <div class="rule-content">
-                  <a href="#" class="rule-title">${rule.name}</a>
+                  <a href="/rules/${rule.id}" class="rule-title">
+                    ${rule.name}
+                  </a>
                   <div class="rule-description">${rule.description}</div>
                   <div class="rule-meta">
                     <span class="meta-item">作成者: ${rule.createdBy}</span>

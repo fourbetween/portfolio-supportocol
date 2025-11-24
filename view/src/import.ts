@@ -5,6 +5,7 @@ import "./component/container/page/front";
 import "./component/container/page/projects";
 import "./component/container/page/rules";
 import "./component/container/page/rules/create";
+import "./component/container/page/rules/edit";
 import "./component/presenter/form/discussion/settings";
 import "./component/presenter/form/rule";
 import "./component/presenter/form/rule/create";

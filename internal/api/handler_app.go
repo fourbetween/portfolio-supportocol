@@ -142,6 +142,25 @@ func (h *appHandler) ProjectsProjectIdDelete(ctx context.Context, params oas.Pro
 	)
 }
 
+func (h *appHandler) ProjectsProjectIdGet(ctx context.Context, params oas.ProjectsProjectIdGetParams) (*oas.Project, error) {
+	var item *project.Project
+	var err error
+	if err := h.uowSrv.Do(
+		ctx,
+		func(con *Container) error {
+			u := h.loadAccount(ctx, con)
+			item, err = u.LoadProject(user.LoadProjectParams{
+				ProjectID: string(params.ProjectId),
+			})
+			return err
+		},
+	); err != nil {
+		return nil, err
+	}
+	res := h.toOasProject(item)
+	return &res, nil
+}
+
 func (h *appHandler) ProjectsProjectIdPut(ctx context.Context, req oas.OptProjectsProjectIdPutReq, params oas.ProjectsProjectIdPutParams) (*oas.Project, error) {
 	var item *project.Project
 	var err error
@@ -232,6 +251,25 @@ func (h *appHandler) RulesRuleIdDelete(ctx context.Context, params oas.RulesRule
 	)
 }
 
+func (h *appHandler) RulesRuleIdGet(ctx context.Context, params oas.RulesRuleIdGetParams) (*oas.Rule, error) {
+	var item *rule.Rule
+	var err error
+	if err := h.uowSrv.Do(
+		ctx,
+		func(con *Container) error {
+			u := h.loadAccount(ctx, con)
+			item, err = u.LoadRule(user.LoadRuleParams{
+				RuleID: string(params.RuleId),
+			})
+			return err
+		},
+	); err != nil {
+		return nil, err
+	}
+	res := h.toOasRule(item)
+	return &res, nil
+}
+
 func (h *appHandler) RulesRuleIdPut(ctx context.Context, req oas.OptRulesRuleIdPutReq, params oas.RulesRuleIdPutParams) (*oas.Rule, error) {
 	var item *rule.Rule
 	var err error
@@ -242,6 +280,7 @@ func (h *appHandler) RulesRuleIdPut(ctx context.Context, req oas.OptRulesRuleIdP
 			cts := make([]rule.CommentType, len(req.Value.CommentTypes))
 			for i, v := range req.Value.CommentTypes {
 				cts[i] = rule.CommentType{
+					ID:          string(v.ID),
 					Name:        v.Name,
 					Description: v.Description,
 					Color:       v.Color,
@@ -330,6 +369,25 @@ func (h *appHandler) DiscussionsDiscussionIdDelete(ctx context.Context, params o
 			})
 		},
 	)
+}
+
+func (h *appHandler) DiscussionsDiscussionIdGet(ctx context.Context, params oas.DiscussionsDiscussionIdGetParams) (*oas.Discussion, error) {
+	var item *discussion.Discussion
+	var err error
+	if err := h.uowSrv.Do(
+		ctx,
+		func(con *Container) error {
+			u := h.loadAccount(ctx, con)
+			item, err = u.LoadDiscussion(user.LoadDiscussionParams{
+				DiscussionID: string(params.DiscussionId),
+			})
+			return err
+		},
+	); err != nil {
+		return nil, err
+	}
+	res := h.toOasDiscussion(item)
+	return &res, nil
 }
 
 func (h *appHandler) DiscussionsDiscussionIdPut(ctx context.Context, req oas.OptDiscussionsDiscussionIdPutReq, params oas.DiscussionsDiscussionIdPutParams) (*oas.Discussion, error) {

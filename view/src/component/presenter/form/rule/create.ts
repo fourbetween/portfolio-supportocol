@@ -19,8 +19,8 @@ export class CreateRuleFormPresenter extends RuleFormPresenter {
             </p>
           </div>
           <div class="header-actions">
-            <button class="btn">キャンセル</button>
-            <button class="btn btn-primary" @click=${this._handleCreate}>
+            <button class="btn" @click=${this.cancel}>キャンセル</button>
+            <button class="btn btn-primary" @click=${this.save}>
               作成する
             </button>
           </div>
@@ -31,7 +31,11 @@ export class CreateRuleFormPresenter extends RuleFormPresenter {
     `;
   }
 
-  private async _handleCreate() {
+  private cancel() {
+    window.history.back();
+  }
+
+  private async save() {
     await this.createRule(this.rule);
   }
 }

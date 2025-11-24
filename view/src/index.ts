@@ -72,6 +72,15 @@ export class AppRoot extends LitElement {
         ></create-rules-page-container>
       `,
     },
+    {
+      path: "/rules/:ruleId",
+      render: ({ ruleId }) => html`
+        <edit-rules-page-container
+          .isLoggedIn=${this.isLoggedIn}
+          .ruleId=${ruleId as string}
+        ></edit-rules-page-container>
+      `,
+    },
   ]);
 
   render() {

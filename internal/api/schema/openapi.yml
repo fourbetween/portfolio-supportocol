@@ -239,6 +239,29 @@ paths:
               schema:
                 $ref: "#/components/schemas/error"
   /projects/{projectId}:
+    get:
+      description: get project
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: projectId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/project"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
     put:
       description: update project
       security:
@@ -352,6 +375,29 @@ paths:
               schema:
                 $ref: "#/components/schemas/error"
   /rules/{ruleId}:
+    get:
+      description: get rule
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: ruleId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/rule"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
     put:
       description: update rule
       security:
@@ -486,6 +532,29 @@ paths:
               schema:
                 $ref: "#/components/schemas/error"
   /discussions/{discussionId}:
+    get:
+      description: get discussion
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
     put:
       description: update discussion
       security:

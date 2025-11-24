@@ -34,6 +34,7 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 
 var operationRolesCognitoAuth = map[string][]string{
 	DiscussionsDiscussionIdDeleteOperation: []string{},
+	DiscussionsDiscussionIdGetOperation:    []string{},
 	DiscussionsDiscussionIdPutOperation:    []string{},
 	DiscussionsGetOperation:                []string{},
 	DiscussionsPostOperation:               []string{},
@@ -41,10 +42,12 @@ var operationRolesCognitoAuth = map[string][]string{
 	ProjectsGetOperation:                   []string{},
 	ProjectsPostOperation:                  []string{},
 	ProjectsProjectIdDeleteOperation:       []string{},
+	ProjectsProjectIdGetOperation:          []string{},
 	ProjectsProjectIdPutOperation:          []string{},
 	RulesGetOperation:                      []string{},
 	RulesPostOperation:                     []string{},
 	RulesRuleIdDeleteOperation:             []string{},
+	RulesRuleIdGetOperation:                []string{},
 	RulesRuleIdPutOperation:                []string{},
 	WorkbooksGetOperation:                  []string{},
 }

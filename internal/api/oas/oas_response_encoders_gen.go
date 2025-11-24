@@ -16,6 +16,19 @@ func encodeDiscussionsDiscussionIdDeleteResponse(response *DiscussionsDiscussion
 	return nil
 }
 
+func encodeDiscussionsDiscussionIdGetResponse(response *Discussion, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(200)
+
+	e := new(jx.Encoder)
+	response.Encode(e)
+	if _, err := e.WriteTo(w); err != nil {
+		return errors.Wrap(err, "write")
+	}
+
+	return nil
+}
+
 func encodeDiscussionsDiscussionIdPutResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
@@ -101,6 +114,19 @@ func encodeProjectsProjectIdDeleteResponse(response *ProjectsProjectIdDeleteNoCo
 	return nil
 }
 
+func encodeProjectsProjectIdGetResponse(response *Project, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(200)
+
+	e := new(jx.Encoder)
+	response.Encode(e)
+	if _, err := e.WriteTo(w); err != nil {
+		return errors.Wrap(err, "write")
+	}
+
+	return nil
+}
+
 func encodeProjectsProjectIdPutResponse(response *Project, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
@@ -146,6 +172,19 @@ func encodeRulesPostResponse(response *Rule, w http.ResponseWriter) error {
 
 func encodeRulesRuleIdDeleteResponse(response *RulesRuleIdDeleteNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
+
+	return nil
+}
+
+func encodeRulesRuleIdGetResponse(response *Rule, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(200)
+
+	e := new(jx.Encoder)
+	response.Encode(e)
+	if _, err := e.WriteTo(w); err != nil {
+		return errors.Wrap(err, "write")
+	}
 
 	return nil
 }
