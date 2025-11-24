@@ -5,7 +5,9 @@ describe("ToastPresenter", async () => {
   let elem: ToastPresenter;
 
   beforeEach(() => {
-    elem = document.createElement("toast-presenter") as unknown as ToastPresenter;
+    elem = document.createElement(
+      "toast-presenter"
+    ) as unknown as ToastPresenter;
     document.body.appendChild(elem);
   });
 
@@ -38,13 +40,9 @@ describe("ToastPresenter", async () => {
     const toasts = elem.shadowRoot?.querySelectorAll(".toast");
     expect(toasts?.length).toBe(4);
 
-    expect(
-      elem.shadowRoot?.querySelector(".toast-success")
-    ).not.toBeNull();
+    expect(elem.shadowRoot?.querySelector(".toast-success")).not.toBeNull();
     expect(elem.shadowRoot?.querySelector(".toast-error")).not.toBeNull();
-    expect(
-      elem.shadowRoot?.querySelector(".toast-warning")
-    ).not.toBeNull();
+    expect(elem.shadowRoot?.querySelector(".toast-warning")).not.toBeNull();
     expect(elem.shadowRoot?.querySelector(".toast-info")).not.toBeNull();
   });
 
@@ -138,5 +136,37 @@ describe("ToastPresenter", async () => {
     expect(consoleSpy).toHaveBeenCalledWith("Toast message cannot be empty");
 
     consoleSpy.mockRestore();
+  });
+
+  it("マウスホバー時に自動削除が一時停止すること", async () => {
+    vi.useFakeTimers();
+
+    elem.show("テストメッセージ", "info", 1000);
+    await elem.updateComplete;
+
+    const toast = elem.shadowRoot?.querySelector(".toast");
+    expect(toast).not.toBeNull();
+
+    // Mouse enter
+    toast?.dispatchEvent(new MouseEvent("mouseenter"));
+
+    // Advance time past duration
+    vi.advanceTimersByTime(1500);
+    await elem.updateComplete;
+
+    // Should still be visible
+    expect(elem.shadowRoot?.querySelector(".toast")).not.toBeNull();
+
+    // Mouse leave
+    toast?.dispatchEvent(new MouseEvent("mouseleave"));
+
+    // Advance time
+    vi.advanceTimersByTime(1000);
+    await elem.updateComplete;
+
+    // Should be gone
+    expect(elem.shadowRoot?.querySelector(".toast")).toBeNull();
+
+    vi.useRealTimers();
   });
 });

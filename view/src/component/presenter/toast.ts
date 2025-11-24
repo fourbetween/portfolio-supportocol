@@ -57,6 +57,18 @@ export class ToastPresenter extends LitElement {
     this.toasts = this.toasts.filter((t) => t.id !== id);
   }
 
+  private pauseToast(toast: ToastMessage) {
+    const timeoutId = this.timeouts.get(toast.id);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      this.timeouts.delete(toast.id);
+    }
+  }
+
+  private resumeToast(toast: ToastMessage) {
+    this.scheduleRemoval(toast);
+  }
+
   private getIcon(type: ToastType) {
     switch (type) {
       case "success":
@@ -124,7 +136,12 @@ export class ToastPresenter extends LitElement {
       <div class="toast-container">
         ${this.toasts.map(
           (toast) => html`
-            <div class="toast toast-${toast.type}" role="alert">
+            <div
+              class="toast toast-${toast.type}"
+              role="alert"
+              @mouseenter=${() => this.pauseToast(toast)}
+              @mouseleave=${() => this.resumeToast(toast)}
+            >
               ${this.getIcon(toast.type)}
               <span class="toast-message">${toast.message}</span>
               <button
