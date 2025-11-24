@@ -94,6 +94,86 @@ func decodeDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscaped bool,
 	return params, nil
 }
 
+// DiscussionsDiscussionIdGetParams is parameters of GET /discussions/{discussionId} operation.
+type DiscussionsDiscussionIdGetParams struct {
+	DiscussionId ID
+}
+
+func unpackDiscussionsDiscussionIdGetParams(packed middleware.Parameters) (params DiscussionsDiscussionIdGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "discussionId",
+			In:   "path",
+		}
+		params.DiscussionId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped bool, r *http.Request) (params DiscussionsDiscussionIdGetParams, _ error) {
+	// Decode path: discussionId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "discussionId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotDiscussionIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.DiscussionId.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "discussionId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // DiscussionsDiscussionIdPutParams is parameters of PUT /discussions/{discussionId} operation.
 type DiscussionsDiscussionIdPutParams struct {
 	DiscussionId ID
@@ -340,6 +420,86 @@ func decodeProjectsProjectIdDeleteParams(args [1]string, argsEscaped bool, r *ht
 	return params, nil
 }
 
+// ProjectsProjectIdGetParams is parameters of GET /projects/{projectId} operation.
+type ProjectsProjectIdGetParams struct {
+	ProjectId ID
+}
+
+func unpackProjectsProjectIdGetParams(packed middleware.Parameters) (params ProjectsProjectIdGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "projectId",
+			In:   "path",
+		}
+		params.ProjectId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeProjectsProjectIdGetParams(args [1]string, argsEscaped bool, r *http.Request) (params ProjectsProjectIdGetParams, _ error) {
+	// Decode path: projectId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "projectId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotProjectIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotProjectIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.ProjectId = ID(paramsDotProjectIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.ProjectId.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "projectId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // ProjectsProjectIdPutParams is parameters of PUT /projects/{projectId} operation.
 type ProjectsProjectIdPutParams struct {
 	ProjectId ID
@@ -437,6 +597,86 @@ func unpackRulesRuleIdDeleteParams(packed middleware.Parameters) (params RulesRu
 }
 
 func decodeRulesRuleIdDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params RulesRuleIdDeleteParams, _ error) {
+	// Decode path: ruleId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "ruleId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotRuleIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotRuleIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.RuleId = ID(paramsDotRuleIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.RuleId.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "ruleId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// RulesRuleIdGetParams is parameters of GET /rules/{ruleId} operation.
+type RulesRuleIdGetParams struct {
+	RuleId ID
+}
+
+func unpackRulesRuleIdGetParams(packed middleware.Parameters) (params RulesRuleIdGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "ruleId",
+			In:   "path",
+		}
+		params.RuleId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeRulesRuleIdGetParams(args [1]string, argsEscaped bool, r *http.Request) (params RulesRuleIdGetParams, _ error) {
 	// Decode path: ruleId.
 	if err := func() error {
 		param := args[0]

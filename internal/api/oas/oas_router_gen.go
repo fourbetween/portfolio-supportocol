@@ -106,12 +106,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							s.handleDiscussionsDiscussionIdDeleteRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
+						case "GET":
+							s.handleDiscussionsDiscussionIdGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
 						case "PUT":
 							s.handleDiscussionsDiscussionIdPutRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "DELETE,PUT")
+							s.notAllowed(w, r, "DELETE,GET,PUT")
 						}
 
 						return
@@ -184,12 +188,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							s.handleProjectsProjectIdDeleteRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
+						case "GET":
+							s.handleProjectsProjectIdGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
 						case "PUT":
 							s.handleProjectsProjectIdPutRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "DELETE,PUT")
+							s.notAllowed(w, r, "DELETE,GET,PUT")
 						}
 
 						return
@@ -242,12 +250,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							s.handleRulesRuleIdDeleteRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
+						case "GET":
+							s.handleRulesRuleIdGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
 						case "PUT":
 							s.handleRulesRuleIdPutRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "DELETE,PUT")
+							s.notAllowed(w, r, "DELETE,GET,PUT")
 						}
 
 						return
@@ -428,6 +440,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.args = args
 							r.count = 1
 							return r, true
+						case "GET":
+							r.name = DiscussionsDiscussionIdGetOperation
+							r.summary = ""
+							r.operationID = ""
+							r.pathPattern = "/discussions/{discussionId}"
+							r.args = args
+							r.count = 1
+							return r, true
 						case "PUT":
 							r.name = DiscussionsDiscussionIdPutOperation
 							r.summary = ""
@@ -526,6 +546,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.args = args
 							r.count = 1
 							return r, true
+						case "GET":
+							r.name = ProjectsProjectIdGetOperation
+							r.summary = ""
+							r.operationID = ""
+							r.pathPattern = "/projects/{projectId}"
+							r.args = args
+							r.count = 1
+							return r, true
 						case "PUT":
 							r.name = ProjectsProjectIdPutOperation
 							r.summary = ""
@@ -594,6 +622,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						switch method {
 						case "DELETE":
 							r.name = RulesRuleIdDeleteOperation
+							r.summary = ""
+							r.operationID = ""
+							r.pathPattern = "/rules/{ruleId}"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "GET":
+							r.name = RulesRuleIdGetOperation
 							r.summary = ""
 							r.operationID = ""
 							r.pathPattern = "/rules/{ruleId}"

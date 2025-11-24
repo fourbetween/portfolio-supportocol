@@ -23,6 +23,10 @@ type (
 		clockSrv       clock.Service
 	}
 
+	LoadProjectParams struct {
+		ProjectID string
+	}
+
 	CreateProjectParams struct {
 		Name string
 	}
@@ -34,6 +38,10 @@ type (
 
 	DeleteProjectParams struct {
 		ProjectID string
+	}
+
+	LoadRuleParams struct {
+		RuleID string
 	}
 
 	CreateRuleParams struct {
@@ -53,6 +61,10 @@ type (
 
 	DeleteRuleParams struct {
 		RuleID string
+	}
+
+	LoadDiscussionParams struct {
+		DiscussionID string
 	}
 
 	ListDiscussionsParams struct {
@@ -90,6 +102,13 @@ func (u *User) ID() string {
 
 func (u *User) Email() string {
 	return u.email
+}
+
+func (u *User) LoadProject(params LoadProjectParams) (*project.Project, error) {
+	return u.projectRepo.Load(project.LoadParams{
+		ID:        params.ProjectID,
+		CreatedBy: u.id,
+	})
 }
 
 func (u *User) ListProjects() ([]*project.Project, error) {
@@ -140,6 +159,13 @@ func (u *User) DeleteProject(params DeleteProjectParams) error {
 	}
 
 	return p.Delete()
+}
+
+func (u *User) LoadRule(params LoadRuleParams) (*rule.Rule, error) {
+	return u.ruleRepo.Load(rule.LoadParams{
+		ID:        params.RuleID,
+		CreatedBy: u.id,
+	})
 }
 
 func (u *User) ListRules() ([]*rule.Rule, error) {
@@ -198,6 +224,12 @@ func (u *User) DeleteRule(params DeleteRuleParams) error {
 	}
 
 	return r.Delete()
+}
+
+func (u *User) LoadDiscussion(params LoadDiscussionParams) (*discussion.Discussion, error) {
+	return u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
 }
 
 func (u *User) ListDiscussions(params ListDiscussionsParams) ([]*discussion.Discussion, error) {

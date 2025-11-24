@@ -80,6 +80,35 @@ const routes: RouteConfig[] = [
     },
   },
   {
+    method: "get",
+    path: "/projects/{projectId}",
+    description: "get project",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        projectId: IdSchema,
+      }),
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: ProjectSchema,
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
     method: "post",
     path: "/projects",
     description: "create project",
@@ -188,6 +217,35 @@ const routes: RouteConfig[] = [
         content: {
           "application/json": {
             schema: z.array(RuleSchema),
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "get",
+    path: "/rules/{ruleId}",
+    description: "get rule",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        ruleId: IdSchema,
+      }),
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: RuleSchema,
           },
         },
       },
@@ -320,6 +378,35 @@ const routes: RouteConfig[] = [
         content: {
           "application/json": {
             schema: z.array(DiscussionSchema),
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "get",
+    path: "/discussions/{discussionId}",
+    description: "get discussion",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+      }),
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: DiscussionSchema,
           },
         },
       },

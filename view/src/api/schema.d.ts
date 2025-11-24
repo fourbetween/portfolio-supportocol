@@ -136,7 +136,38 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** @description get project */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    projectId: components["schemas"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["project"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
         /** @description update project */
         put: {
             parameters: {
@@ -301,7 +332,38 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** @description get rule */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    ruleId: components["schemas"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["rule"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
         /** @description update rule */
         put: {
             parameters: {
@@ -473,7 +535,38 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** @description get discussion */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    discussionId: components["schemas"]["id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["discussion"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["error"];
+                    };
+                };
+            };
+        };
         /** @description update discussion */
         put: {
             parameters: {
