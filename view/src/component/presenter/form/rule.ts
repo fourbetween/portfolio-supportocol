@@ -130,7 +130,6 @@ export class RuleFormPresenter extends LitElement {
     const { name, description, color } = e.detail;
     const newType = {
       id: ulid(),
-      ruleId: this.rule.id,
       name,
       description,
       color,
@@ -159,8 +158,6 @@ export class RuleFormPresenter extends LitElement {
         commentTypePaths: [
           ...this.rule.commentTypePaths,
           {
-            id: ulid(),
-            ruleId: this.rule.id,
             fromCommentTypeId: fromId,
             toCommentTypeId: toId,
           },

@@ -262,16 +262,8 @@ export interface paths {
                     "application/json": {
                         name: string;
                         description: string;
-                        commentTypes: {
-                            id: components["schemas"]["id"];
-                            name: string;
-                            description: string;
-                            color: string;
-                        }[];
-                        commentTypePaths: {
-                            fromCommentTypeId: components["schemas"]["id"];
-                            toCommentTypeId: components["schemas"]["id"];
-                        }[];
+                        commentTypes: components["schemas"]["commentType"][];
+                        commentTypePaths: components["schemas"]["commentTypePath"][];
                     };
                 };
             };
@@ -325,16 +317,8 @@ export interface paths {
                     "application/json": {
                         name: string;
                         description: string;
-                        commentTypes: {
-                            id: components["schemas"]["id"];
-                            name: string;
-                            description: string;
-                            color: string;
-                        }[];
-                        commentTypePaths: {
-                            fromCommentTypeId: components["schemas"]["id"];
-                            toCommentTypeId: components["schemas"]["id"];
-                        }[];
+                        commentTypes: components["schemas"]["commentType"][];
+                        commentTypePaths: components["schemas"]["commentTypePath"][];
                     };
                 };
             };
@@ -646,14 +630,11 @@ export interface components {
         };
         commentType: {
             id: components["schemas"]["id"];
-            ruleId: components["schemas"]["id"];
             name: string;
             description: string;
             color: string;
         };
         commentTypePath: {
-            id: components["schemas"]["id"];
-            ruleId: components["schemas"]["id"];
             fromCommentTypeId: components["schemas"]["id"];
             toCommentTypeId: components["schemas"]["id"];
         };

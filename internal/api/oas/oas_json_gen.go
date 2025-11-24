@@ -68,10 +68,6 @@ func (s *CommentType) encodeFields(e *jx.Encoder) {
 		s.ID.Encode(e)
 	}
 	{
-		e.FieldStart("ruleId")
-		s.RuleId.Encode(e)
-	}
-	{
 		e.FieldStart("name")
 		e.Str(s.Name)
 	}
@@ -85,12 +81,11 @@ func (s *CommentType) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfCommentType = [5]string{
+var jsonFieldsNameOfCommentType = [4]string{
 	0: "id",
-	1: "ruleId",
-	2: "name",
-	3: "description",
-	4: "color",
+	1: "name",
+	2: "description",
+	3: "color",
 }
 
 // Decode decodes CommentType from json.
@@ -112,18 +107,8 @@ func (s *CommentType) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"id\"")
 			}
-		case "ruleId":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				if err := s.RuleId.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"ruleId\"")
-			}
 		case "name":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				v, err := d.Str()
 				s.Name = string(v)
@@ -135,7 +120,7 @@ func (s *CommentType) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "description":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				v, err := d.Str()
 				s.Description = string(v)
@@ -147,7 +132,7 @@ func (s *CommentType) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"description\"")
 			}
 		case "color":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				v, err := d.Str()
 				s.Color = string(v)
@@ -168,7 +153,7 @@ func (s *CommentType) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -224,14 +209,6 @@ func (s *CommentTypePath) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CommentTypePath) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("id")
-		s.ID.Encode(e)
-	}
-	{
-		e.FieldStart("ruleId")
-		s.RuleId.Encode(e)
-	}
-	{
 		e.FieldStart("fromCommentTypeId")
 		s.FromCommentTypeId.Encode(e)
 	}
@@ -241,11 +218,9 @@ func (s *CommentTypePath) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfCommentTypePath = [4]string{
-	0: "id",
-	1: "ruleId",
-	2: "fromCommentTypeId",
-	3: "toCommentTypeId",
+var jsonFieldsNameOfCommentTypePath = [2]string{
+	0: "fromCommentTypeId",
+	1: "toCommentTypeId",
 }
 
 // Decode decodes CommentTypePath from json.
@@ -257,28 +232,8 @@ func (s *CommentTypePath) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "id":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"id\"")
-			}
-		case "ruleId":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				if err := s.RuleId.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"ruleId\"")
-			}
 		case "fromCommentTypeId":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
 				if err := s.FromCommentTypeId.Decode(d); err != nil {
 					return err
@@ -288,7 +243,7 @@ func (s *CommentTypePath) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"fromCommentTypeId\"")
 			}
 		case "toCommentTypeId":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				if err := s.ToCommentTypeId.Decode(d); err != nil {
 					return err
@@ -307,7 +262,7 @@ func (s *CommentTypePath) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2114,9 +2069,9 @@ func (s *RulesPostReq) Decode(d *jx.Decoder) error {
 		case "commentTypes":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				s.CommentTypes = make([]RulesPostReqCommentTypesItem, 0)
+				s.CommentTypes = make([]CommentType, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem RulesPostReqCommentTypesItem
+					var elem CommentType
 					if err := elem.Decode(d); err != nil {
 						return err
 					}
@@ -2132,9 +2087,9 @@ func (s *RulesPostReq) Decode(d *jx.Decoder) error {
 		case "commentTypePaths":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				s.CommentTypePaths = make([]RulesPostReqCommentTypePathsItem, 0)
+				s.CommentTypePaths = make([]CommentTypePath, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem RulesPostReqCommentTypePathsItem
+					var elem CommentTypePath
 					if err := elem.Decode(d); err != nil {
 						return err
 					}
@@ -2199,260 +2154,6 @@ func (s *RulesPostReq) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *RulesPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *RulesPostReqCommentTypePathsItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *RulesPostReqCommentTypePathsItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("fromCommentTypeId")
-		s.FromCommentTypeId.Encode(e)
-	}
-	{
-		e.FieldStart("toCommentTypeId")
-		s.ToCommentTypeId.Encode(e)
-	}
-}
-
-var jsonFieldsNameOfRulesPostReqCommentTypePathsItem = [2]string{
-	0: "fromCommentTypeId",
-	1: "toCommentTypeId",
-}
-
-// Decode decodes RulesPostReqCommentTypePathsItem from json.
-func (s *RulesPostReqCommentTypePathsItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode RulesPostReqCommentTypePathsItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "fromCommentTypeId":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				if err := s.FromCommentTypeId.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"fromCommentTypeId\"")
-			}
-		case "toCommentTypeId":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				if err := s.ToCommentTypeId.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"toCommentTypeId\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode RulesPostReqCommentTypePathsItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfRulesPostReqCommentTypePathsItem) {
-					name = jsonFieldsNameOfRulesPostReqCommentTypePathsItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *RulesPostReqCommentTypePathsItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *RulesPostReqCommentTypePathsItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *RulesPostReqCommentTypesItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *RulesPostReqCommentTypesItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("id")
-		s.ID.Encode(e)
-	}
-	{
-		e.FieldStart("name")
-		e.Str(s.Name)
-	}
-	{
-		e.FieldStart("description")
-		e.Str(s.Description)
-	}
-	{
-		e.FieldStart("color")
-		e.Str(s.Color)
-	}
-}
-
-var jsonFieldsNameOfRulesPostReqCommentTypesItem = [4]string{
-	0: "id",
-	1: "name",
-	2: "description",
-	3: "color",
-}
-
-// Decode decodes RulesPostReqCommentTypesItem from json.
-func (s *RulesPostReqCommentTypesItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode RulesPostReqCommentTypesItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "id":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"id\"")
-			}
-		case "name":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Str()
-				s.Name = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
-		case "description":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Str()
-				s.Description = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"description\"")
-			}
-		case "color":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				v, err := d.Str()
-				s.Color = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"color\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode RulesPostReqCommentTypesItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00001111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfRulesPostReqCommentTypesItem) {
-					name = jsonFieldsNameOfRulesPostReqCommentTypesItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *RulesPostReqCommentTypesItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *RulesPostReqCommentTypesItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -2535,9 +2236,9 @@ func (s *RulesRuleIdPutReq) Decode(d *jx.Decoder) error {
 		case "commentTypes":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				s.CommentTypes = make([]RulesRuleIdPutReqCommentTypesItem, 0)
+				s.CommentTypes = make([]CommentType, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem RulesRuleIdPutReqCommentTypesItem
+					var elem CommentType
 					if err := elem.Decode(d); err != nil {
 						return err
 					}
@@ -2553,9 +2254,9 @@ func (s *RulesRuleIdPutReq) Decode(d *jx.Decoder) error {
 		case "commentTypePaths":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				s.CommentTypePaths = make([]RulesRuleIdPutReqCommentTypePathsItem, 0)
+				s.CommentTypePaths = make([]CommentTypePath, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem RulesRuleIdPutReqCommentTypePathsItem
+					var elem CommentTypePath
 					if err := elem.Decode(d); err != nil {
 						return err
 					}
@@ -2620,260 +2321,6 @@ func (s *RulesRuleIdPutReq) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *RulesRuleIdPutReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *RulesRuleIdPutReqCommentTypePathsItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *RulesRuleIdPutReqCommentTypePathsItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("fromCommentTypeId")
-		s.FromCommentTypeId.Encode(e)
-	}
-	{
-		e.FieldStart("toCommentTypeId")
-		s.ToCommentTypeId.Encode(e)
-	}
-}
-
-var jsonFieldsNameOfRulesRuleIdPutReqCommentTypePathsItem = [2]string{
-	0: "fromCommentTypeId",
-	1: "toCommentTypeId",
-}
-
-// Decode decodes RulesRuleIdPutReqCommentTypePathsItem from json.
-func (s *RulesRuleIdPutReqCommentTypePathsItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode RulesRuleIdPutReqCommentTypePathsItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "fromCommentTypeId":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				if err := s.FromCommentTypeId.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"fromCommentTypeId\"")
-			}
-		case "toCommentTypeId":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				if err := s.ToCommentTypeId.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"toCommentTypeId\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode RulesRuleIdPutReqCommentTypePathsItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfRulesRuleIdPutReqCommentTypePathsItem) {
-					name = jsonFieldsNameOfRulesRuleIdPutReqCommentTypePathsItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *RulesRuleIdPutReqCommentTypePathsItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *RulesRuleIdPutReqCommentTypePathsItem) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *RulesRuleIdPutReqCommentTypesItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *RulesRuleIdPutReqCommentTypesItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("id")
-		s.ID.Encode(e)
-	}
-	{
-		e.FieldStart("name")
-		e.Str(s.Name)
-	}
-	{
-		e.FieldStart("description")
-		e.Str(s.Description)
-	}
-	{
-		e.FieldStart("color")
-		e.Str(s.Color)
-	}
-}
-
-var jsonFieldsNameOfRulesRuleIdPutReqCommentTypesItem = [4]string{
-	0: "id",
-	1: "name",
-	2: "description",
-	3: "color",
-}
-
-// Decode decodes RulesRuleIdPutReqCommentTypesItem from json.
-func (s *RulesRuleIdPutReqCommentTypesItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode RulesRuleIdPutReqCommentTypesItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "id":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"id\"")
-			}
-		case "name":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Str()
-				s.Name = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
-		case "description":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Str()
-				s.Description = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"description\"")
-			}
-		case "color":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				v, err := d.Str()
-				s.Color = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"color\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode RulesRuleIdPutReqCommentTypesItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00001111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfRulesRuleIdPutReqCommentTypesItem) {
-					name = jsonFieldsNameOfRulesRuleIdPutReqCommentTypesItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *RulesRuleIdPutReqCommentTypesItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *RulesRuleIdPutReqCommentTypesItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

@@ -8,28 +8,24 @@ const commentTypes: CommentType[] = [
     id: "agreement",
     name: "賛成",
     description: "",
-    ruleId: "rule1",
     color: "green",
   },
   {
     id: "disagreement",
     name: "反対",
     description: "",
-    ruleId: "rule1",
     color: "red",
   },
   {
     id: "question",
     name: "質問",
     description: "",
-    ruleId: "rule1",
     color: "blue",
   },
   {
     id: "supplement",
     name: "補足",
     description: "",
-    ruleId: "rule1",
     color: "gray",
   },
 ];

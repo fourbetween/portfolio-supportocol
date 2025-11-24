@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS notes;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS comment_type_paths;
 DROP TABLE IF EXISTS comment_types;
+DROP TABLE IF EXISTS project_discussions;
 DROP TABLE IF EXISTS discussions;
 DROP TABLE IF EXISTS rules;
 DROP TABLE IF EXISTS projects;

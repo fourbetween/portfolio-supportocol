@@ -88,7 +88,6 @@ export const NoteSchema = z
 export const CommentTypeSchema = z
   .object({
     id: IdSchema,
-    ruleId: IdSchema,
     name: z.string(),
     description: z.string(),
     color: z.string(),
@@ -97,8 +96,6 @@ export const CommentTypeSchema = z
 
 export const CommentTypePathSchema = z
   .object({
-    id: IdSchema,
-    ruleId: IdSchema,
     fromCommentTypeId: IdSchema,
     toCommentTypeId: IdSchema,
   })
