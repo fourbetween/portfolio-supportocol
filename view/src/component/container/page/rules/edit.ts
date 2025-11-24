@@ -1,3 +1,4 @@
+import { Task } from "@lit/task";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { client } from "../../../../api/client";
@@ -10,33 +11,55 @@ export class EditRulesPageContainer extends LitElement {
   @property({ type: Boolean })
   isLoggedIn = false;
 
+  @property({ type: String })
+  ruleId!: string;
+
+  private ruleTask = new Task(this, {
+    task: async ([]) => {
+      const { data, error } = await client.GET("/rules/{ruleId}", {
+        headers: await accountMethods.authHeader(),
+        params: {
+          path: {
+            ruleId: this.ruleId,
+          },
+        },
+      });
+      if (error) {
+        throw new Error(error.message);
+      }
+      return data;
+    },
+    args: () => [],
+  });
+
   render() {
     return html`
       <div class="container">
-        <create-rule-form-presenter
-          .createRule=${(rule: Rule) => this.createRule(rule)}
-        ></create-rule-form-presenter>
+        ${this.ruleTask.render({
+          complete: (rule) => html`
+            <edit-rule-form-presenter
+              .rule=${rule}
+              .editRule=${(rule: Rule) => this.editRule(rule)}
+            ></edit-rule-form-presenter>
+          `,
+          error: (e) =>
+            html`
+              <p>Error: ${e}</p>
+            `,
+        })}
       </div>
     `;
   }
 
-  private async createRule(rule: Rule) {
-    const { error } = await client.POST("/rules", {
+  private async editRule(rule: Rule) {
+    const { error } = await client.PUT("/rules/{ruleId}", {
       headers: await accountMethods.authHeader(),
-      body: {
-        name: rule.name,
-        description: rule.description,
-        commentTypes: rule.commentTypes.map((ct) => ({
-          id: ct.id,
-          name: ct.name,
-          description: ct.description,
-          color: ct.color,
-        })),
-        commentTypePaths: rule.commentTypePaths.map((ctp) => ({
-          fromCommentTypeId: ctp.fromCommentTypeId,
-          toCommentTypeId: ctp.toCommentTypeId,
-        })),
+      params: {
+        path: {
+          ruleId: this.ruleId,
+        },
       },
+      body: rule,
     });
 
     if (error) {
