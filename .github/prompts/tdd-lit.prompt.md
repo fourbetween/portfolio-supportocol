@@ -36,6 +36,7 @@ $ARGUMENTS
 ## コンポーネント実装ガイドライン
 
 - Container/Presentational パターンに従ってコンポーネントを実装してください。
+- container コンポーネントはテストやストーリーは不要です。
 - 各コンポーネントは、`view/src/component/container`または`view/src/component/presenter`以下に配置してください。
 - presenter コンポーネントは、container コンポーネントから渡されたデータを表示することに専念し、状態管理やビジネスロジックは container コンポーネントに任せてください。
 - container コンポーネントがデータ取得に使う api の各エンドポイントは`view/src/api/schema/route.ts`を参照してください。
