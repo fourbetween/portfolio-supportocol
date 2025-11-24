@@ -106,7 +106,7 @@ export class CreateDiscussionPopupPresenter extends LitElement {
               required
             >
               <option value="everyone">全員</option>
-              <option value="logged_in">ログインユーザー</option>
+              <option value="authenticated">ログインユーザー</option>
               <option value="owner">自分のみ</option>
             </select>
             <p class="form-helper">この議論を閲覧できる範囲を設定します。</p>
@@ -123,7 +123,7 @@ export class CreateDiscussionPopupPresenter extends LitElement {
               required
             >
               <option value="everyone">全員</option>
-              <option value="logged_in">ログインユーザー</option>
+              <option value="authenticated">ログインユーザー</option>
               <option value="owner">自分のみ</option>
             </select>
             <p class="form-helper">
