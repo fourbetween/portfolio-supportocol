@@ -62,7 +62,7 @@ func (r *RuleRepository) Save(rl *rule.Rule) error {
 		return err
 	}
 
-	if err := r.saveCommentTypePaths(rl.CommentTypePaths()); err != nil {
+	if err := r.saveCommentTypePaths(rl.ID(), rl.CommentTypePaths()); err != nil {
 		return err
 	}
 
@@ -183,7 +183,7 @@ func (r *RuleRepository) saveCommentTypes(commentTypes []rule.CommentType) error
 	return nil
 }
 
-func (r *RuleRepository) saveCommentTypePaths(commentTypePaths []rule.CommentTypePath) error {
+func (r *RuleRepository) saveCommentTypePaths(ruleID string, commentTypePaths []rule.CommentTypePath) error {
 	if len(commentTypePaths) == 0 {
 		return nil
 	}
@@ -191,8 +191,7 @@ func (r *RuleRepository) saveCommentTypePaths(commentTypePaths []rule.CommentTyp
 	commentTypePathRecords := make([]model.CommentTypePaths, len(commentTypePaths))
 	for i, ctp := range commentTypePaths {
 		commentTypePathRecords[i] = model.CommentTypePaths{
-			ID:                ctp.ID,
-			RuleID:            ctp.RuleID,
+			RuleID:            ruleID,
 			FromCommentTypeID: ctp.FromCommentTypeID,
 			ToCommentTypeID:   ctp.ToCommentTypeID,
 		}
@@ -255,8 +254,6 @@ func (r *RuleRepository) fetchCommentTypePathsByRuleIDs(ruleIDs []string) (map[s
 	result := make(map[string][]rule.CommentTypePath)
 	for _, ctp := range records {
 		result[ctp.RuleID] = append(result[ctp.RuleID], rule.CommentTypePath{
-			ID:                ctp.ID,
-			RuleID:            ctp.RuleID,
 			FromCommentTypeID: ctp.FromCommentTypeID,
 			ToCommentTypeID:   ctp.ToCommentTypeID,
 		})

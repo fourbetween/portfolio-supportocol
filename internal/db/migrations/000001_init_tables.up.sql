@@ -66,11 +66,10 @@ CREATE TABLE comment_types (
 
 -- コメント種類間の経路
 CREATE TABLE comment_type_paths (
-	id VARCHAR NOT NULL,
 	rule_id VARCHAR NOT NULL,
 	from_comment_type_id VARCHAR NOT NULL,
 	to_comment_type_id VARCHAR NOT NULL,
-	CONSTRAINT comment_type_paths_pk PRIMARY KEY (id),
+	CONSTRAINT comment_type_paths_pk PRIMARY KEY (rule_id, from_comment_type_id, to_comment_type_id),
 	CONSTRAINT comment_type_paths_rules_fk FOREIGN KEY (rule_id) REFERENCES rules(id) ON DELETE CASCADE,
 	CONSTRAINT comment_type_paths_from_fk FOREIGN KEY (from_comment_type_id) REFERENCES comment_types(id) ON DELETE CASCADE,
 	CONSTRAINT comment_type_paths_to_fk FOREIGN KEY (to_comment_type_id) REFERENCES comment_types(id) ON DELETE CASCADE

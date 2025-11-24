@@ -268,10 +268,7 @@ export interface paths {
                             description: string;
                             color: string;
                         }[];
-                        commentTypePaths: {
-                            fromCommentTypeId: components["schemas"]["id"];
-                            toCommentTypeId: components["schemas"]["id"];
-                        }[];
+                        commentTypePaths: components["schemas"]["commentTypePath"][];
                     };
                 };
             };
@@ -331,10 +328,7 @@ export interface paths {
                             description: string;
                             color: string;
                         }[];
-                        commentTypePaths: {
-                            fromCommentTypeId: components["schemas"]["id"];
-                            toCommentTypeId: components["schemas"]["id"];
-                        }[];
+                        commentTypePaths: components["schemas"]["commentTypePath"][];
                     };
                 };
             };
@@ -652,8 +646,6 @@ export interface components {
             color: string;
         };
         commentTypePath: {
-            id: components["schemas"]["id"];
-            ruleId: components["schemas"]["id"];
             fromCommentTypeId: components["schemas"]["id"];
             toCommentTypeId: components["schemas"]["id"];
         };

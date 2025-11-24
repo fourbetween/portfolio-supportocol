@@ -63,28 +63,6 @@ func (s *CommentTypePath) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.ID.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "id",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if err := s.RuleId.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "ruleId",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if err := s.FromCommentTypeId.Validate(); err != nil {
 			return err
 		}
@@ -580,40 +558,6 @@ func (s *RulesPostReq) Validate() error {
 	return nil
 }
 
-func (s *RulesPostReqCommentTypePathsItem) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.FromCommentTypeId.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "fromCommentTypeId",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if err := s.ToCommentTypeId.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "toCommentTypeId",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
 func (s *RulesPostReqCommentTypesItem) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -696,40 +640,6 @@ func (s *RulesRuleIdPutReq) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "commentTypePaths",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s *RulesRuleIdPutReqCommentTypePathsItem) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.FromCommentTypeId.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "fromCommentTypeId",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if err := s.ToCommentTypeId.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "toCommentTypeId",
 			Error: err,
 		})
 	}

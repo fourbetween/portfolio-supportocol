@@ -84,17 +84,11 @@ components:
     commentTypePath:
       type: object
       properties:
-        id:
-          $ref: "#/components/schemas/id"
-        ruleId:
-          $ref: "#/components/schemas/id"
         fromCommentTypeId:
           $ref: "#/components/schemas/id"
         toCommentTypeId:
           $ref: "#/components/schemas/id"
       required:
-        - id
-        - ruleId
         - fromCommentTypeId
         - toCommentTypeId
     rule:
@@ -355,15 +349,7 @@ paths:
                 commentTypePaths:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      fromCommentTypeId:
-                        $ref: "#/components/schemas/id"
-                      toCommentTypeId:
-                        $ref: "#/components/schemas/id"
-                    required:
-                      - fromCommentTypeId
-                      - toCommentTypeId
+                    $ref: "#/components/schemas/commentTypePath"
               required:
                 - name
                 - description
@@ -424,15 +410,7 @@ paths:
                 commentTypePaths:
                   type: array
                   items:
-                    type: object
-                    properties:
-                      fromCommentTypeId:
-                        $ref: "#/components/schemas/id"
-                      toCommentTypeId:
-                        $ref: "#/components/schemas/id"
-                    required:
-                      - fromCommentTypeId
-                      - toCommentTypeId
+                    $ref: "#/components/schemas/commentTypePath"
               required:
                 - name
                 - description

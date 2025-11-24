@@ -148,20 +148,8 @@ func (s *CommentType) SetColor(val string) {
 
 // Ref: #/components/schemas/commentTypePath
 type CommentTypePath struct {
-	ID                ID `json:"id"`
-	RuleId            ID `json:"ruleId"`
 	FromCommentTypeId ID `json:"fromCommentTypeId"`
 	ToCommentTypeId   ID `json:"toCommentTypeId"`
-}
-
-// GetID returns the value of ID.
-func (s *CommentTypePath) GetID() ID {
-	return s.ID
-}
-
-// GetRuleId returns the value of RuleId.
-func (s *CommentTypePath) GetRuleId() ID {
-	return s.RuleId
 }
 
 // GetFromCommentTypeId returns the value of FromCommentTypeId.
@@ -172,16 +160,6 @@ func (s *CommentTypePath) GetFromCommentTypeId() ID {
 // GetToCommentTypeId returns the value of ToCommentTypeId.
 func (s *CommentTypePath) GetToCommentTypeId() ID {
 	return s.ToCommentTypeId
-}
-
-// SetID sets the value of ID.
-func (s *CommentTypePath) SetID(val ID) {
-	s.ID = val
-}
-
-// SetRuleId sets the value of RuleId.
-func (s *CommentTypePath) SetRuleId(val ID) {
-	s.RuleId = val
 }
 
 // SetFromCommentTypeId sets the value of FromCommentTypeId.
@@ -1110,10 +1088,10 @@ func (s *Rule) SetCommentTypePaths(val []CommentTypePath) {
 }
 
 type RulesPostReq struct {
-	Name             string                             `json:"name"`
-	Description      string                             `json:"description"`
-	CommentTypes     []RulesPostReqCommentTypesItem     `json:"commentTypes"`
-	CommentTypePaths []RulesPostReqCommentTypePathsItem `json:"commentTypePaths"`
+	Name             string                         `json:"name"`
+	Description      string                         `json:"description"`
+	CommentTypes     []RulesPostReqCommentTypesItem `json:"commentTypes"`
+	CommentTypePaths []CommentTypePath              `json:"commentTypePaths"`
 }
 
 // GetName returns the value of Name.
@@ -1132,7 +1110,7 @@ func (s *RulesPostReq) GetCommentTypes() []RulesPostReqCommentTypesItem {
 }
 
 // GetCommentTypePaths returns the value of CommentTypePaths.
-func (s *RulesPostReq) GetCommentTypePaths() []RulesPostReqCommentTypePathsItem {
+func (s *RulesPostReq) GetCommentTypePaths() []CommentTypePath {
 	return s.CommentTypePaths
 }
 
@@ -1152,33 +1130,8 @@ func (s *RulesPostReq) SetCommentTypes(val []RulesPostReqCommentTypesItem) {
 }
 
 // SetCommentTypePaths sets the value of CommentTypePaths.
-func (s *RulesPostReq) SetCommentTypePaths(val []RulesPostReqCommentTypePathsItem) {
+func (s *RulesPostReq) SetCommentTypePaths(val []CommentTypePath) {
 	s.CommentTypePaths = val
-}
-
-type RulesPostReqCommentTypePathsItem struct {
-	FromCommentTypeId ID `json:"fromCommentTypeId"`
-	ToCommentTypeId   ID `json:"toCommentTypeId"`
-}
-
-// GetFromCommentTypeId returns the value of FromCommentTypeId.
-func (s *RulesPostReqCommentTypePathsItem) GetFromCommentTypeId() ID {
-	return s.FromCommentTypeId
-}
-
-// GetToCommentTypeId returns the value of ToCommentTypeId.
-func (s *RulesPostReqCommentTypePathsItem) GetToCommentTypeId() ID {
-	return s.ToCommentTypeId
-}
-
-// SetFromCommentTypeId sets the value of FromCommentTypeId.
-func (s *RulesPostReqCommentTypePathsItem) SetFromCommentTypeId(val ID) {
-	s.FromCommentTypeId = val
-}
-
-// SetToCommentTypeId sets the value of ToCommentTypeId.
-func (s *RulesPostReqCommentTypePathsItem) SetToCommentTypeId(val ID) {
-	s.ToCommentTypeId = val
 }
 
 type RulesPostReqCommentTypesItem struct {
@@ -1232,10 +1185,10 @@ func (s *RulesPostReqCommentTypesItem) SetColor(val string) {
 type RulesRuleIdDeleteNoContent struct{}
 
 type RulesRuleIdPutReq struct {
-	Name             string                                  `json:"name"`
-	Description      string                                  `json:"description"`
-	CommentTypes     []RulesRuleIdPutReqCommentTypesItem     `json:"commentTypes"`
-	CommentTypePaths []RulesRuleIdPutReqCommentTypePathsItem `json:"commentTypePaths"`
+	Name             string                              `json:"name"`
+	Description      string                              `json:"description"`
+	CommentTypes     []RulesRuleIdPutReqCommentTypesItem `json:"commentTypes"`
+	CommentTypePaths []CommentTypePath                   `json:"commentTypePaths"`
 }
 
 // GetName returns the value of Name.
@@ -1254,7 +1207,7 @@ func (s *RulesRuleIdPutReq) GetCommentTypes() []RulesRuleIdPutReqCommentTypesIte
 }
 
 // GetCommentTypePaths returns the value of CommentTypePaths.
-func (s *RulesRuleIdPutReq) GetCommentTypePaths() []RulesRuleIdPutReqCommentTypePathsItem {
+func (s *RulesRuleIdPutReq) GetCommentTypePaths() []CommentTypePath {
 	return s.CommentTypePaths
 }
 
@@ -1274,33 +1227,8 @@ func (s *RulesRuleIdPutReq) SetCommentTypes(val []RulesRuleIdPutReqCommentTypesI
 }
 
 // SetCommentTypePaths sets the value of CommentTypePaths.
-func (s *RulesRuleIdPutReq) SetCommentTypePaths(val []RulesRuleIdPutReqCommentTypePathsItem) {
+func (s *RulesRuleIdPutReq) SetCommentTypePaths(val []CommentTypePath) {
 	s.CommentTypePaths = val
-}
-
-type RulesRuleIdPutReqCommentTypePathsItem struct {
-	FromCommentTypeId ID `json:"fromCommentTypeId"`
-	ToCommentTypeId   ID `json:"toCommentTypeId"`
-}
-
-// GetFromCommentTypeId returns the value of FromCommentTypeId.
-func (s *RulesRuleIdPutReqCommentTypePathsItem) GetFromCommentTypeId() ID {
-	return s.FromCommentTypeId
-}
-
-// GetToCommentTypeId returns the value of ToCommentTypeId.
-func (s *RulesRuleIdPutReqCommentTypePathsItem) GetToCommentTypeId() ID {
-	return s.ToCommentTypeId
-}
-
-// SetFromCommentTypeId sets the value of FromCommentTypeId.
-func (s *RulesRuleIdPutReqCommentTypePathsItem) SetFromCommentTypeId(val ID) {
-	s.FromCommentTypeId = val
-}
-
-// SetToCommentTypeId sets the value of ToCommentTypeId.
-func (s *RulesRuleIdPutReqCommentTypePathsItem) SetToCommentTypeId(val ID) {
-	s.ToCommentTypeId = val
 }
 
 type RulesRuleIdPutReqCommentTypesItem struct {

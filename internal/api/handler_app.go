@@ -397,8 +397,6 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 	ctps := make([]oas.CommentTypePath, len(item.CommentTypePaths()))
 	for i, v := range item.CommentTypePaths() {
 		ctps[i] = oas.CommentTypePath{
-			ID:                oas.ID(v.ID),
-			RuleId:            oas.ID(v.RuleID),
 			FromCommentTypeId: oas.ID(v.FromCommentTypeID),
 			ToCommentTypeId:   oas.ID(v.ToCommentTypeID),
 		}

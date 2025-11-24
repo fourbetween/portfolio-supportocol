@@ -97,8 +97,6 @@ export const CommentTypeSchema = z
 
 export const CommentTypePathSchema = z
   .object({
-    id: IdSchema,
-    ruleId: IdSchema,
     fromCommentTypeId: IdSchema,
     toCommentTypeId: IdSchema,
   })
