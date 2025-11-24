@@ -12,28 +12,24 @@ const rule: Rule = {
   commentTypes: [
     {
       id: "01J8Y000000000000000000011",
-      ruleId: "01J8Y000000000000000000001",
       name: "主張 (Proposition)",
       description: "自分の意見や提案を述べるコメント",
       color: "#0969da",
     },
     {
       id: "01J8Y000000000000000000012",
-      ruleId: "01J8Y000000000000000000001",
       name: "質問 (Question)",
       description: "不明点を確認するコメント",
       color: "#d29922",
     },
     {
       id: "01J8Y000000000000000000013",
-      ruleId: "01J8Y000000000000000000001",
       name: "回答 (Answer)",
       description: "質問に対する回答",
       color: "#1a7f37",
     },
     {
       id: "01J8Y000000000000000000014",
-      ruleId: "01J8Y000000000000000000001",
       name: "反論 (Objection)",
       description: "主張に対する反論",
       color: "#cf222e",
@@ -41,44 +37,30 @@ const rule: Rule = {
   ],
   commentTypePaths: [
     {
-      id: "01J8Y000000000000000000021",
-      ruleId: "01J8Y000000000000000000001",
       fromCommentTypeId: "01J8Y000000000000000000011",
       toCommentTypeId: "01J8Y000000000000000000012",
     },
     {
-      id: "01J8Y000000000000000000022",
-      ruleId: "01J8Y000000000000000000001",
       fromCommentTypeId: "01J8Y000000000000000000011",
       toCommentTypeId: "01J8Y000000000000000000014",
     },
     {
-      id: "01J8Y000000000000000000023",
-      ruleId: "01J8Y000000000000000000001",
       fromCommentTypeId: "01J8Y000000000000000000012",
       toCommentTypeId: "01J8Y000000000000000000013",
     },
     {
-      id: "01J8Y000000000000000000024",
-      ruleId: "01J8Y000000000000000000001",
       fromCommentTypeId: "01J8Y000000000000000000013",
       toCommentTypeId: "01J8Y000000000000000000012",
     },
     {
-      id: "01J8Y000000000000000000025",
-      ruleId: "01J8Y000000000000000000001",
       fromCommentTypeId: "01J8Y000000000000000000013",
       toCommentTypeId: "01J8Y000000000000000000014",
     },
     {
-      id: "01J8Y000000000000000000026",
-      ruleId: "01J8Y000000000000000000001",
       fromCommentTypeId: "01J8Y000000000000000000014",
       toCommentTypeId: "01J8Y000000000000000000012",
     },
     {
-      id: "01J8Y000000000000000000027",
-      ruleId: "01J8Y000000000000000000001",
       fromCommentTypeId: "01J8Y000000000000000000014",
       toCommentTypeId: "01J8Y000000000000000000014",
     },

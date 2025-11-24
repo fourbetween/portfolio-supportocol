@@ -17,7 +17,6 @@ const comment: Comment = {
 
 const commentType: CommentType = {
   id: "01J8Y000000000000000000001",
-  ruleId: "r1",
   name: "提案",
   description: "",
   color: "#0969da",

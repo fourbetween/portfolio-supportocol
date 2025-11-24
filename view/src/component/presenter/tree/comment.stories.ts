@@ -53,28 +53,24 @@ const comments: Comment[] = [
 const commentTypes: CommentType[] = [
   {
     id: "01J8Y000000000000000000001",
-    ruleId: "r1",
     name: "提案",
     description: "",
     color: "#0969da",
   },
   {
     id: "01J8Y000000000000000000002",
-    ruleId: "r1",
     name: "賛成",
     description: "",
     color: "#1a7f37",
   },
   {
     id: "01J8Y000000000000000000003",
-    ruleId: "r1",
     name: "懸念",
     description: "",
     color: "#cf222e",
   },
   {
     id: "01J8Y000000000000000000004",
-    ruleId: "r1",
     name: "補足",
     description: "",
     color: "#9a6700",

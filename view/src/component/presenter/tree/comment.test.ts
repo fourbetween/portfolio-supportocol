@@ -29,14 +29,12 @@ describe("CommentTreePresenter", () => {
   const commentTypes: CommentType[] = [
     {
       id: "t1",
-      ruleId: "r1",
       name: "Type1",
       description: "Desc1",
       color: "#000000",
     },
     {
       id: "t2",
-      ruleId: "r1",
       name: "Type2",
       description: "Desc2",
       color: "#ffffff",

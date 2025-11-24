@@ -15,14 +15,12 @@ describe("EditRuleFormPresenter", async () => {
     commentTypes: [
       {
         id: "01J8Y000000000000000000011",
-        ruleId: "01J8Y000000000000000000001",
         name: "主張 (Proposition)",
         description: "自分の意見や提案を述べるコメント",
         color: "#0969da",
       },
       {
         id: "01J8Y000000000000000000012",
-        ruleId: "01J8Y000000000000000000001",
         name: "質問 (Question)",
         description: "不明点を確認するコメント",
         color: "#d29922",
@@ -30,8 +28,6 @@ describe("EditRuleFormPresenter", async () => {
     ],
     commentTypePaths: [
       {
-        id: "01J8Y000000000000000000021",
-        ruleId: "01J8Y000000000000000000001",
         fromCommentTypeId: "01J8Y000000000000000000011",
         toCommentTypeId: "01J8Y000000000000000000012",
       },
