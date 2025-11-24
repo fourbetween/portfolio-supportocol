@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
 import type { Discussion } from "../../../model/discussion";
+import type { Rule } from "../../../model/rule";
 import type { DiscussionListPresenter } from "./discussion";
 
 const discussions: Discussion[] = [
@@ -54,6 +55,18 @@ const discussions: Discussion[] = [
   },
 ];
 
+const rules: Rule[] = [
+  {
+    id: "01J8Y000000000000000000000",
+    name: "デフォルトルール",
+    description: "基本的な議論ルール",
+    createdBy: "admin",
+    createdAt: "2025-01-01T00:00:00Z",
+    commentTypes: [],
+    commentTypePaths: [],
+  },
+];
+
 const meta = {
   title: "presenter/list/discussion",
   tags: ["autodocs"],
@@ -64,11 +77,13 @@ const meta = {
     html`
       <discussion-list-presenter
         .discussions=${args.discussions}
+        .rules=${args.rules}
         .onCreate=${args.onCreate}
       ></discussion-list-presenter>
     `,
   argTypes: {
     discussions: { control: "object" },
+    rules: { control: "object" },
   },
 } satisfies Meta<DiscussionListPresenter>;
 
@@ -78,11 +93,13 @@ type Story = StoryObj<DiscussionListPresenter>;
 export const Default: Story = {
   args: {
     discussions: discussions,
+    rules: rules,
   },
 };
 
 export const Empty: Story = {
   args: {
     discussions: [],
+    rules: rules,
   },
 };
