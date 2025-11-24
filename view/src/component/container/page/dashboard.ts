@@ -1,12 +1,13 @@
 import { Task } from "@lit/task";
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { client } from "../../../api/client";
 import { accountMethods } from "../../../model/account";
 import type {
   CommentPermissionLevel,
   VisibilityLevel,
 } from "../../../model/discussion";
+import type { Rule } from "../../../model/rule";
 import { baseStyle } from "../../../style/base";
 import type { CreateDiscussionData } from "../../presenter/popup/discussion/create";
 
@@ -14,6 +15,9 @@ import type { CreateDiscussionData } from "../../presenter/popup/discussion/crea
 export class DashboardPageContainer extends LitElement {
   @property({ type: Boolean })
   isLoggedIn = false;
+
+  @state()
+  private rules: Rule[] = [];
 
   private projectsTask = new Task(this, {
     task: async ([]) => {
@@ -41,6 +45,23 @@ export class DashboardPageContainer extends LitElement {
     args: () => [],
   });
 
+  constructor() {
+    super();
+
+    new Task(this, {
+      task: async ([]) => {
+        const { data, error } = await client.GET("/rules", {
+          headers: await accountMethods.authHeader(),
+        });
+        if (error) {
+          throw new Error(error.message);
+        }
+        this.rules = data;
+      },
+      args: () => [],
+    });
+  }
+
   render() {
     return html`
       <div class="container">
@@ -63,6 +84,7 @@ export class DashboardPageContainer extends LitElement {
             complete: (discussions) => html`
               <discussion-list-presenter
                 .discussions=${discussions}
+                .rules=${this.rules}
                 .onCreate=${(data: CreateDiscussionData) =>
                   this.createDiscussion(data)}
               ></discussion-list-presenter>

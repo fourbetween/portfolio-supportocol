@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import type { Discussion } from "../../../model/discussion";
+import type { Rule } from "../../../model/rule";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
 import { listStyle } from "../../../style/list";
@@ -14,6 +15,9 @@ import type {
 export class DiscussionListPresenter extends LitElement {
   @property({ type: Array })
   discussions: Discussion[] = [];
+
+  @property({ type: Array })
+  rules: Rule[] = [];
 
   @property({ attribute: false })
   onCreate: (data: CreateDiscussionData) => Promise<void> = () =>
@@ -46,6 +50,7 @@ export class DiscussionListPresenter extends LitElement {
         ${this.renderGroup("Closed", closedDiscussions, "status-closed")}
         ${this.renderGroup("Archived", archivedDiscussions, "status-archived")}
         <create-discussion-popup-presenter
+          .rules=${this.rules}
           .onCreate=${this.onCreate}
         ></create-discussion-popup-presenter>
       </div>
