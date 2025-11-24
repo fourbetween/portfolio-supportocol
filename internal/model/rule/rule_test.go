@@ -45,8 +45,8 @@ func TestRule_Save(t *testing.T) {
 		{
 			name: "CommentTypesとCommentTypePathsを含むルールを保存できること",
 			commentTypes: []rule.CommentType{
-				{ID: "ct1", RuleID: "test-id", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
-				{ID: "ct2", RuleID: "test-id", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
 				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct2"},
@@ -121,8 +121,8 @@ func TestRule_CommentTypesAndPaths(t *testing.T) {
 		{
 			name: "コメントタイプとパスを取得できること",
 			commentTypes: []rule.CommentType{
-				{ID: "ct1", RuleID: "test-id", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
-				{ID: "ct2", RuleID: "test-id", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
 				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct2"},
@@ -178,7 +178,7 @@ func TestRule_Update(t *testing.T) {
 				Name:        "updated-rule",
 				Description: "updated-description",
 				CommentTypes: []rule.CommentType{
-					{ID: "ct1", RuleID: "test-id", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+					{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
 				},
 				CommentTypePaths: []rule.CommentTypePath{
 					{FromCommentTypeID: "ct1", ToCommentTypeID: "ct1"},

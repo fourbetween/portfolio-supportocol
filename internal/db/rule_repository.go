@@ -58,7 +58,7 @@ func (r *RuleRepository) Save(rl *rule.Rule) error {
 		return err
 	}
 
-	if err := r.saveCommentTypes(rl.CommentTypes()); err != nil {
+	if err := r.saveCommentTypes(rl.ID(), rl.CommentTypes()); err != nil {
 		return err
 	}
 
@@ -157,7 +157,7 @@ func (r *RuleRepository) deleteCommentTypesAndPaths(ruleID string) error {
 	return nil
 }
 
-func (r *RuleRepository) saveCommentTypes(commentTypes []rule.CommentType) error {
+func (r *RuleRepository) saveCommentTypes(ruleID string, commentTypes []rule.CommentType) error {
 	if len(commentTypes) == 0 {
 		return nil
 	}
@@ -166,7 +166,7 @@ func (r *RuleRepository) saveCommentTypes(commentTypes []rule.CommentType) error
 	for i, ct := range commentTypes {
 		commentTypeRecords[i] = model.CommentTypes{
 			ID:          ct.ID,
-			RuleID:      ct.RuleID,
+			RuleID:      ruleID,
 			Name:        ct.Name,
 			Description: ct.Description,
 			Color:       ct.Color,
@@ -230,7 +230,6 @@ func (r *RuleRepository) fetchCommentTypesByRuleIDs(ruleIDs []string) (map[strin
 	for _, ct := range records {
 		result[ct.RuleID] = append(result[ct.RuleID], rule.CommentType{
 			ID:          ct.ID,
-			RuleID:      ct.RuleID,
 			Name:        ct.Name,
 			Description: ct.Description,
 			Color:       ct.Color,

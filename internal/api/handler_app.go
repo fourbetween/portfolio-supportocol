@@ -388,7 +388,6 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 	for i, v := range item.CommentTypes() {
 		cts[i] = oas.CommentType{
 			ID:          oas.ID(v.ID),
-			RuleId:      oas.ID(v.RuleID),
 			Name:        v.Name,
 			Description: v.Description,
 			Color:       v.Color,

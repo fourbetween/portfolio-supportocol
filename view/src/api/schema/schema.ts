@@ -88,7 +88,6 @@ export const NoteSchema = z
 export const CommentTypeSchema = z
   .object({
     id: IdSchema,
-    ruleId: IdSchema,
     name: z.string(),
     description: z.string(),
     color: z.string(),

@@ -90,7 +90,6 @@ func (s *CommentPermissionLevel) UnmarshalText(data []byte) error {
 // Ref: #/components/schemas/commentType
 type CommentType struct {
 	ID          ID     `json:"id"`
-	RuleId      ID     `json:"ruleId"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Color       string `json:"color"`
@@ -99,11 +98,6 @@ type CommentType struct {
 // GetID returns the value of ID.
 func (s *CommentType) GetID() ID {
 	return s.ID
-}
-
-// GetRuleId returns the value of RuleId.
-func (s *CommentType) GetRuleId() ID {
-	return s.RuleId
 }
 
 // GetName returns the value of Name.
@@ -124,11 +118,6 @@ func (s *CommentType) GetColor() string {
 // SetID sets the value of ID.
 func (s *CommentType) SetID(val ID) {
 	s.ID = val
-}
-
-// SetRuleId sets the value of RuleId.
-func (s *CommentType) SetRuleId(val ID) {
-	s.RuleId = val
 }
 
 // SetName sets the value of Name.
@@ -1088,10 +1077,10 @@ func (s *Rule) SetCommentTypePaths(val []CommentTypePath) {
 }
 
 type RulesPostReq struct {
-	Name             string                         `json:"name"`
-	Description      string                         `json:"description"`
-	CommentTypes     []RulesPostReqCommentTypesItem `json:"commentTypes"`
-	CommentTypePaths []CommentTypePath              `json:"commentTypePaths"`
+	Name             string            `json:"name"`
+	Description      string            `json:"description"`
+	CommentTypes     []CommentType     `json:"commentTypes"`
+	CommentTypePaths []CommentTypePath `json:"commentTypePaths"`
 }
 
 // GetName returns the value of Name.
@@ -1105,7 +1094,7 @@ func (s *RulesPostReq) GetDescription() string {
 }
 
 // GetCommentTypes returns the value of CommentTypes.
-func (s *RulesPostReq) GetCommentTypes() []RulesPostReqCommentTypesItem {
+func (s *RulesPostReq) GetCommentTypes() []CommentType {
 	return s.CommentTypes
 }
 
@@ -1125,7 +1114,7 @@ func (s *RulesPostReq) SetDescription(val string) {
 }
 
 // SetCommentTypes sets the value of CommentTypes.
-func (s *RulesPostReq) SetCommentTypes(val []RulesPostReqCommentTypesItem) {
+func (s *RulesPostReq) SetCommentTypes(val []CommentType) {
 	s.CommentTypes = val
 }
 
@@ -1134,61 +1123,14 @@ func (s *RulesPostReq) SetCommentTypePaths(val []CommentTypePath) {
 	s.CommentTypePaths = val
 }
 
-type RulesPostReqCommentTypesItem struct {
-	ID          ID     `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Color       string `json:"color"`
-}
-
-// GetID returns the value of ID.
-func (s *RulesPostReqCommentTypesItem) GetID() ID {
-	return s.ID
-}
-
-// GetName returns the value of Name.
-func (s *RulesPostReqCommentTypesItem) GetName() string {
-	return s.Name
-}
-
-// GetDescription returns the value of Description.
-func (s *RulesPostReqCommentTypesItem) GetDescription() string {
-	return s.Description
-}
-
-// GetColor returns the value of Color.
-func (s *RulesPostReqCommentTypesItem) GetColor() string {
-	return s.Color
-}
-
-// SetID sets the value of ID.
-func (s *RulesPostReqCommentTypesItem) SetID(val ID) {
-	s.ID = val
-}
-
-// SetName sets the value of Name.
-func (s *RulesPostReqCommentTypesItem) SetName(val string) {
-	s.Name = val
-}
-
-// SetDescription sets the value of Description.
-func (s *RulesPostReqCommentTypesItem) SetDescription(val string) {
-	s.Description = val
-}
-
-// SetColor sets the value of Color.
-func (s *RulesPostReqCommentTypesItem) SetColor(val string) {
-	s.Color = val
-}
-
 // RulesRuleIdDeleteNoContent is response for RulesRuleIdDelete operation.
 type RulesRuleIdDeleteNoContent struct{}
 
 type RulesRuleIdPutReq struct {
-	Name             string                              `json:"name"`
-	Description      string                              `json:"description"`
-	CommentTypes     []RulesRuleIdPutReqCommentTypesItem `json:"commentTypes"`
-	CommentTypePaths []CommentTypePath                   `json:"commentTypePaths"`
+	Name             string            `json:"name"`
+	Description      string            `json:"description"`
+	CommentTypes     []CommentType     `json:"commentTypes"`
+	CommentTypePaths []CommentTypePath `json:"commentTypePaths"`
 }
 
 // GetName returns the value of Name.
@@ -1202,7 +1144,7 @@ func (s *RulesRuleIdPutReq) GetDescription() string {
 }
 
 // GetCommentTypes returns the value of CommentTypes.
-func (s *RulesRuleIdPutReq) GetCommentTypes() []RulesRuleIdPutReqCommentTypesItem {
+func (s *RulesRuleIdPutReq) GetCommentTypes() []CommentType {
 	return s.CommentTypes
 }
 
@@ -1222,60 +1164,13 @@ func (s *RulesRuleIdPutReq) SetDescription(val string) {
 }
 
 // SetCommentTypes sets the value of CommentTypes.
-func (s *RulesRuleIdPutReq) SetCommentTypes(val []RulesRuleIdPutReqCommentTypesItem) {
+func (s *RulesRuleIdPutReq) SetCommentTypes(val []CommentType) {
 	s.CommentTypes = val
 }
 
 // SetCommentTypePaths sets the value of CommentTypePaths.
 func (s *RulesRuleIdPutReq) SetCommentTypePaths(val []CommentTypePath) {
 	s.CommentTypePaths = val
-}
-
-type RulesRuleIdPutReqCommentTypesItem struct {
-	ID          ID     `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Color       string `json:"color"`
-}
-
-// GetID returns the value of ID.
-func (s *RulesRuleIdPutReqCommentTypesItem) GetID() ID {
-	return s.ID
-}
-
-// GetName returns the value of Name.
-func (s *RulesRuleIdPutReqCommentTypesItem) GetName() string {
-	return s.Name
-}
-
-// GetDescription returns the value of Description.
-func (s *RulesRuleIdPutReqCommentTypesItem) GetDescription() string {
-	return s.Description
-}
-
-// GetColor returns the value of Color.
-func (s *RulesRuleIdPutReqCommentTypesItem) GetColor() string {
-	return s.Color
-}
-
-// SetID sets the value of ID.
-func (s *RulesRuleIdPutReqCommentTypesItem) SetID(val ID) {
-	s.ID = val
-}
-
-// SetName sets the value of Name.
-func (s *RulesRuleIdPutReqCommentTypesItem) SetName(val string) {
-	s.Name = val
-}
-
-// SetDescription sets the value of Description.
-func (s *RulesRuleIdPutReqCommentTypesItem) SetDescription(val string) {
-	s.Description = val
-}
-
-// SetColor sets the value of Color.
-func (s *RulesRuleIdPutReqCommentTypesItem) SetColor(val string) {
-	s.Color = val
 }
 
 // Ref: #/components/schemas/status
