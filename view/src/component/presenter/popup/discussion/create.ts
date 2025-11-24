@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
+import type { Rule } from "../../../../model/rule";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
@@ -19,6 +20,9 @@ export class CreateDiscussionPopupPresenter extends LitElement {
   @property({ attribute: false })
   onCreate: (data: CreateDiscussionData) => Promise<void> = () =>
     Promise.resolve();
+
+  @property({ attribute: false })
+  rules: Rule[] = [];
 
   @query("base-popup-presenter")
   private basePopup!: BasePopupPresenter;
@@ -81,9 +85,12 @@ export class CreateDiscussionPopupPresenter extends LitElement {
               <option value="" disabled selected>
                 ルールを選択してください
               </option>
-              <option value="rule1">ディベート標準ルール</option>
-              <option value="rule2">ブレインストーミング</option>
-              <option value="rule3">意思決定プロセス</option>
+              ${this.rules.map(
+                (rule) =>
+                  html`
+                    <option value=${rule.id}>${rule.name}</option>
+                  `
+              )}
             </select>
             <p class="form-helper">
               議論の進行に使用するルールセットを選択します。

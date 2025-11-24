@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
+import type { Rule } from "../../../../model/rule";
 import type { CreateDiscussionPopupPresenter } from "./create";
 
 describe("CreateDiscussionPopupPresenter", () => {
@@ -58,6 +59,7 @@ describe("CreateDiscussionPopupPresenter", () => {
   it("作成ボタンをクリックするとonCreateが呼ばれること", async () => {
     const onCreate = vi.fn();
     elem.onCreate = onCreate;
+    elem.rules = [{ id: "rule1", name: "ディベート標準ルール" } as Rule];
     elem.open();
 
     await page.getByLabelText("テーマ").fill("新しい議論");
@@ -75,5 +77,16 @@ describe("CreateDiscussionPopupPresenter", () => {
       visibilityLevel: "everyone",
       commentPermissionLevel: "everyone",
     });
+  });
+
+  it("rulesプロパティに渡されたルールが選択肢として表示されること", async () => {
+    elem.rules = [
+      { id: "rule-a", name: "ルールA" } as Rule,
+      { id: "rule-b", name: "ルールB" } as Rule,
+    ];
+    elem.open();
+
+    await expect.element(page.getByText("ルールA")).toBeInTheDocument();
+    await expect.element(page.getByText("ルールB")).toBeInTheDocument();
   });
 });
