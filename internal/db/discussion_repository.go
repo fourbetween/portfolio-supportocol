@@ -26,13 +26,20 @@ func (r *DiscussionRepository) SetFactory(fac *discussion.Factory) {
 }
 
 func (r *DiscussionRepository) Search(params discussion.SearchParams) ([]*discussion.Discussion, error) {
+	cond := postgres.Bool(true)
+	if params.ProjectID != "" {
+		cond = table.ProjectDiscussions.ProjectID.EQ(postgres.String(params.ProjectID))
+	}
+
+	var from postgres.ReadableTable = table.Discussions
+	if params.ProjectID != "" {
+		from = from.INNER_JOIN(table.ProjectDiscussions, table.ProjectDiscussions.DiscussionID.EQ(table.Discussions.ID))
+	}
+
 	stmt := postgres.
 		SELECT(table.Discussions.AllColumns).
-		FROM(
-			table.Discussions.
-				INNER_JOIN(table.ProjectDiscussions, table.ProjectDiscussions.DiscussionID.EQ(table.Discussions.ID)),
-		).
-		WHERE(table.ProjectDiscussions.ProjectID.EQ(postgres.String(params.ProjectID)))
+		FROM(from).
+		WHERE(cond)
 
 	var dest []model.Discussions
 	if err := stmt.Query(r.db, &dest); err != nil {
