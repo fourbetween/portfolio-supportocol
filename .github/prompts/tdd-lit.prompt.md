@@ -39,7 +39,7 @@ $ARGUMENTS
 - container コンポーネントはテストやストーリーは不要です。
 - 各コンポーネントは、`view/src/component/container`または`view/src/component/presenter`以下に配置してください。
 - presenter コンポーネントは、container コンポーネントから渡されたデータを表示することに専念し、状態管理やビジネスロジックは container コンポーネントに任せてください。
-- presenter コンポーネントが実行するアクションは、container コンポーネントからコールバックを渡してもらうようにしてください。
+- presenter コンポーネントが実行する api 呼び出しなどの副作用のあるアクションは、container コンポーネントからコールバックを渡してもらうようにしてください。ページ遷移は presenter で行ってください。
 - container コンポーネントがデータ取得に使う api の各エンドポイントは`view/src/api/schema/route.ts`を参照してください。
 - presenter コンポーネントから、container コンポーネントを利用してはいけないことに留意してください。
 - コンポーネントに渡すデータは`view/src/model`以下にあるモデルを利用してください。
@@ -50,6 +50,7 @@ $ARGUMENTS
 - Tailwind CSS は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
 - `view/src/style`以下にある共通スタイルを適用して共通化してください。
 - 他のコンポーネントを参考にして、一貫性のあるデザインを維持してください。
+- 他のコンポーネントと同じスタイルを使う場合は、`view/src/style`以下に共通スタイルを追加してください。
 
 ## インポートガイドライン
 
