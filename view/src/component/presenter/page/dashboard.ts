@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import type { Discussion } from "../../../model/discussion";
 import type { Project } from "../../../model/project";
 import { baseStyle } from "../../../style/base";
+import { buttonStyle } from "../../../style/button";
 
 @customElement("dashboard-page-presenter")
 export class DashboardPagePresenter extends LitElement {
@@ -86,6 +87,7 @@ export class DashboardPagePresenter extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
     css`
       :host {
         display: block;
@@ -122,22 +124,6 @@ export class DashboardPagePresenter extends LitElement {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 16px;
-      }
-
-      .btn-primary {
-        padding: 8px 16px;
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--color-btn-primary-text);
-        background-color: var(--color-btn-primary-bg);
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-      }
-
-      .btn-primary:hover {
-        background-color: var(--color-btn-primary-hover-bg);
       }
 
       .project-list {
