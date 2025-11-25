@@ -8,6 +8,7 @@ import "./auth";
 import { routerContext } from "./context/router";
 import "./import";
 import { accountMethods } from "./model/account";
+import { routes } from "./routes";
 import { baseStyle } from "./style/base";
 
 @customElement("app-root")
@@ -18,7 +19,8 @@ export class AppRoot extends LitElement {
   @provide({ context: routerContext })
   private router = new Router(this, [
     {
-      path: "/",
+      name: "front",
+      path: routes.front,
       render: () => html`
         <front-page-container
           .isLoggedIn=${this.isLoggedIn}
@@ -26,7 +28,8 @@ export class AppRoot extends LitElement {
       `,
     },
     {
-      path: "/dashboard",
+      name: "dashboard",
+      path: routes.dashboard,
       render: () => html`
         <dashboard-page-container></dashboard-page-container>
       `,

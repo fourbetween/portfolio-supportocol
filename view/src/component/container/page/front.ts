@@ -3,8 +3,8 @@ import { consume } from "@lit/context";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { routerContext } from "../../../context/router";
+import { navigate } from "../../../routes";
 import { baseStyle } from "../../../style/base";
-import { navigate } from "../../../util/navigate";
 
 @customElement("front-page-container")
 export class FrontPageContainer extends LitElement {
@@ -39,7 +39,7 @@ export class FrontPageContainer extends LitElement {
 
   private handleNavigateToDashboard = async (e: Event) => {
     e.preventDefault();
-    await navigate(this.router, "/dashboard");
+    await navigate(this.router, "dashboard");
   };
 
   static styles = [baseStyle, css``];

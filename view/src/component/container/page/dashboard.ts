@@ -8,8 +8,8 @@ import { routerContext } from "../../../context/router";
 import { accountMethods } from "../../../model/account";
 import type { Discussion } from "../../../model/discussion";
 import type { Project } from "../../../model/project";
+import { navigate } from "../../../routes";
 import { baseStyle } from "../../../style/base";
-import { navigate } from "../../../util/navigate";
 import type { CreateProjectPopupPresenter } from "../../presenter/popup/create-project";
 
 @customElement("dashboard-page-container")
@@ -100,11 +100,11 @@ export class DashboardPageContainer extends LitElement {
   };
 
   private handleSelectProject = async (project: Project) => {
-    await navigate(this.router, `/projects/${project.id}`);
+    await navigate(this.router, "project", { id: project.id });
   };
 
   private handleSelectDiscussion = async (discussion: Discussion) => {
-    await navigate(this.router, `/discussions/${discussion.id}`);
+    await navigate(this.router, "discussion", { id: discussion.id });
   };
 
   static styles = [baseStyle];
