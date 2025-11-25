@@ -39,8 +39,9 @@ $ARGUMENTS
 - container コンポーネントはテストやストーリーは不要です。
 - 各コンポーネントは、`view/src/component/container`または`view/src/component/presenter`以下に配置してください。
 - presenter コンポーネントは、container コンポーネントから渡されたデータを表示することに専念し、状態管理やビジネスロジックは container コンポーネントに任せてください。
+- presenter コンポーネントが実行するアクションは、container コンポーネントからコールバックを渡してもらうようにしてください。
 - container コンポーネントがデータ取得に使う api の各エンドポイントは`view/src/api/schema/route.ts`を参照してください。
-- ある presenter コンポーネントから、別の container コンポーネントを利用してはいけないことに留意してください。
+- presenter コンポーネントから、container コンポーネントを利用してはいけないことに留意してください。
 - コンポーネントに渡すデータは`view/src/model`以下にあるモデルを利用してください。
 
 ## スタイルガイドライン
