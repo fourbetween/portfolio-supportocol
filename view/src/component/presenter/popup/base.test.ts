@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { page } from "vitest/browser";
 import type { BasePopupPresenter } from "./base";
 
 describe("BasePopupPresenter", async () => {
@@ -16,7 +17,6 @@ describe("BasePopupPresenter", async () => {
   it("open()メソッドを呼ぶとダイアログが表示されること", async () => {
     elem.open();
     await elem.updateComplete;
-    const dialog = elem.renderRoot.querySelector("dialog");
-    expect(dialog?.open).toBe(true);
+    await expect.element(page.getByRole("dialog")).toBeVisible();
   });
 });
