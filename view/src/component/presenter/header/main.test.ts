@@ -32,4 +32,40 @@ describe("MainHeaderPresenter", async () => {
     const style = window.getComputedStyle(header!);
     expect(style.backgroundColor).toBe("rgb(36, 41, 47)");
   });
+
+  it("ダッシュボードリンクのhrefがgetDashboardLinkから取得されること", async () => {
+    elem.getDashboardLink = () => "/custom/dashboard";
+    await elem.updateComplete;
+    const link = elem.shadowRoot?.querySelector(
+      'a[data-testid="dashboard-link"]'
+    ) as HTMLAnchorElement;
+    expect(link.href).toContain("/custom/dashboard");
+  });
+
+  it("プロジェクトリンクのhrefがgetProjectsLinkから取得されること", async () => {
+    elem.getProjectsLink = () => "/custom/projects";
+    await elem.updateComplete;
+    const link = elem.shadowRoot?.querySelector(
+      'a[data-testid="projects-link"]'
+    ) as HTMLAnchorElement;
+    expect(link.href).toContain("/custom/projects");
+  });
+
+  it("議論リンクのhrefがgetDiscussionsLinkから取得されること", async () => {
+    elem.getDiscussionsLink = () => "/custom/discussions";
+    await elem.updateComplete;
+    const link = elem.shadowRoot?.querySelector(
+      'a[data-testid="discussions-link"]'
+    ) as HTMLAnchorElement;
+    expect(link.href).toContain("/custom/discussions");
+  });
+
+  it("ルールリンクのhrefがgetRulesLinkから取得されること", async () => {
+    elem.getRulesLink = () => "/custom/rules";
+    await elem.updateComplete;
+    const link = elem.shadowRoot?.querySelector(
+      'a[data-testid="rules-link"]'
+    ) as HTMLAnchorElement;
+    expect(link.href).toContain("/custom/rules");
+  });
 });

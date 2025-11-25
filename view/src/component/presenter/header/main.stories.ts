@@ -5,16 +5,31 @@ import type { MainHeaderPresenter } from "./main";
 const meta = {
   title: "presenter/header/main",
   tags: ["autodocs"],
-  render: () =>
+  render: (args) =>
     html`
-      <main-header-presenter></main-header-presenter>
+      <main-header-presenter
+        .getDashboardLink=${args.getDashboardLink}
+        .getProjectsLink=${args.getProjectsLink}
+        .getDiscussionsLink=${args.getDiscussionsLink}
+        .getRulesLink=${args.getRulesLink}
+      ></main-header-presenter>
     `,
-  argTypes: {},
+  argTypes: {
+    getDashboardLink: { control: false },
+    getProjectsLink: { control: false },
+    getDiscussionsLink: { control: false },
+    getRulesLink: { control: false },
+  },
 } satisfies Meta<MainHeaderPresenter>;
 
 export default meta;
 type Story = StoryObj<MainHeaderPresenter>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    getDashboardLink: () => "/dashboard",
+    getProjectsLink: () => "/projects",
+    getDiscussionsLink: () => "/discussions",
+    getRulesLink: () => "/rules",
+  },
 };
