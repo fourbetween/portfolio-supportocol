@@ -50,6 +50,9 @@ const mockDiscussions = [
   },
 ];
 
+const getProjectLink = (id: string) => `/projects/${id}`;
+const getDiscussionLink = (id: string) => `/discussions/${id}`;
+
 const meta = {
   title: "presenter/page/dashboard",
   tags: ["autodocs"],
@@ -59,14 +62,12 @@ const meta = {
         .projects=${args.projects}
         .recentDiscussions=${args.recentDiscussions}
         .onCreateProject=${args.onCreateProject}
-        .onSelectProject=${args.onSelectProject}
-        .onSelectDiscussion=${args.onSelectDiscussion}
+        .getProjectLink=${getProjectLink}
+        .getDiscussionLink=${getDiscussionLink}
       ></dashboard-page-presenter>
     `,
   argTypes: {
     onCreateProject: { action: "onCreateProject" },
-    onSelectProject: { action: "onSelectProject" },
-    onSelectDiscussion: { action: "onSelectDiscussion" },
   },
 } satisfies Meta<DashboardPagePresenter>;
 

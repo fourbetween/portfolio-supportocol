@@ -110,22 +110,26 @@ describe("DashboardPagePresenter", async () => {
     await expect.element(page.getByText("議論のテーマ2")).toBeVisible();
   });
 
-  it("プロジェクトをクリックするとonSelectProjectが呼び出されること", async () => {
-    const onSelectProject = vi.fn();
+  it("プロジェクト一覧がリンクとして表示されること", async () => {
     elem.projects = mockProjects;
-    elem.onSelectProject = onSelectProject;
+    elem.getProjectLink = (id) => `/projects/${id}`;
     await elem.updateComplete;
-    await page.getByText("プロジェクト1").click();
-    expect(onSelectProject).toHaveBeenCalledWith(mockProjects[0]);
+    const link = page.getByRole("link", { name: "プロジェクト1" });
+    await expect.element(link).toBeVisible();
+    await expect
+      .element(link)
+      .toHaveAttribute("href", "/projects/01234567890123456789012345");
   });
 
-  it("議論をクリックするとonSelectDiscussionが呼び出されること", async () => {
-    const onSelectDiscussion = vi.fn();
+  it("議論一覧がリンクとして表示されること", async () => {
     elem.recentDiscussions = mockDiscussions;
-    elem.onSelectDiscussion = onSelectDiscussion;
+    elem.getDiscussionLink = (id) => `/discussions/${id}`;
     await elem.updateComplete;
-    await page.getByText("議論のテーマ1").click();
-    expect(onSelectDiscussion).toHaveBeenCalledWith(mockDiscussions[0]);
+    const link = page.getByRole("link", { name: "議論のテーマ1" });
+    await expect.element(link).toBeVisible();
+    await expect
+      .element(link)
+      .toHaveAttribute("href", "/discussions/01234567890123456789012348");
   });
 
   it("プロジェクトがない場合は空のメッセージが表示されること", async () => {

@@ -17,10 +17,10 @@ export class DashboardPagePresenter extends LitElement {
   onCreateProject?: () => void;
 
   @property({ attribute: false })
-  onSelectProject?: (project: Project) => void;
+  getProjectLink?: (id: string) => string;
 
   @property({ attribute: false })
-  onSelectDiscussion?: (discussion: Discussion) => void;
+  getDiscussionLink?: (id: string) => string;
 
   render() {
     return html`
@@ -40,11 +40,13 @@ export class DashboardPagePresenter extends LitElement {
                 `
               : this.projects.map(
                   (project) => html`
-                    <li
-                      class="project-item"
-                      @click=${() => this.handleSelectProject(project)}
-                    >
-                      <span class="project-name">${project.name}</span>
+                    <li class="project-item">
+                      <a
+                        class="project-link"
+                        href=${this.getProjectLink?.(project.id) ?? "#"}
+                      >
+                        <span class="project-name">${project.name}</span>
+                      </a>
                     </li>
                   `
                 )}
@@ -59,11 +61,15 @@ export class DashboardPagePresenter extends LitElement {
                 `
               : this.recentDiscussions.map(
                   (discussion) => html`
-                    <li
-                      class="discussion-item"
-                      @click=${() => this.handleSelectDiscussion(discussion)}
-                    >
-                      <span class="discussion-theme">${discussion.theme}</span>
+                    <li class="discussion-item">
+                      <a
+                        class="discussion-link"
+                        href=${this.getDiscussionLink?.(discussion.id) ?? "#"}
+                      >
+                        <span class="discussion-theme">
+                          ${discussion.theme}
+                        </span>
+                      </a>
                     </li>
                   `
                 )}
@@ -75,14 +81,6 @@ export class DashboardPagePresenter extends LitElement {
 
   private handleCreateProject() {
     this.onCreateProject?.();
-  }
-
-  private handleSelectProject(project: Project) {
-    this.onSelectProject?.(project);
-  }
-
-  private handleSelectDiscussion(discussion: Discussion) {
-    this.onSelectDiscussion?.(discussion);
   }
 
   static styles = [
@@ -133,17 +131,22 @@ export class DashboardPagePresenter extends LitElement {
       }
 
       .project-item {
-        padding: 12px 16px;
         border: 1px solid var(--color-border-default);
         border-radius: 6px;
         margin-bottom: 8px;
         background-color: var(--color-canvas-default);
-        cursor: pointer;
         transition: background-color 0.2s ease;
       }
 
       .project-item:hover {
         background-color: var(--color-canvas-subtle);
+      }
+
+      .project-link {
+        display: block;
+        padding: 12px 16px;
+        text-decoration: none;
+        color: inherit;
       }
 
       .project-name {
@@ -165,17 +168,22 @@ export class DashboardPagePresenter extends LitElement {
       }
 
       .discussion-item {
-        padding: 12px 16px;
         border: 1px solid var(--color-border-default);
         border-radius: 6px;
         margin-bottom: 8px;
         background-color: var(--color-canvas-default);
-        cursor: pointer;
         transition: background-color 0.2s ease;
       }
 
       .discussion-item:hover {
         background-color: var(--color-canvas-subtle);
+      }
+
+      .discussion-link {
+        display: block;
+        padding: 12px 16px;
+        text-decoration: none;
+        color: inherit;
       }
 
       .discussion-theme {
