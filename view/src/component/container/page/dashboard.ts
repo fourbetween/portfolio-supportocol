@@ -1,15 +1,22 @@
+import type { Router } from "@lit-labs/router";
+import { consume } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { client } from "../../../api/client";
+import { routerContext } from "../../../context/router";
 import { accountMethods } from "../../../model/account";
 import type { Discussion } from "../../../model/discussion";
 import type { Project } from "../../../model/project";
 import { baseStyle } from "../../../style/base";
+import { navigate } from "../../../util/navigate";
 import type { CreateProjectPopupPresenter } from "../../presenter/popup/create-project";
 
 @customElement("dashboard-page-container")
 export class DashboardPageContainer extends LitElement {
+  @consume({ context: routerContext })
+  private router!: Router;
+
   @query("create-project-popup-presenter")
   private createProjectPopup!: CreateProjectPopupPresenter;
 
@@ -92,12 +99,12 @@ export class DashboardPageContainer extends LitElement {
     this.createProjectPopup.close();
   };
 
-  private handleSelectProject = (project: Project) => {
-    window.location.href = `/projects/${project.id}`;
+  private handleSelectProject = async (project: Project) => {
+    await navigate(this.router, `/projects/${project.id}`);
   };
 
-  private handleSelectDiscussion = (discussion: Discussion) => {
-    window.location.href = `/discussions/${discussion.id}`;
+  private handleSelectDiscussion = async (discussion: Discussion) => {
+    await navigate(this.router, `/discussions/${discussion.id}`);
   };
 
   static styles = [baseStyle];

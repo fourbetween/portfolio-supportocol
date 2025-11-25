@@ -1,9 +1,11 @@
 import { Router } from "@lit-labs/router";
+import { provide } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "urlpattern-polyfill";
 import "./auth";
+import { routerContext } from "./context/router";
 import "./import";
 import { accountMethods } from "./model/account";
 import { baseStyle } from "./style/base";
@@ -12,6 +14,24 @@ import { baseStyle } from "./style/base";
 export class AppRoot extends LitElement {
   @state()
   private isLoggedIn = false;
+
+  @provide({ context: routerContext })
+  private router = new Router(this, [
+    {
+      path: "/",
+      render: () => html`
+        <front-page-container
+          .isLoggedIn=${this.isLoggedIn}
+        ></front-page-container>
+      `,
+    },
+    {
+      path: "/dashboard",
+      render: () => html`
+        <dashboard-page-container></dashboard-page-container>
+      `,
+    },
+  ]);
 
   constructor() {
     super();
@@ -23,32 +43,10 @@ export class AppRoot extends LitElement {
     });
   }
 
-  private router = new Router(this, [
-    {
-      path: "/",
-      render: () => html`
-        <front-page-container
-          .isLoggedIn=${this.isLoggedIn}
-        ></front-page-container>
-      `,
-    },
-  ]);
-
   render() {
     return html`
-      <main-layout-container @navigate=${this.handleNavigate}>
-        ${this.router.outlet()}
-      </main-layout-container>
+      <main-layout-container>${this.router.outlet()}</main-layout-container>
     `;
-  }
-
-  private async handleNavigate(e: CustomEvent) {
-    await this.router.goto(e.detail.path);
-    const url = new URL(window.location.href);
-    url.search = "";
-    url.hash = "";
-    url.pathname = e.detail.path;
-    window.history.pushState({}, "", url.toString());
   }
 
   static styles = [baseStyle, css``];
