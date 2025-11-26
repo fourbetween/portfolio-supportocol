@@ -1,14 +1,22 @@
+import type { Router } from "@lit-labs/router";
+import { consume } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
+import { routerContext } from "../../../../context/router";
 import { accountMethods } from "../../../../model/account";
 import type { Rule } from "../../../../model/rule";
+import { navigate } from "../../../../routes";
 import { baseStyle } from "../../../../style/base";
 import type { CreateDiscussionFormData } from "../../../presenter/page/discussion/create";
 
 @customElement("create-discussion-page-container")
 export class CreateDiscussionPageContainer extends LitElement {
+  @consume({ context: routerContext })
+  @property({ attribute: false })
+  router?: Router;
+
   @state()
   private rules: Rule[] = [];
 
@@ -66,8 +74,8 @@ export class CreateDiscussionPageContainer extends LitElement {
         throw new Error(error.message);
       }
 
-      if (discussion) {
-        window.location.href = `/discussions/${discussion.id}`;
+      if (discussion && this.router) {
+        navigate(this.router, "discussions");
       }
     } finally {
       this.isSubmitting = false;
@@ -75,7 +83,9 @@ export class CreateDiscussionPageContainer extends LitElement {
   };
 
   private handleCancel = () => {
-    window.location.href = "/discussions";
+    if (this.router) {
+      navigate(this.router, "discussions");
+    }
   };
 
   static styles = [baseStyle];
