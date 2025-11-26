@@ -8,9 +8,6 @@ export class MainHeaderPresenter extends LitElement {
   getDashboardLink?: () => string;
 
   @property({ attribute: false })
-  getProjectsLink?: () => string;
-
-  @property({ attribute: false })
   getDiscussionsLink?: () => string;
 
   @property({ attribute: false })
@@ -26,12 +23,6 @@ export class MainHeaderPresenter extends LitElement {
             data-testid="dashboard-link"
           >
             ダッシュボード
-          </a>
-          <a
-            href=${this.getProjectsLink?.() ?? "/projects"}
-            data-testid="projects-link"
-          >
-            プロジェクト
           </a>
           <a
             href=${this.getDiscussionsLink?.() ?? "/discussions"}

@@ -42,15 +42,6 @@ describe("MainHeaderPresenter", async () => {
     expect(link.href).toContain("/custom/dashboard");
   });
 
-  it("プロジェクトリンクのhrefがgetProjectsLinkから取得されること", async () => {
-    elem.getProjectsLink = () => "/custom/projects";
-    await elem.updateComplete;
-    const link = elem.shadowRoot?.querySelector(
-      'a[data-testid="projects-link"]'
-    ) as HTMLAnchorElement;
-    expect(link.href).toContain("/custom/projects");
-  });
-
   it("議論リンクのhrefがgetDiscussionsLinkから取得されること", async () => {
     elem.getDiscussionsLink = () => "/custom/discussions";
     await elem.updateComplete;
