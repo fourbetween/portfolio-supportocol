@@ -4,6 +4,7 @@ export const routes = {
   front: "/",
   dashboard: "/dashboard",
   project: "/projects/:id",
+  discussions: "/discussions",
   discussion: "/discussions/:id",
 } as const;
 
@@ -13,6 +14,7 @@ export type RouteParams = {
   front: Record<string, never>;
   dashboard: Record<string, never>;
   project: { id: string };
+  discussions: Record<string, never>;
   discussion: { id: string };
 };
 

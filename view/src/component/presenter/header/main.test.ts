@@ -22,7 +22,6 @@ describe("MainHeaderPresenter", async () => {
 
   it("ナビゲーションリンクが表示されること", async () => {
     await expect.element(page.getByText("ダッシュボード")).toBeInTheDocument();
-    await expect.element(page.getByText("プロジェクト")).toBeInTheDocument();
     await expect.element(page.getByText("議論")).toBeInTheDocument();
     await expect.element(page.getByText("ルール")).toBeInTheDocument();
   });

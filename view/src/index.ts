@@ -43,6 +43,13 @@ export class AppRoot extends LitElement {
         ></item-project-page-container>
       `,
     },
+    {
+      name: "discussions",
+      path: routes.discussions,
+      render: () => html`
+        <list-discussion-page-container></list-discussion-page-container>
+      `,
+    },
   ]);
 
   constructor() {

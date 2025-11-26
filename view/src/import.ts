@@ -1,9 +1,11 @@
 import "./component/container/layout/main";
 import "./component/container/page/dashboard";
+import "./component/container/page/discussion/list";
 import "./component/container/page/front";
 import "./component/container/page/project/item";
 import "./component/presenter/header/main";
 import "./component/presenter/page/dashboard";
+import "./component/presenter/page/discussion/list";
 import "./component/presenter/page/home";
 import "./component/presenter/page/project/item";
 import "./component/presenter/popup/base";
