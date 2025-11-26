@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
-import type { EditProjectPopupPresenter } from "./edit-project";
+import type { EditProjectPopupPresenter } from "./edit";
 
 describe("EditProjectPopupPresenter", async () => {
   let elem: EditProjectPopupPresenter;

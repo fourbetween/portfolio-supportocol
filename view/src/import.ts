@@ -8,5 +8,5 @@ import "./component/presenter/page/home";
 import "./component/presenter/page/project/item";
 import "./component/presenter/popup/base";
 import "./component/presenter/popup/confirm";
-import "./component/presenter/popup/create-project";
-import "./component/presenter/popup/edit-project";
+import "./component/presenter/popup/project/create";
+import "./component/presenter/popup/project/edit";

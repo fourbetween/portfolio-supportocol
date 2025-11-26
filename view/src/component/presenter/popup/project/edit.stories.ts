@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
-import type { EditProjectPopupPresenter } from "./edit-project";
+import type { EditProjectPopupPresenter } from "./edit";
 
 const meta = {
-  title: "presenter/popup/edit-project",
+  title: "presenter/popup/project/edit",
   tags: ["autodocs"],
   render: (args) =>
     html`

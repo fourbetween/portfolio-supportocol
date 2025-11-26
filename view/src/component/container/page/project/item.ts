@@ -9,7 +9,7 @@ import type { Project } from "../../../../model/project";
 import { buildPath, navigate } from "../../../../routes";
 import { baseStyle } from "../../../../style/base";
 import type { ConfirmPopupPresenter } from "../../../presenter/popup/confirm";
-import type { EditProjectPopupPresenter } from "../../../presenter/popup/edit-project";
+import type { EditProjectPopupPresenter } from "../../../presenter/popup/project/edit";
 
 @customElement("item-project-page-container")
 export class ItemProjectPageContainer extends LitElement {

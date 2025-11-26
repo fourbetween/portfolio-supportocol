@@ -7,7 +7,7 @@ import type { Discussion } from "../../../model/discussion";
 import type { Project } from "../../../model/project";
 import { buildPath } from "../../../routes";
 import { baseStyle } from "../../../style/base";
-import type { CreateProjectPopupPresenter } from "../../presenter/popup/create-project";
+import type { CreateProjectPopupPresenter } from "../../presenter/popup/project/create";
 
 @customElement("dashboard-page-container")
 export class DashboardPageContainer extends LitElement {

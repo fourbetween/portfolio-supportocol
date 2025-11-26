@@ -1,43 +1,32 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
-import { baseStyle } from "../../../style/base";
-import { buttonStyle } from "../../../style/button";
+import { customElement, property, query } from "lit/decorators.js";
+import { baseStyle } from "../../../../style/base";
+import { buttonStyle } from "../../../../style/button";
 
-@customElement("edit-project-popup-presenter")
-export class EditProjectPopupPresenter extends LitElement {
+@customElement("create-project-popup-presenter")
+export class CreateProjectPopupPresenter extends LitElement {
   @query("base-popup-presenter")
   private popup!: HTMLElement & { open: () => void; close: () => void };
 
-  @property({ type: String })
-  projectName = "";
-
-  @state()
-  private inputValue = "";
+  @query("#project-name")
+  private nameInput!: HTMLInputElement;
 
   @property({ attribute: false })
-  onSave?: (name: string) => void;
+  onCreate?: (name: string) => void;
 
   @property({ attribute: false })
   onCancel?: () => void;
 
-  updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has("projectName")) {
-      this.inputValue = this.projectName;
-    }
-  }
-
   render() {
     return html`
       <base-popup-presenter>
-        <span slot="header">プロジェクトを編集</span>
+        <span slot="header">新規プロジェクト</span>
         <div slot="main">
           <div class="form-group">
             <label for="project-name">プロジェクト名</label>
             <input
               type="text"
               id="project-name"
-              .value=${this.inputValue}
-              @input=${this.handleInput}
               placeholder="プロジェクト名を入力"
             />
           </div>
@@ -46,14 +35,13 @@ export class EditProjectPopupPresenter extends LitElement {
           <button class="btn-secondary" @click=${this.handleCancel}>
             キャンセル
           </button>
-          <button class="btn-primary" @click=${this.handleSave}>保存</button>
+          <button class="btn-primary" @click=${this.handleCreate}>作成</button>
         </div>
       </base-popup-presenter>
     `;
   }
 
   open() {
-    this.inputValue = this.projectName;
     this.popup.open();
   }
 
@@ -61,19 +49,16 @@ export class EditProjectPopupPresenter extends LitElement {
     this.popup.close();
   }
 
-  private handleInput(e: Event) {
-    this.inputValue = (e.target as HTMLInputElement).value;
-  }
-
-  private handleSave() {
-    const name = this.inputValue.trim();
+  private handleCreate() {
+    const name = this.nameInput.value.trim();
     if (name) {
-      this.onSave?.(name);
+      this.onCreate?.(name);
     }
   }
 
   private handleCancel() {
     this.onCancel?.();
+    this.close();
   }
 
   static styles = [
