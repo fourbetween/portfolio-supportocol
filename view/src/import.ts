@@ -6,6 +6,7 @@ import "./component/container/page/front";
 import "./component/container/page/project/item";
 import "./component/container/page/rule/edit";
 import "./component/container/page/rule/list";
+import "./component/presenter/form/rule/comment_type";
 import "./component/presenter/header/main";
 import "./component/presenter/page/dashboard";
 import "./component/presenter/page/discussion/create";
