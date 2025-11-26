@@ -34,6 +34,13 @@ export class AppRoot extends LitElement {
         <dashboard-page-container></dashboard-page-container>
       `,
     },
+    {
+      name: "project",
+      path: routes.project,
+      render: () => html`
+        <item-project-page-container></item-project-page-container>
+      `,
+    },
   ]);
 
   constructor() {

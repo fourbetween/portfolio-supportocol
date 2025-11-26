@@ -1,8 +1,10 @@
 import type { Router } from "@lit-labs/router";
+import { consume } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
+import { routerContext } from "../../../../context/router";
 import { accountMethods } from "../../../../model/account";
 import type { Discussion } from "../../../../model/discussion";
 import type { Project } from "../../../../model/project";
@@ -13,6 +15,7 @@ import type { EditProjectPopupPresenter } from "../../../presenter/popup/project
 
 @customElement("item-project-page-container")
 export class ItemProjectPageContainer extends LitElement {
+  @consume({ context: routerContext })
   @property({ attribute: false })
   router?: Router;
 
