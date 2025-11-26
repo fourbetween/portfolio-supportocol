@@ -16,9 +16,9 @@ export type RouteParams = {
   discussion: { id: string };
 };
 
-export const buildPath = <T extends RouteName>(
-  name: T,
-  params?: RouteParams[T]
+export const buildPath = (
+  name: RouteName,
+  params?: RouteParams[RouteName]
 ): string => {
   let path: string = routes[name];
   if (params) {
@@ -29,10 +29,10 @@ export const buildPath = <T extends RouteName>(
   return path;
 };
 
-export const navigate = async <T extends RouteName>(
+export const navigate = async (
   router: Router,
-  name: T,
-  params?: RouteParams[T]
+  name: RouteName,
+  params?: RouteParams[RouteName]
 ) => {
   const path = buildPath(name, params);
   await router.goto(path);
