@@ -7,4 +7,6 @@ import "./component/presenter/page/dashboard";
 import "./component/presenter/page/home";
 import "./component/presenter/page/project/item";
 import "./component/presenter/popup/base";
+import "./component/presenter/popup/confirm";
 import "./component/presenter/popup/create-project";
+import "./component/presenter/popup/edit-project";
