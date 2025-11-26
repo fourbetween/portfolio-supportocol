@@ -3,9 +3,9 @@ import type { Router } from "@lit-labs/router";
 export const routes = {
   front: "/",
   dashboard: "/dashboard",
-  project: "/projects/:id",
-  discussions: "/discussions",
-  discussion: "/discussions/:id",
+  project_item: "/projects/:id",
+  discussion_list: "/discussions",
+  discussion_item: "/discussions/:id",
   discussion_new: "/discussions/new",
 } as const;
 
@@ -14,9 +14,9 @@ export type RouteName = keyof typeof routes;
 export type RouteParams = {
   front: Record<string, never>;
   dashboard: Record<string, never>;
-  project: { id: string };
-  discussions: Record<string, never>;
-  discussion: { id: string };
+  project_item: { id: string };
+  discussion_list: Record<string, never>;
+  discussion_item: { id: string };
   discussion_new: Record<string, never>;
 };
 

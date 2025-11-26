@@ -94,11 +94,11 @@ export class DashboardPageContainer extends LitElement {
   };
 
   private getProjectLink = (id: string): string => {
-    return buildPath("project", { id });
+    return buildPath("project_item", { id });
   };
 
   private getDiscussionLink = (id: string): string => {
-    return buildPath("discussion", { id });
+    return buildPath("discussion_item", { id });
   };
 
   static styles = [baseStyle];

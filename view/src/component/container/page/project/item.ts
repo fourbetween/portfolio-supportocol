@@ -105,7 +105,7 @@ export class ItemProjectPageContainer extends LitElement {
   }
 
   private getDiscussionLink = (id: string): string => {
-    return buildPath("discussion", { id });
+    return buildPath("discussion_item", { id });
   };
 
   private handleCreateDiscussion = () => {

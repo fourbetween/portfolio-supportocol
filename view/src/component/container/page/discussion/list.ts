@@ -47,7 +47,7 @@ export class ListDiscussionPageContainer extends LitElement {
   }
 
   private getDiscussionLink = (id: string): string => {
-    return buildPath("discussion", { id });
+    return buildPath("discussion_item", { id });
   };
 
   private handleSearch = (query: string) => {

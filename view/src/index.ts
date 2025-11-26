@@ -36,7 +36,7 @@ export class AppRoot extends LitElement {
     },
     {
       name: "project",
-      path: routes.project,
+      path: routes.project_item,
       render: ({ id }) => html`
         <item-project-page-container
           .projectId=${id as string}
@@ -44,8 +44,8 @@ export class AppRoot extends LitElement {
       `,
     },
     {
-      name: "discussions",
-      path: routes.discussions,
+      name: "discussion_list",
+      path: routes.discussion_list,
       render: () => html`
         <list-discussion-page-container></list-discussion-page-container>
       `,

@@ -75,7 +75,7 @@ export class CreateDiscussionPageContainer extends LitElement {
       }
 
       if (discussion && this.router) {
-        navigate(this.router, "discussions");
+        navigate(this.router, "discussion_list");
       }
     } finally {
       this.isSubmitting = false;
@@ -84,7 +84,7 @@ export class CreateDiscussionPageContainer extends LitElement {
 
   private handleCancel = () => {
     if (this.router) {
-      navigate(this.router, "discussions");
+      navigate(this.router, "discussion_list");
     }
   };
 
