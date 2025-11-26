@@ -20,7 +20,7 @@ export class EditProjectPopupPresenter extends LitElement {
   @property({ attribute: false })
   onCancel?: () => void;
 
-  updated(changedProperties: Map<string, unknown>) {
+  protected willUpdate(changedProperties: Map<string, unknown>) {
     if (changedProperties.has("projectName")) {
       this.inputValue = this.projectName;
     }
