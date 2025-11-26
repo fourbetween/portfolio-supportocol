@@ -70,7 +70,9 @@ export class EditRulePagePresenter extends LitElement {
               ${this.rule.commentTypes.map(
                 (fromType) => html`
                   <div class="path-row">
-                    <span class="path-from-label">${fromType.name} →</span>
+                    <span class="path-from-label">
+                      ${fromType.name} に対して
+                    </span>
                     <div class="path-checkboxes">
                       ${this.rule.commentTypes.map((toType) => {
                         const isChecked = this.rule.commentTypePaths.some(
