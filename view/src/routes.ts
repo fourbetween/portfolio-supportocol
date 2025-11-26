@@ -7,6 +7,9 @@ export const routes = {
   discussion_list: "/discussions",
   discussion_item: "/discussions/:id",
   discussion_new: "/discussions/new",
+  rule_list: "/rules",
+  rule_item: "/rules/:id",
+  rule_new: "/rules/new",
 } as const;
 
 export type RouteName = keyof typeof routes;
@@ -18,6 +21,9 @@ export type RouteParams = {
   discussion_list: Record<string, never>;
   discussion_item: { id: string };
   discussion_new: Record<string, never>;
+  rule_list: Record<string, never>;
+  rule_item: { id: string };
+  rule_new: Record<string, never>;
 };
 
 export const buildPath = (

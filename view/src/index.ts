@@ -57,6 +57,13 @@ export class AppRoot extends LitElement {
         <create-discussion-page-container></create-discussion-page-container>
       `,
     },
+    {
+      name: "rule_list",
+      path: routes.rule_list,
+      render: () => html`
+        <list-rule-page-container></list-rule-page-container>
+      `,
+    },
   ]);
 
   constructor() {
