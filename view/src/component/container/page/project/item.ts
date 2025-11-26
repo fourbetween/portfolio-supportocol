@@ -1,7 +1,7 @@
 import type { Router } from "@lit-labs/router";
 import { consume } from "@lit/context";
 import { Task } from "@lit/task";
-import { LitElement, html } from "lit";
+import { LitElement, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
 import { routerContext } from "../../../../context/router";
@@ -57,7 +57,7 @@ export class ItemProjectPageContainer extends LitElement {
 
     new Task(this, {
       task: async ([projectId]) => {
-        if (!projectId) return [];
+        if (!projectId) return [] as Discussion[];
         const { data, error } = await client.GET("/discussions", {
           headers: await accountMethods.authHeader(),
           params: { query: { projectId } },
@@ -65,16 +65,20 @@ export class ItemProjectPageContainer extends LitElement {
         if (error) {
           throw new Error(error.message);
         }
-        return data ?? [];
+        return data;
       },
       args: () => [this.projectId] as const,
       onComplete: (data) => {
-        this.discussions = [...data];
+        this.discussions = data;
       },
     });
   }
 
   render() {
+    if (!this.project) {
+      return nothing;
+    }
+
     return html`
       <item-project-page-presenter
         .project=${this.project}
