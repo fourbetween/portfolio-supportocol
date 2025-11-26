@@ -109,8 +109,9 @@ export class ItemProjectPageContainer extends LitElement {
   };
 
   private handleCreateDiscussion = () => {
-    // TODO: 議論作成画面への遷移を実装
-    console.log("Create discussion");
+    if (this.router) {
+      navigate(this.router, "discussion_new");
+    }
   };
 
   private handleOpenEditProjectPopup = () => {

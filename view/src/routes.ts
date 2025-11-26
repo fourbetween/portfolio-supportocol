@@ -6,6 +6,7 @@ export const routes = {
   project: "/projects/:id",
   discussions: "/discussions",
   discussion: "/discussions/:id",
+  discussion_new: "/discussions/new",
 } as const;
 
 export type RouteName = keyof typeof routes;
@@ -16,6 +17,7 @@ export type RouteParams = {
   project: { id: string };
   discussions: Record<string, never>;
   discussion: { id: string };
+  discussion_new: Record<string, never>;
 };
 
 export const buildPath = (
