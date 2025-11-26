@@ -18,3 +18,5 @@ import "./component/presenter/popup/base";
 import "./component/presenter/popup/confirm";
 import "./component/presenter/popup/project/create";
 import "./component/presenter/popup/project/edit";
+import "./component/presenter/popup/rule/add_comment_type";
+import "./component/presenter/popup/rule/edit_comment_type";

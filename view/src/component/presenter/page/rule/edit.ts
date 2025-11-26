@@ -1,8 +1,10 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import type { Rule } from "../../../../model/rule";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
+import type { AddCommentTypePopupPresenter } from "../../popup/rule/add_comment_type";
+import type { EditCommentTypePopupPresenter } from "../../popup/rule/edit_comment_type";
 
 @customElement("edit-rule-page-presenter")
 export class EditRulePagePresenter extends LitElement {
@@ -22,6 +24,12 @@ export class EditRulePagePresenter extends LitElement {
 
   @property({ attribute: false })
   onCancel?: () => void;
+
+  @query("add-comment-type-popup-presenter")
+  private addCommentTypePopup!: AddCommentTypePopupPresenter;
+
+  @query("edit-comment-type-popup-presenter")
+  private editCommentTypePopup!: EditCommentTypePopupPresenter;
 
   render() {
     return html`
@@ -49,7 +57,16 @@ export class EditRulePagePresenter extends LitElement {
             ></textarea>
           </div>
           <section class="section">
-            <h2 class="section-title">コメント種類</h2>
+            <div class="section-header">
+              <h2 class="section-title">コメント種類</h2>
+              <button
+                type="button"
+                class="btn-secondary"
+                @click=${this.handleAddCommentType}
+              >
+                + コメント種類を追加
+              </button>
+            </div>
             <ul class="comment-type-list">
               ${this.rule.commentTypes.map(
                 (type) => html`
@@ -59,6 +76,22 @@ export class EditRulePagePresenter extends LitElement {
                       style="background-color: ${type.color}"
                     ></span>
                     <span class="comment-type-name">${type.name}</span>
+                    <div class="comment-type-actions">
+                      <button
+                        type="button"
+                        class="btn-text"
+                        @click=${() => this.handleEditCommentType(type.id)}
+                      >
+                        編集
+                      </button>
+                      <button
+                        type="button"
+                        class="btn-text btn-danger"
+                        @click=${() => this.handleDeleteCommentType(type.id)}
+                      >
+                        削除
+                      </button>
+                    </div>
                   </li>
                 `
               )}
@@ -118,6 +151,12 @@ export class EditRulePagePresenter extends LitElement {
             </button>
           </div>
         </form>
+        <add-comment-type-popup-presenter
+          @add=${this.handleAddCommentTypeSubmit}
+        ></add-comment-type-popup-presenter>
+        <edit-comment-type-popup-presenter
+          @update=${this.handleEditCommentTypeSubmit}
+        ></edit-comment-type-popup-presenter>
       </main>
     `;
   }
@@ -128,6 +167,53 @@ export class EditRulePagePresenter extends LitElement {
 
   private handleCancel() {
     this.onCancel?.();
+  }
+
+  private handleAddCommentType() {
+    this.addCommentTypePopup.open();
+  }
+
+  private handleAddCommentTypeSubmit(e: CustomEvent) {
+    const { name, description, color } = e.detail;
+    const newId = `temp-${Date.now()}`;
+    const newType = {
+      id: newId,
+      name,
+      description,
+      color,
+    };
+    this.rule = {
+      ...this.rule,
+      commentTypes: [...this.rule.commentTypes, newType],
+    };
+  }
+
+  private handleEditCommentType(id: string) {
+    const commentType = this.rule.commentTypes.find((type) => type.id === id);
+    if (commentType) {
+      this.editCommentTypePopup.open(commentType);
+    }
+  }
+
+  private handleEditCommentTypeSubmit(e: CustomEvent) {
+    const { id, name, description, color } = e.detail;
+    this.rule = {
+      ...this.rule,
+      commentTypes: this.rule.commentTypes.map((type) =>
+        type.id === id ? { ...type, name, description, color } : type
+      ),
+    };
+  }
+
+  private handleDeleteCommentType(id: string) {
+    this.rule = {
+      ...this.rule,
+      commentTypes: this.rule.commentTypes.filter((type) => type.id !== id),
+      // 削除されたコメント種類に関連する経路も削除
+      commentTypePaths: this.rule.commentTypePaths.filter(
+        (path) => path.fromCommentTypeId !== id && path.toCommentTypeId !== id
+      ),
+    };
   }
 
   private handleNameChange(e: Event) {
@@ -229,6 +315,13 @@ export class EditRulePagePresenter extends LitElement {
         margin-top: 24px;
       }
 
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
       .section-title {
         font-size: 18px;
         font-weight: 600;
@@ -266,6 +359,29 @@ export class EditRulePagePresenter extends LitElement {
         font-size: 14px;
         font-weight: 500;
         color: var(--color-fg-default);
+        flex-grow: 1;
+      }
+
+      .comment-type-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .btn-text {
+        background: none;
+        border: none;
+        color: var(--color-accent-fg);
+        cursor: pointer;
+        font-size: 14px;
+        padding: 4px 8px;
+      }
+
+      .btn-text:hover {
+        text-decoration: underline;
+      }
+
+      .btn-danger {
+        color: var(--color-danger-fg);
       }
 
       .path-matrix {

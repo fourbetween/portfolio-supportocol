@@ -61,7 +61,7 @@ describe("EditRulePagePresenter", async () => {
 
   it("ルール説明が入力欄に表示されること", async () => {
     await elem.updateComplete;
-    const textarea = page.getByLabelText("説明");
+    const textarea = page.getByRole("textbox", { name: "説明" });
     await expect
       .element(textarea)
       .toHaveValue("論理的な議論を行うための基本的なルールセットです。");
@@ -147,5 +147,98 @@ describe("EditRulePagePresenter", async () => {
         ]),
       })
     );
+  });
+
+  it("コメント種類を追加ボタンが表示されること", async () => {
+    await elem.updateComplete;
+    const addButton = page.getByRole("button", {
+      name: "+ コメント種類を追加",
+    });
+    await expect.element(addButton).toBeVisible();
+  });
+
+  it("コメント種類を追加すると一覧に反映されること", async () => {
+    await elem.updateComplete;
+
+    // 追加ボタンをクリック
+    const addButton = page.getByRole("button", {
+      name: "+ コメント種類を追加",
+    });
+    await addButton.click();
+    await elem.updateComplete;
+
+    // ポップアップが開いていることを確認
+    await expect.element(page.getByRole("dialog")).toBeVisible();
+
+    // フォームに入力（ポップアップ内のフィールドを特定）
+    const nameInput = page.getByRole("textbox", { name: "名前" });
+    await userEvent.fill(nameInput.element(), "質問");
+
+    // 追加ボタンをクリック
+    const submitButton = page.getByRole("button", {
+      name: "追加",
+      exact: true,
+    });
+    await submitButton.click();
+    await elem.updateComplete;
+
+    // 一覧に反映されていることを確認
+    const list = page.getByRole("list");
+    await expect.element(list.getByText("質問")).toBeVisible();
+  });
+
+  it("コメント種類に編集ボタンが表示されること", async () => {
+    await elem.updateComplete;
+    const editButtons = page.getByRole("button", { name: "編集" });
+    // 2つのコメント種類があるので、2つの編集ボタンがあるはず
+    await expect.element(editButtons.first()).toBeVisible();
+  });
+
+  it("コメント種類を編集すると一覧に反映されること", async () => {
+    await elem.updateComplete;
+
+    // 編集ボタンをクリック（最初のコメント種類）
+    const editButton = page.getByRole("button", { name: "編集" }).first();
+    await editButton.click();
+    await elem.updateComplete;
+
+    // ポップアップが開いていることを確認
+    await expect.element(page.getByRole("dialog")).toBeVisible();
+
+    // 名前を変更
+    const nameInput = page.getByRole("textbox", { name: "名前" });
+    await userEvent.clear(nameInput.element());
+    await userEvent.fill(nameInput.element(), "更新された主張");
+
+    // 更新ボタンをクリック
+    const updateButton = page.getByRole("button", { name: "更新" });
+    await updateButton.click();
+    await elem.updateComplete;
+
+    // 一覧に反映されていることを確認
+    const list = page.getByRole("list");
+    await expect.element(list.getByText("更新された主張")).toBeVisible();
+  });
+
+  it("コメント種類に削除ボタンが表示されること", async () => {
+    await elem.updateComplete;
+    const deleteButtons = page.getByRole("button", { name: "削除" });
+    // 2つのコメント種類があるので、2つの削除ボタンがあるはず
+    await expect.element(deleteButtons.first()).toBeVisible();
+  });
+
+  it("コメント種類を削除すると一覧から消えること", async () => {
+    await elem.updateComplete;
+
+    // 削除ボタンをクリック（最初のコメント種類「主張」）
+    const deleteButton = page.getByRole("button", { name: "削除" }).first();
+    await deleteButton.click();
+    await elem.updateComplete;
+
+    // 一覧から消えていることを確認
+    const list = page.getByRole("list");
+    await expect.element(list.getByText("主張")).not.toBeInTheDocument();
+    // 根拠はまだ残っている
+    await expect.element(list.getByText("根拠")).toBeVisible();
   });
 });
