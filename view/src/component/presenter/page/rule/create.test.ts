@@ -17,34 +17,29 @@ describe("CreateRulePagePresenter", async () => {
   });
 
   it("ページタイトルが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("heading", { level: 1 }))
       .toHaveTextContent("ルール作成");
   });
 
   it("ルール名の入力欄が表示されること", async () => {
-    await elem.updateComplete;
     const input = page.getByLabelText("ルール名");
     await expect.element(input).toBeVisible();
     await expect.element(input).toHaveValue("");
   });
 
   it("ルール説明の入力欄が表示されること", async () => {
-    await elem.updateComplete;
     const textarea = page.getByRole("textbox", { name: "説明" });
     await expect.element(textarea).toBeVisible();
     await expect.element(textarea).toHaveValue("");
   });
 
   it("作成ボタンが表示されること", async () => {
-    await elem.updateComplete;
     const createButton = page.getByRole("button", { name: "作成" });
     await expect.element(createButton).toBeVisible();
   });
 
   it("キャンセルボタンが表示されること", async () => {
-    await elem.updateComplete;
     const cancelButton = page.getByRole("button", { name: "キャンセル" });
     await expect.element(cancelButton).toBeVisible();
   });
@@ -52,7 +47,6 @@ describe("CreateRulePagePresenter", async () => {
   it("作成ボタンをクリックするとonSaveが呼ばれること", async () => {
     const onSave = vi.fn();
     elem.onSave = onSave;
-    await elem.updateComplete;
 
     const createButton = page.getByRole("button", { name: "作成" });
     await createButton.click();
@@ -63,7 +57,6 @@ describe("CreateRulePagePresenter", async () => {
   it("キャンセルボタンをクリックするとonCancelが呼ばれること", async () => {
     const onCancel = vi.fn();
     elem.onCancel = onCancel;
-    await elem.updateComplete;
 
     const cancelButton = page.getByRole("button", { name: "キャンセル" });
     await cancelButton.click();
@@ -89,7 +82,6 @@ describe("CreateRulePagePresenter", async () => {
   });
 
   it("コメント種類を追加ボタンが表示されること", async () => {
-    await elem.updateComplete;
     const addButton = page.getByRole("button", {
       name: "+ コメント種類を追加",
     });

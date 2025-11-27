@@ -39,24 +39,20 @@ describe("CreateDiscussionPagePresenter", async () => {
   });
 
   it("ページタイトルが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("heading", { level: 1 }))
       .toHaveTextContent("新規議論作成");
   });
 
   it("テーマ入力欄が表示されること", async () => {
-    await elem.updateComplete;
     await expect.element(page.getByLabelText("テーマ")).toBeVisible();
   });
 
   it("背景入力欄が表示されること", async () => {
-    await elem.updateComplete;
     await expect.element(page.getByLabelText("背景")).toBeVisible();
   });
 
   it("結論入力欄が表示されること", async () => {
-    await elem.updateComplete;
     await expect.element(page.getByLabelText("結論（初期案）")).toBeVisible();
   });
 
@@ -67,19 +63,16 @@ describe("CreateDiscussionPagePresenter", async () => {
   });
 
   it("公開レベル選択欄が表示されること", async () => {
-    await elem.updateComplete;
     await expect.element(page.getByLabelText("公開レベル")).toBeVisible();
   });
 
   it("コメント許可レベル選択欄が表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByLabelText("コメント許可レベル"))
       .toBeVisible();
   });
 
   it("作成ボタンが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("button", { name: "作成" }))
       .toBeVisible();
@@ -124,7 +117,6 @@ describe("CreateDiscussionPagePresenter", async () => {
   });
 
   it("キャンセルボタンが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("button", { name: "キャンセル" }))
       .toBeVisible();
@@ -133,7 +125,6 @@ describe("CreateDiscussionPagePresenter", async () => {
   it("キャンセルボタンクリック時にonCancelが呼ばれること", async () => {
     const onCancel = vi.fn();
     elem.onCancel = onCancel;
-    await elem.updateComplete;
 
     await page.getByRole("button", { name: "キャンセル" }).click();
 

@@ -16,7 +16,6 @@ describe("BasePopupPresenter", async () => {
 
   it("open()メソッドを呼ぶとダイアログが表示されること", async () => {
     elem.open();
-    await elem.updateComplete;
     await expect.element(page.getByRole("dialog")).toBeVisible();
   });
 });

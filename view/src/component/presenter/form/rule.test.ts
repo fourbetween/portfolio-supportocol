@@ -45,7 +45,6 @@ describe("RuleFormPresenter", async () => {
   });
 
   it("ルール名の入力欄が表示されること", async () => {
-    await elem.updateComplete;
     const input = page.getByLabelText("ルール名");
     await expect.element(input).toBeVisible();
     await expect.element(input).toHaveValue("基本的な議論");

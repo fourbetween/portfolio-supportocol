@@ -15,28 +15,24 @@ describe("HomePagePresenter", async () => {
   });
 
   it("アプリのタイトルが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("heading", { level: 1 }))
       .toHaveTextContent("Supportocol");
   });
 
   it("アプリの説明が表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByText("論理的な議論を支援するプラットフォーム"))
       .toBeVisible();
   });
 
   it("ログインボタンが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("button", { name: "ログイン" }))
       .toBeVisible();
   });
 
   it("公開議論一覧へのリンクが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("link", { name: "公開議論を見る" }))
       .toBeVisible();
@@ -45,7 +41,6 @@ describe("HomePagePresenter", async () => {
   it("ログインボタンをクリックするとonLoginが呼び出されること", async () => {
     const onLogin = vi.fn();
     elem.onLogin = onLogin;
-    await elem.updateComplete;
     await page.getByRole("button", { name: "ログイン" }).click();
     expect(onLogin).toHaveBeenCalled();
   });

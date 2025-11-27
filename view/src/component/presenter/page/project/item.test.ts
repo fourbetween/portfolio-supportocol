@@ -62,7 +62,6 @@ describe("ItemProjectPagePresenter", async () => {
 
   it("議論一覧のセクションタイトルが表示されること", async () => {
     elem.project = mockProject;
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("heading", { level: 2, name: "議論" }))
       .toBeVisible();
@@ -97,7 +96,6 @@ describe("ItemProjectPagePresenter", async () => {
 
   it("新規議論作成ボタンが表示されること", async () => {
     elem.project = mockProject;
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("button", { name: "新規議論" }))
       .toBeVisible();
@@ -107,14 +105,12 @@ describe("ItemProjectPagePresenter", async () => {
     const onCreateDiscussion = vi.fn();
     elem.project = mockProject;
     elem.onCreateDiscussion = onCreateDiscussion;
-    await elem.updateComplete;
     await page.getByRole("button", { name: "新規議論" }).click();
     expect(onCreateDiscussion).toHaveBeenCalled();
   });
 
   it("プロジェクト編集ボタンが表示されること", async () => {
     elem.project = mockProject;
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("button", { name: "編集" }))
       .toBeVisible();
@@ -124,14 +120,12 @@ describe("ItemProjectPagePresenter", async () => {
     const onEditProject = vi.fn();
     elem.project = mockProject;
     elem.onEditProject = onEditProject;
-    await elem.updateComplete;
     await page.getByRole("button", { name: "編集" }).click();
     expect(onEditProject).toHaveBeenCalled();
   });
 
   it("プロジェクト削除ボタンが表示されること", async () => {
     elem.project = mockProject;
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("button", { name: "削除" }))
       .toBeVisible();
@@ -141,7 +135,6 @@ describe("ItemProjectPagePresenter", async () => {
     const onDeleteProject = vi.fn();
     elem.project = mockProject;
     elem.onDeleteProject = onDeleteProject;
-    await elem.updateComplete;
     await page.getByRole("button", { name: "削除" }).click();
     expect(onDeleteProject).toHaveBeenCalled();
   });
