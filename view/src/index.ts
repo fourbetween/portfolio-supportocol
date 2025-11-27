@@ -58,6 +58,15 @@ export class AppRoot extends LitElement {
       `,
     },
     {
+      name: "discussion_item",
+      path: routes.discussion_item,
+      render: ({ id }) => html`
+        <item-discussion-page-container
+          .discussionId=${id as string}
+        ></item-discussion-page-container>
+      `,
+    },
+    {
       name: "rule_list",
       path: routes.rule_list,
       render: () => html`
