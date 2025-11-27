@@ -5,8 +5,8 @@ import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { ruleFormPageStyle } from "../../../../style/rule_form_page";
 
-@customElement("edit-rule-page-presenter")
-export class EditRulePagePresenter extends LitElement {
+@customElement("create-rule-page-presenter")
+export class CreateRulePagePresenter extends LitElement {
   @property({ attribute: false })
   rule: Rule = {
     id: "",
@@ -27,7 +27,7 @@ export class EditRulePagePresenter extends LitElement {
   render() {
     return html`
       <main class="container">
-        <h1>ルール編集</h1>
+        <h1>ルール作成</h1>
         <form>
           <rule-form-presenter
             .rule=${this.rule}
@@ -42,7 +42,7 @@ export class EditRulePagePresenter extends LitElement {
               キャンセル
             </button>
             <button type="button" class="btn-primary" @click=${this.handleSave}>
-              保存
+              作成
             </button>
           </div>
         </form>
