@@ -1,7 +1,8 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { page, userEvent } from "vitest/browser";
 import type { CreateProjectPopupPresenter } from "./create";
 
-describe("CreateProjectPopupPresenter", () => {
+describe("CreateProjectPopupPresenter", async () => {
   let elem: CreateProjectPopupPresenter;
 
   beforeEach(() => {
@@ -15,14 +16,56 @@ describe("CreateProjectPopupPresenter", () => {
     elem.remove();
   });
 
-  it("プロジェクト名入力欄と作成ボタンが表示されること", async () => {
+  it("open()メソッドを呼ぶとダイアログが表示されること", async () => {
+    elem.open();
+    await elem.updateComplete;
+    await expect.element(page.getByRole("dialog")).toBeVisible();
+  });
+
+  it("プロジェクト名入力フィールドが表示されること", async () => {
+    elem.open();
+    await elem.updateComplete;
+    await expect
+      .element(page.getByRole("textbox", { name: "プロジェクト名" }))
+      .toBeVisible();
+  });
+
+  it("作成ボタンをクリックするとonCreateが呼ばれること", async () => {
+    const onCreate = vi.fn();
+    elem.onCreate = onCreate;
+    elem.open();
     await elem.updateComplete;
 
-    const input = elem.shadowRoot?.querySelector("input#name");
-    expect(input).toBeTruthy();
+    const input = page.getByRole("textbox", { name: "プロジェクト名" });
+    await userEvent.fill(input.element(), "テストプロジェクト");
 
-    const button = elem.shadowRoot?.querySelector("button");
-    expect(button).toBeTruthy();
-    expect(button?.textContent?.trim()).toBe("作成する");
+    const createButton = page.getByRole("button", { name: "作成" });
+    await userEvent.click(createButton.element());
+
+    expect(onCreate).toHaveBeenCalledWith("テストプロジェクト");
+  });
+
+  it("キャンセルボタンをクリックするとonCancelが呼ばれること", async () => {
+    const onCancel = vi.fn();
+    elem.onCancel = onCancel;
+    elem.open();
+    await elem.updateComplete;
+
+    const cancelButton = page.getByRole("button", { name: "キャンセル" });
+    await userEvent.click(cancelButton.element());
+
+    expect(onCancel).toHaveBeenCalled();
+  });
+
+  it("プロジェクト名が空の場合はonCreateが呼ばれないこと", async () => {
+    const onCreate = vi.fn();
+    elem.onCreate = onCreate;
+    elem.open();
+    await elem.updateComplete;
+
+    const createButton = page.getByRole("button", { name: "作成" });
+    await userEvent.click(createButton.element());
+
+    expect(onCreate).not.toHaveBeenCalled();
   });
 });

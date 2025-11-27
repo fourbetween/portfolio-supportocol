@@ -1,8 +1,11 @@
-import { LitElement, css, html } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
+import { LitElement, html } from "lit";
+import { customElement, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
-import { formStyle } from "../../../../style/form";
+import type {
+  CommentTypeFormData,
+  CommentTypeFormPresenter,
+} from "../../form/rule/comment_type";
 import type { BasePopupPresenter } from "../base";
 
 @customElement("add-comment-type-popup-presenter")
@@ -10,26 +13,18 @@ export class AddCommentTypePopupPresenter extends LitElement {
   @query("base-popup-presenter")
   private basePopup!: BasePopupPresenter;
 
-  @state()
-  private selectedColorIndex = 5;
-
-  @state()
-  private name = "";
-
-  @state()
-  private description = "";
-
-  private static readonly COLORS = [
-    "#0969da",
-    "#d29922",
-    "#1a7f37",
-    "#cf222e",
-    "#8250df",
-    "#6e7781",
-  ];
+  @query("comment-type-form-presenter")
+  private form!: CommentTypeFormPresenter;
 
   open() {
+    this.form.name = "";
+    this.form.description = "";
+    this.form.selectedColorIndex = 0;
     this.basePopup.open();
+  }
+
+  close() {
+    this.basePopup.close();
   }
 
   render() {
@@ -37,95 +32,29 @@ export class AddCommentTypePopupPresenter extends LitElement {
       <base-popup-presenter>
         <span slot="header">コメント種類の追加</span>
         <div slot="main">
-          <div class="form-group">
-            <label class="form-label">名前</label>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="例: 補足情報"
-              .value="${this.name}"
-              @input="${(e: Event) =>
-                (this.name = (e.target as HTMLInputElement).value)}"
-            />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">説明</label>
-            <textarea
-              class="form-control"
-              placeholder="このコメント種類の用途を説明してください"
-              .value="${this.description}"
-              @input="${(e: Event) =>
-                (this.description = (e.target as HTMLTextAreaElement).value)}"
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">色</label>
-            <div class="color-picker">
-              ${AddCommentTypePopupPresenter.COLORS.map(
-                (color, index) => html`
-                  <div
-                    class="color-option ${this.selectedColorIndex === index
-                      ? "selected"
-                      : ""}"
-                    style="background-color: ${color}"
-                    @click=${() => (this.selectedColorIndex = index)}
-                  ></div>
-                `
-              )}
-            </div>
-          </div>
+          <comment-type-form-presenter></comment-type-form-presenter>
         </div>
         <div slot="footer">
-          <button class="btn" @click=${() => this.basePopup.close()}>
+          <button class="btn-secondary" @click=${() => this.basePopup.close()}>
             キャンセル
           </button>
-          <button class="btn btn-primary" @click=${this.handleAdd}>追加</button>
+          <button class="btn-primary" @click=${this.handleAdd}>追加</button>
         </div>
       </base-popup-presenter>
     `;
   }
 
   private handleAdd() {
+    const formData: CommentTypeFormData = this.form.getFormData();
     this.dispatchEvent(
       new CustomEvent("add", {
         bubbles: true,
         composed: true,
-        detail: {
-          name: this.name,
-          description: this.description,
-          color: AddCommentTypePopupPresenter.COLORS[this.selectedColorIndex],
-        },
+        detail: formData,
       })
     );
     this.basePopup.close();
-    this.name = "";
-    this.description = "";
-    this.selectedColorIndex = 5;
   }
 
-  static styles = [
-    baseStyle,
-    buttonStyle,
-    formStyle,
-    css`
-      .color-picker {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-      .color-option {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        cursor: pointer;
-        border: 2px solid transparent;
-      }
-      .color-option.selected {
-        border-color: var(--color-fg-default);
-        transform: scale(1.1);
-      }
-    `,
-  ];
+  static styles = [baseStyle, buttonStyle];
 }

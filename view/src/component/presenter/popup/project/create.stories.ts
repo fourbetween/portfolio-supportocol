@@ -5,19 +5,24 @@ import type { CreateProjectPopupPresenter } from "./create";
 const meta = {
   title: "presenter/popup/project/create",
   tags: ["autodocs"],
-  render: () =>
+  render: (args) =>
     html`
       <create-project-popup-presenter
         id="popup"
+        .onCreate=${args.onCreate}
+        .onCancel=${args.onCancel}
       ></create-project-popup-presenter>
       <button
         @click=${() =>
           document.querySelector<CreateProjectPopupPresenter>("#popup")?.open()}
       >
-        Open Create Project Popup
+        ポップアップを開く
       </button>
     `,
-  argTypes: {},
+  argTypes: {
+    onCreate: { action: "onCreate" },
+    onCancel: { action: "onCancel" },
+  },
 } satisfies Meta<CreateProjectPopupPresenter>;
 
 export default meta;

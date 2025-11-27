@@ -1,61 +1,72 @@
-BASE_DIR=${CURDIR}
-STACK_NAME=$(shell echo ${PROJECT_NAME}-${STAGE}-stack | sed -E 's/-(.)/\U\1/g; s/^(.)/\U\1/')
+# ディレクトリ定義
+BASE_DIR := ${CURDIR}
+VIEW_DIR := ${BASE_DIR}/view
+CDK_DIR  := ${BASE_DIR}/cdk
 
-.PHONY: runapi runview api view builddeploy build deploy destroy fixview gen testapi testview import storybook %
+# CDKスタック名（キャメルケースに変換）
+STACK_NAME := $(shell echo ${PROJECT_NAME}-${STAGE}-stack | sed -E 's/-(.)/\U\1/g; s/^(.)/\U\1/')
 
-runapi:
-	cd ${BASE_DIR} && \
+.PHONY: dev-api dev-view build-api build-view build build-deploy deploy destroy gen test-api test-view setup-view import storybook upgrade-tools upgrade-go upgrade-view %
+
+# ===== 開発サーバー =====
+dev-api:
 	go tool air -c .air.toml
-runview: fixview
-	cd ${BASE_DIR}/view && \
-	npm run dev --mode=${STAGE}
-api:
-	cd ${BASE_DIR}/cmd/lambda/api && \
-	GOOS=linux GOARCH=arm64 go build -o build/bootstrap
-view: view/env fixview
-	cd ${BASE_DIR}/view && \
-	npm run build --mode=${STAGE}
-builddeploy: build deploy
-	@:
-build: testapi api view
-	@:
+
+dev-view: setup-view
+	cd ${VIEW_DIR} && npm run dev --mode=${STAGE}
+
+# ===== ビルド =====
+build-api:
+	cd ${BASE_DIR}/cmd/lambda/api && GOOS=linux GOARCH=arm64 go build -o build/bootstrap
+
+build-view: view/env setup-view
+	cd ${VIEW_DIR} && npm run build --mode=${STAGE}
+
+build: test-api build-api test-view build-view
+
+# ===== デプロイ =====
+build-deploy: build deploy
+
 deploy:
-	cd ${BASE_DIR}/cdk && \
-	npx cdk deploy ${STACK_NAME}
+	cd ${CDK_DIR} && npx cdk deploy ${STACK_NAME}
+
 destroy:
-	cd ${BASE_DIR}/cdk && \
-	npx cdk destroy ${STACK_NAME}
-fixview:
-	cd ${BASE_DIR}/view && \
-	npm install && \
-	npm audit fix
+	cd ${CDK_DIR} && npx cdk destroy ${STACK_NAME}
+
+# ===== コード生成 =====
 gen:
-	cd ${BASE_DIR}/view && \
-	npm run gen && \
-	cd ${BASE_DIR} && \
+	cd ${VIEW_DIR} && npm run gen
 	go generate ./...
-testapi:
-	cd ${BASE_DIR} && \
-	mkdir -p tmp/test && \
-	go test -race -shuffle=on -cover -coverprofile=tmp/test/cover.out ./... && \
+
+# ===== テスト =====
+test-api:
+	mkdir -p tmp/test
+	go test -race -shuffle=on -cover -coverprofile=tmp/test/cover.out ./...
 	go tool cover -html=tmp/test/cover.out -o=tmp/test/cover.html
-testview:
-	cd ${BASE_DIR}/view && \
-	npx playwright install --with-deps && \
-	npm run test
+
+test-view:
+	cd ${VIEW_DIR} && npx playwright install --with-deps && npm run test
+
+# ===== ユーティリティ =====
+setup-view:
+	cd ${VIEW_DIR} && npm install && npm audit fix
+
 import:
-	go tool import --importfile=${BASE_DIR}/view/src/import.ts --targetdir=${BASE_DIR}/view/src/component --watch
-story:
-	cd ${BASE_DIR}/view && \
-	npm run storybook -- -p $${PORT:-6006}
-upgradetools:
+	go tool import --importfile=${VIEW_DIR}/src/import.ts --targetdir=${VIEW_DIR}/src/component --watch
+
+storybook:
+	cd ${VIEW_DIR} && npm run storybook -- -p $${PORT:-6006}
+
+# ===== アップグレード =====
+upgrade-tools:
 	go get tool
-upgradegopkgs:
+
+upgrade-go:
 	go get -u ./...
-upgradeviewpkgs:
-	cd ${BASE_DIR}/view && \
-	npx npm-check-updates -u && \
-	npm install
+
+upgrade-view:
+	cd ${VIEW_DIR} && npx npm-check-updates -u && npm install
+
+# ===== 汎用コマンド実行 =====
 %:
-	cd ${BASE_DIR}/cmd/${@} && \
-	go run .
+	cd ${BASE_DIR}/cmd/${@} && go run .

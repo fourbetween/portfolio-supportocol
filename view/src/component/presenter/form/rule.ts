@@ -1,15 +1,14 @@
 import { LitElement, css, html } from "lit";
-import { property, query } from "lit/decorators.js";
-import { ulid } from "ulid";
+import { customElement, property, query } from "lit/decorators.js";
 import type { Rule } from "../../../model/rule";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
-import { cardStyle } from "../../../style/card";
-import { formStyle } from "../../../style/form";
 import type { AddCommentTypePopupPresenter } from "../popup/rule/add_comment_type";
+import type { EditCommentTypePopupPresenter } from "../popup/rule/edit_comment_type";
 
+@customElement("rule-form-presenter")
 export class RuleFormPresenter extends LitElement {
-  @property({ type: Object })
+  @property({ attribute: false })
   rule: Rule = {
     id: "",
     name: "",
@@ -20,151 +19,195 @@ export class RuleFormPresenter extends LitElement {
     commentTypePaths: [],
   };
 
+  @property({ attribute: false })
+  onRuleChange?: (rule: Rule) => void;
+
   @query("add-comment-type-popup-presenter")
-  private _addCommentTypePopup!: AddCommentTypePopupPresenter;
+  private addCommentTypePopup!: AddCommentTypePopupPresenter;
 
-  protected renderForm() {
+  @query("edit-comment-type-popup-presenter")
+  private editCommentTypePopup!: EditCommentTypePopupPresenter;
+
+  render() {
     return html`
-      <!-- 基本情報 -->
-      <div class="section">
-        <div class="section-header">
-          <h2 class="section-title">基本情報</h2>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="rule-name">ルール名</label>
-          <input
-            id="rule-name"
-            type="text"
-            class="form-control"
-            .value="${this.rule.name}"
-            @input="${this._handleNameChange}"
-          />
-        </div>
-        <div class="form-group">
-          <label class="form-label">説明</label>
-          <textarea
-            class="form-control"
-            .value="${this.rule.description}"
-            @input="${this._handleDescriptionChange}"
-          ></textarea>
-        </div>
+      <div class="form-group">
+        <label for="name">ルール名</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          .value=${this.rule.name}
+          @input=${this.handleNameChange}
+        />
       </div>
-
-      <!-- 構造定義 -->
-      <div class="section">
+      <div class="form-group">
+        <label for="description">説明</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          .value=${this.rule.description}
+          @input=${this.handleDescriptionChange}
+        ></textarea>
+      </div>
+      <section class="section">
         <div class="section-header">
-          <h2 class="section-title">構造定義 (コメント種類と経路)</h2>
-          <button class="btn btn-sm" @click="${this._openAddCommentTypePopup}">
+          <h2 class="section-title">コメント種類</h2>
+          <button
+            type="button"
+            class="btn-secondary"
+            @click=${this.handleAddCommentType}
+          >
             + コメント種類を追加
           </button>
         </div>
-
-        <p class="helper-text" style="margin-bottom: 16px">
-          各コメント種類に対して、返信として許可するコメント種類（子コメント）を選択してください。
-        </p>
-
-        ${this.rule.commentTypes.map(
-          (parentType) => html`
-            <div class="card">
-              <div
-                class="card-header"
-                style="border-left: 4px solid ${parentType.color}"
-              >
-                <div class="comment-type-title">
-                  <span
-                    class="color-dot"
-                    style="background-color: ${parentType.color}"
-                  ></span>
-                  ${parentType.name}
+        <ul class="comment-type-list">
+          ${this.rule.commentTypes.map(
+            (type) => html`
+              <li class="comment-type-item">
+                <span
+                  class="color-badge"
+                  style="background-color: ${type.color}"
+                ></span>
+                <span class="comment-type-name">${type.name}</span>
+                <div class="comment-type-actions">
+                  <button
+                    type="button"
+                    class="btn-text"
+                    @click=${() => this.handleEditCommentType(type.id)}
+                  >
+                    編集
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-text btn-danger"
+                    @click=${() => this.handleDeleteCommentType(type.id)}
+                  >
+                    削除
+                  </button>
                 </div>
-                <button class="btn-danger-text">削除</button>
-              </div>
-              <div class="card-body">
-                <div class="form-group">
-                  <label class="form-label">
-                    このコメントへの返信として許可するもの
-                  </label>
-                  <div class="checkbox-grid">
-                    ${this.rule.commentTypes.map((childType) => {
-                      const isChecked = this.rule.commentTypePaths.some(
-                        (path) =>
-                          path.fromCommentTypeId === parentType.id &&
-                          path.toCommentTypeId === childType.id
-                      );
-                      return html`
-                        <label class="checkbox-item">
-                          <input
-                            type="checkbox"
-                            .checked="${isChecked}"
-                            @change="${(e: Event) =>
-                              this._handlePathChange(
-                                e,
-                                parentType.id,
-                                childType.id
-                              )}"
-                          />
-                          ${childType.name}
-                        </label>
-                      `;
-                    })}
-                  </div>
+              </li>
+            `
+          )}
+        </ul>
+      </section>
+      <section class="section">
+        <h2 class="section-title">経路設定</h2>
+        <div class="path-matrix">
+          ${this.rule.commentTypes.map(
+            (fromType) => html`
+              <div class="path-row">
+                <span class="path-from-label">${fromType.name} に対して</span>
+                <div class="path-checkboxes">
+                  ${this.rule.commentTypes.map((toType) => {
+                    const isChecked = this.rule.commentTypePaths.some(
+                      (path) =>
+                        path.fromCommentTypeId === fromType.id &&
+                        path.toCommentTypeId === toType.id
+                    );
+                    const checkboxId = `path-${fromType.id}-${toType.id}`;
+                    return html`
+                      <label class="path-checkbox-label">
+                        <input
+                          type="checkbox"
+                          id=${checkboxId}
+                          .checked=${isChecked}
+                          aria-label="${fromType.name} → ${toType.name}"
+                          @change=${(e: Event) =>
+                            this.handlePathChange(e, fromType.id, toType.id)}
+                        />
+                        <span class="path-to-name">${toType.name}</span>
+                      </label>
+                    `;
+                  })}
                 </div>
               </div>
-            </div>
-          `
-        )}
-      </div>
-
+            `
+          )}
+        </div>
+      </section>
       <add-comment-type-popup-presenter
-        @add=${this._handleAddCommentType}
+        @add=${this.handleAddCommentTypeSubmit}
       ></add-comment-type-popup-presenter>
+      <edit-comment-type-popup-presenter
+        @update=${this.handleEditCommentTypeSubmit}
+      ></edit-comment-type-popup-presenter>
     `;
   }
 
-  private _openAddCommentTypePopup(e: Event) {
-    e.preventDefault();
-    this._addCommentTypePopup.open();
+  private updateRule(newRule: Rule) {
+    this.rule = newRule;
+    this.onRuleChange?.(newRule);
   }
 
-  private _handleAddCommentType(e: CustomEvent) {
+  private handleAddCommentType() {
+    this.addCommentTypePopup.open();
+  }
+
+  private handleAddCommentTypeSubmit(e: CustomEvent) {
     const { name, description, color } = e.detail;
+    const newId = `temp-${Date.now()}`;
     const newType = {
-      id: ulid(),
+      id: newId,
       name,
       description,
       color,
     };
-    this.rule = {
+    this.updateRule({
       ...this.rule,
       commentTypes: [...this.rule.commentTypes, newType],
-    };
+    });
   }
 
-  private _handleNameChange(e: Event) {
+  private handleEditCommentType(id: string) {
+    const commentType = this.rule.commentTypes.find((type) => type.id === id);
+    if (commentType) {
+      this.editCommentTypePopup.open(commentType);
+    }
+  }
+
+  private handleEditCommentTypeSubmit(e: CustomEvent) {
+    const { id, name, description, color } = e.detail;
+    this.updateRule({
+      ...this.rule,
+      commentTypes: this.rule.commentTypes.map((type) =>
+        type.id === id ? { ...type, name, description, color } : type
+      ),
+    });
+  }
+
+  private handleDeleteCommentType(id: string) {
+    this.updateRule({
+      ...this.rule,
+      commentTypes: this.rule.commentTypes.filter((type) => type.id !== id),
+      commentTypePaths: this.rule.commentTypePaths.filter(
+        (path) => path.fromCommentTypeId !== id && path.toCommentTypeId !== id
+      ),
+    });
+  }
+
+  private handleNameChange(e: Event) {
     const target = e.target as HTMLInputElement;
-    this.rule = { ...this.rule, name: target.value };
+    this.updateRule({ ...this.rule, name: target.value });
   }
 
-  private _handleDescriptionChange(e: Event) {
+  private handleDescriptionChange(e: Event) {
     const target = e.target as HTMLTextAreaElement;
-    this.rule = { ...this.rule, description: target.value };
+    this.updateRule({ ...this.rule, description: target.value });
   }
 
-  protected _handlePathChange(e: Event, fromId: string, toId: string) {
+  private handlePathChange(e: Event, fromId: string, toId: string) {
     const checked = (e.target as HTMLInputElement).checked;
     if (checked) {
-      this.rule = {
+      this.updateRule({
         ...this.rule,
         commentTypePaths: [
           ...this.rule.commentTypePaths,
-          {
-            fromCommentTypeId: fromId,
-            toCommentTypeId: toId,
-          },
+          { fromCommentTypeId: fromId, toCommentTypeId: toId },
         ],
-      };
+      });
     } else {
-      this.rule = {
+      this.updateRule({
         ...this.rule,
         commentTypePaths: this.rule.commentTypePaths.filter(
           (path) =>
@@ -172,54 +215,49 @@ export class RuleFormPresenter extends LitElement {
               path.fromCommentTypeId === fromId && path.toCommentTypeId === toId
             )
         ),
-      };
+      });
     }
   }
 
   static styles = [
     baseStyle,
     buttonStyle,
-    formStyle,
-    cardStyle,
     css`
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-
-      /* Header */
-      .page-header {
-        margin-bottom: 24px;
+      .form-group {
         display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-      }
-
-      h1 {
-        font-size: 24px;
-        font-weight: 600;
-        margin: 0;
-      }
-
-      .header-description {
-        color: var(--color-fg-muted);
-        font-size: 14px;
-        margin-top: 4px;
-      }
-
-      .header-actions {
-        display: flex;
+        flex-direction: column;
         gap: 8px;
       }
 
-      /* Cards & Sections */
-      .section {
-        background-color: var(--color-canvas-default);
+      label {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--color-fg-default);
+      }
+
+      input[type="text"],
+      textarea {
+        padding: 8px 12px;
+        font-size: 14px;
         border: 1px solid var(--color-border-default);
         border-radius: 6px;
-        padding: 24px;
-        margin-bottom: 24px;
+        background-color: var(--color-canvas-default);
+        color: var(--color-fg-default);
+      }
+
+      input[type="text"]:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--color-accent-fg);
+        box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
+      }
+
+      textarea {
+        resize: vertical;
+      }
+
+      .section {
+        margin-top: 24px;
       }
 
       .section-header {
@@ -227,82 +265,115 @@ export class RuleFormPresenter extends LitElement {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 16px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--color-border-muted);
       }
 
       .section-title {
         font-size: 18px;
         font-weight: 600;
+        color: var(--color-fg-default);
+        margin: 0 0 16px 0;
+      }
+
+      .comment-type-list {
+        list-style: none;
+        padding: 0;
         margin: 0;
-      }
-
-      /* Comment Type Card */
-      .card {
-        overflow: hidden;
-      }
-
-      .card-header {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .comment-type-title {
-        font-weight: 600;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
+        flex-direction: column;
         gap: 8px;
       }
 
-      .color-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        display: inline-block;
-      }
-
-      .checkbox-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      .comment-type-item {
+        display: flex;
+        align-items: center;
         gap: 8px;
-        margin-top: 8px;
-        padding: 12px;
-        background-color: var(--color-canvas-subtle);
+        padding: 8px 12px;
+        border: 1px solid var(--color-border-default);
         border-radius: 6px;
-        border: 1px solid var(--color-border-muted);
+        background-color: var(--color-canvas-default);
       }
 
-      .checkbox-item {
+      .color-badge {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        flex-shrink: 0;
+      }
+
+      .comment-type-name {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--color-fg-default);
+        flex-grow: 1;
+      }
+
+      .comment-type-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .btn-text {
+        background: none;
+        border: none;
+        color: var(--color-accent-fg);
+        cursor: pointer;
+        font-size: 14px;
+        padding: 4px 8px;
+      }
+
+      .btn-text:hover {
+        text-decoration: underline;
+      }
+
+      .btn-danger {
+        color: var(--color-danger-fg);
+      }
+
+      .path-matrix {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .path-row {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        background-color: var(--color-canvas-subtle);
+      }
+
+      .path-from-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--color-fg-default);
+      }
+
+      .path-checkboxes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .path-checkbox-label {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 4px;
         font-size: 14px;
+        color: var(--color-fg-default);
         cursor: pointer;
       }
 
-      .checkbox-item input[type="checkbox"] {
-        margin: 0;
-      }
-
-      .helper-text {
-        font-size: 12px;
-        color: var(--color-fg-muted);
-        margin-top: 4px;
-      }
-
-      .btn-danger-text {
-        color: var(--color-danger-fg);
-        border: none;
-        background: none;
-        padding: 4px 8px;
+      .path-checkbox-label input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
         cursor: pointer;
       }
-      .btn-danger-text:hover {
-        background-color: #ffebe9;
-        text-decoration: underline;
-        border-radius: 4px;
+
+      .path-to-name {
+        font-size: 14px;
       }
     `,
   ];

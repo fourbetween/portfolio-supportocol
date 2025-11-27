@@ -1,0 +1,62 @@
+import { LitElement, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import type { Rule } from "../../../../model/rule";
+import { baseStyle } from "../../../../style/base";
+import { buttonStyle } from "../../../../style/button";
+import { ruleFormPageStyle } from "../../../../style/rule_form_page";
+
+@customElement("edit-rule-page-presenter")
+export class EditRulePagePresenter extends LitElement {
+  @property({ attribute: false })
+  rule: Rule = {
+    id: "",
+    name: "",
+    description: "",
+    createdBy: "",
+    createdAt: "",
+    commentTypes: [],
+    commentTypePaths: [],
+  };
+
+  @property({ attribute: false })
+  onSave?: (rule: Rule) => void;
+
+  @property({ attribute: false })
+  onCancel?: () => void;
+
+  render() {
+    return html`
+      <main class="container">
+        <h1>ルール編集</h1>
+        <form>
+          <rule-form-presenter
+            .rule=${this.rule}
+            .onRuleChange=${(rule: Rule) => (this.rule = rule)}
+          ></rule-form-presenter>
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              @click=${this.handleCancel}
+            >
+              キャンセル
+            </button>
+            <button type="button" class="btn-primary" @click=${this.handleSave}>
+              保存
+            </button>
+          </div>
+        </form>
+      </main>
+    `;
+  }
+
+  private handleSave() {
+    this.onSave?.(this.rule);
+  }
+
+  private handleCancel() {
+    this.onCancel?.();
+  }
+
+  static styles = [baseStyle, buttonStyle, ruleFormPageStyle];
+}

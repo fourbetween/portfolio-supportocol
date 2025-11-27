@@ -1,150 +1,105 @@
 import { Task } from "@lit/task";
-import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { LitElement, html } from "lit";
+import { customElement, query, state } from "lit/decorators.js";
 import { client } from "../../../api/client";
 import { accountMethods } from "../../../model/account";
-import type {
-  CommentPermissionLevel,
-  VisibilityLevel,
-} from "../../../model/discussion";
-import type { Rule } from "../../../model/rule";
+import type { Discussion } from "../../../model/discussion";
+import type { Project } from "../../../model/project";
+import { buildPath } from "../../../routes";
 import { baseStyle } from "../../../style/base";
-import type { CreateDiscussionData } from "../../presenter/popup/discussion/create";
+import type { CreateProjectPopupPresenter } from "../../presenter/popup/project/create";
 
 @customElement("dashboard-page-container")
 export class DashboardPageContainer extends LitElement {
-  @property({ type: Boolean })
-  isLoggedIn = false;
+  @query("create-project-popup-presenter")
+  private createProjectPopup!: CreateProjectPopupPresenter;
 
   @state()
-  private rules: Rule[] = [];
+  private projects: Project[] = [];
 
-  private projectsTask = new Task(this, {
-    task: async ([]) => {
-      const { data, error } = await client.GET("/projects", {
-        headers: await accountMethods.authHeader(),
-      });
-      if (error) {
-        throw new Error(error.message);
-      }
-      return data;
-    },
-    args: () => [],
-  });
-
-  private discussionsTask = new Task(this, {
-    task: async ([]) => {
-      const { data, error } = await client.GET("/discussions", {
-        headers: await accountMethods.authHeader(),
-      });
-      if (error) {
-        throw new Error(error.message);
-      }
-      return data;
-    },
-    args: () => [],
-  });
+  @state()
+  private recentDiscussions: Discussion[] = [];
 
   constructor() {
     super();
 
     new Task(this, {
-      task: async ([]) => {
-        const { data, error } = await client.GET("/rules", {
+      task: async () => {
+        const { data, error } = await client.GET("/projects", {
           headers: await accountMethods.authHeader(),
         });
         if (error) {
           throw new Error(error.message);
         }
-        this.rules = data;
+        return data;
       },
       args: () => [],
+      onComplete: (data) => {
+        this.projects = data ?? [];
+      },
+    });
+
+    new Task(this, {
+      task: async () => {
+        const { data, error } = await client.GET("/discussions", {
+          headers: await accountMethods.authHeader(),
+        });
+        if (error) {
+          throw new Error(error.message);
+        }
+        return data;
+      },
+      args: () => [],
+      onComplete: (data) => {
+        this.recentDiscussions = data ?? [];
+      },
     });
   }
 
   render() {
     return html`
-      <div class="container">
-        <div class="side">
-          ${this.projectsTask.render({
-            complete: (projects) => html`
-              <project-list-presenter
-                .projects=${projects}
-                .onCreate=${(name: string) => this.createProject(name)}
-              ></project-list-presenter>
-            `,
-            error: (e) =>
-              html`
-                <p>Error: ${e}</p>
-              `,
-          })}
-        </div>
-        <div class="main">
-          ${this.discussionsTask.render({
-            complete: (discussions) => html`
-              <discussion-list-presenter
-                .discussions=${discussions}
-                .rules=${this.rules}
-                .onCreate=${(data: CreateDiscussionData) =>
-                  this.createDiscussion(data)}
-              ></discussion-list-presenter>
-            `,
-            error: (e) =>
-              html`
-                <p>Error: ${e}</p>
-              `,
-          })}
-        </div>
-      </div>
+      <dashboard-page-presenter
+        .projects=${this.projects}
+        .recentDiscussions=${this.recentDiscussions}
+        .onCreateProject=${this.handleOpenCreateProjectPopup}
+        .getProjectLink=${this.getProjectLink}
+        .getDiscussionLink=${this.getDiscussionLink}
+      ></dashboard-page-presenter>
+      <create-project-popup-presenter
+        .onCreate=${this.handleCreateProject}
+        .onCancel=${this.handleCancelCreateProject}
+      ></create-project-popup-presenter>
     `;
   }
 
-  private async createDiscussion(data: CreateDiscussionData) {
-    const { error } = await client.POST("/discussions", {
-      headers: await accountMethods.authHeader(),
-      body: {
-        ...data,
-        visibilityLevel: data.visibilityLevel as VisibilityLevel,
-        commentPermissionLevel:
-          data.commentPermissionLevel as CommentPermissionLevel,
-        conclusion: "",
-      },
-    });
-    if (error) {
-      console.error(error);
-      return;
-    }
-    this.discussionsTask.run();
-  }
+  private handleOpenCreateProjectPopup = () => {
+    this.createProjectPopup.open();
+  };
 
-  private async createProject(name: string) {
-    const { error } = await client.POST("/projects", {
+  private handleCreateProject = async (name: string) => {
+    const { data, error } = await client.POST("/projects", {
       headers: await accountMethods.authHeader(),
       body: { name },
     });
     if (error) {
-      console.error(error);
+      console.error("Failed to create project:", error.message);
       return;
     }
-    this.projectsTask.run();
-  }
+    this.createProjectPopup.close();
+    this.projects = [...this.projects, data];
+  };
 
-  static styles = [
-    baseStyle,
-    css`
-      .container {
-        display: flex;
-        height: 100%;
-        gap: 16px;
-      }
+  private handleCancelCreateProject = () => {
+    this.createProjectPopup.close();
+  };
 
-      .side {
-        width: 300px;
-      }
+  private getProjectLink = (id: string): string => {
+    return buildPath("project_item", { id });
+  };
 
-      .main {
-        flex: 1;
-      }
-    `,
-  ];
+  private getDiscussionLink = (id: string): string => {
+    return buildPath("discussion_item", { id });
+  };
+
+  static styles = [baseStyle];
 }
