@@ -17,21 +17,18 @@ describe("CommentTypeFormPresenter", async () => {
   });
 
   it("名前入力フィールドが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("textbox", { name: "名前" }))
       .toBeVisible();
   });
 
   it("説明入力フィールドが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("textbox", { name: "説明" }))
       .toBeVisible();
   });
 
   it("色選択ボタンが6つ表示されること", async () => {
-    await elem.updateComplete;
     const colorButtons = page.getByRole("button").elements();
     expect(colorButtons.length).toBe(6);
   });
@@ -39,7 +36,6 @@ describe("CommentTypeFormPresenter", async () => {
   it("名前を入力するとchangeイベントが発火すること", async () => {
     const onChange = vi.fn();
     elem.addEventListener("change", onChange);
-    await elem.updateComplete;
 
     const nameInput = page.getByRole("textbox", { name: "名前" });
     await userEvent.type(nameInput.element(), "テスト名");

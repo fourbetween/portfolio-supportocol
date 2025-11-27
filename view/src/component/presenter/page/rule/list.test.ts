@@ -39,7 +39,6 @@ describe("ListRulePagePresenter", async () => {
   });
 
   it("ページタイトルが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("heading", { level: 1 }))
       .toHaveTextContent("ルール一覧");
@@ -64,7 +63,6 @@ describe("ListRulePagePresenter", async () => {
   });
 
   it("新規ルール作成ボタンが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("button", { name: "新規ルール作成" }))
       .toBeVisible();
@@ -73,7 +71,6 @@ describe("ListRulePagePresenter", async () => {
   it("新規ルール作成ボタンをクリックするとonCreateRuleが呼び出されること", async () => {
     const onCreateRule = vi.fn();
     elem.onCreateRule = onCreateRule;
-    await elem.updateComplete;
     await page.getByRole("button", { name: "新規ルール作成" }).click();
     expect(onCreateRule).toHaveBeenCalled();
   });

@@ -45,7 +45,6 @@ describe("ListDiscussionPagePresenter", async () => {
   });
 
   it("ページタイトルが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("heading", { level: 1 }))
       .toHaveTextContent("議論一覧");
@@ -76,14 +75,12 @@ describe("ListDiscussionPagePresenter", async () => {
   });
 
   it("検索入力欄が表示されること", async () => {
-    await elem.updateComplete;
     await expect.element(page.getByPlaceholder("議論を検索...")).toBeVisible();
   });
 
   it("検索入力時にonSearchが呼ばれること", async () => {
     const onSearch = vi.fn();
     elem.onSearch = onSearch;
-    await elem.updateComplete;
     const input = page.getByPlaceholder("議論を検索...");
     await input.fill("テスト");
     expect(onSearch).toHaveBeenCalledWith("テスト");

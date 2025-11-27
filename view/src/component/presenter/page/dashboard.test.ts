@@ -61,14 +61,12 @@ describe("DashboardPagePresenter", async () => {
   });
 
   it("ページタイトルが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("heading", { level: 1 }))
       .toHaveTextContent("ダッシュボード");
   });
 
   it("プロジェクト一覧のセクションタイトルが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("heading", { level: 2, name: "プロジェクト" }))
       .toBeVisible();
@@ -82,7 +80,6 @@ describe("DashboardPagePresenter", async () => {
   });
 
   it("新規プロジェクト作成ボタンが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("button", { name: "新規プロジェクト" }))
       .toBeVisible();
@@ -91,13 +88,11 @@ describe("DashboardPagePresenter", async () => {
   it("新規プロジェクト作成ボタンをクリックするとonCreateProjectが呼び出されること", async () => {
     const onCreateProject = vi.fn();
     elem.onCreateProject = onCreateProject;
-    await elem.updateComplete;
     await page.getByRole("button", { name: "新規プロジェクト" }).click();
     expect(onCreateProject).toHaveBeenCalled();
   });
 
   it("最近アクセスした議論のセクションタイトルが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("heading", { level: 2, name: "最近の議論" }))
       .toBeVisible();

@@ -170,7 +170,6 @@ describe("ItemDiscussionPagePresenter", async () => {
     elem.discussion = mockDiscussion;
     elem.comments = mockComments;
     elem.commentTypes = mockCommentTypes;
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("button", { name: "コメントを追加" }))
       .toBeVisible();
@@ -182,7 +181,6 @@ describe("ItemDiscussionPagePresenter", async () => {
     elem.comments = mockComments;
     elem.commentTypes = mockCommentTypes;
     elem.onAddComment = onAddComment;
-    await elem.updateComplete;
 
     await page.getByRole("button", { name: "コメントを追加" }).click();
 

@@ -47,20 +47,17 @@ describe("EditRulePagePresenter", async () => {
   });
 
   it("ページタイトルが表示されること", async () => {
-    await elem.updateComplete;
     await expect
       .element(page.getByRole("heading", { level: 1 }))
       .toHaveTextContent("ルール編集");
   });
 
   it("ルール名が入力欄に表示されること", async () => {
-    await elem.updateComplete;
     const input = page.getByLabelText("ルール名");
     await expect.element(input).toHaveValue("基本的な議論");
   });
 
   it("ルール説明が入力欄に表示されること", async () => {
-    await elem.updateComplete;
     const textarea = page.getByRole("textbox", { name: "説明" });
     await expect
       .element(textarea)
@@ -68,7 +65,6 @@ describe("EditRulePagePresenter", async () => {
   });
 
   it("コメント種類一覧が表示されること", async () => {
-    await elem.updateComplete;
     // コメント種類一覧セクションで名前が表示されていることを確認
     const list = page.getByRole("list");
     await expect.element(list.getByText("主張")).toBeVisible();
@@ -76,7 +72,6 @@ describe("EditRulePagePresenter", async () => {
   });
 
   it("経路のチェックボックスが表示されること", async () => {
-    await elem.updateComplete;
     // 主張から根拠への経路が設定されているので、チェックボックスがチェックされているはず
     const checkbox = page.getByRole("checkbox", { name: "主張 → 根拠" });
     await expect.element(checkbox).toBeVisible();
@@ -86,7 +81,6 @@ describe("EditRulePagePresenter", async () => {
   it("保存ボタンをクリックするとonSaveが呼ばれること", async () => {
     const onSave = vi.fn();
     elem.onSave = onSave;
-    await elem.updateComplete;
 
     const saveButton = page.getByRole("button", { name: "保存" });
     await saveButton.click();
@@ -97,7 +91,6 @@ describe("EditRulePagePresenter", async () => {
   it("キャンセルボタンをクリックするとonCancelが呼ばれること", async () => {
     const onCancel = vi.fn();
     elem.onCancel = onCancel;
-    await elem.updateComplete;
 
     const cancelButton = page.getByRole("button", { name: "キャンセル" });
     await cancelButton.click();
@@ -150,7 +143,6 @@ describe("EditRulePagePresenter", async () => {
   });
 
   it("コメント種類を追加ボタンが表示されること", async () => {
-    await elem.updateComplete;
     const addButton = page.getByRole("button", {
       name: "+ コメント種類を追加",
     });
@@ -188,7 +180,6 @@ describe("EditRulePagePresenter", async () => {
   });
 
   it("コメント種類に編集ボタンが表示されること", async () => {
-    await elem.updateComplete;
     const editButtons = page.getByRole("button", { name: "編集" });
     // 2つのコメント種類があるので、2つの編集ボタンがあるはず
     await expect.element(editButtons.first()).toBeVisible();
@@ -221,7 +212,6 @@ describe("EditRulePagePresenter", async () => {
   });
 
   it("コメント種類に削除ボタンが表示されること", async () => {
-    await elem.updateComplete;
     const deleteButtons = page.getByRole("button", { name: "削除" });
     // 2つのコメント種類があるので、2つの削除ボタンがあるはず
     await expect.element(deleteButtons.first()).toBeVisible();
