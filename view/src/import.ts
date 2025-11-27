@@ -1,6 +1,7 @@
 import "./component/container/layout/main";
 import "./component/container/page/dashboard";
 import "./component/container/page/discussion/create";
+import "./component/container/page/discussion/item";
 import "./component/container/page/discussion/list";
 import "./component/container/page/front";
 import "./component/container/page/project/item";
