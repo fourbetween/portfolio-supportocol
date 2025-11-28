@@ -7,6 +7,13 @@ import type {
 } from "../../../../model/discussion";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
+import {
+  listItemStyle,
+  pageContainerStyle,
+  pageHeadingStyle,
+  pageHostStyle,
+  sectionStyle,
+} from "../../../../style/page";
 
 @customElement("item-discussion-page-presenter")
 export class ItemDiscussionPagePresenter extends LitElement {
@@ -113,7 +120,7 @@ export class ItemDiscussionPagePresenter extends LitElement {
     const rootComments = this.getRootComments();
 
     return html`
-      <main class="container">
+      <main class="container container--wide">
         <h1>${this.discussion?.theme ?? ""}</h1>
         <section class="discussion-info">
           <div class="info-section">
@@ -152,33 +159,12 @@ export class ItemDiscussionPagePresenter extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
+    pageHostStyle,
+    pageContainerStyle,
+    pageHeadingStyle,
+    sectionStyle,
+    listItemStyle,
     css`
-      :host {
-        display: block;
-        min-height: 100vh;
-        background-color: var(--color-canvas-default);
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 24px;
-      }
-
-      h1 {
-        font-size: 32px;
-        font-weight: 700;
-        color: var(--color-fg-default);
-        margin: 0 0 24px 0;
-      }
-
-      h2 {
-        font-size: 20px;
-        font-weight: 600;
-        color: var(--color-fg-default);
-        margin: 0;
-      }
-
       .discussion-info {
         display: flex;
         flex-direction: column;
@@ -327,8 +313,6 @@ export class ItemDiscussionPagePresenter extends LitElement {
 
       .empty-message {
         padding: 16px;
-        color: var(--color-fg-muted);
-        font-size: 14px;
         text-align: center;
         background-color: var(--color-canvas-subtle);
         border-radius: 6px;

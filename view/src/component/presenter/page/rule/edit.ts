@@ -1,9 +1,14 @@
-import { LitElement, html } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type { Rule } from "../../../../model/rule";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
-import { ruleFormPageStyle } from "../../../../style/rule_form_page";
+import {
+  formActionsStyle,
+  pageContainerStyle,
+  pageHeadingStyle,
+  pageHostStyle,
+} from "../../../../style/page";
 
 @customElement("edit-rule-page-presenter")
 export class EditRulePagePresenter extends LitElement {
@@ -58,5 +63,27 @@ export class EditRulePagePresenter extends LitElement {
     this.onCancel?.();
   }
 
-  static styles = [baseStyle, buttonStyle, ruleFormPageStyle];
+  static styles = [
+    baseStyle,
+    buttonStyle,
+    pageHostStyle,
+    pageContainerStyle,
+    pageHeadingStyle,
+    formActionsStyle,
+    css`
+      .container {
+        max-width: 900px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .form-actions {
+        margin-top: 24px;
+      }
+    `,
+  ];
 }
