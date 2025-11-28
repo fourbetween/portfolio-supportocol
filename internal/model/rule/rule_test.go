@@ -1,9 +1,11 @@
 package rule_test
 
 import (
+	"errors"
 	"testing"
 	"time"
 
+	"github.com/fourbetween/app-supportocol/internal"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/service/id"
 	gomock "go.uber.org/mock/gomock"
@@ -238,6 +240,9 @@ func TestRule_Validate(t *testing.T) {
 			err := r.Validate()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if tt.wantErr && !errors.Is(err, internal.ErrConflict) {
+				t.Errorf("Validate() error should wrap ErrConflict, got %v", err)
 			}
 		})
 	}
