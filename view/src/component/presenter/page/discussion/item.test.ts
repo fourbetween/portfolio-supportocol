@@ -209,4 +209,94 @@ describe("ItemDiscussionPagePresenter", async () => {
 
     expect(onAddComment).toHaveBeenCalledWith("01234567890123456789012360");
   });
+
+  it("コメントをクリックするとフォーカスボタンが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.comments = mockComments;
+    elem.commentTypes = mockCommentTypes;
+    await elem.updateComplete;
+
+    const focusButtons = elem.shadowRoot?.querySelectorAll(".btn-focus");
+    expect(focusButtons?.length).toBeGreaterThan(0);
+  });
+
+  it("フォーカスボタンクリック時にonFocusCommentが呼ばれること", async () => {
+    const onFocusComment = vi.fn();
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    elem.onFocusComment = onFocusComment;
+    await elem.updateComplete;
+
+    const focusButton = elem.shadowRoot?.querySelector(".btn-focus");
+    (focusButton as HTMLElement)?.click();
+
+    expect(onFocusComment).toHaveBeenCalledWith("01234567890123456789012360");
+  });
+
+  it("focusedCommentIdが設定されると祖先コメントセクションが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.comments = mockComments;
+    elem.commentTypes = mockCommentTypes;
+    elem.focusedCommentId = "01234567890123456789012361"; // 根拠コメント1（ルートコメント1の子）
+    await elem.updateComplete;
+
+    const ancestorSection =
+      elem.shadowRoot?.querySelector(".ancestor-comments");
+    expect(ancestorSection).not.toBeNull();
+    await expect.element(page.getByText("ルートコメント1")).toBeVisible();
+  });
+
+  it("フォーカスモードでフォーカスコメントが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.comments = mockComments;
+    elem.commentTypes = mockCommentTypes;
+    elem.focusedCommentId = "01234567890123456789012361"; // 根拠コメント1
+    await elem.updateComplete;
+
+    const focusedSection = elem.shadowRoot?.querySelector(
+      ".focused-comment-section"
+    );
+    expect(focusedSection).not.toBeNull();
+    await expect.element(page.getByText("根拠コメント1")).toBeVisible();
+  });
+
+  it("フォーカスモードでフォーカス解除ボタンが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.comments = mockComments;
+    elem.commentTypes = mockCommentTypes;
+    elem.focusedCommentId = "01234567890123456789012361";
+    await elem.updateComplete;
+
+    await expect
+      .element(page.getByRole("button", { name: "フォーカス解除" }))
+      .toBeVisible();
+  });
+
+  it("フォーカス解除ボタンクリック時にonClearFocusが呼ばれること", async () => {
+    const onClearFocus = vi.fn();
+    elem.discussion = mockDiscussion;
+    elem.comments = mockComments;
+    elem.commentTypes = mockCommentTypes;
+    elem.focusedCommentId = "01234567890123456789012361";
+    elem.onClearFocus = onClearFocus;
+    await elem.updateComplete;
+
+    await page.getByRole("button", { name: "フォーカス解除" }).click();
+
+    expect(onClearFocus).toHaveBeenCalled();
+  });
+
+  it("祖先コメントにフォーカスボタンが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.comments = mockComments;
+    elem.commentTypes = mockCommentTypes;
+    elem.focusedCommentId = "01234567890123456789012361";
+    await elem.updateComplete;
+
+    const ancestorSection =
+      elem.shadowRoot?.querySelector(".ancestor-comments");
+    const focusButton = ancestorSection?.querySelector(".btn-focus");
+    expect(focusButton).not.toBeNull();
+  });
 });
