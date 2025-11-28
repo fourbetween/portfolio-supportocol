@@ -37,12 +37,16 @@ func NewFactory(
 	}
 }
 
-func (f *Factory) NewRule(params NewRuleParams) *Rule {
+func (f *Factory) NewRule(params NewRuleParams) (*Rule, error) {
 	id := f.idSrv.Generate()
-	return f.BuildRule(BuildRuleParams{
+	r := f.BuildRule(BuildRuleParams{
 		ID:            id,
 		NewRuleParams: params,
 	})
+	if err := r.Validate(); err != nil {
+		return nil, err
+	}
+	return r, nil
 }
 
 func (f *Factory) BuildRule(params BuildRuleParams) *Rule {

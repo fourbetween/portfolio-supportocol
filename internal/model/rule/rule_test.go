@@ -166,11 +166,89 @@ func TestRule_CommentTypesAndPaths(t *testing.T) {
 	}
 }
 
+func TestRule_Validate(t *testing.T) {
+	tests := []struct {
+		name             string
+		commentTypes     []rule.CommentType
+		commentTypePaths []rule.CommentTypePath
+		wantErr          bool
+	}{
+		{
+			name: "矛盾がない場合はエラーを返さないこと",
+			commentTypes: []rule.CommentType{
+				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+			},
+			commentTypePaths: []rule.CommentTypePath{
+				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct2"},
+			},
+			wantErr: false,
+		},
+		{
+			name:             "空のルールはエラーを返さないこと",
+			commentTypes:     []rule.CommentType{},
+			commentTypePaths: []rule.CommentTypePath{},
+			wantErr:          false,
+		},
+		{
+			name: "FromCommentTypeIDが存在しない場合はエラーを返すこと",
+			commentTypes: []rule.CommentType{
+				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+			},
+			commentTypePaths: []rule.CommentTypePath{
+				{FromCommentTypeID: "ct999", ToCommentTypeID: "ct1"},
+			},
+			wantErr: true,
+		},
+		{
+			name: "ToCommentTypeIDが存在しない場合はエラーを返すこと",
+			commentTypes: []rule.CommentType{
+				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+			},
+			commentTypePaths: []rule.CommentTypePath{
+				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct999"},
+			},
+			wantErr: true,
+		},
+		{
+			name: "CommentTypeIDが重複している場合はエラーを返すこと",
+			commentTypes: []rule.CommentType{
+				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "ct1", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+			},
+			commentTypePaths: []rule.CommentTypePath{},
+			wantErr:          true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			r := con.RuleFac.BuildRule(rule.BuildRuleParams{
+				ID: "test-id",
+				NewRuleParams: rule.NewRuleParams{
+					Name:             "test-rule",
+					Description:      "test-description",
+					CreatedBy:        "test-user",
+					CreatedAt:        time.Now(),
+					CommentTypes:     tt.commentTypes,
+					CommentTypePaths: tt.commentTypePaths,
+				},
+			})
+
+			err := r.Validate()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestRule_Update(t *testing.T) {
 	tests := []struct {
-		name   string
-		params rule.UpdateParams
-		verify func(*testing.T, *rule.Rule)
+		name    string
+		params  rule.UpdateParams
+		wantErr bool
+		verify  func(*testing.T, *rule.Rule)
 	}{
 		{
 			name: "ルールを更新できること",
@@ -184,6 +262,7 @@ func TestRule_Update(t *testing.T) {
 					{FromCommentTypeID: "ct1", ToCommentTypeID: "ct1"},
 				},
 			},
+			wantErr: false,
 			verify: func(t *testing.T, r *rule.Rule) {
 				if r.Name() != "updated-rule" {
 					t.Errorf("Name() = %v, want %v", r.Name(), "updated-rule")
@@ -196,6 +275,26 @@ func TestRule_Update(t *testing.T) {
 				}
 				if len(r.CommentTypePaths()) != 1 {
 					t.Errorf("CommentTypePaths() len = %v, want %v", len(r.CommentTypePaths()), 1)
+				}
+			},
+		},
+		{
+			name: "矛盾がある更新はエラーを返すこと",
+			params: rule.UpdateParams{
+				Name:        "updated-rule",
+				Description: "updated-description",
+				CommentTypes: []rule.CommentType{
+					{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				},
+				CommentTypePaths: []rule.CommentTypePath{
+					{FromCommentTypeID: "ct1", ToCommentTypeID: "ct999"},
+				},
+			},
+			wantErr: true,
+			verify: func(t *testing.T, r *rule.Rule) {
+				// 元の値のままであること
+				if r.Name() != "test-rule" {
+					t.Errorf("Name() = %v, want %v", r.Name(), "test-rule")
 				}
 			},
 		},
@@ -213,7 +312,10 @@ func TestRule_Update(t *testing.T) {
 				},
 			})
 
-			r.Update(tt.params)
+			err := r.Update(tt.params)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
+			}
 
 			if tt.verify != nil {
 				tt.verify(t, r)

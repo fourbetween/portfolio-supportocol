@@ -1,6 +1,9 @@
 package rule
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type Rule struct {
 	id               string
@@ -49,11 +52,49 @@ func (r *Rule) CommentTypePaths() []CommentTypePath {
 	return r.commentTypePaths
 }
 
-func (r *Rule) Update(params UpdateParams) {
+func (r *Rule) Validate() error {
+	commentTypeIDs := make(map[string]struct{}, len(r.commentTypes))
+	for _, ct := range r.commentTypes {
+		if _, ok := commentTypeIDs[ct.ID]; ok {
+			return fmt.Errorf("CommentTypeID %q is duplicated", ct.ID)
+		}
+		commentTypeIDs[ct.ID] = struct{}{}
+	}
+
+	for _, path := range r.commentTypePaths {
+		if _, ok := commentTypeIDs[path.FromCommentTypeID]; !ok {
+			return fmt.Errorf("FromCommentTypeID %q is not defined in CommentTypes", path.FromCommentTypeID)
+		}
+		if _, ok := commentTypeIDs[path.ToCommentTypeID]; !ok {
+			return fmt.Errorf("ToCommentTypeID %q is not defined in CommentTypes", path.ToCommentTypeID)
+		}
+	}
+
+	return nil
+}
+
+func (r *Rule) Update(params UpdateParams) error {
+	// 一時的に新しい値を設定してバリデーション
+	oldName := r.name
+	oldDescription := r.description
+	oldCommentTypes := r.commentTypes
+	oldCommentTypePaths := r.commentTypePaths
+
 	r.name = params.Name
 	r.description = params.Description
 	r.commentTypes = params.CommentTypes
 	r.commentTypePaths = params.CommentTypePaths
+
+	if err := r.Validate(); err != nil {
+		// 元の値に戻す
+		r.name = oldName
+		r.description = oldDescription
+		r.commentTypes = oldCommentTypes
+		r.commentTypePaths = oldCommentTypePaths
+		return err
+	}
+
+	return nil
 }
 
 func (r *Rule) Save() error {
