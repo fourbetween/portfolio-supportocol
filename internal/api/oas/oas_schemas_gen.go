@@ -538,6 +538,183 @@ func (s *DiscussionsDiscussionIdCommentsPostReq) SetContent(val string) {
 // DiscussionsDiscussionIdDeleteNoContent is response for DiscussionsDiscussionIdDelete operation.
 type DiscussionsDiscussionIdDeleteNoContent struct{}
 
+// DiscussionsDiscussionIdIssuesIssueIdDeleteNoContent is response for DiscussionsDiscussionIdIssuesIssueIdDelete operation.
+type DiscussionsDiscussionIdIssuesIssueIdDeleteNoContent struct{}
+
+type DiscussionsDiscussionIdIssuesIssueIdPutReq struct {
+	IssueType   DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType `json:"issueType"`
+	Description string                                              `json:"description"`
+}
+
+// GetIssueType returns the value of IssueType.
+func (s *DiscussionsDiscussionIdIssuesIssueIdPutReq) GetIssueType() DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType {
+	return s.IssueType
+}
+
+// GetDescription returns the value of Description.
+func (s *DiscussionsDiscussionIdIssuesIssueIdPutReq) GetDescription() string {
+	return s.Description
+}
+
+// SetIssueType sets the value of IssueType.
+func (s *DiscussionsDiscussionIdIssuesIssueIdPutReq) SetIssueType(val DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType) {
+	s.IssueType = val
+}
+
+// SetDescription sets the value of Description.
+func (s *DiscussionsDiscussionIdIssuesIssueIdPutReq) SetDescription(val string) {
+	s.Description = val
+}
+
+type DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType string
+
+const (
+	DiscussionsDiscussionIdIssuesIssueIdPutReqIssueTypeContradiction DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType = "contradiction"
+	DiscussionsDiscussionIdIssuesIssueIdPutReqIssueTypeCircularLogic DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType = "circular_logic"
+)
+
+// AllValues returns all DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType values.
+func (DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType) AllValues() []DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType {
+	return []DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType{
+		DiscussionsDiscussionIdIssuesIssueIdPutReqIssueTypeContradiction,
+		DiscussionsDiscussionIdIssuesIssueIdPutReqIssueTypeCircularLogic,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType) MarshalText() ([]byte, error) {
+	switch s {
+	case DiscussionsDiscussionIdIssuesIssueIdPutReqIssueTypeContradiction:
+		return []byte(s), nil
+	case DiscussionsDiscussionIdIssuesIssueIdPutReqIssueTypeCircularLogic:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType) UnmarshalText(data []byte) error {
+	switch DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType(data) {
+	case DiscussionsDiscussionIdIssuesIssueIdPutReqIssueTypeContradiction:
+		*s = DiscussionsDiscussionIdIssuesIssueIdPutReqIssueTypeContradiction
+		return nil
+	case DiscussionsDiscussionIdIssuesIssueIdPutReqIssueTypeCircularLogic:
+		*s = DiscussionsDiscussionIdIssuesIssueIdPutReqIssueTypeCircularLogic
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type DiscussionsDiscussionIdIssuesPostReq struct {
+	CommentId   ID                                            `json:"commentId"`
+	IssueType   DiscussionsDiscussionIdIssuesPostReqIssueType `json:"issueType"`
+	Description string                                        `json:"description"`
+}
+
+// GetCommentId returns the value of CommentId.
+func (s *DiscussionsDiscussionIdIssuesPostReq) GetCommentId() ID {
+	return s.CommentId
+}
+
+// GetIssueType returns the value of IssueType.
+func (s *DiscussionsDiscussionIdIssuesPostReq) GetIssueType() DiscussionsDiscussionIdIssuesPostReqIssueType {
+	return s.IssueType
+}
+
+// GetDescription returns the value of Description.
+func (s *DiscussionsDiscussionIdIssuesPostReq) GetDescription() string {
+	return s.Description
+}
+
+// SetCommentId sets the value of CommentId.
+func (s *DiscussionsDiscussionIdIssuesPostReq) SetCommentId(val ID) {
+	s.CommentId = val
+}
+
+// SetIssueType sets the value of IssueType.
+func (s *DiscussionsDiscussionIdIssuesPostReq) SetIssueType(val DiscussionsDiscussionIdIssuesPostReqIssueType) {
+	s.IssueType = val
+}
+
+// SetDescription sets the value of Description.
+func (s *DiscussionsDiscussionIdIssuesPostReq) SetDescription(val string) {
+	s.Description = val
+}
+
+type DiscussionsDiscussionIdIssuesPostReqIssueType string
+
+const (
+	DiscussionsDiscussionIdIssuesPostReqIssueTypeContradiction DiscussionsDiscussionIdIssuesPostReqIssueType = "contradiction"
+	DiscussionsDiscussionIdIssuesPostReqIssueTypeCircularLogic DiscussionsDiscussionIdIssuesPostReqIssueType = "circular_logic"
+)
+
+// AllValues returns all DiscussionsDiscussionIdIssuesPostReqIssueType values.
+func (DiscussionsDiscussionIdIssuesPostReqIssueType) AllValues() []DiscussionsDiscussionIdIssuesPostReqIssueType {
+	return []DiscussionsDiscussionIdIssuesPostReqIssueType{
+		DiscussionsDiscussionIdIssuesPostReqIssueTypeContradiction,
+		DiscussionsDiscussionIdIssuesPostReqIssueTypeCircularLogic,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s DiscussionsDiscussionIdIssuesPostReqIssueType) MarshalText() ([]byte, error) {
+	switch s {
+	case DiscussionsDiscussionIdIssuesPostReqIssueTypeContradiction:
+		return []byte(s), nil
+	case DiscussionsDiscussionIdIssuesPostReqIssueTypeCircularLogic:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *DiscussionsDiscussionIdIssuesPostReqIssueType) UnmarshalText(data []byte) error {
+	switch DiscussionsDiscussionIdIssuesPostReqIssueType(data) {
+	case DiscussionsDiscussionIdIssuesPostReqIssueTypeContradiction:
+		*s = DiscussionsDiscussionIdIssuesPostReqIssueTypeContradiction
+		return nil
+	case DiscussionsDiscussionIdIssuesPostReqIssueTypeCircularLogic:
+		*s = DiscussionsDiscussionIdIssuesPostReqIssueTypeCircularLogic
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// DiscussionsDiscussionIdNotesNoteIdDeleteNoContent is response for DiscussionsDiscussionIdNotesNoteIdDelete operation.
+type DiscussionsDiscussionIdNotesNoteIdDeleteNoContent struct{}
+
+type DiscussionsDiscussionIdNotesNoteIdPutReq struct {
+	Content string `json:"content"`
+}
+
+// GetContent returns the value of Content.
+func (s *DiscussionsDiscussionIdNotesNoteIdPutReq) GetContent() string {
+	return s.Content
+}
+
+// SetContent sets the value of Content.
+func (s *DiscussionsDiscussionIdNotesNoteIdPutReq) SetContent(val string) {
+	s.Content = val
+}
+
+type DiscussionsDiscussionIdNotesPostReq struct {
+	Content string `json:"content"`
+}
+
+// GetContent returns the value of Content.
+func (s *DiscussionsDiscussionIdNotesPostReq) GetContent() string {
+	return s.Content
+}
+
+// SetContent sets the value of Content.
+func (s *DiscussionsDiscussionIdNotesPostReq) SetContent(val string) {
+	s.Content = val
+}
+
 type DiscussionsDiscussionIdPutReq struct {
 	Theme                  string                              `json:"theme"`
 	Background             string                              `json:"background"`
@@ -806,6 +983,176 @@ func (s *ErrorsPostReq) SetMessage(val string) {
 
 type ID string
 
+// Ref: #/components/schemas/issue
+type Issue struct {
+	ID          ID             `json:"id"`
+	CommentId   ID             `json:"commentId"`
+	IssueType   IssueIssueType `json:"issueType"`
+	Description string         `json:"description"`
+	CreatedBy   ID             `json:"createdBy"`
+	CreatedAt   time.Time      `json:"createdAt"`
+}
+
+// GetID returns the value of ID.
+func (s *Issue) GetID() ID {
+	return s.ID
+}
+
+// GetCommentId returns the value of CommentId.
+func (s *Issue) GetCommentId() ID {
+	return s.CommentId
+}
+
+// GetIssueType returns the value of IssueType.
+func (s *Issue) GetIssueType() IssueIssueType {
+	return s.IssueType
+}
+
+// GetDescription returns the value of Description.
+func (s *Issue) GetDescription() string {
+	return s.Description
+}
+
+// GetCreatedBy returns the value of CreatedBy.
+func (s *Issue) GetCreatedBy() ID {
+	return s.CreatedBy
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Issue) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Issue) SetID(val ID) {
+	s.ID = val
+}
+
+// SetCommentId sets the value of CommentId.
+func (s *Issue) SetCommentId(val ID) {
+	s.CommentId = val
+}
+
+// SetIssueType sets the value of IssueType.
+func (s *Issue) SetIssueType(val IssueIssueType) {
+	s.IssueType = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Issue) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetCreatedBy sets the value of CreatedBy.
+func (s *Issue) SetCreatedBy(val ID) {
+	s.CreatedBy = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Issue) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+type IssueIssueType string
+
+const (
+	IssueIssueTypeContradiction IssueIssueType = "contradiction"
+	IssueIssueTypeCircularLogic IssueIssueType = "circular_logic"
+)
+
+// AllValues returns all IssueIssueType values.
+func (IssueIssueType) AllValues() []IssueIssueType {
+	return []IssueIssueType{
+		IssueIssueTypeContradiction,
+		IssueIssueTypeCircularLogic,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s IssueIssueType) MarshalText() ([]byte, error) {
+	switch s {
+	case IssueIssueTypeContradiction:
+		return []byte(s), nil
+	case IssueIssueTypeCircularLogic:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *IssueIssueType) UnmarshalText(data []byte) error {
+	switch IssueIssueType(data) {
+	case IssueIssueTypeContradiction:
+		*s = IssueIssueTypeContradiction
+		return nil
+	case IssueIssueTypeCircularLogic:
+		*s = IssueIssueTypeCircularLogic
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/note
+type Note struct {
+	ID           ID        `json:"id"`
+	DiscussionId ID        `json:"discussionId"`
+	Content      string    `json:"content"`
+	PostedBy     ID        `json:"postedBy"`
+	PostedAt     time.Time `json:"postedAt"`
+}
+
+// GetID returns the value of ID.
+func (s *Note) GetID() ID {
+	return s.ID
+}
+
+// GetDiscussionId returns the value of DiscussionId.
+func (s *Note) GetDiscussionId() ID {
+	return s.DiscussionId
+}
+
+// GetContent returns the value of Content.
+func (s *Note) GetContent() string {
+	return s.Content
+}
+
+// GetPostedBy returns the value of PostedBy.
+func (s *Note) GetPostedBy() ID {
+	return s.PostedBy
+}
+
+// GetPostedAt returns the value of PostedAt.
+func (s *Note) GetPostedAt() time.Time {
+	return s.PostedAt
+}
+
+// SetID sets the value of ID.
+func (s *Note) SetID(val ID) {
+	s.ID = val
+}
+
+// SetDiscussionId sets the value of DiscussionId.
+func (s *Note) SetDiscussionId(val ID) {
+	s.DiscussionId = val
+}
+
+// SetContent sets the value of Content.
+func (s *Note) SetContent(val string) {
+	s.Content = val
+}
+
+// SetPostedBy sets the value of PostedBy.
+func (s *Note) SetPostedBy(val ID) {
+	s.PostedBy = val
+}
+
+// SetPostedAt sets the value of PostedAt.
+func (s *Note) SetPostedAt(val time.Time) {
+	s.PostedAt = val
+}
+
 // NewOptDiscussionsDiscussionIdCommentsCommentIdPutReq returns new OptDiscussionsDiscussionIdCommentsCommentIdPutReq with value set to v.
 func NewOptDiscussionsDiscussionIdCommentsCommentIdPutReq(v DiscussionsDiscussionIdCommentsCommentIdPutReq) OptDiscussionsDiscussionIdCommentsCommentIdPutReq {
 	return OptDiscussionsDiscussionIdCommentsCommentIdPutReq{
@@ -892,6 +1239,190 @@ func (o OptDiscussionsDiscussionIdCommentsPostReq) Get() (v DiscussionsDiscussio
 
 // Or returns value if set, or given parameter if does not.
 func (o OptDiscussionsDiscussionIdCommentsPostReq) Or(d DiscussionsDiscussionIdCommentsPostReq) DiscussionsDiscussionIdCommentsPostReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDiscussionsDiscussionIdIssuesIssueIdPutReq returns new OptDiscussionsDiscussionIdIssuesIssueIdPutReq with value set to v.
+func NewOptDiscussionsDiscussionIdIssuesIssueIdPutReq(v DiscussionsDiscussionIdIssuesIssueIdPutReq) OptDiscussionsDiscussionIdIssuesIssueIdPutReq {
+	return OptDiscussionsDiscussionIdIssuesIssueIdPutReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionsDiscussionIdIssuesIssueIdPutReq is optional DiscussionsDiscussionIdIssuesIssueIdPutReq.
+type OptDiscussionsDiscussionIdIssuesIssueIdPutReq struct {
+	Value DiscussionsDiscussionIdIssuesIssueIdPutReq
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionsDiscussionIdIssuesIssueIdPutReq was set.
+func (o OptDiscussionsDiscussionIdIssuesIssueIdPutReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionsDiscussionIdIssuesIssueIdPutReq) Reset() {
+	var v DiscussionsDiscussionIdIssuesIssueIdPutReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionsDiscussionIdIssuesIssueIdPutReq) SetTo(v DiscussionsDiscussionIdIssuesIssueIdPutReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionsDiscussionIdIssuesIssueIdPutReq) Get() (v DiscussionsDiscussionIdIssuesIssueIdPutReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionsDiscussionIdIssuesIssueIdPutReq) Or(d DiscussionsDiscussionIdIssuesIssueIdPutReq) DiscussionsDiscussionIdIssuesIssueIdPutReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDiscussionsDiscussionIdIssuesPostReq returns new OptDiscussionsDiscussionIdIssuesPostReq with value set to v.
+func NewOptDiscussionsDiscussionIdIssuesPostReq(v DiscussionsDiscussionIdIssuesPostReq) OptDiscussionsDiscussionIdIssuesPostReq {
+	return OptDiscussionsDiscussionIdIssuesPostReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionsDiscussionIdIssuesPostReq is optional DiscussionsDiscussionIdIssuesPostReq.
+type OptDiscussionsDiscussionIdIssuesPostReq struct {
+	Value DiscussionsDiscussionIdIssuesPostReq
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionsDiscussionIdIssuesPostReq was set.
+func (o OptDiscussionsDiscussionIdIssuesPostReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionsDiscussionIdIssuesPostReq) Reset() {
+	var v DiscussionsDiscussionIdIssuesPostReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionsDiscussionIdIssuesPostReq) SetTo(v DiscussionsDiscussionIdIssuesPostReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionsDiscussionIdIssuesPostReq) Get() (v DiscussionsDiscussionIdIssuesPostReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionsDiscussionIdIssuesPostReq) Or(d DiscussionsDiscussionIdIssuesPostReq) DiscussionsDiscussionIdIssuesPostReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDiscussionsDiscussionIdNotesNoteIdPutReq returns new OptDiscussionsDiscussionIdNotesNoteIdPutReq with value set to v.
+func NewOptDiscussionsDiscussionIdNotesNoteIdPutReq(v DiscussionsDiscussionIdNotesNoteIdPutReq) OptDiscussionsDiscussionIdNotesNoteIdPutReq {
+	return OptDiscussionsDiscussionIdNotesNoteIdPutReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionsDiscussionIdNotesNoteIdPutReq is optional DiscussionsDiscussionIdNotesNoteIdPutReq.
+type OptDiscussionsDiscussionIdNotesNoteIdPutReq struct {
+	Value DiscussionsDiscussionIdNotesNoteIdPutReq
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionsDiscussionIdNotesNoteIdPutReq was set.
+func (o OptDiscussionsDiscussionIdNotesNoteIdPutReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionsDiscussionIdNotesNoteIdPutReq) Reset() {
+	var v DiscussionsDiscussionIdNotesNoteIdPutReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionsDiscussionIdNotesNoteIdPutReq) SetTo(v DiscussionsDiscussionIdNotesNoteIdPutReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionsDiscussionIdNotesNoteIdPutReq) Get() (v DiscussionsDiscussionIdNotesNoteIdPutReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionsDiscussionIdNotesNoteIdPutReq) Or(d DiscussionsDiscussionIdNotesNoteIdPutReq) DiscussionsDiscussionIdNotesNoteIdPutReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDiscussionsDiscussionIdNotesPostReq returns new OptDiscussionsDiscussionIdNotesPostReq with value set to v.
+func NewOptDiscussionsDiscussionIdNotesPostReq(v DiscussionsDiscussionIdNotesPostReq) OptDiscussionsDiscussionIdNotesPostReq {
+	return OptDiscussionsDiscussionIdNotesPostReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionsDiscussionIdNotesPostReq is optional DiscussionsDiscussionIdNotesPostReq.
+type OptDiscussionsDiscussionIdNotesPostReq struct {
+	Value DiscussionsDiscussionIdNotesPostReq
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionsDiscussionIdNotesPostReq was set.
+func (o OptDiscussionsDiscussionIdNotesPostReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionsDiscussionIdNotesPostReq) Reset() {
+	var v DiscussionsDiscussionIdNotesPostReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionsDiscussionIdNotesPostReq) SetTo(v DiscussionsDiscussionIdNotesPostReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionsDiscussionIdNotesPostReq) Get() (v DiscussionsDiscussionIdNotesPostReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionsDiscussionIdNotesPostReq) Or(d DiscussionsDiscussionIdNotesPostReq) DiscussionsDiscussionIdNotesPostReq {
 	if v, ok := o.Get(); ok {
 		return v
 	}
