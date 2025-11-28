@@ -157,12 +157,119 @@ func (d *Discussion) DeleteComment(commentID string) error {
 	return c.delete()
 }
 
-func (d *Discussion) Issues() ([]Issue, error) {
+func (d *Discussion) Issues() ([]*Issue, error) {
 	return d.repo.FetchIssues(d.id)
 }
 
-func (d *Discussion) Notes() ([]Note, error) {
+func (d *Discussion) LoadIssue(issueID string) (*Issue, error) {
+	return d.repo.LoadIssue(LoadIssueParams{
+		DiscussionID: d.id,
+		IssueID:      issueID,
+	})
+}
+
+type CreateIssueParams struct {
+	CommentID   string
+	IssueType   IssueType
+	Description string
+	CreatedBy   string
+}
+
+func (d *Discussion) CreateIssue(params CreateIssueParams) (*Issue, error) {
+	i := d.fac.NewIssue(NewIssueParams{
+		CommentID:   params.CommentID,
+		IssueType:   params.IssueType,
+		Description: params.Description,
+		CreatedBy:   params.CreatedBy,
+	})
+	if err := i.save(); err != nil {
+		return nil, err
+	}
+	return i, nil
+}
+
+type DiscussionUpdateIssueParams struct {
+	IssueID     string
+	IssueType   IssueType
+	Description string
+}
+
+func (d *Discussion) UpdateIssue(params DiscussionUpdateIssueParams) (*Issue, error) {
+	i, err := d.LoadIssue(params.IssueID)
+	if err != nil {
+		return nil, err
+	}
+	i.update(UpdateIssueParams{
+		IssueType:   params.IssueType,
+		Description: params.Description,
+	})
+	if err := i.save(); err != nil {
+		return nil, err
+	}
+	return i, nil
+}
+
+func (d *Discussion) DeleteIssue(issueID string) error {
+	i, err := d.LoadIssue(issueID)
+	if err != nil {
+		return err
+	}
+	return i.delete()
+}
+
+func (d *Discussion) Notes() ([]*Note, error) {
 	return d.repo.FetchNotes(d.id)
+}
+
+func (d *Discussion) LoadNote(noteID string) (*Note, error) {
+	return d.repo.LoadNote(LoadNoteParams{
+		DiscussionID: d.id,
+		NoteID:       noteID,
+	})
+}
+
+type CreateNoteParams struct {
+	Content  string
+	PostedBy string
+}
+
+func (d *Discussion) CreateNote(params CreateNoteParams) (*Note, error) {
+	n := d.fac.NewNote(NewNoteParams{
+		DiscussionID: d.id,
+		Content:      params.Content,
+		PostedBy:     params.PostedBy,
+	})
+	if err := n.save(); err != nil {
+		return nil, err
+	}
+	return n, nil
+}
+
+type DiscussionUpdateNoteParams struct {
+	NoteID  string
+	Content string
+}
+
+func (d *Discussion) UpdateNote(params DiscussionUpdateNoteParams) (*Note, error) {
+	n, err := d.LoadNote(params.NoteID)
+	if err != nil {
+		return nil, err
+	}
+	n.update(UpdateNoteParams{
+		Content: params.Content,
+	})
+	if err := n.save(); err != nil {
+		return nil, err
+	}
+	return n, nil
+}
+
+func (d *Discussion) DeleteNote(noteID string) error {
+	n, err := d.LoadNote(noteID)
+	if err != nil {
+		return err
+	}
+	return n.delete()
 }
 
 func (d *Discussion) Save() error {

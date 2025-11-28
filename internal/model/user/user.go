@@ -117,6 +117,49 @@ type (
 		DiscussionID string
 		CommentID    string
 	}
+
+	ListIssuesParams struct {
+		DiscussionID string
+	}
+
+	CreateIssueParams struct {
+		DiscussionID string
+		CommentID    string
+		IssueType    discussion.IssueType
+		Description  string
+	}
+
+	UpdateIssueParams struct {
+		DiscussionID string
+		IssueID      string
+		IssueType    discussion.IssueType
+		Description  string
+	}
+
+	DeleteIssueParams struct {
+		DiscussionID string
+		IssueID      string
+	}
+
+	ListNotesParams struct {
+		DiscussionID string
+	}
+
+	CreateNoteParams struct {
+		DiscussionID string
+		Content      string
+	}
+
+	UpdateNoteParams struct {
+		DiscussionID string
+		NoteID       string
+		Content      string
+	}
+
+	DeleteNoteParams struct {
+		DiscussionID string
+		NoteID       string
+	}
 )
 
 func (u *User) ID() string {
@@ -368,6 +411,101 @@ func (u *User) DeleteComment(params DeleteCommentParams) error {
 		return err
 	}
 	return d.DeleteComment(params.CommentID)
+}
+
+func (u *User) ListIssues(params ListIssuesParams) ([]*discussion.Issue, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.Issues()
+}
+
+func (u *User) CreateIssue(params CreateIssueParams) (*discussion.Issue, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.CreateIssue(discussion.CreateIssueParams{
+		CommentID:   params.CommentID,
+		IssueType:   params.IssueType,
+		Description: params.Description,
+		CreatedBy:   u.id,
+	})
+}
+
+func (u *User) UpdateIssue(params UpdateIssueParams) (*discussion.Issue, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.UpdateIssue(discussion.DiscussionUpdateIssueParams{
+		IssueID:     params.IssueID,
+		IssueType:   params.IssueType,
+		Description: params.Description,
+	})
+}
+
+func (u *User) DeleteIssue(params DeleteIssueParams) error {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return err
+	}
+	return d.DeleteIssue(params.IssueID)
+}
+
+func (u *User) ListNotes(params ListNotesParams) ([]*discussion.Note, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.Notes()
+}
+
+func (u *User) CreateNote(params CreateNoteParams) (*discussion.Note, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.CreateNote(discussion.CreateNoteParams{
+		Content:  params.Content,
+		PostedBy: u.id,
+	})
+}
+
+func (u *User) UpdateNote(params UpdateNoteParams) (*discussion.Note, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.UpdateNote(discussion.DiscussionUpdateNoteParams{
+		NoteID:  params.NoteID,
+		Content: params.Content,
+	})
+}
+
+func (u *User) DeleteNote(params DeleteNoteParams) error {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return err
+	}
+	return d.DeleteNote(params.NoteID)
 }
 
 func (u *User) LoadWorkbook(workbookID string) (*workbook.Workbook, error) {

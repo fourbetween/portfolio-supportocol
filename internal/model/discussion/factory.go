@@ -108,3 +108,71 @@ func (f *Factory) BuildComment(params BuildCommentParams) *Comment {
 		repo:            f.repo,
 	}
 }
+
+type (
+	NewIssueParams struct {
+		CommentID   string
+		IssueType   IssueType
+		Description string
+		CreatedBy   string
+	}
+
+	BuildIssueParams struct {
+		ID string
+		NewIssueParams
+		CreatedAt time.Time
+	}
+
+	NewNoteParams struct {
+		DiscussionID string
+		Content      string
+		PostedBy     string
+	}
+
+	BuildNoteParams struct {
+		ID string
+		NewNoteParams
+		PostedAt time.Time
+	}
+)
+
+func (f *Factory) NewIssue(params NewIssueParams) *Issue {
+	id := f.idSrv.Generate()
+	return f.BuildIssue(BuildIssueParams{
+		ID:             id,
+		NewIssueParams: params,
+		CreatedAt:      f.clockSrv.Now(),
+	})
+}
+
+func (f *Factory) BuildIssue(params BuildIssueParams) *Issue {
+	return &Issue{
+		id:          params.ID,
+		commentID:   params.CommentID,
+		issueType:   params.IssueType,
+		description: params.Description,
+		createdBy:   params.CreatedBy,
+		createdAt:   params.CreatedAt,
+		repo:        f.repo,
+	}
+}
+
+func (f *Factory) NewNote(params NewNoteParams) *Note {
+	id := f.idSrv.Generate()
+	return f.BuildNote(BuildNoteParams{
+		ID:            id,
+		NewNoteParams: params,
+		PostedAt:      f.clockSrv.Now(),
+	})
+}
+
+func (f *Factory) BuildNote(params BuildNoteParams) *Note {
+	return &Note{
+		id:           params.ID,
+		discussionID: params.DiscussionID,
+		content:      params.Content,
+		postedBy:     params.PostedBy,
+		postedAt:     params.PostedAt,
+		repo:         f.repo,
+	}
+}
