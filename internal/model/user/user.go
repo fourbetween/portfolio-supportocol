@@ -175,7 +175,7 @@ func (u *User) ListRules() ([]*rule.Rule, error) {
 }
 
 func (u *User) CreateRule(params CreateRuleParams) (*rule.Rule, error) {
-	r := u.ruleFac.NewRule(rule.NewRuleParams{
+	r, err := u.ruleFac.NewRule(rule.NewRuleParams{
 		Name:             params.Name,
 		Description:      params.Description,
 		CreatedBy:        u.id,
@@ -183,6 +183,9 @@ func (u *User) CreateRule(params CreateRuleParams) (*rule.Rule, error) {
 		CommentTypes:     params.CommentTypes,
 		CommentTypePaths: params.CommentTypePaths,
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	if err := r.Save(); err != nil {
 		return nil, err
@@ -200,12 +203,14 @@ func (u *User) UpdateRule(params UpdateRuleParams) (*rule.Rule, error) {
 		return nil, err
 	}
 
-	r.Update(rule.UpdateParams{
+	if err := r.Update(rule.UpdateParams{
 		Name:             params.Name,
 		Description:      params.Description,
 		CommentTypes:     params.CommentTypes,
 		CommentTypePaths: params.CommentTypePaths,
-	})
+	}); err != nil {
+		return nil, err
+	}
 
 	if err := r.Save(); err != nil {
 		return nil, err
