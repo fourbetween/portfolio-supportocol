@@ -603,7 +603,7 @@ const routes: RouteConfig[] = [
         content: {
           "application/json": {
             schema: z.object({
-              parentCommentId: IdSchema.nullable(),
+              parentCommentId: z.string(),
               commentTypeId: IdSchema,
               content: z.string(),
             }),

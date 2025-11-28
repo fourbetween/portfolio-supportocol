@@ -13,6 +13,42 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// DiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /discussions/{discussionId}/comments/{commentId} operation.
+//
+// Delete comment.
+//
+// DELETE /discussions/{discussionId}/comments/{commentId}
+func (UnimplementedHandler) DiscussionsDiscussionIdCommentsCommentIdDelete(ctx context.Context, params DiscussionsDiscussionIdCommentsCommentIdDeleteParams) error {
+	return ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdCommentsCommentIdPut implements PUT /discussions/{discussionId}/comments/{commentId} operation.
+//
+// Update comment.
+//
+// PUT /discussions/{discussionId}/comments/{commentId}
+func (UnimplementedHandler) DiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req OptDiscussionsDiscussionIdCommentsCommentIdPutReq, params DiscussionsDiscussionIdCommentsCommentIdPutParams) (r *Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdCommentsGet implements GET /discussions/{discussionId}/comments operation.
+//
+// Get comments for a discussion.
+//
+// GET /discussions/{discussionId}/comments
+func (UnimplementedHandler) DiscussionsDiscussionIdCommentsGet(ctx context.Context, params DiscussionsDiscussionIdCommentsGetParams) (r []Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdCommentsPost implements POST /discussions/{discussionId}/comments operation.
+//
+// Create comment.
+//
+// POST /discussions/{discussionId}/comments
+func (UnimplementedHandler) DiscussionsDiscussionIdCommentsPost(ctx context.Context, req OptDiscussionsDiscussionIdCommentsPostReq, params DiscussionsDiscussionIdCommentsPostParams) (r *Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // DiscussionsDiscussionIdDelete implements DELETE /discussions/{discussionId} operation.
 //
 // Delete discussion.

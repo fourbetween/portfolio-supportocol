@@ -8,6 +8,30 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// DiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /discussions/{discussionId}/comments/{commentId} operation.
+	//
+	// Delete comment.
+	//
+	// DELETE /discussions/{discussionId}/comments/{commentId}
+	DiscussionsDiscussionIdCommentsCommentIdDelete(ctx context.Context, params DiscussionsDiscussionIdCommentsCommentIdDeleteParams) error
+	// DiscussionsDiscussionIdCommentsCommentIdPut implements PUT /discussions/{discussionId}/comments/{commentId} operation.
+	//
+	// Update comment.
+	//
+	// PUT /discussions/{discussionId}/comments/{commentId}
+	DiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req OptDiscussionsDiscussionIdCommentsCommentIdPutReq, params DiscussionsDiscussionIdCommentsCommentIdPutParams) (*Comment, error)
+	// DiscussionsDiscussionIdCommentsGet implements GET /discussions/{discussionId}/comments operation.
+	//
+	// Get comments for a discussion.
+	//
+	// GET /discussions/{discussionId}/comments
+	DiscussionsDiscussionIdCommentsGet(ctx context.Context, params DiscussionsDiscussionIdCommentsGetParams) ([]Comment, error)
+	// DiscussionsDiscussionIdCommentsPost implements POST /discussions/{discussionId}/comments operation.
+	//
+	// Create comment.
+	//
+	// POST /discussions/{discussionId}/comments
+	DiscussionsDiscussionIdCommentsPost(ctx context.Context, req OptDiscussionsDiscussionIdCommentsPostReq, params DiscussionsDiscussionIdCommentsPostParams) (*Comment, error)
 	// DiscussionsDiscussionIdDelete implements DELETE /discussions/{discussionId} operation.
 	//
 	// Delete discussion.

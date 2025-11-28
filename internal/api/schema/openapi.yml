@@ -169,6 +169,42 @@ components:
         - createdBy
         - createdAt
         - status
+    commentStatus:
+      type: string
+      enum:
+        - unassigned
+        - assigned
+        - archived
+        - deleted
+    comment:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        discussionId:
+          $ref: "#/components/schemas/id"
+        parentCommentId:
+          type: string
+        commentTypeId:
+          $ref: "#/components/schemas/id"
+        content:
+          type: string
+        postedBy:
+          $ref: "#/components/schemas/id"
+        postedAt:
+          type: string
+          format: date-time
+        status:
+          $ref: "#/components/schemas/commentStatus"
+      required:
+        - id
+        - discussionId
+        - parentCommentId
+        - commentTypeId
+        - content
+        - postedBy
+        - postedAt
+        - status
   parameters: {}
 paths:
   /workbooks:
@@ -647,6 +683,137 @@ paths:
                 - message
       responses:
         "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /discussions/{discussionId}/comments:
+    get:
+      description: get comments for a discussion
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    post:
+      description: create comment
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parentCommentId:
+                  type: string
+                commentTypeId:
+                  $ref: "#/components/schemas/id"
+                content:
+                  type: string
+              required:
+                - parentCommentId
+                - commentTypeId
+                - content
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /discussions/{discussionId}/comments/{commentId}:
+    put:
+      description: update comment
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: commentId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                status:
+                  $ref: "#/components/schemas/commentStatus"
+              required:
+                - content
+                - status
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    delete:
+      description: delete comment
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: commentId
+          in: path
+      responses:
+        "204":
           description: success response
         default:
           description: default error

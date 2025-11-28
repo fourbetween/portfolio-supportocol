@@ -38,6 +38,98 @@ func (s *CognitoAuth) SetRoles(val []string) {
 	s.Roles = val
 }
 
+// Ref: #/components/schemas/comment
+type Comment struct {
+	ID              ID            `json:"id"`
+	DiscussionId    ID            `json:"discussionId"`
+	ParentCommentId string        `json:"parentCommentId"`
+	CommentTypeId   ID            `json:"commentTypeId"`
+	Content         string        `json:"content"`
+	PostedBy        ID            `json:"postedBy"`
+	PostedAt        time.Time     `json:"postedAt"`
+	Status          CommentStatus `json:"status"`
+}
+
+// GetID returns the value of ID.
+func (s *Comment) GetID() ID {
+	return s.ID
+}
+
+// GetDiscussionId returns the value of DiscussionId.
+func (s *Comment) GetDiscussionId() ID {
+	return s.DiscussionId
+}
+
+// GetParentCommentId returns the value of ParentCommentId.
+func (s *Comment) GetParentCommentId() string {
+	return s.ParentCommentId
+}
+
+// GetCommentTypeId returns the value of CommentTypeId.
+func (s *Comment) GetCommentTypeId() ID {
+	return s.CommentTypeId
+}
+
+// GetContent returns the value of Content.
+func (s *Comment) GetContent() string {
+	return s.Content
+}
+
+// GetPostedBy returns the value of PostedBy.
+func (s *Comment) GetPostedBy() ID {
+	return s.PostedBy
+}
+
+// GetPostedAt returns the value of PostedAt.
+func (s *Comment) GetPostedAt() time.Time {
+	return s.PostedAt
+}
+
+// GetStatus returns the value of Status.
+func (s *Comment) GetStatus() CommentStatus {
+	return s.Status
+}
+
+// SetID sets the value of ID.
+func (s *Comment) SetID(val ID) {
+	s.ID = val
+}
+
+// SetDiscussionId sets the value of DiscussionId.
+func (s *Comment) SetDiscussionId(val ID) {
+	s.DiscussionId = val
+}
+
+// SetParentCommentId sets the value of ParentCommentId.
+func (s *Comment) SetParentCommentId(val string) {
+	s.ParentCommentId = val
+}
+
+// SetCommentTypeId sets the value of CommentTypeId.
+func (s *Comment) SetCommentTypeId(val ID) {
+	s.CommentTypeId = val
+}
+
+// SetContent sets the value of Content.
+func (s *Comment) SetContent(val string) {
+	s.Content = val
+}
+
+// SetPostedBy sets the value of PostedBy.
+func (s *Comment) SetPostedBy(val ID) {
+	s.PostedBy = val
+}
+
+// SetPostedAt sets the value of PostedAt.
+func (s *Comment) SetPostedAt(val time.Time) {
+	s.PostedAt = val
+}
+
+// SetStatus sets the value of Status.
+func (s *Comment) SetStatus(val CommentStatus) {
+	s.Status = val
+}
+
 // Ref: #/components/schemas/commentPermissionLevel
 type CommentPermissionLevel string
 
@@ -81,6 +173,62 @@ func (s *CommentPermissionLevel) UnmarshalText(data []byte) error {
 		return nil
 	case CommentPermissionLevelOwner:
 		*s = CommentPermissionLevelOwner
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/commentStatus
+type CommentStatus string
+
+const (
+	CommentStatusUnassigned CommentStatus = "unassigned"
+	CommentStatusAssigned   CommentStatus = "assigned"
+	CommentStatusArchived   CommentStatus = "archived"
+	CommentStatusDeleted    CommentStatus = "deleted"
+)
+
+// AllValues returns all CommentStatus values.
+func (CommentStatus) AllValues() []CommentStatus {
+	return []CommentStatus{
+		CommentStatusUnassigned,
+		CommentStatusAssigned,
+		CommentStatusArchived,
+		CommentStatusDeleted,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CommentStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case CommentStatusUnassigned:
+		return []byte(s), nil
+	case CommentStatusAssigned:
+		return []byte(s), nil
+	case CommentStatusArchived:
+		return []byte(s), nil
+	case CommentStatusDeleted:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CommentStatus) UnmarshalText(data []byte) error {
+	switch CommentStatus(data) {
+	case CommentStatusUnassigned:
+		*s = CommentStatusUnassigned
+		return nil
+	case CommentStatusAssigned:
+		*s = CommentStatusAssigned
+		return nil
+	case CommentStatusArchived:
+		*s = CommentStatusArchived
+		return nil
+	case CommentStatusDeleted:
+		*s = CommentStatusDeleted
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -321,6 +469,70 @@ func (s *DiscussionStatus) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+// DiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for DiscussionsDiscussionIdCommentsCommentIdDelete operation.
+type DiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
+
+type DiscussionsDiscussionIdCommentsCommentIdPutReq struct {
+	Content string        `json:"content"`
+	Status  CommentStatus `json:"status"`
+}
+
+// GetContent returns the value of Content.
+func (s *DiscussionsDiscussionIdCommentsCommentIdPutReq) GetContent() string {
+	return s.Content
+}
+
+// GetStatus returns the value of Status.
+func (s *DiscussionsDiscussionIdCommentsCommentIdPutReq) GetStatus() CommentStatus {
+	return s.Status
+}
+
+// SetContent sets the value of Content.
+func (s *DiscussionsDiscussionIdCommentsCommentIdPutReq) SetContent(val string) {
+	s.Content = val
+}
+
+// SetStatus sets the value of Status.
+func (s *DiscussionsDiscussionIdCommentsCommentIdPutReq) SetStatus(val CommentStatus) {
+	s.Status = val
+}
+
+type DiscussionsDiscussionIdCommentsPostReq struct {
+	ParentCommentId string `json:"parentCommentId"`
+	CommentTypeId   ID     `json:"commentTypeId"`
+	Content         string `json:"content"`
+}
+
+// GetParentCommentId returns the value of ParentCommentId.
+func (s *DiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() string {
+	return s.ParentCommentId
+}
+
+// GetCommentTypeId returns the value of CommentTypeId.
+func (s *DiscussionsDiscussionIdCommentsPostReq) GetCommentTypeId() ID {
+	return s.CommentTypeId
+}
+
+// GetContent returns the value of Content.
+func (s *DiscussionsDiscussionIdCommentsPostReq) GetContent() string {
+	return s.Content
+}
+
+// SetParentCommentId sets the value of ParentCommentId.
+func (s *DiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val string) {
+	s.ParentCommentId = val
+}
+
+// SetCommentTypeId sets the value of CommentTypeId.
+func (s *DiscussionsDiscussionIdCommentsPostReq) SetCommentTypeId(val ID) {
+	s.CommentTypeId = val
+}
+
+// SetContent sets the value of Content.
+func (s *DiscussionsDiscussionIdCommentsPostReq) SetContent(val string) {
+	s.Content = val
 }
 
 // DiscussionsDiscussionIdDeleteNoContent is response for DiscussionsDiscussionIdDelete operation.
@@ -593,6 +805,98 @@ func (s *ErrorsPostReq) SetMessage(val string) {
 }
 
 type ID string
+
+// NewOptDiscussionsDiscussionIdCommentsCommentIdPutReq returns new OptDiscussionsDiscussionIdCommentsCommentIdPutReq with value set to v.
+func NewOptDiscussionsDiscussionIdCommentsCommentIdPutReq(v DiscussionsDiscussionIdCommentsCommentIdPutReq) OptDiscussionsDiscussionIdCommentsCommentIdPutReq {
+	return OptDiscussionsDiscussionIdCommentsCommentIdPutReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionsDiscussionIdCommentsCommentIdPutReq is optional DiscussionsDiscussionIdCommentsCommentIdPutReq.
+type OptDiscussionsDiscussionIdCommentsCommentIdPutReq struct {
+	Value DiscussionsDiscussionIdCommentsCommentIdPutReq
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionsDiscussionIdCommentsCommentIdPutReq was set.
+func (o OptDiscussionsDiscussionIdCommentsCommentIdPutReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionsDiscussionIdCommentsCommentIdPutReq) Reset() {
+	var v DiscussionsDiscussionIdCommentsCommentIdPutReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionsDiscussionIdCommentsCommentIdPutReq) SetTo(v DiscussionsDiscussionIdCommentsCommentIdPutReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionsDiscussionIdCommentsCommentIdPutReq) Get() (v DiscussionsDiscussionIdCommentsCommentIdPutReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionsDiscussionIdCommentsCommentIdPutReq) Or(d DiscussionsDiscussionIdCommentsCommentIdPutReq) DiscussionsDiscussionIdCommentsCommentIdPutReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDiscussionsDiscussionIdCommentsPostReq returns new OptDiscussionsDiscussionIdCommentsPostReq with value set to v.
+func NewOptDiscussionsDiscussionIdCommentsPostReq(v DiscussionsDiscussionIdCommentsPostReq) OptDiscussionsDiscussionIdCommentsPostReq {
+	return OptDiscussionsDiscussionIdCommentsPostReq{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionsDiscussionIdCommentsPostReq is optional DiscussionsDiscussionIdCommentsPostReq.
+type OptDiscussionsDiscussionIdCommentsPostReq struct {
+	Value DiscussionsDiscussionIdCommentsPostReq
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionsDiscussionIdCommentsPostReq was set.
+func (o OptDiscussionsDiscussionIdCommentsPostReq) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionsDiscussionIdCommentsPostReq) Reset() {
+	var v DiscussionsDiscussionIdCommentsPostReq
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionsDiscussionIdCommentsPostReq) SetTo(v DiscussionsDiscussionIdCommentsPostReq) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionsDiscussionIdCommentsPostReq) Get() (v DiscussionsDiscussionIdCommentsPostReq, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionsDiscussionIdCommentsPostReq) Or(d DiscussionsDiscussionIdCommentsPostReq) DiscussionsDiscussionIdCommentsPostReq {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewOptDiscussionsDiscussionIdPutReq returns new OptDiscussionsDiscussionIdPutReq with value set to v.
 func NewOptDiscussionsDiscussionIdPutReq(v DiscussionsDiscussionIdPutReq) OptDiscussionsDiscussionIdPutReq {
