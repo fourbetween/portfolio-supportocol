@@ -1,6 +1,8 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../style/base";
+import { buttonStyle } from "../../../style/button";
+import { pageContainerStyle, pageHostStyle } from "../../../style/page";
 
 @customElement("home-page-presenter")
 export class HomePagePresenter extends LitElement {
@@ -9,11 +11,11 @@ export class HomePagePresenter extends LitElement {
 
   render() {
     return html`
-      <main class="container">
+      <main class="container container--narrow hero">
         <h1>Supportocol</h1>
         <p class="description">論理的な議論を支援するプラットフォーム</p>
         <div class="actions">
-          <button class="btn-primary" @click=${this.handleLogin}>
+          <button class="btn-primary btn-large" @click=${this.handleLogin}>
             ログイン
           </button>
           <a href="/discussions" class="link">公開議論を見る</a>
@@ -28,16 +30,11 @@ export class HomePagePresenter extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
+    pageHostStyle,
+    pageContainerStyle,
     css`
-      :host {
-        display: block;
-        min-height: 100vh;
-        background-color: var(--color-canvas-default);
-      }
-
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
+      .hero {
         padding: 80px 24px;
         text-align: center;
       }
@@ -64,20 +61,9 @@ export class HomePagePresenter extends LitElement {
         flex-wrap: wrap;
       }
 
-      .btn-primary {
+      .btn-large {
         padding: 12px 24px;
         font-size: 16px;
-        font-weight: 600;
-        color: var(--color-btn-primary-text);
-        background-color: var(--color-btn-primary-bg);
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-      }
-
-      .btn-primary:hover {
-        background-color: var(--color-btn-primary-hover-bg);
       }
 
       .link {

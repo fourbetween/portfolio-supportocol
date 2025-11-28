@@ -2,6 +2,12 @@ import { type CSSResultGroup, css } from "lit";
 
 export const formStyle: CSSResultGroup = [
   css`
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
     .form-group {
       display: flex;
       flex-direction: column;
@@ -9,13 +15,17 @@ export const formStyle: CSSResultGroup = [
       margin-bottom: 16px;
     }
 
-    .form-label {
+    .form-label,
+    label {
       font-size: 14px;
       font-weight: 600;
       color: var(--color-fg-default);
     }
 
-    .form-control {
+    .form-control,
+    input[type="text"],
+    textarea,
+    select {
       padding: 8px 12px;
       font-size: 14px;
       border: 1px solid var(--color-border-default);
@@ -24,12 +34,16 @@ export const formStyle: CSSResultGroup = [
       color: var(--color-fg-default);
     }
 
-    .form-control:focus {
+    .form-control:focus,
+    input[type="text"]:focus,
+    textarea:focus,
+    select:focus {
       outline: none;
       border-color: var(--color-accent-fg);
       box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
     }
 
+    textarea,
     textarea.form-control {
       min-height: 80px;
       resize: vertical;

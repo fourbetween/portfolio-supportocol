@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type {
   CommentPermissionLevel,
@@ -7,6 +7,13 @@ import type {
 import type { Rule } from "../../../../model/rule";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
+import { formStyle } from "../../../../style/form";
+import {
+  formActionsStyle,
+  pageContainerStyle,
+  pageHeadingStyle,
+  pageHostStyle,
+} from "../../../../style/page";
 
 export interface CreateDiscussionFormData {
   theme: string;
@@ -51,7 +58,7 @@ export class CreateDiscussionPagePresenter extends LitElement {
 
   render() {
     return html`
-      <main class="container">
+      <main class="container container--narrow">
         <h1>新規議論作成</h1>
         <form @submit=${this.handleSubmit}>
           <div class="form-group">
@@ -115,73 +122,10 @@ export class CreateDiscussionPagePresenter extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    css`
-      :host {
-        display: block;
-        min-height: 100vh;
-        background-color: var(--color-canvas-default);
-      }
-
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 24px;
-      }
-
-      h1 {
-        font-size: 32px;
-        font-weight: 700;
-        color: var(--color-fg-default);
-        margin: 0 0 24px 0;
-      }
-
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      label {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--color-fg-default);
-      }
-
-      input[type="text"],
-      textarea,
-      select {
-        padding: 8px 12px;
-        font-size: 14px;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        background-color: var(--color-canvas-default);
-        color: var(--color-fg-default);
-      }
-
-      input[type="text"]:focus,
-      textarea:focus,
-      select:focus {
-        outline: none;
-        border-color: var(--color-accent-fg);
-        box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
-      }
-
-      textarea {
-        resize: vertical;
-      }
-
-      .form-actions {
-        margin-top: 16px;
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-      }
-    `,
+    formStyle,
+    pageHostStyle,
+    pageContainerStyle,
+    pageHeadingStyle,
+    formActionsStyle,
   ];
 }
