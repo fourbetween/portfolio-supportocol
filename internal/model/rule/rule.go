@@ -3,6 +3,8 @@ package rule
 import (
 	"fmt"
 	"time"
+
+	"github.com/fourbetween/app-supportocol/internal"
 )
 
 type Rule struct {
@@ -56,17 +58,17 @@ func (r *Rule) Validate() error {
 	commentTypeIDs := make(map[string]struct{}, len(r.commentTypes))
 	for _, ct := range r.commentTypes {
 		if _, ok := commentTypeIDs[ct.ID]; ok {
-			return fmt.Errorf("CommentTypeID %q is duplicated", ct.ID)
+			return fmt.Errorf("CommentTypeID %q is duplicated: %w", ct.ID, internal.ErrConflict)
 		}
 		commentTypeIDs[ct.ID] = struct{}{}
 	}
 
 	for _, path := range r.commentTypePaths {
 		if _, ok := commentTypeIDs[path.FromCommentTypeID]; !ok {
-			return fmt.Errorf("FromCommentTypeID %q is not defined in CommentTypes", path.FromCommentTypeID)
+			return fmt.Errorf("FromCommentTypeID %q is not defined in CommentTypes: %w", path.FromCommentTypeID, internal.ErrConflict)
 		}
 		if _, ok := commentTypeIDs[path.ToCommentTypeID]; !ok {
-			return fmt.Errorf("ToCommentTypeID %q is not defined in CommentTypes", path.ToCommentTypeID)
+			return fmt.Errorf("ToCommentTypeID %q is not defined in CommentTypes: %w", path.ToCommentTypeID, internal.ErrConflict)
 		}
 	}
 
