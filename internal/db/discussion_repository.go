@@ -107,7 +107,7 @@ func (r *DiscussionRepository) Delete(d *discussion.Discussion) error {
 	return nil
 }
 
-func (r *DiscussionRepository) FetchComments(discussionID string) ([]discussion.Comment, error) {
+func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion.Comment, error) {
 	stmt := postgres.
 		SELECT(table.Comments.AllColumns).
 		FROM(table.Comments).
@@ -118,12 +118,63 @@ func (r *DiscussionRepository) FetchComments(discussionID string) ([]discussion.
 		return nil, fmt.Errorf("failed to fetch comments: %w", err)
 	}
 
-	comments := make([]discussion.Comment, len(dest))
+	comments := make([]*discussion.Comment, len(dest))
 	for i, row := range dest {
 		comments[i] = r.toCommentDomain(row)
 	}
 
 	return comments, nil
+}
+
+func (r *DiscussionRepository) LoadComment(params discussion.LoadCommentParams) (*discussion.Comment, error) {
+	stmt := postgres.
+		SELECT(table.Comments.AllColumns).
+		FROM(table.Comments).
+		WHERE(postgres.AND(
+			table.Comments.DiscussionID.EQ(postgres.String(params.DiscussionID)),
+			table.Comments.ID.EQ(postgres.String(params.CommentID)),
+		))
+
+	var dest model.Comments
+	if err := stmt.Query(r.db, &dest); err != nil {
+		if errors.Is(err, qrm.ErrNoRows) {
+			return nil, internal.ErrNotFound
+		}
+		return nil, fmt.Errorf("failed to load comment: %w", err)
+	}
+
+	return r.toCommentDomain(dest), nil
+}
+
+func (r *DiscussionRepository) SaveComment(c *discussion.Comment) error {
+	model := r.toCommentModel(c)
+
+	stmt := table.Comments.
+		INSERT(table.Comments.AllColumns).
+		MODEL(model).
+		ON_CONFLICT(table.Comments.ID).
+		DO_UPDATE(
+			postgres.SET(
+				table.Comments.Content.SET(postgres.String(c.Content())),
+				table.Comments.Status.SET(postgres.String(string(c.Status()))),
+			),
+		)
+
+	if _, err := stmt.Exec(r.db); err != nil {
+		return fmt.Errorf("failed to save comment: %w", err)
+	}
+	return nil
+}
+
+func (r *DiscussionRepository) DeleteComment(c *discussion.Comment) error {
+	stmt := table.Comments.
+		DELETE().
+		WHERE(table.Comments.ID.EQ(postgres.String(c.ID())))
+
+	if _, err := stmt.Exec(r.db); err != nil {
+		return fmt.Errorf("failed to delete comment: %w", err)
+	}
+	return nil
 }
 
 func (r *DiscussionRepository) FetchIssues(discussionID string) ([]discussion.Issue, error) {
@@ -199,16 +250,31 @@ func (r *DiscussionRepository) toModel(d *discussion.Discussion) model.Discussio
 	}
 }
 
-func (r *DiscussionRepository) toCommentDomain(row model.Comments) discussion.Comment {
-	return discussion.Comment{
-		ID:              row.ID,
-		DiscussionID:    row.DiscussionID,
-		ParentCommentID: row.ParentCommentID,
-		CommentTypeID:   row.CommentTypeID,
-		Content:         row.Content,
-		PostedBy:        row.PostedBy,
-		PostedAt:        row.PostedAt,
-		Status:          discussion.CommentStatus(row.Status),
+func (r *DiscussionRepository) toCommentDomain(row model.Comments) *discussion.Comment {
+	return r.fac.BuildComment(discussion.BuildCommentParams{
+		ID: row.ID,
+		NewCommentParams: discussion.NewCommentParams{
+			DiscussionID:    row.DiscussionID,
+			ParentCommentID: ptrToString(row.ParentCommentID),
+			CommentTypeID:   row.CommentTypeID,
+			Content:         row.Content,
+			PostedBy:        row.PostedBy,
+		},
+		PostedAt: row.PostedAt,
+		Status:   discussion.CommentStatus(row.Status),
+	})
+}
+
+func (r *DiscussionRepository) toCommentModel(c *discussion.Comment) model.Comments {
+	return model.Comments{
+		ID:              c.ID(),
+		DiscussionID:    c.DiscussionID(),
+		ParentCommentID: stringToPtr(c.ParentCommentID()),
+		CommentTypeID:   c.CommentTypeID(),
+		Content:         c.Content(),
+		PostedBy:        c.PostedBy(),
+		PostedAt:        c.PostedAt(),
+		Status:          string(c.Status()),
 	}
 }
 

@@ -94,6 +94,29 @@ type (
 	DeleteDiscussionParams struct {
 		DiscussionID string
 	}
+
+	ListCommentsParams struct {
+		DiscussionID string
+	}
+
+	CreateCommentParams struct {
+		DiscussionID    string
+		ParentCommentID string
+		CommentTypeID   string
+		Content         string
+	}
+
+	UpdateCommentParams struct {
+		DiscussionID  string
+		CommentID     string
+		Content       string
+		CommentStatus discussion.CommentStatus
+	}
+
+	DeleteCommentParams struct {
+		DiscussionID string
+		CommentID    string
+	}
 )
 
 func (u *User) ID() string {
@@ -296,6 +319,55 @@ func (u *User) DeleteDiscussion(params DeleteDiscussionParams) error {
 	}
 
 	return d.Delete()
+}
+
+func (u *User) ListComments(params ListCommentsParams) ([]*discussion.Comment, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.ListComments()
+}
+
+func (u *User) CreateComment(params CreateCommentParams) (*discussion.Comment, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.CreateComment(discussion.CreateCommentParams{
+		ParentCommentID: params.ParentCommentID,
+		CommentTypeID:   params.CommentTypeID,
+		Content:         params.Content,
+		PostedBy:        u.id,
+	})
+}
+
+func (u *User) UpdateComment(params UpdateCommentParams) (*discussion.Comment, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.UpdateComment(discussion.DiscussionUpdateCommentParams{
+		CommentID: params.CommentID,
+		Content:   params.Content,
+		Status:    params.CommentStatus,
+	})
+}
+
+func (u *User) DeleteComment(params DeleteCommentParams) error {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return err
+	}
+	return d.DeleteComment(params.CommentID)
 }
 
 func (u *User) LoadWorkbook(workbookID string) (*workbook.Workbook, error) {

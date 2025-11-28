@@ -416,6 +416,85 @@ func (h *appHandler) DiscussionsDiscussionIdPut(ctx context.Context, req oas.Opt
 	return &res, nil
 }
 
+func (h *appHandler) DiscussionsDiscussionIdCommentsGet(ctx context.Context, params oas.DiscussionsDiscussionIdCommentsGetParams) ([]oas.Comment, error) {
+	var items []*discussion.Comment
+	var err error
+	if err := h.uowSrv.Do(
+		ctx,
+		func(con *Container) error {
+			u := h.loadAccount(ctx, con)
+			items, err = u.ListComments(user.ListCommentsParams{
+				DiscussionID: string(params.DiscussionId),
+			})
+			return err
+		},
+	); err != nil {
+		return nil, err
+	}
+	res := make([]oas.Comment, len(items))
+	for i, v := range items {
+		res[i] = h.toOasComment(v)
+	}
+	return res, nil
+}
+
+func (h *appHandler) DiscussionsDiscussionIdCommentsPost(ctx context.Context, req oas.OptDiscussionsDiscussionIdCommentsPostReq, params oas.DiscussionsDiscussionIdCommentsPostParams) (*oas.Comment, error) {
+	var item *discussion.Comment
+	var err error
+	if err := h.uowSrv.Do(
+		ctx,
+		func(con *Container) error {
+			u := h.loadAccount(ctx, con)
+			item, err = u.CreateComment(user.CreateCommentParams{
+				DiscussionID:    string(params.DiscussionId),
+				ParentCommentID: req.Value.ParentCommentId,
+				CommentTypeID:   string(req.Value.CommentTypeId),
+				Content:         req.Value.Content,
+			})
+			return err
+		},
+	); err != nil {
+		return nil, err
+	}
+	res := h.toOasComment(item)
+	return &res, nil
+}
+
+func (h *appHandler) DiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req oas.OptDiscussionsDiscussionIdCommentsCommentIdPutReq, params oas.DiscussionsDiscussionIdCommentsCommentIdPutParams) (*oas.Comment, error) {
+	var item *discussion.Comment
+	var err error
+	if err := h.uowSrv.Do(
+		ctx,
+		func(con *Container) error {
+			u := h.loadAccount(ctx, con)
+			item, err = u.UpdateComment(user.UpdateCommentParams{
+				DiscussionID:  string(params.DiscussionId),
+				CommentID:     string(params.CommentId),
+				Content:       req.Value.Content,
+				CommentStatus: discussion.CommentStatus(req.Value.Status),
+			})
+			return err
+		},
+	); err != nil {
+		return nil, err
+	}
+	res := h.toOasComment(item)
+	return &res, nil
+}
+
+func (h *appHandler) DiscussionsDiscussionIdCommentsCommentIdDelete(ctx context.Context, params oas.DiscussionsDiscussionIdCommentsCommentIdDeleteParams) error {
+	return h.uowSrv.Do(
+		ctx,
+		func(con *Container) error {
+			u := h.loadAccount(ctx, con)
+			return u.DeleteComment(user.DeleteCommentParams{
+				DiscussionID: string(params.DiscussionId),
+				CommentID:    string(params.CommentId),
+			})
+		},
+	)
+}
+
 func (h *appHandler) loadAccount(ctx context.Context, con *Container) *user.User {
 	au := userFromContext(ctx)
 	return con.UserFac.Build(user.BuildParams{
@@ -481,5 +560,18 @@ func (h *appHandler) toOasDiscussion(item *discussion.Discussion) oas.Discussion
 		CreatedBy:              oas.ID(item.CreatedBy()),
 		CreatedAt:              item.CreatedAt(),
 		Status:                 oas.DiscussionStatus(item.Status()),
+	}
+}
+
+func (h *appHandler) toOasComment(item *discussion.Comment) oas.Comment {
+	return oas.Comment{
+		ID:              oas.ID(item.ID()),
+		DiscussionId:    oas.ID(item.DiscussionID()),
+		ParentCommentId: item.ParentCommentID(),
+		CommentTypeId:   oas.ID(item.CommentTypeID()),
+		Content:         item.Content(),
+		PostedBy:        oas.ID(item.PostedBy()),
+		PostedAt:        item.PostedAt(),
+		Status:          oas.CommentStatus(item.Status()),
 	}
 }

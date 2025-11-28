@@ -1043,3 +1043,126 @@ func TestUser_DeleteDiscussion(t *testing.T) {
 		})
 	}
 }
+
+func TestUser_ListComments(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		params  user.ListCommentsParams
+		want    []*discussion.Comment
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// TODO: construct the receiver type.
+			var u user.User
+			got, gotErr := u.ListComments(tt.params)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("ListComments() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("ListComments() succeeded unexpectedly")
+			}
+			// TODO: update the condition below to compare got with tt.want.
+			if true {
+				t.Errorf("ListComments() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestUser_CreateComment(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		params  user.CreateCommentParams
+		want    *discussion.Comment
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// TODO: construct the receiver type.
+			var u user.User
+			got, gotErr := u.CreateComment(tt.params)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("CreateComment() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("CreateComment() succeeded unexpectedly")
+			}
+			// TODO: update the condition below to compare got with tt.want.
+			if true {
+				t.Errorf("CreateComment() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestUser_UpdateComment(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		params  user.UpdateCommentParams
+		want    *discussion.Comment
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// TODO: construct the receiver type.
+			var u user.User
+			got, gotErr := u.UpdateComment(tt.params)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("UpdateComment() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("UpdateComment() succeeded unexpectedly")
+			}
+			// TODO: update the condition below to compare got with tt.want.
+			if true {
+				t.Errorf("UpdateComment() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestUser_DeleteComment(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		params  user.DeleteCommentParams
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// TODO: construct the receiver type.
+			var u user.User
+			gotErr := u.DeleteComment(tt.params)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("DeleteComment() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("DeleteComment() succeeded unexpectedly")
+			}
+		})
+	}
+}

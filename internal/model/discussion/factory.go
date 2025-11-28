@@ -30,6 +30,21 @@ type (
 		NewDiscussionParams
 		CreatedAt time.Time
 	}
+
+	NewCommentParams struct {
+		DiscussionID    string
+		ParentCommentID string
+		CommentTypeID   string
+		Content         string
+		PostedBy        string
+	}
+
+	BuildCommentParams struct {
+		ID string
+		NewCommentParams
+		PostedAt time.Time
+		Status   CommentStatus
+	}
 )
 
 func NewFactory(
@@ -66,5 +81,30 @@ func (f *Factory) BuildDiscussion(params BuildDiscussionParams) *Discussion {
 		createdAt:              params.CreatedAt,
 		status:                 params.Status,
 		repo:                   f.repo,
+		fac:                    f,
+	}
+}
+
+func (f *Factory) NewComment(params NewCommentParams) *Comment {
+	id := f.idSrv.Generate()
+	return f.BuildComment(BuildCommentParams{
+		ID:               id,
+		NewCommentParams: params,
+		PostedAt:         f.clockSrv.Now(),
+		Status:           CommentStatusUnassigned,
+	})
+}
+
+func (f *Factory) BuildComment(params BuildCommentParams) *Comment {
+	return &Comment{
+		id:              params.ID,
+		discussionID:    params.DiscussionID,
+		parentCommentID: params.ParentCommentID,
+		commentTypeID:   params.CommentTypeID,
+		content:         params.Content,
+		postedBy:        params.PostedBy,
+		postedAt:        params.PostedAt,
+		status:          params.Status,
+		repo:            f.repo,
 	}
 }

@@ -25,6 +25,7 @@ type (
 		status                 Status
 
 		repo Repository
+		fac  *Factory
 	}
 
 	UpdateParams struct {
@@ -35,6 +36,19 @@ type (
 		VisibilityLevel        VisibilityLevel
 		CommentPermissionLevel CommentPermissionLevel
 		Status                 Status
+	}
+
+	CreateCommentParams struct {
+		ParentCommentID string
+		CommentTypeID   string
+		Content         string
+		PostedBy        string
+	}
+
+	DiscussionUpdateCommentParams struct {
+		CommentID string
+		Content   string
+		Status    CommentStatus
 	}
 )
 
@@ -95,8 +109,52 @@ func (d *Discussion) Status() Status {
 	return d.status
 }
 
-func (d *Discussion) Comments() ([]Comment, error) {
+func (d *Discussion) ListComments() ([]*Comment, error) {
 	return d.repo.FetchComments(d.id)
+}
+
+func (d *Discussion) LoadComment(commentID string) (*Comment, error) {
+	return d.repo.LoadComment(LoadCommentParams{
+		DiscussionID: d.id,
+		CommentID:    commentID,
+	})
+}
+
+func (d *Discussion) CreateComment(params CreateCommentParams) (*Comment, error) {
+	c := d.fac.NewComment(NewCommentParams{
+		DiscussionID:    d.id,
+		ParentCommentID: params.ParentCommentID,
+		CommentTypeID:   params.CommentTypeID,
+		Content:         params.Content,
+		PostedBy:        params.PostedBy,
+	})
+	if err := c.save(); err != nil {
+		return nil, err
+	}
+	return c, nil
+}
+
+func (d *Discussion) UpdateComment(params DiscussionUpdateCommentParams) (*Comment, error) {
+	c, err := d.LoadComment(params.CommentID)
+	if err != nil {
+		return nil, err
+	}
+	c.update(UpdateCommentParams{
+		Content: params.Content,
+		Status:  params.Status,
+	})
+	if err := c.save(); err != nil {
+		return nil, err
+	}
+	return c, nil
+}
+
+func (d *Discussion) DeleteComment(commentID string) error {
+	c, err := d.LoadComment(commentID)
+	if err != nil {
+		return err
+	}
+	return c.delete()
 }
 
 func (d *Discussion) Issues() ([]Issue, error) {

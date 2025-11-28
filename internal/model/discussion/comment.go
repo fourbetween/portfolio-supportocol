@@ -7,14 +7,21 @@ type (
 	CommentStatus string
 
 	Comment struct {
-		ID              string
-		DiscussionID    string
-		ParentCommentID *string
-		CommentTypeID   string
-		Content         string
-		PostedBy        string
-		PostedAt        time.Time
-		Status          CommentStatus
+		id              string
+		discussionID    string
+		parentCommentID string
+		commentTypeID   string
+		content         string
+		postedBy        string
+		postedAt        time.Time
+		status          CommentStatus
+
+		repo Repository
+	}
+
+	UpdateCommentParams struct {
+		Content string
+		Status  CommentStatus
 	}
 )
 
@@ -25,3 +32,48 @@ const (
 	CommentStatusArchived   CommentStatus = "archived"
 	CommentStatusDeleted    CommentStatus = "deleted"
 )
+
+func (c *Comment) ID() string {
+	return c.id
+}
+
+func (c *Comment) DiscussionID() string {
+	return c.discussionID
+}
+
+func (c *Comment) ParentCommentID() string {
+	return c.parentCommentID
+}
+
+func (c *Comment) CommentTypeID() string {
+	return c.commentTypeID
+}
+
+func (c *Comment) Content() string {
+	return c.content
+}
+
+func (c *Comment) PostedBy() string {
+	return c.postedBy
+}
+
+func (c *Comment) PostedAt() time.Time {
+	return c.postedAt
+}
+
+func (c *Comment) Status() CommentStatus {
+	return c.status
+}
+
+func (c *Comment) update(params UpdateCommentParams) {
+	c.content = params.Content
+	c.status = params.Status
+}
+
+func (c *Comment) save() error {
+	return c.repo.SaveComment(c)
+}
+
+func (c *Comment) delete() error {
+	return c.repo.DeleteComment(c)
+}

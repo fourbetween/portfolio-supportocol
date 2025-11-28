@@ -11,12 +11,20 @@ type (
 		ID string
 	}
 
+	LoadCommentParams struct {
+		DiscussionID string
+		CommentID    string
+	}
+
 	Repository interface {
 		Search(params SearchParams) ([]*Discussion, error)
 		Load(params LoadParams) (*Discussion, error)
 		Save(discussion *Discussion) error
 		Delete(discussion *Discussion) error
-		FetchComments(discussionID string) ([]Comment, error)
+		FetchComments(discussionID string) ([]*Comment, error)
+		LoadComment(params LoadCommentParams) (*Comment, error)
+		SaveComment(comment *Comment) error
+		DeleteComment(comment *Comment) error
 		FetchIssues(discussionID string) ([]Issue, error)
 		FetchNotes(discussionID string) ([]Note, error)
 	}
