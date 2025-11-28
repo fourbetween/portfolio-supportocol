@@ -44,12 +44,6 @@ type (
 		Content         string
 		PostedBy        string
 	}
-
-	DiscussionUpdateCommentParams struct {
-		CommentID string
-		Content   string
-		Status    CommentStatus
-	}
 )
 
 const (
@@ -134,6 +128,12 @@ func (d *Discussion) CreateComment(params CreateCommentParams) (*Comment, error)
 	return c, nil
 }
 
+type DiscussionUpdateCommentParams struct {
+	CommentID string
+	Content   string
+	Status    CommentStatus
+}
+
 func (d *Discussion) UpdateComment(params DiscussionUpdateCommentParams) (*Comment, error) {
 	c, err := d.LoadComment(params.CommentID)
 	if err != nil {
@@ -176,12 +176,7 @@ type CreateIssueParams struct {
 }
 
 func (d *Discussion) CreateIssue(params CreateIssueParams) (*Issue, error) {
-	i := d.fac.NewIssue(NewIssueParams{
-		CommentID:   params.CommentID,
-		IssueType:   params.IssueType,
-		Description: params.Description,
-		CreatedBy:   params.CreatedBy,
-	})
+	i := d.fac.NewIssue(NewIssueParams(params))
 	if err := i.save(); err != nil {
 		return nil, err
 	}
