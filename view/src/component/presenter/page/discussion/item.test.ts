@@ -55,7 +55,7 @@ describe("ItemDiscussionPagePresenter", async () => {
     {
       id: "01234567890123456789012360",
       discussionId: "01234567890123456789012348",
-      parentCommentId: null,
+      parentCommentId: "",
       commentTypeId: "01234567890123456789012351",
       content: "ルートコメント1",
       postedBy: "01234567890123456789012346",
