@@ -133,11 +133,16 @@ const meta = {
         .discussion=${args.discussion}
         .comments=${args.comments}
         .commentTypes=${args.commentTypes}
+        .focusedCommentId=${args.focusedCommentId}
         .onAddComment=${args.onAddComment}
+        .onFocusComment=${args.onFocusComment}
+        .onClearFocus=${args.onClearFocus}
       ></item-discussion-page-presenter>
     `,
   argTypes: {
     onAddComment: { action: "onAddComment" },
+    onFocusComment: { action: "onFocusComment" },
+    onClearFocus: { action: "onClearFocus" },
   },
 } satisfies Meta<ItemDiscussionPagePresenter>;
 
@@ -267,5 +272,23 @@ export const DeepNestedComments: Story = {
     discussion: mockDiscussion,
     comments: deepNestedComments,
     commentTypes: mockCommentTypes,
+  },
+};
+
+export const FocusedOnRootChild: Story = {
+  args: {
+    discussion: mockDiscussion,
+    comments: mockComments,
+    commentTypes: mockCommentTypes,
+    focusedCommentId: "01234567890123456789012361", // 根拠コメント1（ルートの子）
+  },
+};
+
+export const FocusedOnDeepNested: Story = {
+  args: {
+    discussion: mockDiscussion,
+    comments: deepNestedComments,
+    commentTypes: mockCommentTypes,
+    focusedCommentId: "01234567890123456789012375", // レベル6
   },
 };

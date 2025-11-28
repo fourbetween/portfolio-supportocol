@@ -29,6 +29,15 @@ export class ItemDiscussionPagePresenter extends LitElement {
   @property({ attribute: false })
   onAddComment?: (parentCommentId: string | null) => void;
 
+  @property({ attribute: false })
+  onFocusComment?: (commentId: string) => void;
+
+  @property({ attribute: false })
+  onClearFocus?: () => void;
+
+  @property({ attribute: false })
+  focusedCommentId?: string | null;
+
   private getRootComments(): Comment[] {
     return this.comments.filter((c) => c.parentCommentId === null);
   }
@@ -58,6 +67,25 @@ export class ItemDiscussionPagePresenter extends LitElement {
     return this.commentTypes.find((ct) => ct.id === commentTypeId);
   }
 
+  private getComment(commentId: string): Comment | undefined {
+    return this.comments.find((c) => c.id === commentId);
+  }
+
+  private getAncestorComments(commentId: string): Comment[] {
+    const ancestors: Comment[] = [];
+    let current = this.getComment(commentId);
+    while (current?.parentCommentId) {
+      const parent = this.getComment(current.parentCommentId);
+      if (parent) {
+        ancestors.unshift(parent);
+        current = parent;
+      } else {
+        break;
+      }
+    }
+    return ancestors;
+  }
+
   private renderComment(comment: Comment): unknown {
     const childCommentsByType = this.getChildCommentsByType(comment.id);
     const commentType = this.getCommentType(comment.commentTypeId);
@@ -76,6 +104,12 @@ export class ItemDiscussionPagePresenter extends LitElement {
           <p>${comment.content}</p>
         </div>
         <div class="comment-actions">
+          <button
+            class="btn-focus"
+            @click=${() => this.onFocusComment?.(comment.id)}
+          >
+            フォーカス
+          </button>
           <button
             class="btn-reply"
             @click=${() => this.onAddComment?.(comment.id)}
@@ -116,7 +150,41 @@ export class ItemDiscussionPagePresenter extends LitElement {
     `;
   }
 
+  private renderAncestorComment(comment: Comment): unknown {
+    const commentType = this.getCommentType(comment.commentTypeId);
+
+    return html`
+      <li class="ancestor-comment-item">
+        <div class="comment-header">
+          <span
+            class="comment-type-badge"
+            style="background-color: ${commentType?.color ?? "#ccc"}"
+          >
+            ${commentType?.name ?? ""}
+          </span>
+        </div>
+        <div class="comment-content">
+          <p>${comment.content}</p>
+        </div>
+        <div class="comment-actions">
+          <button
+            class="btn-focus"
+            @click=${() => this.onFocusComment?.(comment.id)}
+          >
+            フォーカス
+          </button>
+        </div>
+      </li>
+    `;
+  }
+
   render() {
+    const focusedComment = this.focusedCommentId
+      ? this.getComment(this.focusedCommentId)
+      : null;
+    const ancestorComments = this.focusedCommentId
+      ? this.getAncestorComments(this.focusedCommentId)
+      : [];
     const rootComments = this.getRootComments();
 
     return html`
@@ -132,26 +200,53 @@ export class ItemDiscussionPagePresenter extends LitElement {
             <p>${this.discussion?.conclusion ?? ""}</p>
           </div>
         </section>
-        <section class="comments-section">
-          <div class="comments-header">
-            <h2>コメント</h2>
-            <button
-              class="btn-primary"
-              @click=${() => this.onAddComment?.(null)}
-            >
-              コメントを追加
-            </button>
-          </div>
-          ${rootComments.length === 0
-            ? html`
-                <p class="empty-message">コメントがありません</p>
-              `
-            : html`
-                <ul class="comment-list">
-                  ${rootComments.map((comment) => this.renderComment(comment))}
+        ${focusedComment
+          ? html`
+              <section class="focus-header">
+                <button
+                  class="btn-unfocus"
+                  @click=${() => this.onClearFocus?.()}
+                >
+                  フォーカス解除
+                </button>
+              </section>
+              <section class="ancestor-comments">
+                <ul class="ancestor-comment-list">
+                  ${ancestorComments.map((comment) =>
+                    this.renderAncestorComment(comment)
+                  )}
                 </ul>
-              `}
-        </section>
+              </section>
+              <section class="focused-comment-section">
+                <ul class="comment-list">
+                  ${this.renderComment(focusedComment)}
+                </ul>
+              </section>
+            `
+          : html`
+              <section class="comments-section">
+                <div class="comments-header">
+                  <h2>コメント</h2>
+                  <button
+                    class="btn-primary"
+                    @click=${() => this.onAddComment?.(null)}
+                  >
+                    コメントを追加
+                  </button>
+                </div>
+                ${rootComments.length === 0
+                  ? html`
+                      <p class="empty-message">コメントがありません</p>
+                    `
+                  : html`
+                      <ul class="comment-list">
+                        ${rootComments.map((comment) =>
+                          this.renderComment(comment)
+                        )}
+                      </ul>
+                    `}
+              </section>
+            `}
       </main>
     `;
   }
@@ -262,6 +357,24 @@ export class ItemDiscussionPagePresenter extends LitElement {
         background-color: var(--color-canvas-subtle);
       }
 
+      .btn-focus {
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--color-fg-muted);
+        background-color: transparent;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-focus:hover {
+        color: var(--color-accent-fg);
+        border-color: var(--color-accent-fg);
+        background-color: var(--color-canvas-subtle);
+      }
+
       .child-comments {
         margin-top: 16px;
         padding-left: 16px;
@@ -317,6 +430,61 @@ export class ItemDiscussionPagePresenter extends LitElement {
         background-color: var(--color-canvas-subtle);
         border-radius: 6px;
         border: 1px solid var(--color-border-default);
+      }
+
+      .focus-header {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+      }
+
+      .btn-unfocus {
+        padding: 6px 16px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--color-fg-muted);
+        background-color: var(--color-canvas-subtle);
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-unfocus:hover {
+        color: var(--color-accent-fg);
+        border-color: var(--color-accent-fg);
+        background-color: var(--color-canvas-default);
+      }
+
+      .ancestor-comments {
+        margin-bottom: 16px;
+      }
+
+      .ancestor-comment-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .ancestor-comment-item {
+        padding: 12px 16px;
+        background-color: var(--color-canvas-subtle);
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        border-left: 3px solid var(--color-border-muted);
+      }
+
+      .ancestor-comment-item .comment-content {
+        font-size: 13px;
+        color: var(--color-fg-muted);
+      }
+
+      .focused-comment-section {
+        padding-top: 16px;
+        border-top: 2px solid var(--color-accent-emphasis);
       }
     `,
   ];
