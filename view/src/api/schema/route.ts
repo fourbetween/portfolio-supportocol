@@ -3,6 +3,8 @@ import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import z from "zod";
 import {
   CommentPermissionLevelSchema,
+  CommentSchema,
+  CommentStatusSchema,
   CommentTypePathSchema,
   CommentTypeSchema,
   DiscussionSchema,
@@ -547,6 +549,140 @@ const routes: RouteConfig[] = [
     },
     responses: {
       200: {
+        description: "success response",
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "get",
+    path: "/discussions/{discussionId}/comments",
+    description: "get comments for a discussion",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+      }),
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: z.array(CommentSchema),
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "post",
+    path: "/discussions/{discussionId}/comments",
+    description: "create comment",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+      }),
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({
+              parentCommentId: z.string(),
+              commentTypeId: IdSchema,
+              content: z.string(),
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: CommentSchema,
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "put",
+    path: "/discussions/{discussionId}/comments/{commentId}",
+    description: "update comment",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+        commentId: IdSchema,
+      }),
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({
+              content: z.string(),
+              status: CommentStatusSchema,
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: CommentSchema,
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "delete",
+    path: "/discussions/{discussionId}/comments/{commentId}",
+    description: "delete comment",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+        commentId: IdSchema,
+      }),
+    },
+    responses: {
+      204: {
         description: "success response",
       },
       default: {

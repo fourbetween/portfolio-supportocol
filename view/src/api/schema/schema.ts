@@ -55,7 +55,7 @@ export const CommentSchema = z
   .object({
     id: IdSchema,
     discussionId: IdSchema,
-    parentCommentId: IdSchema.nullable(),
+    parentCommentId: z.string(),
     commentTypeId: IdSchema,
     content: z.string(),
     postedBy: IdSchema,
