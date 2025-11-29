@@ -107,6 +107,24 @@ func (r *DiscussionRepository) Delete(d *discussion.Discussion) error {
 	return nil
 }
 
+func (r *DiscussionRepository) ExistsByRuleID(ruleID string) (bool, error) {
+	stmt := postgres.
+		SELECT(table.Discussions.ID).
+		FROM(table.Discussions).
+		WHERE(table.Discussions.RuleID.EQ(postgres.String(ruleID))).
+		LIMIT(1)
+
+	var dest model.Discussions
+	if err := stmt.Query(r.db, &dest); err != nil {
+		if errors.Is(err, qrm.ErrNoRows) {
+			return false, nil
+		}
+		return false, fmt.Errorf("failed to check if discussion exists by rule ID: %w", err)
+	}
+
+	return true, nil
+}
+
 func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion.Comment, error) {
 	stmt := postgres.
 		SELECT(table.Comments.AllColumns).

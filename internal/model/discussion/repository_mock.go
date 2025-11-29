@@ -95,6 +95,21 @@ func (mr *MockRepositoryMockRecorder) DeleteNote(note any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteNote", reflect.TypeOf((*MockRepository)(nil).DeleteNote), note)
 }
 
+// ExistsByRuleID mocks base method.
+func (m *MockRepository) ExistsByRuleID(ruleID string) (bool, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ExistsByRuleID", ruleID)
+	ret0, _ := ret[0].(bool)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ExistsByRuleID indicates an expected call of ExistsByRuleID.
+func (mr *MockRepositoryMockRecorder) ExistsByRuleID(ruleID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ExistsByRuleID", reflect.TypeOf((*MockRepository)(nil).ExistsByRuleID), ruleID)
+}
+
 // FetchComments mocks base method.
 func (m *MockRepository) FetchComments(discussionID string) ([]*Comment, error) {
 	m.ctrl.T.Helper()

@@ -31,6 +31,7 @@ type (
 		Load(params LoadParams) (*Discussion, error)
 		Save(discussion *Discussion) error
 		Delete(discussion *Discussion) error
+		ExistsByRuleID(ruleID string) (bool, error)
 		FetchComments(discussionID string) ([]*Comment, error)
 		LoadComment(params LoadCommentParams) (*Comment, error)
 		SaveComment(comment *Comment) error
