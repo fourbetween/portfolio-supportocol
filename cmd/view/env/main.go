@@ -35,8 +35,8 @@ type requiredPaths struct {
 }
 
 const (
-	siteName    = "Tmpl App"
-	siteDesc    = "テンプレートとしてのサンプルアプリです。"
+	siteName    = "Supportocol"
+	siteDesc    = "論理的な議論を支援するプラットフォームです。"
 	siteHost    = "https://app-supportocol.hick-r.com"
 	viewEnvPath = "view/.env"
 )
