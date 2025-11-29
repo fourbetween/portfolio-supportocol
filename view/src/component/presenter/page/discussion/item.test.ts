@@ -354,4 +354,39 @@ describe("ItemDiscussionPagePresenter", async () => {
     expect(depth1Comment).not.toBeNull();
     expect(depth2Comment).not.toBeNull();
   });
+
+  it("コメントにステータス変更ボタンが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    await elem.updateComplete;
+
+    const statusButton = elem.shadowRoot?.querySelector(".btn-status");
+    expect(statusButton).not.toBeNull();
+  });
+
+  it("ステータス変更ボタンクリック時にonChangeStatusが呼ばれること", async () => {
+    const onChangeStatus = vi.fn();
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    elem.onChangeStatus = onChangeStatus;
+    await elem.updateComplete;
+
+    const statusButton = elem.shadowRoot?.querySelector(".btn-status");
+    (statusButton as HTMLElement)?.click();
+
+    expect(onChangeStatus).toHaveBeenCalledWith("01234567890123456789012360");
+  });
+
+  it("コメントのステータスバッジが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    await elem.updateComplete;
+
+    const statusBadge = elem.shadowRoot?.querySelector(".comment-status-badge");
+    expect(statusBadge).not.toBeNull();
+    expect(statusBadge?.textContent?.trim()).toBe("割り当て済み");
+  });
 });

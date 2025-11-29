@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type {
   Comment,
+  CommentStatus,
   CommentType,
   Discussion,
 } from "../../../../model/discussion";
@@ -14,6 +15,13 @@ import {
   pageHostStyle,
   sectionStyle,
 } from "../../../../style/page";
+
+const STATUS_LABELS: Record<CommentStatus, string> = {
+  unassigned: "割り当て待ち",
+  assigned: "割り当て済み",
+  archived: "アーカイブ",
+  deleted: "削除",
+};
 
 @customElement("item-discussion-page-presenter")
 export class ItemDiscussionPagePresenter extends LitElement {
@@ -34,6 +42,9 @@ export class ItemDiscussionPagePresenter extends LitElement {
 
   @property({ attribute: false })
   onClearFocus?: () => void;
+
+  @property({ attribute: false })
+  onChangeStatus?: (commentId: string) => void;
 
   @property({ attribute: false })
   focusedCommentId?: string | null;
@@ -110,6 +121,9 @@ export class ItemDiscussionPagePresenter extends LitElement {
           >
             ${commentType?.name ?? ""}
           </span>
+          <span class="comment-status-badge" data-status="${comment.status}">
+            ${STATUS_LABELS[comment.status]}
+          </span>
         </div>
         <div class="comment-content">
           <p>${comment.content}</p>
@@ -126,6 +140,12 @@ export class ItemDiscussionPagePresenter extends LitElement {
             @click=${() => this.onAddComment?.(comment.id)}
           >
             返信
+          </button>
+          <button
+            class="btn-status"
+            @click=${() => this.onChangeStatus?.(comment.id)}
+          >
+            ステータス変更
           </button>
         </div>
         ${childCommentsByType.size > 0
@@ -384,6 +404,57 @@ export class ItemDiscussionPagePresenter extends LitElement {
         color: var(--color-accent-fg);
         border-color: var(--color-accent-fg);
         background-color: var(--color-canvas-subtle);
+      }
+
+      .btn-status {
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--color-fg-muted);
+        background-color: transparent;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-status:hover {
+        color: var(--color-accent-fg);
+        border-color: var(--color-accent-fg);
+        background-color: var(--color-canvas-subtle);
+      }
+
+      .comment-status-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        font-size: 11px;
+        font-weight: 500;
+        border-radius: 10px;
+        border: 1px solid;
+      }
+
+      .comment-status-badge[data-status="unassigned"] {
+        color: var(--color-fg-muted);
+        background-color: var(--color-canvas-subtle);
+        border-color: var(--color-border-default);
+      }
+
+      .comment-status-badge[data-status="assigned"] {
+        color: var(--color-success-fg);
+        background-color: var(--color-success-subtle);
+        border-color: var(--color-success-muted);
+      }
+
+      .comment-status-badge[data-status="archived"] {
+        color: var(--color-attention-fg);
+        background-color: var(--color-attention-subtle);
+        border-color: var(--color-attention-muted);
+      }
+
+      .comment-status-badge[data-status="deleted"] {
+        color: var(--color-danger-fg);
+        background-color: var(--color-danger-subtle);
+        border-color: var(--color-danger-muted);
       }
 
       .child-comments {
