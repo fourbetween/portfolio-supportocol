@@ -124,6 +124,24 @@ const mockComments = [
   },
 ];
 
+const mockNotes = [
+  {
+    id: "01234567890123456789012380",
+    discussionId: "01234567890123456789012348",
+    content:
+      "この議論では、AIの進化による開発効率への影響について考える必要がある",
+    postedBy: "01234567890123456789012346",
+    postedAt: "2024-01-10T09:00:00Z",
+  },
+  {
+    id: "01234567890123456789012381",
+    discussionId: "01234567890123456789012348",
+    content: "参考資料: GitHub Copilot導入事例レポート",
+    postedBy: "01234567890123456789012346",
+    postedAt: "2024-01-10T09:30:00Z",
+  },
+];
+
 const meta = {
   title: "presenter/page/discussion/item",
   tags: ["autodocs"],
@@ -134,10 +152,12 @@ const meta = {
         .comments=${args.comments}
         .commentTypes=${args.commentTypes}
         .focusedCommentId=${args.focusedCommentId}
+        .notes=${args.notes}
         .onAddComment=${args.onAddComment}
         .onFocusComment=${args.onFocusComment}
         .onClearFocus=${args.onClearFocus}
         .onChangeStatus=${args.onChangeStatus}
+        .onCreateNote=${args.onCreateNote}
       ></item-discussion-page-presenter>
     `,
   argTypes: {
@@ -145,6 +165,7 @@ const meta = {
     onFocusComment: { action: "onFocusComment" },
     onClearFocus: { action: "onClearFocus" },
     onChangeStatus: { action: "onChangeStatus" },
+    onCreateNote: { action: "onCreateNote" },
   },
 } satisfies Meta<ItemDiscussionPagePresenter>;
 
@@ -156,6 +177,7 @@ export const Default: Story = {
     discussion: mockDiscussion,
     comments: mockComments,
     commentTypes: mockCommentTypes,
+    notes: mockNotes,
   },
 };
 
@@ -164,6 +186,7 @@ export const NoComments: Story = {
     discussion: mockDiscussion,
     comments: [],
     commentTypes: mockCommentTypes,
+    notes: [],
   },
 };
 
@@ -172,6 +195,7 @@ export const SingleRootComment: Story = {
     discussion: mockDiscussion,
     comments: [mockComments[0]],
     commentTypes: mockCommentTypes,
+    notes: mockNotes,
   },
 };
 
@@ -180,6 +204,7 @@ export const MultipleRootComments: Story = {
     discussion: mockDiscussion,
     comments: [mockComments[0], mockComments[5]],
     commentTypes: mockCommentTypes,
+    notes: mockNotes,
   },
 };
 
@@ -274,6 +299,7 @@ export const DeepNestedComments: Story = {
     discussion: mockDiscussion,
     comments: deepNestedComments,
     commentTypes: mockCommentTypes,
+    notes: mockNotes,
   },
 };
 
@@ -283,6 +309,7 @@ export const FocusedOnRootChild: Story = {
     comments: mockComments,
     commentTypes: mockCommentTypes,
     focusedCommentId: "01234567890123456789012361", // 根拠コメント1（ルートの子）
+    notes: mockNotes,
   },
 };
 
@@ -292,5 +319,6 @@ export const FocusedOnDeepNested: Story = {
     comments: deepNestedComments,
     commentTypes: mockCommentTypes,
     focusedCommentId: "01234567890123456789012375", // レベル6
+    notes: mockNotes,
   },
 };

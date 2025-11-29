@@ -15,6 +15,7 @@ import "./component/presenter/page/dashboard";
 import "./component/presenter/page/discussion/create";
 import "./component/presenter/page/discussion/item";
 import "./component/presenter/page/discussion/list";
+import "./component/presenter/page/discussion/notes_panel";
 import "./component/presenter/page/home";
 import "./component/presenter/page/project/item";
 import "./component/presenter/page/rule/create";

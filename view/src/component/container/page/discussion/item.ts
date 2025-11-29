@@ -11,6 +11,7 @@ import type {
   CommentStatus,
   CommentType,
   Discussion,
+  Note,
 } from "../../../../model/discussion";
 import { baseStyle } from "../../../../style/base";
 import type { ChangeStatusPopupPresenter } from "../../../presenter/popup/comment/change_status";
@@ -43,6 +44,9 @@ export class ItemDiscussionPageContainer extends LitElement {
   @state()
   private parentCommentIdForCreate: string | null = null;
 
+  @state()
+  private notes: Note[] = [];
+
   @query("create-comment-popup-presenter")
   private createCommentPopup!: CreateCommentPopupPresenter;
 
@@ -73,6 +77,7 @@ export class ItemDiscussionPageContainer extends LitElement {
         if (data) {
           this.fetchRule(data.ruleId);
           this.fetchComments();
+          this.fetchNotes();
         }
       },
     });
@@ -105,6 +110,21 @@ export class ItemDiscussionPageContainer extends LitElement {
     this.comments = data;
   }
 
+  private async fetchNotes() {
+    const { data, error } = await client.GET(
+      "/discussions/{discussionId}/notes",
+      {
+        headers: await accountMethods.authHeader(),
+        params: { path: { discussionId: this.discussionId } },
+      }
+    );
+    if (error) {
+      console.error("Failed to fetch notes:", error.message);
+      return;
+    }
+    this.notes = data;
+  }
+
   render() {
     if (!this.discussion) {
       return nothing;
@@ -116,10 +136,12 @@ export class ItemDiscussionPageContainer extends LitElement {
         .comments=${this.comments}
         .commentTypes=${this.commentTypes}
         .focusedCommentId=${this.focusedCommentId}
+        .notes=${this.notes}
         .onAddComment=${this.handleAddComment}
         .onFocusComment=${this.handleFocusComment}
         .onClearFocus=${this.handleClearFocus}
         .onChangeStatus=${this.handleChangeStatusClick}
+        .onCreateNote=${this.handleCreateNote}
       ></item-discussion-page-presenter>
 
       <create-comment-popup-presenter
@@ -209,6 +231,21 @@ export class ItemDiscussionPageContainer extends LitElement {
 
     this.changeStatusPopup.close();
     await this.fetchComments();
+  };
+
+  private handleCreateNote = async (content: string) => {
+    const { error } = await client.POST("/discussions/{discussionId}/notes", {
+      headers: await accountMethods.authHeader(),
+      params: { path: { discussionId: this.discussionId } },
+      body: { content },
+    });
+
+    if (error) {
+      console.error("Failed to create note:", error.message);
+      return;
+    }
+
+    await this.fetchNotes();
   };
 
   static styles = [baseStyle];
