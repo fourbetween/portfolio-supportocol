@@ -137,12 +137,14 @@ const meta = {
         .onAddComment=${args.onAddComment}
         .onFocusComment=${args.onFocusComment}
         .onClearFocus=${args.onClearFocus}
+        .onChangeStatus=${args.onChangeStatus}
       ></item-discussion-page-presenter>
     `,
   argTypes: {
     onAddComment: { action: "onAddComment" },
     onFocusComment: { action: "onFocusComment" },
     onClearFocus: { action: "onClearFocus" },
+    onChangeStatus: { action: "onChangeStatus" },
   },
 } satisfies Meta<ItemDiscussionPagePresenter>;
 
