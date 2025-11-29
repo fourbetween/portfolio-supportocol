@@ -16,6 +16,7 @@ import type {
 import { baseStyle } from "../../../../style/base";
 import type { ChangeStatusPopupPresenter } from "../../../presenter/popup/comment/change_status";
 import type { CreateCommentPopupPresenter } from "../../../presenter/popup/comment/create";
+import type { CreateIssuePopupPresenter } from "../../../presenter/popup/issue/create";
 
 @customElement("item-discussion-page-container")
 export class ItemDiscussionPageContainer extends LitElement {
@@ -50,11 +51,17 @@ export class ItemDiscussionPageContainer extends LitElement {
   @state()
   private notes: Note[] = [];
 
+  @state()
+  private selectedCommentIdForIssue: string | null = null;
+
   @query("create-comment-popup-presenter")
   private createCommentPopup!: CreateCommentPopupPresenter;
 
   @query("change-status-popup-presenter")
   private changeStatusPopup!: ChangeStatusPopupPresenter;
+
+  @query("create-issue-popup-presenter")
+  private createIssuePopup!: CreateIssuePopupPresenter;
 
   constructor() {
     super();
@@ -144,6 +151,7 @@ export class ItemDiscussionPageContainer extends LitElement {
         .onFocusComment=${this.handleFocusComment}
         .onClearFocus=${this.handleClearFocus}
         .onChangeStatus=${this.handleChangeStatusClick}
+        .onAddIssue=${this.handleAddIssueClick}
         .onCreateNote=${this.handleCreateNote}
         .onDeleteNote=${this.handleDeleteNote}
         .onConvertNoteToComment=${this.handleConvertNoteToComment}
@@ -159,6 +167,10 @@ export class ItemDiscussionPageContainer extends LitElement {
         .currentStatus=${this.selectedCommentForStatus?.status ?? "unassigned"}
         .onChangeStatus=${this.handleChangeStatus}
       ></change-status-popup-presenter>
+
+      <create-issue-popup-presenter
+        .onCreate=${this.handleCreateIssue}
+      ></create-issue-popup-presenter>
     `;
   }
 
@@ -285,6 +297,36 @@ export class ItemDiscussionPageContainer extends LitElement {
     this.convertingNote = note;
     this.parentCommentIdForCreate = null;
     this.createCommentPopup.openWithContent(note.content);
+  };
+
+  private handleAddIssueClick = (commentId: string) => {
+    this.selectedCommentIdForIssue = commentId;
+    this.createIssuePopup.open();
+  };
+
+  private handleCreateIssue = async (data: {
+    issueType: "contradiction" | "circular_logic";
+    description: string;
+  }) => {
+    if (!this.selectedCommentIdForIssue) return;
+
+    const { error } = await client.POST("/discussions/{discussionId}/issues", {
+      headers: await accountMethods.authHeader(),
+      params: { path: { discussionId: this.discussionId } },
+      body: {
+        commentId: this.selectedCommentIdForIssue,
+        issueType: data.issueType,
+        description: data.description,
+      },
+    });
+
+    if (error) {
+      console.error("Failed to create issue:", error.message);
+      return;
+    }
+
+    this.createIssuePopup.close();
+    this.selectedCommentIdForIssue = null;
   };
 
   static styles = [baseStyle];

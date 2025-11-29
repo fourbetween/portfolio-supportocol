@@ -48,6 +48,9 @@ export class ItemDiscussionPagePresenter extends LitElement {
   onChangeStatus?: (commentId: string) => void;
 
   @property({ attribute: false })
+  onAddIssue?: (commentId: string) => void;
+
+  @property({ attribute: false })
   focusedCommentId?: string | null;
 
   @property({ attribute: false })
@@ -159,6 +162,12 @@ export class ItemDiscussionPagePresenter extends LitElement {
             @click=${() => this.onChangeStatus?.(comment.id)}
           >
             ステータス変更
+          </button>
+          <button
+            class="btn-issue"
+            @click=${() => this.onAddIssue?.(comment.id)}
+          >
+            指摘
           </button>
         </div>
         ${childCommentsByType.size > 0
@@ -456,6 +465,24 @@ export class ItemDiscussionPagePresenter extends LitElement {
         color: var(--color-accent-fg);
         border-color: var(--color-accent-fg);
         background-color: var(--color-canvas-subtle);
+      }
+
+      .btn-issue {
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--color-fg-muted);
+        background-color: transparent;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-issue:hover {
+        color: var(--color-danger-fg);
+        border-color: var(--color-danger-fg);
+        background-color: var(--color-danger-subtle);
       }
 
       .comment-status-badge {

@@ -157,6 +157,7 @@ const meta = {
         .onFocusComment=${args.onFocusComment}
         .onClearFocus=${args.onClearFocus}
         .onChangeStatus=${args.onChangeStatus}
+        .onAddIssue=${args.onAddIssue}
         .onCreateNote=${args.onCreateNote}
         .onDeleteNote=${args.onDeleteNote}
         .onConvertNoteToComment=${args.onConvertNoteToComment}
@@ -167,6 +168,7 @@ const meta = {
     onFocusComment: { action: "onFocusComment" },
     onClearFocus: { action: "onClearFocus" },
     onChangeStatus: { action: "onChangeStatus" },
+    onAddIssue: { action: "onAddIssue" },
     onCreateNote: { action: "onCreateNote" },
     onDeleteNote: { action: "onDeleteNote" },
     onConvertNoteToComment: { action: "onConvertNoteToComment" },

@@ -397,4 +397,28 @@ describe("ItemDiscussionPagePresenter", async () => {
     const notesPanel = elem.shadowRoot?.querySelector("notes-panel-presenter");
     expect(notesPanel).not.toBeNull();
   });
+
+  it("コメントに指摘ボタンが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    await elem.updateComplete;
+
+    const issueButton = elem.shadowRoot?.querySelector(".btn-issue");
+    expect(issueButton).not.toBeNull();
+  });
+
+  it("指摘ボタンクリック時にonAddIssueが呼ばれること", async () => {
+    const onAddIssue = vi.fn();
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    elem.onAddIssue = onAddIssue;
+    await elem.updateComplete;
+
+    const issueButton = elem.shadowRoot?.querySelector(".btn-issue");
+    (issueButton as HTMLElement)?.click();
+
+    expect(onAddIssue).toHaveBeenCalledWith("01234567890123456789012360");
+  });
 });
