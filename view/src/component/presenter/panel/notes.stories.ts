@@ -35,11 +35,13 @@ const meta: Meta<NotesPanelPresenter> = {
       <notes-panel-presenter
         .notes=${args.notes}
         .onCreateNote=${args.onCreateNote}
+        .onDeleteNote=${args.onDeleteNote}
       ></notes-panel-presenter>
     </div>
   `,
   argTypes: {
     onCreateNote: { action: "onCreateNote" },
+    onDeleteNote: { action: "onDeleteNote" },
   },
 };
 

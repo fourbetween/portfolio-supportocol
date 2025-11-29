@@ -142,6 +142,7 @@ export class ItemDiscussionPageContainer extends LitElement {
         .onClearFocus=${this.handleClearFocus}
         .onChangeStatus=${this.handleChangeStatusClick}
         .onCreateNote=${this.handleCreateNote}
+        .onDeleteNote=${this.handleDeleteNote}
       ></item-discussion-page-presenter>
 
       <create-comment-popup-presenter
@@ -242,6 +243,28 @@ export class ItemDiscussionPageContainer extends LitElement {
 
     if (error) {
       console.error("Failed to create note:", error.message);
+      return;
+    }
+
+    await this.fetchNotes();
+  };
+
+  private handleDeleteNote = async (noteId: string) => {
+    const { error } = await client.DELETE(
+      "/discussions/{discussionId}/notes/{noteId}",
+      {
+        headers: await accountMethods.authHeader(),
+        params: {
+          path: {
+            discussionId: this.discussionId,
+            noteId,
+          },
+        },
+      }
+    );
+
+    if (error) {
+      console.error("Failed to delete note:", error.message);
       return;
     }
 

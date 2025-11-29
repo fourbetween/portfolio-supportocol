@@ -96,4 +96,24 @@ describe("NotesPanelPresenter", async () => {
 
     await expect.element(textarea).toHaveValue("");
   });
+
+  it("ノートに削除ボタンが表示されること", async () => {
+    elem.notes = mockNotes;
+    await elem.updateComplete;
+
+    const deleteButtons = page.getByRole("button", { name: "削除" });
+    await expect.element(deleteButtons.first()).toBeVisible();
+  });
+
+  it("削除ボタンをクリックするとonDeleteNoteが呼ばれること", async () => {
+    const onDeleteNote = vi.fn();
+    elem.notes = mockNotes;
+    elem.onDeleteNote = onDeleteNote;
+    await elem.updateComplete;
+
+    const deleteButtons = page.getByRole("button", { name: "削除" });
+    await deleteButtons.first().click();
+
+    expect(onDeleteNote).toHaveBeenCalledWith("01234567890123456789012370");
+  });
 });

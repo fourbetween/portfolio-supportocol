@@ -13,6 +13,9 @@ export class NotesPanelPresenter extends LitElement {
   @property({ attribute: false })
   onCreateNote?: (content: string) => void;
 
+  @property({ attribute: false })
+  onDeleteNote?: (noteId: string) => void;
+
   @query("#note-content")
   private contentTextarea!: HTMLTextAreaElement;
 
@@ -38,6 +41,14 @@ export class NotesPanelPresenter extends LitElement {
                   (note) => html`
                     <li class="note-item">
                       <p class="note-content">${note.content}</p>
+                      <div class="note-actions">
+                        <button
+                          class="btn-delete"
+                          @click=${() => this.onDeleteNote?.(note.id)}
+                        >
+                          削除
+                        </button>
+                      </div>
                     </li>
                   `
                 )}
@@ -61,6 +72,10 @@ export class NotesPanelPresenter extends LitElement {
     buttonStyle,
     formStyle,
     css`
+      :host {
+        display: block;
+      }
+
       .notes-panel {
         padding: 16px;
         background-color: var(--color-canvas-subtle);
@@ -68,6 +83,7 @@ export class NotesPanelPresenter extends LitElement {
         height: 100%;
         display: flex;
         flex-direction: column;
+        box-sizing: border-box;
       }
 
       h2 {
@@ -118,6 +134,29 @@ export class NotesPanelPresenter extends LitElement {
         line-height: 1.5;
         white-space: pre-wrap;
         word-break: break-word;
+      }
+
+      .note-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 8px;
+      }
+
+      .btn-delete {
+        padding: 4px 8px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--color-danger-fg);
+        background-color: transparent;
+        border: 1px solid var(--color-danger-muted);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-delete:hover {
+        background-color: var(--color-danger-subtle);
+        border-color: var(--color-danger-fg);
       }
 
       .empty-message {
