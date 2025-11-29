@@ -389,4 +389,12 @@ describe("ItemDiscussionPagePresenter", async () => {
     expect(statusBadge).not.toBeNull();
     expect(statusBadge?.textContent?.trim()).toBe("割り当て済み");
   });
+
+  it("ノートパネルが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    await elem.updateComplete;
+
+    const notesPanel = elem.shadowRoot?.querySelector("notes-panel-presenter");
+    expect(notesPanel).not.toBeNull();
+  });
 });

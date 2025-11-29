@@ -20,6 +20,7 @@ import "./component/presenter/page/project/item";
 import "./component/presenter/page/rule/create";
 import "./component/presenter/page/rule/edit";
 import "./component/presenter/page/rule/list";
+import "./component/presenter/panel/notes";
 import "./component/presenter/popup/base";
 import "./component/presenter/popup/comment/change_status";
 import "./component/presenter/popup/comment/create";
