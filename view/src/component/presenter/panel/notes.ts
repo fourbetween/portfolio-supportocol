@@ -16,6 +16,9 @@ export class NotesPanelPresenter extends LitElement {
   @property({ attribute: false })
   onDeleteNote?: (noteId: string) => void;
 
+  @property({ attribute: false })
+  onConvertToComment?: (note: Note) => void;
+
   @query("#note-content")
   private contentTextarea!: HTMLTextAreaElement;
 
@@ -42,6 +45,12 @@ export class NotesPanelPresenter extends LitElement {
                     <li class="note-item">
                       <p class="note-content">${note.content}</p>
                       <div class="note-actions">
+                        <button
+                          class="btn-convert"
+                          @click=${() => this.onConvertToComment?.(note)}
+                        >
+                          コメントに変換
+                        </button>
                         <button
                           class="btn-delete"
                           @click=${() => this.onDeleteNote?.(note.id)}
@@ -139,7 +148,25 @@ export class NotesPanelPresenter extends LitElement {
       .note-actions {
         display: flex;
         justify-content: flex-end;
+        gap: 8px;
         margin-top: 8px;
+      }
+
+      .btn-convert {
+        padding: 4px 8px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--color-accent-fg);
+        background-color: transparent;
+        border: 1px solid var(--color-accent-muted);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-convert:hover {
+        background-color: var(--color-accent-subtle);
+        border-color: var(--color-accent-fg);
       }
 
       .btn-delete {

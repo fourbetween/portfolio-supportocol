@@ -59,6 +59,9 @@ export class ItemDiscussionPagePresenter extends LitElement {
   @property({ attribute: false })
   onDeleteNote?: (noteId: string) => void;
 
+  @property({ attribute: false })
+  onConvertNoteToComment?: (note: Note) => void;
+
   private getRootComments(): Comment[] {
     return this.comments.filter((c) => c.parentCommentId === "");
   }
@@ -294,6 +297,7 @@ export class ItemDiscussionPagePresenter extends LitElement {
           .notes=${this.notes}
           .onCreateNote=${this.onCreateNote}
           .onDeleteNote=${this.onDeleteNote}
+          .onConvertToComment=${this.onConvertNoteToComment}
         ></notes-panel-presenter>
       </div>
     `;

@@ -68,8 +68,12 @@ export class CreateCommentPopupPresenter extends LitElement {
   }
 
   open() {
+    this.openWithContent("");
+  }
+
+  openWithContent(content: string) {
     this.typeSelect.value = "";
-    this.contentTextarea.value = "";
+    this.contentTextarea.value = content;
     this.popup.open();
   }
 
