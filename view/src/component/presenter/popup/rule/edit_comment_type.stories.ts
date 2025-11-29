@@ -15,17 +15,20 @@ const meta = {
   tags: ["autodocs"],
   render: () =>
     html`
-      <edit-comment-type-popup-presenter
-        id="popup"
-      ></edit-comment-type-popup-presenter>
-      <button
-        @click=${() =>
-          document
-            .querySelector<EditCommentTypePopupPresenter>("#popup")
-            ?.open(mockCommentType)}
-      >
-        Open Popup
-      </button>
+      <div>
+        <edit-comment-type-popup-presenter></edit-comment-type-popup-presenter>
+        <button
+          @click=${(e: Event) =>
+            (e.target as HTMLElement)
+              .closest("div")
+              ?.querySelector<EditCommentTypePopupPresenter>(
+                "edit-comment-type-popup-presenter"
+              )
+              ?.open(mockCommentType)}
+        >
+          Open Popup
+        </button>
+      </div>
     `,
   argTypes: {},
 } satisfies Meta<EditCommentTypePopupPresenter>;
@@ -33,6 +36,4 @@ const meta = {
 export default meta;
 type Story = StoryObj<EditCommentTypePopupPresenter>;
 
-export const Default: Story = {
-  args: {},
-};
+export const Default: Story = {};

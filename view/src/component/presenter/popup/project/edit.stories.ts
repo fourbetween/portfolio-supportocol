@@ -7,18 +7,24 @@ const meta = {
   tags: ["autodocs"],
   render: (args) =>
     html`
-      <edit-project-popup-presenter
-        id="popup"
-        .projectName=${args.projectName}
-        .onSave=${args.onSave}
-        .onCancel=${args.onCancel}
-      ></edit-project-popup-presenter>
-      <button
-        @click=${() =>
-          document.querySelector<EditProjectPopupPresenter>("#popup")?.open()}
-      >
-        ポップアップを開く
-      </button>
+      <div>
+        <edit-project-popup-presenter
+          .projectName=${args.projectName}
+          .onSave=${args.onSave}
+          .onCancel=${args.onCancel}
+        ></edit-project-popup-presenter>
+        <button
+          @click=${(e: Event) =>
+            (e.target as HTMLElement)
+              .closest("div")
+              ?.querySelector<EditProjectPopupPresenter>(
+                "edit-project-popup-presenter"
+              )
+              ?.open()}
+        >
+          ポップアップを開く
+        </button>
+      </div>
     `,
   argTypes: {
     projectName: { control: "text" },

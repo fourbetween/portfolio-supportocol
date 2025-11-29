@@ -1,58 +1,56 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import type { CommentType } from "../../../../model/discussion";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import type { BasePopupPresenter } from "../base";
 
-export interface CreateCommentFormData {
-  commentTypeId: string;
-  content: string;
+type IssueType = "contradiction" | "circular_logic";
+
+const ISSUE_TYPE_LABELS: Record<IssueType, string> = {
+  contradiction: "矛盾",
+  circular_logic: "循環論法",
+};
+
+export interface CreateIssueFormData {
+  issueType: IssueType;
+  description: string;
 }
 
-@customElement("create-comment-popup-presenter")
-export class CreateCommentPopupPresenter extends LitElement {
+@customElement("create-issue-popup-presenter")
+export class CreateIssuePopupPresenter extends LitElement {
   @query("base-popup-presenter")
   private popup!: BasePopupPresenter;
 
-  @query("#comment-type")
+  @query("#issue-type")
   private typeSelect!: HTMLSelectElement;
 
-  @query("#comment-content")
-  private contentTextarea!: HTMLTextAreaElement;
+  @query("#issue-description")
+  private descriptionTextarea!: HTMLTextAreaElement;
 
   @property({ attribute: false })
-  commentTypes: CommentType[] = [];
-
-  @property({ attribute: false })
-  parentCommentId: string | null = null;
-
-  @property({ attribute: false })
-  onCreate?: (data: CreateCommentFormData) => void;
+  onCreate?: (data: CreateIssueFormData) => void;
 
   render() {
-    const title = this.parentCommentId ? "コメントを返信" : "コメントを追加";
-
     return html`
       <base-popup-presenter>
-        <span slot="header">${title}</span>
+        <span slot="header">指摘を作成</span>
         <div slot="main">
           <div class="form-group">
-            <label for="comment-type">コメント種類</label>
-            <select id="comment-type">
+            <label for="issue-type">指摘種類</label>
+            <select id="issue-type">
               <option value="">選択してください</option>
-              ${this.commentTypes.map(
+              ${(Object.keys(ISSUE_TYPE_LABELS) as IssueType[]).map(
                 (type) => html`
-                  <option value="${type.id}">${type.name}</option>
+                  <option value="${type}">${ISSUE_TYPE_LABELS[type]}</option>
                 `
               )}
             </select>
           </div>
           <div class="form-group">
-            <label for="comment-content">内容</label>
+            <label for="issue-description">説明</label>
             <textarea
-              id="comment-content"
-              placeholder="コメント内容を入力"
+              id="issue-description"
+              placeholder="指摘の説明を入力"
               rows="5"
             ></textarea>
           </div>
@@ -68,12 +66,8 @@ export class CreateCommentPopupPresenter extends LitElement {
   }
 
   open() {
-    this.openWithContent("");
-  }
-
-  openWithContent(content: string) {
     this.typeSelect.value = "";
-    this.contentTextarea.value = content;
+    this.descriptionTextarea.value = "";
     this.popup.open();
   }
 
@@ -82,14 +76,14 @@ export class CreateCommentPopupPresenter extends LitElement {
   }
 
   private handleCreate() {
-    const commentTypeId = this.typeSelect.value;
-    const content = this.contentTextarea.value.trim();
+    const issueType = this.typeSelect.value as IssueType;
+    const description = this.descriptionTextarea.value.trim();
 
-    if (!commentTypeId || !content) {
+    if (!issueType || !description) {
       return;
     }
 
-    this.onCreate?.({ commentTypeId, content });
+    this.onCreate?.({ issueType, description });
     this.close();
   }
 
