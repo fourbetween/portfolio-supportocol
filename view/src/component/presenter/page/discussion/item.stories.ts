@@ -158,6 +158,8 @@ const meta = {
         .onClearFocus=${args.onClearFocus}
         .onChangeStatus=${args.onChangeStatus}
         .onCreateNote=${args.onCreateNote}
+        .onDeleteNote=${args.onDeleteNote}
+        .onConvertNoteToComment=${args.onConvertNoteToComment}
       ></item-discussion-page-presenter>
     `,
   argTypes: {
@@ -166,6 +168,8 @@ const meta = {
     onClearFocus: { action: "onClearFocus" },
     onChangeStatus: { action: "onChangeStatus" },
     onCreateNote: { action: "onCreateNote" },
+    onDeleteNote: { action: "onDeleteNote" },
+    onConvertNoteToComment: { action: "onConvertNoteToComment" },
   },
 } satisfies Meta<ItemDiscussionPagePresenter>;
 

@@ -124,4 +124,15 @@ describe("CreateCommentPopupPresenter", async () => {
 
     await expect.element(page.getByText("コメントを追加")).toBeVisible();
   });
+
+  it("openWithContent()メソッドで初期内容を設定してダイアログを開けること", async () => {
+    elem.commentTypes = mockCommentTypes;
+    elem.openWithContent("ノートからの内容");
+    await elem.updateComplete;
+
+    await expect.element(page.getByRole("dialog")).toBeVisible();
+    await expect
+      .element(page.getByRole("textbox", { name: "内容" }))
+      .toHaveValue("ノートからの内容");
+  });
 });

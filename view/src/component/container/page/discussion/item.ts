@@ -45,6 +45,9 @@ export class ItemDiscussionPageContainer extends LitElement {
   private parentCommentIdForCreate: string | null = null;
 
   @state()
+  private convertingNote: Note | null = null;
+
+  @state()
   private notes: Note[] = [];
 
   @query("create-comment-popup-presenter")
@@ -143,6 +146,7 @@ export class ItemDiscussionPageContainer extends LitElement {
         .onChangeStatus=${this.handleChangeStatusClick}
         .onCreateNote=${this.handleCreateNote}
         .onDeleteNote=${this.handleDeleteNote}
+        .onConvertNoteToComment=${this.handleConvertNoteToComment}
       ></item-discussion-page-presenter>
 
       <create-comment-popup-presenter
@@ -183,6 +187,12 @@ export class ItemDiscussionPageContainer extends LitElement {
     if (error) {
       console.error("Failed to create comment:", error.message);
       return;
+    }
+
+    // ノートからの変換の場合、元のノートを削除
+    if (this.convertingNote) {
+      await this.handleDeleteNote(this.convertingNote.id);
+      this.convertingNote = null;
     }
 
     this.createCommentPopup.close();
@@ -269,6 +279,12 @@ export class ItemDiscussionPageContainer extends LitElement {
     }
 
     await this.fetchNotes();
+  };
+
+  private handleConvertNoteToComment = (note: Note) => {
+    this.convertingNote = note;
+    this.parentCommentIdForCreate = null;
+    this.createCommentPopup.openWithContent(note.content);
   };
 
   static styles = [baseStyle];

@@ -116,4 +116,24 @@ describe("NotesPanelPresenter", async () => {
 
     expect(onDeleteNote).toHaveBeenCalledWith("01234567890123456789012370");
   });
+
+  it("ノートに「コメントに変換」ボタンが表示されること", async () => {
+    elem.notes = mockNotes;
+    await elem.updateComplete;
+
+    const convertButtons = page.getByRole("button", { name: "コメントに変換" });
+    await expect.element(convertButtons.first()).toBeVisible();
+  });
+
+  it("「コメントに変換」ボタンをクリックするとonConvertToCommentが呼ばれること", async () => {
+    const onConvertToComment = vi.fn();
+    elem.notes = mockNotes;
+    elem.onConvertToComment = onConvertToComment;
+    await elem.updateComplete;
+
+    const convertButtons = page.getByRole("button", { name: "コメントに変換" });
+    await convertButtons.first().click();
+
+    expect(onConvertToComment).toHaveBeenCalledWith(mockNotes[0]);
+  });
 });
