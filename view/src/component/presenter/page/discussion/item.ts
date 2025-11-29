@@ -5,6 +5,7 @@ import type {
   CommentStatus,
   CommentType,
   Discussion,
+  Issue,
   Note,
 } from "../../../../model/discussion";
 import { baseStyle } from "../../../../style/base";
@@ -51,6 +52,9 @@ export class ItemDiscussionPagePresenter extends LitElement {
   onAddIssue?: (commentId: string) => void;
 
   @property({ attribute: false })
+  onShowIssues?: (commentId: string) => void;
+
+  @property({ attribute: false })
   focusedCommentId?: string | null;
 
   @property({ attribute: false })
@@ -64,6 +68,9 @@ export class ItemDiscussionPagePresenter extends LitElement {
 
   @property({ attribute: false })
   onConvertNoteToComment?: (note: Note) => void;
+
+  @property({ attribute: false })
+  issues: Issue[] = [];
 
   private getRootComments(): Comment[] {
     return this.comments.filter((c) => c.parentCommentId === "");
@@ -98,6 +105,10 @@ export class ItemDiscussionPagePresenter extends LitElement {
     return this.comments.find((c) => c.id === commentId);
   }
 
+  private getIssueCount(commentId: string): number {
+    return this.issues.filter((i) => i.commentId === commentId).length;
+  }
+
   private getAncestorComments(commentId: string): Comment[] {
     const ancestors: Comment[] = [];
     let current = this.getComment(commentId);
@@ -127,6 +138,7 @@ export class ItemDiscussionPagePresenter extends LitElement {
     const childCommentsByType = this.getChildCommentsByType(comment.id);
     const commentType = this.getCommentType(comment.commentTypeId);
     const depth = this.getCommentDepth(comment.id);
+    const issueCount = this.getIssueCount(comment.id);
 
     return html`
       <li class="comment-item" data-depth="${depth}">
@@ -140,6 +152,16 @@ export class ItemDiscussionPagePresenter extends LitElement {
           <span class="comment-status-badge" data-status="${comment.status}">
             ${STATUS_LABELS[comment.status]}
           </span>
+          ${issueCount > 0
+            ? html`
+                <span
+                  class="issue-count-badge"
+                  @click=${() => this.onShowIssues?.(comment.id)}
+                >
+                  ${issueCount}
+                </span>
+              `
+            : ""}
         </div>
         <div class="comment-content">
           <p>${comment.content}</p>
@@ -662,6 +684,26 @@ export class ItemDiscussionPagePresenter extends LitElement {
       .focused-comment-section {
         padding-top: 16px;
         border-top: 2px solid var(--color-accent-emphasis);
+      }
+
+      .issue-count-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #ffffff;
+        background-color: var(--color-danger-emphasis, #cf222e);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .issue-count-badge:hover {
+        background-color: var(--color-danger-fg, #a40e26);
       }
     `,
   ];

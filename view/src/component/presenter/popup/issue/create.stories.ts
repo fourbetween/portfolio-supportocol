@@ -6,20 +6,22 @@ const meta = {
   title: "presenter/popup/issue/create",
   tags: ["autodocs"],
   render: (args) => html`
-    <create-issue-popup-presenter
-      .onCreate=${args.onCreate}
-    ></create-issue-popup-presenter>
-    <button
-      id="open-popup"
-      @click=${() => {
-        const popup = document.querySelector(
-          "create-issue-popup-presenter"
-        ) as CreateIssuePopupPresenter;
-        popup?.open();
-      }}
-    >
-      ポップアップを開く
-    </button>
+    <div>
+      <create-issue-popup-presenter
+        .onCreate=${args.onCreate}
+      ></create-issue-popup-presenter>
+      <button
+        @click=${(e: Event) =>
+          (e.target as HTMLElement)
+            .closest("div")
+            ?.querySelector<CreateIssuePopupPresenter>(
+              "create-issue-popup-presenter"
+            )
+            ?.open()}
+      >
+        ポップアップを開く
+      </button>
+    </div>
   `,
   argTypes: {
     onCreate: { action: "onCreate" },
@@ -29,6 +31,4 @@ const meta = {
 export default meta;
 type Story = StoryObj<CreateIssuePopupPresenter>;
 
-export const Default: Story = {
-  args: {},
-};
+export const Default: Story = {};

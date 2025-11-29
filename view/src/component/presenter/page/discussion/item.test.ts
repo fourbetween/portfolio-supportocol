@@ -421,4 +421,61 @@ describe("ItemDiscussionPagePresenter", async () => {
 
     expect(onAddIssue).toHaveBeenCalledWith("01234567890123456789012360");
   });
+
+  it("コメントに紐づく指摘がある場合、指摘数バッジが表示されること", async () => {
+    const mockIssues = [
+      {
+        id: "01234567890123456789012370",
+        commentId: "01234567890123456789012360",
+        issueType: "contradiction" as const,
+        description: "矛盾の指摘",
+        createdBy: "01234567890123456789012346",
+        createdAt: "2024-01-01T14:00:00Z",
+      },
+      {
+        id: "01234567890123456789012371",
+        commentId: "01234567890123456789012360",
+        issueType: "circular_logic" as const,
+        description: "循環論法の指摘",
+        createdBy: "01234567890123456789012346",
+        createdAt: "2024-01-01T15:00:00Z",
+      },
+    ];
+
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    elem.issues = mockIssues;
+    await elem.updateComplete;
+
+    const issueBadge = elem.shadowRoot?.querySelector(".issue-count-badge");
+    expect(issueBadge).not.toBeNull();
+    expect(issueBadge?.textContent?.trim()).toBe("2");
+  });
+
+  it("指摘数バッジクリック時にonShowIssuesが呼ばれること", async () => {
+    const onShowIssues = vi.fn();
+    const mockIssues = [
+      {
+        id: "01234567890123456789012370",
+        commentId: "01234567890123456789012360",
+        issueType: "contradiction" as const,
+        description: "矛盾の指摘",
+        createdBy: "01234567890123456789012346",
+        createdAt: "2024-01-01T14:00:00Z",
+      },
+    ];
+
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    elem.issues = mockIssues;
+    elem.onShowIssues = onShowIssues;
+    await elem.updateComplete;
+
+    const issueBadge = elem.shadowRoot?.querySelector(".issue-count-badge");
+    (issueBadge as HTMLElement)?.click();
+
+    expect(onShowIssues).toHaveBeenCalledWith("01234567890123456789012360");
+  });
 });

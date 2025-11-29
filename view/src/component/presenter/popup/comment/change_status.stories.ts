@@ -6,21 +6,23 @@ const meta = {
   title: "presenter/popup/comment/change_status",
   tags: ["autodocs"],
   render: (args) => html`
-    <change-status-popup-presenter
-      .currentStatus=${args.currentStatus}
-      .onChangeStatus=${args.onChangeStatus}
-    ></change-status-popup-presenter>
-    <button
-      id="open-popup"
-      @click=${() => {
-        const popup = document.querySelector(
-          "change-status-popup-presenter"
-        ) as ChangeStatusPopupPresenter;
-        popup?.open();
-      }}
-    >
-      ポップアップを開く
-    </button>
+    <div>
+      <change-status-popup-presenter
+        .currentStatus=${args.currentStatus}
+        .onChangeStatus=${args.onChangeStatus}
+      ></change-status-popup-presenter>
+      <button
+        @click=${(e: Event) =>
+          (e.target as HTMLElement)
+            .closest("div")
+            ?.querySelector<ChangeStatusPopupPresenter>(
+              "change-status-popup-presenter"
+            )
+            ?.open()}
+      >
+        ポップアップを開く
+      </button>
+    </div>
   `,
   argTypes: {
     currentStatus: {
