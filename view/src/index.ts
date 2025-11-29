@@ -74,19 +74,19 @@ export class AppRoot extends LitElement {
       `,
     },
     {
+      name: "rule_new",
+      path: routes.rule_new,
+      render: () => html`
+        <create-rule-page-container></create-rule-page-container>
+      `,
+    },
+    {
       name: "rule_item",
       path: routes.rule_item,
       render: ({ id }) => html`
         <edit-rule-page-container
           .ruleId=${id as string}
         ></edit-rule-page-container>
-      `,
-    },
-    {
-      name: "rule_new",
-      path: routes.rule_new,
-      render: () => html`
-        <create-rule-page-container></create-rule-page-container>
       `,
     },
   ]);

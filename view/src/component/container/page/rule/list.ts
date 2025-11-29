@@ -1,13 +1,20 @@
+import type { Router } from "@lit-labs/router";
+import { consume } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
+import { routerContext } from "../../../../context/router";
 import { accountMethods } from "../../../../model/account";
 import type { Rule } from "../../../../model/rule";
-import { buildPath } from "../../../../routes";
+import { buildPath, navigate } from "../../../../routes";
 
 @customElement("list-rule-page-container")
 export class ListRulePageContainer extends LitElement {
+  @consume({ context: routerContext })
+  @property({ attribute: false })
+  router?: Router;
+
   @state()
   private rules: Rule[] = [];
 
@@ -46,11 +53,8 @@ export class ListRulePageContainer extends LitElement {
   };
 
   private handleCreateRule = () => {
-    const event = new CustomEvent("navigate", {
-      bubbles: true,
-      composed: true,
-      detail: { name: "rule_new" },
-    });
-    this.dispatchEvent(event);
+    if (this.router) {
+      navigate(this.router, "rule_new");
+    }
   };
 }
