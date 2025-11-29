@@ -7,17 +7,20 @@ const meta = {
   tags: ["autodocs"],
   render: () =>
     html`
-      <add-comment-type-popup-presenter
-        id="popup"
-      ></add-comment-type-popup-presenter>
-      <button
-        @click=${() =>
-          document
-            .querySelector<AddCommentTypePopupPresenter>("#popup")
-            ?.open()}
-      >
-        Open Popup
-      </button>
+      <div>
+        <add-comment-type-popup-presenter></add-comment-type-popup-presenter>
+        <button
+          @click=${(e: Event) =>
+            (e.target as HTMLElement)
+              .closest("div")
+              ?.querySelector<AddCommentTypePopupPresenter>(
+                "add-comment-type-popup-presenter"
+              )
+              ?.open()}
+        >
+          Open Popup
+        </button>
+      </div>
     `,
   argTypes: {},
 } satisfies Meta<AddCommentTypePopupPresenter>;
@@ -25,6 +28,4 @@ const meta = {
 export default meta;
 type Story = StoryObj<AddCommentTypePopupPresenter>;
 
-export const Default: Story = {
-  args: {},
-};
+export const Default: Story = {};

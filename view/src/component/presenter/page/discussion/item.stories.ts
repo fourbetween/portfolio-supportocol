@@ -142,6 +142,36 @@ const mockNotes = [
   },
 ];
 
+const mockIssues = [
+  {
+    id: "01234567890123456789012390",
+    commentId: "01234567890123456789012360",
+    issueType: "contradiction" as const,
+    description:
+      "この主張は「開発効率を大幅に向上させる」と述べていますが、後述の反論で「設計上の問題やビジネスロジックの誤りを見つけることが難しい」と認めており、一部矛盾があります。",
+    createdBy: "01234567890123456789012347",
+    createdAt: "2024-01-10T18:00:00Z",
+  },
+  {
+    id: "01234567890123456789012391",
+    commentId: "01234567890123456789012360",
+    issueType: "circular_logic" as const,
+    description:
+      "「AIによるコードレビューは効果的である」という結論を、「AIによるコードレビューが効果的だから導入されている」という前提で証明しようとしている循環論法が見られます。",
+    createdBy: "01234567890123456789012348",
+    createdAt: "2024-01-10T19:00:00Z",
+  },
+  {
+    id: "01234567890123456789012392",
+    commentId: "01234567890123456789012365",
+    issueType: "contradiction" as const,
+    description:
+      "学習ツールとして有用と主張していますが、反論で「AIに依存しすぎると自分で考える力が育たない」と認めており、主張が弱体化しています。",
+    createdBy: "01234567890123456789012347",
+    createdAt: "2024-01-10T20:00:00Z",
+  },
+];
+
 const meta = {
   title: "presenter/page/discussion/item",
   tags: ["autodocs"],
@@ -153,10 +183,13 @@ const meta = {
         .commentTypes=${args.commentTypes}
         .focusedCommentId=${args.focusedCommentId}
         .notes=${args.notes}
+        .issues=${args.issues}
         .onAddComment=${args.onAddComment}
         .onFocusComment=${args.onFocusComment}
         .onClearFocus=${args.onClearFocus}
         .onChangeStatus=${args.onChangeStatus}
+        .onAddIssue=${args.onAddIssue}
+        .onShowIssues=${args.onShowIssues}
         .onCreateNote=${args.onCreateNote}
         .onDeleteNote=${args.onDeleteNote}
         .onConvertNoteToComment=${args.onConvertNoteToComment}
@@ -167,6 +200,8 @@ const meta = {
     onFocusComment: { action: "onFocusComment" },
     onClearFocus: { action: "onClearFocus" },
     onChangeStatus: { action: "onChangeStatus" },
+    onAddIssue: { action: "onAddIssue" },
+    onShowIssues: { action: "onShowIssues" },
     onCreateNote: { action: "onCreateNote" },
     onDeleteNote: { action: "onDeleteNote" },
     onConvertNoteToComment: { action: "onConvertNoteToComment" },
@@ -182,6 +217,7 @@ export const Default: Story = {
     comments: mockComments,
     commentTypes: mockCommentTypes,
     notes: mockNotes,
+    issues: mockIssues,
   },
 };
 
@@ -191,6 +227,7 @@ export const NoComments: Story = {
     comments: [],
     commentTypes: mockCommentTypes,
     notes: [],
+    issues: [],
   },
 };
 
@@ -200,6 +237,7 @@ export const SingleRootComment: Story = {
     comments: [mockComments[0]],
     commentTypes: mockCommentTypes,
     notes: mockNotes,
+    issues: [mockIssues[0], mockIssues[1]],
   },
 };
 
@@ -209,6 +247,7 @@ export const MultipleRootComments: Story = {
     comments: [mockComments[0], mockComments[5]],
     commentTypes: mockCommentTypes,
     notes: mockNotes,
+    issues: mockIssues,
   },
 };
 
@@ -304,6 +343,7 @@ export const DeepNestedComments: Story = {
     comments: deepNestedComments,
     commentTypes: mockCommentTypes,
     notes: mockNotes,
+    issues: [],
   },
 };
 
@@ -314,6 +354,7 @@ export const FocusedOnRootChild: Story = {
     commentTypes: mockCommentTypes,
     focusedCommentId: "01234567890123456789012361", // 根拠コメント1（ルートの子）
     notes: mockNotes,
+    issues: mockIssues,
   },
 };
 
@@ -324,5 +365,6 @@ export const FocusedOnDeepNested: Story = {
     commentTypes: mockCommentTypes,
     focusedCommentId: "01234567890123456789012375", // レベル6
     notes: mockNotes,
+    issues: [],
   },
 };

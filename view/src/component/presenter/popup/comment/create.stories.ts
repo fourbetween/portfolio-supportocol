@@ -27,22 +27,24 @@ const meta = {
   title: "presenter/popup/comment/create",
   tags: ["autodocs"],
   render: (args) => html`
-    <create-comment-popup-presenter
-      .commentTypes=${args.commentTypes}
-      .parentCommentId=${args.parentCommentId}
-      .onCreate=${args.onCreate}
-    ></create-comment-popup-presenter>
-    <button
-      id="open-popup"
-      @click=${() => {
-        const popup = document.querySelector(
-          "create-comment-popup-presenter"
-        ) as CreateCommentPopupPresenter;
-        popup?.open();
-      }}
-    >
-      ポップアップを開く
-    </button>
+    <div>
+      <create-comment-popup-presenter
+        .commentTypes=${args.commentTypes}
+        .parentCommentId=${args.parentCommentId}
+        .onCreate=${args.onCreate}
+      ></create-comment-popup-presenter>
+      <button
+        @click=${(e: Event) =>
+          (e.target as HTMLElement)
+            .closest("div")
+            ?.querySelector<CreateCommentPopupPresenter>(
+              "create-comment-popup-presenter"
+            )
+            ?.open()}
+      >
+        ポップアップを開く
+      </button>
+    </div>
   `,
   argTypes: {
     onCreate: { action: "onCreate" },

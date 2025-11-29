@@ -25,6 +25,8 @@ import "./component/presenter/popup/base";
 import "./component/presenter/popup/comment/change_status";
 import "./component/presenter/popup/comment/create";
 import "./component/presenter/popup/confirm";
+import "./component/presenter/popup/issue/create";
+import "./component/presenter/popup/issue/list";
 import "./component/presenter/popup/project/create";
 import "./component/presenter/popup/project/edit";
 import "./component/presenter/popup/rule/add_comment_type";

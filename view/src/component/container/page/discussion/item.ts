@@ -11,11 +11,14 @@ import type {
   CommentStatus,
   CommentType,
   Discussion,
+  Issue,
   Note,
 } from "../../../../model/discussion";
 import { baseStyle } from "../../../../style/base";
 import type { ChangeStatusPopupPresenter } from "../../../presenter/popup/comment/change_status";
 import type { CreateCommentPopupPresenter } from "../../../presenter/popup/comment/create";
+import type { CreateIssuePopupPresenter } from "../../../presenter/popup/issue/create";
+import type { ListIssuePopupPresenter } from "../../../presenter/popup/issue/list";
 
 @customElement("item-discussion-page-container")
 export class ItemDiscussionPageContainer extends LitElement {
@@ -50,11 +53,26 @@ export class ItemDiscussionPageContainer extends LitElement {
   @state()
   private notes: Note[] = [];
 
+  @state()
+  private selectedCommentIdForIssue: string | null = null;
+
+  @state()
+  private issues: Issue[] = [];
+
+  @state()
+  private selectedCommentIdForShowIssues: string | null = null;
+
   @query("create-comment-popup-presenter")
   private createCommentPopup!: CreateCommentPopupPresenter;
 
   @query("change-status-popup-presenter")
   private changeStatusPopup!: ChangeStatusPopupPresenter;
+
+  @query("create-issue-popup-presenter")
+  private createIssuePopup!: CreateIssuePopupPresenter;
+
+  @query("list-issue-popup-presenter")
+  private listIssuePopup!: ListIssuePopupPresenter;
 
   constructor() {
     super();
@@ -81,6 +99,7 @@ export class ItemDiscussionPageContainer extends LitElement {
           this.fetchRule(data.ruleId);
           this.fetchComments();
           this.fetchNotes();
+          this.fetchIssues();
         }
       },
     });
@@ -128,6 +147,21 @@ export class ItemDiscussionPageContainer extends LitElement {
     this.notes = data;
   }
 
+  private async fetchIssues() {
+    const { data, error } = await client.GET(
+      "/discussions/{discussionId}/issues",
+      {
+        headers: await accountMethods.authHeader(),
+        params: { path: { discussionId: this.discussionId } },
+      }
+    );
+    if (error) {
+      console.error("Failed to fetch issues:", error.message);
+      return;
+    }
+    this.issues = data;
+  }
+
   render() {
     if (!this.discussion) {
       return nothing;
@@ -140,10 +174,13 @@ export class ItemDiscussionPageContainer extends LitElement {
         .commentTypes=${this.commentTypes}
         .focusedCommentId=${this.focusedCommentId}
         .notes=${this.notes}
+        .issues=${this.issues}
         .onAddComment=${this.handleAddComment}
         .onFocusComment=${this.handleFocusComment}
         .onClearFocus=${this.handleClearFocus}
         .onChangeStatus=${this.handleChangeStatusClick}
+        .onAddIssue=${this.handleAddIssueClick}
+        .onShowIssues=${this.handleShowIssuesClick}
         .onCreateNote=${this.handleCreateNote}
         .onDeleteNote=${this.handleDeleteNote}
         .onConvertNoteToComment=${this.handleConvertNoteToComment}
@@ -159,6 +196,14 @@ export class ItemDiscussionPageContainer extends LitElement {
         .currentStatus=${this.selectedCommentForStatus?.status ?? "unassigned"}
         .onChangeStatus=${this.handleChangeStatus}
       ></change-status-popup-presenter>
+
+      <create-issue-popup-presenter
+        .onCreate=${this.handleCreateIssue}
+      ></create-issue-popup-presenter>
+
+      <list-issue-popup-presenter
+        .issues=${this.getIssuesForSelectedComment()}
+      ></list-issue-popup-presenter>
     `;
   }
 
@@ -285,6 +330,48 @@ export class ItemDiscussionPageContainer extends LitElement {
     this.convertingNote = note;
     this.parentCommentIdForCreate = null;
     this.createCommentPopup.openWithContent(note.content);
+  };
+
+  private handleShowIssuesClick = (commentId: string) => {
+    this.selectedCommentIdForShowIssues = commentId;
+    this.listIssuePopup.open();
+  };
+
+  private getIssuesForSelectedComment(): Issue[] {
+    if (!this.selectedCommentIdForShowIssues) return [];
+    return this.issues.filter(
+      (issue) => issue.commentId === this.selectedCommentIdForShowIssues
+    );
+  }
+
+  private handleAddIssueClick = (commentId: string) => {
+    this.selectedCommentIdForIssue = commentId;
+    this.createIssuePopup.open();
+  };
+
+  private handleCreateIssue = async (data: {
+    issueType: "contradiction" | "circular_logic";
+    description: string;
+  }) => {
+    if (!this.selectedCommentIdForIssue) return;
+
+    const { error } = await client.POST("/discussions/{discussionId}/issues", {
+      headers: await accountMethods.authHeader(),
+      params: { path: { discussionId: this.discussionId } },
+      body: {
+        commentId: this.selectedCommentIdForIssue,
+        issueType: data.issueType,
+        description: data.description,
+      },
+    });
+
+    if (error) {
+      console.error("Failed to create issue:", error.message);
+      return;
+    }
+
+    this.createIssuePopup.close();
+    this.selectedCommentIdForIssue = null;
   };
 
   static styles = [baseStyle];

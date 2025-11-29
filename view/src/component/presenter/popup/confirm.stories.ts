@@ -7,21 +7,25 @@ const meta = {
   tags: ["autodocs"],
   render: (args) =>
     html`
-      <confirm-popup-presenter
-        id="popup"
-        .title=${args.title}
-        .message=${args.message}
-        .confirmLabel=${args.confirmLabel}
-        .cancelLabel=${args.cancelLabel}
-        .onConfirm=${args.onConfirm}
-        .onCancel=${args.onCancel}
-      ></confirm-popup-presenter>
-      <button
-        @click=${() =>
-          document.querySelector<ConfirmPopupPresenter>("#popup")?.open()}
-      >
-        ポップアップを開く
-      </button>
+      <div>
+        <confirm-popup-presenter
+          .title=${args.title}
+          .message=${args.message}
+          .confirmLabel=${args.confirmLabel}
+          .cancelLabel=${args.cancelLabel}
+          .onConfirm=${args.onConfirm}
+          .onCancel=${args.onCancel}
+        ></confirm-popup-presenter>
+        <button
+          @click=${(e: Event) =>
+            (e.target as HTMLElement)
+              .closest("div")
+              ?.querySelector<ConfirmPopupPresenter>("confirm-popup-presenter")
+              ?.open()}
+        >
+          ポップアップを開く
+        </button>
+      </div>
     `,
   argTypes: {
     title: { control: "text" },
