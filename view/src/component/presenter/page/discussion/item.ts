@@ -39,7 +39,7 @@ export class ItemDiscussionPagePresenter extends LitElement {
   focusedCommentId?: string | null;
 
   private getRootComments(): Comment[] {
-    return this.comments.filter((c) => c.parentCommentId === null);
+    return this.comments.filter((c) => c.parentCommentId === "");
   }
 
   private getChildComments(parentCommentId: string): Comment[] {
@@ -86,12 +86,23 @@ export class ItemDiscussionPagePresenter extends LitElement {
     return ancestors;
   }
 
+  private getCommentDepth(commentId: string): number {
+    let depth = 0;
+    let current = this.getComment(commentId);
+    while (current?.parentCommentId) {
+      depth++;
+      current = this.getComment(current.parentCommentId);
+    }
+    return depth;
+  }
+
   private renderComment(comment: Comment): unknown {
     const childCommentsByType = this.getChildCommentsByType(comment.id);
     const commentType = this.getCommentType(comment.commentTypeId);
+    const depth = this.getCommentDepth(comment.id);
 
     return html`
-      <li class="comment-item">
+      <li class="comment-item" data-depth="${depth}">
         <div class="comment-header">
           <span
             class="comment-type-badge"
@@ -421,7 +432,41 @@ export class ItemDiscussionPagePresenter extends LitElement {
 
       .child-comment-list .comment-item {
         padding: 12px;
-        background-color: var(--color-canvas-subtle);
+      }
+
+      /* 深さに応じた背景色（最大10階層） */
+      .comment-item[data-depth="0"] {
+        background-color: var(--color-canvas-default);
+      }
+      .comment-item[data-depth="1"] {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
+      .comment-item[data-depth="2"] {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+      .comment-item[data-depth="3"] {
+        background-color: rgba(0, 0, 0, 0.06);
+      }
+      .comment-item[data-depth="4"] {
+        background-color: rgba(0, 0, 0, 0.08);
+      }
+      .comment-item[data-depth="5"] {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      .comment-item[data-depth="6"] {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+      .comment-item[data-depth="7"] {
+        background-color: rgba(0, 0, 0, 0.14);
+      }
+      .comment-item[data-depth="8"] {
+        background-color: rgba(0, 0, 0, 0.16);
+      }
+      .comment-item[data-depth="9"] {
+        background-color: rgba(0, 0, 0, 0.18);
+      }
+      .comment-item[data-depth="10"] {
+        background-color: rgba(0, 0, 0, 0.2);
       }
 
       .empty-message {

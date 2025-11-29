@@ -299,4 +299,59 @@ describe("ItemDiscussionPagePresenter", async () => {
     const focusButton = ancestorSection?.querySelector(".btn-focus");
     expect(focusButton).not.toBeNull();
   });
+
+  it("コメントの深さに応じてdata-depth属性が設定されること", async () => {
+    // 深さ3のコメントを作成（ルート -> 子 -> 孫）
+    const deepComments: Comment[] = [
+      {
+        id: "depth0",
+        discussionId: "01234567890123456789012348",
+        parentCommentId: "",
+        commentTypeId: "01234567890123456789012351",
+        content: "深さ0のコメント",
+        postedBy: "01234567890123456789012346",
+        postedAt: "2024-01-01T10:00:00Z",
+        status: "assigned",
+      },
+      {
+        id: "depth1",
+        discussionId: "01234567890123456789012348",
+        parentCommentId: "depth0",
+        commentTypeId: "01234567890123456789012352",
+        content: "深さ1のコメント",
+        postedBy: "01234567890123456789012346",
+        postedAt: "2024-01-01T11:00:00Z",
+        status: "assigned",
+      },
+      {
+        id: "depth2",
+        discussionId: "01234567890123456789012348",
+        parentCommentId: "depth1",
+        commentTypeId: "01234567890123456789012352",
+        content: "深さ2のコメント",
+        postedBy: "01234567890123456789012346",
+        postedAt: "2024-01-01T12:00:00Z",
+        status: "assigned",
+      },
+    ];
+
+    elem.discussion = mockDiscussion;
+    elem.comments = deepComments;
+    elem.commentTypes = mockCommentTypes;
+    await elem.updateComplete;
+
+    const depth0Comment = elem.shadowRoot?.querySelector(
+      '.comment-item[data-depth="0"]'
+    );
+    const depth1Comment = elem.shadowRoot?.querySelector(
+      '.comment-item[data-depth="1"]'
+    );
+    const depth2Comment = elem.shadowRoot?.querySelector(
+      '.comment-item[data-depth="2"]'
+    );
+
+    expect(depth0Comment).not.toBeNull();
+    expect(depth1Comment).not.toBeNull();
+    expect(depth2Comment).not.toBeNull();
+  });
 });
