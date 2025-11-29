@@ -8,7 +8,6 @@ import { routerContext } from "../../../../context/router";
 import { accountMethods } from "../../../../model/account";
 import type { Rule } from "../../../../model/rule";
 import { navigate } from "../../../../routes";
-import { baseStyle } from "../../../../style/base";
 
 @customElement("edit-rule-page-container")
 export class EditRulePageContainer extends LitElement {
@@ -98,6 +97,4 @@ export class EditRulePageContainer extends LitElement {
       navigate(this.router, "rule_list");
     }
   };
-
-  static styles = [baseStyle];
 }

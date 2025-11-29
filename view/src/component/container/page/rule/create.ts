@@ -7,7 +7,6 @@ import { routerContext } from "../../../../context/router";
 import { accountMethods } from "../../../../model/account";
 import type { Rule } from "../../../../model/rule";
 import { navigate } from "../../../../routes";
-import { baseStyle } from "../../../../style/base";
 
 @customElement("create-rule-page-container")
 export class CreateRulePageContainer extends LitElement {
@@ -59,6 +58,4 @@ export class CreateRulePageContainer extends LitElement {
       navigate(this.router, "rule_list");
     }
   };
-
-  static styles = [baseStyle];
 }

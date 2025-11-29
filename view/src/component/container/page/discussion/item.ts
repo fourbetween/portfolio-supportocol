@@ -14,7 +14,6 @@ import type {
   Issue,
   Note,
 } from "../../../../model/discussion";
-import { baseStyle } from "../../../../style/base";
 import type { ChangeStatusPopupPresenter } from "../../../presenter/popup/comment/change_status";
 import type { CreateCommentPopupPresenter } from "../../../presenter/popup/comment/create";
 import type { CreateIssuePopupPresenter } from "../../../presenter/popup/issue/create";
@@ -373,6 +372,4 @@ export class ItemDiscussionPageContainer extends LitElement {
     this.createIssuePopup.close();
     this.selectedCommentIdForIssue = null;
   };
-
-  static styles = [baseStyle];
 }

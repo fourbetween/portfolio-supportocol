@@ -1,6 +1,5 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { baseStyle } from "../../../style/base";
 
 @customElement("front-page-container")
 export class FrontPageContainer extends LitElement {
@@ -16,6 +15,4 @@ export class FrontPageContainer extends LitElement {
       </ul>
     `;
   }
-
-  static styles = [baseStyle, css``];
 }

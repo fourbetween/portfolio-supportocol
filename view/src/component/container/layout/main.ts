@@ -18,20 +18,5 @@ export class MainLayoutContainer extends LitElement {
     `;
   }
 
-  static styles = [
-    baseStyle,
-    css`
-      .layout {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        background-color: #f6f8fa;
-      }
-
-      main {
-        flex: 1;
-        padding: 24px;
-      }
-    `,
-  ];
+  static styles = [baseStyle, css``];
 }
