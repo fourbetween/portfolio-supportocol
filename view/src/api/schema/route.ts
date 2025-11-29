@@ -10,6 +10,8 @@ import {
   DiscussionSchema,
   ErrorSchema,
   IdSchema,
+  IssueSchema,
+  NoteSchema,
   ProjectSchema,
   RuleSchema,
   VisibilityLevelSchema,
@@ -45,6 +47,37 @@ const routes: RouteConfig[] = [
             schema: z.array(WorkbookSchema),
           },
         },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "post",
+    path: "/errors",
+    description: "post an error",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      body: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: z.object({
+              message: z.string(),
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "success response",
       },
       default: {
         description: "default error",
@@ -531,37 +564,6 @@ const routes: RouteConfig[] = [
     },
   },
   {
-    method: "post",
-    path: "/errors",
-    description: "post an error",
-    security: [{ [cognitoAuth.name]: [] }],
-    request: {
-      body: {
-        required: true,
-        content: {
-          "application/json": {
-            schema: z.object({
-              message: z.string(),
-            }),
-          },
-        },
-      },
-    },
-    responses: {
-      200: {
-        description: "success response",
-      },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
-    },
-  },
-  {
     method: "get",
     path: "/discussions/{discussionId}/comments",
     description: "get comments for a discussion",
@@ -679,6 +681,275 @@ const routes: RouteConfig[] = [
       params: z.object({
         discussionId: IdSchema,
         commentId: IdSchema,
+      }),
+    },
+    responses: {
+      204: {
+        description: "success response",
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+
+  // Issue endpoints
+  {
+    method: "get",
+    path: "/discussions/{discussionId}/issues",
+    description: "get issues for a discussion",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+      }),
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: z.array(IssueSchema),
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "post",
+    path: "/discussions/{discussionId}/issues",
+    description: "create issue",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+      }),
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({
+              commentId: IdSchema,
+              issueType: z.enum(["contradiction", "circular_logic"]),
+              description: z.string(),
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: IssueSchema,
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "put",
+    path: "/discussions/{discussionId}/issues/{issueId}",
+    description: "update issue",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+        issueId: IdSchema,
+      }),
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({
+              issueType: z.enum(["contradiction", "circular_logic"]),
+              description: z.string(),
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: IssueSchema,
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "delete",
+    path: "/discussions/{discussionId}/issues/{issueId}",
+    description: "delete issue",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+        issueId: IdSchema,
+      }),
+    },
+    responses: {
+      204: {
+        description: "success response",
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+
+  // Note endpoints
+  {
+    method: "get",
+    path: "/discussions/{discussionId}/notes",
+    description: "get notes for a discussion",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+      }),
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: z.array(NoteSchema),
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "post",
+    path: "/discussions/{discussionId}/notes",
+    description: "create note",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+      }),
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({
+              content: z.string(),
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: NoteSchema,
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "put",
+    path: "/discussions/{discussionId}/notes/{noteId}",
+    description: "update note",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+        noteId: IdSchema,
+      }),
+      body: {
+        content: {
+          "application/json": {
+            schema: z.object({
+              content: z.string(),
+            }),
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: NoteSchema,
+          },
+        },
+      },
+      default: {
+        description: "default error",
+        content: {
+          "application/json": {
+            schema: ErrorSchema,
+          },
+        },
+      },
+    },
+  },
+  {
+    method: "delete",
+    path: "/discussions/{discussionId}/notes/{noteId}",
+    description: "delete note",
+    security: [{ [cognitoAuth.name]: [] }],
+    request: {
+      params: z.object({
+        discussionId: IdSchema,
+        noteId: IdSchema,
       }),
     },
     responses: {

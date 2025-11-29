@@ -44,6 +44,54 @@ type Handler interface {
 	//
 	// GET /discussions/{discussionId}
 	DiscussionsDiscussionIdGet(ctx context.Context, params DiscussionsDiscussionIdGetParams) (*Discussion, error)
+	// DiscussionsDiscussionIdIssuesGet implements GET /discussions/{discussionId}/issues operation.
+	//
+	// Get issues for a discussion.
+	//
+	// GET /discussions/{discussionId}/issues
+	DiscussionsDiscussionIdIssuesGet(ctx context.Context, params DiscussionsDiscussionIdIssuesGetParams) ([]Issue, error)
+	// DiscussionsDiscussionIdIssuesIssueIdDelete implements DELETE /discussions/{discussionId}/issues/{issueId} operation.
+	//
+	// Delete issue.
+	//
+	// DELETE /discussions/{discussionId}/issues/{issueId}
+	DiscussionsDiscussionIdIssuesIssueIdDelete(ctx context.Context, params DiscussionsDiscussionIdIssuesIssueIdDeleteParams) error
+	// DiscussionsDiscussionIdIssuesIssueIdPut implements PUT /discussions/{discussionId}/issues/{issueId} operation.
+	//
+	// Update issue.
+	//
+	// PUT /discussions/{discussionId}/issues/{issueId}
+	DiscussionsDiscussionIdIssuesIssueIdPut(ctx context.Context, req OptDiscussionsDiscussionIdIssuesIssueIdPutReq, params DiscussionsDiscussionIdIssuesIssueIdPutParams) (*Issue, error)
+	// DiscussionsDiscussionIdIssuesPost implements POST /discussions/{discussionId}/issues operation.
+	//
+	// Create issue.
+	//
+	// POST /discussions/{discussionId}/issues
+	DiscussionsDiscussionIdIssuesPost(ctx context.Context, req OptDiscussionsDiscussionIdIssuesPostReq, params DiscussionsDiscussionIdIssuesPostParams) (*Issue, error)
+	// DiscussionsDiscussionIdNotesGet implements GET /discussions/{discussionId}/notes operation.
+	//
+	// Get notes for a discussion.
+	//
+	// GET /discussions/{discussionId}/notes
+	DiscussionsDiscussionIdNotesGet(ctx context.Context, params DiscussionsDiscussionIdNotesGetParams) ([]Note, error)
+	// DiscussionsDiscussionIdNotesNoteIdDelete implements DELETE /discussions/{discussionId}/notes/{noteId} operation.
+	//
+	// Delete note.
+	//
+	// DELETE /discussions/{discussionId}/notes/{noteId}
+	DiscussionsDiscussionIdNotesNoteIdDelete(ctx context.Context, params DiscussionsDiscussionIdNotesNoteIdDeleteParams) error
+	// DiscussionsDiscussionIdNotesNoteIdPut implements PUT /discussions/{discussionId}/notes/{noteId} operation.
+	//
+	// Update note.
+	//
+	// PUT /discussions/{discussionId}/notes/{noteId}
+	DiscussionsDiscussionIdNotesNoteIdPut(ctx context.Context, req OptDiscussionsDiscussionIdNotesNoteIdPutReq, params DiscussionsDiscussionIdNotesNoteIdPutParams) (*Note, error)
+	// DiscussionsDiscussionIdNotesPost implements POST /discussions/{discussionId}/notes operation.
+	//
+	// Create note.
+	//
+	// POST /discussions/{discussionId}/notes
+	DiscussionsDiscussionIdNotesPost(ctx context.Context, req OptDiscussionsDiscussionIdNotesPostReq, params DiscussionsDiscussionIdNotesPostParams) (*Note, error)
 	// DiscussionsDiscussionIdPut implements PUT /discussions/{discussionId} operation.
 	//
 	// Update discussion.

@@ -53,11 +53,53 @@ func (mr *MockRepositoryMockRecorder) Delete(discussion any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRepository)(nil).Delete), discussion)
 }
 
+// DeleteComment mocks base method.
+func (m *MockRepository) DeleteComment(comment *Comment) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteComment", comment)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteComment indicates an expected call of DeleteComment.
+func (mr *MockRepositoryMockRecorder) DeleteComment(comment any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteComment", reflect.TypeOf((*MockRepository)(nil).DeleteComment), comment)
+}
+
+// DeleteIssue mocks base method.
+func (m *MockRepository) DeleteIssue(issue *Issue) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteIssue", issue)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteIssue indicates an expected call of DeleteIssue.
+func (mr *MockRepositoryMockRecorder) DeleteIssue(issue any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteIssue", reflect.TypeOf((*MockRepository)(nil).DeleteIssue), issue)
+}
+
+// DeleteNote mocks base method.
+func (m *MockRepository) DeleteNote(note *Note) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteNote", note)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteNote indicates an expected call of DeleteNote.
+func (mr *MockRepositoryMockRecorder) DeleteNote(note any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteNote", reflect.TypeOf((*MockRepository)(nil).DeleteNote), note)
+}
+
 // FetchComments mocks base method.
-func (m *MockRepository) FetchComments(discussionID string) ([]Comment, error) {
+func (m *MockRepository) FetchComments(discussionID string) ([]*Comment, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FetchComments", discussionID)
-	ret0, _ := ret[0].([]Comment)
+	ret0, _ := ret[0].([]*Comment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -69,10 +111,10 @@ func (mr *MockRepositoryMockRecorder) FetchComments(discussionID any) *gomock.Ca
 }
 
 // FetchIssues mocks base method.
-func (m *MockRepository) FetchIssues(discussionID string) ([]Issue, error) {
+func (m *MockRepository) FetchIssues(discussionID string) ([]*Issue, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FetchIssues", discussionID)
-	ret0, _ := ret[0].([]Issue)
+	ret0, _ := ret[0].([]*Issue)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -84,10 +126,10 @@ func (mr *MockRepositoryMockRecorder) FetchIssues(discussionID any) *gomock.Call
 }
 
 // FetchNotes mocks base method.
-func (m *MockRepository) FetchNotes(discussionID string) ([]Note, error) {
+func (m *MockRepository) FetchNotes(discussionID string) ([]*Note, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FetchNotes", discussionID)
-	ret0, _ := ret[0].([]Note)
+	ret0, _ := ret[0].([]*Note)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -113,6 +155,51 @@ func (mr *MockRepositoryMockRecorder) Load(params any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Load", reflect.TypeOf((*MockRepository)(nil).Load), params)
 }
 
+// LoadComment mocks base method.
+func (m *MockRepository) LoadComment(params LoadCommentParams) (*Comment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LoadComment", params)
+	ret0, _ := ret[0].(*Comment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LoadComment indicates an expected call of LoadComment.
+func (mr *MockRepositoryMockRecorder) LoadComment(params any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadComment", reflect.TypeOf((*MockRepository)(nil).LoadComment), params)
+}
+
+// LoadIssue mocks base method.
+func (m *MockRepository) LoadIssue(params LoadIssueParams) (*Issue, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LoadIssue", params)
+	ret0, _ := ret[0].(*Issue)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LoadIssue indicates an expected call of LoadIssue.
+func (mr *MockRepositoryMockRecorder) LoadIssue(params any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadIssue", reflect.TypeOf((*MockRepository)(nil).LoadIssue), params)
+}
+
+// LoadNote mocks base method.
+func (m *MockRepository) LoadNote(params LoadNoteParams) (*Note, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LoadNote", params)
+	ret0, _ := ret[0].(*Note)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LoadNote indicates an expected call of LoadNote.
+func (mr *MockRepositoryMockRecorder) LoadNote(params any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadNote", reflect.TypeOf((*MockRepository)(nil).LoadNote), params)
+}
+
 // Save mocks base method.
 func (m *MockRepository) Save(discussion *Discussion) error {
 	m.ctrl.T.Helper()
@@ -125,6 +212,48 @@ func (m *MockRepository) Save(discussion *Discussion) error {
 func (mr *MockRepositoryMockRecorder) Save(discussion any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockRepository)(nil).Save), discussion)
+}
+
+// SaveComment mocks base method.
+func (m *MockRepository) SaveComment(comment *Comment) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveComment", comment)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveComment indicates an expected call of SaveComment.
+func (mr *MockRepositoryMockRecorder) SaveComment(comment any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveComment", reflect.TypeOf((*MockRepository)(nil).SaveComment), comment)
+}
+
+// SaveIssue mocks base method.
+func (m *MockRepository) SaveIssue(issue *Issue) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveIssue", issue)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveIssue indicates an expected call of SaveIssue.
+func (mr *MockRepositoryMockRecorder) SaveIssue(issue any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveIssue", reflect.TypeOf((*MockRepository)(nil).SaveIssue), issue)
+}
+
+// SaveNote mocks base method.
+func (m *MockRepository) SaveNote(note *Note) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SaveNote", note)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SaveNote indicates an expected call of SaveNote.
+func (mr *MockRepositoryMockRecorder) SaveNote(note any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveNote", reflect.TypeOf((*MockRepository)(nil).SaveNote), note)
 }
 
 // Search mocks base method.

@@ -67,6 +67,78 @@ func (UnimplementedHandler) DiscussionsDiscussionIdGet(ctx context.Context, para
 	return r, ht.ErrNotImplemented
 }
 
+// DiscussionsDiscussionIdIssuesGet implements GET /discussions/{discussionId}/issues operation.
+//
+// Get issues for a discussion.
+//
+// GET /discussions/{discussionId}/issues
+func (UnimplementedHandler) DiscussionsDiscussionIdIssuesGet(ctx context.Context, params DiscussionsDiscussionIdIssuesGetParams) (r []Issue, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdIssuesIssueIdDelete implements DELETE /discussions/{discussionId}/issues/{issueId} operation.
+//
+// Delete issue.
+//
+// DELETE /discussions/{discussionId}/issues/{issueId}
+func (UnimplementedHandler) DiscussionsDiscussionIdIssuesIssueIdDelete(ctx context.Context, params DiscussionsDiscussionIdIssuesIssueIdDeleteParams) error {
+	return ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdIssuesIssueIdPut implements PUT /discussions/{discussionId}/issues/{issueId} operation.
+//
+// Update issue.
+//
+// PUT /discussions/{discussionId}/issues/{issueId}
+func (UnimplementedHandler) DiscussionsDiscussionIdIssuesIssueIdPut(ctx context.Context, req OptDiscussionsDiscussionIdIssuesIssueIdPutReq, params DiscussionsDiscussionIdIssuesIssueIdPutParams) (r *Issue, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdIssuesPost implements POST /discussions/{discussionId}/issues operation.
+//
+// Create issue.
+//
+// POST /discussions/{discussionId}/issues
+func (UnimplementedHandler) DiscussionsDiscussionIdIssuesPost(ctx context.Context, req OptDiscussionsDiscussionIdIssuesPostReq, params DiscussionsDiscussionIdIssuesPostParams) (r *Issue, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdNotesGet implements GET /discussions/{discussionId}/notes operation.
+//
+// Get notes for a discussion.
+//
+// GET /discussions/{discussionId}/notes
+func (UnimplementedHandler) DiscussionsDiscussionIdNotesGet(ctx context.Context, params DiscussionsDiscussionIdNotesGetParams) (r []Note, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdNotesNoteIdDelete implements DELETE /discussions/{discussionId}/notes/{noteId} operation.
+//
+// Delete note.
+//
+// DELETE /discussions/{discussionId}/notes/{noteId}
+func (UnimplementedHandler) DiscussionsDiscussionIdNotesNoteIdDelete(ctx context.Context, params DiscussionsDiscussionIdNotesNoteIdDeleteParams) error {
+	return ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdNotesNoteIdPut implements PUT /discussions/{discussionId}/notes/{noteId} operation.
+//
+// Update note.
+//
+// PUT /discussions/{discussionId}/notes/{noteId}
+func (UnimplementedHandler) DiscussionsDiscussionIdNotesNoteIdPut(ctx context.Context, req OptDiscussionsDiscussionIdNotesNoteIdPutReq, params DiscussionsDiscussionIdNotesNoteIdPutParams) (r *Note, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DiscussionsDiscussionIdNotesPost implements POST /discussions/{discussionId}/notes operation.
+//
+// Create note.
+//
+// POST /discussions/{discussionId}/notes
+func (UnimplementedHandler) DiscussionsDiscussionIdNotesPost(ctx context.Context, req OptDiscussionsDiscussionIdNotesPostReq, params DiscussionsDiscussionIdNotesPostParams) (r *Note, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // DiscussionsDiscussionIdPut implements PUT /discussions/{discussionId} operation.
 //
 // Update discussion.

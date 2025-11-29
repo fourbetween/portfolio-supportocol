@@ -1043,3 +1043,675 @@ func TestUser_DeleteDiscussion(t *testing.T) {
 		})
 	}
 }
+
+func TestUser_ListComments(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		params  user.ListCommentsParams
+		want    []*discussion.Comment
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// TODO: construct the receiver type.
+			var u user.User
+			got, gotErr := u.ListComments(tt.params)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("ListComments() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("ListComments() succeeded unexpectedly")
+			}
+			// TODO: update the condition below to compare got with tt.want.
+			if true {
+				t.Errorf("ListComments() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestUser_CreateComment(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		params  user.CreateCommentParams
+		want    *discussion.Comment
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// TODO: construct the receiver type.
+			var u user.User
+			got, gotErr := u.CreateComment(tt.params)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("CreateComment() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("CreateComment() succeeded unexpectedly")
+			}
+			// TODO: update the condition below to compare got with tt.want.
+			if true {
+				t.Errorf("CreateComment() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestUser_UpdateComment(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		params  user.UpdateCommentParams
+		want    *discussion.Comment
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// TODO: construct the receiver type.
+			var u user.User
+			got, gotErr := u.UpdateComment(tt.params)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("UpdateComment() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("UpdateComment() succeeded unexpectedly")
+			}
+			// TODO: update the condition below to compare got with tt.want.
+			if true {
+				t.Errorf("UpdateComment() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestUser_DeleteComment(t *testing.T) {
+	tests := []struct {
+		name string // description of this test case
+		// Named input parameters for target function.
+		params  user.DeleteCommentParams
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// TODO: construct the receiver type.
+			var u user.User
+			gotErr := u.DeleteComment(tt.params)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("DeleteComment() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("DeleteComment() succeeded unexpectedly")
+			}
+		})
+	}
+}
+
+func TestUser_ListIssues(t *testing.T) {
+	tests := []struct {
+		name   string
+		params user.ListIssuesParams
+		setup  func(*container)
+		verify func(*testing.T, []*discussion.Issue, error)
+	}{
+		{
+			name: "指摘一覧を取得できること",
+			params: user.ListIssuesParams{
+				DiscussionID: "discussion1",
+			},
+			setup: func(con *container) {
+				d := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "discussion1",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:     "theme",
+						CreatedBy: "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID: "discussion1",
+				}).Return(d, nil)
+				issue := con.DiscussionFac.BuildIssue(discussion.BuildIssueParams{
+					ID: "issue1",
+					NewIssueParams: discussion.NewIssueParams{
+						CommentID:   "comment1",
+						IssueType:   discussion.IssueTypeContradiction,
+						Description: "desc",
+						CreatedBy:   "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().FetchIssues("discussion1").Return([]*discussion.Issue{issue}, nil)
+			},
+			verify: func(t *testing.T, got []*discussion.Issue, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("ListIssues() failed: %v", err)
+					return
+				}
+				if len(got) != 1 {
+					t.Errorf("ListIssues() len = %d, want 1", len(got))
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.ListIssues(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_CreateIssue(t *testing.T) {
+	tests := []struct {
+		name   string
+		params user.CreateIssueParams
+		setup  func(*container)
+		verify func(*testing.T, *discussion.Issue, error)
+	}{
+		{
+			name: "指摘を作成できること",
+			params: user.CreateIssueParams{
+				DiscussionID: "discussion1",
+				CommentID:    "comment1",
+				IssueType:    discussion.IssueTypeContradiction,
+				Description:  "矛盾があります",
+			},
+			setup: func(con *container) {
+				d := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "discussion1",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:     "theme",
+						CreatedBy: "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID: "discussion1",
+				}).Return(d, nil)
+				con.IDSrv.EXPECT().Generate().Return("generated-issue-id")
+				con.ClockSrv.EXPECT().Now().Return(time.Date(2025, 11, 28, 12, 0, 0, 0, time.UTC))
+				con.DiscussionRepo.EXPECT().SaveIssue(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, got *discussion.Issue, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("CreateIssue() failed: %v", err)
+					return
+				}
+				if got.ID() != "generated-issue-id" {
+					t.Errorf("CreateIssue() ID = %v, want %v", got.ID(), "generated-issue-id")
+				}
+				if got.CommentID() != "comment1" {
+					t.Errorf("CreateIssue() CommentID = %v, want %v", got.CommentID(), "comment1")
+				}
+				if got.IssueType() != discussion.IssueTypeContradiction {
+					t.Errorf("CreateIssue() IssueType = %v, want %v", got.IssueType(), discussion.IssueTypeContradiction)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.CreateIssue(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_UpdateIssue(t *testing.T) {
+	tests := []struct {
+		name   string
+		params user.UpdateIssueParams
+		setup  func(*container)
+		verify func(*testing.T, *discussion.Issue, error)
+	}{
+		{
+			name: "指摘を更新できること",
+			params: user.UpdateIssueParams{
+				DiscussionID: "discussion1",
+				IssueID:      "issue1",
+				IssueType:    discussion.IssueTypeCircularLogic,
+				Description:  "循環論法があります",
+			},
+			setup: func(con *container) {
+				d := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "discussion1",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:     "theme",
+						CreatedBy: "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID: "discussion1",
+				}).Return(d, nil)
+				issue := con.DiscussionFac.BuildIssue(discussion.BuildIssueParams{
+					ID: "issue1",
+					NewIssueParams: discussion.NewIssueParams{
+						CommentID:   "comment1",
+						IssueType:   discussion.IssueTypeContradiction,
+						Description: "矛盾があります",
+						CreatedBy:   "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().LoadIssue(discussion.LoadIssueParams{
+					DiscussionID: "discussion1",
+					IssueID:      "issue1",
+				}).Return(issue, nil)
+				con.DiscussionRepo.EXPECT().SaveIssue(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, got *discussion.Issue, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("UpdateIssue() failed: %v", err)
+					return
+				}
+				if got.IssueType() != discussion.IssueTypeCircularLogic {
+					t.Errorf("UpdateIssue() IssueType = %v, want %v", got.IssueType(), discussion.IssueTypeCircularLogic)
+				}
+				if got.Description() != "循環論法があります" {
+					t.Errorf("UpdateIssue() Description = %v, want %v", got.Description(), "循環論法があります")
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.UpdateIssue(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_DeleteIssue(t *testing.T) {
+	tests := []struct {
+		name    string
+		params  user.DeleteIssueParams
+		setup   func(*container)
+		wantErr bool
+	}{
+		{
+			name: "指摘を削除できること",
+			params: user.DeleteIssueParams{
+				DiscussionID: "discussion1",
+				IssueID:      "issue1",
+			},
+			setup: func(con *container) {
+				d := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "discussion1",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:     "theme",
+						CreatedBy: "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID: "discussion1",
+				}).Return(d, nil)
+				issue := con.DiscussionFac.BuildIssue(discussion.BuildIssueParams{
+					ID: "issue1",
+					NewIssueParams: discussion.NewIssueParams{
+						CommentID:   "comment1",
+						IssueType:   discussion.IssueTypeContradiction,
+						Description: "矛盾があります",
+						CreatedBy:   "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().LoadIssue(discussion.LoadIssueParams{
+					DiscussionID: "discussion1",
+					IssueID:      "issue1",
+				}).Return(issue, nil)
+				con.DiscussionRepo.EXPECT().DeleteIssue(gomock.Any()).Return(nil)
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			err := u.DeleteIssue(tt.params)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DeleteIssue() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestUser_ListNotes(t *testing.T) {
+	tests := []struct {
+		name   string
+		params user.ListNotesParams
+		setup  func(*container)
+		verify func(*testing.T, []*discussion.Note, error)
+	}{
+		{
+			name: "ノート一覧を取得できること",
+			params: user.ListNotesParams{
+				DiscussionID: "discussion1",
+			},
+			setup: func(con *container) {
+				d := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "discussion1",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:     "theme",
+						CreatedBy: "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID: "discussion1",
+				}).Return(d, nil)
+				note := con.DiscussionFac.BuildNote(discussion.BuildNoteParams{
+					ID: "note1",
+					NewNoteParams: discussion.NewNoteParams{
+						DiscussionID: "discussion1",
+						Content:      "content",
+						PostedBy:     "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().FetchNotes("discussion1").Return([]*discussion.Note{note}, nil)
+			},
+			verify: func(t *testing.T, got []*discussion.Note, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("ListNotes() failed: %v", err)
+					return
+				}
+				if len(got) != 1 {
+					t.Errorf("ListNotes() len = %d, want 1", len(got))
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.ListNotes(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_CreateNote(t *testing.T) {
+	tests := []struct {
+		name   string
+		params user.CreateNoteParams
+		setup  func(*container)
+		verify func(*testing.T, *discussion.Note, error)
+	}{
+		{
+			name: "ノートを作成できること",
+			params: user.CreateNoteParams{
+				DiscussionID: "discussion1",
+				Content:      "メモ内容",
+			},
+			setup: func(con *container) {
+				d := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "discussion1",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:     "theme",
+						CreatedBy: "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID: "discussion1",
+				}).Return(d, nil)
+				con.IDSrv.EXPECT().Generate().Return("generated-note-id")
+				con.ClockSrv.EXPECT().Now().Return(time.Date(2025, 11, 28, 12, 0, 0, 0, time.UTC))
+				con.DiscussionRepo.EXPECT().SaveNote(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, got *discussion.Note, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("CreateNote() failed: %v", err)
+					return
+				}
+				if got.ID() != "generated-note-id" {
+					t.Errorf("CreateNote() ID = %v, want %v", got.ID(), "generated-note-id")
+				}
+				if got.Content() != "メモ内容" {
+					t.Errorf("CreateNote() Content = %v, want %v", got.Content(), "メモ内容")
+				}
+				if got.PostedBy() != "test-user-id" {
+					t.Errorf("CreateNote() PostedBy = %v, want %v", got.PostedBy(), "test-user-id")
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.CreateNote(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_UpdateNote(t *testing.T) {
+	tests := []struct {
+		name   string
+		params user.UpdateNoteParams
+		setup  func(*container)
+		verify func(*testing.T, *discussion.Note, error)
+	}{
+		{
+			name: "ノートを更新できること",
+			params: user.UpdateNoteParams{
+				DiscussionID: "discussion1",
+				NoteID:       "note1",
+				Content:      "更新されたメモ内容",
+			},
+			setup: func(con *container) {
+				d := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "discussion1",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:     "theme",
+						CreatedBy: "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID: "discussion1",
+				}).Return(d, nil)
+				note := con.DiscussionFac.BuildNote(discussion.BuildNoteParams{
+					ID: "note1",
+					NewNoteParams: discussion.NewNoteParams{
+						DiscussionID: "discussion1",
+						Content:      "元のメモ内容",
+						PostedBy:     "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().LoadNote(discussion.LoadNoteParams{
+					DiscussionID: "discussion1",
+					NoteID:       "note1",
+				}).Return(note, nil)
+				con.DiscussionRepo.EXPECT().SaveNote(gomock.Any()).Return(nil)
+			},
+			verify: func(t *testing.T, got *discussion.Note, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("UpdateNote() failed: %v", err)
+					return
+				}
+				if got.Content() != "更新されたメモ内容" {
+					t.Errorf("UpdateNote() Content = %v, want %v", got.Content(), "更新されたメモ内容")
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.UpdateNote(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
+			}
+		})
+	}
+}
+
+func TestUser_DeleteNote(t *testing.T) {
+	tests := []struct {
+		name    string
+		params  user.DeleteNoteParams
+		setup   func(*container)
+		wantErr bool
+	}{
+		{
+			name: "ノートを削除できること",
+			params: user.DeleteNoteParams{
+				DiscussionID: "discussion1",
+				NoteID:       "note1",
+			},
+			setup: func(con *container) {
+				d := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "discussion1",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:     "theme",
+						CreatedBy: "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID: "discussion1",
+				}).Return(d, nil)
+				note := con.DiscussionFac.BuildNote(discussion.BuildNoteParams{
+					ID: "note1",
+					NewNoteParams: discussion.NewNoteParams{
+						DiscussionID: "discussion1",
+						Content:      "メモ内容",
+						PostedBy:     "test-user-id",
+					},
+				})
+				con.DiscussionRepo.EXPECT().LoadNote(discussion.LoadNoteParams{
+					DiscussionID: "discussion1",
+					NoteID:       "note1",
+				}).Return(note, nil)
+				con.DiscussionRepo.EXPECT().DeleteNote(gomock.Any()).Return(nil)
+			},
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			err := u.DeleteNote(tt.params)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("DeleteNote() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

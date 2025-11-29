@@ -48,7 +48,7 @@ const mockComments = [
   {
     id: "01234567890123456789012360",
     discussionId: "01234567890123456789012348",
-    parentCommentId: null,
+    parentCommentId: "",
     commentTypeId: "01234567890123456789012351",
     content:
       "AIによるコードレビューは開発効率を大幅に向上させる。特に、コーディング規約のチェックやセキュリティ脆弱性の検出において効果的である。",
@@ -103,7 +103,7 @@ const mockComments = [
   {
     id: "01234567890123456789012365",
     discussionId: "01234567890123456789012348",
-    parentCommentId: null,
+    parentCommentId: "",
     commentTypeId: "01234567890123456789012351",
     content:
       "AIコードレビューはジュニアエンジニアの学習ツールとしても有用である。即座にフィードバックが得られるため、スキルアップに貢献する。",
@@ -137,12 +137,14 @@ const meta = {
         .onAddComment=${args.onAddComment}
         .onFocusComment=${args.onFocusComment}
         .onClearFocus=${args.onClearFocus}
+        .onChangeStatus=${args.onChangeStatus}
       ></item-discussion-page-presenter>
     `,
   argTypes: {
     onAddComment: { action: "onAddComment" },
     onFocusComment: { action: "onFocusComment" },
     onClearFocus: { action: "onClearFocus" },
+    onChangeStatus: { action: "onChangeStatus" },
   },
 } satisfies Meta<ItemDiscussionPagePresenter>;
 
@@ -185,7 +187,7 @@ const deepNestedComments = [
   {
     id: "01234567890123456789012370",
     discussionId: "01234567890123456789012348",
-    parentCommentId: null,
+    parentCommentId: "",
     commentTypeId: "01234567890123456789012351",
     content: "レベル1: AIによるコードレビューは開発効率を向上させる。",
     postedBy: "01234567890123456789012346",

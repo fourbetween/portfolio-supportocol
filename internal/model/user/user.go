@@ -8,93 +8,19 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
 )
 
-type (
-	User struct {
-		id    string
-		email string
+type User struct {
+	id    string
+	email string
 
-		workbookRepo   workbook.Repository
-		projectRepo    project.Repository
-		ruleRepo       rule.Repository
-		discussionRepo discussion.Repository
-		projectFac     *project.Factory
-		ruleFac        *rule.Factory
-		discussionFac  *discussion.Factory
-		clockSrv       clock.Service
-	}
-
-	LoadProjectParams struct {
-		ProjectID string
-	}
-
-	CreateProjectParams struct {
-		Name string
-	}
-
-	UpdateProjectParams struct {
-		ProjectID string
-		Name      string
-	}
-
-	DeleteProjectParams struct {
-		ProjectID string
-	}
-
-	LoadRuleParams struct {
-		RuleID string
-	}
-
-	CreateRuleParams struct {
-		Name             string
-		Description      string
-		CommentTypes     []rule.CommentType
-		CommentTypePaths []rule.CommentTypePath
-	}
-
-	UpdateRuleParams struct {
-		RuleID           string
-		Name             string
-		Description      string
-		CommentTypes     []rule.CommentType
-		CommentTypePaths []rule.CommentTypePath
-	}
-
-	DeleteRuleParams struct {
-		RuleID string
-	}
-
-	LoadDiscussionParams struct {
-		DiscussionID string
-	}
-
-	ListDiscussionsParams struct {
-		ProjectID string
-	}
-
-	CreateDiscussionParams struct {
-		Theme                  string
-		Background             string
-		Conclusion             string
-		RuleID                 string
-		VisibilityLevel        discussion.VisibilityLevel
-		CommentPermissionLevel discussion.CommentPermissionLevel
-	}
-
-	UpdateDiscussionParams struct {
-		DiscussionID           string
-		Theme                  string
-		Background             string
-		Conclusion             string
-		RuleID                 string
-		VisibilityLevel        discussion.VisibilityLevel
-		CommentPermissionLevel discussion.CommentPermissionLevel
-		Status                 discussion.Status
-	}
-
-	DeleteDiscussionParams struct {
-		DiscussionID string
-	}
-)
+	workbookRepo   workbook.Repository
+	projectRepo    project.Repository
+	ruleRepo       rule.Repository
+	discussionRepo discussion.Repository
+	projectFac     *project.Factory
+	ruleFac        *rule.Factory
+	discussionFac  *discussion.Factory
+	clockSrv       clock.Service
+}
 
 func (u *User) ID() string {
 	return u.id
@@ -102,6 +28,10 @@ func (u *User) ID() string {
 
 func (u *User) Email() string {
 	return u.email
+}
+
+type LoadProjectParams struct {
+	ProjectID string
 }
 
 func (u *User) LoadProject(params LoadProjectParams) (*project.Project, error) {
@@ -117,6 +47,10 @@ func (u *User) ListProjects() ([]*project.Project, error) {
 	})
 }
 
+type CreateProjectParams struct {
+	Name string
+}
+
 func (u *User) CreateProject(params CreateProjectParams) (*project.Project, error) {
 	p := u.projectFac.NewProject(project.NewProjectParams{
 		Name:      params.Name,
@@ -129,6 +63,11 @@ func (u *User) CreateProject(params CreateProjectParams) (*project.Project, erro
 	}
 
 	return p, nil
+}
+
+type UpdateProjectParams struct {
+	ProjectID string
+	Name      string
 }
 
 func (u *User) UpdateProject(params UpdateProjectParams) (*project.Project, error) {
@@ -149,6 +88,10 @@ func (u *User) UpdateProject(params UpdateProjectParams) (*project.Project, erro
 	return p, nil
 }
 
+type DeleteProjectParams struct {
+	ProjectID string
+}
+
 func (u *User) DeleteProject(params DeleteProjectParams) error {
 	p, err := u.projectRepo.Load(project.LoadParams{
 		ID:        params.ProjectID,
@@ -159,6 +102,10 @@ func (u *User) DeleteProject(params DeleteProjectParams) error {
 	}
 
 	return p.Delete()
+}
+
+type LoadRuleParams struct {
+	RuleID string
 }
 
 func (u *User) LoadRule(params LoadRuleParams) (*rule.Rule, error) {
@@ -172,6 +119,13 @@ func (u *User) ListRules() ([]*rule.Rule, error) {
 	return u.ruleRepo.Search(rule.SearchParams{
 		CreatedBy: u.id,
 	})
+}
+
+type CreateRuleParams struct {
+	Name             string
+	Description      string
+	CommentTypes     []rule.CommentType
+	CommentTypePaths []rule.CommentTypePath
 }
 
 func (u *User) CreateRule(params CreateRuleParams) (*rule.Rule, error) {
@@ -192,6 +146,14 @@ func (u *User) CreateRule(params CreateRuleParams) (*rule.Rule, error) {
 	}
 
 	return r, nil
+}
+
+type UpdateRuleParams struct {
+	RuleID           string
+	Name             string
+	Description      string
+	CommentTypes     []rule.CommentType
+	CommentTypePaths []rule.CommentTypePath
 }
 
 func (u *User) UpdateRule(params UpdateRuleParams) (*rule.Rule, error) {
@@ -219,6 +181,10 @@ func (u *User) UpdateRule(params UpdateRuleParams) (*rule.Rule, error) {
 	return r, nil
 }
 
+type DeleteRuleParams struct {
+	RuleID string
+}
+
 func (u *User) DeleteRule(params DeleteRuleParams) error {
 	r, err := u.ruleRepo.Load(rule.LoadParams{
 		ID:        params.RuleID,
@@ -231,16 +197,33 @@ func (u *User) DeleteRule(params DeleteRuleParams) error {
 	return r.Delete()
 }
 
+type LoadDiscussionParams struct {
+	DiscussionID string
+}
+
 func (u *User) LoadDiscussion(params LoadDiscussionParams) (*discussion.Discussion, error) {
 	return u.discussionRepo.Load(discussion.LoadParams{
 		ID: params.DiscussionID,
 	})
 }
 
+type ListDiscussionsParams struct {
+	ProjectID string
+}
+
 func (u *User) ListDiscussions(params ListDiscussionsParams) ([]*discussion.Discussion, error) {
 	return u.discussionRepo.Search(discussion.SearchParams{
 		ProjectID: params.ProjectID,
 	})
+}
+
+type CreateDiscussionParams struct {
+	Theme                  string
+	Background             string
+	Conclusion             string
+	RuleID                 string
+	VisibilityLevel        discussion.VisibilityLevel
+	CommentPermissionLevel discussion.CommentPermissionLevel
 }
 
 func (u *User) CreateDiscussion(params CreateDiscussionParams) (*discussion.Discussion, error) {
@@ -260,6 +243,17 @@ func (u *User) CreateDiscussion(params CreateDiscussionParams) (*discussion.Disc
 	}
 
 	return d, nil
+}
+
+type UpdateDiscussionParams struct {
+	DiscussionID           string
+	Theme                  string
+	Background             string
+	Conclusion             string
+	RuleID                 string
+	VisibilityLevel        discussion.VisibilityLevel
+	CommentPermissionLevel discussion.CommentPermissionLevel
+	Status                 discussion.Status
 }
 
 func (u *User) UpdateDiscussion(params UpdateDiscussionParams) (*discussion.Discussion, error) {
@@ -287,6 +281,10 @@ func (u *User) UpdateDiscussion(params UpdateDiscussionParams) (*discussion.Disc
 	return d, nil
 }
 
+type DeleteDiscussionParams struct {
+	DiscussionID string
+}
+
 func (u *User) DeleteDiscussion(params DeleteDiscussionParams) error {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
 		ID: params.DiscussionID,
@@ -296,6 +294,216 @@ func (u *User) DeleteDiscussion(params DeleteDiscussionParams) error {
 	}
 
 	return d.Delete()
+}
+
+type ListCommentsParams struct {
+	DiscussionID string
+}
+
+func (u *User) ListComments(params ListCommentsParams) ([]*discussion.Comment, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.ListComments()
+}
+
+type CreateCommentParams struct {
+	DiscussionID    string
+	ParentCommentID string
+	CommentTypeID   string
+	Content         string
+}
+
+func (u *User) CreateComment(params CreateCommentParams) (*discussion.Comment, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.CreateComment(discussion.CreateCommentParams{
+		ParentCommentID: params.ParentCommentID,
+		CommentTypeID:   params.CommentTypeID,
+		Content:         params.Content,
+		PostedBy:        u.id,
+	})
+}
+
+type UpdateCommentParams struct {
+	DiscussionID  string
+	CommentID     string
+	Content       string
+	CommentStatus discussion.CommentStatus
+}
+
+func (u *User) UpdateComment(params UpdateCommentParams) (*discussion.Comment, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.UpdateComment(discussion.DiscussionUpdateCommentParams{
+		CommentID: params.CommentID,
+		Content:   params.Content,
+		Status:    params.CommentStatus,
+	})
+}
+
+type DeleteCommentParams struct {
+	DiscussionID string
+	CommentID    string
+}
+
+func (u *User) DeleteComment(params DeleteCommentParams) error {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return err
+	}
+	return d.DeleteComment(params.CommentID)
+}
+
+type ListIssuesParams struct {
+	DiscussionID string
+}
+
+func (u *User) ListIssues(params ListIssuesParams) ([]*discussion.Issue, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.Issues()
+}
+
+type CreateIssueParams struct {
+	DiscussionID string
+	CommentID    string
+	IssueType    discussion.IssueType
+	Description  string
+}
+
+func (u *User) CreateIssue(params CreateIssueParams) (*discussion.Issue, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.CreateIssue(discussion.CreateIssueParams{
+		CommentID:   params.CommentID,
+		IssueType:   params.IssueType,
+		Description: params.Description,
+		CreatedBy:   u.id,
+	})
+}
+
+type UpdateIssueParams struct {
+	DiscussionID string
+	IssueID      string
+	IssueType    discussion.IssueType
+	Description  string
+}
+
+func (u *User) UpdateIssue(params UpdateIssueParams) (*discussion.Issue, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.UpdateIssue(discussion.DiscussionUpdateIssueParams{
+		IssueID:     params.IssueID,
+		IssueType:   params.IssueType,
+		Description: params.Description,
+	})
+}
+
+type DeleteIssueParams struct {
+	DiscussionID string
+	IssueID      string
+}
+
+func (u *User) DeleteIssue(params DeleteIssueParams) error {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return err
+	}
+	return d.DeleteIssue(params.IssueID)
+}
+
+type ListNotesParams struct {
+	DiscussionID string
+}
+
+func (u *User) ListNotes(params ListNotesParams) ([]*discussion.Note, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.Notes()
+}
+
+type CreateNoteParams struct {
+	DiscussionID string
+	Content      string
+}
+
+func (u *User) CreateNote(params CreateNoteParams) (*discussion.Note, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.CreateNote(discussion.CreateNoteParams{
+		Content:  params.Content,
+		PostedBy: u.id,
+	})
+}
+
+type UpdateNoteParams struct {
+	DiscussionID string
+	NoteID       string
+	Content      string
+}
+
+func (u *User) UpdateNote(params UpdateNoteParams) (*discussion.Note, error) {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return d.UpdateNote(discussion.DiscussionUpdateNoteParams{
+		NoteID:  params.NoteID,
+		Content: params.Content,
+	})
+}
+
+type DeleteNoteParams struct {
+	DiscussionID string
+	NoteID       string
+}
+
+func (u *User) DeleteNote(params DeleteNoteParams) error {
+	d, err := u.discussionRepo.Load(discussion.LoadParams{
+		ID: params.DiscussionID,
+	})
+	if err != nil {
+		return err
+	}
+	return d.DeleteNote(params.NoteID)
 }
 
 func (u *User) LoadWorkbook(workbookID string) (*workbook.Workbook, error) {

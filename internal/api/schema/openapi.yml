@@ -205,6 +205,52 @@ components:
         - postedBy
         - postedAt
         - status
+    issue:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        commentId:
+          $ref: "#/components/schemas/id"
+        issueType:
+          type: string
+          enum:
+            - contradiction
+            - circular_logic
+        description:
+          type: string
+        createdBy:
+          $ref: "#/components/schemas/id"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - commentId
+        - issueType
+        - description
+        - createdBy
+        - createdAt
+    note:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/id"
+        discussionId:
+          $ref: "#/components/schemas/id"
+        content:
+          type: string
+        postedBy:
+          $ref: "#/components/schemas/id"
+        postedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - discussionId
+        - content
+        - postedBy
+        - postedAt
   parameters: {}
 paths:
   /workbooks:
@@ -221,6 +267,31 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/workbook"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /errors:
+    post:
+      description: post an error
+      security:
+        - cognito_auth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
+      responses:
+        "200":
+          description: success response
         default:
           description: default error
           content:
@@ -665,31 +736,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/error"
-  /errors:
-    post:
-      description: post an error
-      security:
-        - cognito_auth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-              required:
-                - message
-      responses:
-        "200":
-          description: success response
-        default:
-          description: default error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
   /discussions/{discussionId}/comments:
     get:
       description: get comments for a discussion
@@ -811,6 +857,265 @@ paths:
             $ref: "#/components/schemas/id"
           required: true
           name: commentId
+          in: path
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /discussions/{discussionId}/issues:
+    get:
+      description: get issues for a discussion
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/issue"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    post:
+      description: create issue
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                commentId:
+                  $ref: "#/components/schemas/id"
+                issueType:
+                  type: string
+                  enum:
+                    - contradiction
+                    - circular_logic
+                description:
+                  type: string
+              required:
+                - commentId
+                - issueType
+                - description
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/issue"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /discussions/{discussionId}/issues/{issueId}:
+    put:
+      description: update issue
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: issueId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                issueType:
+                  type: string
+                  enum:
+                    - contradiction
+                    - circular_logic
+                description:
+                  type: string
+              required:
+                - issueType
+                - description
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/issue"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    delete:
+      description: delete issue
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: issueId
+          in: path
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /discussions/{discussionId}/notes:
+    get:
+      description: get notes for a discussion
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/note"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    post:
+      description: create note
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/note"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+  /discussions/{discussionId}/notes/{noteId}:
+    put:
+      description: update note
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: noteId
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/note"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+    delete:
+      description: delete note
+      security:
+        - cognito_auth: []
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/id"
+          required: true
+          name: noteId
           in: path
       responses:
         "204":

@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type {
   Comment,
+  CommentStatus,
   CommentType,
   Discussion,
 } from "../../../../model/discussion";
@@ -14,6 +15,13 @@ import {
   pageHostStyle,
   sectionStyle,
 } from "../../../../style/page";
+
+const STATUS_LABELS: Record<CommentStatus, string> = {
+  unassigned: "割り当て待ち",
+  assigned: "割り当て済み",
+  archived: "アーカイブ",
+  deleted: "削除",
+};
 
 @customElement("item-discussion-page-presenter")
 export class ItemDiscussionPagePresenter extends LitElement {
@@ -36,10 +44,13 @@ export class ItemDiscussionPagePresenter extends LitElement {
   onClearFocus?: () => void;
 
   @property({ attribute: false })
+  onChangeStatus?: (commentId: string) => void;
+
+  @property({ attribute: false })
   focusedCommentId?: string | null;
 
   private getRootComments(): Comment[] {
-    return this.comments.filter((c) => c.parentCommentId === null);
+    return this.comments.filter((c) => c.parentCommentId === "");
   }
 
   private getChildComments(parentCommentId: string): Comment[] {
@@ -86,18 +97,32 @@ export class ItemDiscussionPagePresenter extends LitElement {
     return ancestors;
   }
 
+  private getCommentDepth(commentId: string): number {
+    let depth = 0;
+    let current = this.getComment(commentId);
+    while (current?.parentCommentId) {
+      depth++;
+      current = this.getComment(current.parentCommentId);
+    }
+    return depth;
+  }
+
   private renderComment(comment: Comment): unknown {
     const childCommentsByType = this.getChildCommentsByType(comment.id);
     const commentType = this.getCommentType(comment.commentTypeId);
+    const depth = this.getCommentDepth(comment.id);
 
     return html`
-      <li class="comment-item">
+      <li class="comment-item" data-depth="${depth}">
         <div class="comment-header">
           <span
             class="comment-type-badge"
             style="background-color: ${commentType?.color ?? "#ccc"}"
           >
             ${commentType?.name ?? ""}
+          </span>
+          <span class="comment-status-badge" data-status="${comment.status}">
+            ${STATUS_LABELS[comment.status]}
           </span>
         </div>
         <div class="comment-content">
@@ -115,6 +140,12 @@ export class ItemDiscussionPagePresenter extends LitElement {
             @click=${() => this.onAddComment?.(comment.id)}
           >
             返信
+          </button>
+          <button
+            class="btn-status"
+            @click=${() => this.onChangeStatus?.(comment.id)}
+          >
+            ステータス変更
           </button>
         </div>
         ${childCommentsByType.size > 0
@@ -375,6 +406,57 @@ export class ItemDiscussionPagePresenter extends LitElement {
         background-color: var(--color-canvas-subtle);
       }
 
+      .btn-status {
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--color-fg-muted);
+        background-color: transparent;
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .btn-status:hover {
+        color: var(--color-accent-fg);
+        border-color: var(--color-accent-fg);
+        background-color: var(--color-canvas-subtle);
+      }
+
+      .comment-status-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        font-size: 11px;
+        font-weight: 500;
+        border-radius: 10px;
+        border: 1px solid;
+      }
+
+      .comment-status-badge[data-status="unassigned"] {
+        color: var(--color-fg-muted);
+        background-color: var(--color-canvas-subtle);
+        border-color: var(--color-border-default);
+      }
+
+      .comment-status-badge[data-status="assigned"] {
+        color: var(--color-success-fg);
+        background-color: var(--color-success-subtle);
+        border-color: var(--color-success-muted);
+      }
+
+      .comment-status-badge[data-status="archived"] {
+        color: var(--color-attention-fg);
+        background-color: var(--color-attention-subtle);
+        border-color: var(--color-attention-muted);
+      }
+
+      .comment-status-badge[data-status="deleted"] {
+        color: var(--color-danger-fg);
+        background-color: var(--color-danger-subtle);
+        border-color: var(--color-danger-muted);
+      }
+
       .child-comments {
         margin-top: 16px;
         padding-left: 16px;
@@ -421,7 +503,41 @@ export class ItemDiscussionPagePresenter extends LitElement {
 
       .child-comment-list .comment-item {
         padding: 12px;
-        background-color: var(--color-canvas-subtle);
+      }
+
+      /* 深さに応じた背景色（最大10階層） */
+      .comment-item[data-depth="0"] {
+        background-color: var(--color-canvas-default);
+      }
+      .comment-item[data-depth="1"] {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
+      .comment-item[data-depth="2"] {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+      .comment-item[data-depth="3"] {
+        background-color: rgba(0, 0, 0, 0.06);
+      }
+      .comment-item[data-depth="4"] {
+        background-color: rgba(0, 0, 0, 0.08);
+      }
+      .comment-item[data-depth="5"] {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      .comment-item[data-depth="6"] {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+      .comment-item[data-depth="7"] {
+        background-color: rgba(0, 0, 0, 0.14);
+      }
+      .comment-item[data-depth="8"] {
+        background-color: rgba(0, 0, 0, 0.16);
+      }
+      .comment-item[data-depth="9"] {
+        background-color: rgba(0, 0, 0, 0.18);
+      }
+      .comment-item[data-depth="10"] {
+        background-color: rgba(0, 0, 0, 0.2);
       }
 
       .empty-message {

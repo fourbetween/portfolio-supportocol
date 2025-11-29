@@ -55,7 +55,7 @@ describe("ItemDiscussionPagePresenter", async () => {
     {
       id: "01234567890123456789012360",
       discussionId: "01234567890123456789012348",
-      parentCommentId: null,
+      parentCommentId: "",
       commentTypeId: "01234567890123456789012351",
       content: "ルートコメント1",
       postedBy: "01234567890123456789012346",
@@ -298,5 +298,95 @@ describe("ItemDiscussionPagePresenter", async () => {
       elem.shadowRoot?.querySelector(".ancestor-comments");
     const focusButton = ancestorSection?.querySelector(".btn-focus");
     expect(focusButton).not.toBeNull();
+  });
+
+  it("コメントの深さに応じてdata-depth属性が設定されること", async () => {
+    // 深さ3のコメントを作成（ルート -> 子 -> 孫）
+    const deepComments: Comment[] = [
+      {
+        id: "depth0",
+        discussionId: "01234567890123456789012348",
+        parentCommentId: "",
+        commentTypeId: "01234567890123456789012351",
+        content: "深さ0のコメント",
+        postedBy: "01234567890123456789012346",
+        postedAt: "2024-01-01T10:00:00Z",
+        status: "assigned",
+      },
+      {
+        id: "depth1",
+        discussionId: "01234567890123456789012348",
+        parentCommentId: "depth0",
+        commentTypeId: "01234567890123456789012352",
+        content: "深さ1のコメント",
+        postedBy: "01234567890123456789012346",
+        postedAt: "2024-01-01T11:00:00Z",
+        status: "assigned",
+      },
+      {
+        id: "depth2",
+        discussionId: "01234567890123456789012348",
+        parentCommentId: "depth1",
+        commentTypeId: "01234567890123456789012352",
+        content: "深さ2のコメント",
+        postedBy: "01234567890123456789012346",
+        postedAt: "2024-01-01T12:00:00Z",
+        status: "assigned",
+      },
+    ];
+
+    elem.discussion = mockDiscussion;
+    elem.comments = deepComments;
+    elem.commentTypes = mockCommentTypes;
+    await elem.updateComplete;
+
+    const depth0Comment = elem.shadowRoot?.querySelector(
+      '.comment-item[data-depth="0"]'
+    );
+    const depth1Comment = elem.shadowRoot?.querySelector(
+      '.comment-item[data-depth="1"]'
+    );
+    const depth2Comment = elem.shadowRoot?.querySelector(
+      '.comment-item[data-depth="2"]'
+    );
+
+    expect(depth0Comment).not.toBeNull();
+    expect(depth1Comment).not.toBeNull();
+    expect(depth2Comment).not.toBeNull();
+  });
+
+  it("コメントにステータス変更ボタンが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    await elem.updateComplete;
+
+    const statusButton = elem.shadowRoot?.querySelector(".btn-status");
+    expect(statusButton).not.toBeNull();
+  });
+
+  it("ステータス変更ボタンクリック時にonChangeStatusが呼ばれること", async () => {
+    const onChangeStatus = vi.fn();
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    elem.onChangeStatus = onChangeStatus;
+    await elem.updateComplete;
+
+    const statusButton = elem.shadowRoot?.querySelector(".btn-status");
+    (statusButton as HTMLElement)?.click();
+
+    expect(onChangeStatus).toHaveBeenCalledWith("01234567890123456789012360");
+  });
+
+  it("コメントのステータスバッジが表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.comments = [mockComments[0]];
+    elem.commentTypes = mockCommentTypes;
+    await elem.updateComplete;
+
+    const statusBadge = elem.shadowRoot?.querySelector(".comment-status-badge");
+    expect(statusBadge).not.toBeNull();
+    expect(statusBadge?.textContent?.trim()).toBe("割り当て済み");
   });
 });
