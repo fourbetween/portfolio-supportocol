@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components-vite";
 import { html } from "lit";
-import type { NotesPanelPresenter } from "./notes_panel";
+import type { NotesPanelPresenter } from "./notes";
 
 const mockNotes = [
   {
@@ -28,7 +28,7 @@ const mockNotes = [
 ];
 
 const meta: Meta<NotesPanelPresenter> = {
-  title: "Page/Discussion/NotesPanel",
+  title: "presenter/panel/notes",
   component: "notes-panel-presenter",
   render: (args) => html`
     <div style="width: 300px; height: 500px;">

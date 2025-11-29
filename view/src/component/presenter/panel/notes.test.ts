@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import type { Note } from "../../../../model/discussion";
-import type { NotesPanelPresenter } from "./notes_panel";
+import type { Note } from "../../../model/discussion";
+import type { NotesPanelPresenter } from "./notes";
 
 describe("NotesPanelPresenter", async () => {
   let elem: NotesPanelPresenter;
