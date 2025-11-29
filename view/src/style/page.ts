@@ -20,7 +20,6 @@ export const pageHostStyle: CSSResultGroup = css`
  */
 export const pageContainerStyle: CSSResultGroup = css`
   .container {
-    margin: 0 auto;
     padding: 24px;
   }
 

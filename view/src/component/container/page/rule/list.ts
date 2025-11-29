@@ -5,7 +5,6 @@ import { client } from "../../../../api/client";
 import { accountMethods } from "../../../../model/account";
 import type { Rule } from "../../../../model/rule";
 import { buildPath } from "../../../../routes";
-import { baseStyle } from "../../../../style/base";
 
 @customElement("list-rule-page-container")
 export class ListRulePageContainer extends LitElement {
@@ -54,6 +53,4 @@ export class ListRulePageContainer extends LitElement {
     });
     this.dispatchEvent(event);
   };
-
-  static styles = [baseStyle];
 }

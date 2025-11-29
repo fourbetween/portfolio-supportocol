@@ -8,7 +8,6 @@ import { routerContext } from "../../../../context/router";
 import { accountMethods } from "../../../../model/account";
 import type { Rule } from "../../../../model/rule";
 import { navigate } from "../../../../routes";
-import { baseStyle } from "../../../../style/base";
 import type { CreateDiscussionFormData } from "../../../presenter/page/discussion/create";
 
 @customElement("create-discussion-page-container")
@@ -87,6 +86,4 @@ export class CreateDiscussionPageContainer extends LitElement {
       navigate(this.router, "discussion_list");
     }
   };
-
-  static styles = [baseStyle];
 }

@@ -9,7 +9,6 @@ import { accountMethods } from "../../../../model/account";
 import type { Discussion } from "../../../../model/discussion";
 import type { Project } from "../../../../model/project";
 import { buildPath, navigate } from "../../../../routes";
-import { baseStyle } from "../../../../style/base";
 import type { ConfirmPopupPresenter } from "../../../presenter/popup/confirm";
 import type { EditProjectPopupPresenter } from "../../../presenter/popup/project/edit";
 
@@ -158,6 +157,4 @@ export class ItemProjectPageContainer extends LitElement {
   private handleCancelDelete = () => {
     this.confirmPopup.close();
   };
-
-  static styles = [baseStyle];
 }

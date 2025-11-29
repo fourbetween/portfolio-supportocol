@@ -543,6 +543,9 @@ export class ItemDiscussionPagePresenter extends LitElement {
       .child-comments {
         margin-top: 16px;
         padding-left: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
       }
 
       .child-comment-group {

@@ -5,7 +5,6 @@ import { client } from "../../../../api/client";
 import { accountMethods } from "../../../../model/account";
 import type { Discussion } from "../../../../model/discussion";
 import { buildPath } from "../../../../routes";
-import { baseStyle } from "../../../../style/base";
 
 @customElement("list-discussion-page-container")
 export class ListDiscussionPageContainer extends LitElement {
@@ -62,6 +61,4 @@ export class ListDiscussionPageContainer extends LitElement {
       );
     }
   };
-
-  static styles = [baseStyle];
 }

@@ -6,7 +6,6 @@ import { accountMethods } from "../../../model/account";
 import type { Discussion } from "../../../model/discussion";
 import type { Project } from "../../../model/project";
 import { buildPath } from "../../../routes";
-import { baseStyle } from "../../../style/base";
 import type { CreateProjectPopupPresenter } from "../../presenter/popup/project/create";
 
 @customElement("dashboard-page-container")
@@ -100,6 +99,4 @@ export class DashboardPageContainer extends LitElement {
   private getDiscussionLink = (id: string): string => {
     return buildPath("discussion_item", { id });
   };
-
-  static styles = [baseStyle];
 }
