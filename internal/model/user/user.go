@@ -1,6 +1,9 @@
 package user
 
 import (
+	"fmt"
+
+	"github.com/fourbetween/app-supportocol/internal"
 	"github.com/fourbetween/app-supportocol/internal/model/discussion"
 	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
@@ -165,6 +168,14 @@ func (u *User) UpdateRule(params UpdateRuleParams) (*rule.Rule, error) {
 		return nil, err
 	}
 
+	exists, err := u.discussionRepo.ExistsByRuleID(params.RuleID)
+	if err != nil {
+		return nil, err
+	}
+	if exists {
+		return nil, fmt.Errorf("rule is referenced by discussion: %w", internal.ErrConflict)
+	}
+
 	if err := r.Update(rule.UpdateParams{
 		Name:             params.Name,
 		Description:      params.Description,
@@ -192,6 +203,14 @@ func (u *User) DeleteRule(params DeleteRuleParams) error {
 	})
 	if err != nil {
 		return err
+	}
+
+	exists, err := u.discussionRepo.ExistsByRuleID(params.RuleID)
+	if err != nil {
+		return err
+	}
+	if exists {
+		return fmt.Errorf("rule is referenced by discussion: %w", internal.ErrConflict)
 	}
 
 	return r.Delete()

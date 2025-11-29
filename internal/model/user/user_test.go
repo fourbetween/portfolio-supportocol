@@ -1,6 +1,7 @@
 package user_test
 
 import (
+	"errors"
 	"testing"
 	"time"
 
@@ -613,6 +614,7 @@ func TestUser_UpdateRule(t *testing.T) {
 					ID:        "existing-rule-id",
 					CreatedBy: "test-user-id",
 				}).Return(existingRule, nil)
+				con.DiscussionRepo.EXPECT().ExistsByRuleID("existing-rule-id").Return(false, nil)
 				con.RuleRepo.EXPECT().Save(gomock.Any()).Return(nil)
 			},
 			verify: func(t *testing.T, got *rule.Rule, err error) {
@@ -655,6 +657,40 @@ func TestUser_UpdateRule(t *testing.T) {
 				}
 				if err != internal.ErrNotFound {
 					t.Errorf("UpdateRule() error = %v, want %v", err, internal.ErrNotFound)
+				}
+			},
+		},
+		{
+			name: "ルールが議論から参照されている場合にコンフリクトエラーを返すこと",
+			params: user.UpdateRuleParams{
+				RuleID:      "referenced-rule-id",
+				Name:        "更新されたルール名",
+				Description: "更新されたルールの説明",
+			},
+			setup: func(con *container) {
+				existingRule := con.RuleFac.BuildRule(rule.BuildRuleParams{
+					ID: "referenced-rule-id",
+					NewRuleParams: rule.NewRuleParams{
+						Name:        "元のルール名",
+						Description: "元のルールの説明",
+						CreatedBy:   "test-user-id",
+						CreatedAt:   fixedTime,
+					},
+				})
+				con.RuleRepo.EXPECT().Load(rule.LoadParams{
+					ID:        "referenced-rule-id",
+					CreatedBy: "test-user-id",
+				}).Return(existingRule, nil)
+				con.DiscussionRepo.EXPECT().ExistsByRuleID("referenced-rule-id").Return(true, nil)
+			},
+			verify: func(t *testing.T, got *rule.Rule, err error) {
+				t.Helper()
+				if err == nil {
+					t.Error("UpdateRule() should return error")
+					return
+				}
+				if !errors.Is(err, internal.ErrConflict) {
+					t.Errorf("UpdateRule() error = %v, want %v", err, internal.ErrConflict)
 				}
 			},
 		},
@@ -706,6 +742,7 @@ func TestUser_DeleteRule(t *testing.T) {
 					ID:        "existing-rule-id",
 					CreatedBy: "test-user-id",
 				}).Return(existingRule, nil)
+				con.DiscussionRepo.EXPECT().ExistsByRuleID("existing-rule-id").Return(false, nil)
 				con.RuleRepo.EXPECT().Delete(gomock.Any()).Return(nil)
 			},
 			verify: func(t *testing.T, err error) {
@@ -732,6 +769,35 @@ func TestUser_DeleteRule(t *testing.T) {
 				}
 				if err != internal.ErrNotFound {
 					t.Errorf("DeleteRule() error = %v, want %v", err, internal.ErrNotFound)
+				}
+			},
+		},
+		{
+			name:   "ルールが議論から参照されている場合にコンフリクトエラーを返すこと",
+			ruleID: "referenced-rule-id",
+			setup: func(con *container) {
+				existingRule := con.RuleFac.BuildRule(rule.BuildRuleParams{
+					ID: "referenced-rule-id",
+					NewRuleParams: rule.NewRuleParams{
+						Name:      "参照されているルール",
+						CreatedBy: "test-user-id",
+						CreatedAt: fixedTime,
+					},
+				})
+				con.RuleRepo.EXPECT().Load(rule.LoadParams{
+					ID:        "referenced-rule-id",
+					CreatedBy: "test-user-id",
+				}).Return(existingRule, nil)
+				con.DiscussionRepo.EXPECT().ExistsByRuleID("referenced-rule-id").Return(true, nil)
+			},
+			verify: func(t *testing.T, err error) {
+				t.Helper()
+				if err == nil {
+					t.Error("DeleteRule() should return error")
+					return
+				}
+				if !errors.Is(err, internal.ErrConflict) {
+					t.Errorf("DeleteRule() error = %v, want %v", err, internal.ErrConflict)
 				}
 			},
 		},
