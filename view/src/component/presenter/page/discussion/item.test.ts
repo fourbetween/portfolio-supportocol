@@ -504,8 +504,10 @@ describe("ItemDiscussionPagePresenter", async () => {
     elem.rule = mockRule;
     await elem.updateComplete;
 
-    const details = elem.shadowRoot?.querySelector(".rule-details");
-    expect(details).not.toBeNull();
+    const ruleDetails = elem.shadowRoot?.querySelector(
+      "discussion-rule-details-presenter"
+    );
+    expect(ruleDetails).not.toBeNull();
     await expect.element(page.getByText("ルール: 議論ルール")).toBeVisible();
   });
 
@@ -514,8 +516,11 @@ describe("ItemDiscussionPagePresenter", async () => {
     elem.rule = mockRule;
     await elem.updateComplete;
 
-    // details要素を開く
-    const details = elem.shadowRoot?.querySelector(
+    // 子コンポーネント内のdetails要素を開く
+    const ruleDetailsPresenter = elem.shadowRoot?.querySelector(
+      "discussion-rule-details-presenter"
+    );
+    const details = ruleDetailsPresenter?.shadowRoot?.querySelector(
       ".rule-details"
     ) as HTMLDetailsElement;
     details.open = true;
@@ -529,14 +534,17 @@ describe("ItemDiscussionPagePresenter", async () => {
     elem.rule = mockRule;
     await elem.updateComplete;
 
-    const details = elem.shadowRoot?.querySelector(
+    const ruleDetailsPresenter = elem.shadowRoot?.querySelector(
+      "discussion-rule-details-presenter"
+    );
+    const details = ruleDetailsPresenter?.shadowRoot?.querySelector(
       ".rule-details"
     ) as HTMLDetailsElement;
     details.open = true;
     await elem.updateComplete;
 
     await expect.element(page.getByText("コメント種類")).toBeVisible();
-    const commentTypeList = elem.shadowRoot?.querySelector(
+    const commentTypeList = ruleDetailsPresenter?.shadowRoot?.querySelector(
       ".rule-comment-type-list"
     );
     expect(commentTypeList).not.toBeNull();
@@ -551,7 +559,10 @@ describe("ItemDiscussionPagePresenter", async () => {
     elem.rule = mockRule;
     await elem.updateComplete;
 
-    const details = elem.shadowRoot?.querySelector(
+    const ruleDetailsPresenter = elem.shadowRoot?.querySelector(
+      "discussion-rule-details-presenter"
+    );
+    const details = ruleDetailsPresenter?.shadowRoot?.querySelector(
       ".rule-details"
     ) as HTMLDetailsElement;
     details.open = true;
@@ -559,7 +570,8 @@ describe("ItemDiscussionPagePresenter", async () => {
 
     await expect.element(page.getByText("経路")).toBeVisible();
     // 経路アイテムが表示されていること
-    const pathList = elem.shadowRoot?.querySelector(".rule-path-list");
+    const pathList =
+      ruleDetailsPresenter?.shadowRoot?.querySelector(".rule-path-list");
     expect(pathList).not.toBeNull();
     const pathItems = pathList?.querySelectorAll(".rule-path-item");
     expect(pathItems?.length).toBe(2);
