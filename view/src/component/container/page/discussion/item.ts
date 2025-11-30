@@ -356,15 +356,18 @@ export class ItemDiscussionPageContainer extends LitElement {
   }) => {
     if (!this.selectedCommentIdForIssue) return;
 
-    const { error } = await client.POST("/discussions/{discussionId}/issues", {
-      headers: await accountMethods.authHeader(),
-      params: { path: { discussionId: this.discussionId } },
-      body: {
-        commentId: this.selectedCommentIdForIssue,
-        issueType: data.issueType,
-        description: data.description,
-      },
-    });
+    const { data: createdIssue, error } = await client.POST(
+      "/discussions/{discussionId}/issues",
+      {
+        headers: await accountMethods.authHeader(),
+        params: { path: { discussionId: this.discussionId } },
+        body: {
+          commentId: this.selectedCommentIdForIssue,
+          issueType: data.issueType,
+          description: data.description,
+        },
+      }
+    );
 
     if (error) {
       console.error("Failed to create issue:", error.message);
@@ -373,5 +376,6 @@ export class ItemDiscussionPageContainer extends LitElement {
 
     this.createIssuePopup.close();
     this.selectedCommentIdForIssue = null;
+    this.issues = [...this.issues, createdIssue];
   };
 }
