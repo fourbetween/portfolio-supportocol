@@ -2,8 +2,10 @@ package discussion_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/model/discussion"
+	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
 	"github.com/fourbetween/app-supportocol/internal/service/id"
 	gomock "go.uber.org/mock/gomock"
@@ -13,6 +15,8 @@ type (
 	container struct {
 		DiscussionFac  *discussion.Factory
 		DiscussionRepo *discussion.MockRepository
+		RuleRepo       *rule.MockRepository
+		RuleFac        *rule.Factory
 	}
 )
 
@@ -22,14 +26,19 @@ func newContainer(t *testing.T) *container {
 	idSrv := id.NewULIDService()
 	clockSrv := clock.NewRealService()
 	discussionRepo := discussion.NewMockRepository(ctrl)
+	ruleRepo := rule.NewMockRepository(ctrl)
+	ruleFac := rule.NewFactory(ruleRepo, idSrv)
 	discussionFac := discussion.NewFactory(
 		discussionRepo,
 		idSrv,
 		clockSrv,
+		ruleRepo,
 	)
 	return &container{
 		DiscussionFac:  discussionFac,
 		DiscussionRepo: discussionRepo,
+		RuleRepo:       ruleRepo,
+		RuleFac:        ruleFac,
 	}
 }
 
@@ -112,7 +121,7 @@ func TestDiscussion_CreateComment(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "コメントを作成できること",
+			name: "ルートコメントを作成できること",
 			prepare: func(c *container) *discussion.Discussion {
 				d := c.DiscussionFac.NewDiscussion(discussion.NewDiscussionParams{
 					Theme:      "theme",
@@ -121,6 +130,17 @@ func TestDiscussion_CreateComment(t *testing.T) {
 					RuleID:     "ruleID",
 					CreatedBy:  "createdBy",
 				})
+				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
+					ID: "ruleID",
+					NewRuleParams: rule.NewRuleParams{
+						Name:      "test-rule",
+						CreatedAt: time.Now(),
+						CommentTypePaths: []rule.CommentTypePath{
+							{FromCommentTypeID: "", ToCommentTypeID: "type1"},
+						},
+					},
+				})
+				c.RuleRepo.EXPECT().Load(rule.LoadParams{ID: "ruleID"}).Return(rl, nil)
 				c.DiscussionRepo.EXPECT().SaveComment(gomock.Any()).Return(nil)
 				return d
 			},
@@ -131,6 +151,124 @@ func TestDiscussion_CreateComment(t *testing.T) {
 				PostedBy:        "user1",
 			},
 			wantErr: false,
+		},
+		{
+			name: "ルールに違反するルートコメントはエラーになること",
+			prepare: func(c *container) *discussion.Discussion {
+				d := c.DiscussionFac.NewDiscussion(discussion.NewDiscussionParams{
+					Theme:      "theme",
+					Background: "background",
+					Conclusion: "conclusion",
+					RuleID:     "ruleID",
+					CreatedBy:  "createdBy",
+				})
+				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
+					ID: "ruleID",
+					NewRuleParams: rule.NewRuleParams{
+						Name:             "test-rule",
+						CreatedAt:        time.Now(),
+						CommentTypePaths: []rule.CommentTypePath{},
+					},
+				})
+				c.RuleRepo.EXPECT().Load(rule.LoadParams{ID: "ruleID"}).Return(rl, nil)
+				return d
+			},
+			params: discussion.CreateCommentParams{
+				ParentCommentID: "",
+				CommentTypeID:   "invalidType",
+				Content:         "test content",
+				PostedBy:        "user1",
+			},
+			wantErr: true,
+		},
+		{
+			name: "親コメントに対するコメントを作成できること",
+			prepare: func(c *container) *discussion.Discussion {
+				d := c.DiscussionFac.NewDiscussion(discussion.NewDiscussionParams{
+					Theme:      "theme",
+					Background: "background",
+					Conclusion: "conclusion",
+					RuleID:     "ruleID",
+					CreatedBy:  "createdBy",
+				})
+				parentComment := c.DiscussionFac.BuildComment(discussion.BuildCommentParams{
+					ID: "parentComment1",
+					NewCommentParams: discussion.NewCommentParams{
+						DiscussionID:  d.ID(),
+						CommentTypeID: "type1",
+						Content:       "parent content",
+						PostedBy:      "user1",
+					},
+					Status: discussion.CommentStatusUnassigned,
+				})
+				c.DiscussionRepo.EXPECT().LoadComment(discussion.LoadCommentParams{
+					DiscussionID: d.ID(),
+					CommentID:    "parentComment1",
+				}).Return(parentComment, nil)
+				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
+					ID: "ruleID",
+					NewRuleParams: rule.NewRuleParams{
+						Name:      "test-rule",
+						CreatedAt: time.Now(),
+						CommentTypePaths: []rule.CommentTypePath{
+							{FromCommentTypeID: "type1", ToCommentTypeID: "type2"},
+						},
+					},
+				})
+				c.RuleRepo.EXPECT().Load(rule.LoadParams{ID: "ruleID"}).Return(rl, nil)
+				c.DiscussionRepo.EXPECT().SaveComment(gomock.Any()).Return(nil)
+				return d
+			},
+			params: discussion.CreateCommentParams{
+				ParentCommentID: "parentComment1",
+				CommentTypeID:   "type2",
+				Content:         "child content",
+				PostedBy:        "user1",
+			},
+			wantErr: false,
+		},
+		{
+			name: "ルールに違反する子コメントはエラーになること",
+			prepare: func(c *container) *discussion.Discussion {
+				d := c.DiscussionFac.NewDiscussion(discussion.NewDiscussionParams{
+					Theme:      "theme",
+					Background: "background",
+					Conclusion: "conclusion",
+					RuleID:     "ruleID",
+					CreatedBy:  "createdBy",
+				})
+				parentComment := c.DiscussionFac.BuildComment(discussion.BuildCommentParams{
+					ID: "parentComment1",
+					NewCommentParams: discussion.NewCommentParams{
+						DiscussionID:  d.ID(),
+						CommentTypeID: "type1",
+						Content:       "parent content",
+						PostedBy:      "user1",
+					},
+					Status: discussion.CommentStatusUnassigned,
+				})
+				c.DiscussionRepo.EXPECT().LoadComment(discussion.LoadCommentParams{
+					DiscussionID: d.ID(),
+					CommentID:    "parentComment1",
+				}).Return(parentComment, nil)
+				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
+					ID: "ruleID",
+					NewRuleParams: rule.NewRuleParams{
+						Name:             "test-rule",
+						CreatedAt:        time.Now(),
+						CommentTypePaths: []rule.CommentTypePath{},
+					},
+				})
+				c.RuleRepo.EXPECT().Load(rule.LoadParams{ID: "ruleID"}).Return(rl, nil)
+				return d
+			},
+			params: discussion.CreateCommentParams{
+				ParentCommentID: "parentComment1",
+				CommentTypeID:   "invalidType",
+				Content:         "child content",
+				PostedBy:        "user1",
+			},
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {

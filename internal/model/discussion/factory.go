@@ -3,6 +3,7 @@ package discussion
 import (
 	"time"
 
+	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
 	"github.com/fourbetween/app-supportocol/internal/service/id"
 )
@@ -11,17 +12,20 @@ type Factory struct {
 	repo     Repository
 	idSrv    id.Service
 	clockSrv clock.Service
+	ruleRepo rule.Repository
 }
 
 func NewFactory(
 	repo Repository,
 	idSrv id.Service,
 	clockSrv clock.Service,
+	ruleRepo rule.Repository,
 ) *Factory {
 	return &Factory{
 		repo:     repo,
 		idSrv:    idSrv,
 		clockSrv: clockSrv,
+		ruleRepo: ruleRepo,
 	}
 }
 
@@ -65,6 +69,7 @@ func (f *Factory) BuildDiscussion(params BuildDiscussionParams) *Discussion {
 		status:                 params.Status,
 		repo:                   f.repo,
 		fac:                    f,
+		ruleRepo:               f.ruleRepo,
 	}
 }
 

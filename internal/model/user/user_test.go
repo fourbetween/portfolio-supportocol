@@ -46,7 +46,7 @@ func newContainer(t *testing.T) *container {
 
 	projectFac := project.NewFactory(projectRepo, idSrv)
 	ruleFac := rule.NewFactory(ruleRepo, idSrv)
-	discussionFac := discussion.NewFactory(discussionRepo, idSrv, clockSrv)
+	discussionFac := discussion.NewFactory(discussionRepo, idSrv, clockSrv, ruleRepo)
 	userFac := user.NewFactory(workbookRepo, projectRepo, ruleRepo, discussionRepo, projectFac, ruleFac, discussionFac, clockSrv)
 
 	return &container{
