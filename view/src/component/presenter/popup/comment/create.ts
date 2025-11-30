@@ -48,8 +48,8 @@ export class CreateCommentPopupPresenter extends LitElement {
     // 許可される子コメント種類（fromCommentTypeId）を取得
     const parentTypeId = this.fromCommentTypeId ?? "";
     const allowedChildTypeIds = this.rule.commentTypePaths
-      .filter((path) => path.toCommentTypeId === parentTypeId)
-      .map((path) => path.fromCommentTypeId);
+      .filter((path) => path.parentCommentTypeId === parentTypeId)
+      .map((path) => path.childCommentTypeId);
 
     return this.commentTypes.filter((type) =>
       allowedChildTypeIds.includes(type.id)

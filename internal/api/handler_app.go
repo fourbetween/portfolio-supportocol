@@ -212,6 +212,7 @@ func (h *appHandler) RulesPost(ctx context.Context, req oas.OptRulesPostReq) (*o
 			for i, v := range req.Value.CommentTypes {
 				cts[i] = rule.CommentType{
 					ID:          string(v.ID),
+					No:          v.No,
 					Name:        v.Name,
 					Description: v.Description,
 					Color:       v.Color,
@@ -220,8 +221,8 @@ func (h *appHandler) RulesPost(ctx context.Context, req oas.OptRulesPostReq) (*o
 			ctps := make([]rule.CommentTypePath, len(req.Value.CommentTypePaths))
 			for i, v := range req.Value.CommentTypePaths {
 				ctps[i] = rule.CommentTypePath{
-					FromCommentTypeID: string(v.FromCommentTypeId),
-					ToCommentTypeID:   string(v.ToCommentTypeId),
+					ChildCommentTypeID:  string(v.ChildCommentTypeId),
+					ParentCommentTypeID: string(v.ParentCommentTypeId),
 				}
 			}
 			item, err = u.CreateRule(user.CreateRuleParams{
@@ -281,6 +282,7 @@ func (h *appHandler) RulesRuleIdPut(ctx context.Context, req oas.OptRulesRuleIdP
 			for i, v := range req.Value.CommentTypes {
 				cts[i] = rule.CommentType{
 					ID:          string(v.ID),
+					No:          v.No,
 					Name:        v.Name,
 					Description: v.Description,
 					Color:       v.Color,
@@ -289,8 +291,8 @@ func (h *appHandler) RulesRuleIdPut(ctx context.Context, req oas.OptRulesRuleIdP
 			ctps := make([]rule.CommentTypePath, len(req.Value.CommentTypePaths))
 			for i, v := range req.Value.CommentTypePaths {
 				ctps[i] = rule.CommentTypePath{
-					FromCommentTypeID: string(v.FromCommentTypeId),
-					ToCommentTypeID:   string(v.ToCommentTypeId),
+					ChildCommentTypeID:  string(v.ChildCommentTypeId),
+					ParentCommentTypeID: string(v.ParentCommentTypeId),
 				}
 			}
 			item, err = u.UpdateRule(user.UpdateRuleParams{
@@ -660,7 +662,7 @@ func (h *appHandler) loadAccount(ctx context.Context, con *Container) *user.User
 
 func (h *appHandler) toOasWorkbook(item *workbook.Workbook) oas.Workbook {
 	return oas.Workbook{
-		ID:     oas.ID(item.ID()),
+		ID:     item.ID(),
 		Title:  item.Title(),
 		Status: oas.Status(item.Status()),
 	}
@@ -668,9 +670,9 @@ func (h *appHandler) toOasWorkbook(item *workbook.Workbook) oas.Workbook {
 
 func (h *appHandler) toOasProject(item *project.Project) oas.Project {
 	return oas.Project{
-		ID:        oas.ID(item.ID()),
+		ID:        item.ID(),
 		Name:      item.Name(),
-		CreatedBy: oas.ID(item.CreatedBy()),
+		CreatedBy: item.CreatedBy(),
 		CreatedAt: item.CreatedAt(),
 	}
 }
@@ -679,7 +681,8 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 	cts := make([]oas.CommentType, len(item.CommentTypes()))
 	for i, v := range item.CommentTypes() {
 		cts[i] = oas.CommentType{
-			ID:          oas.ID(v.ID),
+			ID:          v.ID,
+			No:          v.No,
 			Name:        v.Name,
 			Description: v.Description,
 			Color:       v.Color,
@@ -688,15 +691,15 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 	ctps := make([]oas.CommentTypePath, len(item.CommentTypePaths()))
 	for i, v := range item.CommentTypePaths() {
 		ctps[i] = oas.CommentTypePath{
-			FromCommentTypeId: oas.ID(v.FromCommentTypeID),
-			ToCommentTypeId:   oas.ID(v.ToCommentTypeID),
+			ChildCommentTypeId:  v.ChildCommentTypeID,
+			ParentCommentTypeId: v.ParentCommentTypeID,
 		}
 	}
 	return oas.Rule{
-		ID:               oas.ID(item.ID()),
+		ID:               item.ID(),
 		Name:             item.Name(),
 		Description:      item.Description(),
-		CreatedBy:        oas.ID(item.CreatedBy()),
+		CreatedBy:        item.CreatedBy(),
 		CreatedAt:        item.CreatedAt(),
 		CommentTypes:     cts,
 		CommentTypePaths: ctps,
@@ -705,14 +708,14 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 
 func (h *appHandler) toOasDiscussion(item *discussion.Discussion) oas.Discussion {
 	return oas.Discussion{
-		ID:                     oas.ID(item.ID()),
+		ID:                     item.ID(),
 		Theme:                  item.Theme(),
 		Background:             item.Background(),
 		Conclusion:             item.Conclusion(),
-		RuleId:                 oas.ID(item.RuleID()),
+		RuleId:                 item.RuleID(),
 		VisibilityLevel:        oas.VisibilityLevel(item.VisibilityLevel()),
 		CommentPermissionLevel: oas.CommentPermissionLevel(item.CommentPermissionLevel()),
-		CreatedBy:              oas.ID(item.CreatedBy()),
+		CreatedBy:              item.CreatedBy(),
 		CreatedAt:              item.CreatedAt(),
 		Status:                 oas.DiscussionStatus(item.Status()),
 	}
@@ -720,12 +723,12 @@ func (h *appHandler) toOasDiscussion(item *discussion.Discussion) oas.Discussion
 
 func (h *appHandler) toOasComment(item *discussion.Comment) oas.Comment {
 	return oas.Comment{
-		ID:              oas.ID(item.ID()),
-		DiscussionId:    oas.ID(item.DiscussionID()),
+		ID:              item.ID(),
+		DiscussionId:    item.DiscussionID(),
 		ParentCommentId: item.ParentCommentID(),
-		CommentTypeId:   oas.ID(item.CommentTypeID()),
+		CommentTypeId:   item.CommentTypeID(),
 		Content:         item.Content(),
-		PostedBy:        oas.ID(item.PostedBy()),
+		PostedBy:        item.PostedBy(),
 		PostedAt:        item.PostedAt(),
 		Status:          oas.CommentStatus(item.Status()),
 	}
@@ -733,21 +736,21 @@ func (h *appHandler) toOasComment(item *discussion.Comment) oas.Comment {
 
 func (h *appHandler) toOasIssue(item *discussion.Issue) oas.Issue {
 	return oas.Issue{
-		ID:          oas.ID(item.ID()),
-		CommentId:   oas.ID(item.CommentID()),
+		ID:          item.ID(),
+		CommentId:   item.CommentID(),
 		IssueType:   oas.IssueIssueType(item.IssueType()),
 		Description: item.Description(),
-		CreatedBy:   oas.ID(item.CreatedBy()),
+		CreatedBy:   item.CreatedBy(),
 		CreatedAt:   item.CreatedAt(),
 	}
 }
 
 func (h *appHandler) toOasNote(item *discussion.Note) oas.Note {
 	return oas.Note{
-		ID:           oas.ID(item.ID()),
-		DiscussionId: oas.ID(item.DiscussionID()),
+		ID:           item.ID(),
+		DiscussionId: item.DiscussionID(),
 		Content:      item.Content(),
-		PostedBy:     oas.ID(item.PostedBy()),
+		PostedBy:     item.PostedBy(),
 		PostedAt:     item.PostedAt(),
 	}
 }

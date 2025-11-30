@@ -47,11 +47,11 @@ func TestRule_Save(t *testing.T) {
 		{
 			name: "CommentTypesとCommentTypePathsを含むルールを保存できること",
 			commentTypes: []rule.CommentType{
-				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
-				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+				{ID: "ct1", No: 1, Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "ct2", No: 2, Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
-				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct2"},
+				{ChildCommentTypeID: "ct1", ParentCommentTypeID: "ct2"},
 			},
 			wantErr: false,
 		},
@@ -123,11 +123,11 @@ func TestRule_CommentTypesAndPaths(t *testing.T) {
 		{
 			name: "コメントタイプとパスを取得できること",
 			commentTypes: []rule.CommentType{
-				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
-				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+				{ID: "ct1", No: 1, Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "ct2", No: 2, Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
-				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct2"},
+				{ChildCommentTypeID: "ct1", ParentCommentTypeID: "ct2"},
 			},
 			wantCommentTypesLen:     2,
 			wantCommentTypePathsLen: 1,
@@ -159,6 +159,11 @@ func TestRule_CommentTypesAndPaths(t *testing.T) {
 			if len(gotCommentTypes) != tt.wantCommentTypesLen {
 				t.Errorf("CommentTypes() len = %v, want %v", len(gotCommentTypes), tt.wantCommentTypesLen)
 			}
+			for i, ct := range gotCommentTypes {
+				if ct.No != tt.commentTypes[i].No {
+					t.Errorf("CommentTypes()[%d].No = %v, want %v", i, ct.No, tt.commentTypes[i].No)
+				}
+			}
 
 			gotCommentTypePaths := r.CommentTypePaths()
 			if len(gotCommentTypePaths) != tt.wantCommentTypePathsLen {
@@ -182,7 +187,7 @@ func TestRule_Validate(t *testing.T) {
 				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
-				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct2"},
+				{ChildCommentTypeID: "ct1", ParentCommentTypeID: "ct2"},
 			},
 			wantErr: false,
 		},
@@ -198,7 +203,7 @@ func TestRule_Validate(t *testing.T) {
 				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
-				{FromCommentTypeID: "ct999", ToCommentTypeID: "ct1"},
+				{ChildCommentTypeID: "ct999", ParentCommentTypeID: "ct1"},
 			},
 			wantErr: true,
 		},
@@ -208,7 +213,7 @@ func TestRule_Validate(t *testing.T) {
 				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
-				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct999"},
+				{ChildCommentTypeID: "ct1", ParentCommentTypeID: "ct999"},
 			},
 			wantErr: true,
 		},
@@ -264,7 +269,7 @@ func TestRule_Update(t *testing.T) {
 					{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
 				},
 				CommentTypePaths: []rule.CommentTypePath{
-					{FromCommentTypeID: "ct1", ToCommentTypeID: "ct1"},
+					{ChildCommentTypeID: "ct1", ParentCommentTypeID: "ct1"},
 				},
 			},
 			wantErr: false,
@@ -292,7 +297,7 @@ func TestRule_Update(t *testing.T) {
 					{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
 				},
 				CommentTypePaths: []rule.CommentTypePath{
-					{FromCommentTypeID: "ct1", ToCommentTypeID: "ct999"},
+					{ChildCommentTypeID: "ct1", ParentCommentTypeID: "ct999"},
 				},
 			},
 			wantErr: true,
@@ -347,7 +352,7 @@ func TestRule_IsValidPath(t *testing.T) {
 				{ID: "evidence", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
-				{FromCommentTypeID: "evidence", ToCommentTypeID: "claim"},
+				{ChildCommentTypeID: "evidence", ParentCommentTypeID: "claim"},
 			},
 			fromCommentTypeID: "evidence", // 子コメント
 			toCommentTypeID:   "claim",    // 親コメント
@@ -361,7 +366,7 @@ func TestRule_IsValidPath(t *testing.T) {
 				{ID: "evidence", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
-				{FromCommentTypeID: "evidence", ToCommentTypeID: "claim"},
+				{ChildCommentTypeID: "evidence", ParentCommentTypeID: "claim"},
 			},
 			fromCommentTypeID: "claim",    // 子コメント（しかしこの方向は許可されていない）
 			toCommentTypeID:   "evidence", // 親コメント
@@ -374,7 +379,7 @@ func TestRule_IsValidPath(t *testing.T) {
 				{ID: "claim", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
-				{FromCommentTypeID: "claim", ToCommentTypeID: ""},
+				{ChildCommentTypeID: "claim", ParentCommentTypeID: ""},
 			},
 			fromCommentTypeID: "claim", // ルートとして追加する子コメント
 			toCommentTypeID:   "",      // 親がない（ルート）

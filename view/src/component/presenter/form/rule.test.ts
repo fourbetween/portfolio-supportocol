@@ -15,12 +15,14 @@ describe("RuleFormPresenter", async () => {
     commentTypes: [
       {
         id: "01234567890123456789012347",
+        no: 0,
         name: "主張",
         description: "自分の意見や提案を述べるコメント",
         color: "#0969da",
       },
       {
         id: "01234567890123456789012348",
+        no: 1,
         name: "根拠",
         description: "主張を裏付ける根拠",
         color: "#1a7f37",
@@ -28,8 +30,8 @@ describe("RuleFormPresenter", async () => {
     ],
     commentTypePaths: [
       {
-        fromCommentTypeId: "01234567890123456789012347",
-        toCommentTypeId: "01234567890123456789012348",
+        childCommentTypeId: "01234567890123456789012347",
+        parentCommentTypeId: "01234567890123456789012348",
       },
     ],
   };

@@ -26,12 +26,14 @@ describe("RuleDetailsPresenter", async () => {
     commentTypes: [
       {
         id: "type1",
+        no: 0,
         name: "主張",
         description: "議論の主張を述べる",
         color: "#0969da",
       },
       {
         id: "type2",
+        no: 1,
         name: "根拠",
         description: "主張を裏付ける根拠を述べる",
         color: "#2da44e",
@@ -39,8 +41,8 @@ describe("RuleDetailsPresenter", async () => {
     ],
     commentTypePaths: [
       {
-        fromCommentTypeId: "type1",
-        toCommentTypeId: "type2",
+        childCommentTypeId: "type1",
+        parentCommentTypeId: "type2",
       },
     ],
   };

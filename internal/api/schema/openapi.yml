@@ -8,10 +8,6 @@ components:
       type: http
       scheme: bearer
   schemas:
-    id:
-      type: string
-      minLength: 26
-      maxLength: 26
     status:
       type: string
       enum:
@@ -21,13 +17,13 @@ components:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          type: string
         title:
           type: string
         status:
           $ref: "#/components/schemas/status"
         ownerId:
-          $ref: "#/components/schemas/id"
+          type: string
       required:
         - id
         - title
@@ -49,11 +45,11 @@ components:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          type: string
         name:
           type: string
         createdBy:
-          $ref: "#/components/schemas/id"
+          type: string
         createdAt:
           type: string
           format: date-time
@@ -66,7 +62,10 @@ components:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          type: string
+        no:
+          type: integer
+          minimum: 0
         name:
           type: string
         description:
@@ -75,30 +74,31 @@ components:
           type: string
       required:
         - id
+        - no
         - name
         - description
         - color
     commentTypePath:
       type: object
       properties:
-        fromCommentTypeId:
-          $ref: "#/components/schemas/id"
-        toCommentTypeId:
-          $ref: "#/components/schemas/id"
+        childCommentTypeId:
+          type: string
+        parentCommentTypeId:
+          type: string
       required:
-        - fromCommentTypeId
-        - toCommentTypeId
+        - childCommentTypeId
+        - parentCommentTypeId
     rule:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          type: string
         name:
           type: string
         description:
           type: string
         createdBy:
-          $ref: "#/components/schemas/id"
+          type: string
         createdAt:
           type: string
           format: date-time
@@ -134,7 +134,7 @@ components:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          type: string
         theme:
           type: string
         background:
@@ -142,13 +142,13 @@ components:
         conclusion:
           type: string
         ruleId:
-          $ref: "#/components/schemas/id"
+          type: string
         visibilityLevel:
           $ref: "#/components/schemas/visibilityLevel"
         commentPermissionLevel:
           $ref: "#/components/schemas/commentPermissionLevel"
         createdBy:
-          $ref: "#/components/schemas/id"
+          type: string
         createdAt:
           type: string
           format: date-time
@@ -180,17 +180,17 @@ components:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          type: string
         discussionId:
-          $ref: "#/components/schemas/id"
+          type: string
         parentCommentId:
           type: string
         commentTypeId:
-          $ref: "#/components/schemas/id"
+          type: string
         content:
           type: string
         postedBy:
-          $ref: "#/components/schemas/id"
+          type: string
         postedAt:
           type: string
           format: date-time
@@ -209,9 +209,9 @@ components:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          type: string
         commentId:
-          $ref: "#/components/schemas/id"
+          type: string
         issueType:
           type: string
           enum:
@@ -220,7 +220,7 @@ components:
         description:
           type: string
         createdBy:
-          $ref: "#/components/schemas/id"
+          type: string
         createdAt:
           type: string
           format: date-time
@@ -235,13 +235,13 @@ components:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          type: string
         discussionId:
-          $ref: "#/components/schemas/id"
+          type: string
         content:
           type: string
         postedBy:
-          $ref: "#/components/schemas/id"
+          type: string
         postedAt:
           type: string
           format: date-time
@@ -352,7 +352,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: projectId
           in: path
@@ -375,7 +375,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: projectId
           in: path
@@ -408,7 +408,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: projectId
           in: path
@@ -488,7 +488,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: ruleId
           in: path
@@ -511,7 +511,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: ruleId
           in: path
@@ -557,7 +557,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: ruleId
           in: path
@@ -577,7 +577,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: false
           name: projectId
           in: query
@@ -613,7 +613,7 @@ paths:
                 conclusion:
                   type: string
                 ruleId:
-                  $ref: "#/components/schemas/id"
+                  type: string
                 visibilityLevel:
                   $ref: "#/components/schemas/visibilityLevel"
                 commentPermissionLevel:
@@ -645,7 +645,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
@@ -668,7 +668,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
@@ -685,7 +685,7 @@ paths:
                 conclusion:
                   type: string
                 ruleId:
-                  $ref: "#/components/schemas/id"
+                  type: string
                 visibilityLevel:
                   $ref: "#/components/schemas/visibilityLevel"
                 commentPermissionLevel:
@@ -723,7 +723,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
@@ -743,7 +743,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
@@ -768,7 +768,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
@@ -781,7 +781,7 @@ paths:
                 parentCommentId:
                   type: string
                 commentTypeId:
-                  $ref: "#/components/schemas/id"
+                  type: string
                 content:
                   type: string
               required:
@@ -808,12 +808,12 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: commentId
           in: path
@@ -849,12 +849,12 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: commentId
           in: path
@@ -874,7 +874,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
@@ -899,7 +899,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
@@ -910,7 +910,7 @@ paths:
               type: object
               properties:
                 commentId:
-                  $ref: "#/components/schemas/id"
+                  type: string
                 issueType:
                   type: string
                   enum:
@@ -942,12 +942,12 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: issueId
           in: path
@@ -986,12 +986,12 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: issueId
           in: path
@@ -1011,7 +1011,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
@@ -1036,7 +1036,7 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
@@ -1070,12 +1070,12 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: noteId
           in: path
@@ -1108,12 +1108,12 @@ paths:
         - cognito_auth: []
       parameters:
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: discussionId
           in: path
         - schema:
-            $ref: "#/components/schemas/id"
+            type: string
           required: true
           name: noteId
           in: path

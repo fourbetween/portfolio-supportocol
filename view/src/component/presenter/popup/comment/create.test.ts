@@ -10,18 +10,21 @@ describe("CreateCommentPopupPresenter", async () => {
   const mockCommentTypes: CommentType[] = [
     {
       id: "01234567890123456789012351",
+      no: 0,
       name: "主張",
       description: "議論の主張を述べる",
       color: "#0969da",
     },
     {
       id: "01234567890123456789012352",
+      no: 1,
       name: "根拠",
       description: "主張を裏付ける根拠を述べる",
       color: "#2da44e",
     },
     {
       id: "01234567890123456789012353",
+      no: 2,
       name: "反論",
       description: "反論を述べる",
       color: "#cf222e",
@@ -38,18 +41,18 @@ describe("CreateCommentPopupPresenter", async () => {
     commentTypePaths: [
       {
         // 主張（子）→ ルート（親）：ルートに対して主張で投稿可能
-        fromCommentTypeId: "01234567890123456789012351",
-        toCommentTypeId: "",
+        childCommentTypeId: "01234567890123456789012351",
+        parentCommentTypeId: "",
       },
       {
         // 根拠（子）→ 主張（親）：主張に対して根拠で返信可能
-        fromCommentTypeId: "01234567890123456789012352",
-        toCommentTypeId: "01234567890123456789012351",
+        childCommentTypeId: "01234567890123456789012352",
+        parentCommentTypeId: "01234567890123456789012351",
       },
       {
         // 反論（子）→ 主張（親）：主張に対して反論で返信可能
-        fromCommentTypeId: "01234567890123456789012353",
-        toCommentTypeId: "01234567890123456789012351",
+        childCommentTypeId: "01234567890123456789012353",
+        parentCommentTypeId: "01234567890123456789012351",
       },
     ],
   };

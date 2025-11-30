@@ -5,18 +5,21 @@ import type { CreateCommentPopupPresenter } from "./create";
 const mockCommentTypes = [
   {
     id: "01234567890123456789012351",
+    no: 0,
     name: "主張",
     description: "議論の主張を述べる",
     color: "#0969da",
   },
   {
     id: "01234567890123456789012352",
+    no: 1,
     name: "根拠",
     description: "主張を裏付ける根拠を述べる",
     color: "#2da44e",
   },
   {
     id: "01234567890123456789012353",
+    no: 2,
     name: "反論",
     description: "主張や根拠に対する反論を述べる",
     color: "#cf222e",

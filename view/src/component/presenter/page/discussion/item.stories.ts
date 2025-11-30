@@ -20,24 +20,28 @@ const mockDiscussion = {
 const mockCommentTypes = [
   {
     id: "01234567890123456789012351",
+    no: 0,
     name: "主張",
     description: "議論の主張を述べる",
     color: "#0969da",
   },
   {
     id: "01234567890123456789012352",
+    no: 1,
     name: "根拠",
     description: "主張を裏付ける根拠を述べる",
     color: "#2da44e",
   },
   {
     id: "01234567890123456789012353",
+    no: 2,
     name: "反論",
     description: "主張や根拠に対する反論を述べる",
     color: "#cf222e",
   },
   {
     id: "01234567890123456789012354",
+    no: 3,
     name: "質問",
     description: "主張や根拠に対する質問を述べる",
     color: "#bf8700",
@@ -182,32 +186,32 @@ const mockRule = {
   commentTypes: mockCommentTypes,
   commentTypePaths: [
     {
-      fromCommentTypeId: "01234567890123456789012351", // 主張
-      toCommentTypeId: "01234567890123456789012352", // 根拠
+      childCommentTypeId: "01234567890123456789012351", // 主張
+      parentCommentTypeId: "01234567890123456789012352", // 根拠
     },
     {
-      fromCommentTypeId: "01234567890123456789012351", // 主張
-      toCommentTypeId: "01234567890123456789012353", // 反論
+      childCommentTypeId: "01234567890123456789012351", // 主張
+      parentCommentTypeId: "01234567890123456789012353", // 反論
     },
     {
-      fromCommentTypeId: "01234567890123456789012351", // 主張
-      toCommentTypeId: "01234567890123456789012354", // 質問
+      childCommentTypeId: "01234567890123456789012351", // 主張
+      parentCommentTypeId: "01234567890123456789012354", // 質問
     },
     {
-      fromCommentTypeId: "01234567890123456789012352", // 根拠
-      toCommentTypeId: "01234567890123456789012353", // 反論
+      childCommentTypeId: "01234567890123456789012352", // 根拠
+      parentCommentTypeId: "01234567890123456789012353", // 反論
     },
     {
-      fromCommentTypeId: "01234567890123456789012352", // 根拠
-      toCommentTypeId: "01234567890123456789012354", // 質問
+      childCommentTypeId: "01234567890123456789012352", // 根拠
+      parentCommentTypeId: "01234567890123456789012354", // 質問
     },
     {
-      fromCommentTypeId: "01234567890123456789012353", // 反論
-      toCommentTypeId: "01234567890123456789012352", // 根拠
+      childCommentTypeId: "01234567890123456789012353", // 反論
+      parentCommentTypeId: "01234567890123456789012352", // 根拠
     },
     {
-      fromCommentTypeId: "01234567890123456789012354", // 質問
-      toCommentTypeId: "01234567890123456789012352", // 根拠
+      childCommentTypeId: "01234567890123456789012354", // 質問
+      parentCommentTypeId: "01234567890123456789012352", // 根拠
     },
   ],
 };
