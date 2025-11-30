@@ -416,3 +416,59 @@ export const FocusedOnDeepNested: Story = {
     issues: [],
   },
 };
+
+const mixedStatusComments = [
+  {
+    id: "01234567890123456789012400",
+    discussionId: "01234567890123456789012348",
+    parentCommentId: "",
+    commentTypeId: "01234567890123456789012351",
+    content: "このコメントは「割り当て済み」ステータスです。バッジは非表示。",
+    postedBy: "01234567890123456789012346",
+    postedAt: "2024-01-10T10:00:00Z",
+    status: "assigned" as const,
+  },
+  {
+    id: "01234567890123456789012401",
+    discussionId: "01234567890123456789012348",
+    parentCommentId: "",
+    commentTypeId: "01234567890123456789012352",
+    content:
+      "このコメントは「割り当て待ち」ステータスです。バッジが表示されます。",
+    postedBy: "01234567890123456789012346",
+    postedAt: "2024-01-10T11:00:00Z",
+    status: "unassigned" as const,
+  },
+  {
+    id: "01234567890123456789012402",
+    discussionId: "01234567890123456789012348",
+    parentCommentId: "",
+    commentTypeId: "01234567890123456789012353",
+    content:
+      "このコメントは「アーカイブ」ステータスです。バッジが表示されます。",
+    postedBy: "01234567890123456789012347",
+    postedAt: "2024-01-10T12:00:00Z",
+    status: "archived" as const,
+  },
+  {
+    id: "01234567890123456789012403",
+    discussionId: "01234567890123456789012348",
+    parentCommentId: "",
+    commentTypeId: "01234567890123456789012354",
+    content: "このコメントは「削除」ステータスです。バッジが表示されます。",
+    postedBy: "01234567890123456789012348",
+    postedAt: "2024-01-10T13:00:00Z",
+    status: "deleted" as const,
+  },
+];
+
+export const MixedStatusComments: Story = {
+  args: {
+    discussion: mockDiscussion,
+    comments: mixedStatusComments,
+    commentTypes: mockCommentTypes,
+    rule: mockRule,
+    notes: [],
+    issues: [],
+  },
+};

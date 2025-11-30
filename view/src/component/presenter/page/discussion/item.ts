@@ -153,9 +153,16 @@ export class ItemDiscussionPagePresenter extends LitElement {
           >
             ${commentType?.name ?? ""}
           </span>
-          <span class="comment-status-badge" data-status="${comment.status}">
-            ${STATUS_LABELS[comment.status]}
-          </span>
+          ${comment.status !== "assigned"
+            ? html`
+                <span
+                  class="comment-status-badge"
+                  data-status="${comment.status}"
+                >
+                  ${STATUS_LABELS[comment.status]}
+                </span>
+              `
+            : ""}
           ${issueCount > 0
             ? html`
                 <span
