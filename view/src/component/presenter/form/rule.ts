@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
+import { ulid } from "ulid";
 import type { Rule } from "../../../model/rule";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
@@ -146,7 +147,7 @@ export class RuleFormPresenter extends LitElement {
 
   private handleAddCommentTypeSubmit(e: CustomEvent) {
     const { name, description, color } = e.detail;
-    const newId = `temp-${Date.now()}`;
+    const newId = ulid();
     const newType = {
       id: newId,
       name,
