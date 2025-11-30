@@ -130,13 +130,14 @@ func TestDiscussion_CreateComment(t *testing.T) {
 					RuleID:     "ruleID",
 					CreatedBy:  "createdBy",
 				})
+				// From=子コメント(type1), To=親コメント(空=ルート)
 				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
 					ID: "ruleID",
 					NewRuleParams: rule.NewRuleParams{
 						Name:      "test-rule",
 						CreatedAt: time.Now(),
 						CommentTypePaths: []rule.CommentTypePath{
-							{FromCommentTypeID: "", ToCommentTypeID: "type1"},
+							{FromCommentTypeID: "type1", ToCommentTypeID: ""},
 						},
 					},
 				})
@@ -205,13 +206,14 @@ func TestDiscussion_CreateComment(t *testing.T) {
 					DiscussionID: d.ID(),
 					CommentID:    "parentComment1",
 				}).Return(parentComment, nil)
+				// From=子コメント(type2), To=親コメント(type1)
 				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
 					ID: "ruleID",
 					NewRuleParams: rule.NewRuleParams{
 						Name:      "test-rule",
 						CreatedAt: time.Now(),
 						CommentTypePaths: []rule.CommentTypePath{
-							{FromCommentTypeID: "type1", ToCommentTypeID: "type2"},
+							{FromCommentTypeID: "type2", ToCommentTypeID: "type1"},
 						},
 					},
 				})
@@ -269,6 +271,56 @@ func TestDiscussion_CreateComment(t *testing.T) {
 				PostedBy:        "user1",
 			},
 			wantErr: true,
+		},
+		{
+			// 経路のFrom=子コメント、To=親コメントの定義に従った正しいテスト
+			// 親コメント(type1) に対して 子コメント(type2) を追加する場合、
+			// パスは {FromCommentTypeID: "type2", ToCommentTypeID: "type1"} である必要がある
+			name: "経路がFrom=子To=親の定義に従っていればコメントを作成できること",
+			prepare: func(c *container) *discussion.Discussion {
+				d := c.DiscussionFac.NewDiscussion(discussion.NewDiscussionParams{
+					Theme:      "theme",
+					Background: "background",
+					Conclusion: "conclusion",
+					RuleID:     "ruleID",
+					CreatedBy:  "createdBy",
+				})
+				parentComment := c.DiscussionFac.BuildComment(discussion.BuildCommentParams{
+					ID: "parentComment1",
+					NewCommentParams: discussion.NewCommentParams{
+						DiscussionID:  d.ID(),
+						CommentTypeID: "claim",
+						Content:       "parent content",
+						PostedBy:      "user1",
+					},
+					Status: discussion.CommentStatusUnassigned,
+				})
+				c.DiscussionRepo.EXPECT().LoadComment(discussion.LoadCommentParams{
+					DiscussionID: d.ID(),
+					CommentID:    "parentComment1",
+				}).Return(parentComment, nil)
+				// From=子コメント(evidence), To=親コメント(claim)
+				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
+					ID: "ruleID",
+					NewRuleParams: rule.NewRuleParams{
+						Name:      "test-rule",
+						CreatedAt: time.Now(),
+						CommentTypePaths: []rule.CommentTypePath{
+							{FromCommentTypeID: "evidence", ToCommentTypeID: "claim"},
+						},
+					},
+				})
+				c.RuleRepo.EXPECT().Load(rule.LoadParams{ID: "ruleID"}).Return(rl, nil)
+				c.DiscussionRepo.EXPECT().SaveComment(gomock.Any()).Return(nil)
+				return d
+			},
+			params: discussion.CreateCommentParams{
+				ParentCommentID: "parentComment1",
+				CommentTypeID:   "evidence", // 子コメントのタイプ
+				Content:         "child content",
+				PostedBy:        "user1",
+			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
