@@ -399,15 +399,29 @@ describe("ItemDiscussionPagePresenter", async () => {
     expect(onChangeStatus).toHaveBeenCalledWith("01234567890123456789012360");
   });
 
-  it("コメントのステータスバッジが表示されること", async () => {
+  it("ステータスがassignedの場合はステータスバッジが非表示になること", async () => {
     elem.discussion = mockDiscussion;
-    elem.comments = [mockComments[0]];
+    elem.comments = [mockComments[0]]; // status: "assigned"
+    elem.commentTypes = mockCommentTypes;
+    await elem.updateComplete;
+
+    const statusBadge = elem.shadowRoot?.querySelector(".comment-status-badge");
+    expect(statusBadge).toBeNull();
+  });
+
+  it("ステータスがassigned以外の場合はステータスバッジが表示されること", async () => {
+    const unassignedComment: Comment = {
+      ...mockComments[0],
+      status: "unassigned",
+    };
+    elem.discussion = mockDiscussion;
+    elem.comments = [unassignedComment];
     elem.commentTypes = mockCommentTypes;
     await elem.updateComplete;
 
     const statusBadge = elem.shadowRoot?.querySelector(".comment-status-badge");
     expect(statusBadge).not.toBeNull();
-    expect(statusBadge?.textContent?.trim()).toBe("割り当て済み");
+    expect(statusBadge?.textContent?.trim()).toBe("割り当て待ち");
   });
 
   it("ノートパネルが表示されること", async () => {
@@ -505,7 +519,7 @@ describe("ItemDiscussionPagePresenter", async () => {
     await elem.updateComplete;
 
     const ruleDetails = elem.shadowRoot?.querySelector(
-      "discussion-rule-details-presenter"
+      "rule-details-presenter"
     );
     expect(ruleDetails).not.toBeNull();
     await expect.element(page.getByText("ルール: 議論ルール")).toBeVisible();
@@ -518,7 +532,7 @@ describe("ItemDiscussionPagePresenter", async () => {
 
     // 子コンポーネント内のdetails要素を開く
     const ruleDetailsPresenter = elem.shadowRoot?.querySelector(
-      "discussion-rule-details-presenter"
+      "rule-details-presenter"
     );
     const details = ruleDetailsPresenter?.shadowRoot?.querySelector(
       ".rule-details"
@@ -535,7 +549,7 @@ describe("ItemDiscussionPagePresenter", async () => {
     await elem.updateComplete;
 
     const ruleDetailsPresenter = elem.shadowRoot?.querySelector(
-      "discussion-rule-details-presenter"
+      "rule-details-presenter"
     );
     const details = ruleDetailsPresenter?.shadowRoot?.querySelector(
       ".rule-details"
@@ -560,7 +574,7 @@ describe("ItemDiscussionPagePresenter", async () => {
     await elem.updateComplete;
 
     const ruleDetailsPresenter = elem.shadowRoot?.querySelector(
-      "discussion-rule-details-presenter"
+      "rule-details-presenter"
     );
     const details = ruleDetailsPresenter?.shadowRoot?.querySelector(
       ".rule-details"
