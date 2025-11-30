@@ -4,6 +4,7 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
 import { routerContext } from "../../../../context/router";
+import { showErrorToast } from "../../../../event/toast";
 import { accountMethods } from "../../../../model/account";
 import type { Rule } from "../../../../model/rule";
 import { navigate } from "../../../../routes";
@@ -42,7 +43,8 @@ export class CreateRulePageContainer extends LitElement {
       });
 
       if (error) {
-        throw new Error(error.message);
+        showErrorToast(this, `ルールの作成に失敗しました: ${error.message}`);
+        return;
       }
 
       if (this.router) {
