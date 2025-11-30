@@ -95,20 +95,26 @@ export const sectionStyle: CSSResultGroup = css`
 
 /**
  * リストアイテムの共通スタイル
+ * GitHub のような連続したリスト表示（要素間に隙間なし）
  */
 export const listItemStyle: CSSResultGroup = css`
   .list {
     list-style: none;
     padding: 0;
     margin: 0;
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    overflow: hidden;
   }
 
   .list-item {
-    border: 1px solid var(--color-border-default);
-    border-radius: 6px;
-    margin-bottom: 8px;
+    border-bottom: 1px solid var(--color-border-default);
     background-color: var(--color-canvas-default);
     transition: background-color 0.2s ease;
+  }
+
+  .list-item:last-child {
+    border-bottom: none;
   }
 
   .list-item:hover {
