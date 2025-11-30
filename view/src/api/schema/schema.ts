@@ -3,17 +3,14 @@ import { z } from "zod";
 
 extendZodWithOpenApi(z);
 
-// Component schemas
-export const IdSchema = z.string().min(26).max(26).openapi("id");
-
 export const StatusSchema = z.enum(["draft", "published"]).openapi("status");
 
 export const WorkbookSchema = z
   .object({
-    id: IdSchema,
+    id: z.string(),
     title: z.string(),
     status: StatusSchema,
-    ownerId: IdSchema,
+    ownerId: z.string(),
   })
   .openapi("workbook");
 
@@ -34,14 +31,14 @@ export const CommentPermissionLevelSchema = z
 
 export const DiscussionSchema = z
   .object({
-    id: IdSchema,
+    id: z.string(),
     theme: z.string(),
     background: z.string(),
     conclusion: z.string(),
-    ruleId: IdSchema,
+    ruleId: z.string(),
     visibilityLevel: VisibilityLevelSchema,
     commentPermissionLevel: CommentPermissionLevelSchema,
-    createdBy: IdSchema,
+    createdBy: z.string(),
     createdAt: z.string().openapi({ format: "date-time" }),
     status: z.enum(["open", "closed", "archived"]),
   })
@@ -53,12 +50,12 @@ export const CommentStatusSchema = z
 
 export const CommentSchema = z
   .object({
-    id: IdSchema,
-    discussionId: IdSchema,
+    id: z.string(),
+    discussionId: z.string(),
     parentCommentId: z.string(),
-    commentTypeId: IdSchema,
+    commentTypeId: z.string(),
     content: z.string(),
-    postedBy: IdSchema,
+    postedBy: z.string(),
     postedAt: z.string().openapi({ format: "date-time" }),
     status: CommentStatusSchema,
   })
@@ -66,47 +63,48 @@ export const CommentSchema = z
 
 export const IssueSchema = z
   .object({
-    id: IdSchema,
-    commentId: IdSchema,
+    id: z.string(),
+    commentId: z.string(),
     issueType: z.enum(["contradiction", "circular_logic"]),
     description: z.string(),
-    createdBy: IdSchema,
+    createdBy: z.string(),
     createdAt: z.string().openapi({ format: "date-time" }),
   })
   .openapi("issue");
 
 export const NoteSchema = z
   .object({
-    id: IdSchema,
-    discussionId: IdSchema,
+    id: z.string(),
+    discussionId: z.string(),
     content: z.string(),
-    postedBy: IdSchema,
+    postedBy: z.string(),
     postedAt: z.string().openapi({ format: "date-time" }),
   })
   .openapi("note");
 
 export const CommentTypeSchema = z
   .object({
-    id: IdSchema,
+    id: z.string(),
     name: z.string(),
     description: z.string(),
     color: z.string(),
+    order: z.number().int().min(0).max(100),
   })
   .openapi("commentType");
 
 export const CommentTypePathSchema = z
   .object({
-    fromCommentTypeId: IdSchema,
-    toCommentTypeId: IdSchema,
+    childCommentTypeId: z.string(),
+    parentCommentTypeId: z.string(),
   })
   .openapi("commentTypePath");
 
 export const RuleSchema = z
   .object({
-    id: IdSchema,
+    id: z.string(),
     name: z.string(),
     description: z.string(),
-    createdBy: IdSchema,
+    createdBy: z.string(),
     createdAt: z.string().openapi({ format: "date-time" }),
     commentTypes: z.array(CommentTypeSchema),
     commentTypePaths: z.array(CommentTypePathSchema),
@@ -115,9 +113,9 @@ export const RuleSchema = z
 
 export const ProjectSchema = z
   .object({
-    id: IdSchema,
+    id: z.string(),
     name: z.string(),
-    createdBy: IdSchema,
+    createdBy: z.string(),
     createdAt: z.string().openapi({ format: "date-time" }),
   })
   .openapi("project");

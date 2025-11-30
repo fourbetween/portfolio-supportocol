@@ -28,8 +28,8 @@ describe("EditRulePagePresenter", async () => {
     ],
     commentTypePaths: [
       {
-        fromCommentTypeId: "01234567890123456789012347",
-        toCommentTypeId: "01234567890123456789012348",
+        childCommentTypeId: "01234567890123456789012347",
+        parentCommentTypeId: "01234567890123456789012348",
       },
     ],
   };

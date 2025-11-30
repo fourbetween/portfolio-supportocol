@@ -9,7 +9,6 @@ import {
   CommentTypeSchema,
   DiscussionSchema,
   ErrorSchema,
-  IdSchema,
   IssueSchema,
   NoteSchema,
   ProjectSchema,
@@ -121,7 +120,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        projectId: IdSchema,
+        projectId: z.string(),
       }),
     },
     responses: {
@@ -185,7 +184,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        projectId: IdSchema,
+        projectId: z.string(),
       }),
       body: {
         content: {
@@ -223,7 +222,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        projectId: IdSchema,
+        projectId: z.string(),
       }),
     },
     responses: {
@@ -272,7 +271,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        ruleId: IdSchema,
+        ruleId: z.string(),
       }),
     },
     responses: {
@@ -339,7 +338,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        ruleId: IdSchema,
+        ruleId: z.string(),
       }),
       body: {
         content: {
@@ -380,7 +379,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        ruleId: IdSchema,
+        ruleId: z.string(),
       }),
     },
     responses: {
@@ -404,7 +403,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       query: z.object({
-        projectId: IdSchema.optional(),
+        projectId: z.string().optional(),
       }),
     },
     responses: {
@@ -433,7 +432,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
+        discussionId: z.string(),
       }),
     },
     responses: {
@@ -468,7 +467,7 @@ const routes: RouteConfig[] = [
               theme: z.string(),
               background: z.string(),
               conclusion: z.string(),
-              ruleId: IdSchema,
+              ruleId: z.string(),
               visibilityLevel: VisibilityLevelSchema,
               commentPermissionLevel: CommentPermissionLevelSchema,
             }),
@@ -502,7 +501,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
+        discussionId: z.string(),
       }),
       body: {
         content: {
@@ -511,7 +510,7 @@ const routes: RouteConfig[] = [
               theme: z.string(),
               background: z.string(),
               conclusion: z.string(),
-              ruleId: IdSchema,
+              ruleId: z.string(),
               visibilityLevel: VisibilityLevelSchema,
               commentPermissionLevel: CommentPermissionLevelSchema,
               status: z.enum(["open", "closed", "archived"]),
@@ -546,7 +545,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
+        discussionId: z.string(),
       }),
     },
     responses: {
@@ -570,7 +569,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
+        discussionId: z.string(),
       }),
     },
     responses: {
@@ -599,14 +598,14 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
+        discussionId: z.string(),
       }),
       body: {
         content: {
           "application/json": {
             schema: z.object({
               parentCommentId: z.string(),
-              commentTypeId: IdSchema,
+              commentTypeId: z.string(),
               content: z.string(),
             }),
           },
@@ -639,8 +638,8 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
-        commentId: IdSchema,
+        discussionId: z.string(),
+        commentId: z.string(),
       }),
       body: {
         content: {
@@ -679,8 +678,8 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
-        commentId: IdSchema,
+        discussionId: z.string(),
+        commentId: z.string(),
       }),
     },
     responses: {
@@ -706,7 +705,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
+        discussionId: z.string(),
       }),
     },
     responses: {
@@ -735,13 +734,13 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
+        discussionId: z.string(),
       }),
       body: {
         content: {
           "application/json": {
             schema: z.object({
-              commentId: IdSchema,
+              commentId: z.string(),
               issueType: z.enum(["contradiction", "circular_logic"]),
               description: z.string(),
             }),
@@ -775,8 +774,8 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
-        issueId: IdSchema,
+        discussionId: z.string(),
+        issueId: z.string(),
       }),
       body: {
         content: {
@@ -815,8 +814,8 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
-        issueId: IdSchema,
+        discussionId: z.string(),
+        issueId: z.string(),
       }),
     },
     responses: {
@@ -842,7 +841,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
+        discussionId: z.string(),
       }),
     },
     responses: {
@@ -871,7 +870,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
+        discussionId: z.string(),
       }),
       body: {
         content: {
@@ -909,8 +908,8 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
-        noteId: IdSchema,
+        discussionId: z.string(),
+        noteId: z.string(),
       }),
       body: {
         content: {
@@ -948,8 +947,8 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       params: z.object({
-        discussionId: IdSchema,
-        noteId: IdSchema,
+        discussionId: z.string(),
+        noteId: z.string(),
       }),
     },
     responses: {

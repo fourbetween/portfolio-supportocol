@@ -37,10 +37,10 @@ export class RuleDetailsPresenter extends LitElement {
             <ul class="rule-path-list">
               ${this.rule.commentTypePaths.map((path) => {
                 const fromType = this.rule?.commentTypes.find(
-                  (t) => t.id === path.fromCommentTypeId
+                  (t) => t.id === path.childCommentTypeId
                 );
                 const toType = this.rule?.commentTypes.find(
-                  (t) => t.id === path.toCommentTypeId
+                  (t) => t.id === path.parentCommentTypeId
                 );
                 return html`
                   <li class="rule-path-item">

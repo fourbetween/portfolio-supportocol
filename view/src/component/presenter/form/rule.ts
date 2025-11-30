@@ -104,8 +104,8 @@ export class RuleFormPresenter extends LitElement {
                   ${this.rule.commentTypes.map((toType) => {
                     const isChecked = this.rule.commentTypePaths.some(
                       (path) =>
-                        path.fromCommentTypeId === fromType.id &&
-                        path.toCommentTypeId === toType.id
+                        path.childCommentTypeId === fromType.id &&
+                        path.parentCommentTypeId === toType.id
                     );
                     const checkboxId = `path-${fromType.id}-${toType.id}`;
                     return html`
@@ -183,7 +183,8 @@ export class RuleFormPresenter extends LitElement {
       ...this.rule,
       commentTypes: this.rule.commentTypes.filter((type) => type.id !== id),
       commentTypePaths: this.rule.commentTypePaths.filter(
-        (path) => path.fromCommentTypeId !== id && path.toCommentTypeId !== id
+        (path) =>
+          path.childCommentTypeId !== id && path.parentCommentTypeId !== id
       ),
     });
   }
@@ -205,7 +206,7 @@ export class RuleFormPresenter extends LitElement {
         ...this.rule,
         commentTypePaths: [
           ...this.rule.commentTypePaths,
-          { fromCommentTypeId: fromId, toCommentTypeId: toId },
+          { childCommentTypeId: fromId, parentCommentTypeId: toId },
         ],
       });
     } else {
@@ -214,7 +215,8 @@ export class RuleFormPresenter extends LitElement {
         commentTypePaths: this.rule.commentTypePaths.filter(
           (path) =>
             !(
-              path.fromCommentTypeId === fromId && path.toCommentTypeId === toId
+              path.childCommentTypeId === fromId &&
+              path.parentCommentTypeId === toId
             )
         ),
       });

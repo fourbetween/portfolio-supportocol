@@ -39,8 +39,8 @@ describe("RuleDetailsPresenter", async () => {
     ],
     commentTypePaths: [
       {
-        fromCommentTypeId: "type1",
-        toCommentTypeId: "type2",
+        childCommentTypeId: "type1",
+        parentCommentTypeId: "type2",
       },
     ],
   };

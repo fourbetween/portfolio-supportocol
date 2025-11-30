@@ -120,7 +120,7 @@ export class ItemDiscussionPagePresenter extends LitElement {
     // 経路の「開始コメント」は子コメント、「終了コメント」は親コメント
     // 現在のコメントが親（toCommentTypeId）として経路があるかチェック
     return this.rule.commentTypePaths.some(
-      (path) => path.toCommentTypeId === commentTypeId
+      (path) => path.parentCommentTypeId === commentTypeId
     );
   }
 
