@@ -2,7 +2,8 @@ import { type CSSResultGroup, css } from "lit";
 
 export const formStyle: CSSResultGroup = [
   css`
-    form {
+    form,
+    .form-container {
       display: flex;
       flex-direction: column;
       gap: 16px;
@@ -11,8 +12,16 @@ export const formStyle: CSSResultGroup = [
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
+      gap: 6px;
+    }
+
+    .form-group + .form-group {
+      margin-top: 10px;
+    }
+
+    form .form-group + .form-group,
+    .form-container .form-group + .form-group {
+      margin-top: 0;
     }
 
     .form-label,

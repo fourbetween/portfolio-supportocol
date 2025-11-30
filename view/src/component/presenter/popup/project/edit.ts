@@ -1,7 +1,8 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
+import { formStyle } from "../../../../style/form";
 
 @customElement("edit-project-popup-presenter")
 export class EditProjectPopupPresenter extends LitElement {
@@ -76,36 +77,5 @@ export class EditProjectPopupPresenter extends LitElement {
     this.onCancel?.();
   }
 
-  static styles = [
-    baseStyle,
-    buttonStyle,
-    css`
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      label {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--color-fg-default);
-      }
-
-      input[type="text"] {
-        padding: 8px 12px;
-        font-size: 14px;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        background-color: var(--color-canvas-default);
-        color: var(--color-fg-default);
-      }
-
-      input[type="text"]:focus {
-        outline: none;
-        border-color: var(--color-accent-fg);
-        box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
-      }
-    `,
-  ];
+  static styles = [baseStyle, buttonStyle, formStyle];
 }

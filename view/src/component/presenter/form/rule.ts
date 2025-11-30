@@ -4,6 +4,7 @@ import { ulid } from "ulid";
 import type { Rule } from "../../../model/rule";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
+import { formStyle } from "../../../style/form";
 import type { AddCommentTypePopupPresenter } from "../popup/rule/add_comment_type";
 import type { EditCommentTypePopupPresenter } from "../popup/rule/edit_comment_type";
 
@@ -223,40 +224,8 @@ export class RuleFormPresenter extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
+    formStyle,
     css`
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      label {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--color-fg-default);
-      }
-
-      input[type="text"],
-      textarea {
-        padding: 8px 12px;
-        font-size: 14px;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        background-color: var(--color-canvas-default);
-        color: var(--color-fg-default);
-      }
-
-      input[type="text"]:focus,
-      textarea:focus {
-        outline: none;
-        border-color: var(--color-accent-fg);
-        box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
-      }
-
-      textarea {
-        resize: vertical;
-      }
-
       .section {
         margin-top: 24px;
       }
