@@ -839,6 +839,7 @@ func TestUser_ListDiscussions(t *testing.T) {
 			setup: func(c *container) {
 				c.DiscussionRepo.EXPECT().Search(discussion.SearchParams{
 					ProjectID: "test-project-id",
+					CreatedBy: "test-user-id",
 				}).Return([]*discussion.Discussion{
 					{},
 				}, nil)
@@ -1002,7 +1003,8 @@ func TestUser_UpdateDiscussion(t *testing.T) {
 					CreatedAt: fixedTime,
 				})
 				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
-					ID: "existing-discussion-id",
+					ID:        "existing-discussion-id",
+					CreatedBy: "test-user-id",
 				}).Return(existingDiscussion, nil)
 				con.DiscussionRepo.EXPECT().Save(gomock.Any()).Return(nil)
 			},
@@ -1074,7 +1076,8 @@ func TestUser_DeleteDiscussion(t *testing.T) {
 					CreatedAt: fixedTime,
 				})
 				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
-					ID: "existing-discussion-id",
+					ID:        "existing-discussion-id",
+					CreatedBy: "test-user-id",
 				}).Return(existingDiscussion, nil)
 				con.DiscussionRepo.EXPECT().Delete(gomock.Any()).Return(nil)
 			},
@@ -1254,7 +1257,8 @@ func TestUser_ListIssues(t *testing.T) {
 					},
 				})
 				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
-					ID: "discussion1",
+					ID:        "discussion1",
+					CreatedBy: "test-user-id",
 				}).Return(d, nil)
 				issue := con.DiscussionFac.BuildIssue(discussion.BuildIssueParams{
 					ID: "issue1",
@@ -1325,7 +1329,8 @@ func TestUser_CreateIssue(t *testing.T) {
 					},
 				})
 				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
-					ID: "discussion1",
+					ID:        "discussion1",
+					CreatedBy: "test-user-id",
 				}).Return(d, nil)
 				con.IDSrv.EXPECT().Generate().Return("generated-issue-id")
 				con.ClockSrv.EXPECT().Now().Return(time.Date(2025, 11, 28, 12, 0, 0, 0, time.UTC))
@@ -1395,7 +1400,8 @@ func TestUser_UpdateIssue(t *testing.T) {
 					},
 				})
 				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
-					ID: "discussion1",
+					ID:        "discussion1",
+					CreatedBy: "test-user-id",
 				}).Return(d, nil)
 				issue := con.DiscussionFac.BuildIssue(discussion.BuildIssueParams{
 					ID: "issue1",
@@ -1471,7 +1477,8 @@ func TestUser_DeleteIssue(t *testing.T) {
 					},
 				})
 				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
-					ID: "discussion1",
+					ID:        "discussion1",
+					CreatedBy: "test-user-id",
 				}).Return(d, nil)
 				issue := con.DiscussionFac.BuildIssue(discussion.BuildIssueParams{
 					ID: "issue1",
@@ -1533,7 +1540,8 @@ func TestUser_ListNotes(t *testing.T) {
 					},
 				})
 				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
-					ID: "discussion1",
+					ID:        "discussion1",
+					CreatedBy: "test-user-id",
 				}).Return(d, nil)
 				note := con.DiscussionFac.BuildNote(discussion.BuildNoteParams{
 					ID: "note1",
@@ -1601,7 +1609,8 @@ func TestUser_CreateNote(t *testing.T) {
 					},
 				})
 				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
-					ID: "discussion1",
+					ID:        "discussion1",
+					CreatedBy: "test-user-id",
 				}).Return(d, nil)
 				con.IDSrv.EXPECT().Generate().Return("generated-note-id")
 				con.ClockSrv.EXPECT().Now().Return(time.Date(2025, 11, 28, 12, 0, 0, 0, time.UTC))
@@ -1670,7 +1679,8 @@ func TestUser_UpdateNote(t *testing.T) {
 					},
 				})
 				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
-					ID: "discussion1",
+					ID:        "discussion1",
+					CreatedBy: "test-user-id",
 				}).Return(d, nil)
 				note := con.DiscussionFac.BuildNote(discussion.BuildNoteParams{
 					ID: "note1",
@@ -1742,7 +1752,8 @@ func TestUser_DeleteNote(t *testing.T) {
 					},
 				})
 				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
-					ID: "discussion1",
+					ID:        "discussion1",
+					CreatedBy: "test-user-id",
 				}).Return(d, nil)
 				note := con.DiscussionFac.BuildNote(discussion.BuildNoteParams{
 					ID: "note1",
@@ -1777,6 +1788,77 @@ func TestUser_DeleteNote(t *testing.T) {
 			err := u.DeleteNote(tt.params)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("DeleteNote() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestUser_LoadDiscussion(t *testing.T) {
+	fixedTime := time.Date(2025, 11, 18, 12, 0, 0, 0, time.UTC)
+
+	tests := []struct {
+		name   string
+		params user.LoadDiscussionParams
+		setup  func(*container)
+		verify func(*testing.T, *discussion.Discussion, error)
+	}{
+		{
+			name: "自分が作成した議論を取得できること",
+			params: user.LoadDiscussionParams{
+				DiscussionID: "discussion-id",
+			},
+			setup: func(con *container) {
+				existingDiscussion := con.DiscussionFac.BuildDiscussion(discussion.BuildDiscussionParams{
+					ID: "discussion-id",
+					NewDiscussionParams: discussion.NewDiscussionParams{
+						Theme:                  "テストテーマ",
+						Background:             "テスト背景",
+						Conclusion:             "テスト結論",
+						RuleID:                 "rule-id",
+						VisibilityLevel:        discussion.VisibilityLevelOwner,
+						CommentPermissionLevel: discussion.CommentPermissionLevelOwner,
+						CreatedBy:              "test-user-id",
+						Status:                 discussion.StatusOpen,
+					},
+					CreatedAt: fixedTime,
+				})
+				con.DiscussionRepo.EXPECT().Load(discussion.LoadParams{
+					ID:        "discussion-id",
+					CreatedBy: "test-user-id",
+				}).Return(existingDiscussion, nil)
+			},
+			verify: func(t *testing.T, got *discussion.Discussion, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("LoadDiscussion() failed: %v", err)
+					return
+				}
+				if got.ID() != "discussion-id" {
+					t.Errorf("LoadDiscussion() ID = %v, want %v", got.ID(), "discussion-id")
+				}
+				if got.CreatedBy() != "test-user-id" {
+					t.Errorf("LoadDiscussion() CreatedBy = %v, want %v", got.CreatedBy(), "test-user-id")
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			if tt.setup != nil {
+				tt.setup(con)
+			}
+
+			u := con.UserFac.Build(user.BuildParams{
+				ID:    "test-user-id",
+				Email: "test@example.com",
+			})
+
+			got, err := u.LoadDiscussion(tt.params)
+
+			if tt.verify != nil {
+				tt.verify(t, got, err)
 			}
 		})
 	}
