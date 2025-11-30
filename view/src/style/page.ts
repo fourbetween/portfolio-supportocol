@@ -21,6 +21,7 @@ export const pageHostStyle: CSSResultGroup = css`
 export const pageContainerStyle: CSSResultGroup = css`
   .container {
     padding: 24px;
+    margin: 0 auto;
   }
 
   .container--narrow {
