@@ -28,7 +28,10 @@ func (r *DiscussionRepository) SetFactory(fac *discussion.Factory) {
 func (r *DiscussionRepository) Search(params discussion.SearchParams) ([]*discussion.Discussion, error) {
 	cond := postgres.Bool(true)
 	if params.ProjectID != "" {
-		cond = table.ProjectDiscussions.ProjectID.EQ(postgres.String(params.ProjectID))
+		cond = cond.AND(table.ProjectDiscussions.ProjectID.EQ(postgres.String(params.ProjectID)))
+	}
+	if params.CreatedBy != "" {
+		cond = cond.AND(table.Discussions.CreatedBy.EQ(postgres.String(params.CreatedBy)))
 	}
 
 	var from postgres.ReadableTable = table.Discussions
@@ -55,10 +58,15 @@ func (r *DiscussionRepository) Search(params discussion.SearchParams) ([]*discus
 }
 
 func (r *DiscussionRepository) Load(params discussion.LoadParams) (*discussion.Discussion, error) {
+	cond := table.Discussions.ID.EQ(postgres.String(params.ID))
+	if params.CreatedBy != "" {
+		cond = cond.AND(table.Discussions.CreatedBy.EQ(postgres.String(params.CreatedBy)))
+	}
+
 	stmt := postgres.
 		SELECT(table.Discussions.AllColumns).
 		FROM(table.Discussions).
-		WHERE(table.Discussions.ID.EQ(postgres.String(params.ID)))
+		WHERE(cond)
 
 	var dest model.Discussions
 	if err := stmt.Query(r.db, &dest); err != nil {

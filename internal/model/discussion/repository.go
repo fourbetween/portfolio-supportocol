@@ -5,10 +5,12 @@ package discussion
 type (
 	SearchParams struct {
 		ProjectID string
+		CreatedBy string
 	}
 
 	LoadParams struct {
-		ID string
+		ID        string
+		CreatedBy string
 	}
 
 	LoadCommentParams struct {

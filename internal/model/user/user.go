@@ -222,7 +222,8 @@ type LoadDiscussionParams struct {
 
 func (u *User) LoadDiscussion(params LoadDiscussionParams) (*discussion.Discussion, error) {
 	return u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 }
 
@@ -233,6 +234,7 @@ type ListDiscussionsParams struct {
 func (u *User) ListDiscussions(params ListDiscussionsParams) ([]*discussion.Discussion, error) {
 	return u.discussionRepo.Search(discussion.SearchParams{
 		ProjectID: params.ProjectID,
+		CreatedBy: u.id,
 	})
 }
 
@@ -277,7 +279,8 @@ type UpdateDiscussionParams struct {
 
 func (u *User) UpdateDiscussion(params UpdateDiscussionParams) (*discussion.Discussion, error) {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return nil, err
@@ -306,7 +309,8 @@ type DeleteDiscussionParams struct {
 
 func (u *User) DeleteDiscussion(params DeleteDiscussionParams) error {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return err
@@ -321,7 +325,8 @@ type ListCommentsParams struct {
 
 func (u *User) ListComments(params ListCommentsParams) ([]*discussion.Comment, error) {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return nil, err
@@ -338,7 +343,8 @@ type CreateCommentParams struct {
 
 func (u *User) CreateComment(params CreateCommentParams) (*discussion.Comment, error) {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return nil, err
@@ -360,7 +366,8 @@ type UpdateCommentParams struct {
 
 func (u *User) UpdateComment(params UpdateCommentParams) (*discussion.Comment, error) {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return nil, err
@@ -379,7 +386,8 @@ type DeleteCommentParams struct {
 
 func (u *User) DeleteComment(params DeleteCommentParams) error {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return err
@@ -393,7 +401,8 @@ type ListIssuesParams struct {
 
 func (u *User) ListIssues(params ListIssuesParams) ([]*discussion.Issue, error) {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return nil, err
@@ -410,7 +419,8 @@ type CreateIssueParams struct {
 
 func (u *User) CreateIssue(params CreateIssueParams) (*discussion.Issue, error) {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return nil, err
@@ -432,7 +442,8 @@ type UpdateIssueParams struct {
 
 func (u *User) UpdateIssue(params UpdateIssueParams) (*discussion.Issue, error) {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return nil, err
@@ -451,7 +462,8 @@ type DeleteIssueParams struct {
 
 func (u *User) DeleteIssue(params DeleteIssueParams) error {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return err
@@ -465,7 +477,8 @@ type ListNotesParams struct {
 
 func (u *User) ListNotes(params ListNotesParams) ([]*discussion.Note, error) {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return nil, err
@@ -480,7 +493,8 @@ type CreateNoteParams struct {
 
 func (u *User) CreateNote(params CreateNoteParams) (*discussion.Note, error) {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return nil, err
@@ -499,7 +513,8 @@ type UpdateNoteParams struct {
 
 func (u *User) UpdateNote(params UpdateNoteParams) (*discussion.Note, error) {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return nil, err
@@ -517,7 +532,8 @@ type DeleteNoteParams struct {
 
 func (u *User) DeleteNote(params DeleteNoteParams) error {
 	d, err := u.discussionRepo.Load(discussion.LoadParams{
-		ID: params.DiscussionID,
+		ID:        params.DiscussionID,
+		CreatedBy: u.id,
 	})
 	if err != nil {
 		return err
