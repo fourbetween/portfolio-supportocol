@@ -172,6 +172,46 @@ const mockIssues = [
   },
 ];
 
+const mockRule = {
+  id: "01234567890123456789012349",
+  name: "議論ルール",
+  description:
+    "論理的な議論を行うためのルールです。主張に対して根拠や反論を述べることで、議論を深めていきます。",
+  createdBy: "01234567890123456789012346",
+  createdAt: "2024-01-01T00:00:00Z",
+  commentTypes: mockCommentTypes,
+  commentTypePaths: [
+    {
+      fromCommentTypeId: "01234567890123456789012351", // 主張
+      toCommentTypeId: "01234567890123456789012352", // 根拠
+    },
+    {
+      fromCommentTypeId: "01234567890123456789012351", // 主張
+      toCommentTypeId: "01234567890123456789012353", // 反論
+    },
+    {
+      fromCommentTypeId: "01234567890123456789012351", // 主張
+      toCommentTypeId: "01234567890123456789012354", // 質問
+    },
+    {
+      fromCommentTypeId: "01234567890123456789012352", // 根拠
+      toCommentTypeId: "01234567890123456789012353", // 反論
+    },
+    {
+      fromCommentTypeId: "01234567890123456789012352", // 根拠
+      toCommentTypeId: "01234567890123456789012354", // 質問
+    },
+    {
+      fromCommentTypeId: "01234567890123456789012353", // 反論
+      toCommentTypeId: "01234567890123456789012352", // 根拠
+    },
+    {
+      fromCommentTypeId: "01234567890123456789012354", // 質問
+      toCommentTypeId: "01234567890123456789012352", // 根拠
+    },
+  ],
+};
+
 const meta = {
   title: "presenter/page/discussion/item",
   tags: ["autodocs"],
@@ -181,6 +221,7 @@ const meta = {
         .discussion=${args.discussion}
         .comments=${args.comments}
         .commentTypes=${args.commentTypes}
+        .rule=${args.rule}
         .focusedCommentId=${args.focusedCommentId}
         .notes=${args.notes}
         .issues=${args.issues}
@@ -216,6 +257,7 @@ export const Default: Story = {
     discussion: mockDiscussion,
     comments: mockComments,
     commentTypes: mockCommentTypes,
+    rule: mockRule,
     notes: mockNotes,
     issues: mockIssues,
   },
@@ -226,6 +268,7 @@ export const NoComments: Story = {
     discussion: mockDiscussion,
     comments: [],
     commentTypes: mockCommentTypes,
+    rule: mockRule,
     notes: [],
     issues: [],
   },
@@ -236,6 +279,7 @@ export const SingleRootComment: Story = {
     discussion: mockDiscussion,
     comments: [mockComments[0]],
     commentTypes: mockCommentTypes,
+    rule: mockRule,
     notes: mockNotes,
     issues: [mockIssues[0], mockIssues[1]],
   },
@@ -246,6 +290,7 @@ export const MultipleRootComments: Story = {
     discussion: mockDiscussion,
     comments: [mockComments[0], mockComments[5]],
     commentTypes: mockCommentTypes,
+    rule: mockRule,
     notes: mockNotes,
     issues: mockIssues,
   },
@@ -342,6 +387,7 @@ export const DeepNestedComments: Story = {
     discussion: mockDiscussion,
     comments: deepNestedComments,
     commentTypes: mockCommentTypes,
+    rule: mockRule,
     notes: mockNotes,
     issues: [],
   },
@@ -352,6 +398,7 @@ export const FocusedOnRootChild: Story = {
     discussion: mockDiscussion,
     comments: mockComments,
     commentTypes: mockCommentTypes,
+    rule: mockRule,
     focusedCommentId: "01234567890123456789012361", // 根拠コメント1（ルートの子）
     notes: mockNotes,
     issues: mockIssues,
@@ -363,6 +410,7 @@ export const FocusedOnDeepNested: Story = {
     discussion: mockDiscussion,
     comments: deepNestedComments,
     commentTypes: mockCommentTypes,
+    rule: mockRule,
     focusedCommentId: "01234567890123456789012375", // レベル6
     notes: mockNotes,
     issues: [],

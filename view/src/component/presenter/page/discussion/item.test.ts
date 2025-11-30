@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import type { Comment, CommentType } from "../../../../model/discussion";
+import type { Rule } from "../../../../model/rule";
 import type { ItemDiscussionPagePresenter } from "./item";
 
 describe("ItemDiscussionPagePresenter", async () => {
@@ -50,6 +51,25 @@ describe("ItemDiscussionPagePresenter", async () => {
       color: "#cf222e",
     },
   ];
+
+  const mockRule: Rule = {
+    id: "01234567890123456789012349",
+    name: "議論ルール",
+    description: "議論のルール説明文",
+    createdBy: "01234567890123456789012346",
+    createdAt: "2024-01-01T00:00:00Z",
+    commentTypes: mockCommentTypes,
+    commentTypePaths: [
+      {
+        fromCommentTypeId: "01234567890123456789012351",
+        toCommentTypeId: "01234567890123456789012352",
+      },
+      {
+        fromCommentTypeId: "01234567890123456789012351",
+        toCommentTypeId: "01234567890123456789012353",
+      },
+    ],
+  };
 
   const mockComments: Comment[] = [
     {
@@ -477,5 +497,75 @@ describe("ItemDiscussionPagePresenter", async () => {
     (issueBadge as HTMLElement)?.click();
 
     expect(onShowIssues).toHaveBeenCalledWith("01234567890123456789012360");
+  });
+
+  it("ルール詳細のdetails要素が表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.rule = mockRule;
+    await elem.updateComplete;
+
+    const details = elem.shadowRoot?.querySelector(".rule-details");
+    expect(details).not.toBeNull();
+    await expect.element(page.getByText("ルール: 議論ルール")).toBeVisible();
+  });
+
+  it("ルール詳細を開くとルールの説明が表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.rule = mockRule;
+    await elem.updateComplete;
+
+    // details要素を開く
+    const details = elem.shadowRoot?.querySelector(
+      ".rule-details"
+    ) as HTMLDetailsElement;
+    details.open = true;
+    await elem.updateComplete;
+
+    await expect.element(page.getByText("議論のルール説明文")).toBeVisible();
+  });
+
+  it("ルール詳細を開くとコメント種類一覧が表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.rule = mockRule;
+    await elem.updateComplete;
+
+    const details = elem.shadowRoot?.querySelector(
+      ".rule-details"
+    ) as HTMLDetailsElement;
+    details.open = true;
+    await elem.updateComplete;
+
+    await expect.element(page.getByText("コメント種類")).toBeVisible();
+    const commentTypeList = elem.shadowRoot?.querySelector(
+      ".rule-comment-type-list"
+    );
+    expect(commentTypeList).not.toBeNull();
+    const commentTypeItems = commentTypeList?.querySelectorAll(
+      ".rule-comment-type-item"
+    );
+    expect(commentTypeItems?.length).toBe(3);
+  });
+
+  it("ルール詳細を開くと経路設定が表示されること", async () => {
+    elem.discussion = mockDiscussion;
+    elem.rule = mockRule;
+    await elem.updateComplete;
+
+    const details = elem.shadowRoot?.querySelector(
+      ".rule-details"
+    ) as HTMLDetailsElement;
+    details.open = true;
+    await elem.updateComplete;
+
+    await expect.element(page.getByText("経路")).toBeVisible();
+    // 経路アイテムが表示されていること
+    const pathList = elem.shadowRoot?.querySelector(".rule-path-list");
+    expect(pathList).not.toBeNull();
+    const pathItems = pathList?.querySelectorAll(".rule-path-item");
+    expect(pathItems?.length).toBe(2);
+    // 各経路アイテムに色バッジが2つあること
+    const firstPathItem = pathItems?.[0];
+    const colorBadges = firstPathItem?.querySelectorAll(".color-badge");
+    expect(colorBadges?.length).toBe(2);
   });
 });
