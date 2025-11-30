@@ -12,24 +12,28 @@ const mockRule: Rule = {
   commentTypes: [
     {
       id: "01234567890123456789012347",
+      no: 0,
       name: "主張",
       description: "自分の意見や提案を述べるコメント",
       color: "#0969da",
     },
     {
       id: "01234567890123456789012348",
+      no: 1,
       name: "根拠",
       description: "主張を裏付ける根拠",
       color: "#1a7f37",
     },
     {
       id: "01234567890123456789012349",
+      no: 2,
       name: "質問",
       description: "不明点を確認するコメント",
       color: "#d29922",
     },
     {
       id: "01234567890123456789012350",
+      no: 3,
       name: "反論",
       description: "主張に対する反論",
       color: "#cf222e",

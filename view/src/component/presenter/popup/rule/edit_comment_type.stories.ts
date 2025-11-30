@@ -5,6 +5,7 @@ import type { EditCommentTypePopupPresenter } from "./edit_comment_type";
 
 const mockCommentType: CommentType = {
   id: "01234567890123456789012347",
+  no: 0,
   name: "主張",
   description: "自分の意見や提案を述べるコメント",
   color: "#0969da",

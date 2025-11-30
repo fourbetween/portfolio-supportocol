@@ -149,8 +149,13 @@ export class RuleFormPresenter extends LitElement {
   private handleAddCommentTypeSubmit(e: CustomEvent) {
     const { name, description, color } = e.detail;
     const newId = ulid();
+    const maxNo = this.rule.commentTypes.reduce(
+      (max, type) => Math.max(max, type.no),
+      -1
+    );
     const newType = {
       id: newId,
+      no: maxNo + 1,
       name,
       description,
       color,
