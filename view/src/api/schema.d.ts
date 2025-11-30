@@ -191,7 +191,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    projectId: components["schemas"]["id"];
+                    projectId: string;
                 };
                 cookie?: never;
             };
@@ -223,7 +223,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    projectId: components["schemas"]["id"];
+                    projectId: string;
                 };
                 cookie?: never;
             };
@@ -262,7 +262,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    projectId: components["schemas"]["id"];
+                    projectId: string;
                 };
                 cookie?: never;
             };
@@ -387,7 +387,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    ruleId: components["schemas"]["id"];
+                    ruleId: string;
                 };
                 cookie?: never;
             };
@@ -419,7 +419,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    ruleId: components["schemas"]["id"];
+                    ruleId: string;
                 };
                 cookie?: never;
             };
@@ -461,7 +461,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    ruleId: components["schemas"]["id"];
+                    ruleId: string;
                 };
                 cookie?: never;
             };
@@ -501,7 +501,7 @@ export interface paths {
         get: {
             parameters: {
                 query?: {
-                    projectId?: components["schemas"]["id"];
+                    projectId?: string;
                 };
                 header?: never;
                 path?: never;
@@ -544,7 +544,7 @@ export interface paths {
                         theme: string;
                         background: string;
                         conclusion: string;
-                        ruleId: components["schemas"]["id"];
+                        ruleId: string;
                         visibilityLevel: components["schemas"]["visibilityLevel"];
                         commentPermissionLevel: components["schemas"]["commentPermissionLevel"];
                     };
@@ -590,7 +590,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
+                    discussionId: string;
                 };
                 cookie?: never;
             };
@@ -622,7 +622,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
+                    discussionId: string;
                 };
                 cookie?: never;
             };
@@ -632,7 +632,7 @@ export interface paths {
                         theme: string;
                         background: string;
                         conclusion: string;
-                        ruleId: components["schemas"]["id"];
+                        ruleId: string;
                         visibilityLevel: components["schemas"]["visibilityLevel"];
                         commentPermissionLevel: components["schemas"]["commentPermissionLevel"];
                         /** @enum {string} */
@@ -668,7 +668,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
+                    discussionId: string;
                 };
                 cookie?: never;
             };
@@ -710,7 +710,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
+                    discussionId: string;
                 };
                 cookie?: never;
             };
@@ -743,7 +743,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
+                    discussionId: string;
                 };
                 cookie?: never;
             };
@@ -751,7 +751,7 @@ export interface paths {
                 content: {
                     "application/json": {
                         parentCommentId: string;
-                        commentTypeId: components["schemas"]["id"];
+                        commentTypeId: string;
                         content: string;
                     };
                 };
@@ -797,8 +797,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
-                    commentId: components["schemas"]["id"];
+                    discussionId: string;
+                    commentId: string;
                 };
                 cookie?: never;
             };
@@ -838,8 +838,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
-                    commentId: components["schemas"]["id"];
+                    discussionId: string;
+                    commentId: string;
                 };
                 cookie?: never;
             };
@@ -881,7 +881,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
+                    discussionId: string;
                 };
                 cookie?: never;
             };
@@ -914,14 +914,14 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
+                    discussionId: string;
                 };
                 cookie?: never;
             };
             requestBody?: {
                 content: {
                     "application/json": {
-                        commentId: components["schemas"]["id"];
+                        commentId: string;
                         /** @enum {string} */
                         issueType: "contradiction" | "circular_logic";
                         description: string;
@@ -969,8 +969,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
-                    issueId: components["schemas"]["id"];
+                    discussionId: string;
+                    issueId: string;
                 };
                 cookie?: never;
             };
@@ -1011,8 +1011,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
-                    issueId: components["schemas"]["id"];
+                    discussionId: string;
+                    issueId: string;
                 };
                 cookie?: never;
             };
@@ -1054,7 +1054,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
+                    discussionId: string;
                 };
                 cookie?: never;
             };
@@ -1087,7 +1087,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
+                    discussionId: string;
                 };
                 cookie?: never;
             };
@@ -1139,8 +1139,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
-                    noteId: components["schemas"]["id"];
+                    discussionId: string;
+                    noteId: string;
                 };
                 cookie?: never;
             };
@@ -1179,8 +1179,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["id"];
-                    noteId: components["schemas"]["id"];
+                    discussionId: string;
+                    noteId: string;
                 };
                 cookie?: never;
             };
@@ -1213,41 +1213,41 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        id: string;
         /** @enum {string} */
         status: "draft" | "published";
         workbook: {
-            id: components["schemas"]["id"];
+            id: string;
             title: string;
             status: components["schemas"]["status"];
-            ownerId: components["schemas"]["id"];
+            ownerId: string;
         };
         error: {
             code: number;
             message: string;
         };
         project: {
-            id: components["schemas"]["id"];
+            id: string;
             name: string;
-            createdBy: components["schemas"]["id"];
+            createdBy: string;
             /** Format: date-time */
             createdAt: string;
         };
         commentType: {
-            id: components["schemas"]["id"];
+            id: string;
+            no: number;
             name: string;
             description: string;
             color: string;
         };
         commentTypePath: {
-            fromCommentTypeId: components["schemas"]["id"];
-            toCommentTypeId: components["schemas"]["id"];
+            childCommentTypeId: string;
+            parentCommentTypeId: string;
         };
         rule: {
-            id: components["schemas"]["id"];
+            id: string;
             name: string;
             description: string;
-            createdBy: components["schemas"]["id"];
+            createdBy: string;
             /** Format: date-time */
             createdAt: string;
             commentTypes: components["schemas"]["commentType"][];
@@ -1258,14 +1258,14 @@ export interface components {
         /** @enum {string} */
         commentPermissionLevel: "everyone" | "authenticated" | "owner";
         discussion: {
-            id: components["schemas"]["id"];
+            id: string;
             theme: string;
             background: string;
             conclusion: string;
-            ruleId: components["schemas"]["id"];
+            ruleId: string;
             visibilityLevel: components["schemas"]["visibilityLevel"];
             commentPermissionLevel: components["schemas"]["commentPermissionLevel"];
-            createdBy: components["schemas"]["id"];
+            createdBy: string;
             /** Format: date-time */
             createdAt: string;
             /** @enum {string} */
@@ -1274,31 +1274,31 @@ export interface components {
         /** @enum {string} */
         commentStatus: "unassigned" | "assigned" | "archived" | "deleted";
         comment: {
-            id: components["schemas"]["id"];
-            discussionId: components["schemas"]["id"];
+            id: string;
+            discussionId: string;
             parentCommentId: string;
-            commentTypeId: components["schemas"]["id"];
+            commentTypeId: string;
             content: string;
-            postedBy: components["schemas"]["id"];
+            postedBy: string;
             /** Format: date-time */
             postedAt: string;
             status: components["schemas"]["commentStatus"];
         };
         issue: {
-            id: components["schemas"]["id"];
-            commentId: components["schemas"]["id"];
+            id: string;
+            commentId: string;
             /** @enum {string} */
             issueType: "contradiction" | "circular_logic";
             description: string;
-            createdBy: components["schemas"]["id"];
+            createdBy: string;
             /** Format: date-time */
             createdAt: string;
         };
         note: {
-            id: components["schemas"]["id"];
-            discussionId: components["schemas"]["id"];
+            id: string;
+            discussionId: string;
             content: string;
-            postedBy: components["schemas"]["id"];
+            postedBy: string;
             /** Format: date-time */
             postedAt: string;
         };

@@ -10,6 +10,7 @@ package model
 type CommentTypes struct {
 	ID          string `sql:"primary_key"`
 	RuleID      string
+	No          int32
 	Name        string
 	Description string
 	Color       string

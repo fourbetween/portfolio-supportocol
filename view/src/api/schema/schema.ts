@@ -85,10 +85,10 @@ export const NoteSchema = z
 export const CommentTypeSchema = z
   .object({
     id: z.string(),
+    no: z.number().int().min(0),
     name: z.string(),
     description: z.string(),
     color: z.string(),
-    order: z.number().int().min(0).max(100),
   })
   .openapi("commentType");
 

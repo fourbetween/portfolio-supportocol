@@ -73,11 +73,11 @@ func (r *Rule) Validate() error {
 	}
 
 	for _, path := range r.commentTypePaths {
-		if _, ok := commentTypeIDs[path.FromCommentTypeID]; !ok {
-			return fmt.Errorf("FromCommentTypeID %q is not defined in CommentTypes: %w", path.FromCommentTypeID, internal.ErrConflict)
+		if _, ok := commentTypeIDs[path.ChildCommentTypeID]; !ok {
+			return fmt.Errorf("FromCommentTypeID %q is not defined in CommentTypes: %w", path.ChildCommentTypeID, internal.ErrConflict)
 		}
-		if _, ok := commentTypeIDs[path.ToCommentTypeID]; !ok {
-			return fmt.Errorf("ToCommentTypeID %q is not defined in CommentTypes: %w", path.ToCommentTypeID, internal.ErrConflict)
+		if _, ok := commentTypeIDs[path.ParentCommentTypeID]; !ok {
+			return fmt.Errorf("ToCommentTypeID %q is not defined in CommentTypes: %w", path.ParentCommentTypeID, internal.ErrConflict)
 		}
 	}
 
@@ -110,7 +110,7 @@ func (r *Rule) Update(params UpdateParams) error {
 
 func (r *Rule) IsValidPath(fromCommentTypeID, toCommentTypeID string) error {
 	for _, path := range r.commentTypePaths {
-		if path.FromCommentTypeID == fromCommentTypeID && path.ToCommentTypeID == toCommentTypeID {
+		if path.ChildCommentTypeID == fromCommentTypeID && path.ParentCommentTypeID == toCommentTypeID {
 			return nil
 		}
 	}

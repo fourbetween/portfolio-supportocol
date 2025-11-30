@@ -137,7 +137,7 @@ func TestDiscussion_CreateComment(t *testing.T) {
 						Name:      "test-rule",
 						CreatedAt: time.Now(),
 						CommentTypePaths: []rule.CommentTypePath{
-							{FromCommentTypeID: "type1", ToCommentTypeID: ""},
+							{ChildCommentTypeID: "type1", ParentCommentTypeID: ""},
 						},
 					},
 				})
@@ -213,7 +213,7 @@ func TestDiscussion_CreateComment(t *testing.T) {
 						Name:      "test-rule",
 						CreatedAt: time.Now(),
 						CommentTypePaths: []rule.CommentTypePath{
-							{FromCommentTypeID: "type2", ToCommentTypeID: "type1"},
+							{ChildCommentTypeID: "type2", ParentCommentTypeID: "type1"},
 						},
 					},
 				})
@@ -306,7 +306,7 @@ func TestDiscussion_CreateComment(t *testing.T) {
 						Name:      "test-rule",
 						CreatedAt: time.Now(),
 						CommentTypePaths: []rule.CommentTypePath{
-							{FromCommentTypeID: "evidence", ToCommentTypeID: "claim"},
+							{ChildCommentTypeID: "evidence", ParentCommentTypeID: "claim"},
 						},
 					},
 				})

@@ -19,6 +19,7 @@ type commentTypesTable struct {
 	// Columns
 	ID          postgres.ColumnString
 	RuleID      postgres.ColumnString
+	No          postgres.ColumnInteger
 	Name        postgres.ColumnString
 	Description postgres.ColumnString
 	Color       postgres.ColumnString
@@ -65,11 +66,12 @@ func newCommentTypesTableImpl(schemaName, tableName, alias string) commentTypesT
 	var (
 		IDColumn          = postgres.StringColumn("id")
 		RuleIDColumn      = postgres.StringColumn("rule_id")
+		NoColumn          = postgres.IntegerColumn("no")
 		NameColumn        = postgres.StringColumn("name")
 		DescriptionColumn = postgres.StringColumn("description")
 		ColorColumn       = postgres.StringColumn("color")
-		allColumns        = postgres.ColumnList{IDColumn, RuleIDColumn, NameColumn, DescriptionColumn, ColorColumn}
-		mutableColumns    = postgres.ColumnList{RuleIDColumn, NameColumn, DescriptionColumn, ColorColumn}
+		allColumns        = postgres.ColumnList{IDColumn, RuleIDColumn, NoColumn, NameColumn, DescriptionColumn, ColorColumn}
+		mutableColumns    = postgres.ColumnList{RuleIDColumn, NoColumn, NameColumn, DescriptionColumn, ColorColumn}
 		defaultColumns    = postgres.ColumnList{}
 	)
 
@@ -79,6 +81,7 @@ func newCommentTypesTableImpl(schemaName, tableName, alias string) commentTypesT
 		//Columns
 		ID:          IDColumn,
 		RuleID:      RuleIDColumn,
+		No:          NoColumn,
 		Name:        NameColumn,
 		Description: DescriptionColumn,
 		Color:       ColorColumn,

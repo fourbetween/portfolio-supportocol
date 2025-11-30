@@ -23,11 +23,11 @@ func (s *Comment) Encode(e *jx.Encoder) {
 func (s *Comment) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		s.ID.Encode(e)
+		e.Str(s.ID)
 	}
 	{
 		e.FieldStart("discussionId")
-		s.DiscussionId.Encode(e)
+		e.Str(s.DiscussionId)
 	}
 	{
 		e.FieldStart("parentCommentId")
@@ -35,7 +35,7 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("commentTypeId")
-		s.CommentTypeId.Encode(e)
+		e.Str(s.CommentTypeId)
 	}
 	{
 		e.FieldStart("content")
@@ -43,7 +43,7 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("postedBy")
-		s.PostedBy.Encode(e)
+		e.Str(s.PostedBy)
 	}
 	{
 		e.FieldStart("postedAt")
@@ -78,7 +78,9 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
+				v, err := d.Str()
+				s.ID = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -88,7 +90,9 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 		case "discussionId":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				if err := s.DiscussionId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.DiscussionId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -110,7 +114,9 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 		case "commentTypeId":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.CommentTypeId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.CommentTypeId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -132,7 +138,9 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 		case "postedBy":
 			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
-				if err := s.PostedBy.Decode(d); err != nil {
+				v, err := d.Str()
+				s.PostedBy = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -314,7 +322,11 @@ func (s *CommentType) Encode(e *jx.Encoder) {
 func (s *CommentType) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		s.ID.Encode(e)
+		e.Str(s.ID)
+	}
+	{
+		e.FieldStart("no")
+		e.Int(s.No)
 	}
 	{
 		e.FieldStart("name")
@@ -330,11 +342,12 @@ func (s *CommentType) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfCommentType = [4]string{
+var jsonFieldsNameOfCommentType = [5]string{
 	0: "id",
-	1: "name",
-	2: "description",
-	3: "color",
+	1: "no",
+	2: "name",
+	3: "description",
+	4: "color",
 }
 
 // Decode decodes CommentType from json.
@@ -349,15 +362,29 @@ func (s *CommentType) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
+				v, err := d.Str()
+				s.ID = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"id\"")
 			}
-		case "name":
+		case "no":
 			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int()
+				s.No = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"no\"")
+			}
+		case "name":
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				v, err := d.Str()
 				s.Name = string(v)
@@ -369,7 +396,7 @@ func (s *CommentType) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "description":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				v, err := d.Str()
 				s.Description = string(v)
@@ -381,7 +408,7 @@ func (s *CommentType) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"description\"")
 			}
 		case "color":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Str()
 				s.Color = string(v)
@@ -402,7 +429,7 @@ func (s *CommentType) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00011111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -458,18 +485,18 @@ func (s *CommentTypePath) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CommentTypePath) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("fromCommentTypeId")
-		s.FromCommentTypeId.Encode(e)
+		e.FieldStart("childCommentTypeId")
+		e.Str(s.ChildCommentTypeId)
 	}
 	{
-		e.FieldStart("toCommentTypeId")
-		s.ToCommentTypeId.Encode(e)
+		e.FieldStart("parentCommentTypeId")
+		e.Str(s.ParentCommentTypeId)
 	}
 }
 
 var jsonFieldsNameOfCommentTypePath = [2]string{
-	0: "fromCommentTypeId",
-	1: "toCommentTypeId",
+	0: "childCommentTypeId",
+	1: "parentCommentTypeId",
 }
 
 // Decode decodes CommentTypePath from json.
@@ -481,25 +508,29 @@ func (s *CommentTypePath) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "fromCommentTypeId":
+		case "childCommentTypeId":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.FromCommentTypeId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.ChildCommentTypeId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"fromCommentTypeId\"")
+				return errors.Wrap(err, "decode field \"childCommentTypeId\"")
 			}
-		case "toCommentTypeId":
+		case "parentCommentTypeId":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				if err := s.ToCommentTypeId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.ParentCommentTypeId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"toCommentTypeId\"")
+				return errors.Wrap(err, "decode field \"parentCommentTypeId\"")
 			}
 		default:
 			return d.Skip()
@@ -568,7 +599,7 @@ func (s *Discussion) Encode(e *jx.Encoder) {
 func (s *Discussion) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		s.ID.Encode(e)
+		e.Str(s.ID)
 	}
 	{
 		e.FieldStart("theme")
@@ -584,7 +615,7 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("ruleId")
-		s.RuleId.Encode(e)
+		e.Str(s.RuleId)
 	}
 	{
 		e.FieldStart("visibilityLevel")
@@ -596,7 +627,7 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("createdBy")
-		s.CreatedBy.Encode(e)
+		e.Str(s.CreatedBy)
 	}
 	{
 		e.FieldStart("createdAt")
@@ -633,7 +664,9 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
+				v, err := d.Str()
+				s.ID = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -679,7 +712,9 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 		case "ruleId":
 			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
-				if err := s.RuleId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.RuleId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -709,7 +744,9 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 		case "createdBy":
 			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
-				if err := s.CreatedBy.Decode(d); err != nil {
+				v, err := d.Str()
+				s.CreatedBy = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -963,7 +1000,7 @@ func (s *DiscussionsDiscussionIdCommentsPostReq) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("commentTypeId")
-		s.CommentTypeId.Encode(e)
+		e.Str(s.CommentTypeId)
 	}
 	{
 		e.FieldStart("content")
@@ -1001,7 +1038,9 @@ func (s *DiscussionsDiscussionIdCommentsPostReq) Decode(d *jx.Decoder) error {
 		case "commentTypeId":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				if err := s.CommentTypeId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.CommentTypeId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -1238,7 +1277,7 @@ func (s *DiscussionsDiscussionIdIssuesPostReq) Encode(e *jx.Encoder) {
 func (s *DiscussionsDiscussionIdIssuesPostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("commentId")
-		s.CommentId.Encode(e)
+		e.Str(s.CommentId)
 	}
 	{
 		e.FieldStart("issueType")
@@ -1268,7 +1307,9 @@ func (s *DiscussionsDiscussionIdIssuesPostReq) Decode(d *jx.Decoder) error {
 		case "commentId":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.CommentId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.CommentId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -1608,7 +1649,7 @@ func (s *DiscussionsDiscussionIdPutReq) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("ruleId")
-		s.RuleId.Encode(e)
+		e.Str(s.RuleId)
 	}
 	{
 		e.FieldStart("visibilityLevel")
@@ -1682,7 +1723,9 @@ func (s *DiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
 		case "ruleId":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.RuleId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.RuleId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -1840,7 +1883,7 @@ func (s *DiscussionsPostReq) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("ruleId")
-		s.RuleId.Encode(e)
+		e.Str(s.RuleId)
 	}
 	{
 		e.FieldStart("visibilityLevel")
@@ -1909,7 +1952,9 @@ func (s *DiscussionsPostReq) Decode(d *jx.Decoder) error {
 		case "ruleId":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.RuleId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.RuleId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2201,46 +2246,6 @@ func (s *ErrorsPostReq) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes ID as json.
-func (s ID) Encode(e *jx.Encoder) {
-	unwrapped := string(s)
-
-	e.Str(unwrapped)
-}
-
-// Decode decodes ID from json.
-func (s *ID) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode ID to nil")
-	}
-	var unwrapped string
-	if err := func() error {
-		v, err := d.Str()
-		unwrapped = string(v)
-		if err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = ID(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s ID) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *ID) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode implements json.Marshaler.
 func (s *Issue) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -2252,11 +2257,11 @@ func (s *Issue) Encode(e *jx.Encoder) {
 func (s *Issue) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		s.ID.Encode(e)
+		e.Str(s.ID)
 	}
 	{
 		e.FieldStart("commentId")
-		s.CommentId.Encode(e)
+		e.Str(s.CommentId)
 	}
 	{
 		e.FieldStart("issueType")
@@ -2268,7 +2273,7 @@ func (s *Issue) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("createdBy")
-		s.CreatedBy.Encode(e)
+		e.Str(s.CreatedBy)
 	}
 	{
 		e.FieldStart("createdAt")
@@ -2297,7 +2302,9 @@ func (s *Issue) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
+				v, err := d.Str()
+				s.ID = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2307,7 +2314,9 @@ func (s *Issue) Decode(d *jx.Decoder) error {
 		case "commentId":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				if err := s.CommentId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.CommentId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2339,7 +2348,9 @@ func (s *Issue) Decode(d *jx.Decoder) error {
 		case "createdBy":
 			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
-				if err := s.CreatedBy.Decode(d); err != nil {
+				v, err := d.Str()
+				s.CreatedBy = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2465,11 +2476,11 @@ func (s *Note) Encode(e *jx.Encoder) {
 func (s *Note) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		s.ID.Encode(e)
+		e.Str(s.ID)
 	}
 	{
 		e.FieldStart("discussionId")
-		s.DiscussionId.Encode(e)
+		e.Str(s.DiscussionId)
 	}
 	{
 		e.FieldStart("content")
@@ -2477,7 +2488,7 @@ func (s *Note) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("postedBy")
-		s.PostedBy.Encode(e)
+		e.Str(s.PostedBy)
 	}
 	{
 		e.FieldStart("postedAt")
@@ -2505,7 +2516,9 @@ func (s *Note) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
+				v, err := d.Str()
+				s.ID = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2515,7 +2528,9 @@ func (s *Note) Decode(d *jx.Decoder) error {
 		case "discussionId":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				if err := s.DiscussionId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.DiscussionId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2537,7 +2552,9 @@ func (s *Note) Decode(d *jx.Decoder) error {
 		case "postedBy":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.PostedBy.Decode(d); err != nil {
+				v, err := d.Str()
+				s.PostedBy = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -3019,7 +3036,7 @@ func (s *Project) Encode(e *jx.Encoder) {
 func (s *Project) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		s.ID.Encode(e)
+		e.Str(s.ID)
 	}
 	{
 		e.FieldStart("name")
@@ -3027,7 +3044,7 @@ func (s *Project) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("createdBy")
-		s.CreatedBy.Encode(e)
+		e.Str(s.CreatedBy)
 	}
 	{
 		e.FieldStart("createdAt")
@@ -3054,7 +3071,9 @@ func (s *Project) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
+				v, err := d.Str()
+				s.ID = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -3076,7 +3095,9 @@ func (s *Project) Decode(d *jx.Decoder) error {
 		case "createdBy":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				if err := s.CreatedBy.Decode(d); err != nil {
+				v, err := d.Str()
+				s.CreatedBy = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -3354,7 +3375,7 @@ func (s *Rule) Encode(e *jx.Encoder) {
 func (s *Rule) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		s.ID.Encode(e)
+		e.Str(s.ID)
 	}
 	{
 		e.FieldStart("name")
@@ -3366,7 +3387,7 @@ func (s *Rule) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("createdBy")
-		s.CreatedBy.Encode(e)
+		e.Str(s.CreatedBy)
 	}
 	{
 		e.FieldStart("createdAt")
@@ -3412,7 +3433,9 @@ func (s *Rule) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
+				v, err := d.Str()
+				s.ID = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -3446,7 +3469,9 @@ func (s *Rule) Decode(d *jx.Decoder) error {
 		case "createdBy":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.CreatedBy.Decode(d); err != nil {
+				v, err := d.Str()
+				s.CreatedBy = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -3984,7 +4009,7 @@ func (s *Workbook) Encode(e *jx.Encoder) {
 func (s *Workbook) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("id")
-		s.ID.Encode(e)
+		e.Str(s.ID)
 	}
 	{
 		e.FieldStart("title")
@@ -3996,7 +4021,7 @@ func (s *Workbook) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("ownerId")
-		s.OwnerId.Encode(e)
+		e.Str(s.OwnerId)
 	}
 }
 
@@ -4019,7 +4044,9 @@ func (s *Workbook) Decode(d *jx.Decoder) error {
 		case "id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.ID.Decode(d); err != nil {
+				v, err := d.Str()
+				s.ID = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -4051,7 +4078,9 @@ func (s *Workbook) Decode(d *jx.Decoder) error {
 		case "ownerId":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.OwnerId.Decode(d); err != nil {
+				v, err := d.Str()
+				s.OwnerId = string(v)
+				if err != nil {
 					return err
 				}
 				return nil

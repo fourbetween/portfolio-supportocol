@@ -16,8 +16,8 @@ import (
 
 // DiscussionsDiscussionIdCommentsCommentIdDeleteParams is parameters of DELETE /discussions/{discussionId}/comments/{commentId} operation.
 type DiscussionsDiscussionIdCommentsCommentIdDeleteParams struct {
-	DiscussionId ID
-	CommentId    ID
+	DiscussionId string
+	CommentId    string
 }
 
 func unpackDiscussionsDiscussionIdCommentsCommentIdDeleteParams(packed middleware.Parameters) (params DiscussionsDiscussionIdCommentsCommentIdDeleteParams) {
@@ -26,14 +26,14 @@ func unpackDiscussionsDiscussionIdCommentsCommentIdDeleteParams(packed middlewar
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	{
 		key := middleware.ParameterKey{
 			Name: "commentId",
 			In:   "path",
 		}
-		params.CommentId = packed[key].(ID)
+		params.CommentId = packed[key].(string)
 	}
 	return params
 }
@@ -58,32 +58,17 @@ func decodeDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]string, 
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -118,32 +103,17 @@ func decodeDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]string, 
 			})
 
 			if err := func() error {
-				var paramsDotCommentIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotCommentIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.CommentId = ID(paramsDotCommentIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.CommentId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.CommentId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -164,8 +134,8 @@ func decodeDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]string, 
 
 // DiscussionsDiscussionIdCommentsCommentIdPutParams is parameters of PUT /discussions/{discussionId}/comments/{commentId} operation.
 type DiscussionsDiscussionIdCommentsCommentIdPutParams struct {
-	DiscussionId ID
-	CommentId    ID
+	DiscussionId string
+	CommentId    string
 }
 
 func unpackDiscussionsDiscussionIdCommentsCommentIdPutParams(packed middleware.Parameters) (params DiscussionsDiscussionIdCommentsCommentIdPutParams) {
@@ -174,14 +144,14 @@ func unpackDiscussionsDiscussionIdCommentsCommentIdPutParams(packed middleware.P
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	{
 		key := middleware.ParameterKey{
 			Name: "commentId",
 			In:   "path",
 		}
-		params.CommentId = packed[key].(ID)
+		params.CommentId = packed[key].(string)
 	}
 	return params
 }
@@ -206,32 +176,17 @@ func decodeDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]string, arg
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -266,32 +221,17 @@ func decodeDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]string, arg
 			})
 
 			if err := func() error {
-				var paramsDotCommentIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotCommentIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.CommentId = ID(paramsDotCommentIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.CommentId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.CommentId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -312,7 +252,7 @@ func decodeDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]string, arg
 
 // DiscussionsDiscussionIdCommentsGetParams is parameters of GET /discussions/{discussionId}/comments operation.
 type DiscussionsDiscussionIdCommentsGetParams struct {
-	DiscussionId ID
+	DiscussionId string
 }
 
 func unpackDiscussionsDiscussionIdCommentsGetParams(packed middleware.Parameters) (params DiscussionsDiscussionIdCommentsGetParams) {
@@ -321,7 +261,7 @@ func unpackDiscussionsDiscussionIdCommentsGetParams(packed middleware.Parameters
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	return params
 }
@@ -346,32 +286,17 @@ func decodeDiscussionsDiscussionIdCommentsGetParams(args [1]string, argsEscaped 
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -392,7 +317,7 @@ func decodeDiscussionsDiscussionIdCommentsGetParams(args [1]string, argsEscaped 
 
 // DiscussionsDiscussionIdCommentsPostParams is parameters of POST /discussions/{discussionId}/comments operation.
 type DiscussionsDiscussionIdCommentsPostParams struct {
-	DiscussionId ID
+	DiscussionId string
 }
 
 func unpackDiscussionsDiscussionIdCommentsPostParams(packed middleware.Parameters) (params DiscussionsDiscussionIdCommentsPostParams) {
@@ -401,7 +326,7 @@ func unpackDiscussionsDiscussionIdCommentsPostParams(packed middleware.Parameter
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	return params
 }
@@ -426,32 +351,17 @@ func decodeDiscussionsDiscussionIdCommentsPostParams(args [1]string, argsEscaped
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -472,7 +382,7 @@ func decodeDiscussionsDiscussionIdCommentsPostParams(args [1]string, argsEscaped
 
 // DiscussionsDiscussionIdDeleteParams is parameters of DELETE /discussions/{discussionId} operation.
 type DiscussionsDiscussionIdDeleteParams struct {
-	DiscussionId ID
+	DiscussionId string
 }
 
 func unpackDiscussionsDiscussionIdDeleteParams(packed middleware.Parameters) (params DiscussionsDiscussionIdDeleteParams) {
@@ -481,7 +391,7 @@ func unpackDiscussionsDiscussionIdDeleteParams(packed middleware.Parameters) (pa
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	return params
 }
@@ -506,32 +416,17 @@ func decodeDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscaped bool,
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -552,7 +447,7 @@ func decodeDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscaped bool,
 
 // DiscussionsDiscussionIdGetParams is parameters of GET /discussions/{discussionId} operation.
 type DiscussionsDiscussionIdGetParams struct {
-	DiscussionId ID
+	DiscussionId string
 }
 
 func unpackDiscussionsDiscussionIdGetParams(packed middleware.Parameters) (params DiscussionsDiscussionIdGetParams) {
@@ -561,7 +456,7 @@ func unpackDiscussionsDiscussionIdGetParams(packed middleware.Parameters) (param
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	return params
 }
@@ -586,32 +481,17 @@ func decodeDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped bool, r 
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -632,7 +512,7 @@ func decodeDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped bool, r 
 
 // DiscussionsDiscussionIdIssuesGetParams is parameters of GET /discussions/{discussionId}/issues operation.
 type DiscussionsDiscussionIdIssuesGetParams struct {
-	DiscussionId ID
+	DiscussionId string
 }
 
 func unpackDiscussionsDiscussionIdIssuesGetParams(packed middleware.Parameters) (params DiscussionsDiscussionIdIssuesGetParams) {
@@ -641,7 +521,7 @@ func unpackDiscussionsDiscussionIdIssuesGetParams(packed middleware.Parameters) 
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	return params
 }
@@ -666,32 +546,17 @@ func decodeDiscussionsDiscussionIdIssuesGetParams(args [1]string, argsEscaped bo
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -712,8 +577,8 @@ func decodeDiscussionsDiscussionIdIssuesGetParams(args [1]string, argsEscaped bo
 
 // DiscussionsDiscussionIdIssuesIssueIdDeleteParams is parameters of DELETE /discussions/{discussionId}/issues/{issueId} operation.
 type DiscussionsDiscussionIdIssuesIssueIdDeleteParams struct {
-	DiscussionId ID
-	IssueId      ID
+	DiscussionId string
+	IssueId      string
 }
 
 func unpackDiscussionsDiscussionIdIssuesIssueIdDeleteParams(packed middleware.Parameters) (params DiscussionsDiscussionIdIssuesIssueIdDeleteParams) {
@@ -722,14 +587,14 @@ func unpackDiscussionsDiscussionIdIssuesIssueIdDeleteParams(packed middleware.Pa
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	{
 		key := middleware.ParameterKey{
 			Name: "issueId",
 			In:   "path",
 		}
-		params.IssueId = packed[key].(ID)
+		params.IssueId = packed[key].(string)
 	}
 	return params
 }
@@ -754,32 +619,17 @@ func decodeDiscussionsDiscussionIdIssuesIssueIdDeleteParams(args [2]string, args
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -814,32 +664,17 @@ func decodeDiscussionsDiscussionIdIssuesIssueIdDeleteParams(args [2]string, args
 			})
 
 			if err := func() error {
-				var paramsDotIssueIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotIssueIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.IssueId = ID(paramsDotIssueIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.IssueId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.IssueId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -860,8 +695,8 @@ func decodeDiscussionsDiscussionIdIssuesIssueIdDeleteParams(args [2]string, args
 
 // DiscussionsDiscussionIdIssuesIssueIdPutParams is parameters of PUT /discussions/{discussionId}/issues/{issueId} operation.
 type DiscussionsDiscussionIdIssuesIssueIdPutParams struct {
-	DiscussionId ID
-	IssueId      ID
+	DiscussionId string
+	IssueId      string
 }
 
 func unpackDiscussionsDiscussionIdIssuesIssueIdPutParams(packed middleware.Parameters) (params DiscussionsDiscussionIdIssuesIssueIdPutParams) {
@@ -870,14 +705,14 @@ func unpackDiscussionsDiscussionIdIssuesIssueIdPutParams(packed middleware.Param
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	{
 		key := middleware.ParameterKey{
 			Name: "issueId",
 			In:   "path",
 		}
-		params.IssueId = packed[key].(ID)
+		params.IssueId = packed[key].(string)
 	}
 	return params
 }
@@ -902,32 +737,17 @@ func decodeDiscussionsDiscussionIdIssuesIssueIdPutParams(args [2]string, argsEsc
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -962,32 +782,17 @@ func decodeDiscussionsDiscussionIdIssuesIssueIdPutParams(args [2]string, argsEsc
 			})
 
 			if err := func() error {
-				var paramsDotIssueIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotIssueIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.IssueId = ID(paramsDotIssueIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.IssueId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.IssueId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1008,7 +813,7 @@ func decodeDiscussionsDiscussionIdIssuesIssueIdPutParams(args [2]string, argsEsc
 
 // DiscussionsDiscussionIdIssuesPostParams is parameters of POST /discussions/{discussionId}/issues operation.
 type DiscussionsDiscussionIdIssuesPostParams struct {
-	DiscussionId ID
+	DiscussionId string
 }
 
 func unpackDiscussionsDiscussionIdIssuesPostParams(packed middleware.Parameters) (params DiscussionsDiscussionIdIssuesPostParams) {
@@ -1017,7 +822,7 @@ func unpackDiscussionsDiscussionIdIssuesPostParams(packed middleware.Parameters)
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	return params
 }
@@ -1042,32 +847,17 @@ func decodeDiscussionsDiscussionIdIssuesPostParams(args [1]string, argsEscaped b
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1088,7 +878,7 @@ func decodeDiscussionsDiscussionIdIssuesPostParams(args [1]string, argsEscaped b
 
 // DiscussionsDiscussionIdNotesGetParams is parameters of GET /discussions/{discussionId}/notes operation.
 type DiscussionsDiscussionIdNotesGetParams struct {
-	DiscussionId ID
+	DiscussionId string
 }
 
 func unpackDiscussionsDiscussionIdNotesGetParams(packed middleware.Parameters) (params DiscussionsDiscussionIdNotesGetParams) {
@@ -1097,7 +887,7 @@ func unpackDiscussionsDiscussionIdNotesGetParams(packed middleware.Parameters) (
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	return params
 }
@@ -1122,32 +912,17 @@ func decodeDiscussionsDiscussionIdNotesGetParams(args [1]string, argsEscaped boo
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1168,8 +943,8 @@ func decodeDiscussionsDiscussionIdNotesGetParams(args [1]string, argsEscaped boo
 
 // DiscussionsDiscussionIdNotesNoteIdDeleteParams is parameters of DELETE /discussions/{discussionId}/notes/{noteId} operation.
 type DiscussionsDiscussionIdNotesNoteIdDeleteParams struct {
-	DiscussionId ID
-	NoteId       ID
+	DiscussionId string
+	NoteId       string
 }
 
 func unpackDiscussionsDiscussionIdNotesNoteIdDeleteParams(packed middleware.Parameters) (params DiscussionsDiscussionIdNotesNoteIdDeleteParams) {
@@ -1178,14 +953,14 @@ func unpackDiscussionsDiscussionIdNotesNoteIdDeleteParams(packed middleware.Para
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	{
 		key := middleware.ParameterKey{
 			Name: "noteId",
 			In:   "path",
 		}
-		params.NoteId = packed[key].(ID)
+		params.NoteId = packed[key].(string)
 	}
 	return params
 }
@@ -1210,32 +985,17 @@ func decodeDiscussionsDiscussionIdNotesNoteIdDeleteParams(args [2]string, argsEs
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1270,32 +1030,17 @@ func decodeDiscussionsDiscussionIdNotesNoteIdDeleteParams(args [2]string, argsEs
 			})
 
 			if err := func() error {
-				var paramsDotNoteIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotNoteIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.NoteId = ID(paramsDotNoteIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.NoteId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.NoteId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1316,8 +1061,8 @@ func decodeDiscussionsDiscussionIdNotesNoteIdDeleteParams(args [2]string, argsEs
 
 // DiscussionsDiscussionIdNotesNoteIdPutParams is parameters of PUT /discussions/{discussionId}/notes/{noteId} operation.
 type DiscussionsDiscussionIdNotesNoteIdPutParams struct {
-	DiscussionId ID
-	NoteId       ID
+	DiscussionId string
+	NoteId       string
 }
 
 func unpackDiscussionsDiscussionIdNotesNoteIdPutParams(packed middleware.Parameters) (params DiscussionsDiscussionIdNotesNoteIdPutParams) {
@@ -1326,14 +1071,14 @@ func unpackDiscussionsDiscussionIdNotesNoteIdPutParams(packed middleware.Paramet
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	{
 		key := middleware.ParameterKey{
 			Name: "noteId",
 			In:   "path",
 		}
-		params.NoteId = packed[key].(ID)
+		params.NoteId = packed[key].(string)
 	}
 	return params
 }
@@ -1358,32 +1103,17 @@ func decodeDiscussionsDiscussionIdNotesNoteIdPutParams(args [2]string, argsEscap
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1418,32 +1148,17 @@ func decodeDiscussionsDiscussionIdNotesNoteIdPutParams(args [2]string, argsEscap
 			})
 
 			if err := func() error {
-				var paramsDotNoteIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotNoteIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.NoteId = ID(paramsDotNoteIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.NoteId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.NoteId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1464,7 +1179,7 @@ func decodeDiscussionsDiscussionIdNotesNoteIdPutParams(args [2]string, argsEscap
 
 // DiscussionsDiscussionIdNotesPostParams is parameters of POST /discussions/{discussionId}/notes operation.
 type DiscussionsDiscussionIdNotesPostParams struct {
-	DiscussionId ID
+	DiscussionId string
 }
 
 func unpackDiscussionsDiscussionIdNotesPostParams(packed middleware.Parameters) (params DiscussionsDiscussionIdNotesPostParams) {
@@ -1473,7 +1188,7 @@ func unpackDiscussionsDiscussionIdNotesPostParams(packed middleware.Parameters) 
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	return params
 }
@@ -1498,32 +1213,17 @@ func decodeDiscussionsDiscussionIdNotesPostParams(args [1]string, argsEscaped bo
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1544,7 +1244,7 @@ func decodeDiscussionsDiscussionIdNotesPostParams(args [1]string, argsEscaped bo
 
 // DiscussionsDiscussionIdPutParams is parameters of PUT /discussions/{discussionId} operation.
 type DiscussionsDiscussionIdPutParams struct {
-	DiscussionId ID
+	DiscussionId string
 }
 
 func unpackDiscussionsDiscussionIdPutParams(packed middleware.Parameters) (params DiscussionsDiscussionIdPutParams) {
@@ -1553,7 +1253,7 @@ func unpackDiscussionsDiscussionIdPutParams(packed middleware.Parameters) (param
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(ID)
+		params.DiscussionId = packed[key].(string)
 	}
 	return params
 }
@@ -1578,32 +1278,17 @@ func decodeDiscussionsDiscussionIdPutParams(args [1]string, argsEscaped bool, r 
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1624,7 +1309,7 @@ func decodeDiscussionsDiscussionIdPutParams(args [1]string, argsEscaped bool, r 
 
 // DiscussionsGetParams is parameters of GET /discussions operation.
 type DiscussionsGetParams struct {
-	ProjectId OptID `json:",omitempty,omitzero"`
+	ProjectId OptString `json:",omitempty,omitzero"`
 }
 
 func unpackDiscussionsGetParams(packed middleware.Parameters) (params DiscussionsGetParams) {
@@ -1634,7 +1319,7 @@ func unpackDiscussionsGetParams(packed middleware.Parameters) (params Discussion
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.ProjectId = v.(OptID)
+			params.ProjectId = v.(OptString)
 		}
 	}
 	return params
@@ -1652,26 +1337,19 @@ func decodeDiscussionsGetParams(args [0]string, argsEscaped bool, r *http.Reques
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotProjectIdVal ID
+				var paramsDotProjectIdVal string
 				if err := func() error {
-					var paramsDotProjectIdValVal string
-					if err := func() error {
-						val, err := d.DecodeValue()
-						if err != nil {
-							return err
-						}
-
-						c, err := conv.ToString(val)
-						if err != nil {
-							return err
-						}
-
-						paramsDotProjectIdValVal = c
-						return nil
-					}(); err != nil {
+					val, err := d.DecodeValue()
+					if err != nil {
 						return err
 					}
-					paramsDotProjectIdVal = ID(paramsDotProjectIdValVal)
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotProjectIdVal = c
 					return nil
 				}(); err != nil {
 					return err
@@ -1679,21 +1357,6 @@ func decodeDiscussionsGetParams(args [0]string, argsEscaped bool, r *http.Reques
 				params.ProjectId.SetTo(paramsDotProjectIdVal)
 				return nil
 			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.ProjectId.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
 				return err
 			}
 		}
@@ -1710,7 +1373,7 @@ func decodeDiscussionsGetParams(args [0]string, argsEscaped bool, r *http.Reques
 
 // ProjectsProjectIdDeleteParams is parameters of DELETE /projects/{projectId} operation.
 type ProjectsProjectIdDeleteParams struct {
-	ProjectId ID
+	ProjectId string
 }
 
 func unpackProjectsProjectIdDeleteParams(packed middleware.Parameters) (params ProjectsProjectIdDeleteParams) {
@@ -1719,7 +1382,7 @@ func unpackProjectsProjectIdDeleteParams(packed middleware.Parameters) (params P
 			Name: "projectId",
 			In:   "path",
 		}
-		params.ProjectId = packed[key].(ID)
+		params.ProjectId = packed[key].(string)
 	}
 	return params
 }
@@ -1744,32 +1407,17 @@ func decodeProjectsProjectIdDeleteParams(args [1]string, argsEscaped bool, r *ht
 			})
 
 			if err := func() error {
-				var paramsDotProjectIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotProjectIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.ProjectId = ID(paramsDotProjectIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.ProjectId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.ProjectId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1790,7 +1438,7 @@ func decodeProjectsProjectIdDeleteParams(args [1]string, argsEscaped bool, r *ht
 
 // ProjectsProjectIdGetParams is parameters of GET /projects/{projectId} operation.
 type ProjectsProjectIdGetParams struct {
-	ProjectId ID
+	ProjectId string
 }
 
 func unpackProjectsProjectIdGetParams(packed middleware.Parameters) (params ProjectsProjectIdGetParams) {
@@ -1799,7 +1447,7 @@ func unpackProjectsProjectIdGetParams(packed middleware.Parameters) (params Proj
 			Name: "projectId",
 			In:   "path",
 		}
-		params.ProjectId = packed[key].(ID)
+		params.ProjectId = packed[key].(string)
 	}
 	return params
 }
@@ -1824,32 +1472,17 @@ func decodeProjectsProjectIdGetParams(args [1]string, argsEscaped bool, r *http.
 			})
 
 			if err := func() error {
-				var paramsDotProjectIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotProjectIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.ProjectId = ID(paramsDotProjectIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.ProjectId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.ProjectId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1870,7 +1503,7 @@ func decodeProjectsProjectIdGetParams(args [1]string, argsEscaped bool, r *http.
 
 // ProjectsProjectIdPutParams is parameters of PUT /projects/{projectId} operation.
 type ProjectsProjectIdPutParams struct {
-	ProjectId ID
+	ProjectId string
 }
 
 func unpackProjectsProjectIdPutParams(packed middleware.Parameters) (params ProjectsProjectIdPutParams) {
@@ -1879,7 +1512,7 @@ func unpackProjectsProjectIdPutParams(packed middleware.Parameters) (params Proj
 			Name: "projectId",
 			In:   "path",
 		}
-		params.ProjectId = packed[key].(ID)
+		params.ProjectId = packed[key].(string)
 	}
 	return params
 }
@@ -1904,32 +1537,17 @@ func decodeProjectsProjectIdPutParams(args [1]string, argsEscaped bool, r *http.
 			})
 
 			if err := func() error {
-				var paramsDotProjectIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotProjectIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.ProjectId = ID(paramsDotProjectIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.ProjectId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.ProjectId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -1950,7 +1568,7 @@ func decodeProjectsProjectIdPutParams(args [1]string, argsEscaped bool, r *http.
 
 // RulesRuleIdDeleteParams is parameters of DELETE /rules/{ruleId} operation.
 type RulesRuleIdDeleteParams struct {
-	RuleId ID
+	RuleId string
 }
 
 func unpackRulesRuleIdDeleteParams(packed middleware.Parameters) (params RulesRuleIdDeleteParams) {
@@ -1959,7 +1577,7 @@ func unpackRulesRuleIdDeleteParams(packed middleware.Parameters) (params RulesRu
 			Name: "ruleId",
 			In:   "path",
 		}
-		params.RuleId = packed[key].(ID)
+		params.RuleId = packed[key].(string)
 	}
 	return params
 }
@@ -1984,32 +1602,17 @@ func decodeRulesRuleIdDeleteParams(args [1]string, argsEscaped bool, r *http.Req
 			})
 
 			if err := func() error {
-				var paramsDotRuleIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotRuleIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.RuleId = ID(paramsDotRuleIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.RuleId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.RuleId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -2030,7 +1633,7 @@ func decodeRulesRuleIdDeleteParams(args [1]string, argsEscaped bool, r *http.Req
 
 // RulesRuleIdGetParams is parameters of GET /rules/{ruleId} operation.
 type RulesRuleIdGetParams struct {
-	RuleId ID
+	RuleId string
 }
 
 func unpackRulesRuleIdGetParams(packed middleware.Parameters) (params RulesRuleIdGetParams) {
@@ -2039,7 +1642,7 @@ func unpackRulesRuleIdGetParams(packed middleware.Parameters) (params RulesRuleI
 			Name: "ruleId",
 			In:   "path",
 		}
-		params.RuleId = packed[key].(ID)
+		params.RuleId = packed[key].(string)
 	}
 	return params
 }
@@ -2064,32 +1667,17 @@ func decodeRulesRuleIdGetParams(args [1]string, argsEscaped bool, r *http.Reques
 			})
 
 			if err := func() error {
-				var paramsDotRuleIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotRuleIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.RuleId = ID(paramsDotRuleIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.RuleId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.RuleId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -2110,7 +1698,7 @@ func decodeRulesRuleIdGetParams(args [1]string, argsEscaped bool, r *http.Reques
 
 // RulesRuleIdPutParams is parameters of PUT /rules/{ruleId} operation.
 type RulesRuleIdPutParams struct {
-	RuleId ID
+	RuleId string
 }
 
 func unpackRulesRuleIdPutParams(packed middleware.Parameters) (params RulesRuleIdPutParams) {
@@ -2119,7 +1707,7 @@ func unpackRulesRuleIdPutParams(packed middleware.Parameters) (params RulesRuleI
 			Name: "ruleId",
 			In:   "path",
 		}
-		params.RuleId = packed[key].(ID)
+		params.RuleId = packed[key].(string)
 	}
 	return params
 }
@@ -2144,32 +1732,17 @@ func decodeRulesRuleIdPutParams(args [1]string, argsEscaped bool, r *http.Reques
 			})
 
 			if err := func() error {
-				var paramsDotRuleIdVal string
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotRuleIdVal = c
-					return nil
-				}(); err != nil {
+				val, err := d.DecodeValue()
+				if err != nil {
 					return err
 				}
-				params.RuleId = ID(paramsDotRuleIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.RuleId.Validate(); err != nil {
+
+				c, err := conv.ToString(val)
+				if err != nil {
 					return err
 				}
+
+				params.RuleId = c
 				return nil
 			}(); err != nil {
 				return err

@@ -40,23 +40,23 @@ func (s *CognitoAuth) SetRoles(val []string) {
 
 // Ref: #/components/schemas/comment
 type Comment struct {
-	ID              ID            `json:"id"`
-	DiscussionId    ID            `json:"discussionId"`
+	ID              string        `json:"id"`
+	DiscussionId    string        `json:"discussionId"`
 	ParentCommentId string        `json:"parentCommentId"`
-	CommentTypeId   ID            `json:"commentTypeId"`
+	CommentTypeId   string        `json:"commentTypeId"`
 	Content         string        `json:"content"`
-	PostedBy        ID            `json:"postedBy"`
+	PostedBy        string        `json:"postedBy"`
 	PostedAt        time.Time     `json:"postedAt"`
 	Status          CommentStatus `json:"status"`
 }
 
 // GetID returns the value of ID.
-func (s *Comment) GetID() ID {
+func (s *Comment) GetID() string {
 	return s.ID
 }
 
 // GetDiscussionId returns the value of DiscussionId.
-func (s *Comment) GetDiscussionId() ID {
+func (s *Comment) GetDiscussionId() string {
 	return s.DiscussionId
 }
 
@@ -66,7 +66,7 @@ func (s *Comment) GetParentCommentId() string {
 }
 
 // GetCommentTypeId returns the value of CommentTypeId.
-func (s *Comment) GetCommentTypeId() ID {
+func (s *Comment) GetCommentTypeId() string {
 	return s.CommentTypeId
 }
 
@@ -76,7 +76,7 @@ func (s *Comment) GetContent() string {
 }
 
 // GetPostedBy returns the value of PostedBy.
-func (s *Comment) GetPostedBy() ID {
+func (s *Comment) GetPostedBy() string {
 	return s.PostedBy
 }
 
@@ -91,12 +91,12 @@ func (s *Comment) GetStatus() CommentStatus {
 }
 
 // SetID sets the value of ID.
-func (s *Comment) SetID(val ID) {
+func (s *Comment) SetID(val string) {
 	s.ID = val
 }
 
 // SetDiscussionId sets the value of DiscussionId.
-func (s *Comment) SetDiscussionId(val ID) {
+func (s *Comment) SetDiscussionId(val string) {
 	s.DiscussionId = val
 }
 
@@ -106,7 +106,7 @@ func (s *Comment) SetParentCommentId(val string) {
 }
 
 // SetCommentTypeId sets the value of CommentTypeId.
-func (s *Comment) SetCommentTypeId(val ID) {
+func (s *Comment) SetCommentTypeId(val string) {
 	s.CommentTypeId = val
 }
 
@@ -116,7 +116,7 @@ func (s *Comment) SetContent(val string) {
 }
 
 // SetPostedBy sets the value of PostedBy.
-func (s *Comment) SetPostedBy(val ID) {
+func (s *Comment) SetPostedBy(val string) {
 	s.PostedBy = val
 }
 
@@ -237,15 +237,21 @@ func (s *CommentStatus) UnmarshalText(data []byte) error {
 
 // Ref: #/components/schemas/commentType
 type CommentType struct {
-	ID          ID     `json:"id"`
+	ID          string `json:"id"`
+	No          int    `json:"no"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Color       string `json:"color"`
 }
 
 // GetID returns the value of ID.
-func (s *CommentType) GetID() ID {
+func (s *CommentType) GetID() string {
 	return s.ID
+}
+
+// GetNo returns the value of No.
+func (s *CommentType) GetNo() int {
+	return s.No
 }
 
 // GetName returns the value of Name.
@@ -264,8 +270,13 @@ func (s *CommentType) GetColor() string {
 }
 
 // SetID sets the value of ID.
-func (s *CommentType) SetID(val ID) {
+func (s *CommentType) SetID(val string) {
 	s.ID = val
+}
+
+// SetNo sets the value of No.
+func (s *CommentType) SetNo(val int) {
+	s.No = val
 }
 
 // SetName sets the value of Name.
@@ -285,46 +296,46 @@ func (s *CommentType) SetColor(val string) {
 
 // Ref: #/components/schemas/commentTypePath
 type CommentTypePath struct {
-	FromCommentTypeId ID `json:"fromCommentTypeId"`
-	ToCommentTypeId   ID `json:"toCommentTypeId"`
+	ChildCommentTypeId  string `json:"childCommentTypeId"`
+	ParentCommentTypeId string `json:"parentCommentTypeId"`
 }
 
-// GetFromCommentTypeId returns the value of FromCommentTypeId.
-func (s *CommentTypePath) GetFromCommentTypeId() ID {
-	return s.FromCommentTypeId
+// GetChildCommentTypeId returns the value of ChildCommentTypeId.
+func (s *CommentTypePath) GetChildCommentTypeId() string {
+	return s.ChildCommentTypeId
 }
 
-// GetToCommentTypeId returns the value of ToCommentTypeId.
-func (s *CommentTypePath) GetToCommentTypeId() ID {
-	return s.ToCommentTypeId
+// GetParentCommentTypeId returns the value of ParentCommentTypeId.
+func (s *CommentTypePath) GetParentCommentTypeId() string {
+	return s.ParentCommentTypeId
 }
 
-// SetFromCommentTypeId sets the value of FromCommentTypeId.
-func (s *CommentTypePath) SetFromCommentTypeId(val ID) {
-	s.FromCommentTypeId = val
+// SetChildCommentTypeId sets the value of ChildCommentTypeId.
+func (s *CommentTypePath) SetChildCommentTypeId(val string) {
+	s.ChildCommentTypeId = val
 }
 
-// SetToCommentTypeId sets the value of ToCommentTypeId.
-func (s *CommentTypePath) SetToCommentTypeId(val ID) {
-	s.ToCommentTypeId = val
+// SetParentCommentTypeId sets the value of ParentCommentTypeId.
+func (s *CommentTypePath) SetParentCommentTypeId(val string) {
+	s.ParentCommentTypeId = val
 }
 
 // Ref: #/components/schemas/discussion
 type Discussion struct {
-	ID                     ID                     `json:"id"`
+	ID                     string                 `json:"id"`
 	Theme                  string                 `json:"theme"`
 	Background             string                 `json:"background"`
 	Conclusion             string                 `json:"conclusion"`
-	RuleId                 ID                     `json:"ruleId"`
+	RuleId                 string                 `json:"ruleId"`
 	VisibilityLevel        VisibilityLevel        `json:"visibilityLevel"`
 	CommentPermissionLevel CommentPermissionLevel `json:"commentPermissionLevel"`
-	CreatedBy              ID                     `json:"createdBy"`
+	CreatedBy              string                 `json:"createdBy"`
 	CreatedAt              time.Time              `json:"createdAt"`
 	Status                 DiscussionStatus       `json:"status"`
 }
 
 // GetID returns the value of ID.
-func (s *Discussion) GetID() ID {
+func (s *Discussion) GetID() string {
 	return s.ID
 }
 
@@ -344,7 +355,7 @@ func (s *Discussion) GetConclusion() string {
 }
 
 // GetRuleId returns the value of RuleId.
-func (s *Discussion) GetRuleId() ID {
+func (s *Discussion) GetRuleId() string {
 	return s.RuleId
 }
 
@@ -359,7 +370,7 @@ func (s *Discussion) GetCommentPermissionLevel() CommentPermissionLevel {
 }
 
 // GetCreatedBy returns the value of CreatedBy.
-func (s *Discussion) GetCreatedBy() ID {
+func (s *Discussion) GetCreatedBy() string {
 	return s.CreatedBy
 }
 
@@ -374,7 +385,7 @@ func (s *Discussion) GetStatus() DiscussionStatus {
 }
 
 // SetID sets the value of ID.
-func (s *Discussion) SetID(val ID) {
+func (s *Discussion) SetID(val string) {
 	s.ID = val
 }
 
@@ -394,7 +405,7 @@ func (s *Discussion) SetConclusion(val string) {
 }
 
 // SetRuleId sets the value of RuleId.
-func (s *Discussion) SetRuleId(val ID) {
+func (s *Discussion) SetRuleId(val string) {
 	s.RuleId = val
 }
 
@@ -409,7 +420,7 @@ func (s *Discussion) SetCommentPermissionLevel(val CommentPermissionLevel) {
 }
 
 // SetCreatedBy sets the value of CreatedBy.
-func (s *Discussion) SetCreatedBy(val ID) {
+func (s *Discussion) SetCreatedBy(val string) {
 	s.CreatedBy = val
 }
 
@@ -501,7 +512,7 @@ func (s *DiscussionsDiscussionIdCommentsCommentIdPutReq) SetStatus(val CommentSt
 
 type DiscussionsDiscussionIdCommentsPostReq struct {
 	ParentCommentId string `json:"parentCommentId"`
-	CommentTypeId   ID     `json:"commentTypeId"`
+	CommentTypeId   string `json:"commentTypeId"`
 	Content         string `json:"content"`
 }
 
@@ -511,7 +522,7 @@ func (s *DiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() string {
 }
 
 // GetCommentTypeId returns the value of CommentTypeId.
-func (s *DiscussionsDiscussionIdCommentsPostReq) GetCommentTypeId() ID {
+func (s *DiscussionsDiscussionIdCommentsPostReq) GetCommentTypeId() string {
 	return s.CommentTypeId
 }
 
@@ -526,7 +537,7 @@ func (s *DiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val string) 
 }
 
 // SetCommentTypeId sets the value of CommentTypeId.
-func (s *DiscussionsDiscussionIdCommentsPostReq) SetCommentTypeId(val ID) {
+func (s *DiscussionsDiscussionIdCommentsPostReq) SetCommentTypeId(val string) {
 	s.CommentTypeId = val
 }
 
@@ -608,13 +619,13 @@ func (s *DiscussionsDiscussionIdIssuesIssueIdPutReqIssueType) UnmarshalText(data
 }
 
 type DiscussionsDiscussionIdIssuesPostReq struct {
-	CommentId   ID                                            `json:"commentId"`
+	CommentId   string                                        `json:"commentId"`
 	IssueType   DiscussionsDiscussionIdIssuesPostReqIssueType `json:"issueType"`
 	Description string                                        `json:"description"`
 }
 
 // GetCommentId returns the value of CommentId.
-func (s *DiscussionsDiscussionIdIssuesPostReq) GetCommentId() ID {
+func (s *DiscussionsDiscussionIdIssuesPostReq) GetCommentId() string {
 	return s.CommentId
 }
 
@@ -629,7 +640,7 @@ func (s *DiscussionsDiscussionIdIssuesPostReq) GetDescription() string {
 }
 
 // SetCommentId sets the value of CommentId.
-func (s *DiscussionsDiscussionIdIssuesPostReq) SetCommentId(val ID) {
+func (s *DiscussionsDiscussionIdIssuesPostReq) SetCommentId(val string) {
 	s.CommentId = val
 }
 
@@ -719,7 +730,7 @@ type DiscussionsDiscussionIdPutReq struct {
 	Theme                  string                              `json:"theme"`
 	Background             string                              `json:"background"`
 	Conclusion             string                              `json:"conclusion"`
-	RuleId                 ID                                  `json:"ruleId"`
+	RuleId                 string                              `json:"ruleId"`
 	VisibilityLevel        VisibilityLevel                     `json:"visibilityLevel"`
 	CommentPermissionLevel CommentPermissionLevel              `json:"commentPermissionLevel"`
 	Status                 DiscussionsDiscussionIdPutReqStatus `json:"status"`
@@ -741,7 +752,7 @@ func (s *DiscussionsDiscussionIdPutReq) GetConclusion() string {
 }
 
 // GetRuleId returns the value of RuleId.
-func (s *DiscussionsDiscussionIdPutReq) GetRuleId() ID {
+func (s *DiscussionsDiscussionIdPutReq) GetRuleId() string {
 	return s.RuleId
 }
 
@@ -776,7 +787,7 @@ func (s *DiscussionsDiscussionIdPutReq) SetConclusion(val string) {
 }
 
 // SetRuleId sets the value of RuleId.
-func (s *DiscussionsDiscussionIdPutReq) SetRuleId(val ID) {
+func (s *DiscussionsDiscussionIdPutReq) SetRuleId(val string) {
 	s.RuleId = val
 }
 
@@ -847,7 +858,7 @@ type DiscussionsPostReq struct {
 	Theme                  string                 `json:"theme"`
 	Background             string                 `json:"background"`
 	Conclusion             string                 `json:"conclusion"`
-	RuleId                 ID                     `json:"ruleId"`
+	RuleId                 string                 `json:"ruleId"`
 	VisibilityLevel        VisibilityLevel        `json:"visibilityLevel"`
 	CommentPermissionLevel CommentPermissionLevel `json:"commentPermissionLevel"`
 }
@@ -868,7 +879,7 @@ func (s *DiscussionsPostReq) GetConclusion() string {
 }
 
 // GetRuleId returns the value of RuleId.
-func (s *DiscussionsPostReq) GetRuleId() ID {
+func (s *DiscussionsPostReq) GetRuleId() string {
 	return s.RuleId
 }
 
@@ -898,7 +909,7 @@ func (s *DiscussionsPostReq) SetConclusion(val string) {
 }
 
 // SetRuleId sets the value of RuleId.
-func (s *DiscussionsPostReq) SetRuleId(val ID) {
+func (s *DiscussionsPostReq) SetRuleId(val string) {
 	s.RuleId = val
 }
 
@@ -981,25 +992,23 @@ func (s *ErrorsPostReq) SetMessage(val string) {
 	s.Message = val
 }
 
-type ID string
-
 // Ref: #/components/schemas/issue
 type Issue struct {
-	ID          ID             `json:"id"`
-	CommentId   ID             `json:"commentId"`
+	ID          string         `json:"id"`
+	CommentId   string         `json:"commentId"`
 	IssueType   IssueIssueType `json:"issueType"`
 	Description string         `json:"description"`
-	CreatedBy   ID             `json:"createdBy"`
+	CreatedBy   string         `json:"createdBy"`
 	CreatedAt   time.Time      `json:"createdAt"`
 }
 
 // GetID returns the value of ID.
-func (s *Issue) GetID() ID {
+func (s *Issue) GetID() string {
 	return s.ID
 }
 
 // GetCommentId returns the value of CommentId.
-func (s *Issue) GetCommentId() ID {
+func (s *Issue) GetCommentId() string {
 	return s.CommentId
 }
 
@@ -1014,7 +1023,7 @@ func (s *Issue) GetDescription() string {
 }
 
 // GetCreatedBy returns the value of CreatedBy.
-func (s *Issue) GetCreatedBy() ID {
+func (s *Issue) GetCreatedBy() string {
 	return s.CreatedBy
 }
 
@@ -1024,12 +1033,12 @@ func (s *Issue) GetCreatedAt() time.Time {
 }
 
 // SetID sets the value of ID.
-func (s *Issue) SetID(val ID) {
+func (s *Issue) SetID(val string) {
 	s.ID = val
 }
 
 // SetCommentId sets the value of CommentId.
-func (s *Issue) SetCommentId(val ID) {
+func (s *Issue) SetCommentId(val string) {
 	s.CommentId = val
 }
 
@@ -1044,7 +1053,7 @@ func (s *Issue) SetDescription(val string) {
 }
 
 // SetCreatedBy sets the value of CreatedBy.
-func (s *Issue) SetCreatedBy(val ID) {
+func (s *Issue) SetCreatedBy(val string) {
 	s.CreatedBy = val
 }
 
@@ -1096,20 +1105,20 @@ func (s *IssueIssueType) UnmarshalText(data []byte) error {
 
 // Ref: #/components/schemas/note
 type Note struct {
-	ID           ID        `json:"id"`
-	DiscussionId ID        `json:"discussionId"`
+	ID           string    `json:"id"`
+	DiscussionId string    `json:"discussionId"`
 	Content      string    `json:"content"`
-	PostedBy     ID        `json:"postedBy"`
+	PostedBy     string    `json:"postedBy"`
 	PostedAt     time.Time `json:"postedAt"`
 }
 
 // GetID returns the value of ID.
-func (s *Note) GetID() ID {
+func (s *Note) GetID() string {
 	return s.ID
 }
 
 // GetDiscussionId returns the value of DiscussionId.
-func (s *Note) GetDiscussionId() ID {
+func (s *Note) GetDiscussionId() string {
 	return s.DiscussionId
 }
 
@@ -1119,7 +1128,7 @@ func (s *Note) GetContent() string {
 }
 
 // GetPostedBy returns the value of PostedBy.
-func (s *Note) GetPostedBy() ID {
+func (s *Note) GetPostedBy() string {
 	return s.PostedBy
 }
 
@@ -1129,12 +1138,12 @@ func (s *Note) GetPostedAt() time.Time {
 }
 
 // SetID sets the value of ID.
-func (s *Note) SetID(val ID) {
+func (s *Note) SetID(val string) {
 	s.ID = val
 }
 
 // SetDiscussionId sets the value of DiscussionId.
-func (s *Note) SetDiscussionId(val ID) {
+func (s *Note) SetDiscussionId(val string) {
 	s.DiscussionId = val
 }
 
@@ -1144,7 +1153,7 @@ func (s *Note) SetContent(val string) {
 }
 
 // SetPostedBy sets the value of PostedBy.
-func (s *Note) SetPostedBy(val ID) {
+func (s *Note) SetPostedBy(val string) {
 	s.PostedBy = val
 }
 
@@ -1521,52 +1530,6 @@ func (o OptDiscussionsPostReq) Or(d DiscussionsPostReq) DiscussionsPostReq {
 	return d
 }
 
-// NewOptID returns new OptID with value set to v.
-func NewOptID(v ID) OptID {
-	return OptID{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptID is optional ID.
-type OptID struct {
-	Value ID
-	Set   bool
-}
-
-// IsSet returns true if OptID was set.
-func (o OptID) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptID) Reset() {
-	var v ID
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptID) SetTo(v ID) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptID) Get() (v ID, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptID) Or(d ID) ID {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptProjectsPostReq returns new OptProjectsPostReq with value set to v.
 func NewOptProjectsPostReq(v ProjectsPostReq) OptProjectsPostReq {
 	return OptProjectsPostReq{
@@ -1751,16 +1714,62 @@ func (o OptRulesRuleIdPutReq) Or(d RulesRuleIdPutReq) RulesRuleIdPutReq {
 	return d
 }
 
+// NewOptString returns new OptString with value set to v.
+func NewOptString(v string) OptString {
+	return OptString{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptString is optional string.
+type OptString struct {
+	Value string
+	Set   bool
+}
+
+// IsSet returns true if OptString was set.
+func (o OptString) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptString) Reset() {
+	var v string
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptString) SetTo(v string) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptString) Get() (v string, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // Ref: #/components/schemas/project
 type Project struct {
-	ID        ID        `json:"id"`
+	ID        string    `json:"id"`
 	Name      string    `json:"name"`
-	CreatedBy ID        `json:"createdBy"`
+	CreatedBy string    `json:"createdBy"`
 	CreatedAt time.Time `json:"createdAt"`
 }
 
 // GetID returns the value of ID.
-func (s *Project) GetID() ID {
+func (s *Project) GetID() string {
 	return s.ID
 }
 
@@ -1770,7 +1779,7 @@ func (s *Project) GetName() string {
 }
 
 // GetCreatedBy returns the value of CreatedBy.
-func (s *Project) GetCreatedBy() ID {
+func (s *Project) GetCreatedBy() string {
 	return s.CreatedBy
 }
 
@@ -1780,7 +1789,7 @@ func (s *Project) GetCreatedAt() time.Time {
 }
 
 // SetID sets the value of ID.
-func (s *Project) SetID(val ID) {
+func (s *Project) SetID(val string) {
 	s.ID = val
 }
 
@@ -1790,7 +1799,7 @@ func (s *Project) SetName(val string) {
 }
 
 // SetCreatedBy sets the value of CreatedBy.
-func (s *Project) SetCreatedBy(val ID) {
+func (s *Project) SetCreatedBy(val string) {
 	s.CreatedBy = val
 }
 
@@ -1832,17 +1841,17 @@ func (s *ProjectsProjectIdPutReq) SetName(val string) {
 
 // Ref: #/components/schemas/rule
 type Rule struct {
-	ID               ID                `json:"id"`
+	ID               string            `json:"id"`
 	Name             string            `json:"name"`
 	Description      string            `json:"description"`
-	CreatedBy        ID                `json:"createdBy"`
+	CreatedBy        string            `json:"createdBy"`
 	CreatedAt        time.Time         `json:"createdAt"`
 	CommentTypes     []CommentType     `json:"commentTypes"`
 	CommentTypePaths []CommentTypePath `json:"commentTypePaths"`
 }
 
 // GetID returns the value of ID.
-func (s *Rule) GetID() ID {
+func (s *Rule) GetID() string {
 	return s.ID
 }
 
@@ -1857,7 +1866,7 @@ func (s *Rule) GetDescription() string {
 }
 
 // GetCreatedBy returns the value of CreatedBy.
-func (s *Rule) GetCreatedBy() ID {
+func (s *Rule) GetCreatedBy() string {
 	return s.CreatedBy
 }
 
@@ -1877,7 +1886,7 @@ func (s *Rule) GetCommentTypePaths() []CommentTypePath {
 }
 
 // SetID sets the value of ID.
-func (s *Rule) SetID(val ID) {
+func (s *Rule) SetID(val string) {
 	s.ID = val
 }
 
@@ -1892,7 +1901,7 @@ func (s *Rule) SetDescription(val string) {
 }
 
 // SetCreatedBy sets the value of CreatedBy.
-func (s *Rule) SetCreatedBy(val ID) {
+func (s *Rule) SetCreatedBy(val string) {
 	s.CreatedBy = val
 }
 
@@ -2101,14 +2110,14 @@ func (s *VisibilityLevel) UnmarshalText(data []byte) error {
 
 // Ref: #/components/schemas/workbook
 type Workbook struct {
-	ID      ID     `json:"id"`
+	ID      string `json:"id"`
 	Title   string `json:"title"`
 	Status  Status `json:"status"`
-	OwnerId ID     `json:"ownerId"`
+	OwnerId string `json:"ownerId"`
 }
 
 // GetID returns the value of ID.
-func (s *Workbook) GetID() ID {
+func (s *Workbook) GetID() string {
 	return s.ID
 }
 
@@ -2123,12 +2132,12 @@ func (s *Workbook) GetStatus() Status {
 }
 
 // GetOwnerId returns the value of OwnerId.
-func (s *Workbook) GetOwnerId() ID {
+func (s *Workbook) GetOwnerId() string {
 	return s.OwnerId
 }
 
 // SetID sets the value of ID.
-func (s *Workbook) SetID(val ID) {
+func (s *Workbook) SetID(val string) {
 	s.ID = val
 }
 
@@ -2143,6 +2152,6 @@ func (s *Workbook) SetStatus(val Status) {
 }
 
 // SetOwnerId sets the value of OwnerId.
-func (s *Workbook) SetOwnerId(val ID) {
+func (s *Workbook) SetOwnerId(val string) {
 	s.OwnerId = val
 }
