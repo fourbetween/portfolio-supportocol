@@ -136,8 +136,8 @@ describe("EditRulePagePresenter", async () => {
       expect.objectContaining({
         commentTypePaths: expect.arrayContaining([
           {
-            fromCommentTypeId: "01234567890123456789012347",
-            toCommentTypeId: "01234567890123456789012347",
+            childCommentTypeId: "01234567890123456789012347",
+            parentCommentTypeId: "01234567890123456789012347",
           },
         ]),
       })
