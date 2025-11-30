@@ -5,6 +5,7 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
 import { routerContext } from "../../../../context/router";
+import { showErrorToast } from "../../../../event/toast";
 import { accountMethods } from "../../../../model/account";
 import type { Rule } from "../../../../model/rule";
 import { buildPath, navigate } from "../../../../routes";
@@ -27,7 +28,8 @@ export class ListRulePageContainer extends LitElement {
           headers: await accountMethods.authHeader(),
         });
         if (error) {
-          throw new Error(error.message);
+          showErrorToast(this, `ルールの取得に失敗しました: ${error.message}`);
+          return [] as Rule[];
         }
         return data;
       },

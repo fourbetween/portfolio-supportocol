@@ -2,6 +2,7 @@ import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { client } from "../../../api/client";
+import { showErrorToast } from "../../../event/toast";
 import { accountMethods } from "../../../model/account";
 import type { Discussion } from "../../../model/discussion";
 import type { Project } from "../../../model/project";
@@ -28,7 +29,11 @@ export class DashboardPageContainer extends LitElement {
           headers: await accountMethods.authHeader(),
         });
         if (error) {
-          throw new Error(error.message);
+          showErrorToast(
+            this,
+            `プロジェクトの取得に失敗しました: ${error.message}`
+          );
+          return [] as Project[];
         }
         return data;
       },
@@ -44,7 +49,8 @@ export class DashboardPageContainer extends LitElement {
           headers: await accountMethods.authHeader(),
         });
         if (error) {
-          throw new Error(error.message);
+          showErrorToast(this, `議論の取得に失敗しました: ${error.message}`);
+          return [] as Discussion[];
         }
         return data;
       },
@@ -81,7 +87,10 @@ export class DashboardPageContainer extends LitElement {
       body: { name },
     });
     if (error) {
-      console.error("Failed to create project:", error.message);
+      showErrorToast(
+        this,
+        `プロジェクトの作成に失敗しました: ${error.message}`
+      );
       return;
     }
     this.createProjectPopup.close();

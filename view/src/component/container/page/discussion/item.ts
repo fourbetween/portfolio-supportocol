@@ -5,6 +5,7 @@ import { LitElement, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
 import { routerContext } from "../../../../context/router";
+import { showErrorToast } from "../../../../event/toast";
 import { accountMethods } from "../../../../model/account";
 import type {
   Comment,
@@ -91,7 +92,8 @@ export class ItemDiscussionPageContainer extends LitElement {
           }
         );
         if (error) {
-          throw new Error(error.message);
+          showErrorToast(this, `議論の取得に失敗しました: ${error.message}`);
+          return undefined;
         }
         return data;
       },
@@ -114,7 +116,7 @@ export class ItemDiscussionPageContainer extends LitElement {
       params: { path: { ruleId } },
     });
     if (error) {
-      console.error("Failed to fetch rule:", error.message);
+      showErrorToast(this, `ルールの取得に失敗しました: ${error.message}`);
       return;
     }
     this.rule = data;
@@ -130,7 +132,7 @@ export class ItemDiscussionPageContainer extends LitElement {
       }
     );
     if (error) {
-      console.error("Failed to fetch comments:", error.message);
+      showErrorToast(this, `コメントの取得に失敗しました: ${error.message}`);
       return;
     }
     this.comments = data;
@@ -145,7 +147,7 @@ export class ItemDiscussionPageContainer extends LitElement {
       }
     );
     if (error) {
-      console.error("Failed to fetch notes:", error.message);
+      showErrorToast(this, `ノートの取得に失敗しました: ${error.message}`);
       return;
     }
     this.notes = data;
@@ -160,7 +162,7 @@ export class ItemDiscussionPageContainer extends LitElement {
       }
     );
     if (error) {
-      console.error("Failed to fetch issues:", error.message);
+      showErrorToast(this, `指摘の取得に失敗しました: ${error.message}`);
       return;
     }
     this.issues = data;
@@ -247,7 +249,7 @@ export class ItemDiscussionPageContainer extends LitElement {
     );
 
     if (error) {
-      console.error("Failed to create comment:", error.message);
+      showErrorToast(this, `コメントの作成に失敗しました: ${error.message}`);
       return;
     }
 
@@ -298,7 +300,7 @@ export class ItemDiscussionPageContainer extends LitElement {
     );
 
     if (error) {
-      console.error("Failed to update comment status:", error.message);
+      showErrorToast(this, `コメントの更新に失敗しました: ${error.message}`);
       return;
     }
 
@@ -316,7 +318,7 @@ export class ItemDiscussionPageContainer extends LitElement {
     });
 
     if (error) {
-      console.error("Failed to create note:", error.message);
+      showErrorToast(this, `ノートの作成に失敗しました: ${error.message}`);
       return;
     }
 
@@ -338,7 +340,7 @@ export class ItemDiscussionPageContainer extends LitElement {
     );
 
     if (error) {
-      console.error("Failed to delete note:", error.message);
+      showErrorToast(this, `ノートの削除に失敗しました: ${error.message}`);
       return;
     }
 
@@ -388,7 +390,7 @@ export class ItemDiscussionPageContainer extends LitElement {
     );
 
     if (error) {
-      console.error("Failed to create issue:", error.message);
+      showErrorToast(this, `指摘の作成に失敗しました: ${error.message}`);
       return;
     }
 

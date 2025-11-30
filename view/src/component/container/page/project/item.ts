@@ -5,6 +5,7 @@ import { LitElement, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
 import { routerContext } from "../../../../context/router";
+import { showErrorToast } from "../../../../event/toast";
 import { accountMethods } from "../../../../model/account";
 import type { Discussion } from "../../../../model/discussion";
 import type { Project } from "../../../../model/project";
@@ -44,7 +45,11 @@ export class ItemProjectPageContainer extends LitElement {
           params: { path: { projectId } },
         });
         if (error) {
-          throw new Error(error.message);
+          showErrorToast(
+            this,
+            `プロジェクトの取得に失敗しました: ${error.message}`
+          );
+          return undefined;
         }
         return data;
       },
@@ -62,7 +67,8 @@ export class ItemProjectPageContainer extends LitElement {
           params: { query: { projectId } },
         });
         if (error) {
-          throw new Error(error.message);
+          showErrorToast(this, `議論の取得に失敗しました: ${error.message}`);
+          return [] as Discussion[];
         }
         return data;
       },
@@ -124,7 +130,10 @@ export class ItemProjectPageContainer extends LitElement {
       body: { name },
     });
     if (error) {
-      console.error("Failed to update project:", error.message);
+      showErrorToast(
+        this,
+        `プロジェクトの更新に失敗しました: ${error.message}`
+      );
       return;
     }
     this.project = data;
@@ -145,7 +154,10 @@ export class ItemProjectPageContainer extends LitElement {
       params: { path: { projectId: this.projectId } },
     });
     if (error) {
-      console.error("Failed to delete project:", error.message);
+      showErrorToast(
+        this,
+        `プロジェクトの削除に失敗しました: ${error.message}`
+      );
       return;
     }
     this.confirmPopup.close();

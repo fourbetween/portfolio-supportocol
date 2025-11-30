@@ -2,10 +2,12 @@ import { Router } from "@lit-labs/router";
 import { provide } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, css, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, query, state } from "lit/decorators.js";
 import "urlpattern-polyfill";
 import "./auth";
+import type { BaseToastPresenter } from "./component/presenter/toast/base";
 import { routerContext } from "./context/router";
+import { ShowToastEvent } from "./event/toast";
 import "./import";
 import { accountMethods } from "./model/account";
 import { routes } from "./routes";
@@ -91,6 +93,9 @@ export class AppRoot extends LitElement {
     },
   ]);
 
+  @query("base-toast-presenter")
+  private toast!: BaseToastPresenter;
+
   constructor() {
     super();
     new Task(this, {
@@ -101,9 +106,28 @@ export class AppRoot extends LitElement {
     });
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener(ShowToastEvent.eventName, this.handleShowToast);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener(ShowToastEvent.eventName, this.handleShowToast);
+  }
+
+  private handleShowToast = (event: ShowToastEvent) => {
+    this.toast.show({
+      message: event.detail.message,
+      type: event.detail.type,
+      duration: event.detail.duration,
+    });
+  };
+
   render() {
     return html`
       <main-layout-container>${this.router.outlet()}</main-layout-container>
+      <base-toast-presenter></base-toast-presenter>
     `;
   }
 
