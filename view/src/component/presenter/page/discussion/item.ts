@@ -113,6 +113,17 @@ export class ItemDiscussionPagePresenter extends LitElement {
     return this.issues.filter((i) => i.commentId === commentId).length;
   }
 
+  private canReplyToComment(commentTypeId: string): boolean {
+    if (!this.rule) {
+      return false;
+    }
+    // 経路の「開始コメント」は子コメント、「終了コメント」は親コメント
+    // 現在のコメントが親（toCommentTypeId）として経路があるかチェック
+    return this.rule.commentTypePaths.some(
+      (path) => path.toCommentTypeId === commentTypeId
+    );
+  }
+
   private getAncestorComments(commentId: string): Comment[] {
     const ancestors: Comment[] = [];
     let current = this.getComment(commentId);
@@ -184,12 +195,16 @@ export class ItemDiscussionPagePresenter extends LitElement {
           >
             フォーカス
           </button>
-          <button
-            class="btn-reply"
-            @click=${() => this.onAddComment?.(comment.id)}
-          >
-            返信
-          </button>
+          ${this.canReplyToComment(comment.commentTypeId)
+            ? html`
+                <button
+                  class="btn-reply"
+                  @click=${() => this.onAddComment?.(comment.id)}
+                >
+                  返信
+                </button>
+              `
+            : ""}
           <button
             class="btn-status"
             @click=${() => this.onChangeStatus?.(comment.id)}

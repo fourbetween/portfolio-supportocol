@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import type { CommentType } from "../../../../model/discussion";
+import type { Rule } from "../../../../model/rule";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
@@ -29,10 +30,35 @@ export class CreateCommentPopupPresenter extends LitElement {
   parentCommentId: string | null = null;
 
   @property({ attribute: false })
+  rule?: Rule;
+
+  @property({ attribute: false })
+  fromCommentTypeId?: string;
+
+  @property({ attribute: false })
   onCreate?: (data: CreateCommentFormData) => void;
+
+  private getAvailableCommentTypes(): CommentType[] {
+    if (!this.rule) {
+      return this.commentTypes;
+    }
+
+    // 経路の「開始コメント」は子コメント、「終了コメント」は親コメント
+    // 親コメント種類（toCommentTypeId）が一致する経路を探し、
+    // 許可される子コメント種類（fromCommentTypeId）を取得
+    const parentTypeId = this.fromCommentTypeId ?? "";
+    const allowedChildTypeIds = this.rule.commentTypePaths
+      .filter((path) => path.toCommentTypeId === parentTypeId)
+      .map((path) => path.fromCommentTypeId);
+
+    return this.commentTypes.filter((type) =>
+      allowedChildTypeIds.includes(type.id)
+    );
+  }
 
   render() {
     const title = this.parentCommentId ? "コメントを返信" : "コメントを追加";
+    const availableCommentTypes = this.getAvailableCommentTypes();
 
     return html`
       <base-popup-presenter>
@@ -42,7 +68,7 @@ export class CreateCommentPopupPresenter extends LitElement {
             <label for="comment-type">コメント種類</label>
             <select id="comment-type">
               <option value="">選択してください</option>
-              ${this.commentTypes.map(
+              ${availableCommentTypes.map(
                 (type) => html`
                   <option value="${type.id}">${type.name}</option>
                 `

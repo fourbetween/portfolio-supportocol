@@ -61,12 +61,14 @@ describe("ItemDiscussionPagePresenter", async () => {
     commentTypes: mockCommentTypes,
     commentTypePaths: [
       {
-        fromCommentTypeId: "01234567890123456789012351",
-        toCommentTypeId: "01234567890123456789012352",
+        // 根拠（子）→主張（親）：主張に対して根拠で返信可能
+        fromCommentTypeId: "01234567890123456789012352",
+        toCommentTypeId: "01234567890123456789012351",
       },
       {
-        fromCommentTypeId: "01234567890123456789012351",
-        toCommentTypeId: "01234567890123456789012353",
+        // 反論（子）→主張（親）：主張に対して反論で返信可能
+        fromCommentTypeId: "01234567890123456789012353",
+        toCommentTypeId: "01234567890123456789012351",
       },
     ],
   };
@@ -211,6 +213,7 @@ describe("ItemDiscussionPagePresenter", async () => {
     elem.discussion = mockDiscussion;
     elem.comments = mockComments;
     elem.commentTypes = mockCommentTypes;
+    elem.rule = mockRule;
     await elem.updateComplete;
     const replyButtons = elem.shadowRoot?.querySelectorAll(".btn-reply");
     expect(replyButtons?.length).toBeGreaterThan(0);
@@ -221,6 +224,7 @@ describe("ItemDiscussionPagePresenter", async () => {
     elem.discussion = mockDiscussion;
     elem.comments = [mockComments[0]];
     elem.commentTypes = mockCommentTypes;
+    elem.rule = mockRule;
     elem.onAddComment = onAddComment;
     await elem.updateComplete;
 
@@ -593,5 +597,74 @@ describe("ItemDiscussionPagePresenter", async () => {
     const firstPathItem = pathItems?.[0];
     const colorBadges = firstPathItem?.querySelectorAll(".color-badge");
     expect(colorBadges?.length).toBe(2);
+  });
+
+  it("ルールで返信可能な経路がある場合のみ返信ボタンが表示されること", async () => {
+    // 経路の「開始コメント」は子コメント、「終了コメント」は親コメント
+    // 主張に対して根拠・反論で返信可能
+    // 根拠・反論から先の経路は許可されていない
+    const ruleWithPaths: Rule = {
+      ...mockRule,
+      commentTypePaths: [
+        {
+          // 根拠（子）→主張（親）
+          fromCommentTypeId: "01234567890123456789012352",
+          toCommentTypeId: "01234567890123456789012351",
+        },
+        {
+          // 反論（子）→主張（親）
+          fromCommentTypeId: "01234567890123456789012353",
+          toCommentTypeId: "01234567890123456789012351",
+        },
+      ],
+    };
+
+    // 主張コメント（返信可能）
+    const claimComment: Comment = {
+      id: "claim-comment-id-00000000001",
+      discussionId: "01234567890123456789012348",
+      parentCommentId: "",
+      commentTypeId: "01234567890123456789012351", // 主張
+      content: "これは主張です",
+      postedBy: "01234567890123456789012346",
+      postedAt: "2024-01-01T10:00:00Z",
+      status: "assigned",
+    };
+
+    // 根拠コメント（返信不可）
+    const evidenceComment: Comment = {
+      id: "evidence-comment-id-0000001",
+      discussionId: "01234567890123456789012348",
+      parentCommentId: "claim-comment-id-00000000001",
+      commentTypeId: "01234567890123456789012352", // 根拠
+      content: "これは根拠です",
+      postedBy: "01234567890123456789012346",
+      postedAt: "2024-01-01T11:00:00Z",
+      status: "assigned",
+    };
+
+    elem.discussion = mockDiscussion;
+    elem.comments = [claimComment, evidenceComment];
+    elem.commentTypes = mockCommentTypes;
+    elem.rule = ruleWithPaths;
+    await elem.updateComplete;
+
+    // 主張コメント（depth=0）には返信ボタンがあること
+    const depth0Comment = elem.shadowRoot?.querySelector(
+      '.comment-item[data-depth="0"]'
+    );
+    const claimReplyButton = depth0Comment?.querySelector(
+      ":scope > .comment-actions > .btn-reply"
+    );
+    expect(claimReplyButton).not.toBeNull();
+
+    // 根拠コメント（depth=1）には返信ボタンがないこと
+    const depth1Comment = elem.shadowRoot?.querySelector(
+      '.comment-item[data-depth="1"]'
+    );
+    const evidenceReplyButton = depth1Comment?.querySelector(
+      ":scope > .comment-actions > .btn-reply"
+    );
+    expect(evidenceReplyButton).toBeNull();
   });
 });

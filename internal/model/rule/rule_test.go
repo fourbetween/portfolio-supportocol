@@ -334,35 +334,51 @@ func TestRule_IsValidPath(t *testing.T) {
 		name              string
 		commentTypes      []rule.CommentType
 		commentTypePaths  []rule.CommentTypePath
-		fromCommentTypeID string
-		toCommentTypeID   string
+		fromCommentTypeID string // 子コメントのタイプ
+		toCommentTypeID   string // 親コメントのタイプ
 		wantErr           bool
 	}{
 		{
-			name: "有効な経路の場合にエラーを返さないこと",
+			// 経路: From=子コメント, To=親コメント
+			// 子コメント(根拠)が親コメント(主張)に対して許可されている
+			name: "子コメントから親コメントへの有効な経路の場合にエラーを返さないこと",
 			commentTypes: []rule.CommentType{
-				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
-				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+				{ID: "claim", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "evidence", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
-				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct2"},
+				{FromCommentTypeID: "evidence", ToCommentTypeID: "claim"},
 			},
-			fromCommentTypeID: "ct1",
-			toCommentTypeID:   "ct2",
+			fromCommentTypeID: "evidence", // 子コメント
+			toCommentTypeID:   "claim",    // 親コメント
 			wantErr:           false,
 		},
 		{
-			name: "無効な経路の場合にエラーを返すこと",
+			// 逆方向の経路は許可されていない
+			name: "許可されていない経路の場合にエラーを返すこと",
 			commentTypes: []rule.CommentType{
-				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
-				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+				{ID: "claim", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "evidence", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
-				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct2"},
+				{FromCommentTypeID: "evidence", ToCommentTypeID: "claim"},
 			},
-			fromCommentTypeID: "ct2",
-			toCommentTypeID:   "ct1",
+			fromCommentTypeID: "claim",    // 子コメント（しかしこの方向は許可されていない）
+			toCommentTypeID:   "evidence", // 親コメント
 			wantErr:           true,
+		},
+		{
+			// ルートコメント（親がない）の場合は To が空
+			name: "ルートコメントとして許可されている場合にエラーを返さないこと",
+			commentTypes: []rule.CommentType{
+				{ID: "claim", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+			},
+			commentTypePaths: []rule.CommentTypePath{
+				{FromCommentTypeID: "claim", ToCommentTypeID: ""},
+			},
+			fromCommentTypeID: "claim", // ルートとして追加する子コメント
+			toCommentTypeID:   "",      // 親がない（ルート）
+			wantErr:           false,
 		},
 	}
 	for _, tt := range tests {

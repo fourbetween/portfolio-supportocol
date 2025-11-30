@@ -14,6 +14,7 @@ import type {
   Issue,
   Note,
 } from "../../../../model/discussion";
+import type { Rule } from "../../../../model/rule";
 import type { ChangeStatusPopupPresenter } from "../../../presenter/popup/comment/change_status";
 import type { CreateCommentPopupPresenter } from "../../../presenter/popup/comment/create";
 import type { CreateIssuePopupPresenter } from "../../../presenter/popup/issue/create";
@@ -57,6 +58,9 @@ export class ItemDiscussionPageContainer extends LitElement {
 
   @state()
   private issues: Issue[] = [];
+
+  @state()
+  private rule?: Rule;
 
   @state()
   private selectedCommentIdForShowIssues: string | null = null;
@@ -113,6 +117,7 @@ export class ItemDiscussionPageContainer extends LitElement {
       console.error("Failed to fetch rule:", error.message);
       return;
     }
+    this.rule = data;
     this.commentTypes = data.commentTypes;
   }
 
@@ -174,6 +179,7 @@ export class ItemDiscussionPageContainer extends LitElement {
         .focusedCommentId=${this.focusedCommentId}
         .notes=${this.notes}
         .issues=${this.issues}
+        .rule=${this.rule}
         .onAddComment=${this.handleAddComment}
         .onFocusComment=${this.handleFocusComment}
         .onClearFocus=${this.handleClearFocus}
@@ -188,6 +194,8 @@ export class ItemDiscussionPageContainer extends LitElement {
       <create-comment-popup-presenter
         .commentTypes=${this.commentTypes}
         .parentCommentId=${this.parentCommentIdForCreate}
+        .rule=${this.rule}
+        .fromCommentTypeId=${this.getFromCommentTypeId()}
         .onCreate=${this.handleCreateComment}
       ></create-comment-popup-presenter>
 
@@ -204,6 +212,16 @@ export class ItemDiscussionPageContainer extends LitElement {
         .issues=${this.getIssuesForSelectedComment()}
       ></list-issue-popup-presenter>
     `;
+  }
+
+  private getFromCommentTypeId(): string {
+    if (!this.parentCommentIdForCreate) {
+      return "";
+    }
+    const parentComment = this.comments.find(
+      (c) => c.id === this.parentCommentIdForCreate
+    );
+    return parentComment?.commentTypeId ?? "";
   }
 
   private handleAddComment = (parentCommentId: string | null) => {

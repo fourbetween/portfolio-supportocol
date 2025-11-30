@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import type { CommentType } from "../../../../model/discussion";
+import type { Rule } from "../../../../model/rule";
 import type { CreateCommentPopupPresenter } from "./create";
 
 describe("CreateCommentPopupPresenter", async () => {
@@ -19,7 +20,39 @@ describe("CreateCommentPopupPresenter", async () => {
       description: "主張を裏付ける根拠を述べる",
       color: "#2da44e",
     },
+    {
+      id: "01234567890123456789012353",
+      name: "反論",
+      description: "反論を述べる",
+      color: "#cf222e",
+    },
   ];
+
+  const mockRule: Rule = {
+    id: "01234567890123456789012349",
+    name: "議論ルール",
+    description: "議論のルール説明文",
+    createdBy: "01234567890123456789012346",
+    createdAt: "2024-01-01T00:00:00Z",
+    commentTypes: mockCommentTypes,
+    commentTypePaths: [
+      {
+        // 主張（子）→ ルート（親）：ルートに対して主張で投稿可能
+        fromCommentTypeId: "01234567890123456789012351",
+        toCommentTypeId: "",
+      },
+      {
+        // 根拠（子）→ 主張（親）：主張に対して根拠で返信可能
+        fromCommentTypeId: "01234567890123456789012352",
+        toCommentTypeId: "01234567890123456789012351",
+      },
+      {
+        // 反論（子）→ 主張（親）：主張に対して反論で返信可能
+        fromCommentTypeId: "01234567890123456789012353",
+        toCommentTypeId: "01234567890123456789012351",
+      },
+    ],
+  };
 
   beforeEach(() => {
     elem = document.createElement(
@@ -134,5 +167,43 @@ describe("CreateCommentPopupPresenter", async () => {
     await expect
       .element(page.getByRole("textbox", { name: "内容" }))
       .toHaveValue("ノートからの内容");
+  });
+
+  it("ルールが設定されている場合、許可されたコメント種類のみが選択肢に表示されること", async () => {
+    elem.commentTypes = mockCommentTypes;
+    elem.rule = mockRule;
+    elem.fromCommentTypeId = "01234567890123456789012351"; // 主張からの返信
+    elem.open();
+    await elem.updateComplete;
+
+    const selectElement = elem.shadowRoot?.querySelector(
+      "#comment-type"
+    ) as HTMLSelectElement;
+    const options = Array.from(selectElement?.options || []).filter(
+      (opt) => opt.value !== ""
+    );
+
+    // 主張からは根拠と反論のみ許可
+    expect(options.length).toBe(2);
+    expect(options.map((o) => o.textContent)).toEqual(["根拠", "反論"]);
+  });
+
+  it("ルートコメント追加時に許可されたコメント種類のみが選択肢に表示されること", async () => {
+    elem.commentTypes = mockCommentTypes;
+    elem.rule = mockRule;
+    elem.fromCommentTypeId = ""; // ルートコメント
+    elem.open();
+    await elem.updateComplete;
+
+    const selectElement = elem.shadowRoot?.querySelector(
+      "#comment-type"
+    ) as HTMLSelectElement;
+    const options = Array.from(selectElement?.options || []).filter(
+      (opt) => opt.value !== ""
+    );
+
+    // ルートからは主張のみ許可
+    expect(options.length).toBe(1);
+    expect(options[0].textContent).toBe("主張");
   });
 });

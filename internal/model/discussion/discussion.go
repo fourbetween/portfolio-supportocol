@@ -121,21 +121,22 @@ func (d *Discussion) LoadComment(commentID string) (*Comment, error) {
 
 func (d *Discussion) CreateComment(params CreateCommentParams) (*Comment, error) {
 	// 親コメントのコメント種類を取得
-	fromCommentTypeID := ""
+	parentCommentTypeID := ""
 	if params.ParentCommentID != "" {
 		parentComment, err := d.LoadComment(params.ParentCommentID)
 		if err != nil {
 			return nil, err
 		}
-		fromCommentTypeID = parentComment.CommentTypeID()
+		parentCommentTypeID = parentComment.CommentTypeID()
 	}
 
 	// ルールをチェック
+	// 経路の「開始コメント(From)」は子コメント、「終了コメント(To)」は親コメント
 	rl, err := d.ruleRepo.Load(rule.LoadParams{ID: d.ruleID})
 	if err != nil {
 		return nil, err
 	}
-	if err := rl.IsValidPath(fromCommentTypeID, params.CommentTypeID); err != nil {
+	if err := rl.IsValidPath(params.CommentTypeID, parentCommentTypeID); err != nil {
 		return nil, err
 	}
 
