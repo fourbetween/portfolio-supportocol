@@ -328,3 +328,65 @@ func TestRule_Update(t *testing.T) {
 		})
 	}
 }
+
+func TestRule_IsValidPath(t *testing.T) {
+	tests := []struct {
+		name              string
+		commentTypes      []rule.CommentType
+		commentTypePaths  []rule.CommentTypePath
+		fromCommentTypeID string
+		toCommentTypeID   string
+		wantErr           bool
+	}{
+		{
+			name: "有効な経路の場合にエラーを返さないこと",
+			commentTypes: []rule.CommentType{
+				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+			},
+			commentTypePaths: []rule.CommentTypePath{
+				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct2"},
+			},
+			fromCommentTypeID: "ct1",
+			toCommentTypeID:   "ct2",
+			wantErr:           false,
+		},
+		{
+			name: "無効な経路の場合にエラーを返すこと",
+			commentTypes: []rule.CommentType{
+				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+			},
+			commentTypePaths: []rule.CommentTypePath{
+				{FromCommentTypeID: "ct1", ToCommentTypeID: "ct2"},
+			},
+			fromCommentTypeID: "ct2",
+			toCommentTypeID:   "ct1",
+			wantErr:           true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			con := newContainer(t)
+			r := con.RuleFac.BuildRule(rule.BuildRuleParams{
+				ID: "test-id",
+				NewRuleParams: rule.NewRuleParams{
+					Name:             "test-rule",
+					Description:      "test-description",
+					CreatedBy:        "test-user",
+					CreatedAt:        time.Now(),
+					CommentTypes:     tt.commentTypes,
+					CommentTypePaths: tt.commentTypePaths,
+				},
+			})
+
+			err := r.IsValidPath(tt.fromCommentTypeID, tt.toCommentTypeID)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("IsValidPath() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if tt.wantErr && !errors.Is(err, internal.ErrConflict) {
+				t.Errorf("IsValidPath() error should wrap ErrConflict, got %v", err)
+			}
+		})
+	}
+}

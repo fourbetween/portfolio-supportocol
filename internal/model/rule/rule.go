@@ -50,6 +50,15 @@ func (r *Rule) CommentTypes() []CommentType {
 	return r.commentTypes
 }
 
+func (r *Rule) CommentType(typeID string) (CommentType, error) {
+	for _, ct := range r.commentTypes {
+		if ct.ID == typeID {
+			return ct, nil
+		}
+	}
+	return CommentType{}, fmt.Errorf("comment type %q not found: %w", typeID, internal.ErrNotFound)
+}
+
 func (r *Rule) CommentTypePaths() []CommentTypePath {
 	return r.commentTypePaths
 }
@@ -97,6 +106,23 @@ func (r *Rule) Update(params UpdateParams) error {
 	}
 
 	return nil
+}
+
+func (r *Rule) IsValidPath(fromCommentTypeID, toCommentTypeID string) error {
+	for _, path := range r.commentTypePaths {
+		if path.FromCommentTypeID == fromCommentTypeID && path.ToCommentTypeID == toCommentTypeID {
+			return nil
+		}
+	}
+	from, err := r.CommentType(fromCommentTypeID)
+	if err != nil {
+		return err
+	}
+	to, err := r.CommentType(toCommentTypeID)
+	if err != nil {
+		return err
+	}
+	return fmt.Errorf("not allowed path from %q to %q: %w", from.Name, to.Name, internal.ErrConflict)
 }
 
 func (r *Rule) Save() error {

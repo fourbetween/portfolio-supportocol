@@ -48,6 +48,7 @@ func NewContainer(tx *sql.Tx) (*Container, error) {
 		discussionRepo,
 		idSrv,
 		clockSrv,
+		ruleRepo,
 	)
 	discussionRepo.SetFactory(discussionFac)
 

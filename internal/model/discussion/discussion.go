@@ -1,6 +1,10 @@
 package discussion
 
-import "time"
+import (
+	"time"
+
+	"github.com/fourbetween/app-supportocol/internal/model/rule"
+)
 
 type (
 	// VisibilityLevel は議論の公開レベルを表す
@@ -24,8 +28,9 @@ type (
 		createdAt              time.Time
 		status                 Status
 
-		repo Repository
-		fac  *Factory
+		repo     Repository
+		fac      *Factory
+		ruleRepo rule.Repository
 	}
 
 	UpdateParams struct {
@@ -115,6 +120,25 @@ func (d *Discussion) LoadComment(commentID string) (*Comment, error) {
 }
 
 func (d *Discussion) CreateComment(params CreateCommentParams) (*Comment, error) {
+	// 親コメントのコメント種類を取得
+	fromCommentTypeID := ""
+	if params.ParentCommentID != "" {
+		parentComment, err := d.LoadComment(params.ParentCommentID)
+		if err != nil {
+			return nil, err
+		}
+		fromCommentTypeID = parentComment.CommentTypeID()
+	}
+
+	// ルールをチェック
+	rl, err := d.ruleRepo.Load(rule.LoadParams{ID: d.ruleID})
+	if err != nil {
+		return nil, err
+	}
+	if err := rl.IsValidPath(fromCommentTypeID, params.CommentTypeID); err != nil {
+		return nil, err
+	}
+
 	c := d.fac.NewComment(NewCommentParams{
 		DiscussionID:    d.id,
 		ParentCommentID: params.ParentCommentID,
