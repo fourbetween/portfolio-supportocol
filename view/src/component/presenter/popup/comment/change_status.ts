@@ -1,8 +1,9 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import type { CommentStatus } from "../../../../model/discussion";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
+import { formStyle } from "../../../../style/form";
 import type { BasePopupPresenter } from "../base";
 
 const STATUS_LABELS: Record<CommentStatus, string> = {
@@ -79,37 +80,5 @@ export class ChangeStatusPopupPresenter extends LitElement {
     this.close();
   }
 
-  static styles = [
-    baseStyle,
-    buttonStyle,
-    css`
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      label {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--color-fg-default);
-      }
-
-      select {
-        padding: 8px 12px;
-        font-size: 14px;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        background-color: var(--color-canvas-default);
-        color: var(--color-fg-default);
-        cursor: pointer;
-      }
-
-      select:focus {
-        outline: none;
-        border-color: var(--color-accent-fg);
-        box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
-      }
-    `,
-  ];
+  static styles = [baseStyle, buttonStyle, formStyle];
 }
