@@ -349,6 +349,10 @@ export class ItemDiscussionPagePresenter extends LitElement {
         min-height: 100vh;
       }
 
+      main {
+        width: 100%;
+      }
+
       notes-panel-presenter {
         position: sticky;
         top: 0;

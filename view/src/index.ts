@@ -22,9 +22,9 @@ export class AppRoot extends LitElement {
       name: "front",
       path: routes.front,
       render: () => html`
-        <front-page-container
+        <home-page-presenter
           .isLoggedIn=${this.isLoggedIn}
-        ></front-page-container>
+        ></home-page-presenter>
       `,
     },
     {
