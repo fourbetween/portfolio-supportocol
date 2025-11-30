@@ -215,7 +215,7 @@ export class ItemDiscussionPageContainer extends LitElement {
     commentTypeId: string;
     content: string;
   }) => {
-    const { error } = await client.POST(
+    const { data: newComment, error } = await client.POST(
       "/discussions/{discussionId}/comments",
       {
         headers: await accountMethods.authHeader(),
@@ -240,7 +240,7 @@ export class ItemDiscussionPageContainer extends LitElement {
     }
 
     this.createCommentPopup.close();
-    await this.fetchComments();
+    this.comments = [...this.comments, newComment];
   };
 
   private handleFocusComment = (commentId: string) => {
@@ -262,7 +262,7 @@ export class ItemDiscussionPageContainer extends LitElement {
   private handleChangeStatus = async (status: CommentStatus) => {
     if (!this.selectedCommentForStatus) return;
 
-    const { error } = await client.PUT(
+    const { data: updatedComment, error } = await client.PUT(
       "/discussions/{discussionId}/comments/{commentId}",
       {
         headers: await accountMethods.authHeader(),
@@ -285,7 +285,9 @@ export class ItemDiscussionPageContainer extends LitElement {
     }
 
     this.changeStatusPopup.close();
-    await this.fetchComments();
+    this.comments = this.comments.map((c) =>
+      c.id === updatedComment.id ? updatedComment : c
+    );
   };
 
   private handleCreateNote = async (content: string) => {
