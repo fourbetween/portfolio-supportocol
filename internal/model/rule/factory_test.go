@@ -23,8 +23,8 @@ func TestFactory_NewRule(t *testing.T) {
 				CreatedBy:   "test-user",
 				CreatedAt:   time.Now(),
 				CommentTypes: []rule.CommentType{
-					{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
-					{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+					{ID: "ct1", No: 1, Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+					{ID: "ct2", No: 2, Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 				},
 				CommentTypePaths: []rule.CommentTypePath{
 					{ChildCommentTypeID: "ct1", ParentCommentTypeID: "ct2"},
@@ -40,7 +40,7 @@ func TestFactory_NewRule(t *testing.T) {
 				CreatedBy:   "test-user",
 				CreatedAt:   time.Now(),
 				CommentTypes: []rule.CommentType{
-					{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+					{ID: "ct1", No: 1, Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
 				},
 				CommentTypePaths: []rule.CommentTypePath{
 					{ChildCommentTypeID: "ct999", ParentCommentTypeID: "ct1"},

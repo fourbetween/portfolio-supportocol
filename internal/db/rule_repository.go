@@ -167,6 +167,7 @@ func (r *RuleRepository) saveCommentTypes(ruleID string, commentTypes []rule.Com
 		commentTypeRecords[i] = model.CommentTypes{
 			ID:          ct.ID,
 			RuleID:      ruleID,
+			No:          int32(ct.No),
 			Name:        ct.Name,
 			Description: ct.Description,
 			Color:       ct.Color,
@@ -219,7 +220,8 @@ func (r *RuleRepository) fetchCommentTypesByRuleIDs(ruleIDs []string) (map[strin
 	stmt := postgres.
 		SELECT(table.CommentTypes.AllColumns).
 		FROM(table.CommentTypes).
-		WHERE(table.CommentTypes.RuleID.IN(toPostgresStrings(ruleIDs)...))
+		WHERE(table.CommentTypes.RuleID.IN(toPostgresStrings(ruleIDs)...)).
+		ORDER_BY(table.CommentTypes.RuleID.ASC(), table.CommentTypes.No.ASC())
 
 	var records []model.CommentTypes
 	if err := stmt.Query(r.db, &records); err != nil {
@@ -230,6 +232,7 @@ func (r *RuleRepository) fetchCommentTypesByRuleIDs(ruleIDs []string) (map[strin
 	for _, ct := range records {
 		result[ct.RuleID] = append(result[ct.RuleID], rule.CommentType{
 			ID:          ct.ID,
+			No:          int(ct.No),
 			Name:        ct.Name,
 			Description: ct.Description,
 			Color:       ct.Color,

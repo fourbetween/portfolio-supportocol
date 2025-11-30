@@ -212,6 +212,7 @@ func (h *appHandler) RulesPost(ctx context.Context, req oas.OptRulesPostReq) (*o
 			for i, v := range req.Value.CommentTypes {
 				cts[i] = rule.CommentType{
 					ID:          string(v.ID),
+					No:          v.No,
 					Name:        v.Name,
 					Description: v.Description,
 					Color:       v.Color,
@@ -281,6 +282,7 @@ func (h *appHandler) RulesRuleIdPut(ctx context.Context, req oas.OptRulesRuleIdP
 			for i, v := range req.Value.CommentTypes {
 				cts[i] = rule.CommentType{
 					ID:          string(v.ID),
+					No:          v.No,
 					Name:        v.Name,
 					Description: v.Description,
 					Color:       v.Color,
@@ -680,6 +682,7 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 	for i, v := range item.CommentTypes() {
 		cts[i] = oas.CommentType{
 			ID:          v.ID,
+			No:          v.No,
 			Name:        v.Name,
 			Description: v.Description,
 			Color:       v.Color,

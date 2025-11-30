@@ -47,8 +47,8 @@ func TestRule_Save(t *testing.T) {
 		{
 			name: "CommentTypesとCommentTypePathsを含むルールを保存できること",
 			commentTypes: []rule.CommentType{
-				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
-				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+				{ID: "ct1", No: 1, Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "ct2", No: 2, Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
 				{ChildCommentTypeID: "ct1", ParentCommentTypeID: "ct2"},
@@ -123,8 +123,8 @@ func TestRule_CommentTypesAndPaths(t *testing.T) {
 		{
 			name: "コメントタイプとパスを取得できること",
 			commentTypes: []rule.CommentType{
-				{ID: "ct1", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
-				{ID: "ct2", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
+				{ID: "ct1", No: 1, Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "ct2", No: 2, Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
 			},
 			commentTypePaths: []rule.CommentTypePath{
 				{ChildCommentTypeID: "ct1", ParentCommentTypeID: "ct2"},
@@ -158,6 +158,11 @@ func TestRule_CommentTypesAndPaths(t *testing.T) {
 			gotCommentTypes := r.CommentTypes()
 			if len(gotCommentTypes) != tt.wantCommentTypesLen {
 				t.Errorf("CommentTypes() len = %v, want %v", len(gotCommentTypes), tt.wantCommentTypesLen)
+			}
+			for i, ct := range gotCommentTypes {
+				if ct.No != tt.commentTypes[i].No {
+					t.Errorf("CommentTypes()[%d].No = %v, want %v", i, ct.No, tt.commentTypes[i].No)
+				}
 			}
 
 			gotCommentTypePaths := r.CommentTypePaths()
