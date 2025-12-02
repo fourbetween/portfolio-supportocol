@@ -10,7 +10,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/model/user"
-	"github.com/fourbetween/app-supportocol/internal/model/workbook"
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
 	"github.com/fourbetween/app-supportocol/internal/service/id"
 	"go.uber.org/mock/gomock"
@@ -23,7 +22,6 @@ type container struct {
 	ProjectFac *project.Factory
 	RuleFac    *rule.Factory
 
-	WorkbookRepo   *workbook.MockRepository
 	ProjectRepo    *project.MockRepository
 	RuleRepo       *rule.MockRepository
 	DiscussionRepo *discussion.MockRepository
@@ -37,7 +35,6 @@ func newContainer(t *testing.T) *container {
 
 	ctrl := gomock.NewController(t)
 
-	workbookRepo := workbook.NewMockRepository(ctrl)
 	projectRepo := project.NewMockRepository(ctrl)
 	ruleRepo := rule.NewMockRepository(ctrl)
 	discussionRepo := discussion.NewMockRepository(ctrl)
@@ -47,7 +44,7 @@ func newContainer(t *testing.T) *container {
 	projectFac := project.NewFactory(projectRepo, idSrv)
 	ruleFac := rule.NewFactory(ruleRepo, idSrv)
 	discussionFac := discussion.NewFactory(discussionRepo, idSrv, clockSrv, ruleRepo)
-	userFac := user.NewFactory(workbookRepo, projectRepo, ruleRepo, discussionRepo, projectFac, ruleFac, discussionFac, clockSrv)
+	userFac := user.NewFactory(projectRepo, ruleRepo, discussionRepo, projectFac, ruleFac, discussionFac, clockSrv)
 
 	return &container{
 		t:              t,
@@ -55,7 +52,6 @@ func newContainer(t *testing.T) *container {
 		ProjectFac:     projectFac,
 		RuleFac:        ruleFac,
 		DiscussionFac:  discussionFac,
-		WorkbookRepo:   workbookRepo,
 		ProjectRepo:    projectRepo,
 		RuleRepo:       ruleRepo,
 		DiscussionRepo: discussionRepo,

@@ -5,15 +5,6 @@ extendZodWithOpenApi(z);
 
 export const StatusSchema = z.enum(["draft", "published"]).openapi("status");
 
-export const WorkbookSchema = z
-  .object({
-    id: z.string(),
-    title: z.string(),
-    status: StatusSchema,
-    ownerId: z.string(),
-  })
-  .openapi("workbook");
-
 export const ErrorSchema = z
   .object({
     code: z.number().int().min(100).max(599),

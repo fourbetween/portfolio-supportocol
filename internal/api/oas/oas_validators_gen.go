@@ -575,17 +575,6 @@ func (s *RulesRuleIdPutReq) Validate() error {
 	return nil
 }
 
-func (s Status) Validate() error {
-	switch s {
-	case "draft":
-		return nil
-	case "published":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
 func (s VisibilityLevel) Validate() error {
 	switch s {
 	case "everyone":
@@ -597,27 +586,4 @@ func (s VisibilityLevel) Validate() error {
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
-}
-
-func (s *Workbook) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.Status.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "status",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
 }

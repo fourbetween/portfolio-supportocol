@@ -14,7 +14,6 @@ import {
   ProjectSchema,
   RuleSchema,
   VisibilityLevelSchema,
-  WorkbookSchema,
 } from "./schema";
 
 // OpenAPIRegistryのインスタンスを作成
@@ -32,31 +31,6 @@ export const cognitoAuth = registry.registerComponent(
 
 // エンドポイントの定義
 const routes: RouteConfig[] = [
-  {
-    method: "get",
-    path: "/workbooks",
-    description: "get workbooks",
-    security: [{ [cognitoAuth.name]: [] }],
-    request: {},
-    responses: {
-      200: {
-        description: "success response",
-        content: {
-          "application/json": {
-            schema: z.array(WorkbookSchema),
-          },
-        },
-      },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
-    },
-  },
   {
     method: "post",
     path: "/errors",

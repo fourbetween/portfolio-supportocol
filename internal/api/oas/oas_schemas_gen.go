@@ -2017,48 +2017,6 @@ func (s *RulesRuleIdPutReq) SetCommentTypePaths(val []CommentTypePath) {
 	s.CommentTypePaths = val
 }
 
-// Ref: #/components/schemas/status
-type Status string
-
-const (
-	StatusDraft     Status = "draft"
-	StatusPublished Status = "published"
-)
-
-// AllValues returns all Status values.
-func (Status) AllValues() []Status {
-	return []Status{
-		StatusDraft,
-		StatusPublished,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s Status) MarshalText() ([]byte, error) {
-	switch s {
-	case StatusDraft:
-		return []byte(s), nil
-	case StatusPublished:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *Status) UnmarshalText(data []byte) error {
-	switch Status(data) {
-	case StatusDraft:
-		*s = StatusDraft
-		return nil
-	case StatusPublished:
-		*s = StatusPublished
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
 // Ref: #/components/schemas/visibilityLevel
 type VisibilityLevel string
 
@@ -2106,52 +2064,4 @@ func (s *VisibilityLevel) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
-}
-
-// Ref: #/components/schemas/workbook
-type Workbook struct {
-	ID      string `json:"id"`
-	Title   string `json:"title"`
-	Status  Status `json:"status"`
-	OwnerId string `json:"ownerId"`
-}
-
-// GetID returns the value of ID.
-func (s *Workbook) GetID() string {
-	return s.ID
-}
-
-// GetTitle returns the value of Title.
-func (s *Workbook) GetTitle() string {
-	return s.Title
-}
-
-// GetStatus returns the value of Status.
-func (s *Workbook) GetStatus() Status {
-	return s.Status
-}
-
-// GetOwnerId returns the value of OwnerId.
-func (s *Workbook) GetOwnerId() string {
-	return s.OwnerId
-}
-
-// SetID sets the value of ID.
-func (s *Workbook) SetID(val string) {
-	s.ID = val
-}
-
-// SetTitle sets the value of Title.
-func (s *Workbook) SetTitle(val string) {
-	s.Title = val
-}
-
-// SetStatus sets the value of Status.
-func (s *Workbook) SetStatus(val Status) {
-	s.Status = val
-}
-
-// SetOwnerId sets the value of OwnerId.
-func (s *Workbook) SetOwnerId(val string) {
-	s.OwnerId = val
 }

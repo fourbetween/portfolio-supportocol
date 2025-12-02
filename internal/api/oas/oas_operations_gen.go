@@ -34,5 +34,4 @@ const (
 	RulesRuleIdDeleteOperation                              OperationName = "RulesRuleIdDelete"
 	RulesRuleIdGetOperation                                 OperationName = "RulesRuleIdGet"
 	RulesRuleIdPutOperation                                 OperationName = "RulesRuleIdPut"
-	WorkbooksGetOperation                                   OperationName = "WorkbooksGet"
 )

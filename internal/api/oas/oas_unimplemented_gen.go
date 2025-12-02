@@ -265,15 +265,6 @@ func (UnimplementedHandler) RulesRuleIdPut(ctx context.Context, req OptRulesRule
 	return r, ht.ErrNotImplemented
 }
 
-// WorkbooksGet implements GET /workbooks operation.
-//
-// Get workbooks.
-//
-// GET /workbooks
-func (UnimplementedHandler) WorkbooksGet(ctx context.Context) (r []Workbook, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // NewError creates *ErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

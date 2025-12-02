@@ -8,7 +8,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/model/user"
-	"github.com/fourbetween/app-supportocol/internal/model/workbook"
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
 	"github.com/fourbetween/app-supportocol/internal/service/id"
 )
@@ -22,12 +21,6 @@ type (
 func NewContainer(tx *sql.Tx) (*Container, error) {
 	idSrv := id.NewULIDService()
 	clockSrv := clock.NewRealService()
-	workbookRepo := db.NewWorkbookRepository(tx)
-	workbookFac := workbook.NewFactory(
-		workbookRepo,
-		idSrv,
-	)
-	workbookRepo.SetFactory(workbookFac)
 
 	projectRepo := db.NewProjectRepository(tx)
 	projectFac := project.NewFactory(
@@ -53,7 +46,6 @@ func NewContainer(tx *sql.Tx) (*Container, error) {
 	discussionRepo.SetFactory(discussionFac)
 
 	userFac := user.NewFactory(
-		workbookRepo,
 		projectRepo,
 		ruleRepo,
 		discussionRepo,
