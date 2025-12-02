@@ -38,6 +38,7 @@ describe("ItemDiscussionPagePresenter", async () => {
       name: "主張",
       description: "議論の主張を述べる",
       color: "#0969da",
+      root: true,
     },
     {
       id: "01234567890123456789012352",
@@ -45,6 +46,7 @@ describe("ItemDiscussionPagePresenter", async () => {
       name: "根拠",
       description: "主張を裏付ける根拠を述べる",
       color: "#2da44e",
+      root: false,
     },
     {
       id: "01234567890123456789012353",
@@ -52,6 +54,7 @@ describe("ItemDiscussionPagePresenter", async () => {
       name: "反論",
       description: "主張や根拠に対する反論を述べる",
       color: "#cf222e",
+      root: false,
     },
   ];
 

@@ -14,4 +14,5 @@ type CommentTypes struct {
 	Name        string
 	Description string
 	Color       string
+	Root        bool
 }

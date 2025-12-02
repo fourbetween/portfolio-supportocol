@@ -19,6 +19,7 @@ describe("EditRulePagePresenter", async () => {
         name: "主張",
         description: "自分の意見や提案を述べるコメント",
         color: "#0969da",
+        root: true,
       },
       {
         id: "01234567890123456789012348",
@@ -26,6 +27,7 @@ describe("EditRulePagePresenter", async () => {
         name: "根拠",
         description: "主張を裏付ける根拠",
         color: "#1a7f37",
+        root: false,
       },
     ],
     commentTypePaths: [

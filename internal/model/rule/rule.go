@@ -109,6 +109,18 @@ func (r *Rule) Update(params UpdateParams) error {
 }
 
 func (r *Rule) IsValidPath(fromCommentTypeID, toCommentTypeID string) error {
+	// ルートコメントの場合（親がない場合）
+	if toCommentTypeID == "" {
+		from, err := r.CommentType(fromCommentTypeID)
+		if err != nil {
+			return err
+		}
+		if from.Root {
+			return nil
+		}
+		return fmt.Errorf("comment type %q is not allowed as root: %w", from.Name, internal.ErrConflict)
+	}
+
 	for _, path := range r.commentTypePaths {
 		if path.ChildCommentTypeID == fromCommentTypeID && path.ParentCommentTypeID == toCommentTypeID {
 			return nil

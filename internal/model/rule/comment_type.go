@@ -6,4 +6,5 @@ type CommentType struct {
 	Name        string
 	Description string
 	Color       string
+	Root        bool // ルートコメントとして許可されているかどうか
 }

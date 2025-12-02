@@ -78,6 +78,7 @@ export const CommentTypeSchema = z
     name: z.string(),
     description: z.string(),
     color: z.string(),
+    root: z.boolean(),
   })
   .openapi("commentType");
 

@@ -139,6 +139,18 @@ func TestRule_CommentTypesAndPaths(t *testing.T) {
 			wantCommentTypesLen:     0,
 			wantCommentTypePathsLen: 0,
 		},
+		{
+			name: "Rootフラグが設定されたコメントタイプを取得できること",
+			commentTypes: []rule.CommentType{
+				{ID: "ct1", No: 1, Name: "主張", Description: "主張を表すコメント", Color: "#FF0000", Root: true},
+				{ID: "ct2", No: 2, Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00", Root: false},
+			},
+			commentTypePaths: []rule.CommentTypePath{
+				{ChildCommentTypeID: "ct1", ParentCommentTypeID: "ct2"},
+			},
+			wantCommentTypesLen:     2,
+			wantCommentTypePathsLen: 1,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -162,6 +174,9 @@ func TestRule_CommentTypesAndPaths(t *testing.T) {
 			for i, ct := range gotCommentTypes {
 				if ct.No != tt.commentTypes[i].No {
 					t.Errorf("CommentTypes()[%d].No = %v, want %v", i, ct.No, tt.commentTypes[i].No)
+				}
+				if ct.Root != tt.commentTypes[i].Root {
+					t.Errorf("CommentTypes()[%d].Root = %v, want %v", i, ct.Root, tt.commentTypes[i].Root)
 				}
 			}
 
@@ -384,6 +399,28 @@ func TestRule_IsValidPath(t *testing.T) {
 			fromCommentTypeID: "claim", // ルートとして追加する子コメント
 			toCommentTypeID:   "",      // 親がない（ルート）
 			wantErr:           false,
+		},
+		{
+			// CommentType.Root=trueの場合、ルートコメントとして許可される
+			name: "CommentType.Rootがtrueの場合にルートコメントとしてエラーを返さないこと",
+			commentTypes: []rule.CommentType{
+				{ID: "claim", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000", Root: true},
+			},
+			commentTypePaths:  []rule.CommentTypePath{},
+			fromCommentTypeID: "claim",
+			toCommentTypeID:   "",
+			wantErr:           false,
+		},
+		{
+			// CommentType.Root=falseの場合、ルートコメントとして許可されない
+			name: "CommentType.Rootがfalseの場合にルートコメントとしてエラーを返すこと",
+			commentTypes: []rule.CommentType{
+				{ID: "evidence", Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00", Root: false},
+			},
+			commentTypePaths:  []rule.CommentTypePath{},
+			fromCommentTypeID: "evidence",
+			toCommentTypeID:   "",
+			wantErr:           true,
 		},
 	}
 	for _, tt := range tests {

@@ -1185,6 +1185,7 @@ export interface components {
             name: string;
             description: string;
             color: string;
+            root: boolean;
         };
         commentTypePath: {
             childCommentTypeId: string;

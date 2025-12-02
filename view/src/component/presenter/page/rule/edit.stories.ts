@@ -16,6 +16,7 @@ const mockRule: Rule = {
       name: "主張",
       description: "自分の意見や提案を述べるコメント",
       color: "#0969da",
+      root: true,
     },
     {
       id: "01234567890123456789012348",
@@ -23,6 +24,7 @@ const mockRule: Rule = {
       name: "根拠",
       description: "主張を裏付ける根拠",
       color: "#1a7f37",
+      root: false,
     },
     {
       id: "01234567890123456789012349",
@@ -30,6 +32,7 @@ const mockRule: Rule = {
       name: "質問",
       description: "不明点を確認するコメント",
       color: "#d29922",
+      root: false,
     },
     {
       id: "01234567890123456789012350",
@@ -37,6 +40,7 @@ const mockRule: Rule = {
       name: "反論",
       description: "主張に対する反論",
       color: "#cf222e",
+      root: false,
     },
   ],
   commentTypePaths: [
@@ -99,6 +103,25 @@ export const Empty: Story = {
       createdAt: "",
       commentTypes: [],
       commentTypePaths: [],
+    },
+  },
+};
+
+export const WithRootCommentTypes: Story = {
+  args: {
+    rule: {
+      ...mockRule,
+      commentTypePaths: [
+        ...mockRule.commentTypePaths,
+        {
+          childCommentTypeId: "01234567890123456789012347",
+          parentCommentTypeId: "",
+        },
+        {
+          childCommentTypeId: "01234567890123456789012349",
+          parentCommentTypeId: "",
+        },
+      ],
     },
   },
 };
