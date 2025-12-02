@@ -212,4 +212,45 @@ describe("CreateCommentPopupPresenter", async () => {
     expect(options.length).toBe(1);
     expect(options[0].textContent).toBe("主張");
   });
+
+  it("ルートコメント追加時にroot=trueのコメント種類のみが選択肢に表示されること", async () => {
+    // ルートコメント用の経路がないルール
+    const ruleWithoutRootPath: Rule = {
+      id: "01234567890123456789012349",
+      name: "議論ルール",
+      description: "議論のルール説明文",
+      createdBy: "01234567890123456789012346",
+      createdAt: "2024-01-01T00:00:00Z",
+      commentTypes: mockCommentTypes,
+      commentTypePaths: [
+        {
+          // 根拠（子）→ 主張（親）：主張に対して根拠で返信可能
+          childCommentTypeId: "01234567890123456789012352",
+          parentCommentTypeId: "01234567890123456789012351",
+        },
+        {
+          // 反論（子）→ 主張（親）：主張に対して反論で返信可能
+          childCommentTypeId: "01234567890123456789012353",
+          parentCommentTypeId: "01234567890123456789012351",
+        },
+      ],
+    };
+
+    elem.commentTypes = mockCommentTypes;
+    elem.rule = ruleWithoutRootPath;
+    elem.fromCommentTypeId = ""; // ルートコメント
+    elem.open();
+    await elem.updateComplete;
+
+    const selectElement = elem.shadowRoot?.querySelector(
+      "#comment-type"
+    ) as HTMLSelectElement;
+    const options = Array.from(selectElement?.options || []).filter(
+      (opt) => opt.value !== ""
+    );
+
+    // root=trueの主張のみ許可
+    expect(options.length).toBe(1);
+    expect(options[0].textContent).toBe("主張");
+  });
 });

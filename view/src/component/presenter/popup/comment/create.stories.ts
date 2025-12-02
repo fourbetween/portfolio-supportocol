@@ -29,6 +29,27 @@ const mockCommentTypes = [
   },
 ];
 
+const mockRule = {
+  id: "01234567890123456789012349",
+  name: "議論ルール",
+  description: "議論のルール説明文",
+  createdBy: "01234567890123456789012346",
+  createdAt: "2024-01-01T00:00:00Z",
+  commentTypes: mockCommentTypes,
+  commentTypePaths: [
+    {
+      // 根拠（子）→ 主張（親）：主張に対して根拠で返信可能
+      childCommentTypeId: "01234567890123456789012352",
+      parentCommentTypeId: "01234567890123456789012351",
+    },
+    {
+      // 反論（子）→ 主張（親）：主張に対して反論で返信可能
+      childCommentTypeId: "01234567890123456789012353",
+      parentCommentTypeId: "01234567890123456789012351",
+    },
+  ],
+};
+
 const meta = {
   title: "presenter/popup/comment/create",
   tags: ["autodocs"],
@@ -37,6 +58,8 @@ const meta = {
       <create-comment-popup-presenter
         .commentTypes=${args.commentTypes}
         .parentCommentId=${args.parentCommentId}
+        .rule=${args.rule}
+        .fromCommentTypeId=${args.fromCommentTypeId}
         .onCreate=${args.onCreate}
       ></create-comment-popup-presenter>
       <button
@@ -67,9 +90,27 @@ export const NewComment: Story = {
   },
 };
 
+export const NewCommentWithRule: Story = {
+  args: {
+    commentTypes: mockCommentTypes,
+    parentCommentId: null,
+    rule: mockRule,
+    fromCommentTypeId: "",
+  },
+};
+
 export const ReplyComment: Story = {
   args: {
     commentTypes: mockCommentTypes,
     parentCommentId: "01234567890123456789012360",
+  },
+};
+
+export const ReplyCommentWithRule: Story = {
+  args: {
+    commentTypes: mockCommentTypes,
+    parentCommentId: "01234567890123456789012360",
+    rule: mockRule,
+    fromCommentTypeId: "01234567890123456789012351", // 主張からの返信
   },
 };

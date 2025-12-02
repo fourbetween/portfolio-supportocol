@@ -43,10 +43,16 @@ export class CreateCommentPopupPresenter extends LitElement {
       return this.commentTypes;
     }
 
+    const parentTypeId = this.fromCommentTypeId ?? "";
+
+    // ルートコメントの場合（親コメント種類が空文字）
+    if (parentTypeId === "") {
+      return this.commentTypes.filter((type) => type.root);
+    }
+
     // 経路の「開始コメント」は子コメント、「終了コメント」は親コメント
     // 親コメント種類（toCommentTypeId）が一致する経路を探し、
     // 許可される子コメント種類（fromCommentTypeId）を取得
-    const parentTypeId = this.fromCommentTypeId ?? "";
     const allowedChildTypeIds = this.rule.commentTypePaths
       .filter((path) => path.parentCommentTypeId === parentTypeId)
       .map((path) => path.childCommentTypeId);
