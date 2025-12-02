@@ -3,8 +3,6 @@ import { z } from "zod";
 
 extendZodWithOpenApi(z);
 
-export const StatusSchema = z.enum(["draft", "published"]).openapi("status");
-
 export const ErrorSchema = z
   .object({
     code: z.number().int().min(100).max(599),
