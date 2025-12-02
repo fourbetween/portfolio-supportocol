@@ -1172,15 +1172,16 @@ export interface components {
             code: number;
             message: string;
         };
+        id: string;
         project: {
-            id: string;
+            id: components["schemas"]["id"];
             name: string;
             createdBy: string;
             /** Format: date-time */
             createdAt: string;
         };
         commentType: {
-            id: string;
+            id: components["schemas"]["id"];
             no: number;
             name: string;
             description: string;
@@ -1188,11 +1189,11 @@ export interface components {
             root: boolean;
         };
         commentTypePath: {
-            childCommentTypeId: string;
-            parentCommentTypeId: string;
+            childCommentTypeId: components["schemas"]["id"];
+            parentCommentTypeId: components["schemas"]["id"];
         };
         rule: {
-            id: string;
+            id: components["schemas"]["id"];
             name: string;
             description: string;
             createdBy: string;
@@ -1206,11 +1207,11 @@ export interface components {
         /** @enum {string} */
         commentPermissionLevel: "everyone" | "authenticated" | "owner";
         discussion: {
-            id: string;
+            id: components["schemas"]["id"];
             theme: string;
             background: string;
             conclusion: string;
-            ruleId: string;
+            ruleId: components["schemas"]["id"];
             visibilityLevel: components["schemas"]["visibilityLevel"];
             commentPermissionLevel: components["schemas"]["commentPermissionLevel"];
             createdBy: string;
@@ -1222,10 +1223,10 @@ export interface components {
         /** @enum {string} */
         commentStatus: "unassigned" | "assigned" | "archived" | "deleted";
         comment: {
-            id: string;
-            discussionId: string;
-            parentCommentId: string;
-            commentTypeId: string;
+            id: components["schemas"]["id"];
+            discussionId: components["schemas"]["id"];
+            parentCommentId: components["schemas"]["id"];
+            commentTypeId: components["schemas"]["id"];
             content: string;
             postedBy: string;
             /** Format: date-time */
@@ -1233,8 +1234,8 @@ export interface components {
             status: components["schemas"]["commentStatus"];
         };
         issue: {
-            id: string;
-            commentId: string;
+            id: components["schemas"]["id"];
+            commentId: components["schemas"]["id"];
             /** @enum {string} */
             issueType: "contradiction" | "circular_logic";
             description: string;
@@ -1243,8 +1244,8 @@ export interface components {
             createdAt: string;
         };
         note: {
-            id: string;
-            discussionId: string;
+            id: components["schemas"]["id"];
+            discussionId: components["schemas"]["id"];
             content: string;
             postedBy: string;
             /** Format: date-time */

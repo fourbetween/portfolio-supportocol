@@ -73,6 +73,12 @@ func (r *Rule) Validate() error {
 	}
 
 	for _, path := range r.commentTypePaths {
+		if path.ChildCommentTypeID == "" {
+			return fmt.Errorf("ChildCommentTypeID is empty: %w", internal.ErrConflict)
+		}
+		if path.ParentCommentTypeID == "" {
+			return fmt.Errorf("ParentCommentTypeID is empty: %w", internal.ErrConflict)
+		}
 		if _, ok := commentTypeIDs[path.ChildCommentTypeID]; !ok {
 			return fmt.Errorf("FromCommentTypeID %q is not defined in CommentTypes: %w", path.ChildCommentTypeID, internal.ErrConflict)
 		}
@@ -111,6 +117,7 @@ func (r *Rule) Update(params UpdateParams) error {
 func (r *Rule) IsValidPath(fromCommentTypeID, toCommentTypeID string) error {
 	// ルートコメントの場合（親がない場合）
 	if toCommentTypeID == "" {
+		// CommentType.Root=trueの場合、ルートコメントとして許可
 		from, err := r.CommentType(fromCommentTypeID)
 		if err != nil {
 			return err

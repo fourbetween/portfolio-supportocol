@@ -389,13 +389,12 @@ func TestRule_IsValidPath(t *testing.T) {
 		},
 		{
 			// ルートコメント（親がない）の場合は To が空
+			// CommentType.Root=trueで許可する
 			name: "ルートコメントとして許可されている場合にエラーを返さないこと",
 			commentTypes: []rule.CommentType{
-				{ID: "claim", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
+				{ID: "claim", Name: "主張", Description: "主張を表すコメント", Color: "#FF0000", Root: true},
 			},
-			commentTypePaths: []rule.CommentTypePath{
-				{ChildCommentTypeID: "claim", ParentCommentTypeID: ""},
-			},
+			commentTypePaths:  []rule.CommentTypePath{},
 			fromCommentTypeID: "claim", // ルートとして追加する子コメント
 			toCommentTypeID:   "",      // 親がない（ルート）
 			wantErr:           false,
