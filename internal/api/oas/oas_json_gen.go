@@ -340,14 +340,19 @@ func (s *CommentType) encodeFields(e *jx.Encoder) {
 		e.FieldStart("color")
 		e.Str(s.Color)
 	}
+	{
+		e.FieldStart("root")
+		e.Bool(s.Root)
+	}
 }
 
-var jsonFieldsNameOfCommentType = [5]string{
+var jsonFieldsNameOfCommentType = [6]string{
 	0: "id",
 	1: "no",
 	2: "name",
 	3: "description",
 	4: "color",
+	5: "root",
 }
 
 // Decode decodes CommentType from json.
@@ -419,6 +424,18 @@ func (s *CommentType) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"color\"")
 			}
+		case "root":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				v, err := d.Bool()
+				s.Root = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"root\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -429,7 +446,7 @@ func (s *CommentType) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011111,
+		0b00111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

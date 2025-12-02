@@ -171,6 +171,7 @@ func (r *RuleRepository) saveCommentTypes(ruleID string, commentTypes []rule.Com
 			Name:        ct.Name,
 			Description: ct.Description,
 			Color:       ct.Color,
+			Root:        ct.Root,
 		}
 	}
 
@@ -236,6 +237,7 @@ func (r *RuleRepository) fetchCommentTypesByRuleIDs(ruleIDs []string) (map[strin
 			Name:        ct.Name,
 			Description: ct.Description,
 			Color:       ct.Color,
+			Root:        ct.Root,
 		})
 	}
 

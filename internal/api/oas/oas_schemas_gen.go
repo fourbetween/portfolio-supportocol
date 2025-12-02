@@ -242,6 +242,7 @@ type CommentType struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Color       string `json:"color"`
+	Root        bool   `json:"root"`
 }
 
 // GetID returns the value of ID.
@@ -269,6 +270,11 @@ func (s *CommentType) GetColor() string {
 	return s.Color
 }
 
+// GetRoot returns the value of Root.
+func (s *CommentType) GetRoot() bool {
+	return s.Root
+}
+
 // SetID sets the value of ID.
 func (s *CommentType) SetID(val string) {
 	s.ID = val
@@ -292,6 +298,11 @@ func (s *CommentType) SetDescription(val string) {
 // SetColor sets the value of Color.
 func (s *CommentType) SetColor(val string) {
 	s.Color = val
+}
+
+// SetRoot sets the value of Root.
+func (s *CommentType) SetRoot(val bool) {
+	s.Root = val
 }
 
 // Ref: #/components/schemas/commentTypePath

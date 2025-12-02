@@ -51,12 +51,15 @@ components:
           type: string
         color:
           type: string
+        root:
+          type: boolean
       required:
         - id
         - no
         - name
         - description
         - color
+        - root
     commentTypePath:
       type: object
       properties:

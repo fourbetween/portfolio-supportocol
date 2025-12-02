@@ -187,28 +187,11 @@ func (h *appHandler) RulesPost(ctx context.Context, req oas.OptRulesPostReq) (*o
 		ctx,
 		func(con *Container) error {
 			u := h.loadAccount(ctx, con)
-			cts := make([]rule.CommentType, len(req.Value.CommentTypes))
-			for i, v := range req.Value.CommentTypes {
-				cts[i] = rule.CommentType{
-					ID:          string(v.ID),
-					No:          v.No,
-					Name:        v.Name,
-					Description: v.Description,
-					Color:       v.Color,
-				}
-			}
-			ctps := make([]rule.CommentTypePath, len(req.Value.CommentTypePaths))
-			for i, v := range req.Value.CommentTypePaths {
-				ctps[i] = rule.CommentTypePath{
-					ChildCommentTypeID:  string(v.ChildCommentTypeId),
-					ParentCommentTypeID: string(v.ParentCommentTypeId),
-				}
-			}
 			item, err = u.CreateRule(user.CreateRuleParams{
 				Name:             req.Value.Name,
 				Description:      req.Value.Description,
-				CommentTypes:     cts,
-				CommentTypePaths: ctps,
+				CommentTypes:     h.toRuleCommentTypes(req.Value.CommentTypes),
+				CommentTypePaths: h.toRuleCommentTypePaths(req.Value.CommentTypePaths),
 			})
 			return err
 		},
@@ -257,29 +240,12 @@ func (h *appHandler) RulesRuleIdPut(ctx context.Context, req oas.OptRulesRuleIdP
 		ctx,
 		func(con *Container) error {
 			u := h.loadAccount(ctx, con)
-			cts := make([]rule.CommentType, len(req.Value.CommentTypes))
-			for i, v := range req.Value.CommentTypes {
-				cts[i] = rule.CommentType{
-					ID:          string(v.ID),
-					No:          v.No,
-					Name:        v.Name,
-					Description: v.Description,
-					Color:       v.Color,
-				}
-			}
-			ctps := make([]rule.CommentTypePath, len(req.Value.CommentTypePaths))
-			for i, v := range req.Value.CommentTypePaths {
-				ctps[i] = rule.CommentTypePath{
-					ChildCommentTypeID:  string(v.ChildCommentTypeId),
-					ParentCommentTypeID: string(v.ParentCommentTypeId),
-				}
-			}
 			item, err = u.UpdateRule(user.UpdateRuleParams{
 				RuleID:           string(params.RuleId),
 				Name:             req.Value.Name,
 				Description:      req.Value.Description,
-				CommentTypes:     cts,
-				CommentTypePaths: ctps,
+				CommentTypes:     h.toRuleCommentTypes(req.Value.CommentTypes),
+				CommentTypePaths: h.toRuleCommentTypePaths(req.Value.CommentTypePaths),
 			})
 			return err
 		},
@@ -648,6 +614,32 @@ func (h *appHandler) toOasProject(item *project.Project) oas.Project {
 	}
 }
 
+func (h *appHandler) toRuleCommentTypes(cts []oas.CommentType) []rule.CommentType {
+	result := make([]rule.CommentType, len(cts))
+	for i, v := range cts {
+		result[i] = rule.CommentType{
+			ID:          string(v.ID),
+			No:          v.No,
+			Name:        v.Name,
+			Description: v.Description,
+			Color:       v.Color,
+			Root:        v.Root,
+		}
+	}
+	return result
+}
+
+func (h *appHandler) toRuleCommentTypePaths(ctps []oas.CommentTypePath) []rule.CommentTypePath {
+	result := make([]rule.CommentTypePath, len(ctps))
+	for i, v := range ctps {
+		result[i] = rule.CommentTypePath{
+			ChildCommentTypeID:  string(v.ChildCommentTypeId),
+			ParentCommentTypeID: string(v.ParentCommentTypeId),
+		}
+	}
+	return result
+}
+
 func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 	cts := make([]oas.CommentType, len(item.CommentTypes()))
 	for i, v := range item.CommentTypes() {
@@ -657,6 +649,7 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 			Name:        v.Name,
 			Description: v.Description,
 			Color:       v.Color,
+			Root:        v.Root,
 		}
 	}
 	ctps := make([]oas.CommentTypePath, len(item.CommentTypePaths()))
