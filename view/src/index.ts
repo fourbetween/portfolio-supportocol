@@ -116,6 +116,13 @@ export class AppRoot extends LitElement {
     this.removeEventListener(ShowToastEvent.eventName, this.handleShowToast);
   }
 
+  render() {
+    return html`
+      <main-layout-container>${this.router.outlet()}</main-layout-container>
+      <base-toast-presenter></base-toast-presenter>
+    `;
+  }
+
   private handleShowToast = (event: ShowToastEvent) => {
     this.toast.show({
       message: event.detail.message,
@@ -123,13 +130,6 @@ export class AppRoot extends LitElement {
       duration: event.detail.duration,
     });
   };
-
-  render() {
-    return html`
-      <main-layout-container>${this.router.outlet()}</main-layout-container>
-      <base-toast-presenter></base-toast-presenter>
-    `;
-  }
 
   static styles = [baseStyle, css``];
 }
