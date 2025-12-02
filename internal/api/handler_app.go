@@ -607,7 +607,7 @@ func (h *appHandler) loadAccount(ctx context.Context, con *Container) *user.User
 
 func (h *appHandler) toOasProject(item *project.Project) oas.Project {
 	return oas.Project{
-		ID:        item.ID(),
+		ID:        oas.ID(item.ID()),
 		Name:      item.Name(),
 		CreatedBy: item.CreatedBy(),
 		CreatedAt: item.CreatedAt(),
@@ -644,7 +644,7 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 	cts := make([]oas.CommentType, len(item.CommentTypes()))
 	for i, v := range item.CommentTypes() {
 		cts[i] = oas.CommentType{
-			ID:          v.ID,
+			ID:          oas.ID(v.ID),
 			No:          v.No,
 			Name:        v.Name,
 			Description: v.Description,
@@ -655,12 +655,12 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 	ctps := make([]oas.CommentTypePath, len(item.CommentTypePaths()))
 	for i, v := range item.CommentTypePaths() {
 		ctps[i] = oas.CommentTypePath{
-			ChildCommentTypeId:  v.ChildCommentTypeID,
-			ParentCommentTypeId: v.ParentCommentTypeID,
+			ChildCommentTypeId:  oas.ID(v.ChildCommentTypeID),
+			ParentCommentTypeId: oas.ID(v.ParentCommentTypeID),
 		}
 	}
 	return oas.Rule{
-		ID:               item.ID(),
+		ID:               oas.ID(item.ID()),
 		Name:             item.Name(),
 		Description:      item.Description(),
 		CreatedBy:        item.CreatedBy(),
@@ -672,11 +672,11 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 
 func (h *appHandler) toOasDiscussion(item *discussion.Discussion) oas.Discussion {
 	return oas.Discussion{
-		ID:                     item.ID(),
+		ID:                     oas.ID(item.ID()),
 		Theme:                  item.Theme(),
 		Background:             item.Background(),
 		Conclusion:             item.Conclusion(),
-		RuleId:                 item.RuleID(),
+		RuleId:                 oas.ID(item.RuleID()),
 		VisibilityLevel:        oas.VisibilityLevel(item.VisibilityLevel()),
 		CommentPermissionLevel: oas.CommentPermissionLevel(item.CommentPermissionLevel()),
 		CreatedBy:              item.CreatedBy(),
@@ -687,10 +687,10 @@ func (h *appHandler) toOasDiscussion(item *discussion.Discussion) oas.Discussion
 
 func (h *appHandler) toOasComment(item *discussion.Comment) oas.Comment {
 	return oas.Comment{
-		ID:              item.ID(),
-		DiscussionId:    item.DiscussionID(),
-		ParentCommentId: item.ParentCommentID(),
-		CommentTypeId:   item.CommentTypeID(),
+		ID:              oas.ID(item.ID()),
+		DiscussionId:    oas.ID(item.DiscussionID()),
+		ParentCommentId: oas.ID(item.ParentCommentID()),
+		CommentTypeId:   oas.ID(item.CommentTypeID()),
 		Content:         item.Content(),
 		PostedBy:        item.PostedBy(),
 		PostedAt:        item.PostedAt(),
@@ -700,8 +700,8 @@ func (h *appHandler) toOasComment(item *discussion.Comment) oas.Comment {
 
 func (h *appHandler) toOasIssue(item *discussion.Issue) oas.Issue {
 	return oas.Issue{
-		ID:          item.ID(),
-		CommentId:   item.CommentID(),
+		ID:          oas.ID(item.ID()),
+		CommentId:   oas.ID(item.CommentID()),
 		IssueType:   oas.IssueIssueType(item.IssueType()),
 		Description: item.Description(),
 		CreatedBy:   item.CreatedBy(),
@@ -711,8 +711,8 @@ func (h *appHandler) toOasIssue(item *discussion.Issue) oas.Issue {
 
 func (h *appHandler) toOasNote(item *discussion.Note) oas.Note {
 	return oas.Note{
-		ID:           item.ID(),
-		DiscussionId: item.DiscussionID(),
+		ID:           oas.ID(item.ID()),
+		DiscussionId: oas.ID(item.DiscussionID()),
 		Content:      item.Content(),
 		PostedBy:     item.PostedBy(),
 		PostedAt:     item.PostedAt(),

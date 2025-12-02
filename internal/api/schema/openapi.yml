@@ -20,11 +20,15 @@ components:
       required:
         - code
         - message
+    id:
+      type: string
+      minLength: 26
+      maxLength: 26
     project:
       type: object
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/id"
         name:
           type: string
         createdBy:
@@ -41,7 +45,7 @@ components:
       type: object
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/id"
         no:
           type: integer
           minimum: 0
@@ -64,9 +68,9 @@ components:
       type: object
       properties:
         childCommentTypeId:
-          type: string
+          $ref: "#/components/schemas/id"
         parentCommentTypeId:
-          type: string
+          $ref: "#/components/schemas/id"
       required:
         - childCommentTypeId
         - parentCommentTypeId
@@ -74,7 +78,7 @@ components:
       type: object
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/id"
         name:
           type: string
         description:
@@ -116,7 +120,7 @@ components:
       type: object
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/id"
         theme:
           type: string
         background:
@@ -124,7 +128,7 @@ components:
         conclusion:
           type: string
         ruleId:
-          type: string
+          $ref: "#/components/schemas/id"
         visibilityLevel:
           $ref: "#/components/schemas/visibilityLevel"
         commentPermissionLevel:
@@ -162,13 +166,13 @@ components:
       type: object
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/id"
         discussionId:
-          type: string
+          $ref: "#/components/schemas/id"
         parentCommentId:
-          type: string
+          $ref: "#/components/schemas/id"
         commentTypeId:
-          type: string
+          $ref: "#/components/schemas/id"
         content:
           type: string
         postedBy:
@@ -191,9 +195,9 @@ components:
       type: object
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/id"
         commentId:
-          type: string
+          $ref: "#/components/schemas/id"
         issueType:
           type: string
           enum:
@@ -217,9 +221,9 @@ components:
       type: object
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/id"
         discussionId:
-          type: string
+          $ref: "#/components/schemas/id"
         content:
           type: string
         postedBy:

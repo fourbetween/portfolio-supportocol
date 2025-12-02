@@ -130,14 +130,14 @@ func TestDiscussion_CreateComment(t *testing.T) {
 					RuleID:     "ruleID",
 					CreatedBy:  "createdBy",
 				})
-				// From=子コメント(type1), To=親コメント(空=ルート)
+				// CommentType.Root=trueでルートコメントを許可
 				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
 					ID: "ruleID",
 					NewRuleParams: rule.NewRuleParams{
 						Name:      "test-rule",
 						CreatedAt: time.Now(),
-						CommentTypePaths: []rule.CommentTypePath{
-							{ChildCommentTypeID: "type1", ParentCommentTypeID: ""},
+						CommentTypes: []rule.CommentType{
+							{ID: "type1", Name: "type1", Root: true},
 						},
 					},
 				})
