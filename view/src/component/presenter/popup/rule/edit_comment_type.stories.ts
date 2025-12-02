@@ -9,6 +9,7 @@ const mockCommentType: CommentType = {
   name: "主張",
   description: "自分の意見や提案を述べるコメント",
   color: "#0969da",
+  root: true,
 };
 
 const meta = {

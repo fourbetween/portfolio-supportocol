@@ -19,6 +19,7 @@ describe("RuleFormPresenter", async () => {
         name: "主張",
         description: "自分の意見や提案を述べるコメント",
         color: "#0969da",
+        root: false,
       },
       {
         id: "01234567890123456789012348",
@@ -26,6 +27,7 @@ describe("RuleFormPresenter", async () => {
         name: "根拠",
         description: "主張を裏付ける根拠",
         color: "#1a7f37",
+        root: false,
       },
     ],
     commentTypePaths: [
@@ -80,5 +82,60 @@ describe("RuleFormPresenter", async () => {
     expect(updatedRule).toBeDefined();
     expect(updatedRule!.commentTypes[0].name).toBe("根拠");
     expect(updatedRule!.commentTypes[1].name).toBe("主張");
+  });
+
+  it("ルートコメント設定のチェックボックスが各コメント種類に対して表示されること", async () => {
+    const rootCheckboxes = page.getByRole("checkbox", {
+      name: /ルートコメント/,
+    });
+    await expect.element(rootCheckboxes.nth(0)).toBeVisible();
+    await expect.element(rootCheckboxes.nth(1)).toBeVisible();
+  });
+
+  it("ルートコメント設定をオンにするとcommentTypeのrootがtrueになること", async () => {
+    let updatedRule: Rule | undefined;
+    elem.onRuleChange = (rule) => {
+      updatedRule = rule;
+    };
+
+    const rootCheckbox = page.getByRole("checkbox", {
+      name: "主張 をルートコメントとして設定",
+    });
+    await rootCheckbox.click();
+
+    expect(updatedRule).toBeDefined();
+    const commentType = updatedRule!.commentTypes.find(
+      (ct) => ct.id === "01234567890123456789012347"
+    );
+    expect(commentType?.root).toBe(true);
+  });
+
+  it("ルートコメント設定をオフにするとcommentTypeのrootがfalseになること", async () => {
+    // ルートコメント設定を持つルールを設定
+    const ruleWithRoot: Rule = {
+      ...mockRule,
+      commentTypes: mockRule.commentTypes.map((ct) =>
+        ct.id === "01234567890123456789012347" ? { ...ct, root: true } : ct
+      ),
+    };
+    elem.rule = ruleWithRoot;
+
+    let updatedRule: Rule | undefined;
+    elem.onRuleChange = (rule) => {
+      updatedRule = rule;
+    };
+
+    const rootCheckbox = page.getByRole("checkbox", {
+      name: "主張 をルートコメントとして設定",
+    });
+    // チェックがオンになっていることを確認してからオフにする
+    await expect.element(rootCheckbox).toBeChecked();
+    await rootCheckbox.click();
+
+    expect(updatedRule).toBeDefined();
+    const commentType = updatedRule!.commentTypes.find(
+      (ct) => ct.id === "01234567890123456789012347"
+    );
+    expect(commentType?.root).toBe(false);
   });
 });

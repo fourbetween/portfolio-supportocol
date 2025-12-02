@@ -72,6 +72,16 @@ export class RuleFormPresenter extends LitElement {
                   style="background-color: ${type.color}"
                 ></span>
                 <span class="comment-type-name">${type.name}</span>
+                <label class="root-comment-label">
+                  <input
+                    type="checkbox"
+                    aria-label="${type.name} をルートコメントとして設定"
+                    .checked=${this.isRootCommentType(type.id)}
+                    @change=${(e: Event) =>
+                      this.handleRootCommentChange(e, type.id)}
+                  />
+                  ルートコメント
+                </label>
                 <div class="comment-type-actions">
                   <button
                     type="button"
@@ -177,6 +187,7 @@ export class RuleFormPresenter extends LitElement {
       name,
       description,
       color,
+      root: false,
     };
     this.updateRule({
       ...this.rule,
@@ -270,6 +281,21 @@ export class RuleFormPresenter extends LitElement {
     }
   }
 
+  private isRootCommentType(typeId: string): boolean {
+    const commentType = this.rule.commentTypes.find((ct) => ct.id === typeId);
+    return commentType?.root ?? false;
+  }
+
+  private handleRootCommentChange(e: Event, typeId: string) {
+    const checked = (e.target as HTMLInputElement).checked;
+    this.updateRule({
+      ...this.rule,
+      commentTypes: this.rule.commentTypes.map((ct) =>
+        ct.id === typeId ? { ...ct, root: checked } : ct
+      ),
+    });
+  }
+
   static styles = [
     baseStyle,
     buttonStyle,
@@ -324,6 +350,29 @@ export class RuleFormPresenter extends LitElement {
         font-weight: 500;
         color: var(--color-fg-default);
         flex-grow: 1;
+      }
+
+      .root-comment-label {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        color: var(--color-fg-muted);
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+        background-color: var(--color-canvas-subtle);
+        white-space: nowrap;
+      }
+
+      .root-comment-label:hover {
+        background-color: var(--color-canvas-inset);
+      }
+
+      .root-comment-label input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
       }
 
       .comment-type-actions {

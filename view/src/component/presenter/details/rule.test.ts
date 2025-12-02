@@ -30,6 +30,7 @@ describe("RuleDetailsPresenter", async () => {
         name: "主張",
         description: "議論の主張を述べる",
         color: "#0969da",
+        root: true,
       },
       {
         id: "type2",
@@ -37,6 +38,7 @@ describe("RuleDetailsPresenter", async () => {
         name: "根拠",
         description: "主張を裏付ける根拠を述べる",
         color: "#2da44e",
+        root: false,
       },
     ],
     commentTypePaths: [
