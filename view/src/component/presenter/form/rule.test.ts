@@ -51,4 +51,34 @@ describe("RuleFormPresenter", async () => {
     await expect.element(input).toBeVisible();
     await expect.element(input).toHaveValue("基本的な議論");
   });
+
+  it("コメント種類の上へ移動ボタンをクリックすると順序が変わること", async () => {
+    let updatedRule: Rule | undefined;
+    elem.onRuleChange = (rule) => {
+      updatedRule = rule;
+    };
+
+    const moveUpButtons = page.getByRole("button", { name: "上へ移動" });
+    // 2番目のコメント種類（根拠）の上へ移動ボタンをクリック
+    await moveUpButtons.nth(1).click();
+
+    expect(updatedRule).toBeDefined();
+    expect(updatedRule!.commentTypes[0].name).toBe("根拠");
+    expect(updatedRule!.commentTypes[1].name).toBe("主張");
+  });
+
+  it("コメント種類の下へ移動ボタンをクリックすると順序が変わること", async () => {
+    let updatedRule: Rule | undefined;
+    elem.onRuleChange = (rule) => {
+      updatedRule = rule;
+    };
+
+    const moveDownButtons = page.getByRole("button", { name: "下へ移動" });
+    // 1番目のコメント種類（主張）の下へ移動ボタンをクリック
+    await moveDownButtons.nth(0).click();
+
+    expect(updatedRule).toBeDefined();
+    expect(updatedRule!.commentTypes[0].name).toBe("根拠");
+    expect(updatedRule!.commentTypes[1].name).toBe("主張");
+  });
 });
