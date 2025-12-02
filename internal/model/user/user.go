@@ -7,7 +7,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/model/discussion"
 	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
-	"github.com/fourbetween/app-supportocol/internal/model/workbook"
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
 )
 
@@ -15,7 +14,6 @@ type User struct {
 	id    string
 	email string
 
-	workbookRepo   workbook.Repository
 	projectRepo    project.Repository
 	ruleRepo       rule.Repository
 	discussionRepo discussion.Repository
@@ -539,17 +537,4 @@ func (u *User) DeleteNote(params DeleteNoteParams) error {
 		return err
 	}
 	return d.DeleteNote(params.NoteID)
-}
-
-func (u *User) LoadWorkbook(workbookID string) (*workbook.Workbook, error) {
-	return u.workbookRepo.Load(workbook.LoadParams{
-		ID:      workbookID,
-		OwnerID: u.id,
-	})
-}
-
-func (u *User) SearchWorkbooks() ([]*workbook.Workbook, error) {
-	return u.workbookRepo.Search(workbook.SearchParams{
-		OwnerID: u.id,
-	})
 }

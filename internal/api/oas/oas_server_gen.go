@@ -176,12 +176,6 @@ type Handler interface {
 	//
 	// PUT /rules/{ruleId}
 	RulesRuleIdPut(ctx context.Context, req OptRulesRuleIdPutReq, params RulesRuleIdPutParams) (*Rule, error)
-	// WorkbooksGet implements GET /workbooks operation.
-	//
-	// Get workbooks.
-	//
-	// GET /workbooks
-	WorkbooksGet(ctx context.Context) ([]Workbook, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

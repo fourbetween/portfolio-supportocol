@@ -8,27 +8,6 @@ components:
       type: http
       scheme: bearer
   schemas:
-    status:
-      type: string
-      enum:
-        - draft
-        - published
-    workbook:
-      type: object
-      properties:
-        id:
-          type: string
-        title:
-          type: string
-        status:
-          $ref: "#/components/schemas/status"
-        ownerId:
-          type: string
-      required:
-        - id
-        - title
-        - status
-        - ownerId
     error:
       type: object
       properties:
@@ -253,26 +232,6 @@ components:
         - postedAt
   parameters: {}
 paths:
-  /workbooks:
-    get:
-      description: get workbooks
-      security:
-        - cognito_auth: []
-      responses:
-        "200":
-          description: success response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/workbook"
-        default:
-          description: default error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/error"
   /errors:
     post:
       description: post an error

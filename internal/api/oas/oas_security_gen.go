@@ -61,7 +61,6 @@ var operationRolesCognitoAuth = map[string][]string{
 	RulesRuleIdDeleteOperation:                              []string{},
 	RulesRuleIdGetOperation:                                 []string{},
 	RulesRuleIdPutOperation:                                 []string{},
-	WorkbooksGetOperation:                                   []string{},
 }
 
 func (s *Server) securityCognitoAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {

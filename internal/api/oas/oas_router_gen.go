@@ -474,26 +474,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 				}
 
-			case 'w': // Prefix: "workbooks"
-
-				if l := len("workbooks"); len(elem) >= l && elem[0:l] == "workbooks" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "GET":
-						s.handleWorkbooksGetRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET")
-					}
-
-					return
-				}
-
 			}
 
 		}
@@ -1093,30 +1073,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 					}
 
-				}
-
-			case 'w': // Prefix: "workbooks"
-
-				if l := len("workbooks"); len(elem) >= l && elem[0:l] == "workbooks" {
-					elem = elem[l:]
-				} else {
-					break
-				}
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "GET":
-						r.name = WorkbooksGetOperation
-						r.summary = ""
-						r.operationID = ""
-						r.pathPattern = "/workbooks"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
-					}
 				}
 
 			}

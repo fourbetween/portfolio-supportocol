@@ -4,13 +4,11 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/model/discussion"
 	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
-	"github.com/fourbetween/app-supportocol/internal/model/workbook"
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
 )
 
 type (
 	Factory struct {
-		workbookRepo   workbook.Repository
 		projectRepo    project.Repository
 		ruleRepo       rule.Repository
 		discussionRepo discussion.Repository
@@ -27,7 +25,6 @@ type (
 )
 
 func NewFactory(
-	workbookRepo workbook.Repository,
 	projectRepo project.Repository,
 	ruleRepo rule.Repository,
 	discussionRepo discussion.Repository,
@@ -37,7 +34,6 @@ func NewFactory(
 	clockSrv clock.Service,
 ) *Factory {
 	return &Factory{
-		workbookRepo:   workbookRepo,
 		projectRepo:    projectRepo,
 		ruleRepo:       ruleRepo,
 		discussionRepo: discussionRepo,
@@ -53,7 +49,6 @@ func (f *Factory) Build(params BuildParams) *User {
 		id:    params.ID,
 		email: params.Email,
 
-		workbookRepo:   f.workbookRepo,
 		projectRepo:    f.projectRepo,
 		ruleRepo:       f.ruleRepo,
 		discussionRepo: f.discussionRepo,

@@ -1,11 +1,3 @@
-CREATE TABLE workbooks (
-	id VARCHAR NOT NULL,
-	title VARCHAR NOT NULL,
-	status VARCHAR NOT NULL,
-	owner_id VARCHAR NOT NULL,
-	CONSTRAINT workbooks_pk PRIMARY KEY (id)
-);
-
 -- プロジェクト
 CREATE TABLE projects (
 	id VARCHAR NOT NULL,

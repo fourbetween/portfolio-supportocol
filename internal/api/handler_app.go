@@ -12,7 +12,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/model/project"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/model/user"
-	"github.com/fourbetween/app-supportocol/internal/model/workbook"
 	auth "github.com/fourbetween/pkg-auth"
 	uow "github.com/fourbetween/pkg-uow"
 	"github.com/ogen-go/ogen/ogenerrors"
@@ -33,26 +32,6 @@ func NewHttpHandler(
 
 type appHandler struct {
 	uowSrv uow.UnitOfWork[*Container]
-}
-
-func (h *appHandler) WorkbooksGet(ctx context.Context) ([]oas.Workbook, error) {
-	var items []*workbook.Workbook
-	var err error
-	if err := h.uowSrv.Do(
-		ctx,
-		func(con *Container) error {
-			u := h.loadAccount(ctx, con)
-			items, err = u.SearchWorkbooks()
-			return err
-		},
-	); err != nil {
-		return nil, err
-	}
-	res := make([]oas.Workbook, len(items))
-	for i, v := range items {
-		res[i] = h.toOasWorkbook(v)
-	}
-	return res, nil
 }
 
 func (h *appHandler) ErrorsPost(ctx context.Context, req *oas.ErrorsPostReq) error {
@@ -658,14 +637,6 @@ func (h *appHandler) loadAccount(ctx context.Context, con *Container) *user.User
 		ID:    au.ID,
 		Email: au.Email,
 	})
-}
-
-func (h *appHandler) toOasWorkbook(item *workbook.Workbook) oas.Workbook {
-	return oas.Workbook{
-		ID:     item.ID(),
-		Title:  item.Title(),
-		Status: oas.Status(item.Status()),
-	}
 }
 
 func (h *appHandler) toOasProject(item *project.Project) oas.Project {
