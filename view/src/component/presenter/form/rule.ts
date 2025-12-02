@@ -65,7 +65,7 @@ export class RuleFormPresenter extends LitElement {
         </div>
         <ul class="comment-type-list">
           ${this.rule.commentTypes.map(
-            (type) => html`
+            (type, index) => html`
               <li class="comment-type-item">
                 <span
                   class="color-badge"
@@ -73,6 +73,24 @@ export class RuleFormPresenter extends LitElement {
                 ></span>
                 <span class="comment-type-name">${type.name}</span>
                 <div class="comment-type-actions">
+                  <button
+                    type="button"
+                    class="btn-icon"
+                    aria-label="上へ移動"
+                    ?disabled=${index === 0}
+                    @click=${() => this.handleMoveUp(index)}
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-icon"
+                    aria-label="下へ移動"
+                    ?disabled=${index === this.rule.commentTypes.length - 1}
+                    @click=${() => this.handleMoveDown(index)}
+                  >
+                    ↓
+                  </button>
                   <button
                     type="button"
                     class="btn-text"
@@ -194,6 +212,30 @@ export class RuleFormPresenter extends LitElement {
     });
   }
 
+  private handleMoveUp(index: number) {
+    if (index <= 0) return;
+    const newCommentTypes = [...this.rule.commentTypes];
+    const temp = newCommentTypes[index];
+    newCommentTypes[index] = newCommentTypes[index - 1];
+    newCommentTypes[index - 1] = temp;
+    this.updateRule({
+      ...this.rule,
+      commentTypes: newCommentTypes,
+    });
+  }
+
+  private handleMoveDown(index: number) {
+    if (index >= this.rule.commentTypes.length - 1) return;
+    const newCommentTypes = [...this.rule.commentTypes];
+    const temp = newCommentTypes[index];
+    newCommentTypes[index] = newCommentTypes[index + 1];
+    newCommentTypes[index + 1] = temp;
+    this.updateRule({
+      ...this.rule,
+      commentTypes: newCommentTypes,
+    });
+  }
+
   private handleNameChange(e: Event) {
     const target = e.target as HTMLInputElement;
     this.updateRule({ ...this.rule, name: target.value });
@@ -287,6 +329,32 @@ export class RuleFormPresenter extends LitElement {
       .comment-type-actions {
         display: flex;
         gap: 8px;
+      }
+
+      .btn-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        background: none;
+        border: 1px solid var(--color-border-default);
+        border-radius: 4px;
+        color: var(--color-fg-muted);
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s ease, color 0.2s ease;
+      }
+
+      .btn-icon:hover:not(:disabled) {
+        background-color: var(--color-canvas-subtle);
+        color: var(--color-fg-default);
+      }
+
+      .btn-icon:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
       }
 
       .btn-text {
