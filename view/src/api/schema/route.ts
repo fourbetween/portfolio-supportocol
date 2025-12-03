@@ -123,6 +123,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -161,6 +162,7 @@ const routes: RouteConfig[] = [
         projectId: z.string(),
       }),
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -274,6 +276,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -315,6 +318,7 @@ const routes: RouteConfig[] = [
         ruleId: z.string(),
       }),
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -435,6 +439,7 @@ const routes: RouteConfig[] = [
     security: [{ [cognitoAuth.name]: [] }],
     request: {
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -478,6 +483,7 @@ const routes: RouteConfig[] = [
         discussionId: z.string(),
       }),
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -575,6 +581,7 @@ const routes: RouteConfig[] = [
         discussionId: z.string(),
       }),
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -616,6 +623,7 @@ const routes: RouteConfig[] = [
         commentId: z.string(),
       }),
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -711,6 +719,7 @@ const routes: RouteConfig[] = [
         discussionId: z.string(),
       }),
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -752,6 +761,7 @@ const routes: RouteConfig[] = [
         issueId: z.string(),
       }),
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -847,6 +857,7 @@ const routes: RouteConfig[] = [
         discussionId: z.string(),
       }),
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({
@@ -886,6 +897,7 @@ const routes: RouteConfig[] = [
         noteId: z.string(),
       }),
       body: {
+        required: true,
         content: {
           "application/json": {
             schema: z.object({

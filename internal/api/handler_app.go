@@ -90,7 +90,7 @@ func (h *appHandler) ProjectsGet(ctx context.Context) ([]oas.Project, error) {
 	return res, nil
 }
 
-func (h *appHandler) ProjectsPost(ctx context.Context, req oas.OptProjectsPostReq) (*oas.Project, error) {
+func (h *appHandler) ProjectsPost(ctx context.Context, req *oas.ProjectsPostReq) (*oas.Project, error) {
 	var item *project.Project
 	var err error
 	if err := h.uowSrv.Do(
@@ -98,7 +98,7 @@ func (h *appHandler) ProjectsPost(ctx context.Context, req oas.OptProjectsPostRe
 		func(con *Container) error {
 			u := h.loadAccount(ctx, con)
 			item, err = u.CreateProject(user.CreateProjectParams{
-				Name: req.Value.Name,
+				Name: req.Name,
 			})
 			return err
 		},
@@ -140,7 +140,7 @@ func (h *appHandler) ProjectsProjectIdGet(ctx context.Context, params oas.Projec
 	return &res, nil
 }
 
-func (h *appHandler) ProjectsProjectIdPut(ctx context.Context, req oas.OptProjectsProjectIdPutReq, params oas.ProjectsProjectIdPutParams) (*oas.Project, error) {
+func (h *appHandler) ProjectsProjectIdPut(ctx context.Context, req *oas.ProjectsProjectIdPutReq, params oas.ProjectsProjectIdPutParams) (*oas.Project, error) {
 	var item *project.Project
 	var err error
 	if err := h.uowSrv.Do(
@@ -149,7 +149,7 @@ func (h *appHandler) ProjectsProjectIdPut(ctx context.Context, req oas.OptProjec
 			u := h.loadAccount(ctx, con)
 			item, err = u.UpdateProject(user.UpdateProjectParams{
 				ProjectID: string(params.ProjectId),
-				Name:      req.Value.Name,
+				Name:      req.Name,
 			})
 			return err
 		},
@@ -180,7 +180,7 @@ func (h *appHandler) RulesGet(ctx context.Context) ([]oas.Rule, error) {
 	return res, nil
 }
 
-func (h *appHandler) RulesPost(ctx context.Context, req oas.OptRulesPostReq) (*oas.Rule, error) {
+func (h *appHandler) RulesPost(ctx context.Context, req *oas.RulesPostReq) (*oas.Rule, error) {
 	var item *rule.Rule
 	var err error
 	if err := h.uowSrv.Do(
@@ -188,10 +188,10 @@ func (h *appHandler) RulesPost(ctx context.Context, req oas.OptRulesPostReq) (*o
 		func(con *Container) error {
 			u := h.loadAccount(ctx, con)
 			item, err = u.CreateRule(user.CreateRuleParams{
-				Name:             req.Value.Name,
-				Description:      req.Value.Description,
-				CommentTypes:     h.toRuleCommentTypes(req.Value.CommentTypes),
-				CommentTypePaths: h.toRuleCommentTypePaths(req.Value.CommentTypePaths),
+				Name:             req.Name,
+				Description:      req.Description,
+				CommentTypes:     h.toRuleCommentTypes(req.CommentTypes),
+				CommentTypePaths: h.toRuleCommentTypePaths(req.CommentTypePaths),
 			})
 			return err
 		},
@@ -233,7 +233,7 @@ func (h *appHandler) RulesRuleIdGet(ctx context.Context, params oas.RulesRuleIdG
 	return &res, nil
 }
 
-func (h *appHandler) RulesRuleIdPut(ctx context.Context, req oas.OptRulesRuleIdPutReq, params oas.RulesRuleIdPutParams) (*oas.Rule, error) {
+func (h *appHandler) RulesRuleIdPut(ctx context.Context, req *oas.RulesRuleIdPutReq, params oas.RulesRuleIdPutParams) (*oas.Rule, error) {
 	var item *rule.Rule
 	var err error
 	if err := h.uowSrv.Do(
@@ -242,10 +242,10 @@ func (h *appHandler) RulesRuleIdPut(ctx context.Context, req oas.OptRulesRuleIdP
 			u := h.loadAccount(ctx, con)
 			item, err = u.UpdateRule(user.UpdateRuleParams{
 				RuleID:           string(params.RuleId),
-				Name:             req.Value.Name,
-				Description:      req.Value.Description,
-				CommentTypes:     h.toRuleCommentTypes(req.Value.CommentTypes),
-				CommentTypePaths: h.toRuleCommentTypePaths(req.Value.CommentTypePaths),
+				Name:             req.Name,
+				Description:      req.Description,
+				CommentTypes:     h.toRuleCommentTypes(req.CommentTypes),
+				CommentTypePaths: h.toRuleCommentTypePaths(req.CommentTypePaths),
 			})
 			return err
 		},
@@ -282,7 +282,7 @@ func (h *appHandler) DiscussionsGet(ctx context.Context, params oas.DiscussionsG
 	return res, nil
 }
 
-func (h *appHandler) DiscussionsPost(ctx context.Context, req oas.OptDiscussionsPostReq) (*oas.Discussion, error) {
+func (h *appHandler) DiscussionsPost(ctx context.Context, req *oas.DiscussionsPostReq) (*oas.Discussion, error) {
 	var item *discussion.Discussion
 	var err error
 	if err := h.uowSrv.Do(
@@ -290,12 +290,12 @@ func (h *appHandler) DiscussionsPost(ctx context.Context, req oas.OptDiscussions
 		func(con *Container) error {
 			u := h.loadAccount(ctx, con)
 			item, err = u.CreateDiscussion(user.CreateDiscussionParams{
-				Theme:                  req.Value.Theme,
-				Background:             req.Value.Background,
-				Conclusion:             req.Value.Conclusion,
-				RuleID:                 string(req.Value.RuleId),
-				VisibilityLevel:        discussion.VisibilityLevel(req.Value.VisibilityLevel),
-				CommentPermissionLevel: discussion.CommentPermissionLevel(req.Value.CommentPermissionLevel),
+				Theme:                  req.Theme,
+				Background:             req.Background,
+				Conclusion:             req.Conclusion,
+				RuleID:                 string(req.RuleId),
+				VisibilityLevel:        discussion.VisibilityLevel(req.VisibilityLevel),
+				CommentPermissionLevel: discussion.CommentPermissionLevel(req.CommentPermissionLevel),
 			})
 			return err
 		},
@@ -337,7 +337,7 @@ func (h *appHandler) DiscussionsDiscussionIdGet(ctx context.Context, params oas.
 	return &res, nil
 }
 
-func (h *appHandler) DiscussionsDiscussionIdPut(ctx context.Context, req oas.OptDiscussionsDiscussionIdPutReq, params oas.DiscussionsDiscussionIdPutParams) (*oas.Discussion, error) {
+func (h *appHandler) DiscussionsDiscussionIdPut(ctx context.Context, req *oas.DiscussionsDiscussionIdPutReq, params oas.DiscussionsDiscussionIdPutParams) (*oas.Discussion, error) {
 	var item *discussion.Discussion
 	var err error
 	if err := h.uowSrv.Do(
@@ -346,13 +346,13 @@ func (h *appHandler) DiscussionsDiscussionIdPut(ctx context.Context, req oas.Opt
 			u := h.loadAccount(ctx, con)
 			item, err = u.UpdateDiscussion(user.UpdateDiscussionParams{
 				DiscussionID:           string(params.DiscussionId),
-				Theme:                  req.Value.Theme,
-				Background:             req.Value.Background,
-				Conclusion:             req.Value.Conclusion,
-				RuleID:                 string(req.Value.RuleId),
-				VisibilityLevel:        discussion.VisibilityLevel(req.Value.VisibilityLevel),
-				CommentPermissionLevel: discussion.CommentPermissionLevel(req.Value.CommentPermissionLevel),
-				Status:                 discussion.Status(req.Value.Status),
+				Theme:                  req.Theme,
+				Background:             req.Background,
+				Conclusion:             req.Conclusion,
+				RuleID:                 string(req.RuleId),
+				VisibilityLevel:        discussion.VisibilityLevel(req.VisibilityLevel),
+				CommentPermissionLevel: discussion.CommentPermissionLevel(req.CommentPermissionLevel),
+				Status:                 discussion.Status(req.Status),
 			})
 			return err
 		},
@@ -385,7 +385,7 @@ func (h *appHandler) DiscussionsDiscussionIdCommentsGet(ctx context.Context, par
 	return res, nil
 }
 
-func (h *appHandler) DiscussionsDiscussionIdCommentsPost(ctx context.Context, req oas.OptDiscussionsDiscussionIdCommentsPostReq, params oas.DiscussionsDiscussionIdCommentsPostParams) (*oas.Comment, error) {
+func (h *appHandler) DiscussionsDiscussionIdCommentsPost(ctx context.Context, req *oas.DiscussionsDiscussionIdCommentsPostReq, params oas.DiscussionsDiscussionIdCommentsPostParams) (*oas.Comment, error) {
 	var item *discussion.Comment
 	var err error
 	if err := h.uowSrv.Do(
@@ -394,9 +394,9 @@ func (h *appHandler) DiscussionsDiscussionIdCommentsPost(ctx context.Context, re
 			u := h.loadAccount(ctx, con)
 			item, err = u.CreateComment(user.CreateCommentParams{
 				DiscussionID:    string(params.DiscussionId),
-				ParentCommentID: req.Value.ParentCommentId,
-				CommentTypeID:   string(req.Value.CommentTypeId),
-				Content:         req.Value.Content,
+				ParentCommentID: req.ParentCommentId,
+				CommentTypeID:   string(req.CommentTypeId),
+				Content:         req.Content,
 			})
 			return err
 		},
@@ -407,7 +407,7 @@ func (h *appHandler) DiscussionsDiscussionIdCommentsPost(ctx context.Context, re
 	return &res, nil
 }
 
-func (h *appHandler) DiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req oas.OptDiscussionsDiscussionIdCommentsCommentIdPutReq, params oas.DiscussionsDiscussionIdCommentsCommentIdPutParams) (*oas.Comment, error) {
+func (h *appHandler) DiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req *oas.DiscussionsDiscussionIdCommentsCommentIdPutReq, params oas.DiscussionsDiscussionIdCommentsCommentIdPutParams) (*oas.Comment, error) {
 	var item *discussion.Comment
 	var err error
 	if err := h.uowSrv.Do(
@@ -417,8 +417,8 @@ func (h *appHandler) DiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Con
 			item, err = u.UpdateComment(user.UpdateCommentParams{
 				DiscussionID:  string(params.DiscussionId),
 				CommentID:     string(params.CommentId),
-				Content:       req.Value.Content,
-				CommentStatus: discussion.CommentStatus(req.Value.Status),
+				Content:       req.Content,
+				CommentStatus: discussion.CommentStatus(req.Status),
 			})
 			return err
 		},
@@ -464,7 +464,7 @@ func (h *appHandler) DiscussionsDiscussionIdIssuesGet(ctx context.Context, param
 	return res, nil
 }
 
-func (h *appHandler) DiscussionsDiscussionIdIssuesPost(ctx context.Context, req oas.OptDiscussionsDiscussionIdIssuesPostReq, params oas.DiscussionsDiscussionIdIssuesPostParams) (*oas.Issue, error) {
+func (h *appHandler) DiscussionsDiscussionIdIssuesPost(ctx context.Context, req *oas.DiscussionsDiscussionIdIssuesPostReq, params oas.DiscussionsDiscussionIdIssuesPostParams) (*oas.Issue, error) {
 	var item *discussion.Issue
 	var err error
 	if err := h.uowSrv.Do(
@@ -473,9 +473,9 @@ func (h *appHandler) DiscussionsDiscussionIdIssuesPost(ctx context.Context, req 
 			u := h.loadAccount(ctx, con)
 			item, err = u.CreateIssue(user.CreateIssueParams{
 				DiscussionID: string(params.DiscussionId),
-				CommentID:    string(req.Value.CommentId),
-				IssueType:    discussion.IssueType(req.Value.IssueType),
-				Description:  req.Value.Description,
+				CommentID:    string(req.CommentId),
+				IssueType:    discussion.IssueType(req.IssueType),
+				Description:  req.Description,
 			})
 			return err
 		},
@@ -486,7 +486,7 @@ func (h *appHandler) DiscussionsDiscussionIdIssuesPost(ctx context.Context, req 
 	return &res, nil
 }
 
-func (h *appHandler) DiscussionsDiscussionIdIssuesIssueIdPut(ctx context.Context, req oas.OptDiscussionsDiscussionIdIssuesIssueIdPutReq, params oas.DiscussionsDiscussionIdIssuesIssueIdPutParams) (*oas.Issue, error) {
+func (h *appHandler) DiscussionsDiscussionIdIssuesIssueIdPut(ctx context.Context, req *oas.DiscussionsDiscussionIdIssuesIssueIdPutReq, params oas.DiscussionsDiscussionIdIssuesIssueIdPutParams) (*oas.Issue, error) {
 	var item *discussion.Issue
 	var err error
 	if err := h.uowSrv.Do(
@@ -496,8 +496,8 @@ func (h *appHandler) DiscussionsDiscussionIdIssuesIssueIdPut(ctx context.Context
 			item, err = u.UpdateIssue(user.UpdateIssueParams{
 				DiscussionID: string(params.DiscussionId),
 				IssueID:      string(params.IssueId),
-				IssueType:    discussion.IssueType(req.Value.IssueType),
-				Description:  req.Value.Description,
+				IssueType:    discussion.IssueType(req.IssueType),
+				Description:  req.Description,
 			})
 			return err
 		},
@@ -543,7 +543,7 @@ func (h *appHandler) DiscussionsDiscussionIdNotesGet(ctx context.Context, params
 	return res, nil
 }
 
-func (h *appHandler) DiscussionsDiscussionIdNotesPost(ctx context.Context, req oas.OptDiscussionsDiscussionIdNotesPostReq, params oas.DiscussionsDiscussionIdNotesPostParams) (*oas.Note, error) {
+func (h *appHandler) DiscussionsDiscussionIdNotesPost(ctx context.Context, req *oas.DiscussionsDiscussionIdNotesPostReq, params oas.DiscussionsDiscussionIdNotesPostParams) (*oas.Note, error) {
 	var item *discussion.Note
 	var err error
 	if err := h.uowSrv.Do(
@@ -552,7 +552,7 @@ func (h *appHandler) DiscussionsDiscussionIdNotesPost(ctx context.Context, req o
 			u := h.loadAccount(ctx, con)
 			item, err = u.CreateNote(user.CreateNoteParams{
 				DiscussionID: string(params.DiscussionId),
-				Content:      req.Value.Content,
+				Content:      req.Content,
 			})
 			return err
 		},
@@ -563,7 +563,7 @@ func (h *appHandler) DiscussionsDiscussionIdNotesPost(ctx context.Context, req o
 	return &res, nil
 }
 
-func (h *appHandler) DiscussionsDiscussionIdNotesNoteIdPut(ctx context.Context, req oas.OptDiscussionsDiscussionIdNotesNoteIdPutReq, params oas.DiscussionsDiscussionIdNotesNoteIdPutParams) (*oas.Note, error) {
+func (h *appHandler) DiscussionsDiscussionIdNotesNoteIdPut(ctx context.Context, req *oas.DiscussionsDiscussionIdNotesNoteIdPutReq, params oas.DiscussionsDiscussionIdNotesNoteIdPutParams) (*oas.Note, error) {
 	var item *discussion.Note
 	var err error
 	if err := h.uowSrv.Do(
@@ -573,7 +573,7 @@ func (h *appHandler) DiscussionsDiscussionIdNotesNoteIdPut(ctx context.Context, 
 			item, err = u.UpdateNote(user.UpdateNoteParams{
 				DiscussionID: string(params.DiscussionId),
 				NoteID:       string(params.NoteId),
-				Content:      req.Value.Content,
+				Content:      req.Content,
 			})
 			return err
 		},

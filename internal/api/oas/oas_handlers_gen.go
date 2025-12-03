@@ -283,7 +283,7 @@ func (s *Server) handleDiscussionsDiscussionIdCommentsCommentIdPutRequest(args [
 		}
 
 		type (
-			Request  = OptDiscussionsDiscussionIdCommentsCommentIdPutReq
+			Request  = *DiscussionsDiscussionIdCommentsCommentIdPutReq
 			Params   = DiscussionsDiscussionIdCommentsCommentIdPutParams
 			Response = *Comment
 		)
@@ -580,7 +580,7 @@ func (s *Server) handleDiscussionsDiscussionIdCommentsPostRequest(args [1]string
 		}
 
 		type (
-			Request  = OptDiscussionsDiscussionIdCommentsPostReq
+			Request  = *DiscussionsDiscussionIdCommentsPostReq
 			Params   = DiscussionsDiscussionIdCommentsPostParams
 			Response = *Comment
 		)
@@ -1308,7 +1308,7 @@ func (s *Server) handleDiscussionsDiscussionIdIssuesIssueIdPutRequest(args [2]st
 		}
 
 		type (
-			Request  = OptDiscussionsDiscussionIdIssuesIssueIdPutReq
+			Request  = *DiscussionsDiscussionIdIssuesIssueIdPutReq
 			Params   = DiscussionsDiscussionIdIssuesIssueIdPutParams
 			Response = *Issue
 		)
@@ -1464,7 +1464,7 @@ func (s *Server) handleDiscussionsDiscussionIdIssuesPostRequest(args [1]string, 
 		}
 
 		type (
-			Request  = OptDiscussionsDiscussionIdIssuesPostReq
+			Request  = *DiscussionsDiscussionIdIssuesPostReq
 			Params   = DiscussionsDiscussionIdIssuesPostParams
 			Response = *Issue
 		)
@@ -1910,7 +1910,7 @@ func (s *Server) handleDiscussionsDiscussionIdNotesNoteIdPutRequest(args [2]stri
 		}
 
 		type (
-			Request  = OptDiscussionsDiscussionIdNotesNoteIdPutReq
+			Request  = *DiscussionsDiscussionIdNotesNoteIdPutReq
 			Params   = DiscussionsDiscussionIdNotesNoteIdPutParams
 			Response = *Note
 		)
@@ -2066,7 +2066,7 @@ func (s *Server) handleDiscussionsDiscussionIdNotesPostRequest(args [1]string, a
 		}
 
 		type (
-			Request  = OptDiscussionsDiscussionIdNotesPostReq
+			Request  = *DiscussionsDiscussionIdNotesPostReq
 			Params   = DiscussionsDiscussionIdNotesPostParams
 			Response = *Note
 		)
@@ -2222,7 +2222,7 @@ func (s *Server) handleDiscussionsDiscussionIdPutRequest(args [1]string, argsEsc
 		}
 
 		type (
-			Request  = OptDiscussionsDiscussionIdPutReq
+			Request  = *DiscussionsDiscussionIdPutReq
 			Params   = DiscussionsDiscussionIdPutParams
 			Response = *Discussion
 		)
@@ -2504,7 +2504,7 @@ func (s *Server) handleDiscussionsPostRequest(args [0]string, argsEscaped bool, 
 		}
 
 		type (
-			Request  = OptDiscussionsPostReq
+			Request  = *DiscussionsPostReq
 			Params   = struct{}
 			Response = *Discussion
 		)
@@ -2912,7 +2912,7 @@ func (s *Server) handleProjectsPostRequest(args [0]string, argsEscaped bool, w h
 		}
 
 		type (
-			Request  = OptProjectsPostReq
+			Request  = *ProjectsPostReq
 			Params   = struct{}
 			Response = *Project
 		)
@@ -3350,7 +3350,7 @@ func (s *Server) handleProjectsProjectIdPutRequest(args [1]string, argsEscaped b
 		}
 
 		type (
-			Request  = OptProjectsProjectIdPutReq
+			Request  = *ProjectsProjectIdPutReq
 			Params   = ProjectsProjectIdPutParams
 			Response = *Project
 		)
@@ -3617,7 +3617,7 @@ func (s *Server) handleRulesPostRequest(args [0]string, argsEscaped bool, w http
 		}
 
 		type (
-			Request  = OptRulesPostReq
+			Request  = *RulesPostReq
 			Params   = struct{}
 			Response = *Rule
 		)
@@ -4055,7 +4055,7 @@ func (s *Server) handleRulesRuleIdPutRequest(args [1]string, argsEscaped bool, w
 		}
 
 		type (
-			Request  = OptRulesRuleIdPutReq
+			Request  = *RulesRuleIdPutReq
 			Params   = RulesRuleIdPutParams
 			Response = *Rule
 		)

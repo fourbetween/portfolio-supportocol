@@ -27,7 +27,7 @@ func (UnimplementedHandler) DiscussionsDiscussionIdCommentsCommentIdDelete(ctx c
 // Update comment.
 //
 // PUT /discussions/{discussionId}/comments/{commentId}
-func (UnimplementedHandler) DiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req OptDiscussionsDiscussionIdCommentsCommentIdPutReq, params DiscussionsDiscussionIdCommentsCommentIdPutParams) (r *Comment, _ error) {
+func (UnimplementedHandler) DiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req *DiscussionsDiscussionIdCommentsCommentIdPutReq, params DiscussionsDiscussionIdCommentsCommentIdPutParams) (r *Comment, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -45,7 +45,7 @@ func (UnimplementedHandler) DiscussionsDiscussionIdCommentsGet(ctx context.Conte
 // Create comment.
 //
 // POST /discussions/{discussionId}/comments
-func (UnimplementedHandler) DiscussionsDiscussionIdCommentsPost(ctx context.Context, req OptDiscussionsDiscussionIdCommentsPostReq, params DiscussionsDiscussionIdCommentsPostParams) (r *Comment, _ error) {
+func (UnimplementedHandler) DiscussionsDiscussionIdCommentsPost(ctx context.Context, req *DiscussionsDiscussionIdCommentsPostReq, params DiscussionsDiscussionIdCommentsPostParams) (r *Comment, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -90,7 +90,7 @@ func (UnimplementedHandler) DiscussionsDiscussionIdIssuesIssueIdDelete(ctx conte
 // Update issue.
 //
 // PUT /discussions/{discussionId}/issues/{issueId}
-func (UnimplementedHandler) DiscussionsDiscussionIdIssuesIssueIdPut(ctx context.Context, req OptDiscussionsDiscussionIdIssuesIssueIdPutReq, params DiscussionsDiscussionIdIssuesIssueIdPutParams) (r *Issue, _ error) {
+func (UnimplementedHandler) DiscussionsDiscussionIdIssuesIssueIdPut(ctx context.Context, req *DiscussionsDiscussionIdIssuesIssueIdPutReq, params DiscussionsDiscussionIdIssuesIssueIdPutParams) (r *Issue, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -99,7 +99,7 @@ func (UnimplementedHandler) DiscussionsDiscussionIdIssuesIssueIdPut(ctx context.
 // Create issue.
 //
 // POST /discussions/{discussionId}/issues
-func (UnimplementedHandler) DiscussionsDiscussionIdIssuesPost(ctx context.Context, req OptDiscussionsDiscussionIdIssuesPostReq, params DiscussionsDiscussionIdIssuesPostParams) (r *Issue, _ error) {
+func (UnimplementedHandler) DiscussionsDiscussionIdIssuesPost(ctx context.Context, req *DiscussionsDiscussionIdIssuesPostReq, params DiscussionsDiscussionIdIssuesPostParams) (r *Issue, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -126,7 +126,7 @@ func (UnimplementedHandler) DiscussionsDiscussionIdNotesNoteIdDelete(ctx context
 // Update note.
 //
 // PUT /discussions/{discussionId}/notes/{noteId}
-func (UnimplementedHandler) DiscussionsDiscussionIdNotesNoteIdPut(ctx context.Context, req OptDiscussionsDiscussionIdNotesNoteIdPutReq, params DiscussionsDiscussionIdNotesNoteIdPutParams) (r *Note, _ error) {
+func (UnimplementedHandler) DiscussionsDiscussionIdNotesNoteIdPut(ctx context.Context, req *DiscussionsDiscussionIdNotesNoteIdPutReq, params DiscussionsDiscussionIdNotesNoteIdPutParams) (r *Note, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -135,7 +135,7 @@ func (UnimplementedHandler) DiscussionsDiscussionIdNotesNoteIdPut(ctx context.Co
 // Create note.
 //
 // POST /discussions/{discussionId}/notes
-func (UnimplementedHandler) DiscussionsDiscussionIdNotesPost(ctx context.Context, req OptDiscussionsDiscussionIdNotesPostReq, params DiscussionsDiscussionIdNotesPostParams) (r *Note, _ error) {
+func (UnimplementedHandler) DiscussionsDiscussionIdNotesPost(ctx context.Context, req *DiscussionsDiscussionIdNotesPostReq, params DiscussionsDiscussionIdNotesPostParams) (r *Note, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -144,7 +144,7 @@ func (UnimplementedHandler) DiscussionsDiscussionIdNotesPost(ctx context.Context
 // Update discussion.
 //
 // PUT /discussions/{discussionId}
-func (UnimplementedHandler) DiscussionsDiscussionIdPut(ctx context.Context, req OptDiscussionsDiscussionIdPutReq, params DiscussionsDiscussionIdPutParams) (r *Discussion, _ error) {
+func (UnimplementedHandler) DiscussionsDiscussionIdPut(ctx context.Context, req *DiscussionsDiscussionIdPutReq, params DiscussionsDiscussionIdPutParams) (r *Discussion, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -162,7 +162,7 @@ func (UnimplementedHandler) DiscussionsGet(ctx context.Context, params Discussio
 // Create discussion.
 //
 // POST /discussions
-func (UnimplementedHandler) DiscussionsPost(ctx context.Context, req OptDiscussionsPostReq) (r *Discussion, _ error) {
+func (UnimplementedHandler) DiscussionsPost(ctx context.Context, req *DiscussionsPostReq) (r *Discussion, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -189,7 +189,7 @@ func (UnimplementedHandler) ProjectsGet(ctx context.Context) (r []Project, _ err
 // Create project.
 //
 // POST /projects
-func (UnimplementedHandler) ProjectsPost(ctx context.Context, req OptProjectsPostReq) (r *Project, _ error) {
+func (UnimplementedHandler) ProjectsPost(ctx context.Context, req *ProjectsPostReq) (r *Project, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -216,7 +216,7 @@ func (UnimplementedHandler) ProjectsProjectIdGet(ctx context.Context, params Pro
 // Update project.
 //
 // PUT /projects/{projectId}
-func (UnimplementedHandler) ProjectsProjectIdPut(ctx context.Context, req OptProjectsProjectIdPutReq, params ProjectsProjectIdPutParams) (r *Project, _ error) {
+func (UnimplementedHandler) ProjectsProjectIdPut(ctx context.Context, req *ProjectsProjectIdPutReq, params ProjectsProjectIdPutParams) (r *Project, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -234,7 +234,7 @@ func (UnimplementedHandler) RulesGet(ctx context.Context) (r []Rule, _ error) {
 // Create rule.
 //
 // POST /rules
-func (UnimplementedHandler) RulesPost(ctx context.Context, req OptRulesPostReq) (r *Rule, _ error) {
+func (UnimplementedHandler) RulesPost(ctx context.Context, req *RulesPostReq) (r *Rule, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -261,7 +261,7 @@ func (UnimplementedHandler) RulesRuleIdGet(ctx context.Context, params RulesRule
 // Update rule.
 //
 // PUT /rules/{ruleId}
-func (UnimplementedHandler) RulesRuleIdPut(ctx context.Context, req OptRulesRuleIdPutReq, params RulesRuleIdPutParams) (r *Rule, _ error) {
+func (UnimplementedHandler) RulesRuleIdPut(ctx context.Context, req *RulesRuleIdPutReq, params RulesRuleIdPutParams) (r *Rule, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
