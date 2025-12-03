@@ -491,6 +491,41 @@ func TestUser_ListRules(t *testing.T) {
 				}
 			},
 		},
+		{
+			name: "ルールがない場合にデフォルトルールが自動追加されて返されること",
+			setup: func(con *container) []*rule.Rule {
+				con.RuleRepo.EXPECT().Search(rule.SearchParams{
+					CreatedBy: "test-user-id",
+				}).Return([]*rule.Rule{}, nil)
+
+				con.IDSrv.EXPECT().Generate().Return("default-rule-id")
+				con.ClockSrv.EXPECT().Now().Return(fixedTime)
+
+				con.RuleRepo.EXPECT().Save(gomock.Any()).Return(nil)
+
+				return nil
+			},
+			verify: func(t *testing.T, got []*rule.Rule, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("ListRules() failed: %v", err)
+					return
+				}
+				if len(got) != 1 {
+					t.Errorf("ListRules() length = %v, want %v", len(got), 1)
+					return
+				}
+				if got[0].ID() != "default-rule-id" {
+					t.Errorf("ListRules()[0].ID() = %v, want %v", got[0].ID(), "default-rule-id")
+				}
+				if got[0].Name() != "デフォルトルール" {
+					t.Errorf("ListRules()[0].Name() = %v, want %v", got[0].Name(), "デフォルトルール")
+				}
+				if got[0].CreatedBy() != "test-user-id" {
+					t.Errorf("ListRules()[0].CreatedBy() = %v, want %v", got[0].CreatedBy(), "test-user-id")
+				}
+			},
+		},
 	}
 
 	for _, tt := range tests {
