@@ -289,6 +289,7 @@ paths:
       security:
         - cognito_auth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -346,6 +347,7 @@ paths:
           name: projectId
           in: path
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -412,6 +414,7 @@ paths:
       security:
         - cognito_auth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -482,6 +485,7 @@ paths:
           name: ruleId
           in: path
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -567,6 +571,7 @@ paths:
       security:
         - cognito_auth: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -639,6 +644,7 @@ paths:
           name: discussionId
           in: path
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -739,6 +745,7 @@ paths:
           name: discussionId
           in: path
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -784,6 +791,7 @@ paths:
           name: commentId
           in: path
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -870,6 +878,7 @@ paths:
           name: discussionId
           in: path
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -918,6 +927,7 @@ paths:
           name: issueId
           in: path
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -1007,6 +1017,7 @@ paths:
           name: discussionId
           in: path
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -1046,6 +1057,7 @@ paths:
           name: noteId
           in: path
       requestBody:
+        required: true
         content:
           application/json:
             schema:

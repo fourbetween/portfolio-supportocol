@@ -19,7 +19,7 @@ type Handler interface {
 	// Update comment.
 	//
 	// PUT /discussions/{discussionId}/comments/{commentId}
-	DiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req OptDiscussionsDiscussionIdCommentsCommentIdPutReq, params DiscussionsDiscussionIdCommentsCommentIdPutParams) (*Comment, error)
+	DiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req *DiscussionsDiscussionIdCommentsCommentIdPutReq, params DiscussionsDiscussionIdCommentsCommentIdPutParams) (*Comment, error)
 	// DiscussionsDiscussionIdCommentsGet implements GET /discussions/{discussionId}/comments operation.
 	//
 	// Get comments for a discussion.
@@ -31,7 +31,7 @@ type Handler interface {
 	// Create comment.
 	//
 	// POST /discussions/{discussionId}/comments
-	DiscussionsDiscussionIdCommentsPost(ctx context.Context, req OptDiscussionsDiscussionIdCommentsPostReq, params DiscussionsDiscussionIdCommentsPostParams) (*Comment, error)
+	DiscussionsDiscussionIdCommentsPost(ctx context.Context, req *DiscussionsDiscussionIdCommentsPostReq, params DiscussionsDiscussionIdCommentsPostParams) (*Comment, error)
 	// DiscussionsDiscussionIdDelete implements DELETE /discussions/{discussionId} operation.
 	//
 	// Delete discussion.
@@ -61,13 +61,13 @@ type Handler interface {
 	// Update issue.
 	//
 	// PUT /discussions/{discussionId}/issues/{issueId}
-	DiscussionsDiscussionIdIssuesIssueIdPut(ctx context.Context, req OptDiscussionsDiscussionIdIssuesIssueIdPutReq, params DiscussionsDiscussionIdIssuesIssueIdPutParams) (*Issue, error)
+	DiscussionsDiscussionIdIssuesIssueIdPut(ctx context.Context, req *DiscussionsDiscussionIdIssuesIssueIdPutReq, params DiscussionsDiscussionIdIssuesIssueIdPutParams) (*Issue, error)
 	// DiscussionsDiscussionIdIssuesPost implements POST /discussions/{discussionId}/issues operation.
 	//
 	// Create issue.
 	//
 	// POST /discussions/{discussionId}/issues
-	DiscussionsDiscussionIdIssuesPost(ctx context.Context, req OptDiscussionsDiscussionIdIssuesPostReq, params DiscussionsDiscussionIdIssuesPostParams) (*Issue, error)
+	DiscussionsDiscussionIdIssuesPost(ctx context.Context, req *DiscussionsDiscussionIdIssuesPostReq, params DiscussionsDiscussionIdIssuesPostParams) (*Issue, error)
 	// DiscussionsDiscussionIdNotesGet implements GET /discussions/{discussionId}/notes operation.
 	//
 	// Get notes for a discussion.
@@ -85,19 +85,19 @@ type Handler interface {
 	// Update note.
 	//
 	// PUT /discussions/{discussionId}/notes/{noteId}
-	DiscussionsDiscussionIdNotesNoteIdPut(ctx context.Context, req OptDiscussionsDiscussionIdNotesNoteIdPutReq, params DiscussionsDiscussionIdNotesNoteIdPutParams) (*Note, error)
+	DiscussionsDiscussionIdNotesNoteIdPut(ctx context.Context, req *DiscussionsDiscussionIdNotesNoteIdPutReq, params DiscussionsDiscussionIdNotesNoteIdPutParams) (*Note, error)
 	// DiscussionsDiscussionIdNotesPost implements POST /discussions/{discussionId}/notes operation.
 	//
 	// Create note.
 	//
 	// POST /discussions/{discussionId}/notes
-	DiscussionsDiscussionIdNotesPost(ctx context.Context, req OptDiscussionsDiscussionIdNotesPostReq, params DiscussionsDiscussionIdNotesPostParams) (*Note, error)
+	DiscussionsDiscussionIdNotesPost(ctx context.Context, req *DiscussionsDiscussionIdNotesPostReq, params DiscussionsDiscussionIdNotesPostParams) (*Note, error)
 	// DiscussionsDiscussionIdPut implements PUT /discussions/{discussionId} operation.
 	//
 	// Update discussion.
 	//
 	// PUT /discussions/{discussionId}
-	DiscussionsDiscussionIdPut(ctx context.Context, req OptDiscussionsDiscussionIdPutReq, params DiscussionsDiscussionIdPutParams) (*Discussion, error)
+	DiscussionsDiscussionIdPut(ctx context.Context, req *DiscussionsDiscussionIdPutReq, params DiscussionsDiscussionIdPutParams) (*Discussion, error)
 	// DiscussionsGet implements GET /discussions operation.
 	//
 	// Get discussions.
@@ -109,7 +109,7 @@ type Handler interface {
 	// Create discussion.
 	//
 	// POST /discussions
-	DiscussionsPost(ctx context.Context, req OptDiscussionsPostReq) (*Discussion, error)
+	DiscussionsPost(ctx context.Context, req *DiscussionsPostReq) (*Discussion, error)
 	// ErrorsPost implements POST /errors operation.
 	//
 	// Post an error.
@@ -127,7 +127,7 @@ type Handler interface {
 	// Create project.
 	//
 	// POST /projects
-	ProjectsPost(ctx context.Context, req OptProjectsPostReq) (*Project, error)
+	ProjectsPost(ctx context.Context, req *ProjectsPostReq) (*Project, error)
 	// ProjectsProjectIdDelete implements DELETE /projects/{projectId} operation.
 	//
 	// Delete project.
@@ -145,7 +145,7 @@ type Handler interface {
 	// Update project.
 	//
 	// PUT /projects/{projectId}
-	ProjectsProjectIdPut(ctx context.Context, req OptProjectsProjectIdPutReq, params ProjectsProjectIdPutParams) (*Project, error)
+	ProjectsProjectIdPut(ctx context.Context, req *ProjectsProjectIdPutReq, params ProjectsProjectIdPutParams) (*Project, error)
 	// RulesGet implements GET /rules operation.
 	//
 	// Get rules.
@@ -157,7 +157,7 @@ type Handler interface {
 	// Create rule.
 	//
 	// POST /rules
-	RulesPost(ctx context.Context, req OptRulesPostReq) (*Rule, error)
+	RulesPost(ctx context.Context, req *RulesPostReq) (*Rule, error)
 	// RulesRuleIdDelete implements DELETE /rules/{ruleId} operation.
 	//
 	// Delete rule.
@@ -175,7 +175,7 @@ type Handler interface {
 	// Update rule.
 	//
 	// PUT /rules/{ruleId}
-	RulesRuleIdPut(ctx context.Context, req OptRulesRuleIdPutReq, params RulesRuleIdPutParams) (*Rule, error)
+	RulesRuleIdPut(ctx context.Context, req *RulesRuleIdPutReq, params RulesRuleIdPutParams) (*Rule, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

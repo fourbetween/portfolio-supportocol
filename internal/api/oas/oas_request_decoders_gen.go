@@ -15,7 +15,7 @@ import (
 )
 
 func (s *Server) decodeDiscussionsDiscussionIdCommentsCommentIdPutRequest(r *http.Request) (
-	req OptDiscussionsDiscussionIdCommentsCommentIdPutReq,
+	req *DiscussionsDiscussionIdCommentsCommentIdPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -35,9 +35,6 @@ func (s *Server) decodeDiscussionsDiscussionIdCommentsCommentIdPutRequest(r *htt
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -45,7 +42,7 @@ func (s *Server) decodeDiscussionsDiscussionIdCommentsCommentIdPutRequest(r *htt
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -59,15 +56,14 @@ func (s *Server) decodeDiscussionsDiscussionIdCommentsCommentIdPutRequest(r *htt
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptDiscussionsDiscussionIdCommentsCommentIdPutReq
+		var request DiscussionsDiscussionIdCommentsCommentIdPutReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -84,28 +80,21 @@ func (s *Server) decodeDiscussionsDiscussionIdCommentsCommentIdPutRequest(r *htt
 			return req, rawBody, close, err
 		}
 		if err := func() error {
-			if value, ok := request.Get(); ok {
-				if err := func() error {
-					if err := value.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					return err
-				}
+			if err := request.Validate(); err != nil {
+				return err
 			}
 			return nil
 		}(); err != nil {
 			return req, rawBody, close, errors.Wrap(err, "validate")
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeDiscussionsDiscussionIdCommentsPostRequest(r *http.Request) (
-	req OptDiscussionsDiscussionIdCommentsPostReq,
+	req *DiscussionsDiscussionIdCommentsPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -125,9 +114,6 @@ func (s *Server) decodeDiscussionsDiscussionIdCommentsPostRequest(r *http.Reques
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -135,7 +121,7 @@ func (s *Server) decodeDiscussionsDiscussionIdCommentsPostRequest(r *http.Reques
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -149,15 +135,14 @@ func (s *Server) decodeDiscussionsDiscussionIdCommentsPostRequest(r *http.Reques
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptDiscussionsDiscussionIdCommentsPostReq
+		var request DiscussionsDiscussionIdCommentsPostReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -173,14 +158,14 @@ func (s *Server) decodeDiscussionsDiscussionIdCommentsPostRequest(r *http.Reques
 			}
 			return req, rawBody, close, err
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeDiscussionsDiscussionIdIssuesIssueIdPutRequest(r *http.Request) (
-	req OptDiscussionsDiscussionIdIssuesIssueIdPutReq,
+	req *DiscussionsDiscussionIdIssuesIssueIdPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -200,9 +185,6 @@ func (s *Server) decodeDiscussionsDiscussionIdIssuesIssueIdPutRequest(r *http.Re
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -210,7 +192,7 @@ func (s *Server) decodeDiscussionsDiscussionIdIssuesIssueIdPutRequest(r *http.Re
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -224,15 +206,14 @@ func (s *Server) decodeDiscussionsDiscussionIdIssuesIssueIdPutRequest(r *http.Re
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptDiscussionsDiscussionIdIssuesIssueIdPutReq
+		var request DiscussionsDiscussionIdIssuesIssueIdPutReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -249,28 +230,21 @@ func (s *Server) decodeDiscussionsDiscussionIdIssuesIssueIdPutRequest(r *http.Re
 			return req, rawBody, close, err
 		}
 		if err := func() error {
-			if value, ok := request.Get(); ok {
-				if err := func() error {
-					if err := value.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					return err
-				}
+			if err := request.Validate(); err != nil {
+				return err
 			}
 			return nil
 		}(); err != nil {
 			return req, rawBody, close, errors.Wrap(err, "validate")
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeDiscussionsDiscussionIdIssuesPostRequest(r *http.Request) (
-	req OptDiscussionsDiscussionIdIssuesPostReq,
+	req *DiscussionsDiscussionIdIssuesPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -290,9 +264,6 @@ func (s *Server) decodeDiscussionsDiscussionIdIssuesPostRequest(r *http.Request)
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -300,7 +271,7 @@ func (s *Server) decodeDiscussionsDiscussionIdIssuesPostRequest(r *http.Request)
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -314,15 +285,14 @@ func (s *Server) decodeDiscussionsDiscussionIdIssuesPostRequest(r *http.Request)
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptDiscussionsDiscussionIdIssuesPostReq
+		var request DiscussionsDiscussionIdIssuesPostReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -339,28 +309,21 @@ func (s *Server) decodeDiscussionsDiscussionIdIssuesPostRequest(r *http.Request)
 			return req, rawBody, close, err
 		}
 		if err := func() error {
-			if value, ok := request.Get(); ok {
-				if err := func() error {
-					if err := value.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					return err
-				}
+			if err := request.Validate(); err != nil {
+				return err
 			}
 			return nil
 		}(); err != nil {
 			return req, rawBody, close, errors.Wrap(err, "validate")
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeDiscussionsDiscussionIdNotesNoteIdPutRequest(r *http.Request) (
-	req OptDiscussionsDiscussionIdNotesNoteIdPutReq,
+	req *DiscussionsDiscussionIdNotesNoteIdPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -380,9 +343,6 @@ func (s *Server) decodeDiscussionsDiscussionIdNotesNoteIdPutRequest(r *http.Requ
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -390,7 +350,7 @@ func (s *Server) decodeDiscussionsDiscussionIdNotesNoteIdPutRequest(r *http.Requ
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -404,15 +364,14 @@ func (s *Server) decodeDiscussionsDiscussionIdNotesNoteIdPutRequest(r *http.Requ
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptDiscussionsDiscussionIdNotesNoteIdPutReq
+		var request DiscussionsDiscussionIdNotesNoteIdPutReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -428,14 +387,14 @@ func (s *Server) decodeDiscussionsDiscussionIdNotesNoteIdPutRequest(r *http.Requ
 			}
 			return req, rawBody, close, err
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeDiscussionsDiscussionIdNotesPostRequest(r *http.Request) (
-	req OptDiscussionsDiscussionIdNotesPostReq,
+	req *DiscussionsDiscussionIdNotesPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -455,9 +414,6 @@ func (s *Server) decodeDiscussionsDiscussionIdNotesPostRequest(r *http.Request) 
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -465,7 +421,7 @@ func (s *Server) decodeDiscussionsDiscussionIdNotesPostRequest(r *http.Request) 
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -479,15 +435,14 @@ func (s *Server) decodeDiscussionsDiscussionIdNotesPostRequest(r *http.Request) 
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptDiscussionsDiscussionIdNotesPostReq
+		var request DiscussionsDiscussionIdNotesPostReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -503,14 +458,14 @@ func (s *Server) decodeDiscussionsDiscussionIdNotesPostRequest(r *http.Request) 
 			}
 			return req, rawBody, close, err
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeDiscussionsDiscussionIdPutRequest(r *http.Request) (
-	req OptDiscussionsDiscussionIdPutReq,
+	req *DiscussionsDiscussionIdPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -530,9 +485,6 @@ func (s *Server) decodeDiscussionsDiscussionIdPutRequest(r *http.Request) (
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -540,7 +492,7 @@ func (s *Server) decodeDiscussionsDiscussionIdPutRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -554,15 +506,14 @@ func (s *Server) decodeDiscussionsDiscussionIdPutRequest(r *http.Request) (
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptDiscussionsDiscussionIdPutReq
+		var request DiscussionsDiscussionIdPutReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -579,28 +530,21 @@ func (s *Server) decodeDiscussionsDiscussionIdPutRequest(r *http.Request) (
 			return req, rawBody, close, err
 		}
 		if err := func() error {
-			if value, ok := request.Get(); ok {
-				if err := func() error {
-					if err := value.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					return err
-				}
+			if err := request.Validate(); err != nil {
+				return err
 			}
 			return nil
 		}(); err != nil {
 			return req, rawBody, close, errors.Wrap(err, "validate")
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeDiscussionsPostRequest(r *http.Request) (
-	req OptDiscussionsPostReq,
+	req *DiscussionsPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -620,9 +564,6 @@ func (s *Server) decodeDiscussionsPostRequest(r *http.Request) (
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -630,7 +571,7 @@ func (s *Server) decodeDiscussionsPostRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -644,15 +585,14 @@ func (s *Server) decodeDiscussionsPostRequest(r *http.Request) (
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptDiscussionsPostReq
+		var request DiscussionsPostReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -669,21 +609,14 @@ func (s *Server) decodeDiscussionsPostRequest(r *http.Request) (
 			return req, rawBody, close, err
 		}
 		if err := func() error {
-			if value, ok := request.Get(); ok {
-				if err := func() error {
-					if err := value.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					return err
-				}
+			if err := request.Validate(); err != nil {
+				return err
 			}
 			return nil
 		}(); err != nil {
 			return req, rawBody, close, errors.Wrap(err, "validate")
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
@@ -761,7 +694,7 @@ func (s *Server) decodeErrorsPostRequest(r *http.Request) (
 }
 
 func (s *Server) decodeProjectsPostRequest(r *http.Request) (
-	req OptProjectsPostReq,
+	req *ProjectsPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -781,9 +714,6 @@ func (s *Server) decodeProjectsPostRequest(r *http.Request) (
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -791,7 +721,7 @@ func (s *Server) decodeProjectsPostRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -805,15 +735,14 @@ func (s *Server) decodeProjectsPostRequest(r *http.Request) (
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptProjectsPostReq
+		var request ProjectsPostReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -829,14 +758,14 @@ func (s *Server) decodeProjectsPostRequest(r *http.Request) (
 			}
 			return req, rawBody, close, err
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeProjectsProjectIdPutRequest(r *http.Request) (
-	req OptProjectsProjectIdPutReq,
+	req *ProjectsProjectIdPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -856,9 +785,6 @@ func (s *Server) decodeProjectsProjectIdPutRequest(r *http.Request) (
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -866,7 +792,7 @@ func (s *Server) decodeProjectsProjectIdPutRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -880,15 +806,14 @@ func (s *Server) decodeProjectsProjectIdPutRequest(r *http.Request) (
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptProjectsProjectIdPutReq
+		var request ProjectsProjectIdPutReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -904,14 +829,14 @@ func (s *Server) decodeProjectsProjectIdPutRequest(r *http.Request) (
 			}
 			return req, rawBody, close, err
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeRulesPostRequest(r *http.Request) (
-	req OptRulesPostReq,
+	req *RulesPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -931,9 +856,6 @@ func (s *Server) decodeRulesPostRequest(r *http.Request) (
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -941,7 +863,7 @@ func (s *Server) decodeRulesPostRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -955,15 +877,14 @@ func (s *Server) decodeRulesPostRequest(r *http.Request) (
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptRulesPostReq
+		var request RulesPostReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -980,28 +901,21 @@ func (s *Server) decodeRulesPostRequest(r *http.Request) (
 			return req, rawBody, close, err
 		}
 		if err := func() error {
-			if value, ok := request.Get(); ok {
-				if err := func() error {
-					if err := value.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					return err
-				}
+			if err := request.Validate(); err != nil {
+				return err
 			}
 			return nil
 		}(); err != nil {
 			return req, rawBody, close, errors.Wrap(err, "validate")
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
 }
 
 func (s *Server) decodeRulesRuleIdPutRequest(r *http.Request) (
-	req OptRulesRuleIdPutReq,
+	req *RulesRuleIdPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -1021,9 +935,6 @@ func (s *Server) decodeRulesRuleIdPutRequest(r *http.Request) (
 			rerr = errors.Join(rerr, close())
 		}
 	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, rawBody, close, nil
-	}
 	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
 	if err != nil {
 		return req, rawBody, close, errors.Wrap(err, "parse media type")
@@ -1031,7 +942,7 @@ func (s *Server) decodeRulesRuleIdPutRequest(r *http.Request) (
 	switch {
 	case ct == "application/json":
 		if r.ContentLength == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 		buf, err := io.ReadAll(r.Body)
 		defer func() {
@@ -1045,15 +956,14 @@ func (s *Server) decodeRulesRuleIdPutRequest(r *http.Request) (
 		r.Body = io.NopCloser(bytes.NewBuffer(buf))
 
 		if len(buf) == 0 {
-			return req, rawBody, close, nil
+			return req, rawBody, close, validate.ErrBodyRequired
 		}
 
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request OptRulesRuleIdPutReq
+		var request RulesRuleIdPutReq
 		if err := func() error {
-			request.Reset()
 			if err := request.Decode(d); err != nil {
 				return err
 			}
@@ -1070,21 +980,14 @@ func (s *Server) decodeRulesRuleIdPutRequest(r *http.Request) (
 			return req, rawBody, close, err
 		}
 		if err := func() error {
-			if value, ok := request.Get(); ok {
-				if err := func() error {
-					if err := value.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					return err
-				}
+			if err := request.Validate(); err != nil {
+				return err
 			}
 			return nil
 		}(); err != nil {
 			return req, rawBody, close, errors.Wrap(err, "validate")
 		}
-		return request, rawBody, close, nil
+		return &request, rawBody, close, nil
 	default:
 		return req, rawBody, close, validate.InvalidContentType(ct)
 	}
