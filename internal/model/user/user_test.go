@@ -2,6 +2,7 @@ package user_test
 
 import (
 	"errors"
+	"slices"
 	"testing"
 	"time"
 
@@ -488,6 +489,77 @@ func TestUser_ListRules(t *testing.T) {
 				}
 				if got[1].Name() != "ルール2" {
 					t.Errorf("ListRules()[1].Name() = %v, want %v", got[1].Name(), "ルール2")
+				}
+			},
+		},
+		{
+			name: "ルールがない場合に汎用ルールが自動追加されて返されること",
+			setup: func(con *container) []*rule.Rule {
+				con.RuleRepo.EXPECT().Search(rule.SearchParams{
+					CreatedBy: "test-user-id",
+				}).Return([]*rule.Rule{}, nil)
+
+				// NewDefaultRuleは6つのコメント種類IDを生成し、その後ルールIDを生成
+				con.IDSrv.EXPECT().Generate().Return("ct-problem")
+				con.IDSrv.EXPECT().Generate().Return("ct-solution")
+				con.IDSrv.EXPECT().Generate().Return("ct-agree")
+				con.IDSrv.EXPECT().Generate().Return("ct-disagree")
+				con.IDSrv.EXPECT().Generate().Return("ct-question")
+				con.IDSrv.EXPECT().Generate().Return("ct-answer")
+				con.IDSrv.EXPECT().Generate().Return("default-rule-id")
+				con.ClockSrv.EXPECT().Now().Return(fixedTime)
+
+				con.RuleRepo.EXPECT().Save(gomock.Any()).Return(nil)
+
+				return nil
+			},
+			verify: func(t *testing.T, got []*rule.Rule, err error) {
+				t.Helper()
+				if err != nil {
+					t.Errorf("ListRules() failed: %v", err)
+					return
+				}
+				if len(got) != 1 {
+					t.Errorf("ListRules() length = %v, want %v", len(got), 1)
+					return
+				}
+				if got[0].ID() != "default-rule-id" {
+					t.Errorf("ListRules()[0].ID() = %v, want %v", got[0].ID(), "default-rule-id")
+				}
+				if got[0].Name() != "汎用ルール" {
+					t.Errorf("ListRules()[0].Name() = %v, want %v", got[0].Name(), "汎用ルール")
+				}
+				if got[0].CreatedBy() != "test-user-id" {
+					t.Errorf("ListRules()[0].CreatedBy() = %v, want %v", got[0].CreatedBy(), "test-user-id")
+				}
+
+				// コメント種類の検証
+				commentTypes := got[0].CommentTypes()
+				expectedTypeNames := []string{"問題", "対応", "賛成", "反対", "質問", "回答"}
+				if len(commentTypes) != len(expectedTypeNames) {
+					t.Errorf("CommentTypes length = %v, want %v", len(commentTypes), len(expectedTypeNames))
+					return
+				}
+				for i, expectedName := range expectedTypeNames {
+					if commentTypes[i].Name != expectedName {
+						t.Errorf("CommentTypes[%d].Name = %v, want %v", i, commentTypes[i].Name, expectedName)
+					}
+				}
+
+				// ルートコメントタイプの検証
+				rootTypes := []string{"問題", "質問"}
+				for _, ct := range commentTypes {
+					isRoot := slices.Contains(rootTypes, ct.Name)
+					if ct.Root != isRoot {
+						t.Errorf("CommentType %q.Root = %v, want %v", ct.Name, ct.Root, isRoot)
+					}
+				}
+
+				// 経路の検証
+				paths := got[0].CommentTypePaths()
+				expectedPathCount := 17
+				if len(paths) != expectedPathCount {
+					t.Errorf("CommentTypePaths length = %v, want %v", len(paths), expectedPathCount)
 				}
 			},
 		},

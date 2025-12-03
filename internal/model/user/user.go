@@ -117,9 +117,28 @@ func (u *User) LoadRule(params LoadRuleParams) (*rule.Rule, error) {
 }
 
 func (u *User) ListRules() ([]*rule.Rule, error) {
-	return u.ruleRepo.Search(rule.SearchParams{
+	rules, err := u.ruleRepo.Search(rule.SearchParams{
 		CreatedBy: u.id,
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	if len(rules) == 0 {
+		defaultRule, err := u.ruleFac.NewDefaultRule(rule.NewDefaultRuleParams{
+			CreatedBy: u.id,
+			CreatedAt: u.clockSrv.Now(),
+		})
+		if err != nil {
+			return nil, err
+		}
+		if err := defaultRule.Save(); err != nil {
+			return nil, err
+		}
+		return []*rule.Rule{defaultRule}, nil
+	}
+
+	return rules, nil
 }
 
 type CreateRuleParams struct {
