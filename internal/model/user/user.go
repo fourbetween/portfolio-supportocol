@@ -125,11 +125,9 @@ func (u *User) ListRules() ([]*rule.Rule, error) {
 	}
 
 	if len(rules) == 0 {
-		defaultRule, err := u.ruleFac.NewRule(rule.NewRuleParams{
-			Name:        "デフォルトルール",
-			Description: "",
-			CreatedBy:   u.id,
-			CreatedAt:   u.clockSrv.Now(),
+		defaultRule, err := u.ruleFac.NewDefaultRule(rule.NewDefaultRuleParams{
+			CreatedBy: u.id,
+			CreatedAt: u.clockSrv.Now(),
 		})
 		if err != nil {
 			return nil, err
