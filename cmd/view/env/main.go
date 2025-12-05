@@ -37,7 +37,6 @@ type requiredPaths struct {
 const (
 	siteName    = "Supportocol"
 	siteDesc    = "論理的な議論を支援するプラットフォームです。"
-	siteHost    = "https://app-supportocol.hick-r.com"
 	viewEnvPath = "view/.env"
 )
 
@@ -113,7 +112,7 @@ func fetchConfig(ctx context.Context) (*envConfig, error) {
 		APIURL:               "https://" + domain + "/api",
 		SiteDescription:      siteDesc,
 		SiteTitle:            siteName,
-		SiteURL:              siteHost,
+		SiteURL:              "https://" + domain,
 		SiteLogo:             "/images/logo.webp",
 		SiteFavicon:          "/images/favicon.ico",
 		AuthRedirectInURL:    "https://" + domain,
