@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awscloudfront"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awscloudfrontorigins"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awscognito"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsec2"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsiam"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambdaeventsources"
@@ -32,6 +33,7 @@ type (
 		stage       string
 		usContainer *UsContainer
 
+		vpc            awsec2.IVpc
 		logGroup       awslogs.ILogGroup
 		userPool       awscognito.IUserPool
 		viewBucket     awss3.Bucket
@@ -65,6 +67,7 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 	}
 	c.setParam("domain", c.domain())
 
+	c.buildVPC()
 	c.buildLogGroup()
 	c.buildUserPool()
 
@@ -85,6 +88,33 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 	}
 
 	return c
+}
+
+func (c *AppContainer) buildVPC() {
+	vpcID, _ := conf.GetString(context.TODO(), "/share/vpc/id")
+	publicIDs := []*string{}
+	privateIDs := []*string{}
+	isolatedIDs := []*string{}
+	for i := range []int{0, 1} {
+		publicID, _ := conf.GetString(context.TODO(), fmt.Sprintf("/share/vpc/subnet/public/%d/id", i))
+		privateID, _ := conf.GetString(context.TODO(), fmt.Sprintf("/share/vpc/subnet/private/%d/id", i))
+		isolatedID, _ := conf.GetString(context.TODO(), fmt.Sprintf("/share/vpc/subnet/isolated/%d/id", i))
+		publicIDs = append(publicIDs, jsii.String(publicID))
+		privateIDs = append(privateIDs, jsii.String(privateID))
+		isolatedIDs = append(isolatedIDs, jsii.String(isolatedID))
+	}
+
+	c.vpc = awsec2.Vpc_FromVpcAttributes(
+		c.stack,
+		jsii.String("VPC"),
+		&awsec2.VpcAttributes{
+			AvailabilityZones: jsii.Strings("ap-northeast-1a", "ap-northeast-1c"),
+			VpcId:             jsii.String(vpcID),
+			PublicSubnetIds:   &publicIDs,
+			PrivateSubnetIds:  &privateIDs,
+			IsolatedSubnetIds: &isolatedIDs,
+		},
+	)
 }
 
 func (c *AppContainer) buildLogGroup() {
@@ -202,6 +232,7 @@ func (c *AppContainer) buildApiFunction() {
 				&awss3assets.AssetOptions{},
 			),
 			Environment: &map[string]*string{"STAGE": jsii.String(c.stage)},
+			Vpc:         c.vpc,
 		})
 	f.AddToRolePolicy(awsiam.NewPolicyStatement(&awsiam.PolicyStatementProps{
 		Actions:   &[]*string{jsii.String("ssm:Get*")},
