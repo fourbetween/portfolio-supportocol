@@ -3,11 +3,12 @@ import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../style/base";
 import { buttonStyle } from "../../../../style/button";
 import { formStyle } from "../../../../style/form";
+import type { BasePopupPresenter } from "../base";
 
 @customElement("create-project-popup-presenter")
 export class CreateProjectPopupPresenter extends LitElement {
   @query("base-popup-presenter")
-  private popup!: HTMLElement & { open: () => void; close: () => void };
+  private basePopup!: BasePopupPresenter;
 
   @query("#project-name")
   private nameInput!: HTMLInputElement;
@@ -43,11 +44,11 @@ export class CreateProjectPopupPresenter extends LitElement {
   }
 
   open() {
-    this.popup.open();
+    this.basePopup.open();
   }
 
   close() {
-    this.popup.close();
+    this.basePopup.close();
   }
 
   private handleCreate() {

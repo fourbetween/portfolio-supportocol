@@ -2,11 +2,12 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
+import type { BasePopupPresenter } from "./base";
 
 @customElement("confirm-popup-presenter")
 export class ConfirmPopupPresenter extends LitElement {
   @query("base-popup-presenter")
-  private popup!: HTMLElement & { open: () => void; close: () => void };
+  private basePopup!: BasePopupPresenter;
 
   @property({ type: String })
   title = "";
@@ -46,11 +47,11 @@ export class ConfirmPopupPresenter extends LitElement {
   }
 
   open() {
-    this.popup.open();
+    this.basePopup.open();
   }
 
   close() {
-    this.popup.close();
+    this.basePopup.close();
   }
 
   private handleConfirm() {
