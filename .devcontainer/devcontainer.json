@@ -14,19 +14,7 @@
         "runem.lit-plugin",
         "vitest.explorer",
         "GitHub.vscode-pull-request-github"
-      ],
-      "mcp": {
-        "servers": {
-          "postgres": {
-            "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-postgres",
-              "postgresql://postgres:password@db:5432/app-supportocol"
-            ]
-          }
-        }
-      }
+      ]
     }
   }
 }

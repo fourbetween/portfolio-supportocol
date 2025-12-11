@@ -15,15 +15,15 @@ services:
       - sources:/sources
       - ~/.aws:/root/.aws
     tty: true
-  db:
-    image: postgres:17
+  mariadb:
+    image: mariadb:11.8
     ports:
-      - ${IP}:5432:5432
+      - ${IP}:3306:3306
     environment:
-      - POSTGRES_PASSWORD=password
+      - MARIADB_ROOT_PASSWORD=password
     volumes:
-      - dbdata:/var/lib/postgresql/data
+      - mariadb_data:/var/lib/mysql
 volumes:
   sources:
     external: true
-  dbdata:
+  mariadb_data:
