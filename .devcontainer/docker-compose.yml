@@ -15,15 +15,15 @@ services:
       - sources:/sources
       - ~/.aws:/root/.aws
     tty: true
-  mariadb:
-    image: mariadb:11.8
+  mysql:
+    image: mysql:8.4
     ports:
       - ${IP}:3306:3306
     environment:
-      - MARIADB_ROOT_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - db_data:/var/lib/mysql
 volumes:
   sources:
     external: true
-  mariadb_data:
+  db_data:
