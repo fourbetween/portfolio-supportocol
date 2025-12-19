@@ -16,7 +16,7 @@ func main() {
 	defer jsii.Close()
 
 	app := awscdk.NewApp(nil)
-	appName := os.Getenv("PROJECT_NAME")
+	appName := os.Getenv("APP_NAME")
 	for _, stage := range []string{"dev", "demo", "prod"} {
 		usContainer := container.NewUsContainer(container.UsContainerProps{
 			AppName: appName,

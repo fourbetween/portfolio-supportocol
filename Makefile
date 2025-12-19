@@ -4,7 +4,7 @@ VIEW_DIR := ${BASE_DIR}/view
 CDK_DIR  := ${BASE_DIR}/cdk
 
 # CDKスタック名（キャメルケースに変換）
-STACK_NAME := $(shell echo ${PROJECT_NAME}-${STAGE}-stack | sed -E 's/-(.)/\U\1/g; s/^(.)/\U\1/')
+STACK_NAME := $(shell echo ${APP_NAME}-${STAGE}-stack | sed -E 's/-(.)/\U\1/g; s/^(.)/\U\1/')
 
 .PHONY: dev-api dev-view build-api build-view build build-deploy deploy destroy gen test-api test-view setup-view import storybook upgrade-tools upgrade-go upgrade-view %
 
