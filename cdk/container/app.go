@@ -163,7 +163,7 @@ func (c *AppContainer) buildCDN() {
 						EventType: awscloudfront.FunctionEventType_VIEWER_REQUEST,
 						Function: awscloudfront.NewFunction(
 							c.stack,
-							jsii.String("RewritePathForSpaFunction"),
+							jsii.String("RewritePathFunctionForSpa"),
 							&awscloudfront.FunctionProps{
 								Code: awscloudfront.FunctionCode_FromFile(&awscloudfront.FileCodeOptions{
 									FilePath: jsii.String("/sources/cdk-share/lambda/cloudfront_rewrite_path_for_spa/main.js"),
