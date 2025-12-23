@@ -1,6 +1,6 @@
 package discussion
 
-//go:generate mockgen -source=$GOFILE -destination=repository_mock.go -package=$GOPACKAGE
+//go:generate go tool mockgen -package discussion -destination ./repository_mock.go . Repository
 
 type (
 	SearchParams struct {
