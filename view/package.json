@@ -16,11 +16,10 @@
     "@lit-labs/router": "^0.1.4",
     "@lit/context": "^1.1.6",
     "@lit/task": "^1.0.3",
-    "aws-amplify": "^6.15.8",
     "lit": "^3.3.1",
     "openapi-fetch": "^0.15.0",
-    "ulid": "^3.0.1",
     "urlpattern-polyfill": "^10.1.0",
+    "uuid": "^13.0.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
@@ -30,6 +29,7 @@
     "@storybook/addon-docs": "^10.0.8",
     "@storybook/addon-vitest": "^10.0.8",
     "@storybook/web-components-vite": "^10.0.8",
+    "@types/google.accounts": "^0.0.18",
     "@vitest/browser-playwright": "^4.0.12",
     "@vitest/coverage-v8": "^4.0.12",
     "playwright": "^1.56.1",
