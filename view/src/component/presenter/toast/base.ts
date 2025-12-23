@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { baseStyle } from "../../../style/base";
+import { buttonStyle } from "../../../style/button";
 
 export type ToastType = "success" | "error" | "info" | "warning";
 
@@ -30,7 +31,11 @@ export class BaseToastPresenter extends LitElement {
     return html`
       <div class="toast ${this.type}" role="alert">
         <span class="message">${this.message}</span>
-        <button class="close-button" @click=${this.hide} aria-label="閉じる">
+        <button
+          class="close-button icon-button"
+          @click=${this.hide}
+          aria-label="閉じる"
+        >
           ×
         </button>
       </div>
@@ -63,6 +68,7 @@ export class BaseToastPresenter extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
     css`
       :host {
         position: fixed;
@@ -103,19 +109,10 @@ export class BaseToastPresenter extends LitElement {
         font-size: 14px;
       }
 
-      .close-button {
-        background: none;
-        border: none;
-        cursor: pointer;
+      .close-button.icon-button {
         font-size: 16px;
-        color: var(--color-fg-muted);
         padding: 0;
-        line-height: 1;
         flex-shrink: 0;
-      }
-
-      .close-button:hover {
-        color: var(--color-fg-default);
       }
     `,
   ];

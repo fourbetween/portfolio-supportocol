@@ -4,10 +4,9 @@ import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
 import { routerContext } from "../../../../context/router";
-import { showErrorToast } from "../../../../event/toast";
-import { accountMethods } from "../../../../model/account";
 import type { Rule } from "../../../../model/rule";
 import { navigate } from "../../../../routes";
+import { showToast } from "../../../../event/toast";
 
 @customElement("create-rule-page-container")
 export class CreateRulePageContainer extends LitElement {
@@ -33,7 +32,6 @@ export class CreateRulePageContainer extends LitElement {
     this.isSubmitting = true;
     try {
       const { error } = await client.POST("/rules", {
-        headers: await accountMethods.authHeader(),
         body: {
           name: rule.name,
           description: rule.description,
@@ -43,7 +41,11 @@ export class CreateRulePageContainer extends LitElement {
       });
 
       if (error) {
-        showErrorToast(this, `ルールの作成に失敗しました: ${error.message}`);
+        showToast(
+          this,
+          `ルールの作成に失敗しました: ${error.message}`,
+          "error"
+        );
         return;
       }
 
