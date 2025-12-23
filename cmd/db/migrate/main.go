@@ -1,34 +1,31 @@
 package main
 
 import (
-	"context"
-	"strings"
+	"fmt"
 
-	conf "github.com/fourbetween/pkg-conf"
+	"github.com/fourbetween/app-supportocol/internal/db"
+	"github.com/fourbetween/app-supportocol/internal/service/env"
 	"github.com/golang-migrate/migrate/v4"
-	_ "github.com/golang-migrate/migrate/v4/database/cockroachdb"
-	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	"github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
-	dsn, err := conf.GetStringWithStage(context.TODO(), "/app-supportocol/db/dsn")
+	con, err := db.NewConnection()
+	if err != nil {
+		panic(err)
+	}
+	defer con.Close()
+
+	driver, err := mysql.WithInstance(con, &mysql.Config{})
 	if err != nil {
 		panic(err)
 	}
 
-	if conf.Stage() == "prod" {
-		dsn = strings.Replace(
-			dsn,
-			"postgresql:",
-			"cockroachdb:",
-			1,
-		)
-	}
-
-	m, err := migrate.New(
+	m, err := migrate.NewWithDatabaseInstance(
 		"file://../../../internal/db/migrations",
-		dsn,
+		env.AppName(),
+		driver,
 	)
 	if err != nil {
 		panic(err)
@@ -40,9 +37,11 @@ func main() {
 		}
 	}
 
-	if err := m.Up(); err != nil {
+	if err := m.Migrate(1); err != nil {
 		if err != migrate.ErrNoChange {
 			panic(err)
 		}
 	}
+
+	fmt.Println("Migration applied successfully")
 }

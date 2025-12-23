@@ -5,8 +5,7 @@ import { LitElement, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
 import { routerContext } from "../../../../context/router";
-import { showErrorToast } from "../../../../event/toast";
-import { accountMethods } from "../../../../model/account";
+import { showToast } from "../../../../event/toast";
 import type { Discussion } from "../../../../model/discussion";
 import type { Project } from "../../../../model/project";
 import { buildPath, navigate } from "../../../../routes";
@@ -41,13 +40,13 @@ export class ItemProjectPageContainer extends LitElement {
       task: async ([projectId]) => {
         if (!projectId) return undefined;
         const { data, error } = await client.GET("/projects/{projectId}", {
-          headers: await accountMethods.authHeader(),
           params: { path: { projectId } },
         });
         if (error) {
-          showErrorToast(
+          showToast(
             this,
-            `プロジェクトの取得に失敗しました: ${error.message}`
+            `プロジェクトの取得に失敗しました: ${error.message}`,
+            "error"
           );
           return undefined;
         }
@@ -63,11 +62,14 @@ export class ItemProjectPageContainer extends LitElement {
       task: async ([projectId]) => {
         if (!projectId) return [] as Discussion[];
         const { data, error } = await client.GET("/discussions", {
-          headers: await accountMethods.authHeader(),
           params: { query: { projectId } },
         });
         if (error) {
-          showErrorToast(this, `議論の取得に失敗しました: ${error.message}`);
+          showToast(
+            this,
+            `議論の取得に失敗しました: ${error.message}`,
+            "error"
+          );
           return [] as Discussion[];
         }
         return data;
@@ -125,14 +127,14 @@ export class ItemProjectPageContainer extends LitElement {
 
   private handleSaveProject = async (name: string) => {
     const { data, error } = await client.PUT("/projects/{projectId}", {
-      headers: await accountMethods.authHeader(),
       params: { path: { projectId: this.projectId } },
       body: { name },
     });
     if (error) {
-      showErrorToast(
+      showToast(
         this,
-        `プロジェクトの更新に失敗しました: ${error.message}`
+        `プロジェクトの更新に失敗しました: ${error.message}`,
+        "error"
       );
       return;
     }
@@ -150,13 +152,13 @@ export class ItemProjectPageContainer extends LitElement {
 
   private handleDeleteProject = async () => {
     const { error } = await client.DELETE("/projects/{projectId}", {
-      headers: await accountMethods.authHeader(),
       params: { path: { projectId: this.projectId } },
     });
     if (error) {
-      showErrorToast(
+      showToast(
         this,
-        `プロジェクトの削除に失敗しました: ${error.message}`
+        `プロジェクトの削除に失敗しました: ${error.message}`,
+        "error"
       );
       return;
     }

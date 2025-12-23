@@ -3,7 +3,7 @@ package project
 import (
 	"time"
 
-	"github.com/fourbetween/app-supportocol/internal/service/id"
+	id "github.com/fourbetween/pkg-id"
 )
 
 type (

@@ -6,6 +6,8 @@ package oas
 type OperationName = string
 
 const (
+	AuthGooglePostOperation                                 OperationName = "AuthGooglePost"
+	AuthLogoutPostOperation                                 OperationName = "AuthLogoutPost"
 	DiscussionsDiscussionIdCommentsCommentIdDeleteOperation OperationName = "DiscussionsDiscussionIdCommentsCommentIdDelete"
 	DiscussionsDiscussionIdCommentsCommentIdPutOperation    OperationName = "DiscussionsDiscussionIdCommentsCommentIdPut"
 	DiscussionsDiscussionIdCommentsGetOperation             OperationName = "DiscussionsDiscussionIdCommentsGet"
@@ -24,6 +26,7 @@ const (
 	DiscussionsGetOperation                                 OperationName = "DiscussionsGet"
 	DiscussionsPostOperation                                OperationName = "DiscussionsPost"
 	ErrorsPostOperation                                     OperationName = "ErrorsPost"
+	MeGetOperation                                          OperationName = "MeGet"
 	ProjectsGetOperation                                    OperationName = "ProjectsGet"
 	ProjectsPostOperation                                   OperationName = "ProjectsPost"
 	ProjectsProjectIdDeleteOperation                        OperationName = "ProjectsProjectIdDelete"

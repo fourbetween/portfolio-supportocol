@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
-	"github.com/fourbetween/app-supportocol/internal/service/id"
+	id "github.com/fourbetween/pkg-id"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -53,7 +53,7 @@ func TestFactory_NewRule(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
-			idSrv := id.NewULIDService()
+			idSrv := id.NewMockService(ctrl)
 			ruleRepo := rule.NewMockRepository(ctrl)
 			ruleFac := rule.NewFactory(ruleRepo, idSrv)
 

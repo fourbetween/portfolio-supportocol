@@ -1,59 +1,32 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log/slog"
-	"net/http"
 	"os"
+	"time"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/fourbetween/app-supportocol/internal/api"
 	"github.com/fourbetween/app-supportocol/internal/db"
-	auth "github.com/fourbetween/pkg-auth"
-	conf "github.com/fourbetween/pkg-conf"
-	uow "github.com/fourbetween/pkg-uow"
 )
 
 func main() {
 	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stderr, nil)))
 
-	handler, err := makeHandler()
+	dbCon, err := db.NewConnection()
+	if err != nil {
+		panic(fmt.Errorf("failed to connect to db: %w", err))
+	}
+	dbCon.SetMaxOpenConns(1)
+	dbCon.SetMaxIdleConns(1)
+	dbCon.SetConnMaxLifetime(3 * time.Minute)
+
+	handler, err := api.NewHttpHandler(dbCon)
 	if err != nil {
 		panic(err)
 	}
 
 	lambda.Start(httpadapter.NewV2(handler).ProxyWithContext)
-}
-
-func makeHandler() (http.Handler, error) {
-	if err := api.CheckConfig(); err != nil {
-		return nil, fmt.Errorf("failed to check config: %w", err)
-	}
-
-	dsn, err := conf.GetStringWithStage(context.TODO(), "/app-supportocol/db/dsn")
-	if err != nil {
-		return nil, fmt.Errorf("failed to get db dsn: %w", err)
-	}
-
-	userpoolID, err := conf.GetString(context.TODO(), "/share/cognito/userpool/id")
-	if err != nil {
-		return nil, fmt.Errorf("failed to get userpool ID: %w", err)
-	}
-
-	dbCon, err := db.NewDB(dsn)
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect to db: %w", err)
-	}
-
-	authSrv, err := auth.NewCognitoAuth(context.TODO(), auth.CognitoConfig{
-		UserPoolID: userpoolID,
-	})
-	if err != nil {
-		return nil, fmt.Errorf("failed to create auth service: %w", err)
-	}
-
-	uowSrv := uow.NewSqlUnitOfWork(dbCon, api.NewContainer)
-	return api.NewHttpHandler(uowSrv, authSrv)
 }

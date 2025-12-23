@@ -2,8 +2,7 @@ import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { client } from "../../../api/client";
-import { showErrorToast } from "../../../event/toast";
-import { accountMethods } from "../../../model/account";
+import { showToast } from "../../../event/toast";
 import type { Discussion } from "../../../model/discussion";
 import type { Project } from "../../../model/project";
 import { buildPath } from "../../../routes";
@@ -25,13 +24,12 @@ export class DashboardPageContainer extends LitElement {
 
     new Task(this, {
       task: async () => {
-        const { data, error } = await client.GET("/projects", {
-          headers: await accountMethods.authHeader(),
-        });
+        const { data, error } = await client.GET("/projects");
         if (error) {
-          showErrorToast(
+          showToast(
             this,
-            `プロジェクトの取得に失敗しました: ${error.message}`
+            `プロジェクトの取得に失敗しました: ${error.message}`,
+            "error"
           );
           return [] as Project[];
         }
@@ -45,11 +43,13 @@ export class DashboardPageContainer extends LitElement {
 
     new Task(this, {
       task: async () => {
-        const { data, error } = await client.GET("/discussions", {
-          headers: await accountMethods.authHeader(),
-        });
+        const { data, error } = await client.GET("/discussions");
         if (error) {
-          showErrorToast(this, `議論の取得に失敗しました: ${error.message}`);
+          showToast(
+            this,
+            `議論の取得に失敗しました: ${error.message}`,
+            "error"
+          );
           return [] as Discussion[];
         }
         return data;
@@ -83,13 +83,13 @@ export class DashboardPageContainer extends LitElement {
 
   private handleCreateProject = async (name: string) => {
     const { data, error } = await client.POST("/projects", {
-      headers: await accountMethods.authHeader(),
       body: { name },
     });
     if (error) {
-      showErrorToast(
+      showToast(
         this,
-        `プロジェクトの作成に失敗しました: ${error.message}`
+        `プロジェクトの作成に失敗しました: ${error.message}`,
+        "error"
       );
       return;
     }

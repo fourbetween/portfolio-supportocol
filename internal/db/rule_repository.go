@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal"
-	"github.com/fourbetween/app-supportocol/internal/db/.gen/public/model"
-	"github.com/fourbetween/app-supportocol/internal/db/.gen/public/table"
+	"github.com/fourbetween/app-supportocol/internal/db/.gen/app-supportocol/model"
+	"github.com/fourbetween/app-supportocol/internal/db/.gen/app-supportocol/table"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 	"github.com/go-jet/jet/v2/qrm"
 )
 
@@ -40,14 +40,12 @@ func (r *RuleRepository) Save(rl *rule.Rule) error {
 	ruleStmt := table.Rules.
 		INSERT(table.Rules.AllColumns).
 		MODEL(ruleRecord).
-		ON_CONFLICT(table.Rules.ID).
-		DO_UPDATE(
-			postgres.SET(
-				table.Rules.Name.SET(table.Rules.EXCLUDED.Name),
-				table.Rules.Description.SET(table.Rules.EXCLUDED.Description),
-				table.Rules.CreatedBy.SET(table.Rules.EXCLUDED.CreatedBy),
-				table.Rules.CreatedAt.SET(table.Rules.EXCLUDED.CreatedAt),
-			),
+		AS_NEW().
+		ON_DUPLICATE_KEY_UPDATE(
+			table.Rules.Name.SET(table.Rules.NEW.Name),
+			table.Rules.Description.SET(table.Rules.NEW.Description),
+			table.Rules.CreatedBy.SET(table.Rules.NEW.CreatedBy),
+			table.Rules.CreatedAt.SET(table.Rules.NEW.CreatedAt),
 		)
 
 	if _, err := ruleStmt.Exec(r.db); err != nil {
@@ -72,7 +70,7 @@ func (r *RuleRepository) Save(rl *rule.Rule) error {
 func (r *RuleRepository) Delete(rl *rule.Rule) error {
 	stmt := table.Rules.
 		DELETE().
-		WHERE(table.Rules.ID.EQ(postgres.String(rl.ID())))
+		WHERE(table.Rules.ID.EQ(mysql.String(rl.ID())))
 
 	if _, err := stmt.Exec(r.db); err != nil {
 		return fmt.Errorf("failed to delete rule: %w", err)
@@ -82,9 +80,9 @@ func (r *RuleRepository) Delete(rl *rule.Rule) error {
 }
 
 func (r *RuleRepository) Load(params rule.LoadParams) (*rule.Rule, error) {
-	cond := table.Rules.ID.EQ(postgres.String(params.ID))
+	cond := table.Rules.ID.EQ(mysql.String(params.ID))
 	if params.CreatedBy != "" {
-		cond = cond.AND(table.Rules.CreatedBy.EQ(postgres.String(params.CreatedBy)))
+		cond = cond.AND(table.Rules.CreatedBy.EQ(mysql.String(params.CreatedBy)))
 	}
 
 	rules, err := r.searchByCondition(cond)
@@ -103,15 +101,15 @@ func (r *RuleRepository) Load(params rule.LoadParams) (*rule.Rule, error) {
 }
 
 func (r *RuleRepository) Search(params rule.SearchParams) ([]*rule.Rule, error) {
-	cond := postgres.Bool(true)
+	cond := mysql.Bool(true)
 	if params.CreatedBy != "" {
-		cond = cond.AND(table.Rules.CreatedBy.EQ(postgres.String(params.CreatedBy)))
+		cond = cond.AND(table.Rules.CreatedBy.EQ(mysql.String(params.CreatedBy)))
 	}
 	return r.searchByCondition(cond)
 }
 
-func (r *RuleRepository) searchByCondition(cond postgres.BoolExpression) ([]*rule.Rule, error) {
-	stmt := postgres.
+func (r *RuleRepository) searchByCondition(cond mysql.BoolExpression) ([]*rule.Rule, error) {
+	stmt := mysql.
 		SELECT(table.Rules.AllColumns).
 		FROM(table.Rules).
 		WHERE(cond)
@@ -142,14 +140,14 @@ func (r *RuleRepository) searchByCondition(cond postgres.BoolExpression) ([]*rul
 func (r *RuleRepository) deleteCommentTypesAndPaths(ruleID string) error {
 	deleteCommentTypesStmt := table.CommentTypes.
 		DELETE().
-		WHERE(table.CommentTypes.RuleID.EQ(postgres.String(ruleID)))
+		WHERE(table.CommentTypes.RuleID.EQ(mysql.String(ruleID)))
 	if _, err := deleteCommentTypesStmt.Exec(r.db); err != nil {
 		return fmt.Errorf("failed to delete existing comment types: %w", err)
 	}
 
 	deleteCommentTypePathsStmt := table.CommentTypePaths.
 		DELETE().
-		WHERE(table.CommentTypePaths.RuleID.EQ(postgres.String(ruleID)))
+		WHERE(table.CommentTypePaths.RuleID.EQ(mysql.String(ruleID)))
 	if _, err := deleteCommentTypePathsStmt.Exec(r.db); err != nil {
 		return fmt.Errorf("failed to delete existing comment type paths: %w", err)
 	}
@@ -218,10 +216,10 @@ func extractRuleIDs(rules []model.Rules) []string {
 }
 
 func (r *RuleRepository) fetchCommentTypesByRuleIDs(ruleIDs []string) (map[string][]rule.CommentType, error) {
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.CommentTypes.AllColumns).
 		FROM(table.CommentTypes).
-		WHERE(table.CommentTypes.RuleID.IN(toPostgresStrings(ruleIDs)...)).
+		WHERE(table.CommentTypes.RuleID.IN(toMysqlStrings(ruleIDs)...)).
 		ORDER_BY(table.CommentTypes.RuleID.ASC(), table.CommentTypes.No.ASC())
 
 	var records []model.CommentTypes
@@ -245,10 +243,10 @@ func (r *RuleRepository) fetchCommentTypesByRuleIDs(ruleIDs []string) (map[strin
 }
 
 func (r *RuleRepository) fetchCommentTypePathsByRuleIDs(ruleIDs []string) (map[string][]rule.CommentTypePath, error) {
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.CommentTypePaths.AllColumns).
 		FROM(table.CommentTypePaths).
-		WHERE(table.CommentTypePaths.RuleID.IN(toPostgresStrings(ruleIDs)...))
+		WHERE(table.CommentTypePaths.RuleID.IN(toMysqlStrings(ruleIDs)...))
 
 	var records []model.CommentTypePaths
 	if err := stmt.Query(r.db, &records); err != nil {

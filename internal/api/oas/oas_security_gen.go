@@ -13,8 +13,8 @@ import (
 
 // SecurityHandler is handler for security parameters.
 type SecurityHandler interface {
-	// HandleCognitoAuth handles cognito_auth security.
-	HandleCognitoAuth(ctx context.Context, operationName OperationName, t CognitoAuth) (context.Context, error)
+	// HandleCookieAuth handles cookie_auth security.
+	HandleCookieAuth(ctx context.Context, operationName OperationName, t CookieAuth) (context.Context, error)
 }
 
 func findAuthorization(h http.Header, prefix string) (string, bool) {
@@ -32,7 +32,7 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 	return "", false
 }
 
-var operationRolesCognitoAuth = map[string][]string{
+var operationRolesCookieAuth = map[string][]string{
 	DiscussionsDiscussionIdCommentsCommentIdDeleteOperation: []string{},
 	DiscussionsDiscussionIdCommentsCommentIdPutOperation:    []string{},
 	DiscussionsDiscussionIdCommentsGetOperation:             []string{},
@@ -51,6 +51,7 @@ var operationRolesCognitoAuth = map[string][]string{
 	DiscussionsGetOperation:                                 []string{},
 	DiscussionsPostOperation:                                []string{},
 	ErrorsPostOperation:                                     []string{},
+	MeGetOperation:                                          []string{},
 	ProjectsGetOperation:                                    []string{},
 	ProjectsPostOperation:                                   []string{},
 	ProjectsProjectIdDeleteOperation:                        []string{},
@@ -63,15 +64,21 @@ var operationRolesCognitoAuth = map[string][]string{
 	RulesRuleIdPutOperation:                                 []string{},
 }
 
-func (s *Server) securityCognitoAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
-	var t CognitoAuth
-	token, ok := findAuthorization(req.Header, "Bearer")
-	if !ok {
+func (s *Server) securityCookieAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {
+	var t CookieAuth
+	const parameterName = "auth_token"
+	var value string
+	switch cookie, err := req.Cookie(parameterName); {
+	case err == nil: // if NO error
+		value = cookie.Value
+	case errors.Is(err, http.ErrNoCookie):
 		return ctx, false, nil
+	default:
+		return nil, false, errors.Wrap(err, "get cookie value")
 	}
-	t.Token = token
-	t.Roles = operationRolesCognitoAuth[operationName]
-	rctx, err := s.sec.HandleCognitoAuth(ctx, operationName, t)
+	t.APIKey = value
+	t.Roles = operationRolesCookieAuth[operationName]
+	rctx, err := s.sec.HandleCookieAuth(ctx, operationName, t)
 	if errors.Is(err, ogenerrors.ErrSkipServerSecurity) {
 		return nil, false, nil
 	} else if err != nil {

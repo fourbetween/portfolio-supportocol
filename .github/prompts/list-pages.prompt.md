@@ -20,9 +20,10 @@ $ARGUMENTS
 
 ## ワークフロー
 
-1. `AGENTS.md`を参照し、アプリの概要を確認してください。
+1. `.github/instructions/app.instructions.md`を参照し、アプリの概要を確認してください。
 2. `view/src/api/schema/schema.ts`を参照し、関連するデータスキーマを確認してください。
 3. `view/pages.md`にアプリに必要なページをリストしてください。
+   - Workbook に関してはサンプルなのでスキップしてください。
    - ログインやアカウント登録ページは不要です。
    - 各ページには以下の情報を含めてください。
      - ページ名

@@ -22,7 +22,182 @@ func (c *codeRecorder) WriteHeader(status int) {
 	c.ResponseWriter.WriteHeader(status)
 }
 
+func (c *codeRecorder) Unwrap() http.ResponseWriter {
+	return c.ResponseWriter
+}
+
 func recordError(string, error) {}
+
+// handleAuthGooglePostRequest handles POST /auth/google operation.
+//
+// Google login.
+//
+// POST /auth/google
+func (s *Server) handleAuthGooglePostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: AuthGooglePostOperation,
+			ID:   "",
+		}
+	)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeAuthGooglePostRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response *AuthGooglePostOK
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    AuthGooglePostOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             request,
+			RawBody:          rawBody,
+			Params:           middleware.Parameters{},
+			Raw:              r,
+		}
+
+		type (
+			Request  = *GoogleLoginRequest
+			Params   = struct{}
+			Response = *AuthGooglePostOK
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			nil,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				err = s.h.AuthGooglePost(ctx, request)
+				return response, err
+			},
+		)
+	} else {
+		err = s.h.AuthGooglePost(ctx, request)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeAuthGooglePostResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleAuthLogoutPostRequest handles POST /auth/logout operation.
+//
+// Logout.
+//
+// POST /auth/logout
+func (s *Server) handleAuthLogoutPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err error
+	)
+
+	var rawBody []byte
+
+	var response *AuthLogoutPostOK
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    AuthLogoutPostOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             nil,
+			RawBody:          rawBody,
+			Params:           middleware.Parameters{},
+			Raw:              r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = struct{}
+			Response = *AuthLogoutPostOK
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			nil,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				err = s.h.AuthLogoutPost(ctx)
+				return response, err
+			},
+		)
+	} else {
+		err = s.h.AuthLogoutPost(ctx)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeAuthLogoutPostResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
 
 // handleDiscussionsDiscussionIdCommentsCommentIdDeleteRequest handles DELETE /discussions/{discussionId}/comments/{commentId} operation.
 //
@@ -45,15 +220,15 @@ func (s *Server) handleDiscussionsDiscussionIdCommentsCommentIdDeleteRequest(arg
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdCommentsCommentIdDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdCommentsCommentIdDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -190,15 +365,15 @@ func (s *Server) handleDiscussionsDiscussionIdCommentsCommentIdPutRequest(args [
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdCommentsCommentIdPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdCommentsCommentIdPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -350,15 +525,15 @@ func (s *Server) handleDiscussionsDiscussionIdCommentsGetRequest(args [1]string,
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdCommentsGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdCommentsGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -491,15 +666,15 @@ func (s *Server) handleDiscussionsDiscussionIdCommentsPostRequest(args [1]string
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdCommentsPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdCommentsPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -647,15 +822,15 @@ func (s *Server) handleDiscussionsDiscussionIdDeleteRequest(args [1]string, args
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -788,15 +963,15 @@ func (s *Server) handleDiscussionsDiscussionIdGetRequest(args [1]string, argsEsc
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -929,15 +1104,15 @@ func (s *Server) handleDiscussionsDiscussionIdIssuesGetRequest(args [1]string, a
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdIssuesGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdIssuesGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -1070,15 +1245,15 @@ func (s *Server) handleDiscussionsDiscussionIdIssuesIssueIdDeleteRequest(args [2
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdIssuesIssueIdDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdIssuesIssueIdDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -1215,15 +1390,15 @@ func (s *Server) handleDiscussionsDiscussionIdIssuesIssueIdPutRequest(args [2]st
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdIssuesIssueIdPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdIssuesIssueIdPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -1375,15 +1550,15 @@ func (s *Server) handleDiscussionsDiscussionIdIssuesPostRequest(args [1]string, 
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdIssuesPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdIssuesPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -1531,15 +1706,15 @@ func (s *Server) handleDiscussionsDiscussionIdNotesGetRequest(args [1]string, ar
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdNotesGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdNotesGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -1672,15 +1847,15 @@ func (s *Server) handleDiscussionsDiscussionIdNotesNoteIdDeleteRequest(args [2]s
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdNotesNoteIdDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdNotesNoteIdDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -1817,15 +1992,15 @@ func (s *Server) handleDiscussionsDiscussionIdNotesNoteIdPutRequest(args [2]stri
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdNotesNoteIdPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdNotesNoteIdPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -1977,15 +2152,15 @@ func (s *Server) handleDiscussionsDiscussionIdNotesPostRequest(args [1]string, a
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdNotesPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdNotesPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -2133,15 +2308,15 @@ func (s *Server) handleDiscussionsDiscussionIdPutRequest(args [1]string, argsEsc
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsDiscussionIdPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsDiscussionIdPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -2289,15 +2464,15 @@ func (s *Server) handleDiscussionsGetRequest(args [0]string, argsEscaped bool, w
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -2430,15 +2605,15 @@ func (s *Server) handleDiscussionsPostRequest(args [0]string, argsEscaped bool, 
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, DiscussionsPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, DiscussionsPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -2571,15 +2746,15 @@ func (s *Server) handleErrorsPostRequest(args [0]string, argsEscaped bool, w htt
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, ErrorsPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, ErrorsPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -2691,6 +2866,132 @@ func (s *Server) handleErrorsPostRequest(args [0]string, argsEscaped bool, w htt
 	}
 }
 
+// handleMeGetRequest handles GET /me operation.
+//
+// Get current user.
+//
+// GET /me
+func (s *Server) handleMeGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: MeGetOperation,
+			ID:   "",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityCookieAuth(ctx, MeGetOperation, r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "CookieAuth",
+					Err:              err,
+				}
+				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
+					defer recordError("Security:CookieAuth", err)
+				}
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
+				defer recordError("Security", err)
+			}
+			return
+		}
+	}
+
+	var rawBody []byte
+
+	var response *User
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    MeGetOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             nil,
+			RawBody:          rawBody,
+			Params:           middleware.Parameters{},
+			Raw:              r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = struct{}
+			Response = *User
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			nil,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.MeGet(ctx)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.MeGet(ctx)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeMeGetResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleProjectsGetRequest handles GET /projects operation.
 //
 // Get projects.
@@ -2712,15 +3013,15 @@ func (s *Server) handleProjectsGetRequest(args [0]string, argsEscaped bool, w ht
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, ProjectsGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, ProjectsGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -2838,15 +3139,15 @@ func (s *Server) handleProjectsPostRequest(args [0]string, argsEscaped bool, w h
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, ProjectsPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, ProjectsPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -2979,15 +3280,15 @@ func (s *Server) handleProjectsProjectIdDeleteRequest(args [1]string, argsEscape
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, ProjectsProjectIdDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, ProjectsProjectIdDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -3120,15 +3421,15 @@ func (s *Server) handleProjectsProjectIdGetRequest(args [1]string, argsEscaped b
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, ProjectsProjectIdGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, ProjectsProjectIdGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -3261,15 +3562,15 @@ func (s *Server) handleProjectsProjectIdPutRequest(args [1]string, argsEscaped b
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, ProjectsProjectIdPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, ProjectsProjectIdPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -3417,15 +3718,15 @@ func (s *Server) handleRulesGetRequest(args [0]string, argsEscaped bool, w http.
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, RulesGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, RulesGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -3543,15 +3844,15 @@ func (s *Server) handleRulesPostRequest(args [0]string, argsEscaped bool, w http
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, RulesPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, RulesPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -3684,15 +3985,15 @@ func (s *Server) handleRulesRuleIdDeleteRequest(args [1]string, argsEscaped bool
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, RulesRuleIdDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, RulesRuleIdDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -3825,15 +4126,15 @@ func (s *Server) handleRulesRuleIdGetRequest(args [1]string, argsEscaped bool, w
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, RulesRuleIdGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, RulesRuleIdGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}
@@ -3966,15 +4267,15 @@ func (s *Server) handleRulesRuleIdPutRequest(args [1]string, argsEscaped bool, w
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCognitoAuth(ctx, RulesRuleIdPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, RulesRuleIdPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
-					Security:         "CognitoAuth",
+					Security:         "CookieAuth",
 					Err:              err,
 				}
 				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CognitoAuth", err)
+					defer recordError("Security:CookieAuth", err)
 				}
 				return
 			}

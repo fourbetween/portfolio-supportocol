@@ -2,8 +2,7 @@ import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
-import { showErrorToast } from "../../../../event/toast";
-import { accountMethods } from "../../../../model/account";
+import { showToast } from "../../../../event/toast";
 import type { Discussion } from "../../../../model/discussion";
 import { buildPath } from "../../../../routes";
 
@@ -20,11 +19,13 @@ export class ListDiscussionPageContainer extends LitElement {
 
     new Task(this, {
       task: async () => {
-        const { data, error } = await client.GET("/discussions", {
-          headers: await accountMethods.authHeader(),
-        });
+        const { data, error } = await client.GET("/discussions");
         if (error) {
-          showErrorToast(this, `議論の取得に失敗しました: ${error.message}`);
+          showToast(
+            this,
+            `議論の取得に失敗しました: ${error.message}`,
+            "error"
+          );
           return [] as Discussion[];
         }
         return data;

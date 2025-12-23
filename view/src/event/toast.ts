@@ -6,31 +6,29 @@ export interface ToastEventDetail {
   duration?: number;
 }
 
-export class ShowToastEvent extends CustomEvent<ToastEventDetail> {
-  static readonly eventName = "show-toast" as const;
-
-  constructor(detail: ToastEventDetail) {
-    super(ShowToastEvent.eventName, {
-      bubbles: true,
-      composed: true,
-      detail,
-    });
-  }
-}
+export const SHOW_TOAST_EVENT_NAME = "show-toast";
 
 declare global {
   interface HTMLElementEventMap {
-    [ShowToastEvent.eventName]: ShowToastEvent;
+    [SHOW_TOAST_EVENT_NAME]: CustomEvent<ToastEventDetail>;
   }
 }
 
-export function showErrorToast(element: HTMLElement, message: string): void {
-  console.error(message);
+export function showToast(
+  element: HTMLElement,
+  message: string,
+  type: ToastType,
+  duration?: number
+): void {
   element.dispatchEvent(
-    new ShowToastEvent({
-      message,
-      type: "error",
-      duration: 5000,
+    new CustomEvent(SHOW_TOAST_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+      detail: {
+        message,
+        type,
+        duration,
+      },
     })
   );
 }

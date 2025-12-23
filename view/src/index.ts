@@ -1,32 +1,24 @@
 import { Router } from "@lit-labs/router";
 import { provide } from "@lit/context";
-import { Task } from "@lit/task";
 import { LitElement, css, html } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import "urlpattern-polyfill";
-import "./auth";
-import type { BaseToastPresenter } from "./component/presenter/toast/base";
 import { routerContext } from "./context/router";
-import { ShowToastEvent } from "./event/toast";
+import { userContext } from "./context/user";
 import "./import";
-import { accountMethods } from "./model/account";
+import { type User, authMethods } from "./model/user";
 import { routes } from "./routes";
 import { baseStyle } from "./style/base";
 
 @customElement("app-root")
 export class AppRoot extends LitElement {
-  @state()
-  private isLoggedIn = false;
-
   @provide({ context: routerContext })
   private router = new Router(this, [
     {
       name: "front",
       path: routes.front,
       render: () => html`
-        <home-page-presenter
-          .isLoggedIn=${this.isLoggedIn}
-        ></home-page-presenter>
+        <home-page-presenter></home-page-presenter>
       `,
     },
     {
@@ -93,43 +85,28 @@ export class AppRoot extends LitElement {
     },
   ]);
 
-  @query("base-toast-presenter")
-  private toast!: BaseToastPresenter;
-
-  constructor() {
-    super();
-    new Task(this, {
-      task: async ([]) => {
-        this.isLoggedIn = await accountMethods.isLoggedIn();
-      },
-      args: () => [],
-    });
-  }
+  @provide({ context: userContext })
+  @state()
+  private user: User | null = null;
 
   connectedCallback() {
     super.connectedCallback();
-    this.addEventListener(ShowToastEvent.eventName, this.handleShowToast);
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.removeEventListener(ShowToastEvent.eventName, this.handleShowToast);
+    this.fetchCurrentUser();
   }
 
   render() {
+    void this.user;
     return html`
       <main-layout-container>${this.router.outlet()}</main-layout-container>
-      <base-toast-presenter></base-toast-presenter>
+      <toast-container></toast-container>
+      <auth-popup-container></auth-popup-container>
+      <loading-container></loading-container>
     `;
   }
 
-  private handleShowToast = (event: ShowToastEvent) => {
-    this.toast.show({
-      message: event.detail.message,
-      type: event.detail.type,
-      duration: event.detail.duration,
-    });
-  };
+  private async fetchCurrentUser() {
+    this.user = await authMethods.getCurrentUser();
+  }
 
   static styles = [baseStyle, css``];
 }

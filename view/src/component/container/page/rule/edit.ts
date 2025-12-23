@@ -5,8 +5,7 @@ import { LitElement, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
 import { routerContext } from "../../../../context/router";
-import { showErrorToast } from "../../../../event/toast";
-import { accountMethods } from "../../../../model/account";
+import { showToast } from "../../../../event/toast";
 import type { Rule } from "../../../../model/rule";
 import { navigate } from "../../../../routes";
 
@@ -31,15 +30,18 @@ export class EditRulePageContainer extends LitElement {
     new Task(this, {
       task: async ([ruleId]) => {
         if (!ruleId) {
-          showErrorToast(this, "ルールIDが必要です");
+          showToast(this, "ルールIDが必要です", "error");
           return undefined;
         }
         const { data, error } = await client.GET("/rules/{ruleId}", {
-          headers: await accountMethods.authHeader(),
           params: { path: { ruleId } },
         });
         if (error) {
-          showErrorToast(this, `ルールの取得に失敗しました: ${error.message}`);
+          showToast(
+            this,
+            `ルールの取得に失敗しました: ${error.message}`,
+            "error"
+          );
           return undefined;
         }
         return data;
@@ -73,7 +75,6 @@ export class EditRulePageContainer extends LitElement {
     this.isSubmitting = true;
     try {
       const { error } = await client.PUT("/rules/{ruleId}", {
-        headers: await accountMethods.authHeader(),
         params: { path: { ruleId: this.ruleId } },
         body: {
           name: rule.name,
@@ -84,7 +85,11 @@ export class EditRulePageContainer extends LitElement {
       });
 
       if (error) {
-        showErrorToast(this, `ルールの更新に失敗しました: ${error.message}`);
+        showToast(
+          this,
+          `ルールの更新に失敗しました: ${error.message}`,
+          "error"
+        );
         return;
       }
 

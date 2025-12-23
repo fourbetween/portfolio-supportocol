@@ -1,5 +1,5 @@
 import createClient, { type Middleware } from "openapi-fetch";
-import { accountMethods } from "../model/account";
+import { authMethods } from "../model/user";
 import type { paths } from "./schema";
 
 export const client = createClient<paths>({
@@ -7,9 +7,9 @@ export const client = createClient<paths>({
 });
 
 const middleware: Middleware = {
-  async onResponse({ response }) {
-    if (response.status === 401) {
-      accountMethods.login();
+  async onResponse({ request, response }) {
+    if (!request.url.endsWith("/api/me") && response.status === 401) {
+      authMethods.login();
       return;
     }
   },

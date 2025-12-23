@@ -3,22 +3,30 @@ import { z } from "zod";
 
 extendZodWithOpenApi(z);
 
-export const idSchema = z.string().min(26).max(26).openapi("id");
+export const idSchema = z.string().min(36).max(36).openapi("Id");
 
 export const ErrorSchema = z
   .object({
     code: z.number().int().min(100).max(599),
     message: z.string(),
   })
-  .openapi("error");
+  .openapi("Error");
+
+export const UserSchema = z
+  .object({
+    id: z.string(),
+    email: z.string().openapi({ format: "email" }),
+    name: z.string(),
+  })
+  .openapi("User");
 
 export const VisibilityLevelSchema = z
   .enum(["everyone", "authenticated", "owner"])
-  .openapi("visibilityLevel");
+  .openapi("VisibilityLevel");
 
 export const CommentPermissionLevelSchema = z
   .enum(["everyone", "authenticated", "owner"])
-  .openapi("commentPermissionLevel");
+  .openapi("CommentPermissionLevel");
 
 export const DiscussionSchema = z
   .object({
@@ -33,11 +41,11 @@ export const DiscussionSchema = z
     createdAt: z.string().openapi({ format: "date-time" }),
     status: z.enum(["open", "closed", "archived"]),
   })
-  .openapi("discussion");
+  .openapi("Discussion");
 
 export const CommentStatusSchema = z
   .enum(["unassigned", "assigned", "archived", "deleted"])
-  .openapi("commentStatus");
+  .openapi("CommentStatus");
 
 export const CommentSchema = z
   .object({
@@ -50,7 +58,7 @@ export const CommentSchema = z
     postedAt: z.string().openapi({ format: "date-time" }),
     status: CommentStatusSchema,
   })
-  .openapi("comment");
+  .openapi("Comment");
 
 export const IssueSchema = z
   .object({
@@ -61,7 +69,7 @@ export const IssueSchema = z
     createdBy: z.string(),
     createdAt: z.string().openapi({ format: "date-time" }),
   })
-  .openapi("issue");
+  .openapi("Issue");
 
 export const NoteSchema = z
   .object({
@@ -71,7 +79,7 @@ export const NoteSchema = z
     postedBy: z.string(),
     postedAt: z.string().openapi({ format: "date-time" }),
   })
-  .openapi("note");
+  .openapi("Note");
 
 export const CommentTypeSchema = z
   .object({
@@ -82,14 +90,14 @@ export const CommentTypeSchema = z
     color: z.string(),
     root: z.boolean(),
   })
-  .openapi("commentType");
+  .openapi("CommentType");
 
 export const CommentTypePathSchema = z
   .object({
     childCommentTypeId: idSchema,
     parentCommentTypeId: idSchema,
   })
-  .openapi("commentTypePath");
+  .openapi("CommentTypePath");
 
 export const RuleSchema = z
   .object({
@@ -101,7 +109,7 @@ export const RuleSchema = z
     commentTypes: z.array(CommentTypeSchema),
     commentTypePaths: z.array(CommentTypePathSchema),
   })
-  .openapi("rule");
+  .openapi("Rule");
 
 export const ProjectSchema = z
   .object({
@@ -110,4 +118,10 @@ export const ProjectSchema = z
     createdBy: z.string(),
     createdAt: z.string().openapi({ format: "date-time" }),
   })
-  .openapi("project");
+  .openapi("Project");
+
+export const GoogleLoginRequestSchema = z
+  .object({
+    idToken: z.string(),
+  })
+  .openapi("GoogleLoginRequest");

@@ -1,6 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
-import { ulid } from "ulid";
+import { v7 } from "uuid";
 import type { Rule } from "../../../model/rule";
 import { baseStyle } from "../../../style/base";
 import { buttonStyle } from "../../../style/button";
@@ -176,7 +176,7 @@ export class RuleFormPresenter extends LitElement {
 
   private handleAddCommentTypeSubmit(e: CustomEvent) {
     const { name, description, color } = e.detail;
-    const newId = ulid();
+    const newId = v7();
     const maxNo = this.rule.commentTypes.reduce(
       (max, type) => Math.max(max, type.no),
       -1

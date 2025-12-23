@@ -5,8 +5,7 @@ import { LitElement, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { client } from "../../../../api/client";
 import { routerContext } from "../../../../context/router";
-import { showErrorToast } from "../../../../event/toast";
-import { accountMethods } from "../../../../model/account";
+import { showToast } from "../../../../event/toast";
 import type {
   Comment,
   CommentStatus,
@@ -87,12 +86,15 @@ export class ItemDiscussionPageContainer extends LitElement {
         const { data, error } = await client.GET(
           "/discussions/{discussionId}",
           {
-            headers: await accountMethods.authHeader(),
             params: { path: { discussionId } },
           }
         );
         if (error) {
-          showErrorToast(this, `議論の取得に失敗しました: ${error.message}`);
+          showToast(
+            this,
+            `議論の取得に失敗しました: ${error.message}`,
+            "error"
+          );
           return undefined;
         }
         return data;
@@ -112,11 +114,10 @@ export class ItemDiscussionPageContainer extends LitElement {
 
   private async fetchRule(ruleId: string) {
     const { data, error } = await client.GET("/rules/{ruleId}", {
-      headers: await accountMethods.authHeader(),
       params: { path: { ruleId } },
     });
     if (error) {
-      showErrorToast(this, `ルールの取得に失敗しました: ${error.message}`);
+      showToast(this, `ルールの取得に失敗しました: ${error.message}`, "error");
       return;
     }
     this.rule = data;
@@ -127,12 +128,15 @@ export class ItemDiscussionPageContainer extends LitElement {
     const { data, error } = await client.GET(
       "/discussions/{discussionId}/comments",
       {
-        headers: await accountMethods.authHeader(),
         params: { path: { discussionId: this.discussionId } },
       }
     );
     if (error) {
-      showErrorToast(this, `コメントの取得に失敗しました: ${error.message}`);
+      showToast(
+        this,
+        `コメントの取得に失敗しました: ${error.message}`,
+        "error"
+      );
       return;
     }
     this.comments = data;
@@ -142,12 +146,11 @@ export class ItemDiscussionPageContainer extends LitElement {
     const { data, error } = await client.GET(
       "/discussions/{discussionId}/notes",
       {
-        headers: await accountMethods.authHeader(),
         params: { path: { discussionId: this.discussionId } },
       }
     );
     if (error) {
-      showErrorToast(this, `ノートの取得に失敗しました: ${error.message}`);
+      showToast(this, `ノートの取得に失敗しました: ${error.message}`, "error");
       return;
     }
     this.notes = data;
@@ -157,12 +160,11 @@ export class ItemDiscussionPageContainer extends LitElement {
     const { data, error } = await client.GET(
       "/discussions/{discussionId}/issues",
       {
-        headers: await accountMethods.authHeader(),
         params: { path: { discussionId: this.discussionId } },
       }
     );
     if (error) {
-      showErrorToast(this, `指摘の取得に失敗しました: ${error.message}`);
+      showToast(this, `指摘の取得に失敗しました: ${error.message}`, "error");
       return;
     }
     this.issues = data;
@@ -238,7 +240,6 @@ export class ItemDiscussionPageContainer extends LitElement {
     const { data: newComment, error } = await client.POST(
       "/discussions/{discussionId}/comments",
       {
-        headers: await accountMethods.authHeader(),
         params: { path: { discussionId: this.discussionId } },
         body: {
           parentCommentId: this.parentCommentIdForCreate ?? "",
@@ -249,7 +250,11 @@ export class ItemDiscussionPageContainer extends LitElement {
     );
 
     if (error) {
-      showErrorToast(this, `コメントの作成に失敗しました: ${error.message}`);
+      showToast(
+        this,
+        `コメントの作成に失敗しました: ${error.message}`,
+        "error"
+      );
       return;
     }
 
@@ -285,7 +290,6 @@ export class ItemDiscussionPageContainer extends LitElement {
     const { data: updatedComment, error } = await client.PUT(
       "/discussions/{discussionId}/comments/{commentId}",
       {
-        headers: await accountMethods.authHeader(),
         params: {
           path: {
             discussionId: this.discussionId,
@@ -300,7 +304,11 @@ export class ItemDiscussionPageContainer extends LitElement {
     );
 
     if (error) {
-      showErrorToast(this, `コメントの更新に失敗しました: ${error.message}`);
+      showToast(
+        this,
+        `コメントの更新に失敗しました: ${error.message}`,
+        "error"
+      );
       return;
     }
 
@@ -312,13 +320,12 @@ export class ItemDiscussionPageContainer extends LitElement {
 
   private handleCreateNote = async (content: string) => {
     const { error } = await client.POST("/discussions/{discussionId}/notes", {
-      headers: await accountMethods.authHeader(),
       params: { path: { discussionId: this.discussionId } },
       body: { content },
     });
 
     if (error) {
-      showErrorToast(this, `ノートの作成に失敗しました: ${error.message}`);
+      showToast(this, `ノートの作成に失敗しました: ${error.message}`, "error");
       return;
     }
 
@@ -329,7 +336,6 @@ export class ItemDiscussionPageContainer extends LitElement {
     const { error } = await client.DELETE(
       "/discussions/{discussionId}/notes/{noteId}",
       {
-        headers: await accountMethods.authHeader(),
         params: {
           path: {
             discussionId: this.discussionId,
@@ -340,7 +346,7 @@ export class ItemDiscussionPageContainer extends LitElement {
     );
 
     if (error) {
-      showErrorToast(this, `ノートの削除に失敗しました: ${error.message}`);
+      showToast(this, `ノートの削除に失敗しました: ${error.message}`, "error");
       return;
     }
 
@@ -379,7 +385,6 @@ export class ItemDiscussionPageContainer extends LitElement {
     const { data: createdIssue, error } = await client.POST(
       "/discussions/{discussionId}/issues",
       {
-        headers: await accountMethods.authHeader(),
         params: { path: { discussionId: this.discussionId } },
         body: {
           commentId: this.selectedCommentIdForIssue,
@@ -390,7 +395,7 @@ export class ItemDiscussionPageContainer extends LitElement {
     );
 
     if (error) {
-      showErrorToast(this, `指摘の作成に失敗しました: ${error.message}`);
+      showToast(this, `指摘の作成に失敗しました: ${error.message}`, "error");
       return;
     }
 

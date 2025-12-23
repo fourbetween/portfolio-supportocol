@@ -13,6 +13,24 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// AuthGooglePost implements POST /auth/google operation.
+//
+// Google login.
+//
+// POST /auth/google
+func (UnimplementedHandler) AuthGooglePost(ctx context.Context, req *GoogleLoginRequest) error {
+	return ht.ErrNotImplemented
+}
+
+// AuthLogoutPost implements POST /auth/logout operation.
+//
+// Logout.
+//
+// POST /auth/logout
+func (UnimplementedHandler) AuthLogoutPost(ctx context.Context) error {
+	return ht.ErrNotImplemented
+}
+
 // DiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /discussions/{discussionId}/comments/{commentId} operation.
 //
 // Delete comment.
@@ -173,6 +191,15 @@ func (UnimplementedHandler) DiscussionsPost(ctx context.Context, req *Discussion
 // POST /errors
 func (UnimplementedHandler) ErrorsPost(ctx context.Context, req *ErrorsPostReq) error {
 	return ht.ErrNotImplemented
+}
+
+// MeGet implements GET /me operation.
+//
+// Get current user.
+//
+// GET /me
+func (UnimplementedHandler) MeGet(ctx context.Context) (r *User, _ error) {
+	return r, ht.ErrNotImplemented
 }
 
 // ProjectsGet implements GET /projects operation.
