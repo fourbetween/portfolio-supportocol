@@ -8,31 +8,32 @@
 package table
 
 import (
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 )
 
-var Issues = newIssuesTable("public", "issues", "")
+var Issues = newIssuesTable("app-supportocol", "issues", "")
 
 type issuesTable struct {
-	postgres.Table
+	mysql.Table
 
 	// Columns
-	ID          postgres.ColumnString
-	CommentID   postgres.ColumnString
-	IssueType   postgres.ColumnString
-	Description postgres.ColumnString
-	CreatedBy   postgres.ColumnString
-	CreatedAt   postgres.ColumnTimestamp
+	ID          mysql.ColumnString
+	CommentID   mysql.ColumnString
+	IssueType   mysql.ColumnString
+	Description mysql.ColumnString
+	CreatedBy   mysql.ColumnString
+	CreatedAt   mysql.ColumnTimestamp
+	UpdatedAt   mysql.ColumnTimestamp
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
-	DefaultColumns postgres.ColumnList
+	AllColumns     mysql.ColumnList
+	MutableColumns mysql.ColumnList
+	DefaultColumns mysql.ColumnList
 }
 
 type IssuesTable struct {
 	issuesTable
 
-	EXCLUDED issuesTable
+	NEW issuesTable
 }
 
 // AS creates new IssuesTable with assigned alias
@@ -58,25 +59,26 @@ func (a IssuesTable) WithSuffix(suffix string) *IssuesTable {
 func newIssuesTable(schemaName, tableName, alias string) *IssuesTable {
 	return &IssuesTable{
 		issuesTable: newIssuesTableImpl(schemaName, tableName, alias),
-		EXCLUDED:    newIssuesTableImpl("", "excluded", ""),
+		NEW:         newIssuesTableImpl("", "new", ""),
 	}
 }
 
 func newIssuesTableImpl(schemaName, tableName, alias string) issuesTable {
 	var (
-		IDColumn          = postgres.StringColumn("id")
-		CommentIDColumn   = postgres.StringColumn("comment_id")
-		IssueTypeColumn   = postgres.StringColumn("issue_type")
-		DescriptionColumn = postgres.StringColumn("description")
-		CreatedByColumn   = postgres.StringColumn("created_by")
-		CreatedAtColumn   = postgres.TimestampColumn("created_at")
-		allColumns        = postgres.ColumnList{IDColumn, CommentIDColumn, IssueTypeColumn, DescriptionColumn, CreatedByColumn, CreatedAtColumn}
-		mutableColumns    = postgres.ColumnList{CommentIDColumn, IssueTypeColumn, DescriptionColumn, CreatedByColumn, CreatedAtColumn}
-		defaultColumns    = postgres.ColumnList{CreatedAtColumn}
+		IDColumn          = mysql.StringColumn("id")
+		CommentIDColumn   = mysql.StringColumn("comment_id")
+		IssueTypeColumn   = mysql.StringColumn("issue_type")
+		DescriptionColumn = mysql.StringColumn("description")
+		CreatedByColumn   = mysql.StringColumn("created_by")
+		CreatedAtColumn   = mysql.TimestampColumn("created_at")
+		UpdatedAtColumn   = mysql.TimestampColumn("updated_at")
+		allColumns        = mysql.ColumnList{IDColumn, CommentIDColumn, IssueTypeColumn, DescriptionColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns    = mysql.ColumnList{CommentIDColumn, IssueTypeColumn, DescriptionColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns    = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return issuesTable{
-		Table: postgres.NewTable(schemaName, tableName, alias, allColumns...),
+		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
 		ID:          IDColumn,
@@ -85,6 +87,7 @@ func newIssuesTableImpl(schemaName, tableName, alias string) issuesTable {
 		Description: DescriptionColumn,
 		CreatedBy:   CreatedByColumn,
 		CreatedAt:   CreatedAtColumn,
+		UpdatedAt:   UpdatedAtColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

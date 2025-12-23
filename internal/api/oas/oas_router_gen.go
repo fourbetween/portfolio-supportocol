@@ -61,6 +61,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'a': // Prefix: "auth/"
+
+				if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'g': // Prefix: "google"
+
+					if l := len("google"); len(elem) >= l && elem[0:l] == "google" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAuthGooglePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+				case 'l': // Prefix: "logout"
+
+					if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleAuthLogoutPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+				}
+
 			case 'd': // Prefix: "discussions"
 
 				if l := len("discussions"); len(elem) >= l && elem[0:l] == "discussions" {
@@ -350,6 +404,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
+			case 'm': // Prefix: "me"
+
+				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleMeGetRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+
 			case 'p': // Prefix: "projects"
 
 				if l := len("projects"); len(elem) >= l && elem[0:l] == "projects" {
@@ -483,12 +557,13 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // Route is route object.
 type Route struct {
-	name        string
-	summary     string
-	operationID string
-	pathPattern string
-	count       int
-	args        [2]string
+	name           string
+	summary        string
+	operationID    string
+	operationGroup string
+	pathPattern    string
+	count          int
+	args           [2]string
 }
 
 // Name returns ogen operation name.
@@ -506,6 +581,11 @@ func (r Route) Summary() string {
 // OperationID returns OpenAPI operationId.
 func (r Route) OperationID() string {
 	return r.operationID
+}
+
+// OperationGroup returns the x-ogen-operation-group value.
+func (r Route) OperationGroup() string {
+	return r.operationGroup
 }
 
 // PathPattern returns OpenAPI path.
@@ -568,6 +648,70 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'a': // Prefix: "auth/"
+
+				if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'g': // Prefix: "google"
+
+					if l := len("google"); len(elem) >= l && elem[0:l] == "google" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = AuthGooglePostOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/auth/google"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				case 'l': // Prefix: "logout"
+
+					if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = AuthLogoutPostOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/auth/logout"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				}
+
 			case 'd': // Prefix: "discussions"
 
 				if l := len("discussions"); len(elem) >= l && elem[0:l] == "discussions" {
@@ -582,6 +726,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = DiscussionsGetOperation
 						r.summary = ""
 						r.operationID = ""
+						r.operationGroup = ""
 						r.pathPattern = "/discussions"
 						r.args = args
 						r.count = 0
@@ -590,6 +735,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = DiscussionsPostOperation
 						r.summary = ""
 						r.operationID = ""
+						r.operationGroup = ""
 						r.pathPattern = "/discussions"
 						r.args = args
 						r.count = 0
@@ -622,6 +768,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = DiscussionsDiscussionIdDeleteOperation
 							r.summary = ""
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/discussions/{discussionId}"
 							r.args = args
 							r.count = 1
@@ -630,6 +777,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = DiscussionsDiscussionIdGetOperation
 							r.summary = ""
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/discussions/{discussionId}"
 							r.args = args
 							r.count = 1
@@ -638,6 +786,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = DiscussionsDiscussionIdPutOperation
 							r.summary = ""
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/discussions/{discussionId}"
 							r.args = args
 							r.count = 1
@@ -673,6 +822,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = DiscussionsDiscussionIdCommentsGetOperation
 									r.summary = ""
 									r.operationID = ""
+									r.operationGroup = ""
 									r.pathPattern = "/discussions/{discussionId}/comments"
 									r.args = args
 									r.count = 1
@@ -681,6 +831,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = DiscussionsDiscussionIdCommentsPostOperation
 									r.summary = ""
 									r.operationID = ""
+									r.operationGroup = ""
 									r.pathPattern = "/discussions/{discussionId}/comments"
 									r.args = args
 									r.count = 1
@@ -714,6 +865,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										r.name = DiscussionsDiscussionIdCommentsCommentIdDeleteOperation
 										r.summary = ""
 										r.operationID = ""
+										r.operationGroup = ""
 										r.pathPattern = "/discussions/{discussionId}/comments/{commentId}"
 										r.args = args
 										r.count = 2
@@ -722,6 +874,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										r.name = DiscussionsDiscussionIdCommentsCommentIdPutOperation
 										r.summary = ""
 										r.operationID = ""
+										r.operationGroup = ""
 										r.pathPattern = "/discussions/{discussionId}/comments/{commentId}"
 										r.args = args
 										r.count = 2
@@ -747,6 +900,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = DiscussionsDiscussionIdIssuesGetOperation
 									r.summary = ""
 									r.operationID = ""
+									r.operationGroup = ""
 									r.pathPattern = "/discussions/{discussionId}/issues"
 									r.args = args
 									r.count = 1
@@ -755,6 +909,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = DiscussionsDiscussionIdIssuesPostOperation
 									r.summary = ""
 									r.operationID = ""
+									r.operationGroup = ""
 									r.pathPattern = "/discussions/{discussionId}/issues"
 									r.args = args
 									r.count = 1
@@ -788,6 +943,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										r.name = DiscussionsDiscussionIdIssuesIssueIdDeleteOperation
 										r.summary = ""
 										r.operationID = ""
+										r.operationGroup = ""
 										r.pathPattern = "/discussions/{discussionId}/issues/{issueId}"
 										r.args = args
 										r.count = 2
@@ -796,6 +952,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										r.name = DiscussionsDiscussionIdIssuesIssueIdPutOperation
 										r.summary = ""
 										r.operationID = ""
+										r.operationGroup = ""
 										r.pathPattern = "/discussions/{discussionId}/issues/{issueId}"
 										r.args = args
 										r.count = 2
@@ -821,6 +978,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = DiscussionsDiscussionIdNotesGetOperation
 									r.summary = ""
 									r.operationID = ""
+									r.operationGroup = ""
 									r.pathPattern = "/discussions/{discussionId}/notes"
 									r.args = args
 									r.count = 1
@@ -829,6 +987,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.name = DiscussionsDiscussionIdNotesPostOperation
 									r.summary = ""
 									r.operationID = ""
+									r.operationGroup = ""
 									r.pathPattern = "/discussions/{discussionId}/notes"
 									r.args = args
 									r.count = 1
@@ -862,6 +1021,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										r.name = DiscussionsDiscussionIdNotesNoteIdDeleteOperation
 										r.summary = ""
 										r.operationID = ""
+										r.operationGroup = ""
 										r.pathPattern = "/discussions/{discussionId}/notes/{noteId}"
 										r.args = args
 										r.count = 2
@@ -870,6 +1030,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										r.name = DiscussionsDiscussionIdNotesNoteIdPutOperation
 										r.summary = ""
 										r.operationID = ""
+										r.operationGroup = ""
 										r.pathPattern = "/discussions/{discussionId}/notes/{noteId}"
 										r.args = args
 										r.count = 2
@@ -902,7 +1063,33 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = ErrorsPostOperation
 						r.summary = ""
 						r.operationID = ""
+						r.operationGroup = ""
 						r.pathPattern = "/errors"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
+			case 'm': // Prefix: "me"
+
+				if l := len("me"); len(elem) >= l && elem[0:l] == "me" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "GET":
+						r.name = MeGetOperation
+						r.summary = ""
+						r.operationID = ""
+						r.operationGroup = ""
+						r.pathPattern = "/me"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -925,6 +1112,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = ProjectsGetOperation
 						r.summary = ""
 						r.operationID = ""
+						r.operationGroup = ""
 						r.pathPattern = "/projects"
 						r.args = args
 						r.count = 0
@@ -933,6 +1121,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = ProjectsPostOperation
 						r.summary = ""
 						r.operationID = ""
+						r.operationGroup = ""
 						r.pathPattern = "/projects"
 						r.args = args
 						r.count = 0
@@ -966,6 +1155,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = ProjectsProjectIdDeleteOperation
 							r.summary = ""
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/projects/{projectId}"
 							r.args = args
 							r.count = 1
@@ -974,6 +1164,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = ProjectsProjectIdGetOperation
 							r.summary = ""
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/projects/{projectId}"
 							r.args = args
 							r.count = 1
@@ -982,6 +1173,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = ProjectsProjectIdPutOperation
 							r.summary = ""
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/projects/{projectId}"
 							r.args = args
 							r.count = 1
@@ -1007,6 +1199,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = RulesGetOperation
 						r.summary = ""
 						r.operationID = ""
+						r.operationGroup = ""
 						r.pathPattern = "/rules"
 						r.args = args
 						r.count = 0
@@ -1015,6 +1208,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.name = RulesPostOperation
 						r.summary = ""
 						r.operationID = ""
+						r.operationGroup = ""
 						r.pathPattern = "/rules"
 						r.args = args
 						r.count = 0
@@ -1048,6 +1242,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = RulesRuleIdDeleteOperation
 							r.summary = ""
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/rules/{ruleId}"
 							r.args = args
 							r.count = 1
@@ -1056,6 +1251,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = RulesRuleIdGetOperation
 							r.summary = ""
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/rules/{ruleId}"
 							r.args = args
 							r.count = 1
@@ -1064,6 +1260,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.name = RulesRuleIdPutOperation
 							r.summary = ""
 							r.operationID = ""
+							r.operationGroup = ""
 							r.pathPattern = "/rules/{ruleId}"
 							r.args = args
 							r.count = 1

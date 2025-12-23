@@ -5,7 +5,7 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
 	"github.com/fourbetween/app-supportocol/internal/service/clock"
-	"github.com/fourbetween/app-supportocol/internal/service/id"
+	id "github.com/fourbetween/pkg-id"
 )
 
 type Factory struct {

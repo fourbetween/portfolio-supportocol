@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal"
-	"github.com/fourbetween/app-supportocol/internal/db/.gen/public/model"
-	"github.com/fourbetween/app-supportocol/internal/db/.gen/public/table"
+	"github.com/fourbetween/app-supportocol/internal/db/.gen/app-supportocol/model"
+	"github.com/fourbetween/app-supportocol/internal/db/.gen/app-supportocol/table"
 	"github.com/fourbetween/app-supportocol/internal/model/project"
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 	"github.com/go-jet/jet/v2/qrm"
 )
 
@@ -39,13 +39,11 @@ func (r *ProjectRepository) Save(p *project.Project) error {
 	projectStmt := table.Projects.
 		INSERT(table.Projects.AllColumns).
 		MODEL(projectRecord).
-		ON_CONFLICT(table.Projects.ID).
-		DO_UPDATE(
-			postgres.SET(
-				table.Projects.Name.SET(table.Projects.EXCLUDED.Name),
-				table.Projects.CreatedBy.SET(table.Projects.EXCLUDED.CreatedBy),
-				table.Projects.CreatedAt.SET(table.Projects.EXCLUDED.CreatedAt),
-			),
+		AS_NEW().
+		ON_DUPLICATE_KEY_UPDATE(
+			table.Projects.Name.SET(table.Projects.NEW.Name),
+			table.Projects.CreatedBy.SET(table.Projects.NEW.CreatedBy),
+			table.Projects.CreatedAt.SET(table.Projects.NEW.CreatedAt),
 		)
 
 	if _, err := projectStmt.Exec(r.db); err != nil {
@@ -58,7 +56,7 @@ func (r *ProjectRepository) Save(p *project.Project) error {
 func (r *ProjectRepository) Delete(p *project.Project) error {
 	stmt := table.Projects.
 		DELETE().
-		WHERE(table.Projects.ID.EQ(postgres.String(p.ID())))
+		WHERE(table.Projects.ID.EQ(mysql.String(p.ID())))
 
 	if _, err := stmt.Exec(r.db); err != nil {
 		return fmt.Errorf("failed to delete project: %w", err)
@@ -68,9 +66,9 @@ func (r *ProjectRepository) Delete(p *project.Project) error {
 }
 
 func (r *ProjectRepository) Load(params project.LoadParams) (*project.Project, error) {
-	cond := table.Projects.ID.EQ(postgres.String(params.ID))
+	cond := table.Projects.ID.EQ(mysql.String(params.ID))
 	if params.CreatedBy != "" {
-		cond = cond.AND(table.Projects.CreatedBy.EQ(postgres.String(params.CreatedBy)))
+		cond = cond.AND(table.Projects.CreatedBy.EQ(mysql.String(params.CreatedBy)))
 	}
 
 	projects, err := r.searchByCondition(cond)
@@ -89,15 +87,15 @@ func (r *ProjectRepository) Load(params project.LoadParams) (*project.Project, e
 }
 
 func (r *ProjectRepository) Search(params project.SearchParams) ([]*project.Project, error) {
-	cond := postgres.Bool(true)
+	cond := mysql.Bool(true)
 	if params.CreatedBy != "" {
-		cond = cond.AND(table.Projects.CreatedBy.EQ(postgres.String(params.CreatedBy)))
+		cond = cond.AND(table.Projects.CreatedBy.EQ(mysql.String(params.CreatedBy)))
 	}
 	return r.searchByCondition(cond)
 }
 
-func (r *ProjectRepository) searchByCondition(cond postgres.BoolExpression) ([]*project.Project, error) {
-	stmt := postgres.
+func (r *ProjectRepository) searchByCondition(cond mysql.BoolExpression) ([]*project.Project, error) {
+	stmt := mysql.
 		SELECT(table.Projects.AllColumns).
 		FROM(table.Projects).
 		WHERE(cond)

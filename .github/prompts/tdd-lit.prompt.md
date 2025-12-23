@@ -36,7 +36,7 @@ $ARGUMENTS
 ## コンポーネント実装ガイドライン
 
 - Container/Presentational パターンに従ってコンポーネントを実装してください。
-- container コンポーネントはテストやストーリーは不要です。
+- presenter コンポーネント以外はテストやストーリーは不要です。
 - 各コンポーネントは、`view/src/component/container`または`view/src/component/presenter`以下に配置してください。
 - presenter コンポーネントは、container コンポーネントから渡されたデータを表示することに専念し、状態管理やビジネスロジックは container コンポーネントに任せてください。
 - presenter コンポーネントが実行するアクションは、container コンポーネントからコールバックを渡してもらうようにしてください。
@@ -51,6 +51,8 @@ $ARGUMENTS
 - `view/src/style`以下にある共通スタイルを適用して共通化してください。
 - 他のコンポーネントを参考にして、一貫性のあるデザインを維持してください。
 - 他のコンポーネントと同じスタイルを使う場合は、`view/src/style`以下に共通スタイルを追加してください。
+- すべての presenter コンポーネントは`view/src/style/base.ts`を styles プロパティに含めるようにしてください。
+- アイコンは Google マテリアルアイコンを使用してください。その場合、`view/src/style/icon.ts`を styles プロパティに含めるようにしてください。
 
 ## リファクタリングガイドライン
 

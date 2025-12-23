@@ -8,28 +8,28 @@
 package table
 
 import (
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 )
 
-var CommentTypePaths = newCommentTypePathsTable("public", "comment_type_paths", "")
+var CommentTypePaths = newCommentTypePathsTable("app-supportocol", "comment_type_paths", "")
 
 type commentTypePathsTable struct {
-	postgres.Table
+	mysql.Table
 
 	// Columns
-	RuleID              postgres.ColumnString
-	ChildCommentTypeID  postgres.ColumnString
-	ParentCommentTypeID postgres.ColumnString
+	RuleID              mysql.ColumnString
+	ChildCommentTypeID  mysql.ColumnString
+	ParentCommentTypeID mysql.ColumnString
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
-	DefaultColumns postgres.ColumnList
+	AllColumns     mysql.ColumnList
+	MutableColumns mysql.ColumnList
+	DefaultColumns mysql.ColumnList
 }
 
 type CommentTypePathsTable struct {
 	commentTypePathsTable
 
-	EXCLUDED commentTypePathsTable
+	NEW commentTypePathsTable
 }
 
 // AS creates new CommentTypePathsTable with assigned alias
@@ -55,22 +55,22 @@ func (a CommentTypePathsTable) WithSuffix(suffix string) *CommentTypePathsTable 
 func newCommentTypePathsTable(schemaName, tableName, alias string) *CommentTypePathsTable {
 	return &CommentTypePathsTable{
 		commentTypePathsTable: newCommentTypePathsTableImpl(schemaName, tableName, alias),
-		EXCLUDED:              newCommentTypePathsTableImpl("", "excluded", ""),
+		NEW:                   newCommentTypePathsTableImpl("", "new", ""),
 	}
 }
 
 func newCommentTypePathsTableImpl(schemaName, tableName, alias string) commentTypePathsTable {
 	var (
-		RuleIDColumn              = postgres.StringColumn("rule_id")
-		ChildCommentTypeIDColumn  = postgres.StringColumn("child_comment_type_id")
-		ParentCommentTypeIDColumn = postgres.StringColumn("parent_comment_type_id")
-		allColumns                = postgres.ColumnList{RuleIDColumn, ChildCommentTypeIDColumn, ParentCommentTypeIDColumn}
-		mutableColumns            = postgres.ColumnList{}
-		defaultColumns            = postgres.ColumnList{}
+		RuleIDColumn              = mysql.StringColumn("rule_id")
+		ChildCommentTypeIDColumn  = mysql.StringColumn("child_comment_type_id")
+		ParentCommentTypeIDColumn = mysql.StringColumn("parent_comment_type_id")
+		allColumns                = mysql.ColumnList{RuleIDColumn, ChildCommentTypeIDColumn, ParentCommentTypeIDColumn}
+		mutableColumns            = mysql.ColumnList{}
+		defaultColumns            = mysql.ColumnList{}
 	)
 
 	return commentTypePathsTable{
-		Table: postgres.NewTable(schemaName, tableName, alias, allColumns...),
+		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
 		RuleID:              RuleIDColumn,

@@ -9,29 +9,21 @@ import (
 	"path/filepath"
 	"sort"
 
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/fourbetween/app-supportocol/internal/service/env"
 	conf "github.com/fourbetween/pkg-conf"
 )
 
 // envConfig represents the environment configuration for the view.
 type envConfig struct {
-	Stage                string
-	APIURL               string
-	SiteDescription      string
-	SiteTitle            string
-	SiteURL              string
-	SiteLogo             string
-	SiteFavicon          string
-	AuthRedirectInURL    string
-	AuthRedirectOutURL   string
-	AuthDomain           string
-	AuthUserpoolID       string
-	AuthUserpoolClientID string
-}
-
-// requiredPaths represents the configuration paths that must be validated.
-type requiredPaths struct {
-	shared        []string
-	stageSpecific []string
+	Stage           string
+	APIURL          string
+	SiteDescription string
+	SiteTitle       string
+	SiteURL         string
+	SiteLogo        string
+	SiteFavicon     string
+	GoogleClientID  string
 }
 
 const (
@@ -42,21 +34,14 @@ const (
 
 func main() {
 	if err := run(); err != nil {
-		slog.Error("failed to run viewenv", "error", err)
+		slog.Error("failed to run viewenv", slog.String("error", err.Error()))
 		os.Exit(1)
 	}
 }
 
 func run() error {
-	ctx := context.Background()
-
-	// Validate required configuration paths
-	if err := validatePaths(ctx); err != nil {
-		return fmt.Errorf("validation failed: %w", err)
-	}
-
 	// Fetch configuration values
-	cfg, err := fetchConfig(ctx)
+	cfg, err := fetchConfig()
 	if err != nil {
 		return fmt.Errorf("failed to fetch config: %w", err)
 	}
@@ -66,86 +51,49 @@ func run() error {
 		return fmt.Errorf("failed to write env file: %w", err)
 	}
 
-	slog.Info("environment file generated successfully", "path", buildEnvFilePath(cfg.Stage))
 	return nil
 }
 
-func validatePaths(ctx context.Context) error {
-	paths := requiredPaths{
-		shared: []string{
-			"/share/cognito/userpool/domain",
-			"/share/cognito/userpool/id",
-		},
-		stageSpecific: []string{
-			"/app-supportocol/domain",
-			"/app-supportocol/cognito/userpool/clientid",
-		},
+func fetchConfig() (*envConfig, error) {
+	awscfg, err := config.LoadDefaultConfig(context.TODO())
+	if err != nil {
+		return nil, fmt.Errorf("failed to load aws config for ses: %w", err)
 	}
 
-	return conf.ValidateAll(ctx, paths.shared, paths.stageSpecific)
-}
+	appConf, err := conf.NewSSMService(env.AppName(), awscfg)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load app config: %w", err)
+	}
 
-func fetchConfig(ctx context.Context) (*envConfig, error) {
-	domain, err := conf.GetStringWithStage(ctx, "/app-supportocol/domain")
+	stage, err := appConf.Get("stage")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get stage: %w", err)
+	}
+
+	domain, err := appConf.Get("domain")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get domain: %w", err)
 	}
 
-	poolDomain, err := conf.GetString(ctx, "/share/cognito/userpool/domain")
+	googleClientID, err := appConf.Get("google/client/id")
 	if err != nil {
-		return nil, fmt.Errorf("failed to get pool domain: %w", err)
+		return nil, fmt.Errorf("failed to get google client id: %w", err)
 	}
 
-	poolID, err := conf.GetString(ctx, "/share/cognito/userpool/id")
-	if err != nil {
-		return nil, fmt.Errorf("failed to get pool ID: %w", err)
-	}
-
-	clientID, err := conf.GetStringWithStage(ctx, "/app-supportocol/cognito/userpool/clientid")
-	if err != nil {
-		return nil, fmt.Errorf("failed to get client ID: %w", err)
-	}
-
-	stage := conf.Stage()
 	return &envConfig{
-		Stage:                stage,
-		APIURL:               "https://" + domain + "/api",
-		SiteDescription:      siteDesc,
-		SiteTitle:            siteName,
-		SiteURL:              "https://" + domain,
-		SiteLogo:             "/images/logo.webp",
-		SiteFavicon:          "/images/favicon.ico",
-		AuthRedirectInURL:    "https://" + domain,
-		AuthRedirectOutURL:   "https://" + domain,
-		AuthDomain:           poolDomain,
-		AuthUserpoolID:       poolID,
-		AuthUserpoolClientID: clientID,
+		Stage:           stage,
+		APIURL:          "https://" + domain + "/api",
+		SiteDescription: siteDesc,
+		SiteTitle:       siteName,
+		SiteURL:         "https://" + domain,
+		SiteLogo:        "/images/logo.webp",
+		SiteFavicon:     "/images/favicon.ico",
+		GoogleClientID:  googleClientID,
 	}, nil
 }
 
-func buildEnvData(cfg *envConfig) map[string]string {
-	return map[string]string{
-		"VITE_STAGE":                   cfg.Stage,
-		"VITE_API_URL":                 cfg.APIURL,
-		"VITE_SITE_DESCRIPTION":        cfg.SiteDescription,
-		"VITE_SITE_TITLE":              cfg.SiteTitle,
-		"VITE_SITE_URL":                cfg.SiteURL,
-		"VITE_SITE_LOGO":               cfg.SiteLogo,
-		"VITE_SITE_FAVICON":            cfg.SiteFavicon,
-		"VITE_AUTH_REDIRECT_SIGN_IN":   cfg.AuthRedirectInURL,
-		"VITE_AUTH_REDIRECT_SIGN_OUT":  cfg.AuthRedirectOutURL,
-		"VITE_AUTH_DOMAIN":             cfg.AuthDomain,
-		"VITE_AUTH_USERPOOL_ID":        cfg.AuthUserpoolID,
-		"VITE_AUTH_USERPOOL_CLIENT_ID": cfg.AuthUserpoolClientID,
-	}
-}
-
-func buildEnvFilePath(stage string) string {
-	return filepath.Join("/sources/app-supportocol", viewEnvPath+"."+stage)
-}
-
 func writeEnvFile(cfg *envConfig) error {
-	filePath := buildEnvFilePath(cfg.Stage)
+	filePath := "/" + filepath.Join("sources", env.AppName(), viewEnvPath+"."+cfg.Stage)
 	file, err := os.Create(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to create file %s: %w", filePath, err)
@@ -172,4 +120,16 @@ func writeEnvFile(cfg *envConfig) error {
 	}
 
 	return nil
+}
+
+func buildEnvData(cfg *envConfig) map[string]string {
+	return map[string]string{
+		"VITE_API_URL":          cfg.APIURL,
+		"VITE_SITE_DESCRIPTION": cfg.SiteDescription,
+		"VITE_SITE_TITLE":       cfg.SiteTitle,
+		"VITE_SITE_URL":         cfg.SiteURL,
+		"VITE_SITE_LOGO":        cfg.SiteLogo,
+		"VITE_SITE_FAVICON":     cfg.SiteFavicon,
+		"VITE_GOOGLE_CLIENT_ID": cfg.GoogleClientID,
+	}
 }

@@ -13,32 +13,13 @@ func (s *ErrorStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
 }
 
-type CognitoAuth struct {
-	Token string
-	Roles []string
-}
+// AuthGooglePostOK is response for AuthGooglePost operation.
+type AuthGooglePostOK struct{}
 
-// GetToken returns the value of Token.
-func (s *CognitoAuth) GetToken() string {
-	return s.Token
-}
+// AuthLogoutPostOK is response for AuthLogoutPost operation.
+type AuthLogoutPostOK struct{}
 
-// GetRoles returns the value of Roles.
-func (s *CognitoAuth) GetRoles() []string {
-	return s.Roles
-}
-
-// SetToken sets the value of Token.
-func (s *CognitoAuth) SetToken(val string) {
-	s.Token = val
-}
-
-// SetRoles sets the value of Roles.
-func (s *CognitoAuth) SetRoles(val []string) {
-	s.Roles = val
-}
-
-// Ref: #/components/schemas/comment
+// Ref: #/components/schemas/Comment
 type Comment struct {
 	ID              ID            `json:"id"`
 	DiscussionId    ID            `json:"discussionId"`
@@ -130,7 +111,7 @@ func (s *Comment) SetStatus(val CommentStatus) {
 	s.Status = val
 }
 
-// Ref: #/components/schemas/commentPermissionLevel
+// Ref: #/components/schemas/CommentPermissionLevel
 type CommentPermissionLevel string
 
 const (
@@ -179,7 +160,7 @@ func (s *CommentPermissionLevel) UnmarshalText(data []byte) error {
 	}
 }
 
-// Ref: #/components/schemas/commentStatus
+// Ref: #/components/schemas/CommentStatus
 type CommentStatus string
 
 const (
@@ -235,7 +216,7 @@ func (s *CommentStatus) UnmarshalText(data []byte) error {
 	}
 }
 
-// Ref: #/components/schemas/commentType
+// Ref: #/components/schemas/CommentType
 type CommentType struct {
 	ID          ID     `json:"id"`
 	No          int    `json:"no"`
@@ -305,7 +286,7 @@ func (s *CommentType) SetRoot(val bool) {
 	s.Root = val
 }
 
-// Ref: #/components/schemas/commentTypePath
+// Ref: #/components/schemas/CommentTypePath
 type CommentTypePath struct {
 	ChildCommentTypeId  ID `json:"childCommentTypeId"`
 	ParentCommentTypeId ID `json:"parentCommentTypeId"`
@@ -331,7 +312,32 @@ func (s *CommentTypePath) SetParentCommentTypeId(val ID) {
 	s.ParentCommentTypeId = val
 }
 
-// Ref: #/components/schemas/discussion
+type CookieAuth struct {
+	APIKey string
+	Roles  []string
+}
+
+// GetAPIKey returns the value of APIKey.
+func (s *CookieAuth) GetAPIKey() string {
+	return s.APIKey
+}
+
+// GetRoles returns the value of Roles.
+func (s *CookieAuth) GetRoles() []string {
+	return s.Roles
+}
+
+// SetAPIKey sets the value of APIKey.
+func (s *CookieAuth) SetAPIKey(val string) {
+	s.APIKey = val
+}
+
+// SetRoles sets the value of Roles.
+func (s *CookieAuth) SetRoles(val []string) {
+	s.Roles = val
+}
+
+// Ref: #/components/schemas/Discussion
 type Discussion struct {
 	ID                     ID                     `json:"id"`
 	Theme                  string                 `json:"theme"`
@@ -934,7 +940,7 @@ func (s *DiscussionsPostReq) SetCommentPermissionLevel(val CommentPermissionLeve
 	s.CommentPermissionLevel = val
 }
 
-// Ref: #/components/schemas/error
+// Ref: #/components/schemas/Error
 type Error struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
@@ -1003,9 +1009,24 @@ func (s *ErrorsPostReq) SetMessage(val string) {
 	s.Message = val
 }
 
+// Ref: #/components/schemas/GoogleLoginRequest
+type GoogleLoginRequest struct {
+	IdToken string `json:"idToken"`
+}
+
+// GetIdToken returns the value of IdToken.
+func (s *GoogleLoginRequest) GetIdToken() string {
+	return s.IdToken
+}
+
+// SetIdToken sets the value of IdToken.
+func (s *GoogleLoginRequest) SetIdToken(val string) {
+	s.IdToken = val
+}
+
 type ID string
 
-// Ref: #/components/schemas/issue
+// Ref: #/components/schemas/Issue
 type Issue struct {
 	ID          ID             `json:"id"`
 	CommentId   ID             `json:"commentId"`
@@ -1116,7 +1137,7 @@ func (s *IssueIssueType) UnmarshalText(data []byte) error {
 	}
 }
 
-// Ref: #/components/schemas/note
+// Ref: #/components/schemas/Note
 type Note struct {
 	ID           ID        `json:"id"`
 	DiscussionId ID        `json:"discussionId"`
@@ -1221,7 +1242,7 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
-// Ref: #/components/schemas/project
+// Ref: #/components/schemas/Project
 type Project struct {
 	ID        ID        `json:"id"`
 	Name      string    `json:"name"`
@@ -1300,7 +1321,7 @@ func (s *ProjectsProjectIdPutReq) SetName(val string) {
 	s.Name = val
 }
 
-// Ref: #/components/schemas/rule
+// Ref: #/components/schemas/Rule
 type Rule struct {
 	ID               ID                `json:"id"`
 	Name             string            `json:"name"`
@@ -1478,7 +1499,44 @@ func (s *RulesRuleIdPutReq) SetCommentTypePaths(val []CommentTypePath) {
 	s.CommentTypePaths = val
 }
 
-// Ref: #/components/schemas/visibilityLevel
+// Ref: #/components/schemas/User
+type User struct {
+	ID    string `json:"id"`
+	Email string `json:"email"`
+	Name  string `json:"name"`
+}
+
+// GetID returns the value of ID.
+func (s *User) GetID() string {
+	return s.ID
+}
+
+// GetEmail returns the value of Email.
+func (s *User) GetEmail() string {
+	return s.Email
+}
+
+// GetName returns the value of Name.
+func (s *User) GetName() string {
+	return s.Name
+}
+
+// SetID sets the value of ID.
+func (s *User) SetID(val string) {
+	s.ID = val
+}
+
+// SetEmail sets the value of Email.
+func (s *User) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetName sets the value of Name.
+func (s *User) SetName(val string) {
+	s.Name = val
+}
+
+// Ref: #/components/schemas/VisibilityLevel
 type VisibilityLevel string
 
 const (

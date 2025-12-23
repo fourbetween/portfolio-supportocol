@@ -7,7 +7,7 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
-	"github.com/fourbetween/app-supportocol/internal/service/id"
+	id "github.com/fourbetween/pkg-id"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -21,7 +21,7 @@ type (
 func newContainer(t *testing.T) *container {
 	ctrl := gomock.NewController(t)
 
-	idSrv := id.NewULIDService()
+	idSrv := id.NewMockService(ctrl)
 	ruleRepo := rule.NewMockRepository(ctrl)
 	ruleFac := rule.NewFactory(
 		ruleRepo,

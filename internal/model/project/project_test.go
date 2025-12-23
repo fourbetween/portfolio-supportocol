@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/model/project"
-	"github.com/fourbetween/app-supportocol/internal/service/id"
+	id "github.com/fourbetween/pkg-id"
 	"github.com/google/go-cmp/cmp"
 	"go.uber.org/mock/gomock"
 )

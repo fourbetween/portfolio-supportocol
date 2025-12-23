@@ -9,33 +9,94 @@ import {
   CommentTypeSchema,
   DiscussionSchema,
   ErrorSchema,
+  GoogleLoginRequestSchema,
   IssueSchema,
   NoteSchema,
   ProjectSchema,
   RuleSchema,
+  UserSchema,
   VisibilityLevelSchema,
 } from "./schema";
 
 // OpenAPIRegistryのインスタンスを作成
 export const registry = new OpenAPIRegistry();
 
-// セキュリティスキーム(Bearer認証)を登録
-export const cognitoAuth = registry.registerComponent(
+// セキュリティスキーム(Cookie認証)を登録
+export const cookieAuth = registry.registerComponent(
   "securitySchemes",
-  "cognito_auth",
+  "cookie_auth",
   {
-    type: "http",
-    scheme: "bearer",
+    type: "apiKey",
+    in: "cookie",
+    name: "auth_token",
   }
 );
+
+const defaultResponse = {
+  description: "default error",
+  content: {
+    "application/json": {
+      schema: ErrorSchema,
+    },
+  },
+};
 
 // エンドポイントの定義
 const routes: RouteConfig[] = [
   {
     method: "post",
+    path: "/auth/google",
+    description: "google login",
+    request: {
+      body: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: GoogleLoginRequestSchema,
+          },
+        },
+      },
+    },
+    responses: {
+      200: {
+        description: "success response",
+      },
+      default: defaultResponse,
+    },
+  },
+  {
+    method: "post",
+    path: "/auth/logout",
+    description: "logout",
+    responses: {
+      200: {
+        description: "success response",
+      },
+      default: defaultResponse,
+    },
+  },
+  {
+    method: "get",
+    path: "/me",
+    description: "get current user",
+    security: [{ [cookieAuth.name]: [] }],
+    responses: {
+      200: {
+        description: "success response",
+        content: {
+          "application/json": {
+            schema: UserSchema,
+          },
+        },
+      },
+      default: defaultResponse,
+    },
+  },
+  {
+    method: "post",
     path: "/errors",
     description: "post an error",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       body: {
         required: true,
@@ -52,21 +113,14 @@ const routes: RouteConfig[] = [
       200: {
         description: "success response",
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "get",
     path: "/projects",
     description: "get projects",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {},
     responses: {
       200: {
@@ -77,21 +131,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "get",
     path: "/projects/{projectId}",
     description: "get project",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         projectId: z.string(),
@@ -106,21 +153,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "post",
     path: "/projects",
     description: "create project",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       body: {
         required: true,
@@ -142,21 +182,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "put",
     path: "/projects/{projectId}",
     description: "update project",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         projectId: z.string(),
@@ -181,21 +214,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "delete",
     path: "/projects/{projectId}",
     description: "delete project",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         projectId: z.string(),
@@ -205,21 +231,14 @@ const routes: RouteConfig[] = [
       204: {
         description: "success response",
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "get",
     path: "/rules",
     description: "get rules",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {},
     responses: {
       200: {
@@ -230,21 +249,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "get",
     path: "/rules/{ruleId}",
     description: "get rule",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         ruleId: z.string(),
@@ -259,21 +271,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "post",
     path: "/rules",
     description: "create rule",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       body: {
         required: true,
@@ -298,21 +303,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "put",
     path: "/rules/{ruleId}",
     description: "update rule",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         ruleId: z.string(),
@@ -340,21 +338,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "delete",
     path: "/rules/{ruleId}",
     description: "delete rule",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         ruleId: z.string(),
@@ -364,21 +355,14 @@ const routes: RouteConfig[] = [
       204: {
         description: "success response",
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "get",
     path: "/discussions",
     description: "get discussions",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       query: z.object({
         projectId: z.string().optional(),
@@ -393,21 +377,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "get",
     path: "/discussions/{discussionId}",
     description: "get discussion",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -422,21 +399,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "post",
     path: "/discussions",
     description: "create discussion",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       body: {
         required: true,
@@ -463,21 +433,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "put",
     path: "/discussions/{discussionId}",
     description: "update discussion",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -508,21 +471,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "delete",
     path: "/discussions/{discussionId}",
     description: "delete discussion",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -532,21 +488,14 @@ const routes: RouteConfig[] = [
       204: {
         description: "success response",
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "get",
     path: "/discussions/{discussionId}/comments",
     description: "get comments for a discussion",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -561,21 +510,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "post",
     path: "/discussions/{discussionId}/comments",
     description: "create comment",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -602,21 +544,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "put",
     path: "/discussions/{discussionId}/comments/{commentId}",
     description: "update comment",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -643,21 +578,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "delete",
     path: "/discussions/{discussionId}/comments/{commentId}",
     description: "delete comment",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -668,14 +596,7 @@ const routes: RouteConfig[] = [
       204: {
         description: "success response",
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
 
@@ -684,7 +605,7 @@ const routes: RouteConfig[] = [
     method: "get",
     path: "/discussions/{discussionId}/issues",
     description: "get issues for a discussion",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -699,21 +620,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "post",
     path: "/discussions/{discussionId}/issues",
     description: "create issue",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -740,21 +654,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "put",
     path: "/discussions/{discussionId}/issues/{issueId}",
     description: "update issue",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -781,21 +688,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "delete",
     path: "/discussions/{discussionId}/issues/{issueId}",
     description: "delete issue",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -806,14 +706,7 @@ const routes: RouteConfig[] = [
       204: {
         description: "success response",
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
 
@@ -822,7 +715,7 @@ const routes: RouteConfig[] = [
     method: "get",
     path: "/discussions/{discussionId}/notes",
     description: "get notes for a discussion",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -837,21 +730,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "post",
     path: "/discussions/{discussionId}/notes",
     description: "create note",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -876,21 +762,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "put",
     path: "/discussions/{discussionId}/notes/{noteId}",
     description: "update note",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -916,21 +795,14 @@ const routes: RouteConfig[] = [
           },
         },
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
   {
     method: "delete",
     path: "/discussions/{discussionId}/notes/{noteId}",
     description: "delete note",
-    security: [{ [cognitoAuth.name]: [] }],
+    security: [{ [cookieAuth.name]: [] }],
     request: {
       params: z.object({
         discussionId: z.string(),
@@ -941,14 +813,7 @@ const routes: RouteConfig[] = [
       204: {
         description: "success response",
       },
-      default: {
-        description: "default error",
-        content: {
-          "application/json": {
-            schema: ErrorSchema,
-          },
-        },
-      },
+      default: defaultResponse,
     },
   },
 ];

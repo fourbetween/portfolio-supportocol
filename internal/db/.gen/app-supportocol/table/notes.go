@@ -8,30 +8,31 @@
 package table
 
 import (
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 )
 
-var Notes = newNotesTable("public", "notes", "")
+var Notes = newNotesTable("app-supportocol", "notes", "")
 
 type notesTable struct {
-	postgres.Table
+	mysql.Table
 
 	// Columns
-	ID           postgres.ColumnString
-	DiscussionID postgres.ColumnString
-	Content      postgres.ColumnString
-	PostedBy     postgres.ColumnString
-	PostedAt     postgres.ColumnTimestamp
+	ID           mysql.ColumnString
+	DiscussionID mysql.ColumnString
+	Content      mysql.ColumnString
+	PostedBy     mysql.ColumnString
+	PostedAt     mysql.ColumnTimestamp
+	UpdatedAt    mysql.ColumnTimestamp
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
-	DefaultColumns postgres.ColumnList
+	AllColumns     mysql.ColumnList
+	MutableColumns mysql.ColumnList
+	DefaultColumns mysql.ColumnList
 }
 
 type NotesTable struct {
 	notesTable
 
-	EXCLUDED notesTable
+	NEW notesTable
 }
 
 // AS creates new NotesTable with assigned alias
@@ -57,24 +58,25 @@ func (a NotesTable) WithSuffix(suffix string) *NotesTable {
 func newNotesTable(schemaName, tableName, alias string) *NotesTable {
 	return &NotesTable{
 		notesTable: newNotesTableImpl(schemaName, tableName, alias),
-		EXCLUDED:   newNotesTableImpl("", "excluded", ""),
+		NEW:        newNotesTableImpl("", "new", ""),
 	}
 }
 
 func newNotesTableImpl(schemaName, tableName, alias string) notesTable {
 	var (
-		IDColumn           = postgres.StringColumn("id")
-		DiscussionIDColumn = postgres.StringColumn("discussion_id")
-		ContentColumn      = postgres.StringColumn("content")
-		PostedByColumn     = postgres.StringColumn("posted_by")
-		PostedAtColumn     = postgres.TimestampColumn("posted_at")
-		allColumns         = postgres.ColumnList{IDColumn, DiscussionIDColumn, ContentColumn, PostedByColumn, PostedAtColumn}
-		mutableColumns     = postgres.ColumnList{DiscussionIDColumn, ContentColumn, PostedByColumn, PostedAtColumn}
-		defaultColumns     = postgres.ColumnList{PostedAtColumn}
+		IDColumn           = mysql.StringColumn("id")
+		DiscussionIDColumn = mysql.StringColumn("discussion_id")
+		ContentColumn      = mysql.StringColumn("content")
+		PostedByColumn     = mysql.StringColumn("posted_by")
+		PostedAtColumn     = mysql.TimestampColumn("posted_at")
+		UpdatedAtColumn    = mysql.TimestampColumn("updated_at")
+		allColumns         = mysql.ColumnList{IDColumn, DiscussionIDColumn, ContentColumn, PostedByColumn, PostedAtColumn, UpdatedAtColumn}
+		mutableColumns     = mysql.ColumnList{DiscussionIDColumn, ContentColumn, PostedByColumn, PostedAtColumn, UpdatedAtColumn}
+		defaultColumns     = mysql.ColumnList{PostedAtColumn, UpdatedAtColumn}
 	)
 
 	return notesTable{
-		Table: postgres.NewTable(schemaName, tableName, alias, allColumns...),
+		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
 		ID:           IDColumn,
@@ -82,6 +84,7 @@ func newNotesTableImpl(schemaName, tableName, alias string) notesTable {
 		Content:      ContentColumn,
 		PostedBy:     PostedByColumn,
 		PostedAt:     PostedAtColumn,
+		UpdatedAt:    UpdatedAtColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

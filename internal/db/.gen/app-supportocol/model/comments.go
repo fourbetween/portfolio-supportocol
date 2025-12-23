@@ -19,5 +19,6 @@ type Comments struct {
 	Content         string
 	PostedBy        string
 	PostedAt        time.Time
+	UpdatedAt       time.Time
 	Status          string
 }

@@ -8,32 +8,32 @@
 package table
 
 import (
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 )
 
-var CommentTypes = newCommentTypesTable("public", "comment_types", "")
+var CommentTypes = newCommentTypesTable("app-supportocol", "comment_types", "")
 
 type commentTypesTable struct {
-	postgres.Table
+	mysql.Table
 
 	// Columns
-	ID          postgres.ColumnString
-	RuleID      postgres.ColumnString
-	No          postgres.ColumnInteger
-	Name        postgres.ColumnString
-	Description postgres.ColumnString
-	Color       postgres.ColumnString
-	Root        postgres.ColumnBool
+	ID          mysql.ColumnString
+	RuleID      mysql.ColumnString
+	No          mysql.ColumnInteger
+	Name        mysql.ColumnString
+	Description mysql.ColumnString
+	Color       mysql.ColumnString
+	Root        mysql.ColumnBool
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
-	DefaultColumns postgres.ColumnList
+	AllColumns     mysql.ColumnList
+	MutableColumns mysql.ColumnList
+	DefaultColumns mysql.ColumnList
 }
 
 type CommentTypesTable struct {
 	commentTypesTable
 
-	EXCLUDED commentTypesTable
+	NEW commentTypesTable
 }
 
 // AS creates new CommentTypesTable with assigned alias
@@ -59,26 +59,26 @@ func (a CommentTypesTable) WithSuffix(suffix string) *CommentTypesTable {
 func newCommentTypesTable(schemaName, tableName, alias string) *CommentTypesTable {
 	return &CommentTypesTable{
 		commentTypesTable: newCommentTypesTableImpl(schemaName, tableName, alias),
-		EXCLUDED:          newCommentTypesTableImpl("", "excluded", ""),
+		NEW:               newCommentTypesTableImpl("", "new", ""),
 	}
 }
 
 func newCommentTypesTableImpl(schemaName, tableName, alias string) commentTypesTable {
 	var (
-		IDColumn          = postgres.StringColumn("id")
-		RuleIDColumn      = postgres.StringColumn("rule_id")
-		NoColumn          = postgres.IntegerColumn("no")
-		NameColumn        = postgres.StringColumn("name")
-		DescriptionColumn = postgres.StringColumn("description")
-		ColorColumn       = postgres.StringColumn("color")
-		RootColumn        = postgres.BoolColumn("root")
-		allColumns        = postgres.ColumnList{IDColumn, RuleIDColumn, NoColumn, NameColumn, DescriptionColumn, ColorColumn, RootColumn}
-		mutableColumns    = postgres.ColumnList{RuleIDColumn, NoColumn, NameColumn, DescriptionColumn, ColorColumn, RootColumn}
-		defaultColumns    = postgres.ColumnList{}
+		IDColumn          = mysql.StringColumn("id")
+		RuleIDColumn      = mysql.StringColumn("rule_id")
+		NoColumn          = mysql.IntegerColumn("no")
+		NameColumn        = mysql.StringColumn("name")
+		DescriptionColumn = mysql.StringColumn("description")
+		ColorColumn       = mysql.StringColumn("color")
+		RootColumn        = mysql.BoolColumn("root")
+		allColumns        = mysql.ColumnList{IDColumn, RuleIDColumn, NoColumn, NameColumn, DescriptionColumn, ColorColumn, RootColumn}
+		mutableColumns    = mysql.ColumnList{RuleIDColumn, NoColumn, NameColumn, DescriptionColumn, ColorColumn, RootColumn}
+		defaultColumns    = mysql.ColumnList{}
 	)
 
 	return commentTypesTable{
-		Table: postgres.NewTable(schemaName, tableName, alias, allColumns...),
+		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
 		ID:          IDColumn,

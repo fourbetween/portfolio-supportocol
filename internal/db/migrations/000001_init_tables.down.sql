@@ -7,3 +7,4 @@ DROP TABLE IF EXISTS project_discussions;
 DROP TABLE IF EXISTS discussions;
 DROP TABLE IF EXISTS rules;
 DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS users;

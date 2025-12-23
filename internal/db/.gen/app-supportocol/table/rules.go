@@ -8,30 +8,31 @@
 package table
 
 import (
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 )
 
-var Rules = newRulesTable("public", "rules", "")
+var Rules = newRulesTable("app-supportocol", "rules", "")
 
 type rulesTable struct {
-	postgres.Table
+	mysql.Table
 
 	// Columns
-	ID          postgres.ColumnString
-	Name        postgres.ColumnString
-	Description postgres.ColumnString
-	CreatedBy   postgres.ColumnString
-	CreatedAt   postgres.ColumnTimestamp
+	ID          mysql.ColumnString
+	Name        mysql.ColumnString
+	Description mysql.ColumnString
+	CreatedBy   mysql.ColumnString
+	CreatedAt   mysql.ColumnTimestamp
+	UpdatedAt   mysql.ColumnTimestamp
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
-	DefaultColumns postgres.ColumnList
+	AllColumns     mysql.ColumnList
+	MutableColumns mysql.ColumnList
+	DefaultColumns mysql.ColumnList
 }
 
 type RulesTable struct {
 	rulesTable
 
-	EXCLUDED rulesTable
+	NEW rulesTable
 }
 
 // AS creates new RulesTable with assigned alias
@@ -57,24 +58,25 @@ func (a RulesTable) WithSuffix(suffix string) *RulesTable {
 func newRulesTable(schemaName, tableName, alias string) *RulesTable {
 	return &RulesTable{
 		rulesTable: newRulesTableImpl(schemaName, tableName, alias),
-		EXCLUDED:   newRulesTableImpl("", "excluded", ""),
+		NEW:        newRulesTableImpl("", "new", ""),
 	}
 }
 
 func newRulesTableImpl(schemaName, tableName, alias string) rulesTable {
 	var (
-		IDColumn          = postgres.StringColumn("id")
-		NameColumn        = postgres.StringColumn("name")
-		DescriptionColumn = postgres.StringColumn("description")
-		CreatedByColumn   = postgres.StringColumn("created_by")
-		CreatedAtColumn   = postgres.TimestampColumn("created_at")
-		allColumns        = postgres.ColumnList{IDColumn, NameColumn, DescriptionColumn, CreatedByColumn, CreatedAtColumn}
-		mutableColumns    = postgres.ColumnList{NameColumn, DescriptionColumn, CreatedByColumn, CreatedAtColumn}
-		defaultColumns    = postgres.ColumnList{CreatedAtColumn}
+		IDColumn          = mysql.StringColumn("id")
+		NameColumn        = mysql.StringColumn("name")
+		DescriptionColumn = mysql.StringColumn("description")
+		CreatedByColumn   = mysql.StringColumn("created_by")
+		CreatedAtColumn   = mysql.TimestampColumn("created_at")
+		UpdatedAtColumn   = mysql.TimestampColumn("updated_at")
+		allColumns        = mysql.ColumnList{IDColumn, NameColumn, DescriptionColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns    = mysql.ColumnList{NameColumn, DescriptionColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns    = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return rulesTable{
-		Table: postgres.NewTable(schemaName, tableName, alias, allColumns...),
+		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
 		ID:          IDColumn,
@@ -82,6 +84,7 @@ func newRulesTableImpl(schemaName, tableName, alias string) rulesTable {
 		Description: DescriptionColumn,
 		CreatedBy:   CreatedByColumn,
 		CreatedAt:   CreatedAtColumn,
+		UpdatedAt:   UpdatedAtColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

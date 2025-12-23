@@ -8,33 +8,34 @@
 package table
 
 import (
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 )
 
-var Comments = newCommentsTable("public", "comments", "")
+var Comments = newCommentsTable("app-supportocol", "comments", "")
 
 type commentsTable struct {
-	postgres.Table
+	mysql.Table
 
 	// Columns
-	ID              postgres.ColumnString
-	DiscussionID    postgres.ColumnString
-	ParentCommentID postgres.ColumnString
-	CommentTypeID   postgres.ColumnString
-	Content         postgres.ColumnString
-	PostedBy        postgres.ColumnString
-	PostedAt        postgres.ColumnTimestamp
-	Status          postgres.ColumnString
+	ID              mysql.ColumnString
+	DiscussionID    mysql.ColumnString
+	ParentCommentID mysql.ColumnString
+	CommentTypeID   mysql.ColumnString
+	Content         mysql.ColumnString
+	PostedBy        mysql.ColumnString
+	PostedAt        mysql.ColumnTimestamp
+	UpdatedAt       mysql.ColumnTimestamp
+	Status          mysql.ColumnString
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
-	DefaultColumns postgres.ColumnList
+	AllColumns     mysql.ColumnList
+	MutableColumns mysql.ColumnList
+	DefaultColumns mysql.ColumnList
 }
 
 type CommentsTable struct {
 	commentsTable
 
-	EXCLUDED commentsTable
+	NEW commentsTable
 }
 
 // AS creates new CommentsTable with assigned alias
@@ -60,27 +61,28 @@ func (a CommentsTable) WithSuffix(suffix string) *CommentsTable {
 func newCommentsTable(schemaName, tableName, alias string) *CommentsTable {
 	return &CommentsTable{
 		commentsTable: newCommentsTableImpl(schemaName, tableName, alias),
-		EXCLUDED:      newCommentsTableImpl("", "excluded", ""),
+		NEW:           newCommentsTableImpl("", "new", ""),
 	}
 }
 
 func newCommentsTableImpl(schemaName, tableName, alias string) commentsTable {
 	var (
-		IDColumn              = postgres.StringColumn("id")
-		DiscussionIDColumn    = postgres.StringColumn("discussion_id")
-		ParentCommentIDColumn = postgres.StringColumn("parent_comment_id")
-		CommentTypeIDColumn   = postgres.StringColumn("comment_type_id")
-		ContentColumn         = postgres.StringColumn("content")
-		PostedByColumn        = postgres.StringColumn("posted_by")
-		PostedAtColumn        = postgres.TimestampColumn("posted_at")
-		StatusColumn          = postgres.StringColumn("status")
-		allColumns            = postgres.ColumnList{IDColumn, DiscussionIDColumn, ParentCommentIDColumn, CommentTypeIDColumn, ContentColumn, PostedByColumn, PostedAtColumn, StatusColumn}
-		mutableColumns        = postgres.ColumnList{DiscussionIDColumn, ParentCommentIDColumn, CommentTypeIDColumn, ContentColumn, PostedByColumn, PostedAtColumn, StatusColumn}
-		defaultColumns        = postgres.ColumnList{PostedAtColumn}
+		IDColumn              = mysql.StringColumn("id")
+		DiscussionIDColumn    = mysql.StringColumn("discussion_id")
+		ParentCommentIDColumn = mysql.StringColumn("parent_comment_id")
+		CommentTypeIDColumn   = mysql.StringColumn("comment_type_id")
+		ContentColumn         = mysql.StringColumn("content")
+		PostedByColumn        = mysql.StringColumn("posted_by")
+		PostedAtColumn        = mysql.TimestampColumn("posted_at")
+		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
+		StatusColumn          = mysql.StringColumn("status")
+		allColumns            = mysql.ColumnList{IDColumn, DiscussionIDColumn, ParentCommentIDColumn, CommentTypeIDColumn, ContentColumn, PostedByColumn, PostedAtColumn, UpdatedAtColumn, StatusColumn}
+		mutableColumns        = mysql.ColumnList{DiscussionIDColumn, ParentCommentIDColumn, CommentTypeIDColumn, ContentColumn, PostedByColumn, PostedAtColumn, UpdatedAtColumn, StatusColumn}
+		defaultColumns        = mysql.ColumnList{PostedAtColumn, UpdatedAtColumn}
 	)
 
 	return commentsTable{
-		Table: postgres.NewTable(schemaName, tableName, alias, allColumns...),
+		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
 		ID:              IDColumn,
@@ -90,6 +92,7 @@ func newCommentsTableImpl(schemaName, tableName, alias string) commentsTable {
 		Content:         ContentColumn,
 		PostedBy:        PostedByColumn,
 		PostedAt:        PostedAtColumn,
+		UpdatedAt:       UpdatedAtColumn,
 		Status:          StatusColumn,
 
 		AllColumns:     allColumns,

@@ -8,28 +8,28 @@
 package table
 
 import (
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 )
 
-var ProjectDiscussions = newProjectDiscussionsTable("public", "project_discussions", "")
+var ProjectDiscussions = newProjectDiscussionsTable("app-supportocol", "project_discussions", "")
 
 type projectDiscussionsTable struct {
-	postgres.Table
+	mysql.Table
 
 	// Columns
-	ProjectID    postgres.ColumnString
-	DiscussionID postgres.ColumnString
-	AddedAt      postgres.ColumnTimestamp
+	ProjectID    mysql.ColumnString
+	DiscussionID mysql.ColumnString
+	AddedAt      mysql.ColumnTimestamp
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
-	DefaultColumns postgres.ColumnList
+	AllColumns     mysql.ColumnList
+	MutableColumns mysql.ColumnList
+	DefaultColumns mysql.ColumnList
 }
 
 type ProjectDiscussionsTable struct {
 	projectDiscussionsTable
 
-	EXCLUDED projectDiscussionsTable
+	NEW projectDiscussionsTable
 }
 
 // AS creates new ProjectDiscussionsTable with assigned alias
@@ -55,22 +55,22 @@ func (a ProjectDiscussionsTable) WithSuffix(suffix string) *ProjectDiscussionsTa
 func newProjectDiscussionsTable(schemaName, tableName, alias string) *ProjectDiscussionsTable {
 	return &ProjectDiscussionsTable{
 		projectDiscussionsTable: newProjectDiscussionsTableImpl(schemaName, tableName, alias),
-		EXCLUDED:                newProjectDiscussionsTableImpl("", "excluded", ""),
+		NEW:                     newProjectDiscussionsTableImpl("", "new", ""),
 	}
 }
 
 func newProjectDiscussionsTableImpl(schemaName, tableName, alias string) projectDiscussionsTable {
 	var (
-		ProjectIDColumn    = postgres.StringColumn("project_id")
-		DiscussionIDColumn = postgres.StringColumn("discussion_id")
-		AddedAtColumn      = postgres.TimestampColumn("added_at")
-		allColumns         = postgres.ColumnList{ProjectIDColumn, DiscussionIDColumn, AddedAtColumn}
-		mutableColumns     = postgres.ColumnList{AddedAtColumn}
-		defaultColumns     = postgres.ColumnList{AddedAtColumn}
+		ProjectIDColumn    = mysql.StringColumn("project_id")
+		DiscussionIDColumn = mysql.StringColumn("discussion_id")
+		AddedAtColumn      = mysql.TimestampColumn("added_at")
+		allColumns         = mysql.ColumnList{ProjectIDColumn, DiscussionIDColumn, AddedAtColumn}
+		mutableColumns     = mysql.ColumnList{AddedAtColumn}
+		defaultColumns     = mysql.ColumnList{AddedAtColumn}
 	)
 
 	return projectDiscussionsTable{
-		Table: postgres.NewTable(schemaName, tableName, alias, allColumns...),
+		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
 		ProjectID:    ProjectIDColumn,

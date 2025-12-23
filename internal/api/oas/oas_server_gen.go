@@ -8,6 +8,18 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// AuthGooglePost implements POST /auth/google operation.
+	//
+	// Google login.
+	//
+	// POST /auth/google
+	AuthGooglePost(ctx context.Context, req *GoogleLoginRequest) error
+	// AuthLogoutPost implements POST /auth/logout operation.
+	//
+	// Logout.
+	//
+	// POST /auth/logout
+	AuthLogoutPost(ctx context.Context) error
 	// DiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /discussions/{discussionId}/comments/{commentId} operation.
 	//
 	// Delete comment.
@@ -116,6 +128,12 @@ type Handler interface {
 	//
 	// POST /errors
 	ErrorsPost(ctx context.Context, req *ErrorsPostReq) error
+	// MeGet implements GET /me operation.
+	//
+	// Get current user.
+	//
+	// GET /me
+	MeGet(ctx context.Context) (*User, error)
 	// ProjectsGet implements GET /projects operation.
 	//
 	// Get projects.

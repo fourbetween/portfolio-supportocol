@@ -131,6 +131,7 @@ func (s *CommentType) Validate() error {
 			MaxExclusive:  false,
 			MultipleOfSet: false,
 			MultipleOf:    0,
+			Pattern:       nil,
 		}).Validate(int64(s.No)); err != nil {
 			return errors.Wrap(err, "int")
 		}
@@ -460,6 +461,7 @@ func (s *Error) Validate() error {
 			MaxExclusive:  false,
 			MultipleOfSet: false,
 			MultipleOf:    0,
+			Pattern:       nil,
 		}).Validate(int64(s.Code)); err != nil {
 			return errors.Wrap(err, "int")
 		}
@@ -502,13 +504,17 @@ func (s *ErrorStatusCode) Validate() error {
 func (s ID) Validate() error {
 	alias := (string)(s)
 	if err := (validate.String{
-		MinLength:    26,
-		MinLengthSet: true,
-		MaxLength:    26,
-		MaxLengthSet: true,
-		Email:        false,
-		Hostname:     false,
-		Regex:        nil,
+		MinLength:     36,
+		MinLengthSet:  true,
+		MaxLength:     36,
+		MaxLengthSet:  true,
+		Email:         false,
+		Hostname:      false,
+		Regex:         nil,
+		MinNumeric:    0,
+		MinNumericSet: false,
+		MaxNumeric:    0,
+		MaxNumericSet: false,
 	}).Validate(string(alias)); err != nil {
 		return errors.Wrap(err, "string")
 	}
@@ -834,6 +840,41 @@ func (s *RulesRuleIdPutReq) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "commentTypePaths",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *User) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := (validate.String{
+			MinLength:     0,
+			MinLengthSet:  false,
+			MaxLength:     0,
+			MaxLengthSet:  false,
+			Email:         true,
+			Hostname:      false,
+			Regex:         nil,
+			MinNumeric:    0,
+			MinNumericSet: false,
+			MaxNumeric:    0,
+			MaxNumericSet: false,
+		}).Validate(string(s.Email)); err != nil {
+			return errors.Wrap(err, "string")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "email",
 			Error: err,
 		})
 	}

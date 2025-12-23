@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal"
-	"github.com/fourbetween/app-supportocol/internal/db/.gen/public/model"
-	"github.com/fourbetween/app-supportocol/internal/db/.gen/public/table"
+	"github.com/fourbetween/app-supportocol/internal/db/.gen/app-supportocol/model"
+	"github.com/fourbetween/app-supportocol/internal/db/.gen/app-supportocol/table"
 	"github.com/fourbetween/app-supportocol/internal/model/discussion"
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 	"github.com/go-jet/jet/v2/qrm"
 )
 
@@ -26,20 +26,20 @@ func (r *DiscussionRepository) SetFactory(fac *discussion.Factory) {
 }
 
 func (r *DiscussionRepository) Search(params discussion.SearchParams) ([]*discussion.Discussion, error) {
-	cond := postgres.Bool(true)
+	cond := mysql.Bool(true)
 	if params.ProjectID != "" {
-		cond = cond.AND(table.ProjectDiscussions.ProjectID.EQ(postgres.String(params.ProjectID)))
+		cond = cond.AND(table.ProjectDiscussions.ProjectID.EQ(mysql.String(params.ProjectID)))
 	}
 	if params.CreatedBy != "" {
-		cond = cond.AND(table.Discussions.CreatedBy.EQ(postgres.String(params.CreatedBy)))
+		cond = cond.AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
 	}
 
-	var from postgres.ReadableTable = table.Discussions
+	var from mysql.ReadableTable = table.Discussions
 	if params.ProjectID != "" {
 		from = from.INNER_JOIN(table.ProjectDiscussions, table.ProjectDiscussions.DiscussionID.EQ(table.Discussions.ID))
 	}
 
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.Discussions.AllColumns).
 		FROM(from).
 		WHERE(cond)
@@ -58,12 +58,12 @@ func (r *DiscussionRepository) Search(params discussion.SearchParams) ([]*discus
 }
 
 func (r *DiscussionRepository) Load(params discussion.LoadParams) (*discussion.Discussion, error) {
-	cond := table.Discussions.ID.EQ(postgres.String(params.ID))
+	cond := table.Discussions.ID.EQ(mysql.String(params.ID))
 	if params.CreatedBy != "" {
-		cond = cond.AND(table.Discussions.CreatedBy.EQ(postgres.String(params.CreatedBy)))
+		cond = cond.AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
 	}
 
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.Discussions.AllColumns).
 		FROM(table.Discussions).
 		WHERE(cond)
@@ -85,17 +85,15 @@ func (r *DiscussionRepository) Save(d *discussion.Discussion) error {
 	stmt := table.Discussions.
 		INSERT(table.Discussions.AllColumns).
 		MODEL(model).
-		ON_CONFLICT(table.Discussions.ID).
-		DO_UPDATE(
-			postgres.SET(
-				table.Discussions.Theme.SET(postgres.String(d.Theme())),
-				table.Discussions.Background.SET(postgres.String(d.Background())),
-				table.Discussions.Conclusion.SET(postgres.String(d.Conclusion())),
-				table.Discussions.RuleID.SET(postgres.String(d.RuleID())),
-				table.Discussions.VisibilityLevel.SET(postgres.String(string(d.VisibilityLevel()))),
-				table.Discussions.CommentPermissionLevel.SET(postgres.String(string(d.CommentPermissionLevel()))),
-				table.Discussions.Status.SET(postgres.String(string(d.Status()))),
-			),
+		AS_NEW().
+		ON_DUPLICATE_KEY_UPDATE(
+			table.Discussions.Theme.SET(table.Discussions.NEW.Theme),
+			table.Discussions.Background.SET(table.Discussions.NEW.Background),
+			table.Discussions.Conclusion.SET(table.Discussions.NEW.Conclusion),
+			table.Discussions.RuleID.SET(table.Discussions.NEW.RuleID),
+			table.Discussions.VisibilityLevel.SET(table.Discussions.NEW.VisibilityLevel),
+			table.Discussions.CommentPermissionLevel.SET(table.Discussions.NEW.CommentPermissionLevel),
+			table.Discussions.Status.SET(table.Discussions.NEW.Status),
 		)
 
 	if _, err := stmt.Exec(r.db); err != nil {
@@ -107,7 +105,7 @@ func (r *DiscussionRepository) Save(d *discussion.Discussion) error {
 func (r *DiscussionRepository) Delete(d *discussion.Discussion) error {
 	stmt := table.Discussions.
 		DELETE().
-		WHERE(table.Discussions.ID.EQ(postgres.String(d.ID())))
+		WHERE(table.Discussions.ID.EQ(mysql.String(d.ID())))
 
 	if _, err := stmt.Exec(r.db); err != nil {
 		return fmt.Errorf("failed to delete discussion: %w", err)
@@ -116,10 +114,10 @@ func (r *DiscussionRepository) Delete(d *discussion.Discussion) error {
 }
 
 func (r *DiscussionRepository) ExistsByRuleID(ruleID string) (bool, error) {
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.Discussions.ID).
 		FROM(table.Discussions).
-		WHERE(table.Discussions.RuleID.EQ(postgres.String(ruleID))).
+		WHERE(table.Discussions.RuleID.EQ(mysql.String(ruleID))).
 		LIMIT(1)
 
 	var dest model.Discussions
@@ -134,10 +132,10 @@ func (r *DiscussionRepository) ExistsByRuleID(ruleID string) (bool, error) {
 }
 
 func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion.Comment, error) {
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.Comments.AllColumns).
 		FROM(table.Comments).
-		WHERE(table.Comments.DiscussionID.EQ(postgres.String(discussionID)))
+		WHERE(table.Comments.DiscussionID.EQ(mysql.String(discussionID)))
 
 	var dest []model.Comments
 	if err := stmt.Query(r.db, &dest); err != nil {
@@ -153,12 +151,12 @@ func (r *DiscussionRepository) FetchComments(discussionID string) ([]*discussion
 }
 
 func (r *DiscussionRepository) LoadComment(params discussion.LoadCommentParams) (*discussion.Comment, error) {
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.Comments.AllColumns).
 		FROM(table.Comments).
-		WHERE(postgres.AND(
-			table.Comments.DiscussionID.EQ(postgres.String(params.DiscussionID)),
-			table.Comments.ID.EQ(postgres.String(params.CommentID)),
+		WHERE(mysql.AND(
+			table.Comments.DiscussionID.EQ(mysql.String(params.DiscussionID)),
+			table.Comments.ID.EQ(mysql.String(params.CommentID)),
 		))
 
 	var dest model.Comments
@@ -178,12 +176,10 @@ func (r *DiscussionRepository) SaveComment(c *discussion.Comment) error {
 	stmt := table.Comments.
 		INSERT(table.Comments.AllColumns).
 		MODEL(model).
-		ON_CONFLICT(table.Comments.ID).
-		DO_UPDATE(
-			postgres.SET(
-				table.Comments.Content.SET(postgres.String(c.Content())),
-				table.Comments.Status.SET(postgres.String(string(c.Status()))),
-			),
+		AS_NEW().
+		ON_DUPLICATE_KEY_UPDATE(
+			table.Comments.Content.SET(table.Comments.NEW.Content),
+			table.Comments.Status.SET(table.Comments.NEW.Status),
 		)
 
 	if _, err := stmt.Exec(r.db); err != nil {
@@ -195,7 +191,7 @@ func (r *DiscussionRepository) SaveComment(c *discussion.Comment) error {
 func (r *DiscussionRepository) DeleteComment(c *discussion.Comment) error {
 	stmt := table.Comments.
 		DELETE().
-		WHERE(table.Comments.ID.EQ(postgres.String(c.ID())))
+		WHERE(table.Comments.ID.EQ(mysql.String(c.ID())))
 
 	if _, err := stmt.Exec(r.db); err != nil {
 		return fmt.Errorf("failed to delete comment: %w", err)
@@ -204,13 +200,13 @@ func (r *DiscussionRepository) DeleteComment(c *discussion.Comment) error {
 }
 
 func (r *DiscussionRepository) FetchIssues(discussionID string) ([]*discussion.Issue, error) {
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.Issues.AllColumns).
 		FROM(
 			table.Issues.
 				INNER_JOIN(table.Comments, table.Comments.ID.EQ(table.Issues.CommentID)),
 		).
-		WHERE(table.Comments.DiscussionID.EQ(postgres.String(discussionID)))
+		WHERE(table.Comments.DiscussionID.EQ(mysql.String(discussionID)))
 
 	var dest []model.Issues
 	if err := stmt.Query(r.db, &dest); err != nil {
@@ -226,15 +222,15 @@ func (r *DiscussionRepository) FetchIssues(discussionID string) ([]*discussion.I
 }
 
 func (r *DiscussionRepository) LoadIssue(params discussion.LoadIssueParams) (*discussion.Issue, error) {
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.Issues.AllColumns).
 		FROM(
 			table.Issues.
 				INNER_JOIN(table.Comments, table.Comments.ID.EQ(table.Issues.CommentID)),
 		).
 		WHERE(
-			table.Issues.ID.EQ(postgres.String(params.IssueID)).
-				AND(table.Comments.DiscussionID.EQ(postgres.String(params.DiscussionID))),
+			table.Issues.ID.EQ(mysql.String(params.IssueID)).
+				AND(table.Comments.DiscussionID.EQ(mysql.String(params.DiscussionID))),
 		)
 
 	var dest model.Issues
@@ -253,11 +249,11 @@ func (r *DiscussionRepository) SaveIssue(issue *discussion.Issue) error {
 	stmt := table.Issues.
 		INSERT(table.Issues.AllColumns).
 		MODEL(mdl).
-		ON_CONFLICT(table.Issues.ID).
-		DO_UPDATE(postgres.SET(
-			table.Issues.IssueType.SET(postgres.String(string(issue.IssueType()))),
-			table.Issues.Description.SET(postgres.String(issue.Description())),
-		))
+		AS_NEW().
+		ON_DUPLICATE_KEY_UPDATE(
+			table.Issues.IssueType.SET(table.Issues.NEW.IssueType),
+			table.Issues.Description.SET(table.Issues.NEW.Description),
+		)
 
 	if _, err := stmt.Exec(r.db); err != nil {
 		return fmt.Errorf("failed to save issue: %w", err)
@@ -268,7 +264,7 @@ func (r *DiscussionRepository) SaveIssue(issue *discussion.Issue) error {
 func (r *DiscussionRepository) DeleteIssue(issue *discussion.Issue) error {
 	stmt := table.Issues.
 		DELETE().
-		WHERE(table.Issues.ID.EQ(postgres.String(issue.ID())))
+		WHERE(table.Issues.ID.EQ(mysql.String(issue.ID())))
 
 	if _, err := stmt.Exec(r.db); err != nil {
 		return fmt.Errorf("failed to delete issue: %w", err)
@@ -277,10 +273,10 @@ func (r *DiscussionRepository) DeleteIssue(issue *discussion.Issue) error {
 }
 
 func (r *DiscussionRepository) FetchNotes(discussionID string) ([]*discussion.Note, error) {
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.Notes.AllColumns).
 		FROM(table.Notes).
-		WHERE(table.Notes.DiscussionID.EQ(postgres.String(discussionID)))
+		WHERE(table.Notes.DiscussionID.EQ(mysql.String(discussionID)))
 
 	var dest []model.Notes
 	if err := stmt.Query(r.db, &dest); err != nil {
@@ -296,12 +292,12 @@ func (r *DiscussionRepository) FetchNotes(discussionID string) ([]*discussion.No
 }
 
 func (r *DiscussionRepository) LoadNote(params discussion.LoadNoteParams) (*discussion.Note, error) {
-	stmt := postgres.
+	stmt := mysql.
 		SELECT(table.Notes.AllColumns).
 		FROM(table.Notes).
 		WHERE(
-			table.Notes.ID.EQ(postgres.String(params.NoteID)).
-				AND(table.Notes.DiscussionID.EQ(postgres.String(params.DiscussionID))),
+			table.Notes.ID.EQ(mysql.String(params.NoteID)).
+				AND(table.Notes.DiscussionID.EQ(mysql.String(params.DiscussionID))),
 		)
 
 	var dest model.Notes
@@ -320,10 +316,10 @@ func (r *DiscussionRepository) SaveNote(note *discussion.Note) error {
 	stmt := table.Notes.
 		INSERT(table.Notes.AllColumns).
 		MODEL(mdl).
-		ON_CONFLICT(table.Notes.ID).
-		DO_UPDATE(postgres.SET(
-			table.Notes.Content.SET(postgres.String(note.Content())),
-		))
+		AS_NEW().
+		ON_DUPLICATE_KEY_UPDATE(
+			table.Notes.Content.SET(table.Notes.NEW.Content),
+		)
 
 	if _, err := stmt.Exec(r.db); err != nil {
 		return fmt.Errorf("failed to save note: %w", err)
@@ -334,7 +330,7 @@ func (r *DiscussionRepository) SaveNote(note *discussion.Note) error {
 func (r *DiscussionRepository) DeleteNote(note *discussion.Note) error {
 	stmt := table.Notes.
 		DELETE().
-		WHERE(table.Notes.ID.EQ(postgres.String(note.ID())))
+		WHERE(table.Notes.ID.EQ(mysql.String(note.ID())))
 
 	if _, err := stmt.Exec(r.db); err != nil {
 		return fmt.Errorf("failed to delete note: %w", err)

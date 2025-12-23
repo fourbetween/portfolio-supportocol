@@ -4,11 +4,12 @@ info:
   version: 1.0.0
 components:
   securitySchemes:
-    cognito_auth:
-      type: http
-      scheme: bearer
+    cookie_auth:
+      type: apiKey
+      in: cookie
+      name: auth_token
   schemas:
-    error:
+    Error:
       type: object
       properties:
         code:
@@ -20,15 +21,36 @@ components:
       required:
         - code
         - message
-    id:
-      type: string
-      minLength: 26
-      maxLength: 26
-    project:
+    GoogleLoginRequest:
+      type: object
+      properties:
+        idToken:
+          type: string
+      required:
+        - idToken
+    User:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+      required:
+        - id
+        - email
+        - name
+    Id:
+      type: string
+      minLength: 36
+      maxLength: 36
+    Project:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
         name:
           type: string
         createdBy:
@@ -41,11 +63,11 @@ components:
         - name
         - createdBy
         - createdAt
-    commentType:
+    CommentType:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         no:
           type: integer
           minimum: 0
@@ -64,21 +86,21 @@ components:
         - description
         - color
         - root
-    commentTypePath:
+    CommentTypePath:
       type: object
       properties:
         childCommentTypeId:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         parentCommentTypeId:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
       required:
         - childCommentTypeId
         - parentCommentTypeId
-    rule:
+    Rule:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         name:
           type: string
         description:
@@ -91,11 +113,11 @@ components:
         commentTypes:
           type: array
           items:
-            $ref: "#/components/schemas/commentType"
+            $ref: "#/components/schemas/CommentType"
         commentTypePaths:
           type: array
           items:
-            $ref: "#/components/schemas/commentTypePath"
+            $ref: "#/components/schemas/CommentTypePath"
       required:
         - id
         - name
@@ -104,23 +126,23 @@ components:
         - createdAt
         - commentTypes
         - commentTypePaths
-    visibilityLevel:
+    VisibilityLevel:
       type: string
       enum:
         - everyone
         - authenticated
         - owner
-    commentPermissionLevel:
+    CommentPermissionLevel:
       type: string
       enum:
         - everyone
         - authenticated
         - owner
-    discussion:
+    Discussion:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         theme:
           type: string
         background:
@@ -128,11 +150,11 @@ components:
         conclusion:
           type: string
         ruleId:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         visibilityLevel:
-          $ref: "#/components/schemas/visibilityLevel"
+          $ref: "#/components/schemas/VisibilityLevel"
         commentPermissionLevel:
-          $ref: "#/components/schemas/commentPermissionLevel"
+          $ref: "#/components/schemas/CommentPermissionLevel"
         createdBy:
           type: string
         createdAt:
@@ -155,24 +177,24 @@ components:
         - createdBy
         - createdAt
         - status
-    commentStatus:
+    CommentStatus:
       type: string
       enum:
         - unassigned
         - assigned
         - archived
         - deleted
-    comment:
+    Comment:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         discussionId:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         parentCommentId:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         commentTypeId:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         content:
           type: string
         postedBy:
@@ -181,7 +203,7 @@ components:
           type: string
           format: date-time
         status:
-          $ref: "#/components/schemas/commentStatus"
+          $ref: "#/components/schemas/CommentStatus"
       required:
         - id
         - discussionId
@@ -191,13 +213,13 @@ components:
         - postedBy
         - postedAt
         - status
-    issue:
+    Issue:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         commentId:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         issueType:
           type: string
           enum:
@@ -217,13 +239,13 @@ components:
         - description
         - createdBy
         - createdAt
-    note:
+    Note:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         discussionId:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/Id"
         content:
           type: string
         postedBy:
@@ -239,11 +261,59 @@ components:
         - postedAt
   parameters: {}
 paths:
+  /auth/google:
+    post:
+      description: google login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoogleLoginRequest"
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /auth/logout:
+    post:
+      description: logout
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /me:
+    get:
+      description: get current user
+      security:
+        - cookie_auth: []
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /errors:
     post:
       description: post an error
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       requestBody:
         required: true
         content:
@@ -263,12 +333,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /projects:
     get:
       description: get projects
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       responses:
         "200":
           description: success response
@@ -277,17 +347,17 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/project"
+                  $ref: "#/components/schemas/Project"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     post:
       description: create project
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       requestBody:
         required: true
         content:
@@ -305,18 +375,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/project"
+                $ref: "#/components/schemas/Project"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /projects/{projectId}:
     get:
       description: get project
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -329,17 +399,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/project"
+                $ref: "#/components/schemas/Project"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     put:
       description: update project
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -363,17 +433,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/project"
+                $ref: "#/components/schemas/Project"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     delete:
       description: delete project
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -388,12 +458,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /rules:
     get:
       description: get rules
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       responses:
         "200":
           description: success response
@@ -402,17 +472,17 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/rule"
+                  $ref: "#/components/schemas/Rule"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     post:
       description: create rule
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       requestBody:
         required: true
         content:
@@ -427,11 +497,11 @@ paths:
                 commentTypes:
                   type: array
                   items:
-                    $ref: "#/components/schemas/commentType"
+                    $ref: "#/components/schemas/CommentType"
                 commentTypePaths:
                   type: array
                   items:
-                    $ref: "#/components/schemas/commentTypePath"
+                    $ref: "#/components/schemas/CommentTypePath"
               required:
                 - name
                 - description
@@ -443,18 +513,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/rule"
+                $ref: "#/components/schemas/Rule"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /rules/{ruleId}:
     get:
       description: get rule
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -467,17 +537,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/rule"
+                $ref: "#/components/schemas/Rule"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     put:
       description: update rule
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -498,11 +568,11 @@ paths:
                 commentTypes:
                   type: array
                   items:
-                    $ref: "#/components/schemas/commentType"
+                    $ref: "#/components/schemas/CommentType"
                 commentTypePaths:
                   type: array
                   items:
-                    $ref: "#/components/schemas/commentTypePath"
+                    $ref: "#/components/schemas/CommentTypePath"
               required:
                 - name
                 - description
@@ -514,17 +584,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/rule"
+                $ref: "#/components/schemas/Rule"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     delete:
       description: delete rule
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -539,12 +609,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /discussions:
     get:
       description: get discussions
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -559,17 +629,17 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/discussion"
+                  $ref: "#/components/schemas/Discussion"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     post:
       description: create discussion
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       requestBody:
         required: true
         content:
@@ -586,9 +656,9 @@ paths:
                 ruleId:
                   type: string
                 visibilityLevel:
-                  $ref: "#/components/schemas/visibilityLevel"
+                  $ref: "#/components/schemas/VisibilityLevel"
                 commentPermissionLevel:
-                  $ref: "#/components/schemas/commentPermissionLevel"
+                  $ref: "#/components/schemas/CommentPermissionLevel"
               required:
                 - theme
                 - background
@@ -602,18 +672,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/discussion"
+                $ref: "#/components/schemas/Discussion"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /discussions/{discussionId}:
     get:
       description: get discussion
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -626,17 +696,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/discussion"
+                $ref: "#/components/schemas/Discussion"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     put:
       description: update discussion
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -659,9 +729,9 @@ paths:
                 ruleId:
                   type: string
                 visibilityLevel:
-                  $ref: "#/components/schemas/visibilityLevel"
+                  $ref: "#/components/schemas/VisibilityLevel"
                 commentPermissionLevel:
-                  $ref: "#/components/schemas/commentPermissionLevel"
+                  $ref: "#/components/schemas/CommentPermissionLevel"
                 status:
                   type: string
                   enum:
@@ -682,17 +752,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/discussion"
+                $ref: "#/components/schemas/Discussion"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     delete:
       description: delete discussion
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -707,12 +777,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /discussions/{discussionId}/comments:
     get:
       description: get comments for a discussion
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -727,17 +797,17 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/comment"
+                  $ref: "#/components/schemas/Comment"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     post:
       description: create comment
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -767,18 +837,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/comment"
+                $ref: "#/components/schemas/Comment"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /discussions/{discussionId}/comments/{commentId}:
     put:
       description: update comment
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -800,7 +870,7 @@ paths:
                 content:
                   type: string
                 status:
-                  $ref: "#/components/schemas/commentStatus"
+                  $ref: "#/components/schemas/CommentStatus"
               required:
                 - content
                 - status
@@ -810,17 +880,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/comment"
+                $ref: "#/components/schemas/Comment"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     delete:
       description: delete comment
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -840,12 +910,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /discussions/{discussionId}/issues:
     get:
       description: get issues for a discussion
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -860,17 +930,17 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/issue"
+                  $ref: "#/components/schemas/Issue"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     post:
       description: create issue
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -903,18 +973,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/issue"
+                $ref: "#/components/schemas/Issue"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /discussions/{discussionId}/issues/{issueId}:
     put:
       description: update issue
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -949,17 +1019,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/issue"
+                $ref: "#/components/schemas/Issue"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     delete:
       description: delete issue
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -979,12 +1049,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /discussions/{discussionId}/notes:
     get:
       description: get notes for a discussion
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -999,17 +1069,17 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/note"
+                  $ref: "#/components/schemas/Note"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     post:
       description: create note
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -1033,18 +1103,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/note"
+                $ref: "#/components/schemas/Note"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
   /discussions/{discussionId}/notes/{noteId}:
     put:
       description: update note
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -1073,17 +1143,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/note"
+                $ref: "#/components/schemas/Note"
         default:
           description: default error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
     delete:
       description: delete note
       security:
-        - cognito_auth: []
+        - cookie_auth: []
       parameters:
         - schema:
             type: string
@@ -1103,5 +1173,5 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/error"
+                $ref: "#/components/schemas/Error"
 webhooks: {}

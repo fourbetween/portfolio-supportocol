@@ -21,5 +21,6 @@ type Discussions struct {
 	CommentPermissionLevel string
 	CreatedBy              string
 	CreatedAt              time.Time
+	UpdatedAt              time.Time
 	Status                 string
 }

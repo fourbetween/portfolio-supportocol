@@ -11,10 +11,10 @@ import (
 	"time"
 )
 
-type Rules struct {
-	ID          string `sql:"primary_key"`
-	Name        string
-	Description string
-	CreatedBy   string
-	CreatedAt   time.Time
+type Projects struct {
+	ID        string `sql:"primary_key"`
+	Name      string
+	CreatedBy string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }

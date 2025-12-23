@@ -1,30 +1,24 @@
 package main
 
 import (
-	"context"
 	"slices"
 
 	"github.com/fourbetween/app-supportocol/internal/db"
-	conf "github.com/fourbetween/pkg-conf"
+	"github.com/fourbetween/app-supportocol/internal/service/env"
 	"github.com/go-jet/jet/v2/generator/metadata"
-	"github.com/go-jet/jet/v2/generator/postgres"
+	"github.com/go-jet/jet/v2/generator/mysql"
 	"github.com/go-jet/jet/v2/generator/template"
-	jetpostgres "github.com/go-jet/jet/v2/postgres"
+	jetmysql "github.com/go-jet/jet/v2/mysql"
 )
 
 func main() {
-	dsn, err := conf.GetStringWithStage(context.TODO(), "/app-supportocol/db/dsn")
-	if err != nil {
-		panic(err)
-	}
-
-	dbCon, err := db.NewDB(dsn)
+	con, err := db.NewConnection()
 	if err != nil {
 		panic(err)
 	}
 
 	excludeTables := []string{"schema_lock", "schema_migrations"}
-	tmpl := template.Default(jetpostgres.Dialect).UseSchema(func(s metadata.Schema) template.Schema {
+	tmpl := template.Default(jetmysql.Dialect).UseSchema(func(s metadata.Schema) template.Schema {
 		return template.DefaultSchema(s).
 			UseModel(
 				template.DefaultModel().
@@ -48,9 +42,9 @@ func main() {
 			)
 	})
 
-	if err := postgres.GenerateDB(
-		dbCon,
-		"public",
+	if err := mysql.GenerateDB(
+		con,
+		env.AppName(),
 		"../../../internal/db/.gen",
 		tmpl,
 	); err != nil {

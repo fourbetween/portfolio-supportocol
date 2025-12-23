@@ -8,29 +8,30 @@
 package table
 
 import (
-	"github.com/go-jet/jet/v2/postgres"
+	"github.com/go-jet/jet/v2/mysql"
 )
 
-var Projects = newProjectsTable("public", "projects", "")
+var Projects = newProjectsTable("app-supportocol", "projects", "")
 
 type projectsTable struct {
-	postgres.Table
+	mysql.Table
 
 	// Columns
-	ID        postgres.ColumnString
-	Name      postgres.ColumnString
-	CreatedBy postgres.ColumnString
-	CreatedAt postgres.ColumnTimestamp
+	ID        mysql.ColumnString
+	Name      mysql.ColumnString
+	CreatedBy mysql.ColumnString
+	CreatedAt mysql.ColumnTimestamp
+	UpdatedAt mysql.ColumnTimestamp
 
-	AllColumns     postgres.ColumnList
-	MutableColumns postgres.ColumnList
-	DefaultColumns postgres.ColumnList
+	AllColumns     mysql.ColumnList
+	MutableColumns mysql.ColumnList
+	DefaultColumns mysql.ColumnList
 }
 
 type ProjectsTable struct {
 	projectsTable
 
-	EXCLUDED projectsTable
+	NEW projectsTable
 }
 
 // AS creates new ProjectsTable with assigned alias
@@ -56,29 +57,31 @@ func (a ProjectsTable) WithSuffix(suffix string) *ProjectsTable {
 func newProjectsTable(schemaName, tableName, alias string) *ProjectsTable {
 	return &ProjectsTable{
 		projectsTable: newProjectsTableImpl(schemaName, tableName, alias),
-		EXCLUDED:      newProjectsTableImpl("", "excluded", ""),
+		NEW:           newProjectsTableImpl("", "new", ""),
 	}
 }
 
 func newProjectsTableImpl(schemaName, tableName, alias string) projectsTable {
 	var (
-		IDColumn        = postgres.StringColumn("id")
-		NameColumn      = postgres.StringColumn("name")
-		CreatedByColumn = postgres.StringColumn("created_by")
-		CreatedAtColumn = postgres.TimestampColumn("created_at")
-		allColumns      = postgres.ColumnList{IDColumn, NameColumn, CreatedByColumn, CreatedAtColumn}
-		mutableColumns  = postgres.ColumnList{NameColumn, CreatedByColumn, CreatedAtColumn}
-		defaultColumns  = postgres.ColumnList{CreatedAtColumn}
+		IDColumn        = mysql.StringColumn("id")
+		NameColumn      = mysql.StringColumn("name")
+		CreatedByColumn = mysql.StringColumn("created_by")
+		CreatedAtColumn = mysql.TimestampColumn("created_at")
+		UpdatedAtColumn = mysql.TimestampColumn("updated_at")
+		allColumns      = mysql.ColumnList{IDColumn, NameColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns  = mysql.ColumnList{NameColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns  = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return projectsTable{
-		Table: postgres.NewTable(schemaName, tableName, alias, allColumns...),
+		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
 		ID:        IDColumn,
 		Name:      NameColumn,
 		CreatedBy: CreatedByColumn,
 		CreatedAt: CreatedAtColumn,
+		UpdatedAt: UpdatedAtColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

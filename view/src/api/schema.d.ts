@@ -4,6 +4,141 @@
  */
 
 export interface paths {
+    "/auth/google": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description google login */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["GoogleLoginRequest"];
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description logout */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description get current user */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["User"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/errors": {
         parameters: {
             query?: never;
@@ -42,7 +177,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -76,7 +211,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["project"][];
+                        "application/json": components["schemas"]["Project"][];
                     };
                 };
                 /** @description default error */
@@ -85,7 +220,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -113,7 +248,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["project"];
+                        "application/json": components["schemas"]["Project"];
                     };
                 };
                 /** @description default error */
@@ -122,7 +257,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -158,7 +293,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["project"];
+                        "application/json": components["schemas"]["Project"];
                     };
                 };
                 /** @description default error */
@@ -167,7 +302,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -196,7 +331,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["project"];
+                        "application/json": components["schemas"]["Project"];
                     };
                 };
                 /** @description default error */
@@ -205,7 +340,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -236,7 +371,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -269,7 +404,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["rule"][];
+                        "application/json": components["schemas"]["Rule"][];
                     };
                 };
                 /** @description default error */
@@ -278,7 +413,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -297,8 +432,8 @@ export interface paths {
                     "application/json": {
                         name: string;
                         description: string;
-                        commentTypes: components["schemas"]["commentType"][];
-                        commentTypePaths: components["schemas"]["commentTypePath"][];
+                        commentTypes: components["schemas"]["CommentType"][];
+                        commentTypePaths: components["schemas"]["CommentTypePath"][];
                     };
                 };
             };
@@ -309,7 +444,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["rule"];
+                        "application/json": components["schemas"]["Rule"];
                     };
                 };
                 /** @description default error */
@@ -318,7 +453,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -354,7 +489,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["rule"];
+                        "application/json": components["schemas"]["Rule"];
                     };
                 };
                 /** @description default error */
@@ -363,7 +498,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -383,8 +518,8 @@ export interface paths {
                     "application/json": {
                         name: string;
                         description: string;
-                        commentTypes: components["schemas"]["commentType"][];
-                        commentTypePaths: components["schemas"]["commentTypePath"][];
+                        commentTypes: components["schemas"]["CommentType"][];
+                        commentTypePaths: components["schemas"]["CommentTypePath"][];
                     };
                 };
             };
@@ -395,7 +530,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["rule"];
+                        "application/json": components["schemas"]["Rule"];
                     };
                 };
                 /** @description default error */
@@ -404,7 +539,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -435,7 +570,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -470,7 +605,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["discussion"][];
+                        "application/json": components["schemas"]["Discussion"][];
                     };
                 };
                 /** @description default error */
@@ -479,7 +614,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -500,8 +635,8 @@ export interface paths {
                         background: string;
                         conclusion: string;
                         ruleId: string;
-                        visibilityLevel: components["schemas"]["visibilityLevel"];
-                        commentPermissionLevel: components["schemas"]["commentPermissionLevel"];
+                        visibilityLevel: components["schemas"]["VisibilityLevel"];
+                        commentPermissionLevel: components["schemas"]["CommentPermissionLevel"];
                     };
                 };
             };
@@ -512,7 +647,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["discussion"];
+                        "application/json": components["schemas"]["Discussion"];
                     };
                 };
                 /** @description default error */
@@ -521,7 +656,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -557,7 +692,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["discussion"];
+                        "application/json": components["schemas"]["Discussion"];
                     };
                 };
                 /** @description default error */
@@ -566,7 +701,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -588,8 +723,8 @@ export interface paths {
                         background: string;
                         conclusion: string;
                         ruleId: string;
-                        visibilityLevel: components["schemas"]["visibilityLevel"];
-                        commentPermissionLevel: components["schemas"]["commentPermissionLevel"];
+                        visibilityLevel: components["schemas"]["VisibilityLevel"];
+                        commentPermissionLevel: components["schemas"]["CommentPermissionLevel"];
                         /** @enum {string} */
                         status: "open" | "closed" | "archived";
                     };
@@ -602,7 +737,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["discussion"];
+                        "application/json": components["schemas"]["Discussion"];
                     };
                 };
                 /** @description default error */
@@ -611,7 +746,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -642,7 +777,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -677,7 +812,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["comment"][];
+                        "application/json": components["schemas"]["Comment"][];
                     };
                 };
                 /** @description default error */
@@ -686,7 +821,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -718,7 +853,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["comment"];
+                        "application/json": components["schemas"]["Comment"];
                     };
                 };
                 /** @description default error */
@@ -727,7 +862,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -761,7 +896,7 @@ export interface paths {
                 content: {
                     "application/json": {
                         content: string;
-                        status: components["schemas"]["commentStatus"];
+                        status: components["schemas"]["CommentStatus"];
                     };
                 };
             };
@@ -772,7 +907,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["comment"];
+                        "application/json": components["schemas"]["Comment"];
                     };
                 };
                 /** @description default error */
@@ -781,7 +916,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -813,7 +948,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -848,7 +983,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["issue"][];
+                        "application/json": components["schemas"]["Issue"][];
                     };
                 };
                 /** @description default error */
@@ -857,7 +992,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -890,7 +1025,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["issue"];
+                        "application/json": components["schemas"]["Issue"];
                     };
                 };
                 /** @description default error */
@@ -899,7 +1034,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -945,7 +1080,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["issue"];
+                        "application/json": components["schemas"]["Issue"];
                     };
                 };
                 /** @description default error */
@@ -954,7 +1089,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -986,7 +1121,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -1021,7 +1156,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["note"][];
+                        "application/json": components["schemas"]["Note"][];
                     };
                 };
                 /** @description default error */
@@ -1030,7 +1165,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -1060,7 +1195,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["note"];
+                        "application/json": components["schemas"]["Note"];
                     };
                 };
                 /** @description default error */
@@ -1069,7 +1204,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -1113,7 +1248,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["note"];
+                        "application/json": components["schemas"]["Note"];
                     };
                 };
                 /** @description default error */
@@ -1122,7 +1257,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -1154,7 +1289,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["error"];
+                        "application/json": components["schemas"]["Error"];
                     };
                 };
             };
@@ -1168,52 +1303,61 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        error: {
+        Error: {
             code: number;
             message: string;
         };
-        id: string;
-        project: {
-            id: components["schemas"]["id"];
+        GoogleLoginRequest: {
+            idToken: string;
+        };
+        User: {
+            id: string;
+            /** Format: email */
+            email: string;
+            name: string;
+        };
+        Id: string;
+        Project: {
+            id: components["schemas"]["Id"];
             name: string;
             createdBy: string;
             /** Format: date-time */
             createdAt: string;
         };
-        commentType: {
-            id: components["schemas"]["id"];
+        CommentType: {
+            id: components["schemas"]["Id"];
             no: number;
             name: string;
             description: string;
             color: string;
             root: boolean;
         };
-        commentTypePath: {
-            childCommentTypeId: components["schemas"]["id"];
-            parentCommentTypeId: components["schemas"]["id"];
+        CommentTypePath: {
+            childCommentTypeId: components["schemas"]["Id"];
+            parentCommentTypeId: components["schemas"]["Id"];
         };
-        rule: {
-            id: components["schemas"]["id"];
+        Rule: {
+            id: components["schemas"]["Id"];
             name: string;
             description: string;
             createdBy: string;
             /** Format: date-time */
             createdAt: string;
-            commentTypes: components["schemas"]["commentType"][];
-            commentTypePaths: components["schemas"]["commentTypePath"][];
+            commentTypes: components["schemas"]["CommentType"][];
+            commentTypePaths: components["schemas"]["CommentTypePath"][];
         };
         /** @enum {string} */
-        visibilityLevel: "everyone" | "authenticated" | "owner";
+        VisibilityLevel: "everyone" | "authenticated" | "owner";
         /** @enum {string} */
-        commentPermissionLevel: "everyone" | "authenticated" | "owner";
-        discussion: {
-            id: components["schemas"]["id"];
+        CommentPermissionLevel: "everyone" | "authenticated" | "owner";
+        Discussion: {
+            id: components["schemas"]["Id"];
             theme: string;
             background: string;
             conclusion: string;
-            ruleId: components["schemas"]["id"];
-            visibilityLevel: components["schemas"]["visibilityLevel"];
-            commentPermissionLevel: components["schemas"]["commentPermissionLevel"];
+            ruleId: components["schemas"]["Id"];
+            visibilityLevel: components["schemas"]["VisibilityLevel"];
+            commentPermissionLevel: components["schemas"]["CommentPermissionLevel"];
             createdBy: string;
             /** Format: date-time */
             createdAt: string;
@@ -1221,21 +1365,21 @@ export interface components {
             status: "open" | "closed" | "archived";
         };
         /** @enum {string} */
-        commentStatus: "unassigned" | "assigned" | "archived" | "deleted";
-        comment: {
-            id: components["schemas"]["id"];
-            discussionId: components["schemas"]["id"];
-            parentCommentId: components["schemas"]["id"];
-            commentTypeId: components["schemas"]["id"];
+        CommentStatus: "unassigned" | "assigned" | "archived" | "deleted";
+        Comment: {
+            id: components["schemas"]["Id"];
+            discussionId: components["schemas"]["Id"];
+            parentCommentId: components["schemas"]["Id"];
+            commentTypeId: components["schemas"]["Id"];
             content: string;
             postedBy: string;
             /** Format: date-time */
             postedAt: string;
-            status: components["schemas"]["commentStatus"];
+            status: components["schemas"]["CommentStatus"];
         };
-        issue: {
-            id: components["schemas"]["id"];
-            commentId: components["schemas"]["id"];
+        Issue: {
+            id: components["schemas"]["Id"];
+            commentId: components["schemas"]["Id"];
             /** @enum {string} */
             issueType: "contradiction" | "circular_logic";
             description: string;
@@ -1243,9 +1387,9 @@ export interface components {
             /** Format: date-time */
             createdAt: string;
         };
-        note: {
-            id: components["schemas"]["id"];
-            discussionId: components["schemas"]["id"];
+        Note: {
+            id: components["schemas"]["Id"];
+            discussionId: components["schemas"]["Id"];
             content: string;
             postedBy: string;
             /** Format: date-time */

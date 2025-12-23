@@ -11,9 +11,12 @@ import (
 	"time"
 )
 
-type Projects struct {
-	ID        string `sql:"primary_key"`
-	Name      string
-	CreatedBy string
-	CreatedAt time.Time
+type Issues struct {
+	ID          string `sql:"primary_key"`
+	CommentID   string
+	IssueType   string
+	Description string
+	CreatedBy   string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }

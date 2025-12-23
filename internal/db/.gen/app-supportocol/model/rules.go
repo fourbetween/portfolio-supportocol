@@ -11,10 +11,11 @@ import (
 	"time"
 )
 
-type Notes struct {
-	ID           string `sql:"primary_key"`
-	DiscussionID string
-	Content      string
-	PostedBy     string
-	PostedAt     time.Time
+type Rules struct {
+	ID          string `sql:"primary_key"`
+	Name        string
+	Description string
+	CreatedBy   string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
