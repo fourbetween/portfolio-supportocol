@@ -1,26 +1,25 @@
 package container
 
 import (
-	"context"
 	"fmt"
-	"os"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsapigatewayv2"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsapigatewayv2integrations"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awscloudfront"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awscloudfrontorigins"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awscognito"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsec2"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsiam"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambdaeventsources"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslogs"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awsrds"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsroute53"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsroute53targets"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3assets"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3deployment"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awssecretsmanager"
 	"github.com/aws/jsii-runtime-go"
 
 	conf "github.com/fourbetween/pkg-conf"
@@ -28,29 +27,31 @@ import (
 
 type (
 	AppContainer struct {
-		appName     string
-		stack       awscdk.Stack
-		stage       string
-		usContainer *UsContainer
+		appName       string
+		stack         awscdk.Stack
+		stage         string
+		certContainer *CertContainer
+		shareConf     conf.Service
 
-		vpc            awsec2.IVpc
-		logGroup       awslogs.ILogGroup
-		userPool       awscognito.IUserPool
-		viewBucket     awss3.Bucket
-		userPoolClient awscognito.UserPoolClient
-		apiFunc        awslambda.Function
-		mainApi        awsapigatewayv2.HttpApi
-		cdn            awscloudfront.Distribution
-		dns            awsroute53.IHostedZone
-		mainRecord     awsroute53.ARecord
+		vpc        awsec2.IVpc
+		secret     awssecretsmanager.ISecret
+		rds        awsrds.IDatabaseInstance
+		logGroup   awslogs.ILogGroup
+		viewBucket awss3.Bucket
+		apiFunc    awslambda.Function
+		mainApi    awsapigatewayv2.HttpApi
+		cdn        awscloudfront.Distribution
+		dns        awsroute53.IHostedZone
+		mainRecord awsroute53.ARecord
 	}
 
 	AppContainerProps struct {
-		AppName     string
-		App         awscdk.App
-		StackProps  awscdk.StackProps
-		Stage       string
-		UsContainer *UsContainer
+		AppName       string
+		App           awscdk.App
+		StackProps    awscdk.StackProps
+		Stage         string
+		CertContainer *CertContainer
+		ShareConf     conf.Service
 	}
 )
 
@@ -59,46 +60,45 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 		appName: p.AppName,
 		stack: awscdk.NewStack(
 			p.App,
-			jsii.String(StackName(p.AppName, p.Stage)),
+			jsii.String(p.AppName),
 			&p.StackProps,
 		),
-		stage:       p.Stage,
-		usContainer: p.UsContainer,
+		stage:         p.Stage,
+		certContainer: p.CertContainer,
+		shareConf:     p.ShareConf,
 	}
+
 	c.setParam("domain", c.domain())
 
-	c.buildVPC()
-	c.buildLogGroup()
-	c.buildUserPool()
-
 	if c.stage != "dev" {
+		// shared resources
+		c.buildVPC()
+		c.buildSecret()
+		c.buildRDS()
+		c.buildLogGroup()
+		c.buildDNS()
+
+		// app resources
 		c.buildViewBucket()
 		c.buildApiFunction()
 		c.buildMainAPI()
 		c.buildCDN()
 		c.buildViewCacheClearFunction()
-	}
-
-	c.buildAuth()
-	c.buildDNS()
-	c.buildMainRecord()
-
-	if c.stage == "dev" {
-		c.setParam("db/dsn", fmt.Sprintf("postgresql://postgres:password@db:5432/%s?sslmode=disable", c.appName))
+		c.buildMainRecord()
 	}
 
 	return c
 }
 
 func (c *AppContainer) buildVPC() {
-	vpcID, _ := conf.GetString(context.TODO(), "/share/vpc/id")
+	vpcID, _ := c.shareConf.Get("vpc/id")
 	publicIDs := []*string{}
 	privateIDs := []*string{}
 	isolatedIDs := []*string{}
 	for i := range []int{0, 1} {
-		publicID, _ := conf.GetString(context.TODO(), fmt.Sprintf("/share/vpc/subnet/public/%d/id", i))
-		privateID, _ := conf.GetString(context.TODO(), fmt.Sprintf("/share/vpc/subnet/private/%d/id", i))
-		isolatedID, _ := conf.GetString(context.TODO(), fmt.Sprintf("/share/vpc/subnet/isolated/%d/id", i))
+		publicID, _ := c.shareConf.Get(fmt.Sprintf("vpc/subnet/public/%d/id", i))
+		privateID, _ := c.shareConf.Get(fmt.Sprintf("vpc/subnet/private/%d/id", i))
+		isolatedID, _ := c.shareConf.Get(fmt.Sprintf("vpc/subnet/isolated/%d/id", i))
 		publicIDs = append(publicIDs, jsii.String(publicID))
 		privateIDs = append(privateIDs, jsii.String(privateID))
 		isolatedIDs = append(isolatedIDs, jsii.String(isolatedID))
@@ -117,14 +117,21 @@ func (c *AppContainer) buildVPC() {
 	)
 }
 
-func (c *AppContainer) buildLogGroup() {
-	loggroupArn, _ := conf.GetString(context.TODO(), "/share/loggroup/arn")
-	c.logGroup = awslogs.LogGroup_FromLogGroupArn(c.stack, jsii.String("ShareLogGroup"), jsii.String(loggroupArn))
+func (c *AppContainer) buildSecret() {
+	secretArn, _ := c.shareConf.Get("secret/arn")
+	c.secret = awssecretsmanager.Secret_FromSecretCompleteArn(c.stack, jsii.String("ShareSecret"), jsii.String(secretArn))
 }
 
-func (c *AppContainer) buildUserPool() {
-	userPoolId, _ := conf.GetString(context.TODO(), "/share/cognito/userpool/id")
-	c.userPool = awscognito.UserPool_FromUserPoolId(c.stack, jsii.String("ShareUserPool"), jsii.String(userPoolId))
+func (c *AppContainer) buildRDS() {
+	rdsInstanceId, _ := c.shareConf.Get("rds/instance/id")
+	c.rds = awsrds.DatabaseInstance_FromLookup(c.stack, jsii.String("ShareRDS"), &awsrds.DatabaseInstanceLookupOptions{
+		InstanceIdentifier: jsii.String(rdsInstanceId),
+	})
+}
+
+func (c *AppContainer) buildLogGroup() {
+	loggroupArn, _ := c.shareConf.Get("loggroup/arn")
+	c.logGroup = awslogs.LogGroup_FromLogGroupArn(c.stack, jsii.String("ShareLogGroup"), jsii.String(loggroupArn))
 }
 
 func (c *AppContainer) buildCDN() {
@@ -133,31 +140,14 @@ func (c *AppContainer) buildCDN() {
 		jsii.String("Cdn"),
 		&awscloudfront.DistributionProps{
 			PriceClass:        awscloudfront.PriceClass_PRICE_CLASS_200,
-			Certificate:       c.usContainer.Cert,
+			Certificate:       c.certContainer.Cert,
 			DefaultRootObject: jsii.String("index.html"),
 			DefaultBehavior: &awscloudfront.BehaviorOptions{
-				Origin:               awscloudfrontorigins.S3BucketOrigin_WithOriginAccessControl(c.viewBucket, &awscloudfrontorigins.S3BucketOriginWithOACProps{}),
-				ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
-				ResponseHeadersPolicy: awscloudfront.NewResponseHeadersPolicy(
-					c.stack,
-					jsii.String("ResponseHeadersPolicy"),
-					&awscloudfront.ResponseHeadersPolicyProps{
-						CustomHeadersBehavior: &awscloudfront.ResponseCustomHeadersBehavior{
-							CustomHeaders: &[]*awscloudfront.ResponseCustomHeader{
-								{
-									Header:   jsii.String("Cross-Origin-Opener-Policy"),
-									Value:    jsii.String("same-origin"),
-									Override: jsii.Bool(true),
-								},
-								{
-									Header:   jsii.String("Cross-Origin-Embedder-Policy"),
-									Value:    jsii.String("require-corp"),
-									Override: jsii.Bool(true),
-								},
-							},
-						},
-					},
+				Origin: awscloudfrontorigins.S3BucketOrigin_WithOriginAccessControl(
+					c.viewBucket,
+					&awscloudfrontorigins.S3BucketOriginWithOACProps{},
 				),
+				ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
 				FunctionAssociations: &[]*awscloudfront.FunctionAssociation{
 					{
 						EventType: awscloudfront.FunctionEventType_VIEWER_REQUEST,
@@ -176,26 +166,23 @@ func (c *AppContainer) buildCDN() {
 			DomainNames: jsii.Strings(c.domain()),
 		})
 
-	if c.stage == "dev" {
-		// noop
-	} else {
-		apigDomain := fmt.Sprintf("%s.execute-api.%s.amazonaws.com", *c.mainApi.ApiId(), *c.stack.Region())
-		apigOrigin := awscloudfrontorigins.NewHttpOrigin(jsii.String(apigDomain), &awscloudfrontorigins.HttpOriginProps{})
-		cacheDisableOptions := &awscloudfront.AddBehaviorOptions{
-			OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
-			ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
-			AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
-			CachePolicy:          awscloudfront.CachePolicy_CACHING_DISABLED(),
-		}
-		cdn.AddBehavior(jsii.String("/api/*"), apigOrigin, cacheDisableOptions)
+	apigDomain := fmt.Sprintf("%s.execute-api.%s.amazonaws.com", *c.mainApi.ApiId(), *c.stack.Region())
+	apigOrigin := awscloudfrontorigins.NewHttpOrigin(jsii.String(apigDomain), &awscloudfrontorigins.HttpOriginProps{})
+	cacheDisableOptions := &awscloudfront.AddBehaviorOptions{
+		OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
+		ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
+		AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
+		CachePolicy:          awscloudfront.CachePolicy_CACHING_DISABLED(),
 	}
+	cdn.AddBehavior(jsii.String("/api/*"), apigOrigin, cacheDisableOptions)
+
 	c.cdn = cdn
 }
 
 func (c *AppContainer) buildMainAPI() {
 	api := awsapigatewayv2.NewHttpApi(
 		c.stack,
-		jsii.Sprintf("%s-%s-main-api", c.appName, c.stage),
+		jsii.Sprintf("%s-main-api", c.appName),
 		&awsapigatewayv2.HttpApiProps{},
 	)
 	integration := awsapigatewayv2integrations.NewHttpLambdaIntegration(
@@ -231,13 +218,18 @@ func (c *AppContainer) buildApiFunction() {
 				jsii.String("../cmd/lambda/api/build"),
 				&awss3assets.AssetOptions{},
 			),
-			Environment: &map[string]*string{"STAGE": jsii.String(c.stage)},
-			Vpc:         c.vpc,
+			Environment: &map[string]*string{
+				"APP_NAME": jsii.String(c.appName),
+				"STAGE":    jsii.String(c.stage),
+			},
+			Vpc: c.vpc,
 		})
 	f.AddToRolePolicy(awsiam.NewPolicyStatement(&awsiam.PolicyStatementProps{
 		Actions:   &[]*string{jsii.String("ssm:Get*")},
 		Resources: &[]*string{jsii.String("*")},
 	}))
+	c.secret.GrantRead(f, nil)
+	c.rds.Connections().AllowDefaultPortFrom(f, nil)
 	c.apiFunc = f
 }
 
@@ -259,7 +251,6 @@ func (c *AppContainer) buildViewBucket() {
 			},
 		})
 	c.viewBucket = bucket
-	c.setParam("s3/view", *bucket.BucketName())
 }
 
 func (c *AppContainer) buildViewCacheClearFunction() {
@@ -327,65 +318,10 @@ func (c *AppContainer) buildDNS() {
 	c.dns = dns
 }
 
-func (c *AppContainer) buildAuth() {
-	userPoolClient := awscognito.NewUserPoolClient(
-		c.stack,
-		jsii.String("UserPoolClient"),
-		&awscognito.UserPoolClientProps{
-			UserPool:           c.userPool,
-			UserPoolClientName: jsii.Sprintf("%s-%s", c.appName, c.stage),
-			SupportedIdentityProviders: &[]awscognito.UserPoolClientIdentityProvider{
-				awscognito.UserPoolClientIdentityProvider_GOOGLE(),
-				awscognito.UserPoolClientIdentityProvider_COGNITO(),
-			},
-			AuthFlows: &awscognito.AuthFlow{
-				User:    jsii.Bool(true),
-				UserSrp: jsii.Bool(true),
-			},
-			OAuth: &awscognito.OAuthSettings{
-				CallbackUrls: &[]*string{
-					jsii.String("https://" + c.domain()),
-				},
-				LogoutUrls: &[]*string{
-					jsii.String("https://" + c.domain()),
-				},
-				Flows: &awscognito.OAuthFlows{
-					AuthorizationCodeGrant: jsii.Bool(true),
-				},
-				Scopes: &[]awscognito.OAuthScope{
-					awscognito.OAuthScope_OPENID(),
-					awscognito.OAuthScope_PROFILE(),
-					awscognito.OAuthScope_EMAIL(),
-				},
-			},
-		},
-	)
-
-	awscognito.NewCfnManagedLoginBranding(
-		c.stack,
-		jsii.String("LoginBranding"),
-		&awscognito.CfnManagedLoginBrandingProps{
-			UserPoolId:               c.userPool.UserPoolId(),
-			ClientId:                 userPoolClient.UserPoolClientId(),
-			UseCognitoProvidedValues: jsii.Bool(true),
-		},
-	)
-
-	c.userPoolClient = userPoolClient
-	c.setParam("cognito/userpool/clientid", *userPoolClient.UserPoolClientId())
-}
-
 func (c *AppContainer) buildMainRecord() {
-	var target awsroute53.RecordTarget
-	if c.stage == "dev" {
-		target = awsroute53.RecordTarget_FromIpAddresses(
-			jsii.String(os.Getenv("IP")),
-		)
-	} else {
-		target = awsroute53.RecordTarget_FromAlias(
-			awsroute53targets.NewCloudFrontTarget(c.cdn),
-		)
-	}
+	target := awsroute53.RecordTarget_FromAlias(
+		awsroute53targets.NewCloudFrontTarget(c.cdn),
+	)
 	record := awsroute53.NewARecord(
 		c.stack,
 		jsii.String("MainDnsRecord"),
@@ -399,9 +335,9 @@ func (c *AppContainer) buildMainRecord() {
 }
 
 func (c *AppContainer) domain() string {
-	return GetDomain(c.appName, c.stage)
+	return getDomain(c.appName, c.stage)
 }
 
 func (c *AppContainer) setParam(key, val string) {
-	SetParam(c.stack, c.appName, c.stage, key, val)
+	setParam(c.stack, c.appName, key, val)
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type (
-	UsContainer struct {
+	CertContainer struct {
 		appName string
 		stack   awscdk.Stack
 		stage   string
@@ -16,7 +16,7 @@ type (
 		Cert    awscertificatemanager.Certificate
 	}
 
-	UsContainerProps struct {
+	CertContainerProps struct {
 		AppName    string
 		App        awscdk.App
 		StackProps awscdk.StackProps
@@ -24,12 +24,12 @@ type (
 	}
 )
 
-func NewUsContainer(p UsContainerProps) *UsContainer {
-	c := &UsContainer{
+func NewCertContainer(p CertContainerProps) *CertContainer {
+	c := &CertContainer{
 		appName: p.AppName,
 		stack: awscdk.NewStack(
 			p.App,
-			jsii.String(StackName(p.AppName+"-cert", p.Stage)),
+			jsii.String(p.AppName+"-cert"),
 			&p.StackProps,
 		),
 		stage: p.Stage,
@@ -40,7 +40,7 @@ func NewUsContainer(p UsContainerProps) *UsContainer {
 
 	return c
 }
-func (c *UsContainer) buildDNS() {
+func (c *CertContainer) buildDNS() {
 	dns := awsroute53.HostedZone_FromLookup(
 		c.stack,
 		jsii.String("Dns"),
@@ -51,12 +51,12 @@ func (c *UsContainer) buildDNS() {
 	c.dns = dns
 }
 
-func (c *UsContainer) buildCert() {
+func (c *CertContainer) buildCert() {
 	cert := c.cert("AppCertificate", c.domain(c.appName))
 	c.Cert = cert
 }
 
-func (c *UsContainer) cert(id, domain string) awscertificatemanager.Certificate {
+func (c *CertContainer) cert(id, domain string) awscertificatemanager.Certificate {
 	return awscertificatemanager.NewCertificate(
 		c.stack,
 		jsii.String(id),
@@ -66,6 +66,6 @@ func (c *UsContainer) cert(id, domain string) awscertificatemanager.Certificate 
 		})
 }
 
-func (c *UsContainer) domain(appName string) string {
-	return GetDomain(appName, c.stage)
+func (c *CertContainer) domain(appName string) string {
+	return getDomain(appName, c.stage)
 }
