@@ -192,8 +192,8 @@ func (r *RuleRepository) saveCommentTypePaths(ruleID string, commentTypePaths []
 	for i, ctp := range commentTypePaths {
 		commentTypePathRecords[i] = model.CommentTypePaths{
 			RuleID:              ruleID,
-			ChildCommentTypeID:  ctp.ChildCommentTypeID,
 			ParentCommentTypeID: ctp.ParentCommentTypeID,
+			ChildCommentTypeID:  ctp.ChildCommentTypeID,
 		}
 	}
 
@@ -256,8 +256,8 @@ func (r *RuleRepository) fetchCommentTypePathsByRuleIDs(ruleIDs []string) (map[s
 	result := make(map[string][]rule.CommentTypePath)
 	for _, ctp := range records {
 		result[ctp.RuleID] = append(result[ctp.RuleID], rule.CommentTypePath{
-			ChildCommentTypeID:  ctp.ChildCommentTypeID,
 			ParentCommentTypeID: ctp.ParentCommentTypeID,
+			ChildCommentTypeID:  ctp.ChildCommentTypeID,
 		})
 	}
 

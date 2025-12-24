@@ -45,24 +45,24 @@ const mockRule: Rule = {
   ],
   commentTypePaths: [
     {
-      childCommentTypeId: "01234567890123456789012347",
       parentCommentTypeId: "01234567890123456789012348",
+      childCommentTypeId: "01234567890123456789012347",
     },
     {
-      childCommentTypeId: "01234567890123456789012347",
       parentCommentTypeId: "01234567890123456789012349",
+      childCommentTypeId: "01234567890123456789012347",
     },
     {
-      childCommentTypeId: "01234567890123456789012347",
       parentCommentTypeId: "01234567890123456789012350",
+      childCommentTypeId: "01234567890123456789012347",
     },
     {
-      childCommentTypeId: "01234567890123456789012348",
       parentCommentTypeId: "01234567890123456789012349",
+      childCommentTypeId: "01234567890123456789012348",
     },
     {
-      childCommentTypeId: "01234567890123456789012350",
       parentCommentTypeId: "01234567890123456789012348",
+      childCommentTypeId: "01234567890123456789012350",
     },
   ],
 };

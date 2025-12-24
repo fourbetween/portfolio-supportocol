@@ -724,8 +724,8 @@ func (h *appHandler) toRuleCommentTypePaths(ctps []oas.CommentTypePath) []rule.C
 	result := make([]rule.CommentTypePath, len(ctps))
 	for i, v := range ctps {
 		result[i] = rule.CommentTypePath{
-			ChildCommentTypeID:  string(v.ChildCommentTypeId),
 			ParentCommentTypeID: string(v.ParentCommentTypeId),
+			ChildCommentTypeID:  string(v.ChildCommentTypeId),
 		}
 	}
 	return result
@@ -746,8 +746,8 @@ func (h *appHandler) toOasRule(item *rule.Rule) oas.Rule {
 	ctps := make([]oas.CommentTypePath, len(item.CommentTypePaths()))
 	for i, v := range item.CommentTypePaths() {
 		ctps[i] = oas.CommentTypePath{
-			ChildCommentTypeId:  oas.ID(v.ChildCommentTypeID),
 			ParentCommentTypeId: oas.ID(v.ParentCommentTypeID),
+			ChildCommentTypeId:  oas.ID(v.ChildCommentTypeID),
 		}
 	}
 	return oas.Rule{

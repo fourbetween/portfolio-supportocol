@@ -89,13 +89,13 @@ components:
     CommentTypePath:
       type: object
       properties:
-        childCommentTypeId:
-          $ref: "#/components/schemas/Id"
         parentCommentTypeId:
           $ref: "#/components/schemas/Id"
+        childCommentTypeId:
+          $ref: "#/components/schemas/Id"
       required:
-        - childCommentTypeId
         - parentCommentTypeId
+        - childCommentTypeId
     Rule:
       type: object
       properties:

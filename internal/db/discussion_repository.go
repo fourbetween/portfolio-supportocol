@@ -174,7 +174,7 @@ func (r *DiscussionRepository) SaveComment(c *discussion.Comment) error {
 	model := r.toCommentModel(c)
 
 	stmt := table.Comments.
-		INSERT(table.Comments.AllColumns).
+		INSERT(table.Comments.AllColumns.Except(table.Comments.UpdatedAt)).
 		MODEL(model).
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(
@@ -247,7 +247,7 @@ func (r *DiscussionRepository) LoadIssue(params discussion.LoadIssueParams) (*di
 func (r *DiscussionRepository) SaveIssue(issue *discussion.Issue) error {
 	mdl := r.toIssueModel(issue)
 	stmt := table.Issues.
-		INSERT(table.Issues.AllColumns).
+		INSERT(table.Issues.AllColumns.Except(table.Issues.UpdatedAt)).
 		MODEL(mdl).
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(
@@ -314,7 +314,7 @@ func (r *DiscussionRepository) LoadNote(params discussion.LoadNoteParams) (*disc
 func (r *DiscussionRepository) SaveNote(note *discussion.Note) error {
 	mdl := r.toNoteModel(note)
 	stmt := table.Notes.
-		INSERT(table.Notes.AllColumns).
+		INSERT(table.Notes.AllColumns.Except(table.Notes.UpdatedAt)).
 		MODEL(mdl).
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(

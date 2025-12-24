@@ -68,13 +68,13 @@ describe("ItemDiscussionPagePresenter", async () => {
     commentTypePaths: [
       {
         // 根拠（子）→主張（親）：主張に対して根拠で返信可能
-        childCommentTypeId: "01234567890123456789012352",
         parentCommentTypeId: "01234567890123456789012351",
+        childCommentTypeId: "01234567890123456789012352",
       },
       {
         // 反論（子）→主張（親）：主張に対して反論で返信可能
-        childCommentTypeId: "01234567890123456789012353",
         parentCommentTypeId: "01234567890123456789012351",
+        childCommentTypeId: "01234567890123456789012353",
       },
     ],
   };

@@ -90,27 +90,27 @@ func (f *Factory) NewDefaultRule(params NewDefaultRuleParams) (*Rule, error) {
 
 	commentTypePaths := []CommentTypePath{
 		// 問題に対して
-		{ChildCommentTypeID: solutionID, ParentCommentTypeID: problemID},
-		{ChildCommentTypeID: agreeID, ParentCommentTypeID: problemID},
-		{ChildCommentTypeID: disagreeID, ParentCommentTypeID: problemID},
-		{ChildCommentTypeID: questionID, ParentCommentTypeID: problemID},
+		{ParentCommentTypeID: problemID, ChildCommentTypeID: solutionID},
+		{ParentCommentTypeID: problemID, ChildCommentTypeID: agreeID},
+		{ParentCommentTypeID: problemID, ChildCommentTypeID: disagreeID},
+		{ParentCommentTypeID: problemID, ChildCommentTypeID: questionID},
 		// 対応に対して
-		{ChildCommentTypeID: agreeID, ParentCommentTypeID: solutionID},
-		{ChildCommentTypeID: disagreeID, ParentCommentTypeID: solutionID},
-		{ChildCommentTypeID: questionID, ParentCommentTypeID: solutionID},
+		{ParentCommentTypeID: solutionID, ChildCommentTypeID: agreeID},
+		{ParentCommentTypeID: solutionID, ChildCommentTypeID: disagreeID},
+		{ParentCommentTypeID: solutionID, ChildCommentTypeID: questionID},
 		// 賛成・反対に対して
-		{ChildCommentTypeID: agreeID, ParentCommentTypeID: agreeID},
-		{ChildCommentTypeID: disagreeID, ParentCommentTypeID: agreeID},
-		{ChildCommentTypeID: questionID, ParentCommentTypeID: agreeID},
-		{ChildCommentTypeID: agreeID, ParentCommentTypeID: disagreeID},
-		{ChildCommentTypeID: disagreeID, ParentCommentTypeID: disagreeID},
-		{ChildCommentTypeID: questionID, ParentCommentTypeID: disagreeID},
+		{ParentCommentTypeID: agreeID, ChildCommentTypeID: agreeID},
+		{ParentCommentTypeID: agreeID, ChildCommentTypeID: disagreeID},
+		{ParentCommentTypeID: agreeID, ChildCommentTypeID: questionID},
+		{ParentCommentTypeID: disagreeID, ChildCommentTypeID: agreeID},
+		{ParentCommentTypeID: disagreeID, ChildCommentTypeID: disagreeID},
+		{ParentCommentTypeID: disagreeID, ChildCommentTypeID: questionID},
 		// 質問に対して
-		{ChildCommentTypeID: answerID, ParentCommentTypeID: questionID},
+		{ParentCommentTypeID: questionID, ChildCommentTypeID: answerID},
 		// 回答に対して
-		{ChildCommentTypeID: agreeID, ParentCommentTypeID: answerID},
-		{ChildCommentTypeID: disagreeID, ParentCommentTypeID: answerID},
-		{ChildCommentTypeID: questionID, ParentCommentTypeID: answerID},
+		{ParentCommentTypeID: answerID, ChildCommentTypeID: agreeID},
+		{ParentCommentTypeID: answerID, ChildCommentTypeID: disagreeID},
+		{ParentCommentTypeID: answerID, ChildCommentTypeID: questionID},
 	}
 
 	return f.NewRule(NewRuleParams{
