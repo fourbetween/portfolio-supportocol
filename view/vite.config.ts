@@ -23,10 +23,6 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       host: true,
       allowedHosts: [".hick-r.com"],
-      headers: {
-        "Cross-Origin-Opener-Policy": "same-origin",
-        "Cross-Origin-Embedder-Policy": "require-corp",
-      },
     },
     plugins: [pwaPlugin(mode)],
   };
