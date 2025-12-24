@@ -199,7 +199,7 @@ components:
           type: string
         postedBy:
           type: string
-        postedAt:
+        createdAt:
           type: string
           format: date-time
         status:
@@ -211,7 +211,7 @@ components:
         - commentTypeId
         - content
         - postedBy
-        - postedAt
+        - createdAt
         - status
     Issue:
       type: object
@@ -250,7 +250,7 @@ components:
           type: string
         postedBy:
           type: string
-        postedAt:
+        createdAt:
           type: string
           format: date-time
       required:
@@ -258,7 +258,7 @@ components:
         - discussionId
         - content
         - postedBy
-        - postedAt
+        - createdAt
   parameters: {}
 paths:
   /auth/google:

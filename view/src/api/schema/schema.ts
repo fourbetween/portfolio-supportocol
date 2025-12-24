@@ -55,7 +55,7 @@ export const CommentSchema = z
     commentTypeId: idSchema,
     content: z.string(),
     postedBy: z.string(),
-    postedAt: z.string().openapi({ format: "date-time" }),
+    createdAt: z.string().openapi({ format: "date-time" }),
     status: CommentStatusSchema,
   })
   .openapi("Comment");
@@ -77,7 +77,7 @@ export const NoteSchema = z
     discussionId: idSchema,
     content: z.string(),
     postedBy: z.string(),
-    postedAt: z.string().openapi({ format: "date-time" }),
+    createdAt: z.string().openapi({ format: "date-time" }),
   })
   .openapi("Note");
 

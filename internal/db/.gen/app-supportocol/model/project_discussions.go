@@ -14,5 +14,5 @@ import (
 type ProjectDiscussions struct {
 	ProjectID    string `sql:"primary_key"`
 	DiscussionID string `sql:"primary_key"`
-	AddedAt      time.Time
+	CreatedAt    time.Time
 }

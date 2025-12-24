@@ -24,6 +24,7 @@ func newContainer(t *testing.T) *container {
 	ctrl := gomock.NewController(t)
 
 	idSrv := id.NewMockService(ctrl)
+	idSrv.EXPECT().Generate().Return("test-id").AnyTimes()
 	clockSrv := clock.NewRealService()
 	discussionRepo := discussion.NewMockRepository(ctrl)
 	ruleRepo := rule.NewMockRepository(ctrl)

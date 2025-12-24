@@ -784,7 +784,7 @@ func (h *appHandler) toOasComment(item *discussion.Comment) oas.Comment {
 		CommentTypeId:   oas.ID(item.CommentTypeID()),
 		Content:         item.Content(),
 		PostedBy:        item.PostedBy(),
-		PostedAt:        item.PostedAt(),
+		CreatedAt:       item.CreatedAt(),
 		Status:          oas.CommentStatus(item.Status()),
 	}
 }
@@ -806,7 +806,7 @@ func (h *appHandler) toOasNote(item *discussion.Note) oas.Note {
 		DiscussionId: oas.ID(item.DiscussionID()),
 		Content:      item.Content(),
 		PostedBy:     item.PostedBy(),
-		PostedAt:     item.PostedAt(),
+		CreatedAt:    item.CreatedAt(),
 	}
 }
 

@@ -27,7 +27,7 @@ type Comment struct {
 	CommentTypeId   ID            `json:"commentTypeId"`
 	Content         string        `json:"content"`
 	PostedBy        string        `json:"postedBy"`
-	PostedAt        time.Time     `json:"postedAt"`
+	CreatedAt       time.Time     `json:"createdAt"`
 	Status          CommentStatus `json:"status"`
 }
 
@@ -61,9 +61,9 @@ func (s *Comment) GetPostedBy() string {
 	return s.PostedBy
 }
 
-// GetPostedAt returns the value of PostedAt.
-func (s *Comment) GetPostedAt() time.Time {
-	return s.PostedAt
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Comment) GetCreatedAt() time.Time {
+	return s.CreatedAt
 }
 
 // GetStatus returns the value of Status.
@@ -101,9 +101,9 @@ func (s *Comment) SetPostedBy(val string) {
 	s.PostedBy = val
 }
 
-// SetPostedAt sets the value of PostedAt.
-func (s *Comment) SetPostedAt(val time.Time) {
-	s.PostedAt = val
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Comment) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
 }
 
 // SetStatus sets the value of Status.
@@ -1143,7 +1143,7 @@ type Note struct {
 	DiscussionId ID        `json:"discussionId"`
 	Content      string    `json:"content"`
 	PostedBy     string    `json:"postedBy"`
-	PostedAt     time.Time `json:"postedAt"`
+	CreatedAt    time.Time `json:"createdAt"`
 }
 
 // GetID returns the value of ID.
@@ -1166,9 +1166,9 @@ func (s *Note) GetPostedBy() string {
 	return s.PostedBy
 }
 
-// GetPostedAt returns the value of PostedAt.
-func (s *Note) GetPostedAt() time.Time {
-	return s.PostedAt
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Note) GetCreatedAt() time.Time {
+	return s.CreatedAt
 }
 
 // SetID sets the value of ID.
@@ -1191,9 +1191,9 @@ func (s *Note) SetPostedBy(val string) {
 	s.PostedBy = val
 }
 
-// SetPostedAt sets the value of PostedAt.
-func (s *Note) SetPostedAt(val time.Time) {
-	s.PostedAt = val
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Note) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
 }
 
 // NewOptString returns new OptString with value set to v.

@@ -8,7 +8,7 @@ type (
 		discussionID string
 		content      string
 		postedBy     string
-		postedAt     time.Time
+		createdAt    time.Time
 
 		repo Repository
 	}
@@ -34,8 +34,8 @@ func (n *Note) PostedBy() string {
 	return n.postedBy
 }
 
-func (n *Note) PostedAt() time.Time {
-	return n.postedAt
+func (n *Note) CreatedAt() time.Time {
+	return n.createdAt
 }
 
 func (n *Note) update(params UpdateNoteParams) {

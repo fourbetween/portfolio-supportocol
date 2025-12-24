@@ -19,7 +19,7 @@ type projectDiscussionsTable struct {
 	// Columns
 	ProjectID    mysql.ColumnString
 	DiscussionID mysql.ColumnString
-	AddedAt      mysql.ColumnTimestamp
+	CreatedAt    mysql.ColumnTimestamp
 
 	AllColumns     mysql.ColumnList
 	MutableColumns mysql.ColumnList
@@ -63,10 +63,10 @@ func newProjectDiscussionsTableImpl(schemaName, tableName, alias string) project
 	var (
 		ProjectIDColumn    = mysql.StringColumn("project_id")
 		DiscussionIDColumn = mysql.StringColumn("discussion_id")
-		AddedAtColumn      = mysql.TimestampColumn("added_at")
-		allColumns         = mysql.ColumnList{ProjectIDColumn, DiscussionIDColumn, AddedAtColumn}
-		mutableColumns     = mysql.ColumnList{AddedAtColumn}
-		defaultColumns     = mysql.ColumnList{AddedAtColumn}
+		CreatedAtColumn    = mysql.TimestampColumn("created_at")
+		allColumns         = mysql.ColumnList{ProjectIDColumn, DiscussionIDColumn, CreatedAtColumn}
+		mutableColumns     = mysql.ColumnList{CreatedAtColumn}
+		defaultColumns     = mysql.ColumnList{CreatedAtColumn}
 	)
 
 	return projectDiscussionsTable{
@@ -75,7 +75,7 @@ func newProjectDiscussionsTableImpl(schemaName, tableName, alias string) project
 		//Columns
 		ProjectID:    ProjectIDColumn,
 		DiscussionID: DiscussionIDColumn,
-		AddedAt:      AddedAtColumn,
+		CreatedAt:    CreatedAtColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

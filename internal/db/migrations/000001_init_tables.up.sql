@@ -62,7 +62,7 @@ CREATE TABLE discussions (
 CREATE TABLE project_discussions (
 	project_id CHAR(36) NOT NULL,
 	discussion_id CHAR(36) NOT NULL,
-	added_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (project_id, discussion_id),
 	CONSTRAINT project_discussions_projects_fk FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
 	CONSTRAINT project_discussions_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE
@@ -100,7 +100,7 @@ CREATE TABLE comments (
 	comment_type_id CHAR(36) NOT NULL,
 	content TEXT NOT NULL,
 	posted_by CHAR(36) NOT NULL,
-	posted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	status VARCHAR(20) NOT NULL, -- 'unassigned', 'assigned', 'archived', 'deleted'
 	PRIMARY KEY (id),
@@ -116,7 +116,7 @@ CREATE TABLE notes (
 	discussion_id CHAR(36) NOT NULL,
 	content TEXT NOT NULL,
 	posted_by CHAR(36) NOT NULL,
-	posted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
 	CONSTRAINT notes_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE,

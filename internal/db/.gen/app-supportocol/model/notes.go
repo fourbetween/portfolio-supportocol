@@ -16,6 +16,6 @@ type Notes struct {
 	DiscussionID string
 	Content      string
 	PostedBy     string
-	PostedAt     time.Time
+	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }

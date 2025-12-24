@@ -37,7 +37,7 @@ func (r *ProjectRepository) Save(p *project.Project) error {
 	}
 
 	projectStmt := table.Projects.
-		INSERT(table.Projects.AllColumns).
+		INSERT(table.Projects.AllColumns.Except(table.Projects.UpdatedAt)).
 		MODEL(projectRecord).
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(

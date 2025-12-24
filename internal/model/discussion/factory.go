@@ -86,7 +86,7 @@ func (f *Factory) NewComment(params NewCommentParams) *Comment {
 	return f.BuildComment(BuildCommentParams{
 		ID:               id,
 		NewCommentParams: params,
-		PostedAt:         f.clockSrv.Now(),
+		CreatedAt:        f.clockSrv.Now(),
 		Status:           CommentStatusUnassigned,
 	})
 }
@@ -94,8 +94,8 @@ func (f *Factory) NewComment(params NewCommentParams) *Comment {
 type BuildCommentParams struct {
 	ID string
 	NewCommentParams
-	PostedAt time.Time
-	Status   CommentStatus
+	CreatedAt time.Time
+	Status    CommentStatus
 }
 
 func (f *Factory) BuildComment(params BuildCommentParams) *Comment {
@@ -106,7 +106,7 @@ func (f *Factory) BuildComment(params BuildCommentParams) *Comment {
 		commentTypeID:   params.CommentTypeID,
 		content:         params.Content,
 		postedBy:        params.PostedBy,
-		postedAt:        params.PostedAt,
+		createdAt:       params.CreatedAt,
 		status:          params.Status,
 		repo:            f.repo,
 	}
@@ -157,14 +157,14 @@ func (f *Factory) NewNote(params NewNoteParams) *Note {
 	return f.BuildNote(BuildNoteParams{
 		ID:            id,
 		NewNoteParams: params,
-		PostedAt:      f.clockSrv.Now(),
+		CreatedAt:     f.clockSrv.Now(),
 	})
 }
 
 type BuildNoteParams struct {
 	ID string
 	NewNoteParams
-	PostedAt time.Time
+	CreatedAt time.Time
 }
 
 func (f *Factory) BuildNote(params BuildNoteParams) *Note {
@@ -173,7 +173,7 @@ func (f *Factory) BuildNote(params BuildNoteParams) *Note {
 		discussionID: params.DiscussionID,
 		content:      params.Content,
 		postedBy:     params.PostedBy,
-		postedAt:     params.PostedAt,
+		createdAt:    params.CreatedAt,
 		repo:         f.repo,
 	}
 }

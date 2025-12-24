@@ -23,7 +23,7 @@ type commentsTable struct {
 	CommentTypeID   mysql.ColumnString
 	Content         mysql.ColumnString
 	PostedBy        mysql.ColumnString
-	PostedAt        mysql.ColumnTimestamp
+	CreatedAt       mysql.ColumnTimestamp
 	UpdatedAt       mysql.ColumnTimestamp
 	Status          mysql.ColumnString
 
@@ -73,12 +73,12 @@ func newCommentsTableImpl(schemaName, tableName, alias string) commentsTable {
 		CommentTypeIDColumn   = mysql.StringColumn("comment_type_id")
 		ContentColumn         = mysql.StringColumn("content")
 		PostedByColumn        = mysql.StringColumn("posted_by")
-		PostedAtColumn        = mysql.TimestampColumn("posted_at")
+		CreatedAtColumn       = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
 		StatusColumn          = mysql.StringColumn("status")
-		allColumns            = mysql.ColumnList{IDColumn, DiscussionIDColumn, ParentCommentIDColumn, CommentTypeIDColumn, ContentColumn, PostedByColumn, PostedAtColumn, UpdatedAtColumn, StatusColumn}
-		mutableColumns        = mysql.ColumnList{DiscussionIDColumn, ParentCommentIDColumn, CommentTypeIDColumn, ContentColumn, PostedByColumn, PostedAtColumn, UpdatedAtColumn, StatusColumn}
-		defaultColumns        = mysql.ColumnList{PostedAtColumn, UpdatedAtColumn}
+		allColumns            = mysql.ColumnList{IDColumn, DiscussionIDColumn, ParentCommentIDColumn, CommentTypeIDColumn, ContentColumn, PostedByColumn, CreatedAtColumn, UpdatedAtColumn, StatusColumn}
+		mutableColumns        = mysql.ColumnList{DiscussionIDColumn, ParentCommentIDColumn, CommentTypeIDColumn, ContentColumn, PostedByColumn, CreatedAtColumn, UpdatedAtColumn, StatusColumn}
+		defaultColumns        = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return commentsTable{
@@ -91,7 +91,7 @@ func newCommentsTableImpl(schemaName, tableName, alias string) commentsTable {
 		CommentTypeID:   CommentTypeIDColumn,
 		Content:         ContentColumn,
 		PostedBy:        PostedByColumn,
-		PostedAt:        PostedAtColumn,
+		CreatedAt:       CreatedAtColumn,
 		UpdatedAt:       UpdatedAtColumn,
 		Status:          StatusColumn,
 

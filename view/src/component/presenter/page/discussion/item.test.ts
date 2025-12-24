@@ -87,7 +87,7 @@ describe("ItemDiscussionPagePresenter", async () => {
       commentTypeId: "01234567890123456789012351",
       content: "ルートコメント1",
       postedBy: "01234567890123456789012346",
-      postedAt: "2024-01-01T10:00:00Z",
+      createdAt: "2024-01-01T10:00:00Z",
       status: "assigned",
     },
     {
@@ -97,7 +97,7 @@ describe("ItemDiscussionPagePresenter", async () => {
       commentTypeId: "01234567890123456789012352",
       content: "根拠コメント1",
       postedBy: "01234567890123456789012346",
-      postedAt: "2024-01-01T11:00:00Z",
+      createdAt: "2024-01-01T11:00:00Z",
       status: "assigned",
     },
     {
@@ -107,7 +107,7 @@ describe("ItemDiscussionPagePresenter", async () => {
       commentTypeId: "01234567890123456789012352",
       content: "根拠コメント2",
       postedBy: "01234567890123456789012346",
-      postedAt: "2024-01-01T12:00:00Z",
+      createdAt: "2024-01-01T12:00:00Z",
       status: "assigned",
     },
     {
@@ -117,7 +117,7 @@ describe("ItemDiscussionPagePresenter", async () => {
       commentTypeId: "01234567890123456789012353",
       content: "反論コメント1",
       postedBy: "01234567890123456789012346",
-      postedAt: "2024-01-01T13:00:00Z",
+      createdAt: "2024-01-01T13:00:00Z",
       status: "assigned",
     },
   ];
@@ -340,7 +340,7 @@ describe("ItemDiscussionPagePresenter", async () => {
         commentTypeId: "01234567890123456789012351",
         content: "深さ0のコメント",
         postedBy: "01234567890123456789012346",
-        postedAt: "2024-01-01T10:00:00Z",
+        createdAt: "2024-01-01T10:00:00Z",
         status: "assigned",
       },
       {
@@ -350,7 +350,7 @@ describe("ItemDiscussionPagePresenter", async () => {
         commentTypeId: "01234567890123456789012352",
         content: "深さ1のコメント",
         postedBy: "01234567890123456789012346",
-        postedAt: "2024-01-01T11:00:00Z",
+        createdAt: "2024-01-01T11:00:00Z",
         status: "assigned",
       },
       {
@@ -360,7 +360,7 @@ describe("ItemDiscussionPagePresenter", async () => {
         commentTypeId: "01234567890123456789012352",
         content: "深さ2のコメント",
         postedBy: "01234567890123456789012346",
-        postedAt: "2024-01-01T12:00:00Z",
+        createdAt: "2024-01-01T12:00:00Z",
         status: "assigned",
       },
     ];
@@ -633,7 +633,7 @@ describe("ItemDiscussionPagePresenter", async () => {
       commentTypeId: "01234567890123456789012351", // 主張
       content: "これは主張です",
       postedBy: "01234567890123456789012346",
-      postedAt: "2024-01-01T10:00:00Z",
+      createdAt: "2024-01-01T10:00:00Z",
       status: "assigned",
     };
 
@@ -645,7 +645,7 @@ describe("ItemDiscussionPagePresenter", async () => {
       commentTypeId: "01234567890123456789012352", // 根拠
       content: "これは根拠です",
       postedBy: "01234567890123456789012346",
-      postedAt: "2024-01-01T11:00:00Z",
+      createdAt: "2024-01-01T11:00:00Z",
       status: "assigned",
     };
 

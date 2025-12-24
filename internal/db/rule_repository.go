@@ -38,7 +38,7 @@ func (r *RuleRepository) Save(rl *rule.Rule) error {
 	}
 
 	ruleStmt := table.Rules.
-		INSERT(table.Rules.AllColumns).
+		INSERT(table.Rules.AllColumns.Except(table.Rules.UpdatedAt)).
 		MODEL(ruleRecord).
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(

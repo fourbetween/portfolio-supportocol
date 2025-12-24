@@ -46,8 +46,8 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 		e.Str(s.PostedBy)
 	}
 	{
-		e.FieldStart("postedAt")
-		json.EncodeDateTime(e, s.PostedAt)
+		e.FieldStart("createdAt")
+		json.EncodeDateTime(e, s.CreatedAt)
 	}
 	{
 		e.FieldStart("status")
@@ -62,7 +62,7 @@ var jsonFieldsNameOfComment = [8]string{
 	3: "commentTypeId",
 	4: "content",
 	5: "postedBy",
-	6: "postedAt",
+	6: "createdAt",
 	7: "status",
 }
 
@@ -139,17 +139,17 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"postedBy\"")
 			}
-		case "postedAt":
+		case "createdAt":
 			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
-				s.PostedAt = v
+				s.CreatedAt = v
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"postedAt\"")
+				return errors.Wrap(err, "decode field \"createdAt\"")
 			}
 		case "status":
 			requiredBitSet[0] |= 1 << 7
@@ -2622,8 +2622,8 @@ func (s *Note) encodeFields(e *jx.Encoder) {
 		e.Str(s.PostedBy)
 	}
 	{
-		e.FieldStart("postedAt")
-		json.EncodeDateTime(e, s.PostedAt)
+		e.FieldStart("createdAt")
+		json.EncodeDateTime(e, s.CreatedAt)
 	}
 }
 
@@ -2632,7 +2632,7 @@ var jsonFieldsNameOfNote = [5]string{
 	1: "discussionId",
 	2: "content",
 	3: "postedBy",
-	4: "postedAt",
+	4: "createdAt",
 }
 
 // Decode decodes Note from json.
@@ -2688,17 +2688,17 @@ func (s *Note) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"postedBy\"")
 			}
-		case "postedAt":
+		case "createdAt":
 			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
-				s.PostedAt = v
+				s.CreatedAt = v
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"postedAt\"")
+				return errors.Wrap(err, "decode field \"createdAt\"")
 			}
 		default:
 			return d.Skip()

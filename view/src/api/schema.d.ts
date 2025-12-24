@@ -1374,7 +1374,7 @@ export interface components {
             content: string;
             postedBy: string;
             /** Format: date-time */
-            postedAt: string;
+            createdAt: string;
             status: components["schemas"]["CommentStatus"];
         };
         Issue: {
@@ -1393,7 +1393,7 @@ export interface components {
             content: string;
             postedBy: string;
             /** Format: date-time */
-            postedAt: string;
+            createdAt: string;
         };
     };
     responses: never;

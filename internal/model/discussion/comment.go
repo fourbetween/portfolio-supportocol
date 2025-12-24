@@ -13,7 +13,7 @@ type (
 		commentTypeID   string
 		content         string
 		postedBy        string
-		postedAt        time.Time
+		createdAt       time.Time
 		status          CommentStatus
 
 		repo Repository
@@ -57,8 +57,8 @@ func (c *Comment) PostedBy() string {
 	return c.postedBy
 }
 
-func (c *Comment) PostedAt() time.Time {
-	return c.postedAt
+func (c *Comment) CreatedAt() time.Time {
+	return c.createdAt
 }
 
 func (c *Comment) Status() CommentStatus {

@@ -21,7 +21,7 @@ type notesTable struct {
 	DiscussionID mysql.ColumnString
 	Content      mysql.ColumnString
 	PostedBy     mysql.ColumnString
-	PostedAt     mysql.ColumnTimestamp
+	CreatedAt    mysql.ColumnTimestamp
 	UpdatedAt    mysql.ColumnTimestamp
 
 	AllColumns     mysql.ColumnList
@@ -68,11 +68,11 @@ func newNotesTableImpl(schemaName, tableName, alias string) notesTable {
 		DiscussionIDColumn = mysql.StringColumn("discussion_id")
 		ContentColumn      = mysql.StringColumn("content")
 		PostedByColumn     = mysql.StringColumn("posted_by")
-		PostedAtColumn     = mysql.TimestampColumn("posted_at")
+		CreatedAtColumn    = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn    = mysql.TimestampColumn("updated_at")
-		allColumns         = mysql.ColumnList{IDColumn, DiscussionIDColumn, ContentColumn, PostedByColumn, PostedAtColumn, UpdatedAtColumn}
-		mutableColumns     = mysql.ColumnList{DiscussionIDColumn, ContentColumn, PostedByColumn, PostedAtColumn, UpdatedAtColumn}
-		defaultColumns     = mysql.ColumnList{PostedAtColumn, UpdatedAtColumn}
+		allColumns         = mysql.ColumnList{IDColumn, DiscussionIDColumn, ContentColumn, PostedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns     = mysql.ColumnList{DiscussionIDColumn, ContentColumn, PostedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns     = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return notesTable{
@@ -83,7 +83,7 @@ func newNotesTableImpl(schemaName, tableName, alias string) notesTable {
 		DiscussionID: DiscussionIDColumn,
 		Content:      ContentColumn,
 		PostedBy:     PostedByColumn,
-		PostedAt:     PostedAtColumn,
+		CreatedAt:    CreatedAtColumn,
 		UpdatedAt:    UpdatedAtColumn,
 
 		AllColumns:     allColumns,

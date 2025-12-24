@@ -61,7 +61,7 @@ const mockComments = [
     content:
       "AIによるコードレビューは開発効率を大幅に向上させる。特に、コーディング規約のチェックやセキュリティ脆弱性の検出において効果的である。",
     postedBy: "01234567890123456789012346",
-    postedAt: "2024-01-10T10:00:00Z",
+    createdAt: "2024-01-10T10:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -72,7 +72,7 @@ const mockComments = [
     content:
       "実際にGitHub Copilotを導入した企業では、コードレビューの時間が平均30%削減されたというデータがある。",
     postedBy: "01234567890123456789012346",
-    postedAt: "2024-01-10T11:00:00Z",
+    createdAt: "2024-01-10T11:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -83,7 +83,7 @@ const mockComments = [
     content:
       "静的解析ツールと比較して、AIはより文脈を理解したレビューが可能である。",
     postedBy: "01234567890123456789012347",
-    postedAt: "2024-01-10T12:00:00Z",
+    createdAt: "2024-01-10T12:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -94,7 +94,7 @@ const mockComments = [
     content:
       "AIは設計上の問題やビジネスロジックの誤りを見つけることが難しい。人間によるレビューは依然として必要である。",
     postedBy: "01234567890123456789012347",
-    postedAt: "2024-01-10T13:00:00Z",
+    createdAt: "2024-01-10T13:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -105,7 +105,7 @@ const mockComments = [
     content:
       "AIによるレビューの精度はどの程度なのか？誤検出の割合についてのデータはあるか？",
     postedBy: "01234567890123456789012348",
-    postedAt: "2024-01-10T14:00:00Z",
+    createdAt: "2024-01-10T14:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -116,7 +116,7 @@ const mockComments = [
     content:
       "AIコードレビューはジュニアエンジニアの学習ツールとしても有用である。即座にフィードバックが得られるため、スキルアップに貢献する。",
     postedBy: "01234567890123456789012346",
-    postedAt: "2024-01-10T15:00:00Z",
+    createdAt: "2024-01-10T15:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -127,7 +127,7 @@ const mockComments = [
     content:
       "AIのフィードバックに依存しすぎると、自分で考える力が育たない可能性がある。",
     postedBy: "01234567890123456789012347",
-    postedAt: "2024-01-10T16:00:00Z",
+    createdAt: "2024-01-10T16:00:00Z",
     status: "assigned" as const,
   },
 ];
@@ -139,14 +139,14 @@ const mockNotes = [
     content:
       "この議論では、AIの進化による開発効率への影響について考える必要がある",
     postedBy: "01234567890123456789012346",
-    postedAt: "2024-01-10T09:00:00Z",
+    createdAt: "2024-01-10T09:00:00Z",
   },
   {
     id: "01234567890123456789012381",
     discussionId: "01234567890123456789012348",
     content: "参考資料: GitHub Copilot導入事例レポート",
     postedBy: "01234567890123456789012346",
-    postedAt: "2024-01-10T09:30:00Z",
+    createdAt: "2024-01-10T09:30:00Z",
   },
 ];
 
@@ -312,7 +312,7 @@ const deepNestedComments = [
     commentTypeId: "01234567890123456789012351",
     content: "レベル1: AIによるコードレビューは開発効率を向上させる。",
     postedBy: "01234567890123456789012346",
-    postedAt: "2024-01-10T10:00:00Z",
+    createdAt: "2024-01-10T10:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -322,7 +322,7 @@ const deepNestedComments = [
     commentTypeId: "01234567890123456789012352",
     content: "レベル2: 具体的なデータとして、レビュー時間が30%削減された。",
     postedBy: "01234567890123456789012347",
-    postedAt: "2024-01-10T11:00:00Z",
+    createdAt: "2024-01-10T11:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -332,7 +332,7 @@ const deepNestedComments = [
     commentTypeId: "01234567890123456789012354",
     content: "レベル3: そのデータの出典は何か？",
     postedBy: "01234567890123456789012348",
-    postedAt: "2024-01-10T12:00:00Z",
+    createdAt: "2024-01-10T12:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -342,7 +342,7 @@ const deepNestedComments = [
     commentTypeId: "01234567890123456789012352",
     content: "レベル4: GitHub公式ブログの2023年調査レポートによる。",
     postedBy: "01234567890123456789012347",
-    postedAt: "2024-01-10T13:00:00Z",
+    createdAt: "2024-01-10T13:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -353,7 +353,7 @@ const deepNestedComments = [
     content:
       "レベル5: そのレポートはGitHub自身の製品に関するものであり、バイアスがある可能性がある。",
     postedBy: "01234567890123456789012348",
-    postedAt: "2024-01-10T14:00:00Z",
+    createdAt: "2024-01-10T14:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -364,7 +364,7 @@ const deepNestedComments = [
     content:
       "レベル6: 第三者機関による検証も行われており、類似の結果が報告されている。",
     postedBy: "01234567890123456789012347",
-    postedAt: "2024-01-10T15:00:00Z",
+    createdAt: "2024-01-10T15:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -374,7 +374,7 @@ const deepNestedComments = [
     commentTypeId: "01234567890123456789012354",
     content: "レベル7: その第三者機関とは具体的にどこか？",
     postedBy: "01234567890123456789012348",
-    postedAt: "2024-01-10T16:00:00Z",
+    createdAt: "2024-01-10T16:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -385,7 +385,7 @@ const deepNestedComments = [
     content:
       "レベル8: MIT Computer Science and Artificial Intelligence Laboratory (CSAIL)の研究チームである。",
     postedBy: "01234567890123456789012347",
-    postedAt: "2024-01-10T17:00:00Z",
+    createdAt: "2024-01-10T17:00:00Z",
     status: "assigned" as const,
   },
 ];
@@ -433,7 +433,7 @@ const mixedStatusComments = [
     commentTypeId: "01234567890123456789012351",
     content: "このコメントは「割り当て済み」ステータスです。バッジは非表示。",
     postedBy: "01234567890123456789012346",
-    postedAt: "2024-01-10T10:00:00Z",
+    createdAt: "2024-01-10T10:00:00Z",
     status: "assigned" as const,
   },
   {
@@ -444,7 +444,7 @@ const mixedStatusComments = [
     content:
       "このコメントは「割り当て待ち」ステータスです。バッジが表示されます。",
     postedBy: "01234567890123456789012346",
-    postedAt: "2024-01-10T11:00:00Z",
+    createdAt: "2024-01-10T11:00:00Z",
     status: "unassigned" as const,
   },
   {
@@ -455,7 +455,7 @@ const mixedStatusComments = [
     content:
       "このコメントは「アーカイブ」ステータスです。バッジが表示されます。",
     postedBy: "01234567890123456789012347",
-    postedAt: "2024-01-10T12:00:00Z",
+    createdAt: "2024-01-10T12:00:00Z",
     status: "archived" as const,
   },
   {
@@ -465,7 +465,7 @@ const mixedStatusComments = [
     commentTypeId: "01234567890123456789012354",
     content: "このコメントは「削除」ステータスです。バッジが表示されます。",
     postedBy: "01234567890123456789012348",
-    postedAt: "2024-01-10T13:00:00Z",
+    createdAt: "2024-01-10T13:00:00Z",
     status: "deleted" as const,
   },
 ];

@@ -83,7 +83,7 @@ func (r *DiscussionRepository) Save(d *discussion.Discussion) error {
 	model := r.toModel(d)
 
 	stmt := table.Discussions.
-		INSERT(table.Discussions.AllColumns).
+		INSERT(table.Discussions.AllColumns.Except(table.Discussions.UpdatedAt)).
 		MODEL(model).
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(
@@ -380,8 +380,8 @@ func (r *DiscussionRepository) toCommentDomain(row model.Comments) *discussion.C
 			Content:         row.Content,
 			PostedBy:        row.PostedBy,
 		},
-		PostedAt: row.PostedAt,
-		Status:   discussion.CommentStatus(row.Status),
+		CreatedAt: row.CreatedAt,
+		Status:    discussion.CommentStatus(row.Status),
 	})
 }
 
@@ -393,7 +393,7 @@ func (r *DiscussionRepository) toCommentModel(c *discussion.Comment) model.Comme
 		CommentTypeID:   c.CommentTypeID(),
 		Content:         c.Content(),
 		PostedBy:        c.PostedBy(),
-		PostedAt:        c.PostedAt(),
+		CreatedAt:       c.CreatedAt(),
 		Status:          string(c.Status()),
 	}
 }
@@ -419,7 +419,7 @@ func (r *DiscussionRepository) toNoteDomain(row model.Notes) *discussion.Note {
 			Content:      row.Content,
 			PostedBy:     row.PostedBy,
 		},
-		PostedAt: row.PostedAt,
+		CreatedAt: row.CreatedAt,
 	})
 }
 
@@ -440,6 +440,6 @@ func (r *DiscussionRepository) toNoteModel(n *discussion.Note) model.Notes {
 		DiscussionID: n.DiscussionID(),
 		Content:      n.Content(),
 		PostedBy:     n.PostedBy(),
-		PostedAt:     n.PostedAt(),
+		CreatedAt:    n.CreatedAt(),
 	}
 }
