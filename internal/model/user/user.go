@@ -57,7 +57,6 @@ func (u *User) CreateProject(params CreateProjectParams) (*project.Project, erro
 	p := u.projectFac.NewProject(project.NewProjectParams{
 		Name:      params.Name,
 		CreatedBy: u.id,
-		CreatedAt: u.clockSrv.Now(),
 	})
 
 	if err := p.Save(); err != nil {
@@ -128,7 +127,6 @@ func (u *User) ListRules() ([]*rule.Rule, error) {
 	if len(rules) == 0 {
 		defaultRule, err := u.ruleFac.NewDefaultRule(rule.NewDefaultRuleParams{
 			CreatedBy: u.id,
-			CreatedAt: u.clockSrv.Now(),
 		})
 		if err != nil {
 			return nil, err
@@ -154,7 +152,6 @@ func (u *User) CreateRule(params CreateRuleParams) (*rule.Rule, error) {
 		Name:             params.Name,
 		Description:      params.Description,
 		CreatedBy:        u.id,
-		CreatedAt:        u.clockSrv.Now(),
 		CommentTypes:     params.CommentTypes,
 		CommentTypePaths: params.CommentTypePaths,
 	})

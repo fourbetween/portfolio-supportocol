@@ -3,20 +3,21 @@ package rule
 import (
 	"time"
 
+	"github.com/fourbetween/app-supportocol/internal/service/clock"
 	id "github.com/fourbetween/pkg-id"
 )
 
 type (
 	Factory struct {
-		repo  Repository
-		idSrv id.Service
+		repo     Repository
+		idSrv    id.Service
+		clockSrv clock.Service
 	}
 
 	NewRuleParams struct {
 		Name             string
 		Description      string
 		CreatedBy        string
-		CreatedAt        time.Time
 		CommentTypes     []CommentType
 		CommentTypePaths []CommentTypePath
 	}
@@ -24,21 +25,23 @@ type (
 	BuildRuleParams struct {
 		ID string
 		NewRuleParams
+		CreatedAt time.Time
 	}
 
 	NewDefaultRuleParams struct {
 		CreatedBy string
-		CreatedAt time.Time
 	}
 )
 
 func NewFactory(
 	repo Repository,
 	idSrv id.Service,
+	clockSrv clock.Service,
 ) *Factory {
 	return &Factory{
-		repo:  repo,
-		idSrv: idSrv,
+		repo:     repo,
+		idSrv:    idSrv,
+		clockSrv: clockSrv,
 	}
 }
 
@@ -47,6 +50,7 @@ func (f *Factory) NewRule(params NewRuleParams) (*Rule, error) {
 	r := f.BuildRule(BuildRuleParams{
 		ID:            id,
 		NewRuleParams: params,
+		CreatedAt:     f.clockSrv.Now(),
 	})
 	if err := r.Validate(); err != nil {
 		return nil, err
@@ -113,7 +117,6 @@ func (f *Factory) NewDefaultRule(params NewDefaultRuleParams) (*Rule, error) {
 		Name:             "汎用ルール",
 		Description:      "一般的な議論で使用できる汎用的なルールです",
 		CreatedBy:        params.CreatedBy,
-		CreatedAt:        params.CreatedAt,
 		CommentTypes:     commentTypes,
 		CommentTypePaths: commentTypePaths,
 	})

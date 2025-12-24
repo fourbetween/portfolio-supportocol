@@ -112,11 +112,11 @@ func (r *ProjectRepository) searchByCondition(cond mysql.BoolExpression) ([]*pro
 	projects := make([]*project.Project, len(dest))
 	for i, row := range dest {
 		projects[i] = r.fac.BuildProject(project.BuildProjectParams{
-			ID: row.ID,
+			ID:        row.ID,
+			CreatedAt: row.CreatedAt,
 			NewProjectParams: project.NewProjectParams{
 				Name:      row.Name,
 				CreatedBy: row.CreatedBy,
-				CreatedAt: row.CreatedAt,
 			},
 		})
 	}

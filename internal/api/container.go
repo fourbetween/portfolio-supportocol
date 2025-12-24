@@ -43,6 +43,7 @@ func newContainerFactory(appConf conf.Service, jwtSrv jwt.Service) (containerFac
 		projectFac := project.NewFactory(
 			projectRepo,
 			idSrv,
+			clockSrv,
 		)
 		projectRepo.SetFactory(projectFac)
 
@@ -50,6 +51,7 @@ func newContainerFactory(appConf conf.Service, jwtSrv jwt.Service) (containerFac
 		ruleFac := rule.NewFactory(
 			ruleRepo,
 			idSrv,
+			clockSrv,
 		)
 		ruleRepo.SetFactory(ruleFac)
 

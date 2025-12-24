@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
+	"github.com/fourbetween/app-supportocol/internal/service/clock"
 	id "github.com/fourbetween/pkg-id"
 	gomock "go.uber.org/mock/gomock"
 )
@@ -22,7 +23,6 @@ func TestFactory_NewRule(t *testing.T) {
 				Name:        "test-rule",
 				Description: "test-description",
 				CreatedBy:   "test-user",
-				CreatedAt:   time.Now(),
 				CommentTypes: []rule.CommentType{
 					{ID: "ct1", No: 1, Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
 					{ID: "ct2", No: 2, Name: "根拠", Description: "根拠を表すコメント", Color: "#00FF00"},
@@ -39,7 +39,6 @@ func TestFactory_NewRule(t *testing.T) {
 				Name:        "test-rule",
 				Description: "test-description",
 				CreatedBy:   "test-user",
-				CreatedAt:   time.Now(),
 				CommentTypes: []rule.CommentType{
 					{ID: "ct1", No: 1, Name: "主張", Description: "主張を表すコメント", Color: "#FF0000"},
 				},
@@ -54,8 +53,9 @@ func TestFactory_NewRule(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			idSrv := id.NewMockService(ctrl)
+			idSrv.EXPECT().Generate().Return("test-rule-id").AnyTimes()
 			ruleRepo := rule.NewMockRepository(ctrl)
-			ruleFac := rule.NewFactory(ruleRepo, idSrv)
+			ruleFac := rule.NewFactory(ruleRepo, idSrv, clock.NewRealService())
 
 			r, err := ruleFac.NewRule(tt.params)
 			if (err != nil) != tt.wantErr {
@@ -142,8 +142,10 @@ func TestFactory_NewDefaultRule(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			idSrv := id.NewMockService(ctrl)
+			clockSrv := clock.NewMockService(ctrl)
+			clockSrv.EXPECT().Now().Return(fixedTime).AnyTimes()
 			ruleRepo := rule.NewMockRepository(ctrl)
-			ruleFac := rule.NewFactory(ruleRepo, idSrv)
+			ruleFac := rule.NewFactory(ruleRepo, idSrv, clockSrv)
 
 			if tt.setup != nil {
 				tt.setup(idSrv)
@@ -151,7 +153,6 @@ func TestFactory_NewDefaultRule(t *testing.T) {
 
 			got, err := ruleFac.NewDefaultRule(rule.NewDefaultRuleParams{
 				CreatedBy: "test-user-id",
-				CreatedAt: fixedTime,
 			})
 
 			if tt.verify != nil {

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/model/project"
+	"github.com/fourbetween/app-supportocol/internal/service/clock"
 	id "github.com/fourbetween/pkg-id"
 	"github.com/google/go-cmp/cmp"
 	"go.uber.org/mock/gomock"
@@ -14,6 +15,7 @@ type container struct {
 	ProjectFac  *project.Factory
 	ProjectRepo *project.MockRepository
 	IDSrv       *id.MockService
+	ClockSrv    *clock.MockService
 }
 
 func newContainer(t *testing.T) *container {
@@ -21,11 +23,13 @@ func newContainer(t *testing.T) *container {
 	ctrl := gomock.NewController(t)
 	projectRepo := project.NewMockRepository(ctrl)
 	idSrv := id.NewMockService(ctrl)
-	projectFac := project.NewFactory(projectRepo, idSrv)
+	clockSrv := clock.NewMockService(ctrl)
+	projectFac := project.NewFactory(projectRepo, idSrv, clockSrv)
 	return &container{
 		ProjectFac:  projectFac,
 		ProjectRepo: projectRepo,
 		IDSrv:       idSrv,
+		ClockSrv:    clockSrv,
 	}
 }
 
@@ -49,8 +53,8 @@ func TestProject_UpdateName(t *testing.T) {
 				NewProjectParams: project.NewProjectParams{
 					Name:      "test-name",
 					CreatedBy: "test-user",
-					CreatedAt: time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				},
+				CreatedAt: time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 			})
 			p.UpdateName(tt.newName)
 			got := p.Name()

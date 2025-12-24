@@ -2,7 +2,6 @@ package discussion_test
 
 import (
 	"testing"
-	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/model/discussion"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
@@ -28,7 +27,7 @@ func newContainer(t *testing.T) *container {
 	clockSrv := clock.NewRealService()
 	discussionRepo := discussion.NewMockRepository(ctrl)
 	ruleRepo := rule.NewMockRepository(ctrl)
-	ruleFac := rule.NewFactory(ruleRepo, idSrv)
+	ruleFac := rule.NewFactory(ruleRepo, idSrv, clockSrv)
 	discussionFac := discussion.NewFactory(
 		discussionRepo,
 		idSrv,
@@ -135,8 +134,7 @@ func TestDiscussion_CreateComment(t *testing.T) {
 				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
 					ID: "ruleID",
 					NewRuleParams: rule.NewRuleParams{
-						Name:      "test-rule",
-						CreatedAt: time.Now(),
+						Name: "test-rule",
 						CommentTypes: []rule.CommentType{
 							{ID: "type1", Name: "type1", Root: true},
 						},
@@ -168,7 +166,6 @@ func TestDiscussion_CreateComment(t *testing.T) {
 					ID: "ruleID",
 					NewRuleParams: rule.NewRuleParams{
 						Name:             "test-rule",
-						CreatedAt:        time.Now(),
 						CommentTypePaths: []rule.CommentTypePath{},
 					},
 				})
@@ -211,8 +208,7 @@ func TestDiscussion_CreateComment(t *testing.T) {
 				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
 					ID: "ruleID",
 					NewRuleParams: rule.NewRuleParams{
-						Name:      "test-rule",
-						CreatedAt: time.Now(),
+						Name: "test-rule",
 						CommentTypePaths: []rule.CommentTypePath{
 							{ChildCommentTypeID: "type2", ParentCommentTypeID: "type1"},
 						},
@@ -258,7 +254,6 @@ func TestDiscussion_CreateComment(t *testing.T) {
 					ID: "ruleID",
 					NewRuleParams: rule.NewRuleParams{
 						Name:             "test-rule",
-						CreatedAt:        time.Now(),
 						CommentTypePaths: []rule.CommentTypePath{},
 					},
 				})
@@ -304,8 +299,7 @@ func TestDiscussion_CreateComment(t *testing.T) {
 				rl := c.RuleFac.BuildRule(rule.BuildRuleParams{
 					ID: "ruleID",
 					NewRuleParams: rule.NewRuleParams{
-						Name:      "test-rule",
-						CreatedAt: time.Now(),
+						Name: "test-rule",
 						CommentTypePaths: []rule.CommentTypePath{
 							{ChildCommentTypeID: "evidence", ParentCommentTypeID: "claim"},
 						},

@@ -272,12 +272,12 @@ func (r *RuleRepository) buildRules(
 	rules := make([]*rule.Rule, len(dest))
 	for i, row := range dest {
 		rules[i] = r.fac.BuildRule(rule.BuildRuleParams{
-			ID: row.ID,
+			ID:        row.ID,
+			CreatedAt: row.CreatedAt,
 			NewRuleParams: rule.NewRuleParams{
 				Name:             row.Name,
 				Description:      row.Description,
 				CreatedBy:        row.CreatedBy,
-				CreatedAt:        row.CreatedAt,
 				CommentTypes:     commentTypesByRuleID[row.ID],
 				CommentTypePaths: commentTypePathsByRuleID[row.ID],
 			},

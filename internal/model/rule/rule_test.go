@@ -7,6 +7,7 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal"
 	"github.com/fourbetween/app-supportocol/internal/model/rule"
+	"github.com/fourbetween/app-supportocol/internal/service/clock"
 	id "github.com/fourbetween/pkg-id"
 	gomock "go.uber.org/mock/gomock"
 )
@@ -15,6 +16,7 @@ type (
 	container struct {
 		RuleFac  *rule.Factory
 		RuleRepo rule.Repository
+		ClockSrv clock.Service
 	}
 )
 
@@ -22,14 +24,17 @@ func newContainer(t *testing.T) *container {
 	ctrl := gomock.NewController(t)
 
 	idSrv := id.NewMockService(ctrl)
+	clockSrv := clock.NewRealService()
 	ruleRepo := rule.NewMockRepository(ctrl)
 	ruleFac := rule.NewFactory(
 		ruleRepo,
 		idSrv,
+		clockSrv,
 	)
 	return &container{
 		RuleFac:  ruleFac,
 		RuleRepo: ruleRepo,
+		ClockSrv: clockSrv,
 	}
 }
 
@@ -65,10 +70,10 @@ func TestRule_Save(t *testing.T) {
 					Name:             "test-rule",
 					Description:      "test-description",
 					CreatedBy:        "test-user",
-					CreatedAt:        time.Now(),
 					CommentTypes:     tt.commentTypes,
 					CommentTypePaths: tt.commentTypePaths,
 				},
+				CreatedAt: time.Now(),
 			})
 			con.RuleRepo.(*rule.MockRepository).EXPECT().Save(r).Return(nil)
 
@@ -99,8 +104,8 @@ func TestRule_Delete(t *testing.T) {
 					Name:        "test-rule",
 					Description: "test-description",
 					CreatedBy:   "test-user",
-					CreatedAt:   time.Now(),
 				},
+				CreatedAt: time.Now(),
 			})
 			con.RuleRepo.(*rule.MockRepository).EXPECT().Delete(r).Return(nil)
 
@@ -161,10 +166,10 @@ func TestRule_CommentTypesAndPaths(t *testing.T) {
 					Name:             "test-rule",
 					Description:      "test-description",
 					CreatedBy:        "test-user",
-					CreatedAt:        time.Now(),
 					CommentTypes:     tt.commentTypes,
 					CommentTypePaths: tt.commentTypePaths,
 				},
+				CreatedAt: time.Now(),
 			})
 
 			gotCommentTypes := r.CommentTypes()
@@ -251,10 +256,10 @@ func TestRule_Validate(t *testing.T) {
 					Name:             "test-rule",
 					Description:      "test-description",
 					CreatedBy:        "test-user",
-					CreatedAt:        time.Now(),
 					CommentTypes:     tt.commentTypes,
 					CommentTypePaths: tt.commentTypePaths,
 				},
+				CreatedAt: time.Now(),
 			})
 
 			err := r.Validate()
@@ -333,8 +338,8 @@ func TestRule_Update(t *testing.T) {
 					Name:        "test-rule",
 					Description: "test-description",
 					CreatedBy:   "test-user",
-					CreatedAt:   time.Now(),
 				},
+				CreatedAt: time.Now(),
 			})
 
 			err := r.Update(tt.params)
@@ -431,10 +436,10 @@ func TestRule_IsValidPath(t *testing.T) {
 					Name:             "test-rule",
 					Description:      "test-description",
 					CreatedBy:        "test-user",
-					CreatedAt:        time.Now(),
 					CommentTypes:     tt.commentTypes,
 					CommentTypePaths: tt.commentTypePaths,
 				},
+				CreatedAt: time.Now(),
 			})
 
 			err := r.IsValidPath(tt.fromCommentTypeID, tt.toCommentTypeID)
