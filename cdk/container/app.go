@@ -22,7 +22,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awssecretsmanager"
 	"github.com/aws/jsii-runtime-go"
 
-	conf "github.com/fourbetween/pkg-conf"
+	"github.com/fourbetween/pkg-conf/conf"
 )
 
 type (

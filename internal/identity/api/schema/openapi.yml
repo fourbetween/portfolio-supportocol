@@ -1,0 +1,118 @@
+openapi: 3.1.0
+info:
+  title: app-supportocol auth api
+  version: 1.0.0
+components:
+  securitySchemes:
+    cookie_auth:
+      type: apiKey
+      in: cookie
+      name: auth_token
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+      required:
+        - code
+        - message
+    GoogleLoginRequest:
+      type: object
+      properties:
+        idToken:
+          type: string
+      required:
+        - idToken
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+      required:
+        - id
+        - email
+        - name
+paths:
+  /identity/google:
+    post:
+      description: google login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoogleLoginRequest"
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /identity/logout:
+    post:
+      description: logout
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /identity/me:
+    get:
+      description: get current user
+      security:
+        - cookie_auth: []
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /identity/errors:
+    post:
+      description: post an error
+      security:
+        - cookie_auth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

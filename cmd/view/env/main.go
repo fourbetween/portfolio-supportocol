@@ -10,8 +10,8 @@ import (
 	"sort"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/fourbetween/app-supportocol/internal/service/env"
-	conf "github.com/fourbetween/pkg-conf"
+	"github.com/fourbetween/app-supportocol/internal/pkg/env"
+	"github.com/fourbetween/pkg-conf/conf"
 )
 
 // envConfig represents the environment configuration for the view.

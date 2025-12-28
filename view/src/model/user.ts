@@ -1,9 +1,7 @@
-import type z from "zod";
-import { client } from "../api/client";
-import type { UserSchema } from "../api/schema/schema";
+import { client } from "../api/identity/client";
 import { openAuthPopup } from "../event/auth";
 
-export type User = z.infer<typeof UserSchema>;
+export type User = {};
 
 export const authMethods = {
   login: () => {

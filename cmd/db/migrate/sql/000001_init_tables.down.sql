@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS discussions;
+DROP TABLE IF EXISTS users;

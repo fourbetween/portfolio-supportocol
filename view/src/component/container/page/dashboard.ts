@@ -1,7 +1,7 @@
 import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
-import { client } from "../../../api/client";
+import { client } from "../../../api/identity/client";
 import { showToast } from "../../../event/toast";
 import type { Discussion } from "../../../model/discussion";
 import type { Project } from "../../../model/project";

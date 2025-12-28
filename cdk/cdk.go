@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/jsii-runtime-go"
-	conf "github.com/fourbetween/pkg-conf"
+	"github.com/fourbetween/pkg-conf/conf"
 )
 
 type CdkStackProps struct {

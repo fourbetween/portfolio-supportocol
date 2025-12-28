@@ -1,6 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
-import { client } from "../../../api/client";
+import { client } from "../../../api/identity/client";
 import { OPEN_AUTH_POPUP_EVENT_NAME } from "../../../event/auth";
 import { baseStyle } from "../../../style/base";
 import type { AuthMode, AuthPopupPresenter } from "../../presenter/popup/auth";

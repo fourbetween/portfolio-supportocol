@@ -3,7 +3,7 @@ import { consume } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { client } from "../../../../api/client";
+import { client } from "../../../../api/identity/client";
 import { routerContext } from "../../../../context/router";
 import { showToast } from "../../../../event/toast";
 import type { Rule } from "../../../../model/rule";

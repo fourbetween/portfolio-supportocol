@@ -3,8 +3,8 @@ package main
 import (
 	"slices"
 
-	"github.com/fourbetween/app-supportocol/internal/db"
-	"github.com/fourbetween/app-supportocol/internal/service/env"
+	"github.com/fourbetween/app-supportocol/internal/pkg/dbcon"
+	"github.com/fourbetween/app-supportocol/internal/pkg/env"
 	"github.com/go-jet/jet/v2/generator/metadata"
 	"github.com/go-jet/jet/v2/generator/mysql"
 	"github.com/go-jet/jet/v2/generator/template"
@@ -12,19 +12,38 @@ import (
 )
 
 func main() {
-	con, err := db.NewConnection()
+	con, err := dbcon.NewConnection()
 	if err != nil {
 		panic(err)
 	}
 
-	excludeTables := []string{"schema_lock", "schema_migrations"}
-	tmpl := template.Default(jetmysql.Dialect).UseSchema(func(s metadata.Schema) template.Schema {
+	if err := mysql.GenerateDB(
+		con,
+		env.AppName(),
+		"../../../internal/identity/infra/db/schema",
+		makeTmpl([]string{"users"}),
+	); err != nil {
+		panic(err)
+	}
+
+	if err := mysql.GenerateDB(
+		con,
+		env.AppName(),
+		"../../../internal/learning/infra/db/schema",
+		makeTmpl([]string{"users", "discussions", "comments"}),
+	); err != nil {
+		panic(err)
+	}
+}
+
+func makeTmpl(tables []string) template.Template {
+	return template.Default(jetmysql.Dialect).UseSchema(func(s metadata.Schema) template.Schema {
 		return template.DefaultSchema(s).
 			UseModel(
 				template.DefaultModel().
 					UseTable(func(t metadata.Table) template.TableModel {
 						tm := template.DefaultTableModel(t)
-						if slices.Contains(excludeTables, t.Name) {
+						if !slices.Contains(tables, t.Name) {
 							tm.Skip = true
 						}
 						return tm
@@ -34,20 +53,11 @@ func main() {
 				template.DefaultSQLBuilder().
 					UseTable(func(t metadata.Table) template.TableSQLBuilder {
 						tb := template.DefaultTableSQLBuilder(t)
-						if slices.Contains(excludeTables, t.Name) {
+						if !slices.Contains(tables, t.Name) {
 							tb.Skip = true
 						}
 						return tb
 					}),
 			)
 	})
-
-	if err := mysql.GenerateDB(
-		con,
-		env.AppName(),
-		"../../../internal/db/.gen",
-		tmpl,
-	); err != nil {
-		panic(err)
-	}
 }

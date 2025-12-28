@@ -3,15 +3,15 @@ package main
 import (
 	"fmt"
 
-	"github.com/fourbetween/app-supportocol/internal/db"
-	"github.com/fourbetween/app-supportocol/internal/service/env"
+	"github.com/fourbetween/app-supportocol/internal/pkg/dbcon"
+	"github.com/fourbetween/app-supportocol/internal/pkg/env"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
-	con, err := db.NewConnection()
+	con, err := dbcon.NewConnection()
 	if err != nil {
 		panic(err)
 	}
@@ -23,7 +23,7 @@ func main() {
 	}
 
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://../../../internal/db/migrations",
+		"file://sql",
 		env.AppName(),
 		driver,
 	)

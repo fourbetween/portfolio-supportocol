@@ -1,0 +1,312 @@
+openapi: 3.1.0
+info:
+  title: app-supportocol learning api
+  version: 1.0.0
+components:
+  securitySchemes:
+    cookie_auth:
+      type: apiKey
+      in: cookie
+      name: auth_token
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+      required:
+        - code
+        - message
+    Id:
+      type: string
+      minLength: 36
+      maxLength: 36
+    Discussion:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        theme:
+          type: string
+      required:
+        - id
+        - theme
+    Comment:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        discussionId:
+          $ref: "#/components/schemas/Id"
+        parentCommentId:
+          $ref: "#/components/schemas/Id"
+        commentType:
+          type: string
+        content:
+          type: string
+      required:
+        - id
+        - discussionId
+        - parentCommentId
+        - commentType
+        - content
+paths:
+  /learning/discussions:
+    get:
+      description: get discussions
+      security:
+        - cookie_auth: []
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: create discussion
+      security:
+        - cookie_auth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                theme:
+                  type: string
+              required:
+                - theme
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /learning/discussions/{discussionId}:
+    get:
+      description: get discussion
+      security:
+        - cookie_auth: []
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: discussionId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      description: update discussion
+      security:
+        - cookie_auth: []
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: discussionId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                theme:
+                  type: string
+              required:
+                - theme
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      description: delete discussion
+      security:
+        - cookie_auth: []
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: discussionId
+          in: path
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /learning/discussions/{discussionId}/comments:
+    get:
+      description: get comments for a discussion
+      security:
+        - cookie_auth: []
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: discussionId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: create comment
+      security:
+        - cookie_auth: []
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: discussionId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parentCommentId:
+                  type: string
+                commentType:
+                  type: string
+                content:
+                  type: string
+              required:
+                - parentCommentId
+                - commentType
+                - content
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /learning/discussions/{discussionId}/comments/{commentId}:
+    put:
+      description: update comment
+      security:
+        - cookie_auth: []
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            type: string
+          required: true
+          name: commentId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      description: delete comment
+      security:
+        - cookie_auth: []
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            type: string
+          required: true
+          name: commentId
+          in: path
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

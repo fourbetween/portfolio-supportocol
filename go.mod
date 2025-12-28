@@ -16,17 +16,15 @@ require (
 	github.com/aws/aws-lambda-go v1.51.1
 	github.com/aws/aws-sdk-go-v2/config v1.32.6
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
-	github.com/fourbetween/pkg-auth v0.0.7
-	github.com/fourbetween/pkg-conf v0.1.1
-	github.com/fourbetween/pkg-id v0.0.2
+	github.com/fourbetween/pkg-auth v0.2.0
+	github.com/fourbetween/pkg-conf v0.2.0
 	github.com/fourbetween/pkg-secret v0.0.3
-	github.com/fourbetween/pkg-uow v0.0.2
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.2.0
 	github.com/go-jet/jet/v2 v2.14.0
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/golang-migrate/migrate/v4 v4.19.1
-	github.com/google/go-cmp v0.7.0
+	github.com/google/uuid v1.6.0
 	github.com/ogen-go/ogen v1.18.0
 	go.uber.org/mock v0.6.0
 )
@@ -73,7 +71,6 @@ require (
 	github.com/gohugoio/hugo v0.149.1 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.7 // indirect
 	github.com/googleapis/gax-go/v2 v2.16.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
