@@ -8,16 +8,26 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal/identity/api/oas"
 	"github.com/fourbetween/app-supportocol/internal/identity/domain"
+	"github.com/fourbetween/app-supportocol/internal/identity/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
-	"github.com/fourbetween/pkg-auth/jwt"
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
 type appHandler struct {
-	con    *container
-	jwtSrv jwt.Service
+	loginWithGoogleUsecase *usecase.LoginWithGoogleUsecase
+	getUserUsecase         *usecase.GetUserUsecase
+}
+
+func NewHandler(
+	loginWithGoogleUsecase *usecase.LoginWithGoogleUsecase,
+	getUserUsecase *usecase.GetUserUsecase,
+) oas.Handler {
+	return &appHandler{
+		loginWithGoogleUsecase: loginWithGoogleUsecase,
+		getUserUsecase:         getUserUsecase,
+	}
 }
 
 func (h *appHandler) IdentityErrorsPost(ctx context.Context, req *oas.IdentityErrorsPostReq) error {
@@ -29,12 +39,7 @@ func (h *appHandler) IdentityErrorsPost(ctx context.Context, req *oas.IdentityEr
 }
 
 func (h *appHandler) IdentityGooglePost(ctx context.Context, req *oas.GoogleLoginRequest) error {
-	u, err := h.con.authSrv.LoginWithGoogle(ctx, req.IdToken)
-	if err != nil {
-		return err
-	}
-
-	token, err := h.jwtSrv.Generate(u.ID())
+	token, err := h.loginWithGoogleUsecase.Execute(ctx, req.IdToken)
 	if err != nil {
 		return err
 	}
@@ -67,7 +72,8 @@ func (h *appHandler) IdentityLogoutPost(ctx context.Context) error {
 }
 
 func (h *appHandler) IdentityMeGet(ctx context.Context) (*oas.User, error) {
-	u, err := h.loadUser(ctx, h.con)
+	uid := httpctx.GetUserID(ctx)
+	u, err := h.getUserUsecase.Execute(ctx, uid)
 	if err != nil {
 		return nil, err
 	}
@@ -102,14 +108,6 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 			Message: msg,
 		},
 	}
-}
-
-func (h *appHandler) loadUser(ctx context.Context, con *container) (*domain.User, error) {
-	uid := httpctx.GetUserID(ctx)
-	if uid == "" {
-		return nil, apperr.ErrUnauthorized
-	}
-	return con.userRepo.FindByID(ctx, uid)
 }
 
 func (h *appHandler) toOasUser(u *domain.User) oas.User {

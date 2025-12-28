@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-sdk-go-v2/config"
-	identity "github.com/fourbetween/app-supportocol/internal/identity/api"
+	"github.com/fourbetween/app-supportocol/internal/identity"
 	learning "github.com/fourbetween/app-supportocol/internal/learning/api"
 	"github.com/fourbetween/app-supportocol/internal/pkg/env"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
