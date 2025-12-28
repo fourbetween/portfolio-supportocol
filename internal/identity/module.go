@@ -51,9 +51,10 @@ func NewHTTPHandler(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (ht
 		googleClientID,
 	)
 
-	loginWithGoogleUsecase := usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv)
-	getUserUsecase := usecase.NewGetUserUsecase(userRepo)
-	h := api.NewHandler(loginWithGoogleUsecase, getUserUsecase)
+	h := api.NewHandler(api.HandlerParams{
+		LoginWithGoogle: usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv),
+		GetUser:         usecase.NewGetUserUsecase(userRepo),
+	})
 
 	server, err := oas.NewServer(
 		h,

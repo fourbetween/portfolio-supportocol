@@ -15,18 +15,20 @@ import (
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
-type appHandler struct {
-	loginWithGoogleUsecase *usecase.LoginWithGoogleUsecase
-	getUserUsecase         *usecase.GetUserUsecase
+type HandlerParams struct {
+	LoginWithGoogle *usecase.LoginWithGoogleUsecase
+	GetUser         *usecase.GetUserUsecase
 }
 
-func NewHandler(
-	loginWithGoogleUsecase *usecase.LoginWithGoogleUsecase,
-	getUserUsecase *usecase.GetUserUsecase,
-) oas.Handler {
+type appHandler struct {
+	loginWithGoogle *usecase.LoginWithGoogleUsecase
+	getUser         *usecase.GetUserUsecase
+}
+
+func NewHandler(params HandlerParams) oas.Handler {
 	return &appHandler{
-		loginWithGoogleUsecase: loginWithGoogleUsecase,
-		getUserUsecase:         getUserUsecase,
+		loginWithGoogle: params.LoginWithGoogle,
+		getUser:         params.GetUser,
 	}
 }
 
@@ -39,7 +41,7 @@ func (h *appHandler) IdentityErrorsPost(ctx context.Context, req *oas.IdentityEr
 }
 
 func (h *appHandler) IdentityGooglePost(ctx context.Context, req *oas.GoogleLoginRequest) error {
-	token, err := h.loginWithGoogleUsecase.Execute(ctx, req.IdToken)
+	token, err := h.loginWithGoogle.Execute(ctx, req.IdToken)
 	if err != nil {
 		return err
 	}
@@ -73,7 +75,7 @@ func (h *appHandler) IdentityLogoutPost(ctx context.Context) error {
 
 func (h *appHandler) IdentityMeGet(ctx context.Context) (*oas.User, error) {
 	uid := httpctx.GetUserID(ctx)
-	u, err := h.getUserUsecase.Execute(ctx, uid)
+	u, err := h.getUser.Execute(ctx, uid)
 	if err != nil {
 		return nil, err
 	}
