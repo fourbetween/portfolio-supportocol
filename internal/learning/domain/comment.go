@@ -2,21 +2,15 @@ package domain
 
 import "time"
 
-type (
-	Comment struct {
-		id              string
-		discussionID    string
-		parentCommentID string
-		commentType     string
-		content         string
-		postedBy        string
-		createdAt       time.Time
-	}
-
-	UpdateCommentParams struct {
-		Content string
-	}
-)
+type Comment struct {
+	id              string
+	discussionID    string
+	parentCommentID string
+	commentType     string
+	content         string
+	postedBy        string
+	createdAt       time.Time
+}
 
 func (c *Comment) ID() string {
 	return c.id
