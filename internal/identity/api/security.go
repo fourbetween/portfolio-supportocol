@@ -31,7 +31,7 @@ func (h *securityHandler) HandleCookieAuth(
 	}
 
 	userID, err := h.jwtSrv.Parse(t.APIKey)
-	if err != nil {
+	if err != nil || userID == "" {
 		return ctx, apperr.ErrUnauthorized
 	}
 

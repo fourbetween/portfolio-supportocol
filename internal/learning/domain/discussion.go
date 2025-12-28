@@ -4,25 +4,12 @@ import (
 	"time"
 )
 
-type (
-	Discussion struct {
-		id        string
-		theme     string
-		createdBy string
-		createdAt time.Time
-	}
-
-	UpdateParams struct {
-		Theme string
-	}
-
-	CreateCommentParams struct {
-		ParentCommentID string
-		CommentType     string
-		Content         string
-		PostedBy        string
-	}
-)
+type Discussion struct {
+	id        string
+	theme     string
+	createdBy string
+	createdAt time.Time
+}
 
 func (d *Discussion) ID() string {
 	return d.id
@@ -38,4 +25,12 @@ func (d *Discussion) CreatedBy() string {
 
 func (d *Discussion) CreatedAt() time.Time {
 	return d.createdAt
+}
+
+type UpdateParams struct {
+	Theme string
+}
+
+func (d *Discussion) Update(params UpdateParams) {
+	d.theme = params.Theme
 }

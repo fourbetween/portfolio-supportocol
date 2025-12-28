@@ -48,6 +48,26 @@ func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadParam
 	return r.toDomain(dest), nil
 }
 
+func (r *DiscussionRepository) List(ctx context.Context, createdBy string) ([]*domain.Discussion, error) {
+	stmt := mysql.
+		SELECT(table.Discussions.AllColumns).
+		FROM(table.Discussions).
+		WHERE(table.Discussions.CreatedBy.EQ(mysql.String(createdBy))).
+		ORDER_BY(table.Discussions.CreatedAt.DESC())
+
+	var dest []model.Discussions
+	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
+		return nil, fmt.Errorf("failed to list discussions: %w", err)
+	}
+
+	discussions := make([]*domain.Discussion, len(dest))
+	for i, row := range dest {
+		discussions[i] = r.toDomain(row)
+	}
+
+	return discussions, nil
+}
+
 func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) error {
 	model := r.toModel(d)
 
@@ -74,6 +94,23 @@ func (r *DiscussionRepository) Delete(ctx context.Context, d *domain.Discussion)
 		return fmt.Errorf("failed to delete discussion: %w", err)
 	}
 	return nil
+}
+
+func (r *DiscussionRepository) LoadComment(ctx context.Context, id string) (*domain.Comment, error) {
+	stmt := mysql.
+		SELECT(table.Comments.AllColumns).
+		FROM(table.Comments).
+		WHERE(table.Comments.ID.EQ(mysql.String(id)))
+
+	var dest model.Comments
+	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
+		if errors.Is(err, qrm.ErrNoRows) {
+			return nil, apperr.ErrNotFound
+		}
+		return nil, fmt.Errorf("failed to load comment: %w", err)
+	}
+
+	return r.toCommentDomain(dest), nil
 }
 
 func (r *DiscussionRepository) FetchComments(ctx context.Context, discussionID string) ([]*domain.Comment, error) {

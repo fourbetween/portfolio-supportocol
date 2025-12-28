@@ -12,8 +12,12 @@ type (
 
 	Repository interface {
 		Load(ctx context.Context, params LoadParams) (*Discussion, error)
+		List(ctx context.Context, createdBy string) ([]*Discussion, error)
 		Save(ctx context.Context, discussion *Discussion) error
 		Delete(ctx context.Context, discussion *Discussion) error
+
+		LoadComment(ctx context.Context, id string) (*Comment, error)
+		FetchComments(ctx context.Context, discussionID string) ([]*Comment, error)
 		SaveComment(ctx context.Context, comment *Comment) error
 		DeleteComment(ctx context.Context, comment *Comment) error
 	}

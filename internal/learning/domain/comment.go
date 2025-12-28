@@ -39,3 +39,11 @@ func (c *Comment) PostedBy() string {
 func (c *Comment) CreatedAt() time.Time {
 	return c.createdAt
 }
+
+type UpdateCommentParams struct {
+	Content string
+}
+
+func (c *Comment) Update(params UpdateCommentParams) {
+	c.content = params.Content
+}
