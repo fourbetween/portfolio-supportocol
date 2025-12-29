@@ -11,7 +11,8 @@
     "gen:identity": "npx openapi-typescript ../internal/identity/api/schema/openapi.yml -o ./src/api/identity/schema.d.ts",
     "gen:learning": "npx openapi-typescript ../internal/learning/api/schema/openapi.yml -o ./src/api/learning/schema.d.ts",
     "storybook": "storybook dev --no-open",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "check:lit": "npx lit-analyzer \"src/**/*.ts\""
   },
   "dependencies": {
     "@lit-labs/router": "^0.1.4",
@@ -31,6 +32,7 @@
     "@types/google.accounts": "^0.0.18",
     "@vitest/browser-playwright": "^4.0.12",
     "@vitest/coverage-v8": "^4.0.12",
+    "lit-analyzer": "^2.0.3",
     "playwright": "^1.56.1",
     "storybook": "^10.0.8",
     "typescript": "~5.9.3",

@@ -1,5 +1,4 @@
 import type { Preview } from "@storybook/web-components-vite";
-import "../src/import";
 
 const preview: Preview = {
   parameters: {
