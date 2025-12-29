@@ -1,30 +1,17 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 
 @customElement("marketing-home-page")
 export class MarketingHomePage extends LitElement {
-  @property({ attribute: false })
-  onLogin?: () => void;
-
   render() {
     return html`
       <main class="container container--narrow hero">
         <h1>Supportocol</h1>
         <p class="description">論理的な議論を支援するプラットフォーム</p>
-        <div class="actions">
-          <button class="btn-primary btn-large" @click=${this.handleLogin}>
-            ログイン
-          </button>
-          <a href="/discussions" class="link">公開議論を見る</a>
-        </div>
       </main>
     `;
-  }
-
-  private handleLogin() {
-    this.onLogin?.();
   }
 
   static styles = [

@@ -29,20 +29,18 @@ func NewHTTPHandler(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (ht
 	)
 	repo.SetFactory(fac)
 
-	h := api.NewHandler(api.HandlerParams{
-		CreateDiscussion: usecase.NewCreateDiscussionUsecase(repo, fac),
-		GetDiscussion:    usecase.NewGetDiscussionUsecase(repo),
-		ListDiscussions:  usecase.NewListDiscussionsUsecase(repo),
-		UpdateDiscussion: usecase.NewUpdateDiscussionUsecase(repo),
-		DeleteDiscussion: usecase.NewDeleteDiscussionUsecase(repo),
-		CreateComment:    usecase.NewCreateCommentUsecase(repo, fac),
-		ListComments:     usecase.NewListCommentsUsecase(repo),
-		UpdateComment:    usecase.NewUpdateCommentUsecase(repo),
-		DeleteComment:    usecase.NewDeleteCommentUsecase(repo),
-	})
-
 	server, err := oas.NewServer(
-		h,
+		api.NewHandler(api.HandlerParams{
+			CreateDiscussion: usecase.NewCreateDiscussionUsecase(repo, fac),
+			GetDiscussion:    usecase.NewGetDiscussionUsecase(repo),
+			ListDiscussions:  usecase.NewListDiscussionsUsecase(repo),
+			UpdateDiscussion: usecase.NewUpdateDiscussionUsecase(repo),
+			DeleteDiscussion: usecase.NewDeleteDiscussionUsecase(repo),
+			CreateComment:    usecase.NewCreateCommentUsecase(repo, fac),
+			ListComments:     usecase.NewListCommentsUsecase(repo),
+			UpdateComment:    usecase.NewUpdateCommentUsecase(repo),
+			DeleteComment:    usecase.NewDeleteCommentUsecase(repo),
+		}),
 		api.NewSecurityHandler(jwtSrv),
 		oas.WithErrorHandler(httperr.ErrorHandler),
 	)

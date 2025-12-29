@@ -12,6 +12,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
+	"github.com/fourbetween/pkg-auth/auth"
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
@@ -88,19 +89,16 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 	code := 500
 	msg := err.Error()
 	if errors.Is(err, apperr.ErrUnauthorized) ||
+		errors.Is(err, auth.ErrNotFound) ||
 		errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied) {
 		code = 401
-	}
-	if errors.Is(err, apperr.ErrForbidden) {
+	} else if errors.Is(err, apperr.ErrForbidden) {
 		code = 403
-	}
-	if errors.Is(err, apperr.ErrNotFound) {
+	} else if errors.Is(err, apperr.ErrNotFound) {
 		code = 404
-	}
-	if errors.Is(err, apperr.ErrConflict) {
+	} else if errors.Is(err, apperr.ErrConflict) {
 		code = 409
-	}
-	if code == 500 {
+	} else if code == 500 {
 		slog.Error(err.Error())
 	}
 	return &oas.ErrorStatusCode{

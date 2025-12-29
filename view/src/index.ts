@@ -3,15 +3,15 @@ import { provide } from "@lit/context";
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "urlpattern-polyfill";
-import "../feature/identity/component/auth-widget";
-import type { User } from "../feature/identity/model/user";
-import { auth } from "../feature/identity/util/auth";
-import "../shared/ui/loading-manager";
-import "../shared/ui/toast-manager";
-import { routerContext } from "./context/router";
-import { userContext } from "./context/user";
-import "./layout/layout";
-import { routes } from "./routes";
+import { routerContext } from "./app/context/router";
+import { userContext } from "./app/context/user";
+import "./app/layout/layout";
+import { routes } from "./app/routes";
+import "./feature/identity/component/auth-widget";
+import type { User } from "./feature/identity/model/user";
+import { auth } from "./feature/identity/util/auth";
+import "./shared/ui/loading-manager";
+import "./shared/ui/toast-manager";
 
 @customElement("app-root")
 export class AppRoot extends LitElement {
@@ -21,7 +21,7 @@ export class AppRoot extends LitElement {
       name: "home",
       path: routes.home,
       enter: async () => {
-        await import("../feature/marketing/page/home-page");
+        await import("./feature/marketing/page/home-page");
         return true;
       },
       render: () => html`
@@ -32,7 +32,7 @@ export class AppRoot extends LitElement {
       name: "dashboard",
       path: routes.dashboard,
       enter: async () => {
-        await import("../feature/learning/page/dashboard-page");
+        await import("./feature/learning/page/dashboard-page");
         return true;
       },
       render: () => html`
@@ -43,7 +43,7 @@ export class AppRoot extends LitElement {
       name: "learning",
       path: routes.learning,
       enter: async () => {
-        await import("../feature/learning/page/edit-page");
+        await import("./feature/learning/page/edit-page");
         return true;
       },
       render: ({ id }) => html`

@@ -7,7 +7,7 @@ export class AppHeader extends LitElement {
   render() {
     return html`
       <header class="header">
-        <a href="/" class="header-logo">Supportocol</a>
+        <a href="/dashboard" class="header-logo">Supportocol</a>
       </header>
     `;
   }

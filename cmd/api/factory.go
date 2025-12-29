@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/fourbetween/app-supportocol/cmd/api/middleware"
 	"github.com/fourbetween/app-supportocol/internal/identity"
 	"github.com/fourbetween/app-supportocol/internal/learning"
 	"github.com/fourbetween/app-supportocol/internal/pkg/env"
@@ -24,6 +25,11 @@ func NewHTTPHandler(dbCon *sql.DB) (http.Handler, error) {
 	appConf, err := conf.NewSSMService(env.AppName(), awscfg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load app config: %w", err)
+	}
+
+	domain, err := appConf.Get("domain")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get domain from config: %w", err)
 	}
 
 	jwtSecret, err := appConf.Get("jwt/secret")
@@ -46,5 +52,6 @@ func NewHTTPHandler(dbCon *sql.DB) (http.Handler, error) {
 	mux := http.NewServeMux()
 	mux.Handle("/identity/", identityHandler)
 	mux.Handle("/learning/", learningHandler)
-	return mux, nil
+
+	return middleware.CSRFMiddleware(domain)(mux), nil
 }
