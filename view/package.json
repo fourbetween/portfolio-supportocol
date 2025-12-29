@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --mode=$npm_config_mode",
     "build": "tsc && vite build --mode=$npm_config_mode",
+    "test": "vitest --run",
     "preview": "vite preview",
     "gen": "npm run gen:identity && npm run gen:learning",
     "gen:identity": "npx openapi-typescript ../internal/identity/api/schema/openapi.yml -o ./src/api/identity/schema.d.ts",
