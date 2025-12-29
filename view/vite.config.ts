@@ -24,6 +24,14 @@ export default defineConfig(({ mode }) => {
       host: true,
       allowedHosts: [".hick-r.com"],
     },
-    plugins: [pwaPlugin(mode)],
+    plugins: [
+      pwaPlugin(mode),
+      // visualizer({
+      //   open: false,
+      //   filename: "stats.html",
+      //   gzipSize: true,
+      //   brotliSize: true,
+      // }),
+    ],
   };
 });

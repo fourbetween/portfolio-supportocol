@@ -24,6 +24,8 @@ dev-dist
 *.sln
 *.sw?
 
+stats.html
+
 *storybook.log
 storybook-static
 
