@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-cdk-go/awscdk/v2 v2.233.0
 	github.com/aws/aws-sdk-go-v2/config v1.32.6
 	github.com/aws/jsii-runtime-go v1.122.0
-	github.com/fourbetween/pkg-conf v0.1.1
+	github.com/fourbetween/pkg-conf v0.2.0
 )
 
 require (

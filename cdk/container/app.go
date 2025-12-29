@@ -21,7 +21,6 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3deployment"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awssecretsmanager"
 	"github.com/aws/jsii-runtime-go"
-
 	"github.com/fourbetween/pkg-conf/conf"
 )
 
@@ -215,7 +214,7 @@ func (c *AppContainer) buildApiFunction() {
 			Handler:       jsii.String("bootstrap"),
 			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
 			Code: awslambda.AssetCode_FromAsset(
-				jsii.String("../cmd/lambda/api/build"),
+				jsii.String("../cmd/api/lambda/build"),
 				&awss3assets.AssetOptions{},
 			),
 			Environment: &map[string]*string{
