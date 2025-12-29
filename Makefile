@@ -3,7 +3,7 @@ BASE_DIR := ${CURDIR}
 VIEW_DIR := ${BASE_DIR}/view
 CDK_DIR  := ${BASE_DIR}/cdk
 
-.PHONY: dev-api dev-view dev build-lambda build-view build build-deploy deploy destroy gen test-api test-view test setup-view import storybook upgrade-tools upgrade-go upgrade-view %
+.PHONY: dev-api dev-view dev watch-view build-lambda build-view build build-deploy deploy destroy gen test-api test-view test setup-view storybook upgrade-tools upgrade-go upgrade-view %
 
 # ===== 開発サーバー =====
 dev-api:
@@ -13,7 +13,10 @@ dev-view: setup-view
 	cd ${VIEW_DIR} && npm run dev --mode=dev
 
 dev:
-	npx concurrently "make dev-api" "make import" "make dev-view"
+	npx concurrently --kill-others --prefix "[{name}]" -n "api,view" -c "blue,cyan" "make dev-api" "make dev-view"
+
+watch-view:
+	cd ${VIEW_DIR} && npm run watch:all
 
 # ===== ビルド =====
 build-lambda:
@@ -52,9 +55,6 @@ test: test-api test-view
 # ===== ユーティリティ =====
 setup-view:
 	cd ${VIEW_DIR} && npm install && npm audit fix
-
-import:
-	go tool import --importfile=${VIEW_DIR}/src/import.ts --targetdir=${VIEW_DIR}/src/component --watch
 
 storybook:
 	cd ${VIEW_DIR} && npm run storybook -- -p $${PORT:-6006}
