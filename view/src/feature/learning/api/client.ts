@@ -7,8 +7,8 @@ export const client = createClient<paths>({
 });
 
 const middleware: Middleware = {
-  async onResponse({ request, response }) {
-    if (!request.url.endsWith("/api/me") && response.status === 401) {
+  async onResponse({ response }) {
+    if (response.status === 401) {
       auth.login();
       return;
     }

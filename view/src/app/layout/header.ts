@@ -1,13 +1,14 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { baseStyle } from "../../shared/style/base";
+import { routes } from "../routes";
 
 @customElement("app-header")
 export class AppHeader extends LitElement {
   render() {
     return html`
       <header class="header">
-        <a href="/dashboard" class="header-logo">Supportocol</a>
+        <a href=${routes.dashboard} class="header-logo">Supportocol</a>
       </header>
     `;
   }
