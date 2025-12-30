@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
 import { baseStyle } from "../style/base";
+import { buttonStyle } from "../style/button";
 
 @customElement("ui-popup")
 export class Popup extends LitElement {
@@ -12,7 +13,11 @@ export class Popup extends LitElement {
       <dialog>
         <div class="header">
           <slot name="header"></slot>
-          <button class="close-button" @click=${this.close} aria-label="Close">
+          <button
+            class="close-button btn"
+            @click=${this.close}
+            aria-label="Close"
+          >
             ×
           </button>
         </div>
@@ -36,6 +41,7 @@ export class Popup extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
     css`
       dialog {
         border: none;
@@ -72,14 +78,13 @@ export class Popup extends LitElement {
         border-bottom-right-radius: 6px;
       }
       .close-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 20px;
-        color: var(--color-fg-muted);
         padding: 4px;
         line-height: 1;
         border-radius: 4px;
+        border: none;
+        background: none;
+        font-size: 20px;
+        color: var(--color-fg-muted);
       }
       .close-button:hover {
         color: var(--color-fg-default);

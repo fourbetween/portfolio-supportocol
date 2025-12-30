@@ -10,9 +10,13 @@ export const baseStyle: CSSResultGroup = [
       --color-border-default: #d0d7de;
       --color-border-muted: #d8dee4;
       --color-accent-fg: #0969da;
+      --color-btn-bg: #f6f8fa;
+      --color-btn-text: #24292f;
+      --color-btn-hover-bg: #f3f4f6;
       --color-btn-primary-bg: #2da44e;
       --color-btn-primary-text: #ffffff;
       --color-btn-primary-hover-bg: #2c974b;
+      --color-btn-primary-border: rgba(27, 31, 36, 0.15);
       --color-header-bg: #24292f;
       --color-header-text: #ffffff;
       --color-danger-fg: #cf222e;

@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
+import { inputStyle } from "../../../shared/style/input";
 import "../../../shared/ui/popup";
 import type { Popup } from "../../../shared/ui/popup";
 
@@ -147,7 +148,7 @@ export class IdentityAuthPopup extends LitElement {
               </div>
             `
           : ""}
-        <button type="submit" class="submit-button button button--primary">
+        <button type="submit" class="submit-button btn btn-primary">
           ${this.mode === "login" ? "ログイン" : "新規登録"}
         </button>
       </form>
@@ -183,6 +184,7 @@ export class IdentityAuthPopup extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
+    inputStyle,
     css`
       ui-popup {
         --popup-max-width: 400px;
@@ -204,12 +206,31 @@ export class IdentityAuthPopup extends LitElement {
         font-size: 14px;
       }
 
-      .submit-button {
-        margin-top: 8px;
+      .auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
 
-      .submit-button.button {
-        --button-padding: 10px 16px;
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .form-group label {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--color-fg-default);
+      }
+
+      .form-group input {
+        width: 100%;
+      }
+
+      .submit-button {
+        margin-top: 8px;
+        width: 100%;
       }
 
       .divider {

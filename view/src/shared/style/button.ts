@@ -1,35 +1,53 @@
 import { type CSSResultGroup, css } from "lit";
 
 export const buttonStyle: CSSResultGroup = css`
-  .btn-primary {
-    padding: 8px 16px;
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 5px 16px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
+    line-height: 20px;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid var(--color-border-default);
+    border-radius: 6px;
+    appearance: none;
+    background-color: var(--color-btn-bg);
+    color: var(--color-btn-text);
+    transition: background-color 0.2s ease;
+  }
+
+  .btn:hover {
+    background-color: var(--color-btn-hover-bg);
+    text-decoration: none;
+  }
+
+  .btn:disabled {
+    color: var(--color-fg-muted);
+    background-color: var(--color-btn-bg);
+    border-color: var(--color-border-default);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .btn-primary {
     color: var(--color-btn-primary-text);
     background-color: var(--color-btn-primary-bg);
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+    border-color: var(--color-btn-primary-border);
   }
 
   .btn-primary:hover {
     background-color: var(--color-btn-primary-hover-bg);
   }
 
-  .btn-secondary {
-    padding: 8px 16px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-fg-default);
-    background-color: var(--color-canvas-subtle);
-    border: 1px solid var(--color-border-default);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  .btn-secondary:hover {
-    background-color: var(--color-border-muted);
+  .btn-primary:disabled {
+    background-color: #94d3a2;
+    border-color: var(--color-btn-primary-border);
+    color: var(--color-btn-primary-text);
   }
 `;

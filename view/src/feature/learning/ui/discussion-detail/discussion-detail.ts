@@ -1,7 +1,9 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
+import { inputStyle } from "../../../../shared/style/input";
 import type { Discussion } from "../../model/discussion";
 
 @customElement("learning-discussion-detail")
@@ -67,7 +69,9 @@ export class LearningDiscussionDetail extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
     iconStyle,
+    inputStyle,
     css`
       .container {
         padding: 16px;
@@ -105,47 +109,12 @@ export class LearningDiscussionDetail extends LitElement {
         font-weight: 600;
         padding: 8px;
         margin-bottom: 8px;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
         background-color: var(--color-canvas-subtle);
       }
 
       .actions {
         display: flex;
         gap: 8px;
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 5px 16px;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 20px;
-        white-space: nowrap;
-        vertical-align: middle;
-        cursor: pointer;
-        user-select: none;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        appearance: none;
-        background-color: var(--color-btn-bg);
-        color: var(--color-btn-text);
-      }
-
-      .btn:hover {
-        background-color: var(--color-btn-hover-bg);
-      }
-
-      .btn-primary {
-        color: var(--color-btn-primary-text);
-        background-color: var(--color-btn-primary-bg);
-        border-color: var(--color-btn-primary-border);
-      }
-
-      .btn-primary:hover {
-        background-color: var(--color-btn-primary-hover-bg);
       }
 
       .material-symbols-outlined {

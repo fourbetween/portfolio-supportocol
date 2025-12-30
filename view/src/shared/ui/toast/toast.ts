@@ -32,7 +32,7 @@ export class Toast extends LitElement {
       <div class="toast ${this.type}" role="alert">
         <span class="message">${this.message}</span>
         <button
-          class="close-button icon-button"
+          class="close-button btn"
           @click=${this.hide}
           aria-label="閉じる"
         >
@@ -109,10 +109,19 @@ export class Toast extends LitElement {
         font-size: 14px;
       }
 
-      .close-button.icon-button {
-        font-size: 16px;
-        padding: 0;
-        flex-shrink: 0;
+      .close-button {
+        padding: 4px;
+        line-height: 1;
+        border-radius: 4px;
+        border: none;
+        background: none;
+        font-size: 18px;
+        color: var(--color-fg-muted);
+      }
+
+      .close-button:hover {
+        color: var(--color-fg-default);
+        background-color: var(--color-canvas-subtle);
       }
     `,
   ];
