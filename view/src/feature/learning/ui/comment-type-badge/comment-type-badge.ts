@@ -2,8 +2,8 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 
-@customElement("learning-comment-type")
-export class LearningCommentType extends LitElement {
+@customElement("learning-comment-type-badge")
+export class LearningCommentTypeBadge extends LitElement {
   @property({ type: String })
   type = "";
 

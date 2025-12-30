@@ -1,15 +1,15 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
-import "./comment-type";
-import type { LearningCommentType } from "./comment-type";
+import "./comment-type-badge";
+import type { LearningCommentTypeBadge } from "./comment-type-badge";
 
-describe("learning-comment-type", async () => {
-  let elem: LearningCommentType;
+describe("learning-comment-type-badge", async () => {
+  let elem: LearningCommentTypeBadge;
 
   beforeEach(() => {
     elem = document.createElement(
-      "learning-comment-type"
-    ) as LearningCommentType;
+      "learning-comment-type-badge"
+    ) as LearningCommentTypeBadge;
     document.body.appendChild(elem);
   });
 

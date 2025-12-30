@@ -4,7 +4,7 @@ import { baseStyle } from "../../../../shared/style/base";
 import { iconStyle } from "../../../../shared/style/icon";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
-import "../comment-type/comment-type";
+import "../comment-type-badge/comment-type-badge";
 
 @customElement("learning-comment-tree")
 export class LearningCommentTree extends LitElement {
@@ -41,7 +41,9 @@ export class LearningCommentTree extends LitElement {
           ${Object.entries(groupedChildren).map(
             ([type, typeChildren]) => html`
               <div class="child-group">
-                <learning-comment-type .type=${type}></learning-comment-type>
+                <learning-comment-type-badge
+                  .type=${type}
+                ></learning-comment-type-badge>
                 ${typeChildren.map((child) =>
                   this.renderComment(child, depth + 1)
                 )}
