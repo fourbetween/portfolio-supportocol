@@ -25,26 +25,8 @@ $ARGUMENTS
    - it 関数の第一引数であるテストケース名は必ず「〜こと」で終わる日本語にしてください。
 2. 追加したテストをパスするための最低限のコードを実装してください。
 3. `make test-view`ですべてのテストを実行して、パスすることを確認してください。
-4. コンポーネントのスタイルを「スタイルガイドライン」に従って実装してください。
-5. 追加の機能が Storybook の story として必要な場合は、その story を追加してください。
-6. `make storybook`を実行して Storybook サーバーを起動してください。
+4. 追加の機能が Storybook の story として必要な場合は、その story を追加してください。
+5. `make storybook`を実行して Storybook サーバーを起動してください。
    - すでにポートが使用されている場合は、別のポートで起動してください。（例: `PORT=6007 make storybook`）
-7. chromedevtools/chrome-devtools-mcp を使って Storybook にアクセスし、UI の見た目と動作を確認してください。
-8. 上記のステップを繰り返すことで、必要な機能をすべて実装してください。
-
-## コンポーネント実装ガイドライン
-
-- Container/Presentational パターンに従ってコンポーネントを実装してください。
-- Container は component ディレクトリ以下に配置してください。テストやストーリーは不要です。
-- Presenter は ui ディレクトリ以下に配置してください。
-- Presenter は Container から渡されたデータを表示することに専念し、状態管理やビジネスロジックは扱いません。
-- Presenter が実行するアクションは、Container からコールバックを渡してもらうようにしてください。
-- Container がデータ取得に使う api の各エンドポイントは`view/src/feature/[context]/api/schema.d.ts`を参照してください。
-
-## スタイルガイドライン
-
-- テーマは Github を参考にしてください。
-- Tailwind CSS は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
-- 他のコンポーネントを参考にして、一貫性のあるデザインを維持してください。
-- すべての Presenter は`view/src/shared/style/base.ts`を styles プロパティに含めるようにしてください。
-- アイコンは Google マテリアルアイコンを使用してください。その場合、`view/src/shared/style/icon.ts`を styles プロパティに含めるようにしてください。
+6. chromedevtools/chrome-devtools-mcp を使って Storybook にアクセスし、UI の見た目と動作を確認してください。
+7. 上記のステップを繰り返すことで、必要な機能をすべて実装してください。

@@ -32,17 +32,33 @@ applyTo: "view/src/**/*.ts"
 - style/: 共通の CSS スタイル（base, button など）。
 - ui/: ボタンや入力フォームなど、アプリケーション全体で共通の UI コンポーネント。
 
-## Lit 実装ガイドライン
+## Lit コンポーネント実装
 
 - コンポーネントは `LitElement` を継承して作成してください。
 - コンポーネント名は `[context]-[name]` の形式（例：`learning-dashboard-page`）で定義してください。
 - 外部から渡されるデータには `@property` デコレータを使用してください。
 - コンポーネント内部の状態管理には `@state` デコレータを使用してください。
 - スタイルは `static styles` に定義し、`shared/style` からインポートした共通スタイルを組み合わせて使用してください。
-- アイコンを使用する場合は、`shared/style/icon` から `iconStyle` をインポートして `static styles` に含め、`material-symbols-outlined` クラスを使用してください。 例: `<span class="material-symbols-outlined">edit</span>`
 - コンポーネントにプロパティを設定する際に、ダブルクォートで囲まないでください。例: `<my-component .data=${data}></my-component>`
 - declare global による HTMLElementTagNameMap の拡張（型定義の追加）は行わないでください。
 - ボタンやラベルなどのテキストは英語で記述してください。国際化対応は後で実装します。
+
+## Container/Presentational パターン
+
+- Container/Presentational パターンに従ってコンポーネントを実装してください。
+- Container は component ディレクトリ以下に配置してください。テストやストーリーは不要です。
+- Presenter は ui ディレクトリ以下に配置してください。
+- Presenter は Container から渡されたデータを表示することに専念し、状態管理やビジネスロジックは扱いません。
+- Presenter が実行するアクションは、Container からコールバックを渡してもらうようにしてください。
+- Container がデータ取得に使う api の各エンドポイントは`view/src/feature/[context]/api/schema.d.ts`を参照してください。
+
+## スタイル
+
+- テーマは Github を参考にしてください。
+- Tailwind CSS は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
+- 他のコンポーネントを参考にして、一貫性のあるデザインを維持してください。
+- すべての Presenter は`view/src/shared/style/base.ts`を styles プロパティに含めるようにしてください。
+- アイコンを使用する場合は、`shared/style/icon` から `iconStyle` をインポートして `static styles` に含め、`material-symbols-outlined` クラスを使用してください。 例: `<span class="material-symbols-outlined">edit</span>`
 
 ## メッセージ
 
