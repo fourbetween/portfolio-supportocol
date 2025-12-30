@@ -13,6 +13,14 @@ export class LearningCommentFrameDetail extends LitElement {
   render() {
     if (!this.frame) return html``;
 
+    const groupedPaths = this.frame.paths.reduce((acc, p) => {
+      if (!acc[p.parent]) {
+        acc[p.parent] = [];
+      }
+      acc[p.parent].push(p.child);
+      return acc;
+    }, {} as Record<string, string[]>);
+
     return html`
       <div class="container">
         <section>
@@ -31,16 +39,28 @@ export class LearningCommentFrameDetail extends LitElement {
         <section>
           <h3>Paths</h3>
           <div class="paths">
-            ${this.frame.paths.map(
-              (p) => html`
-                <div class="path">
-                  <learning-comment-type-badge
-                    .type=${p.child}
-                  ></learning-comment-type-badge>
-                  <span class="material-symbols-outlined">arrow_forward</span>
-                  <learning-comment-type-badge
-                    .type=${p.parent}
-                  ></learning-comment-type-badge>
+            ${Object.entries(groupedPaths).map(
+              ([parent, children]) => html`
+                <div class="path-group">
+                  <div class="parent-node">
+                    <learning-comment-type-badge
+                      .type=${parent}
+                    ></learning-comment-type-badge>
+                  </div>
+                  <div class="children-nodes">
+                    ${children.map(
+                      (child) => html`
+                        <div class="child-node">
+                          <span class="material-symbols-outlined">
+                            north_west
+                          </span>
+                          <learning-comment-type-badge
+                            .type=${child}
+                          ></learning-comment-type-badge>
+                        </div>
+                      `
+                    )}
+                  </div>
                 </div>
               `
             )}
@@ -79,12 +99,26 @@ export class LearningCommentFrameDetail extends LitElement {
       .paths {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 16px;
       }
-      .path {
+      .path-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .parent-node {
+        align-self: flex-start;
+      }
+      .children-nodes {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding-left: 24px;
+      }
+      .child-node {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 4px;
       }
       .material-symbols-outlined {
         font-size: 18px;

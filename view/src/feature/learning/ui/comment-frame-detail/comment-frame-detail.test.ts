@@ -28,6 +28,31 @@ describe("learning-comment-frame-detail", () => {
     await expect.element(page.getByText("Paths")).toBeVisible();
     await expect.element(page.getByText("質問").first()).toBeVisible();
     await expect.element(page.getByText("回答").first()).toBeVisible();
-    await expect.element(page.getByText("arrow_forward")).toBeVisible();
+    await expect.element(page.getByText("north_west")).toBeVisible();
+  });
+
+  it("同じ親を持つパスがグループ化されて表示されること", async () => {
+    const frame: CommentFrame = {
+      types: ["質問", "回答", "補足"],
+      paths: [
+        { child: "回答", parent: "質問" },
+        { child: "補足", parent: "質問" },
+      ],
+    };
+
+    (element as any).frame = frame;
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // 質問（親）が1つだけ表示されていることを確認（Pathsセクション内）
+    const pathsSection = page.getByText("Paths").element().parentElement!;
+    const badges = Array.from(
+      pathsSection.querySelectorAll("learning-comment-type-badge")
+    );
+    const parentBadges = badges.filter((el) =>
+      el.shadowRoot?.textContent?.includes("質問")
+    );
+
+    // 現状の実装だと2つ（各パスに1つずつ）表示されるはずなので、これが1つになることを期待するテストにする
+    expect(parentBadges.length).toBe(1);
   });
 });

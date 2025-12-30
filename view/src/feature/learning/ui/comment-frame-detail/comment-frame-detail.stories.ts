@@ -28,3 +28,18 @@ export const Default: Story = {
     ></learning-comment-frame-detail>
   `,
 };
+
+export const Grouped: Story = {
+  render: () => html`
+    <learning-comment-frame-detail
+      .frame=${{
+        types: ["質問", "回答", "補足", "反対"],
+        paths: [
+          { child: "回答", parent: "質問" },
+          { child: "補足", parent: "質問" },
+          { child: "反対", parent: "質問" },
+        ],
+      }}
+    ></learning-comment-frame-detail>
+  `,
+};
