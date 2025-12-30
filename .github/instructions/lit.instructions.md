@@ -39,6 +39,7 @@ applyTo: "view/src/**/*.ts"
 - 外部から渡されるデータには `@property` デコレータを使用してください。
 - コンポーネント内部の状態管理には `@state` デコレータを使用してください。
 - スタイルは `static styles` に定義し、`shared/style` からインポートした共通スタイルを組み合わせて使用してください。
+- アイコンを使用する場合は、`shared/style/icon` から `iconStyle` をインポートして `static styles` に含め、`material-symbols-outlined` クラスを使用してください。 例: `<span class="material-symbols-outlined">edit</span>`
 - コンポーネントにプロパティを設定する際に、ダブルクォートで囲まないでください。例: `<my-component .data=${data}></my-component>`
 - declare global による HTMLElementTagNameMap の拡張（型定義の追加）は行わないでください。
 

@@ -55,7 +55,7 @@ export class LearningDiscussionDetail extends LitElement {
                 <div class="display">
                   <h1 class="theme">${this.discussion?.theme}</h1>
                   <button class="btn" @click=${() => this.onEdit?.()}>
-                    <span class="material-icons">edit</span>
+                    <span class="material-symbols-outlined">edit</span>
                     編集
                   </button>
                 </div>
@@ -148,7 +148,7 @@ export class LearningDiscussionDetail extends LitElement {
         background-color: var(--color-btn-primary-hover-bg);
       }
 
-      .material-icons {
+      .material-symbols-outlined {
         font-size: 16px;
       }
     `,

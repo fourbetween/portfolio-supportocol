@@ -75,4 +75,13 @@ describe("learning-discussion-detail", async () => {
 
     expect(onCancel).toHaveBeenCalled();
   });
+
+  it("編集ボタンに正しいアイコンクラスが設定されていること", async () => {
+    elem.discussion = { id: "1", theme: "テストテーマ" };
+    await elem.updateComplete;
+
+    const icon = elem.shadowRoot!.querySelector(".material-symbols-outlined");
+    expect(icon).not.toBeNull();
+    expect(icon?.textContent).toBe("edit");
+  });
 });
