@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { baseStyle } from "../style/base";
-import { buttonStyle } from "../style/button";
+import { baseStyle } from "../../style/base";
+import { buttonStyle } from "../../style/button";
 
 export type ToastType = "success" | "error" | "info" | "warning";
 

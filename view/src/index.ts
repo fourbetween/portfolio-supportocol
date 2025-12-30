@@ -10,8 +10,8 @@ import { routes } from "./app/routes";
 import "./feature/identity/component/auth-widget";
 import type { User } from "./feature/identity/model/user";
 import { auth } from "./feature/identity/util/auth";
-import "./shared/ui/loading-manager";
-import "./shared/ui/toast-manager";
+import "./shared/ui/loading/loading-manager";
+import "./shared/ui/toast/toast-manager";
 
 @customElement("app-root")
 export class AppRoot extends LitElement {

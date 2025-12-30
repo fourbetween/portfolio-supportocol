@@ -1,6 +1,9 @@
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { LOADING_EVENT_NAME, type LoadingEventDetail } from "../event/loading";
+import {
+  LOADING_EVENT_NAME,
+  type LoadingEventDetail,
+} from "../../event/loading";
 import "./loading";
 
 @customElement("loading-manager")

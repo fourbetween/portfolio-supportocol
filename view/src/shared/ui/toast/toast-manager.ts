@@ -1,6 +1,9 @@
 import { LitElement, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
-import { SHOW_TOAST_EVENT_NAME, type ToastEventDetail } from "../event/toast";
+import {
+  SHOW_TOAST_EVENT_NAME,
+  type ToastEventDetail,
+} from "../../event/toast";
 import "./toast";
 import type { Toast } from "./toast";
 

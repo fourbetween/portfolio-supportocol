@@ -1,6 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { baseStyle } from "../style/base";
+import { baseStyle } from "../../style/base";
 
 @customElement("ui-loading")
 export class Loading extends LitElement {

@@ -1,4 +1,4 @@
-import type { ToastType } from "../ui/toast";
+import type { ToastType } from "../ui/toast/toast";
 
 export interface ToastEventDetail {
   message: string;
