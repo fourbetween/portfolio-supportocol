@@ -86,14 +86,14 @@ export class IdentityAuthWidget extends LitElement {
       });
 
       if (error) {
-        this.errorMessage = error.message || "Google認証に失敗しました";
+        this.errorMessage = error.message || "Google authentication failed";
         return;
       }
 
       this.close();
       window.location.reload();
     } catch {
-      this.errorMessage = "Google認証に失敗しました";
+      this.errorMessage = "Google authentication failed";
     } finally {
       this.isLoading = false;
     }

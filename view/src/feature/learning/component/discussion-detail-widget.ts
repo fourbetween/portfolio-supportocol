@@ -26,12 +26,12 @@ export class LearningDiscussionDetailWidget extends LitElement {
       }
     );
     if (error) {
-      showToast(this, "テーマの更新に失敗しました。", "error");
+      showToast(this, "Failed to update theme.", "error");
       return;
     }
     this.discussion = data;
     this.isEditing = false;
-    showToast(this, "テーマを更新しました。", "success");
+    showToast(this, "Theme updated.", "success");
   }
 
   render() {

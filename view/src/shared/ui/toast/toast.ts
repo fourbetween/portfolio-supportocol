@@ -31,11 +31,7 @@ export class Toast extends LitElement {
     return html`
       <div class="toast ${this.type}" role="alert">
         <span class="message">${this.message}</span>
-        <button
-          class="close-button btn"
-          @click=${this.hide}
-          aria-label="閉じる"
-        >
+        <button class="close-button btn" @click=${this.hide} aria-label="Close">
           ×
         </button>
       </div>

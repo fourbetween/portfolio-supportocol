@@ -37,7 +37,7 @@ export class LearningDiscussionDetail extends LitElement {
                     type="text"
                     class="theme-input"
                     .value=${this.discussion?.theme ?? ""}
-                    placeholder="議論のテーマを入力"
+                    placeholder="Enter discussion theme"
                   />
                   <div class="actions">
                     <button
@@ -45,10 +45,10 @@ export class LearningDiscussionDetail extends LitElement {
                       @click=${() =>
                         this.onSave?.(this.inputElement?.value ?? "")}
                     >
-                      保存
+                      Save
                     </button>
                     <button class="btn" @click=${() => this.onCancel?.()}>
-                      キャンセル
+                      Cancel
                     </button>
                   </div>
                 </div>
@@ -58,7 +58,7 @@ export class LearningDiscussionDetail extends LitElement {
                   <h1 class="theme">${this.discussion?.theme}</h1>
                   <button class="btn" @click=${() => this.onEdit?.()}>
                     <span class="material-symbols-outlined">edit</span>
-                    編集
+                    Edit
                   </button>
                 </div>
               `}

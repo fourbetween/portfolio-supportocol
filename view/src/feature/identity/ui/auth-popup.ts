@@ -56,16 +56,16 @@ export class IdentityAuthPopup extends LitElement {
     if (this.mode === "login") {
       if (!this.selfSignupEnabled) return "";
       return html`
-        アカウントをお持ちでない方は
+        Don't have an account?
         <a href="#" class="switch-link" @click=${this.handleSwitchClick}>
-          新規登録
+          Sign up
         </a>
       `;
     } else {
       return html`
-        すでにアカウントをお持ちの方は
+        Already have an account?
         <a href="#" class="switch-link" @click=${this.handleSwitchClick}>
-          ログイン
+          Log in
         </a>
       `;
     }
@@ -88,7 +88,7 @@ export class IdentityAuthPopup extends LitElement {
       ).value;
 
       if (password !== passwordConfirm) {
-        this.validationErrorMessage = "パスワードが一致しません";
+        this.validationErrorMessage = "Passwords do not match";
         return;
       }
 
@@ -98,7 +98,7 @@ export class IdentityAuthPopup extends LitElement {
 
       if (!hasLowerCase || !hasUpperCase || !hasNumber) {
         this.validationErrorMessage =
-          "パスワードには小文字、大文字、数字を含める必要があります";
+          "Password must include lowercase, uppercase, and numbers";
         return;
       }
 
@@ -112,36 +112,36 @@ export class IdentityAuthPopup extends LitElement {
     return html`
       <form class="auth-form" @submit=${this.handleSubmit}>
         <div class="form-group">
-          <label for="email">メールアドレス</label>
+          <label for="email">Email address</label>
           <input
             type="email"
             name="email"
             id="email"
-            placeholder="メールアドレスを入力"
+            placeholder="Enter email address"
             required
           />
         </div>
         <div class="form-group">
-          <label for="password">パスワード</label>
+          <label for="password">Password</label>
           <input
             type="password"
             name="password"
             id="password"
             placeholder="${this.mode === "signup"
-              ? "パスワードを入力（8文字以上）"
-              : "パスワードを入力"}"
+              ? "Enter password (8 or more characters)"
+              : "Enter password"}"
             required
           />
         </div>
         ${this.mode === "signup"
           ? html`
               <div class="form-group">
-                <label for="passwordConfirm">パスワード（確認）</label>
+                <label for="passwordConfirm">Confirm password</label>
                 <input
                   type="password"
                   name="passwordConfirm"
                   id="passwordConfirm"
-                  placeholder="パスワードを再入力"
+                  placeholder="Re-enter password"
                   minlength="8"
                   required
                 />
@@ -149,11 +149,11 @@ export class IdentityAuthPopup extends LitElement {
             `
           : ""}
         <button type="submit" class="submit-button btn btn-primary">
-          ${this.mode === "login" ? "ログイン" : "新規登録"}
+          ${this.mode === "login" ? "Log in" : "Sign up"}
         </button>
       </form>
       <div class="divider">
-        <span>または</span>
+        <span>or</span>
       </div>
     `;
   }
@@ -165,7 +165,7 @@ export class IdentityAuthPopup extends LitElement {
     return html`
       <ui-popup>
         <span slot="header" class="popup-title">
-          ${this.mode === "login" ? "ログイン" : "新規登録"}
+          ${this.mode === "login" ? "Log in" : "Sign up"}
         </span>
         <div slot="main" class="popup-content">
           ${displayedErrorMessage

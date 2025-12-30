@@ -42,8 +42,9 @@ applyTo: "view/src/**/*.ts"
 - アイコンを使用する場合は、`shared/style/icon` から `iconStyle` をインポートして `static styles` に含め、`material-symbols-outlined` クラスを使用してください。 例: `<span class="material-symbols-outlined">edit</span>`
 - コンポーネントにプロパティを設定する際に、ダブルクォートで囲まないでください。例: `<my-component .data=${data}></my-component>`
 - declare global による HTMLElementTagNameMap の拡張（型定義の追加）は行わないでください。
+- ボタンやラベルなどのテキストは英語で記述してください。国際化対応は後で実装します。
 
 ## メッセージ
 
-- api コールなどが失敗した場合のエラーメッセージ表示には、`showToast` ヘルパー関数を使用してください。 例:`showToast(this, "失敗しました。", "error");`
-- 成功メッセージの表示にも `showToast` を使用してください。 例:`showToast(this, "成功しました。", "success");`
+- api コールなどが失敗した場合のエラーメッセージ表示には、`showToast` ヘルパー関数を使用してください。 例:`showToast(this, "Failed.", "error");`
+- 成功メッセージの表示にも `showToast` を使用してください。 例:`showToast(this, "Succeeded.", "success");`

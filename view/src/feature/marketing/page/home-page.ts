@@ -9,7 +9,7 @@ export class MarketingHomePage extends LitElement {
     return html`
       <main class="container container--narrow hero">
         <h1>Supportocol</h1>
-        <p class="description">論理的な議論を支援するプラットフォーム</p>
+        <p class="description">A platform for logical discussion</p>
       </main>
     `;
   }
