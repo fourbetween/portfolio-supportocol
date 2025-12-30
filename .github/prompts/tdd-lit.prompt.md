@@ -21,17 +21,9 @@ $ARGUMENTS
 ## ワークフロー
 
 1. 新しく追加する機能の一部に対して「失敗するテスト」を 1 つだけ書いてください。
-   - **Presenter** (`ui/`) のみをテスト対象とし、**Container** (`component/`) はテスト不要です。
-   - describe 関数の第一引数にはコンポーネント名を渡してください。
-   - it 関数の第一引数であるテストケース名は必ず「〜こと」で終わる日本語にしてください。
 2. 追加したテストをパスするための最低限のコードを実装してください。
-   - `LitElement` を継承し、名称は `[context]-[name]` 形式にしてください。
-   - 外部データは `@property`、内部状態は `@state` を使用してください。
-   - スタイルには `shared/style/base.ts` を含め、Tailwind CSS は使用しないでください。
-   - 通知には `showToast` ヘルパーを使用してください。
 3. `make test-view`ですべてのテストを実行して、パスすることを確認してください。
 4. 追加の機能が Storybook の story として必要な場合は、その story を追加してください。
-   - Presenter のみ story を作成してください。
 5. `make storybook`を実行して Storybook サーバーを起動してください。
    - すでにポートが使用されている場合は、別のポートで起動してください。（例: `PORT=6007 make storybook`）
 6. chromedevtools/chrome-devtools-mcp を使って Storybook にアクセスし、UI の見た目と動作を確認してください。
