@@ -2,65 +2,52 @@
 applyTo: "view/src/**/*.ts"
 ---
 
-## ディレクトリ構成
+# Lit 開発ガイドライン
 
-`view/src/` 以下のディレクトリ構成は、アプリケーションの基盤、機能ごとの実装、および共有リソースに分割されています。
+## ディレクトリ構成 (`view/src/`)
 
-### アプリケーション基盤 (`view/src/app/`)
+### アプリケーション基盤 (`app/`)
 
-アプリケーション全体の共通設定や構造を配置します。
+- `context/`: 状態管理（Context API 等）。
+- `layout/`: 共通レイアウト。
+- `routes.ts`: ルーティング定義。
 
-- context/: アプリケーションレベルの状態管理（Context API など）。
-- layout/: 共通のレイアウトコンポーネント。
-- routes.ts: ルーティング定義。
-- index.ts: エントリーポイント。
+### 機能別実装 (`feature/[context]/`)
 
-### 機能別実装 (`view/src/feature/[context]/`)
+- `api/`: API クライアント。
+- `component/`: **Container**: ビジネスロジック・副作用を含む。
+- `page/`: ページコンポーネント。
+- `ui/`: **Presenter**: 純粋な UI 部品。
 
-境界づけられたコンテキスト（例：`identity`, `learning`）ごとに機能を実装します。
+### 共有リソース (`shared/`)
 
-- api/: バックエンド API との通信を行うクライアント。
-- component/: その機能固有のビジネスロジック・副作用を含むコンポーネント。
-- page/: ページ単位のコンポーネント。ルーティングの対象となります。
-- ui/: その機能固有のロジックを持たない純粋な UI 部品。
+- `event/`: カスタムイベント定義。
+- `style/`: 共通 CSS（`base.ts` 等）。
+- `ui/`: 全体共通 UI コンポーネント。
 
-### 共有リソース (`view/src/shared/`)
+## 実装ルール
 
-複数の機能間で共有されるコードを配置します。
+### Lit コンポーネント
 
-- event/: カスタムイベントの定義。
-- style/: 共通の CSS スタイル（base, button など）。
-- ui/: ボタンや入力フォームなど、アプリケーション全体で共通の UI コンポーネント。
+- `LitElement` を継承し、名称は `[context]-[name]` 形式（例: `learning-comment-list`）にする。
+- 外部データは `@property`、内部状態は `@state` を使用する。
+- プロパティ設定時はダブルクォートを使用しない。例: `<my-el .data=${data}></my-el>`
+- `HTMLElementTagNameMap` の拡張は行わない。
+- テキストは英語で記述する（国際化は後日）。
 
-## Lit コンポーネント実装
+### Container/Presentational パターン
 
-- コンポーネントは `LitElement` を継承して作成してください。
-- コンポーネント名は `[context]-[name]` の形式（例：`learning-dashboard-page`）で定義してください。
-- 外部から渡されるデータには `@property` デコレータを使用してください。
-- コンポーネント内部の状態管理には `@state` デコレータを使用してください。
-- スタイルは `static styles` に定義し、`shared/style` からインポートした共通スタイルを組み合わせて使用してください。
-- コンポーネントにプロパティを設定する際に、ダブルクォートで囲まないでください。例: `<my-component .data=${data}></my-component>`
-- declare global による HTMLElementTagNameMap の拡張（型定義の追加）は行わないでください。
-- ボタンやラベルなどのテキストは英語で記述してください。国際化対応は後で実装します。
+- **Container** (`component/`): 状態管理、ビジネスロジック、API 呼出を担当。テスト・ストーリー不要。
+- **Presenter** (`ui/`): 表示に専念。アクションはコールバック経由で実行。
+- API スキーマは `feature/[context]/api/schema.d.ts` を参照。
 
-## Container/Presentational パターン
+### スタイル
 
-- Container/Presentational パターンに従ってコンポーネントを実装してください。
-- Container は component ディレクトリ以下に配置してください。テストやストーリーは不要です。
-- Presenter は ui ディレクトリ以下に配置してください。
-- Presenter は Container から渡されたデータを表示することに専念し、状態管理やビジネスロジックは扱いません。
-- Presenter が実行するアクションは、Container からコールバックを渡してもらうようにしてください。
-- Container がデータ取得に使う api の各エンドポイントは`view/src/feature/[context]/api/schema.d.ts`を参照してください。
+- Tailwind CSS は使用せず、標準 CSS を使用する。
+- すべての Presenter は `shared/style/base.ts` を `static styles` に含める。
+- アイコンは `shared/style/icon` の `iconStyle` を使用し、`material-symbols-outlined` クラスを適用する。
 
-## スタイル
+### メッセージ表示
 
-- テーマは Github を参考にしてください。
-- Tailwind CSS は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
-- 他のコンポーネントを参考にして、一貫性のあるデザインを維持してください。
-- すべての Presenter は`view/src/shared/style/base.ts`を styles プロパティに含めるようにしてください。
-- アイコンを使用する場合は、`shared/style/icon` から `iconStyle` をインポートして `static styles` に含め、`material-symbols-outlined` クラスを使用してください。 例: `<span class="material-symbols-outlined">edit</span>`
-
-## メッセージ
-
-- api コールなどが失敗した場合のエラーメッセージ表示には、`showToast` ヘルパー関数を使用してください。 例:`showToast(this, "Failed.", "error");`
-- 成功メッセージの表示にも `showToast` を使用してください。 例:`showToast(this, "Succeeded.", "success");`
+- API 呼出の成否等の通知には `showToast` ヘルパーを使用する。
+  - 例: `showToast(this, "Succeeded.", "success");`
