@@ -21,7 +21,7 @@ $ARGUMENTS
 ## ワークフロー
 
 1. 新しく追加する機能の一部に対して「失敗するテスト」を 1 つだけ書いてください。
-   - describe 関数の第一引数にはコンポーネントのクラス名を渡してください。
+   - describe 関数の第一引数にはコンポーネント名を渡してください。
    - it 関数の第一引数であるテストケース名は必ず「〜こと」で終わる日本語にしてください。
 2. 追加したテストをパスするための最低限のコードを実装してください。
 3. `make test-view`ですべてのテストを実行して、パスすることを確認してください。
@@ -35,24 +35,16 @@ $ARGUMENTS
 ## コンポーネント実装ガイドライン
 
 - Container/Presentational パターンに従ってコンポーネントを実装してください。
-- presenter コンポーネント以外はテストやストーリーは不要です。
-- 各コンポーネントは、`view/src/component/container`または`view/src/component/presenter`以下に配置してください。
-- presenter コンポーネントは、container コンポーネントから渡されたデータを表示することに専念し、状態管理やビジネスロジックは container コンポーネントに任せてください。
-- presenter コンポーネントが実行するアクションは、container コンポーネントからコールバックを渡してもらうようにしてください。
-- container コンポーネントがデータ取得に使う api の各エンドポイントは`view/src/api/schema/route.ts`を参照してください。
-- presenter コンポーネントから、container コンポーネントを利用してはいけないことに留意してください。
-- コンポーネントに渡すデータは`view/src/model`以下にあるモデルを利用してください。
+- Container は component ディレクトリ以下に配置してください。テストやストーリーは不要です。
+- Presenter は ui ディレクトリ以下に配置してください。
+- Presenter は Container から渡されたデータを表示することに専念し、状態管理やビジネスロジックは扱いません。
+- Presenter が実行するアクションは、Container からコールバックを渡してもらうようにしてください。
+- Container がデータ取得に使う api の各エンドポイントは`view/src/feature/[context]/api/schema.d.ts`を参照してください。
 
 ## スタイルガイドライン
 
 - テーマは Github を参考にしてください。
 - Tailwind CSS は使用せず、標準の CSS を使用してください。クラス名はセマンティックな名前にしてください。
-- `view/src/style`以下にある共通スタイルを適用して共通化してください。
 - 他のコンポーネントを参考にして、一貫性のあるデザインを維持してください。
-- 他のコンポーネントと同じスタイルを使う場合は、`view/src/style`以下に共通スタイルを追加してください。
-- すべての presenter コンポーネントは`view/src/style/base.ts`を styles プロパティに含めるようにしてください。
-- アイコンは Google マテリアルアイコンを使用してください。その場合、`view/src/style/icon.ts`を styles プロパティに含めるようにしてください。
-
-## インポートガイドライン
-
-- すべてのコンポーネントを自動で`view/src/import.ts`からインポートするので、各コンポーネント・テスト・ストーリーではコンポーネントの import 文は書かないでください。
+- すべての Presenter は`view/src/shared/style/base.ts`を styles プロパティに含めるようにしてください。
+- アイコンは Google マテリアルアイコンを使用してください。その場合、`view/src/shared/style/icon.ts`を styles プロパティに含めるようにしてください。

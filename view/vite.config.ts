@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
           instances: [{ browser: "chromium" }],
           provider: playwright({}),
         },
-        testTimeout: 500,
+        testTimeout: 100,
         setupFiles: [".storybook/vitest.setup.ts"],
       },
     };
