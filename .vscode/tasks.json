@@ -2,26 +2,6 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "test:api",
-      "type": "shell",
-      "command": "make test-api",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
-      "label": "test:view",
-      "type": "shell",
-      "command": "make test-view",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
-    },
-    {
       "label": "check:lit",
       "type": "npm",
       "script": "check:lit",

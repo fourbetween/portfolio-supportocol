@@ -37,5 +37,7 @@ describe("learning-comment-context", async () => {
     await elem.updateComplete;
     await expect.element(page.getByText("First comment")).toBeInTheDocument();
     await expect.element(page.getByText("Second comment")).toBeInTheDocument();
+    await expect.element(page.getByText("idea")).toBeInTheDocument();
+    await expect.element(page.getByText("question")).toBeInTheDocument();
   });
 });
