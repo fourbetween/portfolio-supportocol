@@ -39,7 +39,13 @@ describe("learning-discussion-detail", async () => {
     elem.isEditing = true;
     await elem.updateComplete;
 
-    const input = elem.shadowRoot!.querySelector("input") as HTMLInputElement;
+    const editForm = elem.shadowRoot!.querySelector(
+      "learning-discussion-edit-form"
+    )!;
+    await (editForm as any).updateComplete;
+    const input = editForm.shadowRoot!.querySelector(
+      "input"
+    ) as HTMLInputElement;
     expect(input.value).toBe("テストテーマ");
   });
 
@@ -50,13 +56,18 @@ describe("learning-discussion-detail", async () => {
     elem.onSave = onSave;
     await elem.updateComplete;
 
-    const input = elem.shadowRoot!.querySelector("input") as HTMLInputElement;
+    const editForm = elem.shadowRoot!.querySelector(
+      "learning-discussion-edit-form"
+    )!;
+    await (editForm as any).updateComplete;
+    const input = editForm.shadowRoot!.querySelector(
+      "input"
+    ) as HTMLInputElement;
     input.value = "新しいテーマ";
-    input.dispatchEvent(new InputEvent("input"));
 
-    const saveButton = elem.shadowRoot!.querySelectorAll(
-      "button"
-    )[0] as HTMLButtonElement;
+    const saveButton = editForm.shadowRoot!.querySelector(
+      ".btn-primary"
+    ) as HTMLButtonElement;
     saveButton.click();
 
     expect(onSave).toHaveBeenCalledWith("新しいテーマ");
@@ -68,8 +79,12 @@ describe("learning-discussion-detail", async () => {
     elem.onCancel = onCancel;
     await elem.updateComplete;
 
-    const cancelButton = elem.shadowRoot!.querySelectorAll(
-      "button"
+    const editForm = elem.shadowRoot!.querySelector(
+      "learning-discussion-edit-form"
+    )!;
+    await (editForm as any).updateComplete;
+    const cancelButton = editForm.shadowRoot!.querySelectorAll(
+      ".btn"
     )[1] as HTMLButtonElement;
     cancelButton.click();
 
