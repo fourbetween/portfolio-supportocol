@@ -23,7 +23,6 @@ func NewHTTPHandler(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (ht
 
 	repo := db.NewDiscussionRepository(dbCon)
 	fac := domain.NewFactory(
-		repo,
 		idSrv,
 		clockSrv,
 	)

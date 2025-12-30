@@ -13,7 +13,6 @@ type Factory struct {
 }
 
 func NewFactory(
-	repo Repository,
 	idSrv id.Service,
 	clockSrv clock.Service,
 ) *Factory {
