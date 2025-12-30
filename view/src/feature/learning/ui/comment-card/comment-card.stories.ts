@@ -3,7 +3,7 @@ import { html } from "lit";
 import "./comment-card";
 
 const meta: Meta = {
-  title: "Feature/Learning/UI/CommentCard",
+  title: "learning/ui/comment-card",
   component: "learning-comment-card",
   render: (args) => html`
     <learning-comment-card .comment=${args.comment}></learning-comment-card>

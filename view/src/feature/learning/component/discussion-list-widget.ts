@@ -1,0 +1,113 @@
+import { LitElement, css, html } from "lit";
+import { customElement, state } from "lit/decorators.js";
+import { baseStyle } from "../../../shared/style/base";
+import { client } from "../api/client";
+import type { Discussion } from "../model/discussion";
+import "../ui/discussion-add-form/discussion-add-form";
+import "../ui/discussion-list/discussion-list";
+import "../ui/discussion-search-bar/discussion-search-bar";
+
+@customElement("learning-discussion-list-widget")
+export class LearningDiscussionListWidget extends LitElement {
+  @state()
+  private _discussions: Discussion[] = [];
+
+  @state()
+  private _searchQuery = "";
+
+  async connectedCallback() {
+    super.connectedCallback();
+    await this._fetchDiscussions();
+  }
+
+  private async _fetchDiscussions() {
+    const { data, error } = await client.GET("/learning/discussions");
+    if (error) {
+      console.error(error);
+      return;
+    }
+    this._discussions = data || [];
+  }
+
+  private async _handleAddDiscussion(theme: string) {
+    const { data, error } = await client.POST("/learning/discussions", {
+      body: { theme },
+    });
+    if (error) {
+      console.error(error);
+      return;
+    }
+    if (data) {
+      this._discussions = [data, ...this._discussions];
+    }
+  }
+
+  private _handleSearch(query: string) {
+    this._searchQuery = query;
+  }
+
+  private _handleSelect(discussion: Discussion) {
+    this.dispatchEvent(
+      new CustomEvent("select-discussion", {
+        detail: discussion,
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  render() {
+    const filteredDiscussions = this._discussions.filter((d) =>
+      d.theme.toLowerCase().includes(this._searchQuery.toLowerCase())
+    );
+
+    return html`
+      <div class="widget">
+        <div class="header">
+          <learning-discussion-search-bar
+            .value=${this._searchQuery}
+            .onInput=${(q: string) => this._handleSearch(q)}
+          ></learning-discussion-search-bar>
+        </div>
+        <div class="add-form">
+          <learning-discussion-add-form
+            .onSubmit=${(t: string) => this._handleAddDiscussion(t)}
+          ></learning-discussion-add-form>
+        </div>
+        <div class="content">
+          <learning-discussion-list
+            .discussions=${filteredDiscussions}
+            .onSelect=${(d: Discussion) => this._handleSelect(d)}
+          ></learning-discussion-list>
+        </div>
+      </div>
+    `;
+  }
+
+  static styles = [
+    baseStyle,
+    css`
+      .widget {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 16px;
+      }
+      .header {
+        display: flex;
+        gap: 8px;
+      }
+      .add-form {
+        padding: 16px;
+        background-color: var(--color-canvas-subtle);
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+      }
+      .content {
+        flex: 1;
+      }
+    `,
+  ];
+}
