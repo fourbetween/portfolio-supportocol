@@ -1,12 +1,15 @@
 import { LitElement, css, html } from "lit";
-import { customElement, query } from "lit/decorators.js";
-import { baseStyle } from "../style/base";
-import { buttonStyle } from "../style/button";
+import { customElement, query, state } from "lit/decorators.js";
+import { baseStyle } from "../../style/base";
+import { buttonStyle } from "../../style/button";
 
 @customElement("ui-popup")
 export class Popup extends LitElement {
   @query("dialog")
   private dialog!: HTMLDialogElement;
+
+  @state()
+  private _hasFooter = false;
 
   render() {
     return html`
@@ -24,11 +27,19 @@ export class Popup extends LitElement {
         <div class="main">
           <slot name="main"></slot>
         </div>
-        <div class="footer">
-          <slot name="footer"></slot>
+        <div class="footer" ?hidden=${!this._hasFooter}>
+          <slot
+            name="footer"
+            @slotchange=${this._handleFooterSlotChange}
+          ></slot>
         </div>
       </dialog>
     `;
+  }
+
+  private _handleFooterSlotChange(e: Event) {
+    const slot = e.target as HTMLSlotElement;
+    this._hasFooter = slot.assignedNodes().length > 0;
   }
 
   open() {
@@ -76,6 +87,9 @@ export class Popup extends LitElement {
         gap: 8px;
         border-bottom-left-radius: 6px;
         border-bottom-right-radius: 6px;
+      }
+      .footer[hidden] {
+        display: none;
       }
       .close-button {
         padding: 4px;

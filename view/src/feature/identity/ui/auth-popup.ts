@@ -3,8 +3,8 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { inputStyle } from "../../../shared/style/input";
-import "../../../shared/ui/popup";
-import type { Popup } from "../../../shared/ui/popup";
+import "../../../shared/ui/popup/popup";
+import type { Popup } from "../../../shared/ui/popup/popup";
 
 export type AuthMode = "login" | "signup";
 
