@@ -33,7 +33,7 @@ applyTo: "view/src/**/*.ts"
 - 外部データは `@property`、内部状態は `@state` を使用する。
 - プロパティ設定時はダブルクォートを使用しない。例: `<my-el .data=${data}></my-el>`
 - `HTMLElementTagNameMap` の拡張は行わない。
-- テキストは英語で記述する（国際化は後日）。
+- テキストは英語で記述する（多言語対応は後日）。
 
 ### Container/Presentational パターン
 
@@ -51,3 +51,16 @@ applyTo: "view/src/**/*.ts"
 
 - API 呼出の成否等の通知には `showToast` ヘルパーを使用する。
   - 例: `showToast(this, "Succeeded.", "success");`
+
+### Storybook
+
+- すべての Presenter (`ui/`) は Storybook ファイル (`.stories.ts`) を作成する。
+- `title` は `[context]/ui/[name]` 形式にする。
+- `component` にはカスタム要素のタグ名を指定する。
+- `render` 関数内で `html` テンプレートを使用してコンポーネントをレンダリングする。
+
+### テスト
+
+- すべての Presenter (`ui/`) は Vitest Browser Mode を使用したテストファイル (`.test.ts`) を作成する。
+- `beforeEach` で要素を作成して `document.body` に追加し、`afterEach` で削除する。
+- アサーションには `expect.element(page.getBy...)` を使用する。

@@ -3,7 +3,7 @@ import { html } from "lit";
 import "./comment-type";
 
 const meta: Meta = {
-  title: "Feature/Learning/UI/CommentType",
+  title: "learning/ui/comment-type",
   component: "learning-comment-type",
   render: (args) =>
     html`
