@@ -16,7 +16,7 @@ describe("learning-comment-type-popup", () => {
     el.remove();
   });
 
-  it("should render the provided types", async () => {
+  it("提供された種類が表示されること", async () => {
     const types = ["Question", "Idea", "Agreement"];
     el.types = types;
     await el.updateComplete;
@@ -28,7 +28,7 @@ describe("learning-comment-type-popup", () => {
     expect(buttons?.[2].textContent?.trim()).toBe("Agreement");
   });
 
-  it("should call onSelect when a type is clicked", async () => {
+  it("種類がクリックされたときに onSelect が呼ばれること", async () => {
     const types = ["Question"];
     const onSelect = vi.fn();
     el.types = types;
@@ -43,7 +43,7 @@ describe("learning-comment-type-popup", () => {
     expect(onSelect).toHaveBeenCalledWith("Question");
   });
 
-  it("should show input when 'Other' is clicked and call onSelect with input value", async () => {
+  it("'Other...'がクリックされたときに入力フォームが表示され、入力値で onSelect が呼ばれること", async () => {
     const onSelect = vi.fn();
     el.onSelect = onSelect;
     await el.updateComplete;

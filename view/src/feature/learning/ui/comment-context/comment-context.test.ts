@@ -17,7 +17,7 @@ describe("learning-comment-context", async () => {
     elem.remove();
   });
 
-  it("renders ancestor comments in order", async () => {
+  it("祖先コメントが順番に表示されること", async () => {
     elem.ancestors = [
       {
         id: "1",

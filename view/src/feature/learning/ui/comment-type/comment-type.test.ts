@@ -17,7 +17,7 @@ describe("learning-comment-type", async () => {
     elem.remove();
   });
 
-  it("renders the comment type", async () => {
+  it("コメントの種類が表示されること", async () => {
     elem.type = "idea";
     await expect.element(page.getByText("idea")).toBeInTheDocument();
   });

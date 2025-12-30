@@ -62,5 +62,7 @@ applyTo: "view/src/**/*.ts"
 ### テスト
 
 - すべての Presenter (`ui/`) は Vitest Browser Mode を使用したテストファイル (`.test.ts`) を作成する。
+- describe の第一引数はコンポーネント名のカスタム要素タグ名にする。
+- it の第一引数は動作内容を**日本語**で記述する。
 - `beforeEach` で要素を作成して `document.body` に追加し、`afterEach` で削除する。
 - アサーションには `expect.element(page.getBy...)` を使用する。

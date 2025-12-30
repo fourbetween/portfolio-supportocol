@@ -17,7 +17,7 @@ describe("learning-comment-tree", async () => {
     elem.remove();
   });
 
-  it("renders a single comment", async () => {
+  it("単一のコメントが表示されること", async () => {
     elem.comments = [
       {
         id: "1",
@@ -30,7 +30,7 @@ describe("learning-comment-tree", async () => {
     await expect.element(page.getByText("root comment")).toBeInTheDocument();
   });
 
-  it("renders child comments grouped by type", async () => {
+  it("子コメントが種類ごとにグループ化されて表示されること", async () => {
     elem.comments = [
       {
         id: "1",
@@ -78,7 +78,7 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   }, 10000);
 
-  it("renders multiple root comments", async () => {
+  it("複数のルートコメントが表示されること", async () => {
     elem.comments = [
       {
         id: "1",
