@@ -14,7 +14,7 @@ func (s *ErrorStatusCode) Error() string {
 type Comment struct {
 	ID              ID     `json:"id"`
 	DiscussionId    ID     `json:"discussionId"`
-	ParentCommentId ID     `json:"parentCommentId"`
+	ParentCommentId NilID  `json:"parentCommentId"`
 	CommentType     string `json:"commentType"`
 	Content         string `json:"content"`
 }
@@ -30,7 +30,7 @@ func (s *Comment) GetDiscussionId() ID {
 }
 
 // GetParentCommentId returns the value of ParentCommentId.
-func (s *Comment) GetParentCommentId() ID {
+func (s *Comment) GetParentCommentId() NilID {
 	return s.ParentCommentId
 }
 
@@ -55,7 +55,7 @@ func (s *Comment) SetDiscussionId(val ID) {
 }
 
 // SetParentCommentId sets the value of ParentCommentId.
-func (s *Comment) SetParentCommentId(val ID) {
+func (s *Comment) SetParentCommentId(val NilID) {
 	s.ParentCommentId = val
 }
 
@@ -192,13 +192,13 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetContent(val 
 }
 
 type LearningDiscussionsDiscussionIdCommentsPostReq struct {
-	ParentCommentId string `json:"parentCommentId"`
-	CommentType     string `json:"commentType"`
-	Content         string `json:"content"`
+	ParentCommentId NilString `json:"parentCommentId"`
+	CommentType     string    `json:"commentType"`
+	Content         string    `json:"content"`
 }
 
 // GetParentCommentId returns the value of ParentCommentId.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() string {
+func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() NilString {
 	return s.ParentCommentId
 }
 
@@ -213,7 +213,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetContent() string {
 }
 
 // SetParentCommentId sets the value of ParentCommentId.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val string) {
+func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val NilString) {
 	s.ParentCommentId = val
 }
 
@@ -256,4 +256,94 @@ func (s *LearningDiscussionsPostReq) GetTheme() string {
 // SetTheme sets the value of Theme.
 func (s *LearningDiscussionsPostReq) SetTheme(val string) {
 	s.Theme = val
+}
+
+// NewNilID returns new NilID with value set to v.
+func NewNilID(v ID) NilID {
+	return NilID{
+		Value: v,
+	}
+}
+
+// NilID is nullable ID.
+type NilID struct {
+	Value ID
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilID) SetTo(v ID) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilID) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilID) SetToNull() {
+	o.Null = true
+	var v ID
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilID) Get() (v ID, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilID) Or(d ID) ID {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewNilString returns new NilString with value set to v.
+func NewNilString(v string) NilString {
+	return NilString{
+		Value: v,
+	}
+}
+
+// NilString is nullable string.
+type NilString struct {
+	Value string
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilString) SetTo(v string) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilString) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilString) SetToNull() {
+	o.Null = true
+	var v string
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilString) Get() (v string, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }

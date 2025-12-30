@@ -250,7 +250,7 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        parentCommentId: string;
+                        parentCommentId: string | null;
                         commentType: string;
                         content: string;
                     };
@@ -383,7 +383,7 @@ export interface components {
         Comment: {
             id: components["schemas"]["Id"];
             discussionId: components["schemas"]["Id"];
-            parentCommentId: components["schemas"]["Id"];
+            parentCommentId: components["schemas"]["Id"] | null;
             commentType: string;
             content: string;
         };

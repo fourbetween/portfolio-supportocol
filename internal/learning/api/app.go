@@ -129,9 +129,14 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(ctx context.Cont
 }
 
 func (h *appHandler) LearningDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *oas.LearningDiscussionsDiscussionIdCommentsPostReq, params oas.LearningDiscussionsDiscussionIdCommentsPostParams) (*oas.Comment, error) {
+	var parentCommentID *string
+	if !req.ParentCommentId.Null {
+		parentCommentID = &req.ParentCommentId.Value
+	}
+
 	item, err := h.createComment.Execute(ctx, usecase.CreateCommentInput{
 		DiscussionID:    params.DiscussionId,
-		ParentCommentID: req.ParentCommentId,
+		ParentCommentID: parentCommentID,
 		CommentType:     req.CommentType,
 		Content:         req.Content,
 		PostedBy:        httpctx.GetUserID(ctx),
@@ -200,10 +205,17 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 }
 
 func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
+	var parentCommentID oas.NilID
+	if item.ParentCommentID() != nil {
+		parentCommentID.SetTo(oas.ID(*item.ParentCommentID()))
+	} else {
+		parentCommentID.Null = true
+	}
+
 	return oas.Comment{
 		ID:              oas.ID(item.ID()),
 		DiscussionId:    oas.ID(item.DiscussionID()),
-		ParentCommentId: oas.ID(item.ParentCommentID()),
+		ParentCommentId: parentCommentID,
 		CommentType:     item.CommentType(),
 		Content:         item.Content(),
 	}

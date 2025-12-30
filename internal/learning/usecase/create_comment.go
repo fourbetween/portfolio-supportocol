@@ -20,7 +20,7 @@ func NewCreateCommentUsecase(repo domain.Repository, fac *domain.Factory) *Creat
 
 type CreateCommentInput struct {
 	DiscussionID    string
-	ParentCommentID string
+	ParentCommentID *string
 	CommentType     string
 	Content         string
 	PostedBy        string

@@ -9,8 +9,8 @@
     "test": "vitest --run",
     "preview": "vite preview",
     "gen": "npm run gen:identity && npm run gen:learning",
-    "gen:identity": "npx openapi-typescript ../internal/identity/api/schema/openapi.yml -o ./src/api/identity/schema.d.ts",
-    "gen:learning": "npx openapi-typescript ../internal/learning/api/schema/openapi.yml -o ./src/api/learning/schema.d.ts",
+    "gen:identity": "npx openapi-typescript ../internal/identity/api/schema/openapi.yml -o ./src/feature/identity/api/schema.d.ts",
+    "gen:learning": "npx openapi-typescript ../internal/learning/api/schema/openapi.yml -o ./src/feature/learning/api/schema.d.ts",
     "storybook": "storybook dev --no-open",
     "build-storybook": "storybook build",
     "check:lit": "npx lit-analyzer \"src/**/*.ts\""

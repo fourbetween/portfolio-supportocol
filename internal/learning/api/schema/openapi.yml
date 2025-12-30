@@ -43,7 +43,9 @@ components:
         discussionId:
           $ref: "#/components/schemas/Id"
         parentCommentId:
-          $ref: "#/components/schemas/Id"
+          oneOf:
+            - $ref: "#/components/schemas/Id"
+            - type: "null"
         commentType:
           type: string
         content:
@@ -224,7 +226,9 @@ paths:
               type: object
               properties:
                 parentCommentId:
-                  type: string
+                  oneOf:
+                    - type: string
+                    - type: "null"
                 commentType:
                   type: string
                 content:

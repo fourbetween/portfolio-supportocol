@@ -185,7 +185,7 @@ func (r *DiscussionRepository) toCommentDomain(row model.Comments) *domain.Comme
 		ID: row.ID,
 		NewCommentParams: domain.NewCommentParams{
 			DiscussionID:    row.DiscussionID,
-			ParentCommentID: ptrToString(row.ParentCommentID),
+			ParentCommentID: row.ParentCommentID,
 			CommentTypeID:   row.CommentType,
 			Content:         row.Content,
 			PostedBy:        row.PostedBy,
@@ -198,7 +198,7 @@ func (r *DiscussionRepository) toCommentModel(c *domain.Comment) model.Comments 
 	return model.Comments{
 		ID:              c.ID(),
 		DiscussionID:    c.DiscussionID(),
-		ParentCommentID: stringToPtr(c.ParentCommentID()),
+		ParentCommentID: c.ParentCommentID(),
 		CommentType:     c.CommentType(),
 		Content:         c.Content(),
 		PostedBy:        c.PostedBy(),

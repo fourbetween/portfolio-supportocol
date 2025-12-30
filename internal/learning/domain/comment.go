@@ -5,7 +5,7 @@ import "time"
 type Comment struct {
 	id              string
 	discussionID    string
-	parentCommentID string
+	parentCommentID *string
 	commentType     string
 	content         string
 	postedBy        string
@@ -20,7 +20,7 @@ func (c *Comment) DiscussionID() string {
 	return c.discussionID
 }
 
-func (c *Comment) ParentCommentID() string {
+func (c *Comment) ParentCommentID() *string {
 	return c.parentCommentID
 }
 

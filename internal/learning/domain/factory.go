@@ -53,7 +53,7 @@ func (f *Factory) BuildDiscussion(params BuildDiscussionParams) *Discussion {
 
 type NewCommentParams struct {
 	DiscussionID    string
-	ParentCommentID string
+	ParentCommentID *string
 	CommentTypeID   string
 	Content         string
 	PostedBy        string
