@@ -39,3 +39,10 @@ applyTo: "view/src/**/*.ts"
 - 外部から渡されるデータには `@property` デコレータを使用してください。
 - コンポーネント内部の状態管理には `@state` デコレータを使用してください。
 - スタイルは `static styles` に定義し、`shared/style` からインポートした共通スタイルを組み合わせて使用してください。
+- コンポーネントにプロパティを設定する際に、ダブルクォートで囲まないでください。例: `<my-component .data=${data}></my-component>`
+- declare global による HTMLElementTagNameMap の拡張（型定義の追加）は行わないでください。
+
+## メッセージ
+
+- api コールなどが失敗した場合のエラーメッセージ表示には、`showToast` ヘルパー関数を使用してください。 例:`showToast(this, "失敗しました。", "error");`
+- 成功メッセージの表示にも `showToast` を使用してください。 例:`showToast(this, "成功しました。", "success");`
