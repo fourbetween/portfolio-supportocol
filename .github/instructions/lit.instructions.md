@@ -34,6 +34,15 @@ applyTo: "view/src/**/*.ts"
 - プロパティ設定時はダブルクォートを使用しない。例: `<my-el .data=${data}></my-el>`
 - `HTMLElementTagNameMap` の拡張は行わない。
 - テキストは英語で記述する（多言語対応は後日）。
+- 記述の順番は以下の通り:
+  1. インポート
+  2. クラスデコレーター（`@customElement`）
+  3. クラス定義
+     1. プロパティ・状態定義（`@property`, `@state`）
+     2. ライフサイクルメソッド（`connectedCallback` 等）
+     3. イベントハンドラー
+     4. レンダーメソッド（`render` 等）
+     5. スタイル定義（`static styles`）
 
 ### Container/Presentational パターン
 
