@@ -1,5 +1,7 @@
+import { Task } from "@lit/task";
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { client } from "../api/client";
 import type { Discussion } from "../model/discussion";
@@ -15,31 +17,30 @@ export class LearningDiscussionListWidget extends LitElement {
   @state()
   private _searchQuery = "";
 
-  async connectedCallback() {
-    super.connectedCallback();
-    await this._fetchDiscussions();
-  }
-
-  private async _fetchDiscussions() {
-    const { data, error } = await client.GET("/learning/discussions");
-    if (error) {
-      console.error(error);
-      return;
-    }
-    this._discussions = data || [];
-  }
+  private _task = new Task(this, {
+    task: async () => {
+      const { data, error } = await client.GET("/learning/discussions");
+      if (error) throw error.message;
+      return data || [];
+    },
+    onComplete: (discussions) => {
+      this._discussions = discussions;
+    },
+    onError: (e: unknown) => {
+      showToast(this, String(e), "error");
+    },
+    args: () => [],
+  });
 
   private async _handleAddDiscussion(theme: string) {
-    const { data, error } = await client.POST("/learning/discussions", {
+    const { error } = await client.POST("/learning/discussions", {
       body: { theme },
     });
     if (error) {
-      console.error(error);
+      showToast(this, error.message, "error");
       return;
     }
-    if (data) {
-      this._discussions = [data, ...this._discussions];
-    }
+    await this._task.run();
   }
 
   private _handleSearch(query: string) {
