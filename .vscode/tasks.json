@@ -2,7 +2,27 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "lit: check",
+      "label": "test:api",
+      "type": "shell",
+      "command": "make test-api",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "test:view",
+      "type": "shell",
+      "command": "make test-view",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "check:lit",
       "type": "npm",
       "script": "check:lit",
       "path": "view",
@@ -10,7 +30,17 @@
       "group": {
         "kind": "build"
       },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      }
+    },
+    {
+      "label": "storybook",
+      "type": "shell",
+      "command": "make storybook",
       "isBackground": true,
+      "problemMatcher": [],
       "presentation": {
         "reveal": "always",
         "panel": "new"
