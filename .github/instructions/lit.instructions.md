@@ -31,6 +31,7 @@ applyTo: "view/src/**/*.ts"
 
 - `LitElement` を継承し、名称は `[context]-[name]` 形式（例: `learning-comment-list`）にする。
 - 外部データは `@property`、内部状態は `@state` を使用する。
+- 関数をプロパティとして受け取る場合、`@property({ attribute: false })` を使用する。
 - プロパティ設定時はダブルクォートを使用しない。例: `<my-el .data=${data}></my-el>`
 - `HTMLElementTagNameMap` の拡張は行わない。
 - テキストは英語で記述する（多言語対応は後日）。
@@ -59,7 +60,8 @@ applyTo: "view/src/**/*.ts"
 ### メッセージ表示
 
 - API 呼出の成否等の通知には `showToast` ヘルパーを使用する。
-  - 例: `showToast(this, "Succeeded.", "success");`
+  - 成功例: `showToast(this, "Succeeded.", "success", 2000);`
+  - エラー例: `showToast(this, error.message, "error");`
 
 ### Storybook
 

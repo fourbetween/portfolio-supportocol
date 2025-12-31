@@ -88,6 +88,16 @@ export class LearningDashboardPage extends LitElement {
     this.discussionsTask.run();
   }
 
+  private _handleDiscussionDeleted(e: CustomEvent<Discussion>) {
+    if (this._selectedDiscussionId === e.detail.id) {
+      this._selectedDiscussionId = undefined;
+      const url = new URL(window.location.href);
+      url.searchParams.delete("id");
+      window.history.pushState({}, "", url);
+    }
+    this.discussionsTask.run();
+  }
+
   render() {
     const selectedDiscussion = this._discussions.find(
       (d) => d.id === this._selectedDiscussionId
@@ -100,6 +110,7 @@ export class LearningDashboardPage extends LitElement {
             .discussions=${this._discussions}
             @select-discussion=${this._handleSelectDiscussion}
             @discussion-created=${this._handleDiscussionUpdated}
+            @discussion-deleted=${this._handleDiscussionDeleted}
           ></learning-discussion-list-widget>
         </aside>
         <main class="main">

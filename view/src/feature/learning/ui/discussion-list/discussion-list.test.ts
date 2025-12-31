@@ -32,4 +32,21 @@ describe("learning-discussion-list", async () => {
       .element(page.getByText("No discussions found."))
       .toBeInTheDocument();
   });
+
+  it("削除ボタンをクリックすると onDelete が呼ばれること", async () => {
+    let deletedId = "";
+    elem.discussions = [{ id: "1", theme: "テーマ1" }];
+    elem.onDelete = (d) => {
+      deletedId = d.id;
+    };
+    await elem.updateComplete;
+
+    const deleteButton = elem.shadowRoot?.querySelector(
+      ".delete-button"
+    ) as HTMLElement;
+    expect(deleteButton).not.toBeNull();
+    deleteButton.click();
+
+    expect(deletedId).toBe("1");
+  });
 });

@@ -47,6 +47,32 @@ export class LearningDiscussionListWidget extends LitElement {
     );
   }
 
+  private async _handleDeleteDiscussion(discussion: Discussion) {
+    if (!confirm(`Are you sure you want to delete "${discussion.theme}"?`)) {
+      return;
+    }
+    const { error } = await client.DELETE(
+      "/learning/discussions/{discussionId}",
+      {
+        params: {
+          path: { discussionId: discussion.id },
+        },
+      }
+    );
+    if (error) {
+      showToast(this, error.message, "error");
+      return;
+    }
+    this.dispatchEvent(
+      new CustomEvent("discussion-deleted", {
+        detail: discussion,
+        bubbles: true,
+        composed: true,
+      })
+    );
+    showToast(this, "Deleted.", "success", 2000);
+  }
+
   render() {
     const filteredDiscussions = this.discussions.filter((d) =>
       d.theme.toLowerCase().includes(this._searchQuery.toLowerCase())
@@ -69,6 +95,7 @@ export class LearningDiscussionListWidget extends LitElement {
           <learning-discussion-list
             .discussions=${filteredDiscussions}
             .onSelect=${(d: Discussion) => this._handleSelect(d)}
+            .onDelete=${(d: Discussion) => this._handleDeleteDiscussion(d)}
           ></learning-discussion-list>
         </div>
       </div>

@@ -22,7 +22,8 @@ export const Default: Story = {
   render: (args) => html`
     <learning-discussion-list
       .discussions=${args.discussions}
-      @select=${(e: CustomEvent) => console.log("selected", e.detail)}
+      .onSelect=${(d: any) => console.log("selected", d)}
+      .onDelete=${(d: any) => console.log("deleted", d)}
     ></learning-discussion-list>
   `,
 };
