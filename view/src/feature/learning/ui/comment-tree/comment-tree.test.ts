@@ -99,4 +99,24 @@ describe("learning-comment-tree", async () => {
     await expect.element(page.getByText("root 1")).toBeInTheDocument();
     await expect.element(page.getByText("root 2")).toBeInTheDocument();
   });
+
+  it("コメントがクリックされたときにコールバックが実行されること", async () => {
+    const comment = {
+      id: "1",
+      discussionId: "1",
+      parentCommentId: null,
+      content: "root comment",
+      commentType: "idea",
+    };
+    elem.comments = [comment];
+
+    let clickedComment: any = null;
+    (elem as any).onCommentClick = (c: any) => {
+      clickedComment = c;
+    };
+
+    await page.getByText("root comment").click();
+
+    expect(clickedComment).toEqual(comment);
+  });
 });

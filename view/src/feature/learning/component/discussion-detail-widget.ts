@@ -32,6 +32,14 @@ export class LearningDiscussionDetailWidget extends LitElement {
     this.discussion = data;
     this.isEditing = false;
     showToast(this, "Theme updated.", "success");
+
+    this.dispatchEvent(
+      new CustomEvent("discussion-updated", {
+        detail: data,
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   render() {

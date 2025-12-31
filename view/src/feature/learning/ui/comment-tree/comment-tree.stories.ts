@@ -5,8 +5,14 @@ import "./comment-tree";
 const meta: Meta = {
   title: "learning/ui/comment-tree",
   component: "learning-comment-tree",
+  argTypes: {
+    onCommentClick: { action: "onCommentClick" },
+  },
   render: (args) => html`
-    <learning-comment-tree .comments=${args.comments}></learning-comment-tree>
+    <learning-comment-tree
+      .comments=${args.comments}
+      .onCommentClick=${args.onCommentClick}
+    ></learning-comment-tree>
   `,
 };
 

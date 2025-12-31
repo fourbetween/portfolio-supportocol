@@ -11,10 +11,16 @@ export class LearningCommentTree extends LitElement {
   @property({ type: Array })
   comments?: Comment[];
 
+  @property({ attribute: false })
+  onCommentClick?: (comment: Comment) => void;
+
   render() {
     if (!this.comments) return html``;
 
-    const rootComments = this.comments.filter((c) => !c.parentCommentId);
+    const commentIds = new Set(this.comments.map((c) => c.id));
+    const rootComments = this.comments.filter(
+      (c) => !c.parentCommentId || !commentIds.has(c.parentCommentId)
+    );
 
     return html`
       <div class="tree">
@@ -36,7 +42,11 @@ export class LearningCommentTree extends LitElement {
 
     return html`
       <div class="comment-node">
-        <learning-comment-card .comment=${comment}></learning-comment-card>
+        <learning-comment-card
+          .comment=${comment}
+          @click=${() => this.handleCommentClick(comment)}
+          style="cursor: pointer;"
+        ></learning-comment-card>
         <div class="children">
           ${Object.entries(groupedChildren).map(
             ([type, typeChildren]) => html`
@@ -53,6 +63,12 @@ export class LearningCommentTree extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  private handleCommentClick(comment: Comment) {
+    if (this.onCommentClick) {
+      this.onCommentClick(comment);
+    }
   }
 
   static styles = [

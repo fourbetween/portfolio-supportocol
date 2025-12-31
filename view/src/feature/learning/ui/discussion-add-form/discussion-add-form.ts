@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
+import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 
 @customElement("learning-discussion-add-form")
@@ -39,8 +40,9 @@ export class LearningDiscussionAddForm extends LitElement {
           type="submit"
           class="btn btn-primary"
           ?disabled=${!this._theme.trim()}
+          title="New discussion"
         >
-          New discussion
+          <span class="material-symbols-outlined">add</span>
         </button>
       </form>
     `;
@@ -49,6 +51,7 @@ export class LearningDiscussionAddForm extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
+    iconStyle,
     inputStyle,
     css`
       form {

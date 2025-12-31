@@ -34,7 +34,8 @@ export class LearningDiscussionSearchBar extends LitElement {
     baseStyle,
     inputStyle,
     css`
-      .search-container {
+      :host {
+        display: block;
         width: 100%;
       }
       input {

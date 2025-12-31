@@ -40,7 +40,6 @@ export class LearningDiscussionDetail extends LitElement {
                   <h1 class="theme">${this.discussion?.theme}</h1>
                   <button class="btn" @click=${() => this.onEdit?.()}>
                     <span class="material-symbols-outlined">edit</span>
-                    Edit
                   </button>
                 </div>
               `}
@@ -60,7 +59,6 @@ export class LearningDiscussionDetail extends LitElement {
 
       .container {
         padding: 16px;
-        border-bottom: 1px solid var(--color-border-default);
         background-color: var(--color-canvas-default);
       }
 

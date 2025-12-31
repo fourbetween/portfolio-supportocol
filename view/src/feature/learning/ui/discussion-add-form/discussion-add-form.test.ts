@@ -31,4 +31,11 @@ describe("learning-discussion-add-form", async () => {
 
     expect(onSubmit).toHaveBeenCalledWith("新しい議論");
   });
+
+  it("ボタンにアイコンが表示されていること", async () => {
+    const button = elem.shadowRoot!.querySelector("button")!;
+    const icon = button.querySelector(".material-symbols-outlined");
+    expect(icon).not.toBeNull();
+    expect(icon?.textContent).toBe("add");
+  });
 });

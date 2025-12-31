@@ -20,7 +20,7 @@ export class LearningDiscussionListWidget extends LitElement {
   private _task = new Task(this, {
     task: async () => {
       const { data, error } = await client.GET("/learning/discussions");
-      if (error) throw error.message;
+      if (error) throw new Error(error.message);
       return data || [];
     },
     onComplete: (discussions) => {
@@ -92,19 +92,11 @@ export class LearningDiscussionListWidget extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 16px;
-        max-width: 800px;
-        margin: 0 auto;
         padding: 16px;
       }
       .header {
         display: flex;
         gap: 8px;
-      }
-      .add-form {
-        padding: 16px;
-        background-color: var(--color-canvas-subtle);
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
       }
       .content {
         flex: 1;
