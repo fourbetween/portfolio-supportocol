@@ -58,7 +58,18 @@ export class LearningDashboardPage extends LitElement {
     if (id) {
       this._selectedDiscussionId = id;
     }
+    window.addEventListener("popstate", this._handlePopState);
   }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener("popstate", this._handlePopState);
+  }
+
+  private _handlePopState = () => {
+    const params = new URLSearchParams(window.location.search);
+    this._selectedDiscussionId = params.get("id") || undefined;
+  };
 
   private discussionsTask = new Task(this, {
     task: async () => {
