@@ -1,6 +1,5 @@
-import { Task } from "@lit/task";
 import { LitElement, css, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { client } from "../api/client";
@@ -11,36 +10,21 @@ import "../ui/discussion-search-bar/discussion-search-bar";
 
 @customElement("learning-discussion-list-widget")
 export class LearningDiscussionListWidget extends LitElement {
-  @state()
-  private _discussions: Discussion[] = [];
+  @property({ type: Array })
+  discussions: Discussion[] = [];
 
   @state()
   private _searchQuery = "";
 
-  private _task = new Task(this, {
-    task: async () => {
-      const { data, error } = await client.GET("/learning/discussions");
-      if (error) throw new Error(error.message);
-      return data || [];
-    },
-    onComplete: (discussions) => {
-      this._discussions = discussions;
-    },
-    onError: (e: unknown) => {
-      showToast(this, String(e), "error");
-    },
-    args: () => [],
-  });
-
   private async _handleAddDiscussion(theme: string) {
-    const { error } = await client.POST("/learning/discussions", {
+    const { data, error } = await client.POST("/learning/discussions", {
       body: { theme },
     });
     if (error) {
       showToast(this, error.message, "error");
       return;
     }
-    await this._task.run();
+    this.discussions = [data, ...this.discussions];
   }
 
   private _handleSearch(query: string) {
@@ -58,7 +42,7 @@ export class LearningDiscussionListWidget extends LitElement {
   }
 
   render() {
-    const filteredDiscussions = this._discussions.filter((d) =>
+    const filteredDiscussions = this.discussions.filter((d) =>
       d.theme.toLowerCase().includes(this._searchQuery.toLowerCase())
     );
 
