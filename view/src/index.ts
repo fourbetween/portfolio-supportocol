@@ -39,17 +39,6 @@ export class AppRoot extends LitElement {
         <learning-dashboard-page></learning-dashboard-page>
       `,
     },
-    {
-      name: "learning",
-      path: routes.learning,
-      enter: async () => {
-        await import("./feature/learning/page/edit-page");
-        return true;
-      },
-      render: ({ id }) => html`
-        <learning-edit-page .discussionId=${id as string}></learning-edit-page>
-      `,
-    },
   ]);
 
   @provide({ context: userContext })

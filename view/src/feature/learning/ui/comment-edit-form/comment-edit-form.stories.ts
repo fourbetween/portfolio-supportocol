@@ -8,8 +8,8 @@ const meta: Meta = {
   render: (args) =>
     html`
       <learning-comment-edit-form
-        .commentType=${args.commentType}
-        .content=${args.content}
+        .initialType=${args.commentType}
+        .initialContent=${args.content}
         .availableTypes=${args.availableTypes}
         .onSave=${(detail: any) => console.log("save", detail)}
         .onCancel=${() => console.log("cancel")}
