@@ -35,6 +35,9 @@ export class LearningDiscussionList extends LitElement {
         border-radius: 6px;
         overflow: hidden;
       }
+      .list:empty {
+        border: none;
+      }
       .item {
         padding: 16px;
         border-bottom: 1px solid var(--color-border-muted);
