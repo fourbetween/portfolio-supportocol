@@ -117,9 +117,13 @@ export class LearningDashboardPage extends LitElement {
     baseStyle,
     buttonStyle,
     css`
+      :host {
+        display: block;
+        height: 100%;
+      }
       .dashboard {
         display: flex;
-        height: 100vh;
+        height: 100%;
         overflow: hidden;
       }
       .sidebar {
