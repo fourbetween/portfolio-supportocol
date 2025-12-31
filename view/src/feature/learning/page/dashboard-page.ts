@@ -5,6 +5,7 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { client } from "../api/client";
+import "../component/comment-explorer-widget";
 import "../component/comment-frame-widget";
 import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
@@ -136,6 +137,11 @@ export class LearningDashboardPage extends LitElement {
             <learning-comment-frame-widget
               .comments=${this._comments}
             ></learning-comment-frame-widget>
+          </div>
+          <div class="comment-explorer">
+            <learning-comment-explorer-widget
+              .comments=${this._comments}
+            ></learning-comment-explorer-widget>
           </div>
         </main>
       </div>
