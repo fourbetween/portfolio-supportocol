@@ -3,6 +3,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { client } from "../api/client";
+import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 import "../ui/discussion-detail/discussion-detail";
 
@@ -10,6 +11,9 @@ import "../ui/discussion-detail/discussion-detail";
 export class LearningDiscussionDetailWidget extends LitElement {
   @property({ type: Object })
   discussion?: Discussion;
+
+  @property({ type: Array })
+  comments: Comment[] = [];
 
   @state()
   private isEditing = false;

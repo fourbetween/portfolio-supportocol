@@ -7,6 +7,7 @@ import { buttonStyle } from "../../../shared/style/button";
 import { client } from "../api/client";
 import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
+import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 
 @customElement("learning-dashboard-page")
@@ -15,7 +16,39 @@ export class LearningDashboardPage extends LitElement {
   private _discussions: Discussion[] = [];
 
   @state()
+  private _comments: Comment[] = [];
+
+  @state()
   private _selectedDiscussionId?: string;
+
+  constructor() {
+    super();
+
+    new Task(this, {
+      task: async () => {
+        if (!this._selectedDiscussionId) return [] as Comment[];
+        const { data, error } = await client.GET(
+          "/learning/discussions/{discussionId}/comments",
+          {
+            params: {
+              path: {
+                discussionId: this._selectedDiscussionId || "",
+              },
+            },
+          }
+        );
+        if (error) throw new Error(error.message);
+        return data || [];
+      },
+      onComplete: (comments) => {
+        this._comments = comments;
+      },
+      onError: (e: unknown) => {
+        showToast(this, String(e), "error");
+      },
+      args: () => [this._selectedDiscussionId],
+    });
+  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -71,6 +104,7 @@ export class LearningDashboardPage extends LitElement {
           <div class="detail">
             <learning-discussion-detail-widget
               .discussion=${selectedDiscussion}
+              .comments=${this._comments}
               @discussion-updated=${this._handleDiscussionUpdated}
             ></learning-discussion-detail-widget>
           </div>

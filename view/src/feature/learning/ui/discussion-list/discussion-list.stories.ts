@@ -26,3 +26,14 @@ export const Default: Story = {
     ></learning-discussion-list>
   `,
 };
+
+export const Empty: Story = {
+  args: {
+    discussions: [],
+  },
+  render: (args) => html`
+    <learning-discussion-list
+      .discussions=${args.discussions}
+    ></learning-discussion-list>
+  `,
+};

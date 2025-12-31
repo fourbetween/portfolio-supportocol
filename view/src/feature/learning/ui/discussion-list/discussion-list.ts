@@ -12,6 +12,11 @@ export class LearningDiscussionList extends LitElement {
   onSelect?: (discussion: Discussion) => void;
 
   render() {
+    if (this.discussions.length === 0) {
+      return html`
+        <div class="empty">No discussions found.</div>
+      `;
+    }
     return html`
       <div class="list">
         ${this.discussions.map(
@@ -28,15 +33,20 @@ export class LearningDiscussionList extends LitElement {
   static styles = [
     baseStyle,
     css`
+      .empty {
+        padding: 16px;
+        text-align: center;
+        color: var(--color-fg-muted);
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        background-color: var(--color-canvas-subtle);
+      }
       .list {
         display: flex;
         flex-direction: column;
         border: 1px solid var(--color-border-default);
         border-radius: 6px;
         overflow: hidden;
-      }
-      .list:empty {
-        border: none;
       }
       .item {
         padding: 16px;

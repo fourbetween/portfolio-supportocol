@@ -25,4 +25,11 @@ describe("learning-discussion-list", async () => {
     await expect.element(page.getByText("テーマ1")).toBeInTheDocument();
     await expect.element(page.getByText("テーマ2")).toBeInTheDocument();
   });
+
+  it("議論がない場合にメッセージが表示されること", async () => {
+    elem.discussions = [];
+    await expect
+      .element(page.getByText("No discussions found."))
+      .toBeInTheDocument();
+  });
 });
