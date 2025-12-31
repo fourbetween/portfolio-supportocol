@@ -2,7 +2,6 @@ import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import "../component/comment-explorer-widget";
 import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
 import type { Discussion } from "../model/discussion";
