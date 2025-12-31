@@ -15,7 +15,16 @@ export class LearningDashboardPage extends LitElement {
   private _discussions: Discussion[] = [];
 
   @state()
-  private _selectedDiscussion?: Discussion;
+  private _selectedDiscussionId?: string;
+
+  connectedCallback() {
+    super.connectedCallback();
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    if (id) {
+      this._selectedDiscussionId = id;
+    }
+  }
 
   private discussionsTask = new Task(this, {
     task: async () => {
@@ -32,16 +41,24 @@ export class LearningDashboardPage extends LitElement {
     args: () => [],
   });
 
-  private async _handleSelectDiscussion(e: CustomEvent<Discussion>) {
-    this._selectedDiscussion = e.detail;
+  private _handleSelectDiscussion(e: CustomEvent<Discussion>) {
+    if (this._selectedDiscussionId === e.detail.id) return;
+    this._selectedDiscussionId = e.detail.id;
+    const url = new URL(window.location.href);
+    url.searchParams.set("id", e.detail.id);
+    window.history.pushState({}, "", url);
   }
 
   private _handleDiscussionUpdated(e: CustomEvent<Discussion>) {
-    this._selectedDiscussion = e.detail;
+    this._selectedDiscussionId = e.detail.id;
     this.discussionsTask.run();
   }
 
   render() {
+    const selectedDiscussion = this._discussions.find(
+      (d) => d.id === this._selectedDiscussionId
+    );
+
     return html`
       <div class="dashboard">
         <aside class="sidebar">
@@ -53,7 +70,7 @@ export class LearningDashboardPage extends LitElement {
         <main class="main">
           <div class="detail">
             <learning-discussion-detail-widget
-              .discussion=${this._selectedDiscussion}
+              .discussion=${selectedDiscussion}
               @discussion-updated=${this._handleDiscussionUpdated}
             ></learning-discussion-detail-widget>
           </div>
