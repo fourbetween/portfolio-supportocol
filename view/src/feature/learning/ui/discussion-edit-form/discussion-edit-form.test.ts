@@ -25,6 +25,20 @@ describe("learning-discussion-edit-form", () => {
     await expect.element(input).toHaveValue("テストテーマ");
   });
 
+  it("保存ボタンに save アイコンが表示されていること", async () => {
+    const saveButton = elem.shadowRoot!.querySelector(".btn-primary")!;
+    const icon = saveButton.querySelector(".material-symbols-outlined");
+    expect(icon).not.toBeNull();
+    expect(icon?.textContent).toBe("save");
+  });
+
+  it("キャンセルボタンに close アイコンが表示されていること", async () => {
+    const cancelButton = elem.shadowRoot!.querySelectorAll(".btn")[1]!;
+    const icon = cancelButton.querySelector(".material-symbols-outlined");
+    expect(icon).not.toBeNull();
+    expect(icon?.textContent).toBe("close");
+  });
+
   it("保存ボタンをクリックすると onSave が入力値とともに呼ばれること", async () => {
     const onSave = vi.fn();
     elem.theme = "元のテーマ";

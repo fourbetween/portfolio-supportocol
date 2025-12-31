@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
+import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 
 @customElement("learning-discussion-edit-form")
@@ -31,10 +32,13 @@ export class LearningDiscussionEditForm extends LitElement {
           <button
             class="btn btn-primary"
             @click=${() => this.onSave?.(this.inputElement?.value ?? "")}
+            title="Save"
           >
-            Save
+            <span class="material-symbols-outlined">save</span>
           </button>
-          <button class="btn" @click=${() => this.onCancel?.()}>Cancel</button>
+          <button class="btn" @click=${() => this.onCancel?.()} title="Cancel">
+            <span class="material-symbols-outlined">close</span>
+          </button>
         </div>
       </div>
     `;
@@ -44,6 +48,7 @@ export class LearningDiscussionEditForm extends LitElement {
     baseStyle,
     buttonStyle,
     inputStyle,
+    iconStyle,
     css`
       .edit-form {
         width: 100%;
