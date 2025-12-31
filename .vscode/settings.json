@@ -1,6 +1,8 @@
 {
   "chat.promptFilesRecommendations": {
     "tdd-go": true,
-    "tdd-lit": true
+    "tdd-lit": true,
+    "refactor-go": true,
+    "refactor-lit": true
   }
 }

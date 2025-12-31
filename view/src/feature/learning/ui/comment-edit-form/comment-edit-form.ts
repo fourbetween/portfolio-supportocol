@@ -1,5 +1,5 @@
-import { LitElement, css, html } from "lit";
-import { customElement, property, query } from "lit/decorators.js";
+import { LitElement, type PropertyValues, css, html } from "lit";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { inputStyle } from "../../../../shared/style/input";
@@ -10,10 +10,10 @@ import type { LearningCommentTypePopup } from "../comment-type-popup/comment-typ
 @customElement("learning-comment-edit-form")
 export class LearningCommentEditForm extends LitElement {
   @property({ type: String })
-  commentType = "";
+  initialType = "";
 
   @property({ type: String })
-  content = "";
+  initialContent = "";
 
   @property({ type: Array })
   availableTypes: string[] = [];
@@ -24,14 +24,29 @@ export class LearningCommentEditForm extends LitElement {
   @property({ attribute: false })
   onCancel?: () => void;
 
+  @state()
+  private _commentType = "";
+
+  @state()
+  private _content = "";
+
   @query("learning-comment-type-popup")
   private popup!: LearningCommentTypePopup;
+
+  willUpdate(changedProperties: PropertyValues) {
+    if (changedProperties.has("initialType")) {
+      this._commentType = this.initialType;
+    }
+    if (changedProperties.has("initialContent")) {
+      this._content = this.initialContent;
+    }
+  }
 
   render() {
     return html`
       <div class="header">
         <learning-comment-type-badge
-          .type=${this.commentType}
+          .type=${this._commentType}
           @click=${this.handleBadgeClick}
           class="type-badge"
         ></learning-comment-type-badge>
@@ -40,12 +55,15 @@ export class LearningCommentEditForm extends LitElement {
           .onSelect=${this.handleTypeSelect}
         ></learning-comment-type-popup>
       </div>
-      <textarea
-        .value=${this.content}
-        @input=${this.handleInput}
-        aria-label="Comment content"
-        placeholder="Enter your comment..."
-      ></textarea>
+      <div class="content-field">
+        <label for="content-textarea" class="sr-only">Comment content</label>
+        <textarea
+          id="content-textarea"
+          .value=${this._content}
+          @input=${this.handleInput}
+          placeholder="Enter your comment..."
+        ></textarea>
+      </div>
       <div class="actions">
         <button class="btn cancel-button" @click=${this.handleCancel}>
           Cancel
@@ -62,18 +80,18 @@ export class LearningCommentEditForm extends LitElement {
   }
 
   private handleTypeSelect = (type: string) => {
-    this.commentType = type;
+    this._commentType = type;
   };
 
   private handleInput(e: Event) {
     const target = e.target as HTMLTextAreaElement;
-    this.content = target.value;
+    this._content = target.value;
   }
 
   private handleSave() {
     this.onSave?.({
-      commentType: this.commentType,
-      content: this.content,
+      commentType: this._commentType,
+      content: this._content,
     });
   }
 
@@ -104,6 +122,10 @@ export class LearningCommentEditForm extends LitElement {
       .type-badge {
         cursor: pointer;
       }
+      .content-field {
+        display: flex;
+        flex-direction: column;
+      }
       textarea {
         width: 100%;
         min-height: 120px;
@@ -113,6 +135,17 @@ export class LearningCommentEditForm extends LitElement {
         display: flex;
         justify-content: flex-end;
         gap: 8px;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
       }
     `,
   ];

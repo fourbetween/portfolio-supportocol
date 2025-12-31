@@ -21,9 +21,9 @@ describe("learning-comment-edit-form", async () => {
     expect(elem).toBeInstanceOf(HTMLElement);
   });
 
-  it("renders commentType and content", async () => {
-    elem.commentType = "質問";
-    elem.content = "これは質問です";
+  it("renders initialType and initialContent", async () => {
+    elem.initialType = "質問";
+    elem.initialContent = "これは質問です";
     await elem.updateComplete;
 
     const badge = elem.shadowRoot?.querySelector("learning-comment-type-badge");
@@ -81,7 +81,7 @@ describe("learning-comment-edit-form", async () => {
 
   it("opens popup on badge click and updates type on select", async () => {
     elem.availableTypes = ["質問", "回答", "アイデア"];
-    elem.commentType = "質問";
+    elem.initialType = "質問";
     await elem.updateComplete;
 
     const badge = elem.shadowRoot?.querySelector(
@@ -104,7 +104,10 @@ describe("learning-comment-edit-form", async () => {
     popup.onSelect("回答");
     await elem.updateComplete;
 
-    expect(elem.commentType).toBe("回答");
+    const badgeAfter = elem.shadowRoot?.querySelector(
+      "learning-comment-type-badge"
+    ) as any;
+    expect(badgeAfter.type).toBe("回答");
   });
 
   it("has styled textarea and buttons", async () => {
