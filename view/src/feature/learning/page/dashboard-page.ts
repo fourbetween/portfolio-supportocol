@@ -169,8 +169,14 @@ export class LearningDashboardPage extends LitElement {
       .main {
         flex: 1;
         display: flex;
+        gap: 16px;
         flex-direction: column;
         overflow-y: auto;
+      }
+      .detail,
+      .comment-frame,
+      .comment-explorer {
+        padding: 0 16px;
       }
       .detail {
         border-bottom: 1px solid var(--color-border-default);

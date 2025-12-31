@@ -58,7 +58,7 @@ export class LearningDiscussionDetail extends LitElement {
       }
 
       .container {
-        padding: 8px 16px;
+        padding: 8px 0;
         background-color: var(--color-canvas-default);
       }
 

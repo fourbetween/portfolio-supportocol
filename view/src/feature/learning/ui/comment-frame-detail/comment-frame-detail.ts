@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { iconStyle } from "../../../../shared/style/icon";
+import { titleStyle } from "../../../../shared/style/title";
 import type { CommentFrame } from "../../model/comment-frame";
 import "../comment-type-badge/comment-type-badge";
 
@@ -24,7 +25,7 @@ export class LearningCommentFrameDetail extends LitElement {
     return html`
       <div class="container">
         <section>
-          <h3>Types</h3>
+          <div class="section-title">Types</div>
           <div class="types">
             ${this.frame.types.map(
               (t) =>
@@ -37,7 +38,7 @@ export class LearningCommentFrameDetail extends LitElement {
           </div>
         </section>
         <section>
-          <h3>Paths</h3>
+          <div class="section-title">Paths</div>
           <div class="paths">
             ${Object.entries(groupedPaths).map(
               ([parent, children]) => html`
@@ -73,20 +74,12 @@ export class LearningCommentFrameDetail extends LitElement {
   static styles = [
     baseStyle,
     iconStyle,
+    titleStyle,
     css`
-      :host {
-        display: block;
-        padding: 16px;
-      }
       .container {
         display: flex;
         flex-direction: column;
         gap: 16px;
-      }
-      h3 {
-        margin: 0 0 8px 0;
-        font-size: 14px;
-        color: var(--color-fg-muted);
       }
       .types {
         display: flex;

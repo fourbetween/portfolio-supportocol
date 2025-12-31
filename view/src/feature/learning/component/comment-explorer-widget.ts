@@ -1,5 +1,6 @@
 import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { titleStyle } from "../../../shared/style/title";
 import type { Comment } from "../model/comment";
 import "../ui/comment-context/comment-context";
 import "../ui/comment-tree/comment-tree";
@@ -83,7 +84,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         ${ancestors.length > 0
           ? html`
               <div class="section">
-                <div class="label">Context</div>
+                <div class="section-title">Context</div>
                 <learning-comment-context
                   .ancestors=${ancestors}
                   .onCommentClick=${(c: Comment) => this.handleCommentClick(c)}
@@ -92,7 +93,7 @@ export class LearningCommentExplorerWidget extends LitElement {
             `
           : ""}
         <div class="section">
-          <div class="label">
+          <div class="section-title">
             ${this.selectedCommentId ? "Replies" : "All Comments"}
           </div>
           <learning-comment-tree
@@ -104,26 +105,22 @@ export class LearningCommentExplorerWidget extends LitElement {
     `;
   }
 
-  static styles = css`
-    :host {
-      display: block;
-    }
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-    .section {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .label {
-      font-size: 0.8rem;
-      font-weight: bold;
-      color: var(--color-fg-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-  `;
+  static styles = [
+    titleStyle,
+    css`
+      :host {
+        display: block;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .section {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+    `,
+  ];
 }
