@@ -98,6 +98,7 @@ export class LearningDashboardPage extends LitElement {
           <learning-discussion-list-widget
             .discussions=${this._discussions}
             @select-discussion=${this._handleSelectDiscussion}
+            @discussion-created=${this._handleDiscussionUpdated}
           ></learning-discussion-list-widget>
         </aside>
         <main class="main">
@@ -117,9 +118,13 @@ export class LearningDashboardPage extends LitElement {
     baseStyle,
     buttonStyle,
     css`
+      :host {
+        display: block;
+        height: 100%;
+      }
       .dashboard {
         display: flex;
-        height: 100vh;
+        height: 100%;
         overflow: hidden;
       }
       .sidebar {

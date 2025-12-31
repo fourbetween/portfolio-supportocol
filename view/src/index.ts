@@ -1,6 +1,6 @@
 import { Router } from "@lit-labs/router";
 import { provide } from "@lit/context";
-import { LitElement, html } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "urlpattern-polyfill";
 import { routerContext } from "./app/context/router";
@@ -64,5 +64,12 @@ export class AppRoot extends LitElement {
     this.user = await auth.getCurrentUser();
   }
 
-  static styles = [];
+  static styles = [
+    css`
+      :host {
+        display: block;
+        height: 100vh;
+      }
+    `,
+  ];
 }

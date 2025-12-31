@@ -24,7 +24,13 @@ export class LearningDiscussionListWidget extends LitElement {
       showToast(this, error.message, "error");
       return;
     }
-    this.discussions = [data, ...this.discussions];
+    this.dispatchEvent(
+      new CustomEvent("discussion-created", {
+        detail: data,
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   private _handleSearch(query: string) {
