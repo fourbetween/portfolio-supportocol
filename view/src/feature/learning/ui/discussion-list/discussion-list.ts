@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { iconStyle } from "../../../../shared/style/icon";
 import type { Discussion } from "../../model/discussion";
 
 @customElement("learning-discussion-list")
@@ -10,6 +11,9 @@ export class LearningDiscussionList extends LitElement {
 
   @property({ attribute: false })
   onSelect?: (discussion: Discussion) => void;
+
+  @property({ attribute: false })
+  onDelete?: (discussion: Discussion) => void;
 
   render() {
     if (this.discussions.length === 0) {
@@ -23,6 +27,16 @@ export class LearningDiscussionList extends LitElement {
           (d) => html`
             <div class="item" @click=${() => this.onSelect?.(d)}>
               <span class="theme">${d.theme}</span>
+              <button
+                class="delete-button"
+                aria-label="delete"
+                @click=${(e: Event) => {
+                  e.stopPropagation();
+                  this.onDelete?.(d);
+                }}
+              >
+                <span class="material-symbols-outlined">delete</span>
+              </button>
             </div>
           `
         )}
@@ -32,6 +46,7 @@ export class LearningDiscussionList extends LitElement {
 
   static styles = [
     baseStyle,
+    iconStyle,
     css`
       .empty {
         padding: 16px;
@@ -49,6 +64,9 @@ export class LearningDiscussionList extends LitElement {
         overflow: hidden;
       }
       .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         padding: 16px;
         border-bottom: 1px solid var(--color-border-muted);
         background-color: var(--color-canvas-default);
@@ -62,6 +80,22 @@ export class LearningDiscussionList extends LitElement {
       }
       .theme {
         color: var(--color-accent-fg);
+      }
+      .delete-button {
+        display: none;
+        padding: 4px;
+        border: none;
+        background: none;
+        color: var(--color-fg-muted);
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      .item:hover .delete-button {
+        display: flex;
+      }
+      .delete-button:hover {
+        background-color: var(--color-neutral-muted);
+        color: var(--color-danger-fg);
       }
     `,
   ];
