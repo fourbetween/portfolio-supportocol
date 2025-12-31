@@ -58,7 +58,7 @@ export class LearningDiscussionDetail extends LitElement {
       }
 
       .container {
-        padding: 16px;
+        padding: 8px 16px;
         background-color: var(--color-canvas-default);
       }
 
@@ -66,7 +66,6 @@ export class LearningDiscussionDetail extends LitElement {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 8px;
       }
 
       .display {
@@ -77,8 +76,8 @@ export class LearningDiscussionDetail extends LitElement {
       }
 
       .theme {
-        font-size: 32px;
-        font-weight: 600;
+        font-size: 16px;
+        font-weight: 400;
         margin: 0;
       }
 
