@@ -31,7 +31,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
     }
     this.discussion = data;
     this.isEditing = false;
-    showToast(this, "Theme updated.", "success");
+    showToast(this, "Theme updated.", "success", 2000);
 
     this.dispatchEvent(
       new CustomEvent("discussion-updated", {

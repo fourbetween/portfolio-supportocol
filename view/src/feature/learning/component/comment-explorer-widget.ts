@@ -199,7 +199,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         showToast(this, "Failed to create comment.", "error");
         return;
       }
-      showToast(this, "Comment created.", "success");
+      showToast(this, "Comment created.", "success", 2000);
     } else if (this._focusedCommentId) {
       const { error } = await client.PUT(
         "/learning/discussions/{discussionId}/comments/{commentId}",
@@ -221,7 +221,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         showToast(this, "Failed to save comment.", "error");
         return;
       }
-      showToast(this, "Comment saved.", "success");
+      showToast(this, "Comment saved.", "success", 2000);
     }
 
     this.dispatchEvent(
