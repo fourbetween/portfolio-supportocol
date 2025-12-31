@@ -27,6 +27,7 @@ describe("learning-comment-tree", async () => {
         commentType: "idea",
       },
     ];
+    await elem.updateComplete;
     await expect.element(page.getByText("root comment")).toBeInTheDocument();
   });
 
@@ -61,6 +62,7 @@ describe("learning-comment-tree", async () => {
         commentType: "idea",
       },
     ];
+    await elem.updateComplete;
 
     await expect.element(page.getByText("root comment")).toBeInTheDocument();
     await expect.element(page.getByText("child idea 1")).toBeInTheDocument();
@@ -95,6 +97,7 @@ describe("learning-comment-tree", async () => {
         commentType: "question",
       },
     ];
+    await elem.updateComplete;
 
     await expect.element(page.getByText("root 1")).toBeInTheDocument();
     await expect.element(page.getByText("root 2")).toBeInTheDocument();
@@ -109,6 +112,7 @@ describe("learning-comment-tree", async () => {
       commentType: "idea",
     };
     elem.comments = [comment];
+    await elem.updateComplete;
 
     let clickedComment: any = null;
     (elem as any).onCommentClick = (c: any) => {
@@ -118,5 +122,36 @@ describe("learning-comment-tree", async () => {
     await page.getByText("root comment").click();
 
     expect(clickedComment).toEqual(comment);
+  });
+
+  it("深い階層のコメントが表示されること", async () => {
+    elem.comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root",
+        commentType: "idea",
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "level 1",
+        commentType: "idea",
+      },
+      {
+        id: "3",
+        discussionId: "1",
+        parentCommentId: "2",
+        content: "level 2",
+        commentType: "idea",
+      },
+    ];
+    await elem.updateComplete;
+
+    await expect.element(page.getByText("root")).toBeInTheDocument();
+    await expect.element(page.getByText("level 1")).toBeInTheDocument();
+    await expect.element(page.getByText("level 2")).toBeInTheDocument();
   });
 });
