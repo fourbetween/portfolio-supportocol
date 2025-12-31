@@ -61,7 +61,6 @@ export class LearningDiscussionList extends LitElement {
         background-color: var(--color-canvas-subtle);
       }
       .theme {
-        font-weight: 600;
         color: var(--color-accent-fg);
       }
     `,
