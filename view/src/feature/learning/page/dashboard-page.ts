@@ -98,6 +98,7 @@ export class LearningDashboardPage extends LitElement {
           <learning-discussion-list-widget
             .discussions=${this._discussions}
             @select-discussion=${this._handleSelectDiscussion}
+            @discussion-created=${this._handleDiscussionUpdated}
           ></learning-discussion-list-widget>
         </aside>
         <main class="main">
