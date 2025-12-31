@@ -18,14 +18,20 @@ export class LearningCommentTypeBadge extends LitElement {
     baseStyle,
     css`
       :host {
-        display: block;
+        display: inline-block;
       }
       .type-label {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 8px;
         font-size: 12px;
-        font-weight: bold;
-        color: var(--color-fg-muted);
-        margin-bottom: 4px;
-        text-transform: uppercase;
+        font-weight: 600;
+        line-height: 18px;
+        color: var(--color-accent-fg);
+        background-color: rgba(9, 105, 218, 0.1);
+        border: 1px solid rgba(9, 105, 218, 0.2);
+        border-radius: 2em;
+        white-space: nowrap;
       }
     `,
   ];

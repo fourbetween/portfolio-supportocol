@@ -21,4 +21,13 @@ describe("learning-comment-type-badge", async () => {
     elem.type = "idea";
     await expect.element(page.getByText("idea")).toBeInTheDocument();
   });
+
+  it("バッジのスタイルが適用されていること", async () => {
+    elem.type = "idea";
+    await elem.updateComplete;
+    const label = elem.shadowRoot?.querySelector(".type-label");
+    const style = window.getComputedStyle(label!);
+    expect(style.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
+    expect(style.borderRadius).not.toBe("0px");
+  });
 });
