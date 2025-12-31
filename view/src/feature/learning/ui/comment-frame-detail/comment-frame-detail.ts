@@ -77,9 +77,6 @@ export class LearningCommentFrameDetail extends LitElement {
       :host {
         display: block;
         padding: 16px;
-        background-color: var(--color-bg-subtle);
-        border-radius: 8px;
-        border: 1px solid var(--color-border-default);
       }
       .container {
         display: flex;

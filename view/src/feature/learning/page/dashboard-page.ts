@@ -5,6 +5,7 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { client } from "../api/client";
+import "../component/comment-frame-widget";
 import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
 import type { Comment } from "../model/comment";
@@ -108,6 +109,11 @@ export class LearningDashboardPage extends LitElement {
               .comments=${this._comments}
               @discussion-updated=${this._handleDiscussionUpdated}
             ></learning-discussion-detail-widget>
+          </div>
+          <div class="comment-frame">
+            <learning-comment-frame-widget
+              .comments=${this._comments}
+            ></learning-comment-frame-widget>
           </div>
         </main>
       </div>
