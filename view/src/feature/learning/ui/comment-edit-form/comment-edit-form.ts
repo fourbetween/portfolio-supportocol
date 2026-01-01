@@ -108,10 +108,6 @@ export class LearningCommentEditForm extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 8px;
-        padding: 16px;
-        background-color: var(--color-canvas-default);
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
       }
       .header {
         display: flex;

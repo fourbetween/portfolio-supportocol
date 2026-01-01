@@ -89,9 +89,9 @@ export class LearningCommentTypePopup extends LitElement {
                 </div>
               `}
         </div>
-        <div slot="footer" class="footer-content">
-          ${this.isOtherSelected
-            ? html`
+        ${this.isOtherSelected
+          ? html`
+              <div slot="footer" class="footer-content">
                 <div class="other-actions">
                   <button
                     class="btn"
@@ -107,9 +107,9 @@ export class LearningCommentTypePopup extends LitElement {
                     OK
                   </button>
                 </div>
-              `
-            : nothing}
-        </div>
+              </div>
+            `
+          : nothing}
       </ui-popup>
     `;
   }

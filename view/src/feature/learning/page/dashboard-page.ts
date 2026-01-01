@@ -5,6 +5,7 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { client } from "../api/client";
+import "../component/comment-explorer-widget";
 import "../component/comment-frame-widget";
 import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
@@ -21,35 +22,6 @@ export class LearningDashboardPage extends LitElement {
 
   @state()
   private _selectedDiscussionId?: string;
-
-  constructor() {
-    super();
-
-    new Task(this, {
-      task: async () => {
-        if (!this._selectedDiscussionId) return [] as Comment[];
-        const { data, error } = await client.GET(
-          "/learning/discussions/{discussionId}/comments",
-          {
-            params: {
-              path: {
-                discussionId: this._selectedDiscussionId || "",
-              },
-            },
-          }
-        );
-        if (error) throw new Error(error.message);
-        return data || [];
-      },
-      onComplete: (comments) => {
-        this._comments = comments;
-      },
-      onError: (e: unknown) => {
-        showToast(this, String(e), "error");
-      },
-      args: () => [this._selectedDiscussionId],
-    });
-  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -84,6 +56,31 @@ export class LearningDashboardPage extends LitElement {
       showToast(this, String(e), "error");
     },
     args: () => [],
+  });
+
+  private commentsTask = new Task(this, {
+    task: async () => {
+      if (!this._selectedDiscussionId) return [] as Comment[];
+      const { data, error } = await client.GET(
+        "/learning/discussions/{discussionId}/comments",
+        {
+          params: {
+            path: {
+              discussionId: this._selectedDiscussionId || "",
+            },
+          },
+        }
+      );
+      if (error) throw new Error(error.message);
+      return data || [];
+    },
+    onComplete: (comments) => {
+      this._comments = comments;
+    },
+    onError: (e: unknown) => {
+      showToast(this, String(e), "error");
+    },
+    args: () => [this._selectedDiscussionId],
   });
 
   private _handleSelectDiscussion(e: CustomEvent<Discussion>) {
@@ -137,6 +134,13 @@ export class LearningDashboardPage extends LitElement {
               .comments=${this._comments}
             ></learning-comment-frame-widget>
           </div>
+          <div class="comment-explorer">
+            <learning-comment-explorer-widget
+              .discussionId=${this._selectedDiscussionId}
+              .comments=${this._comments}
+              @comment-created=${() => this.commentsTask.run()}
+            ></learning-comment-explorer-widget>
+          </div>
         </main>
       </div>
     `;
@@ -163,8 +167,14 @@ export class LearningDashboardPage extends LitElement {
       .main {
         flex: 1;
         display: flex;
+        gap: 16px;
         flex-direction: column;
         overflow-y: auto;
+      }
+      .detail,
+      .comment-frame,
+      .comment-explorer {
+        padding: 0 16px;
       }
       .detail {
         border-bottom: 1px solid var(--color-border-default);

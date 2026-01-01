@@ -11,6 +11,15 @@ export class LearningCommentContext extends LitElement {
   @property({ type: Array })
   ancestors: Comment[] = [];
 
+  @property({ attribute: false })
+  onCommentClick?: (comment: Comment) => void;
+
+  private handleCommentClick(comment: Comment) {
+    if (this.onCommentClick) {
+      this.onCommentClick(comment);
+    }
+  }
+
   render() {
     return html`
       <div class="container">
@@ -19,11 +28,14 @@ export class LearningCommentContext extends LitElement {
             <learning-comment-type-badge
               .type=${comment.commentType}
             ></learning-comment-type-badge>
-            <learning-comment-card .comment=${comment}></learning-comment-card>
+            <learning-comment-card
+              .comment=${comment}
+              @click=${() => this.handleCommentClick(comment)}
+            ></learning-comment-card>
             ${index < this.ancestors.length - 1
               ? html`
                   <div class="separator">
-                    <span class="material-symbols-outlined">south</span>
+                    <span class="material-symbols-outlined">north</span>
                   </div>
                 `
               : ""}

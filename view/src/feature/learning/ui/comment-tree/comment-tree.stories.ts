@@ -67,3 +67,38 @@ export const Default: Story = {
     ],
   },
 };
+
+export const DeepNesting: Story = {
+  args: {
+    comments: [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "Level 0",
+        commentType: "idea",
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "Level 1",
+        commentType: "idea",
+      },
+      {
+        id: "3",
+        discussionId: "1",
+        parentCommentId: "2",
+        content: "Level 2",
+        commentType: "idea",
+      },
+      {
+        id: "4",
+        discussionId: "1",
+        parentCommentId: "3",
+        content: "Level 3",
+        commentType: "idea",
+      },
+    ],
+  },
+};

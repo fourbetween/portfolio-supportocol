@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { iconStyle } from "../../../../shared/style/icon";
@@ -14,24 +14,47 @@ export class LearningCommentTree extends LitElement {
   @property({ attribute: false })
   onCommentClick?: (comment: Comment) => void;
 
+  private rootComments: Comment[] = [];
+  private childrenMap = new Map<string, Comment[]>();
+
+  willUpdate(changedProperties: PropertyValues<this>) {
+    if (changedProperties.has("comments")) {
+      this.childrenMap.clear();
+      this.rootComments = [];
+
+      if (this.comments) {
+        const commentIds = new Set(this.comments.map((c) => c.id));
+        for (const comment of this.comments) {
+          if (comment.parentCommentId) {
+            const children =
+              this.childrenMap.get(comment.parentCommentId) || [];
+            children.push(comment);
+            this.childrenMap.set(comment.parentCommentId, children);
+          }
+
+          if (
+            !comment.parentCommentId ||
+            !commentIds.has(comment.parentCommentId)
+          ) {
+            this.rootComments.push(comment);
+          }
+        }
+      }
+    }
+  }
+
   render() {
     if (!this.comments) return html``;
 
-    const commentIds = new Set(this.comments.map((c) => c.id));
-    const rootComments = this.comments.filter(
-      (c) => !c.parentCommentId || !commentIds.has(c.parentCommentId)
-    );
-
     return html`
       <div class="tree">
-        ${rootComments.map((comment) => this.renderComment(comment, 0))}
+        ${this.rootComments.map((comment) => this.renderComment(comment, 0))}
       </div>
     `;
   }
 
   private renderComment(comment: Comment, depth: number): any {
-    const children =
-      this.comments?.filter((c) => c.parentCommentId === comment.id) || [];
+    const children = this.childrenMap.get(comment.id) || [];
     const groupedChildren = children.reduce((acc, child) => {
       if (!acc[child.commentType]) {
         acc[child.commentType] = [];
