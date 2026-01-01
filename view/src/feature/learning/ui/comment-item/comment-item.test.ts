@@ -1,0 +1,48 @@
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { page } from "vitest/browser";
+import type { Comment } from "../../model/comment";
+import "./comment-item";
+import type { LearningCommentItem } from "./comment-item";
+
+describe("learning-comment-item", { timeout: 5000 }, () => {
+  let element: LearningCommentItem;
+
+  const mockComment: Comment = {
+    id: "1",
+    discussionId: "d1",
+    parentCommentId: null,
+    commentType: "idea",
+    content: "This is a test comment",
+  };
+
+  const availableTypes = ["idea", "question", "answer"];
+
+  beforeEach(() => {
+    element = document.createElement(
+      "learning-comment-item"
+    ) as LearningCommentItem;
+    element.comment = mockComment;
+    element.availableTypes = availableTypes;
+    document.body.appendChild(element);
+  });
+
+  afterEach(() => {
+    element.remove();
+  });
+
+  it("デフォルトで learning-comment-card を表示する", async () => {
+    await expect
+      .element(page.getByText("This is a test comment"))
+      .toBeVisible();
+  });
+
+  it("編集ボタンをクリックすると編集フォームを表示する", async () => {
+    const editButton = page.getByRole("button", { name: "edit" });
+    await editButton.click();
+
+    await expect.element(page.getByTitle("Save")).toBeVisible();
+    await expect
+      .element(page.getByText("This is a test comment"))
+      .not.toBeInTheDocument();
+  });
+});
