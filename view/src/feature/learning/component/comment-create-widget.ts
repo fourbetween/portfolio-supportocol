@@ -48,7 +48,7 @@ export class LearningCommentCreateWidget extends LitElement {
     if (!this.discussionId) return;
 
     try {
-      const { error } = await client.POST(
+      const { data, error } = await client.POST(
         "/learning/discussions/{discussionId}/comments",
         {
           params: {
@@ -70,7 +70,11 @@ export class LearningCommentCreateWidget extends LitElement {
       showToast(this, "Comment created.", "success", 2000);
       this.handleCancel();
       this.dispatchEvent(
-        new CustomEvent("comment-created", { bubbles: true, composed: true })
+        new CustomEvent("comment-created", {
+          detail: data,
+          bubbles: true,
+          composed: true,
+        })
       );
     } catch (e) {
       showToast(this, String(e), "error");

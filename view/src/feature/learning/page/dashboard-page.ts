@@ -23,6 +23,35 @@ export class LearningDashboardPage extends LitElement {
   @state()
   private _selectedDiscussionId?: string;
 
+  constructor() {
+    super();
+
+    new Task(this, {
+      task: async () => {
+        if (!this._selectedDiscussionId) return [] as Comment[];
+        const { data, error } = await client.GET(
+          "/learning/discussions/{discussionId}/comments",
+          {
+            params: {
+              path: {
+                discussionId: this._selectedDiscussionId || "",
+              },
+            },
+          }
+        );
+        if (error) throw new Error(error.message);
+        return data || [];
+      },
+      onComplete: (comments) => {
+        this._comments = comments;
+      },
+      onError: (e: unknown) => {
+        showToast(this, String(e), "error");
+      },
+      args: () => [this._selectedDiscussionId],
+    });
+  }
+
   connectedCallback() {
     super.connectedCallback();
     const params = new URLSearchParams(window.location.search);
@@ -58,31 +87,6 @@ export class LearningDashboardPage extends LitElement {
     args: () => [],
   });
 
-  private commentsTask = new Task(this, {
-    task: async () => {
-      if (!this._selectedDiscussionId) return [] as Comment[];
-      const { data, error } = await client.GET(
-        "/learning/discussions/{discussionId}/comments",
-        {
-          params: {
-            path: {
-              discussionId: this._selectedDiscussionId || "",
-            },
-          },
-        }
-      );
-      if (error) throw new Error(error.message);
-      return data || [];
-    },
-    onComplete: (comments) => {
-      this._comments = comments;
-    },
-    onError: (e: unknown) => {
-      showToast(this, String(e), "error");
-    },
-    args: () => [this._selectedDiscussionId],
-  });
-
   private _handleSelectDiscussion(e: CustomEvent<Discussion>) {
     if (this._selectedDiscussionId === e.detail.id) return;
     this._selectedDiscussionId = e.detail.id;
@@ -104,6 +108,16 @@ export class LearningDashboardPage extends LitElement {
       window.history.pushState({}, "", url);
     }
     this.discussionsTask.run();
+  }
+
+  private _handleCommentCreated(e: CustomEvent<Comment>) {
+    this._comments = [...this._comments, e.detail];
+  }
+
+  private _handleCommentUpdated(e: CustomEvent<Comment>) {
+    this._comments = this._comments.map((c) =>
+      c.id === e.detail.id ? e.detail : c
+    );
   }
 
   render() {
@@ -138,8 +152,8 @@ export class LearningDashboardPage extends LitElement {
             <learning-comment-explorer-widget
               .discussionId=${this._selectedDiscussionId}
               .comments=${this._comments}
-              @comment-created=${() => this.commentsTask.run()}
-              @comment-updated=${() => this.commentsTask.run()}
+              @comment-created=${this._handleCommentCreated}
+              @comment-updated=${this._handleCommentUpdated}
             ></learning-comment-explorer-widget>
           </div>
         </main>
