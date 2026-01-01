@@ -41,9 +41,11 @@ func (c *Comment) CreatedAt() time.Time {
 }
 
 type UpdateCommentParams struct {
-	Content string
+	CommentType string
+	Content     string
 }
 
 func (c *Comment) Update(params UpdateCommentParams) {
+	c.commentType = params.CommentType
 	c.content = params.Content
 }

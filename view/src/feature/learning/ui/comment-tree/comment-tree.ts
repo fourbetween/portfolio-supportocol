@@ -16,6 +16,12 @@ export class LearningCommentTree extends LitElement {
   @property({ attribute: false })
   onCommentClick?: (comment: Comment) => void;
 
+  @property({ attribute: false })
+  onCommentUpdate?: (
+    commentId: string,
+    detail: { commentType: string; content: string }
+  ) => void;
+
   @state()
   private editingCommentId: string | null = null;
 
@@ -89,7 +95,12 @@ export class LearningCommentTree extends LitElement {
             .initialContent=${comment.content}
             .availableTypes=${this.availableTypes}
             .onCancel=${() => (this.editingCommentId = null)}
-            .onSave=${() => (this.editingCommentId = null)}
+            .onSave=${(detail: { commentType: string; content: string }) => {
+              if (this.onCommentUpdate) {
+                this.onCommentUpdate(comment.id, detail);
+              }
+              this.editingCommentId = null;
+            }}
           ></learning-comment-edit-form>
         </div>
       `;

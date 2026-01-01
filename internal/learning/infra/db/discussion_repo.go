@@ -140,6 +140,7 @@ func (r *DiscussionRepository) SaveComment(ctx context.Context, c *domain.Commen
 		MODEL(model).
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(
+			table.Comments.CommentType.SET(table.Comments.NEW.CommentType),
 			table.Comments.Content.SET(table.Comments.NEW.Content),
 		)
 
