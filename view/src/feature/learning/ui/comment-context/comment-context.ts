@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { iconStyle } from "../../../../shared/style/icon";
@@ -38,7 +38,7 @@ export class LearningCommentContext extends LitElement {
                     <span class="material-symbols-outlined">north</span>
                   </div>
                 `
-              : ""}
+              : nothing}
           `
         )}
       </div>

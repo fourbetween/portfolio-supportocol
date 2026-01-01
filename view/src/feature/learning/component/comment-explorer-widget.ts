@@ -1,5 +1,7 @@
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { baseStyle } from "../../../shared/style/base";
+import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import type { Comment } from "../model/comment";
 import "../ui/comment-context/comment-context";
@@ -40,7 +42,8 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private handleCommentClick(comment: Comment) {
-    this.selectedCommentId = comment.id;
+    this.selectedCommentId =
+      this.selectedCommentId === comment.id ? undefined : comment.id;
   }
 
   private getAncestors(selectedId: string): Comment[] {
@@ -88,7 +91,16 @@ export class LearningCommentExplorerWidget extends LitElement {
         ${ancestors.length > 0
           ? html`
               <div class="section">
-                <div class="section-title">Context</div>
+                <div class="section-header">
+                  <div class="section-title">Context</div>
+                  <button
+                    class="clear-button"
+                    @click=${() => (this.selectedCommentId = undefined)}
+                  >
+                    <span class="material-symbols-outlined">close</span>
+                    <span>Clear Selection</span>
+                  </button>
+                </div>
                 <learning-comment-context
                   .ancestors=${ancestors}
                   .onCommentClick=${(c: Comment) => this.handleCommentClick(c)}
@@ -115,6 +127,8 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   static styles = [
+    baseStyle,
+    iconStyle,
     titleStyle,
     css`
       :host {
@@ -129,6 +143,34 @@ export class LearningCommentExplorerWidget extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 8px;
+      }
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+      .section-header .section-title {
+        margin-bottom: 0;
+      }
+      .clear-button {
+        background: none;
+        border: none;
+        padding: 4px 8px;
+        cursor: pointer;
+        color: var(--color-fg-muted);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        border-radius: 4px;
+        font-size: 12px;
+      }
+      .clear-button:hover {
+        background-color: var(--color-bg-subtle);
+        color: var(--color-fg-default);
+      }
+      .clear-button .material-symbols-outlined {
+        font-size: 16px;
       }
     `,
   ];
