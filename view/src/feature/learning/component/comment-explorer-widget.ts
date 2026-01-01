@@ -53,7 +53,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     detail: { commentType: string; content: string }
   ) {
     if (!this.discussionId) return;
-    const { error } = await client.PUT(
+    const { data, error } = await client.PUT(
       "/learning/discussions/{discussionId}/comments/{commentId}",
       {
         params: {
@@ -72,7 +72,11 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
 
     showToast(this, "Comment updated.", "success", 2000);
-    this.dispatchEvent(new CustomEvent("comment-updated"));
+    this.dispatchEvent(
+      new CustomEvent("comment-updated", {
+        detail: data,
+      })
+    );
   }
 
   private getAncestors(selectedId: string): Comment[] {
