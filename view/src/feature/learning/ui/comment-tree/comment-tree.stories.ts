@@ -102,3 +102,66 @@ export const DeepNesting: Story = {
     ],
   },
 };
+
+export const SameTypeSiblings: Story = {
+  args: {
+    comments: [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "Root",
+        commentType: "idea",
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "Sibling 1",
+        commentType: "question",
+      },
+      {
+        id: "3",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "Sibling 2",
+        commentType: "question",
+      },
+      {
+        id: "4",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "Sibling 3",
+        commentType: "idea",
+      },
+    ],
+  },
+};
+
+export const SameTypeRoots: Story = {
+  args: {
+    comments: [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "Root 1",
+        commentType: "idea",
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "Root 2",
+        commentType: "idea",
+      },
+      {
+        id: "3",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "Root 3",
+        commentType: "question",
+      },
+    ],
+  },
+};

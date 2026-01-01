@@ -46,9 +46,28 @@ export class LearningCommentTree extends LitElement {
   render() {
     if (!this.comments) return html``;
 
+    const groupedRoots = this.rootComments.reduce((acc, root) => {
+      if (!acc[root.commentType]) {
+        acc[root.commentType] = [];
+      }
+      acc[root.commentType].push(root);
+      return acc;
+    }, {} as Record<string, Comment[]>);
+
     return html`
       <div class="tree">
-        ${this.rootComments.map((comment) => this.renderComment(comment, 0))}
+        ${Object.entries(groupedRoots).map(
+          ([type, typeRoots]) => html`
+            <div class="child-group">
+              <learning-comment-type-badge
+                .type=${type}
+              ></learning-comment-type-badge>
+              <div class="group-content">
+                ${typeRoots.map((root) => this.renderComment(root, 0))}
+              </div>
+            </div>
+          `
+        )}
       </div>
     `;
   }
@@ -77,9 +96,11 @@ export class LearningCommentTree extends LitElement {
                 <learning-comment-type-badge
                   .type=${type}
                 ></learning-comment-type-badge>
-                ${typeChildren.map((child) =>
-                  this.renderComment(child, depth + 1)
-                )}
+                <div class="group-content">
+                  ${typeChildren.map((child) =>
+                    this.renderComment(child, depth + 1)
+                  )}
+                </div>
               </div>
             `
           )}
@@ -102,9 +123,16 @@ export class LearningCommentTree extends LitElement {
         margin-bottom: 16px;
       }
       .children {
-        margin-left: 24px;
+        margin-left: 8px;
       }
       .child-group {
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+      .group-content {
+        margin-left: 8px;
+        padding-left: 8px;
+        border-left: 1px dashed var(--color-border-muted);
         margin-top: 8px;
       }
     `,

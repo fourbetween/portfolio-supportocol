@@ -72,13 +72,49 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
 
     // Check for grouping labels (assuming we use the type name as label)
+    // Now root comment also has a type badge, so there might be multiple "idea" badges
     await expect
-      .element(page.getByText("idea", { exact: true }))
+      .element(page.getByText("idea", { exact: true }).first())
       .toBeInTheDocument();
     await expect
       .element(page.getByText("question", { exact: true }))
       .toBeInTheDocument();
   }, 10000);
+
+  it("同じタイプの兄弟コメントがグループ化されたコンテナ内に表示されること", async () => {
+    elem.comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root",
+        commentType: "idea",
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "child 1",
+        commentType: "question",
+      },
+      {
+        id: "3",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "child 2",
+        commentType: "question",
+      },
+    ];
+    await elem.updateComplete;
+
+    // .child-group が存在し、その中にバッジと .group-content が含まれていることを確認
+    await expect.element(page.getByText("question")).toBeInTheDocument();
+    await expect.element(page.getByText("child 1")).toBeInTheDocument();
+    await expect.element(page.getByText("child 2")).toBeInTheDocument();
+
+    const groupContent = elem.shadowRoot?.querySelector(".group-content");
+    expect(groupContent).not.toBeNull();
+  });
 
   it("複数のルートコメントが表示されること", async () => {
     elem.comments = [
@@ -101,6 +137,33 @@ describe("learning-comment-tree", async () => {
 
     await expect.element(page.getByText("root 1")).toBeInTheDocument();
     await expect.element(page.getByText("root 2")).toBeInTheDocument();
+  });
+
+  it("同じタイプの複数のルートコメントがグループ化されて表示されること", async () => {
+    elem.comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root 1",
+        commentType: "idea",
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root 2",
+        commentType: "idea",
+      },
+    ];
+    await elem.updateComplete;
+
+    await expect.element(page.getByText("root 1")).toBeInTheDocument();
+    await expect.element(page.getByText("root 2")).toBeInTheDocument();
+
+    // ideaバッジは1つだけ表示されているはず
+    const ideaBadges = await page.getByText("idea", { exact: true }).all();
+    expect(ideaBadges.length).toBe(1);
   });
 
   it("コメントがクリックされたときにコールバックが実行されること", async () => {
@@ -153,5 +216,56 @@ describe("learning-comment-tree", async () => {
     await expect.element(page.getByText("root")).toBeInTheDocument();
     await expect.element(page.getByText("level 1")).toBeInTheDocument();
     await expect.element(page.getByText("level 2")).toBeInTheDocument();
+  });
+
+  it("ルートコメントのタイプが表示されること", async () => {
+    elem.comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root comment",
+        commentType: "idea",
+      },
+    ];
+    await elem.updateComplete;
+
+    await expect
+      .element(page.getByText("idea", { exact: true }))
+      .toBeInTheDocument();
+  });
+
+  it("同じタイプの兄弟コメントが正しく表示されること", async () => {
+    elem.comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root",
+        commentType: "idea",
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "child 1",
+        commentType: "question",
+      },
+      {
+        id: "3",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "child 2",
+        commentType: "question",
+      },
+    ];
+    await elem.updateComplete;
+
+    await expect.element(page.getByText("child 1")).toBeInTheDocument();
+    await expect.element(page.getByText("child 2")).toBeInTheDocument();
+
+    // questionバッジは1つだけ表示されているはず（グループ化されているため）
+    const questionBadges = page.getByText("question", { exact: true }).all();
+    expect(questionBadges.length).toBe(1);
   });
 });
