@@ -30,7 +30,14 @@ export function deriveCommentFrame(comments: Comment[]): CommentFrame {
   }
 
   return {
-    types: Array.from(types),
-    paths: Array.from(paths).map((p) => JSON.parse(p)),
+    types: Array.from(types).sort(),
+    paths: Array.from(paths)
+      .map((p) => JSON.parse(p))
+      .sort((a, b) => {
+        if (a.child !== b.child) {
+          return a.child.localeCompare(b.child);
+        }
+        return a.parent.localeCompare(b.parent);
+      }),
   };
 }

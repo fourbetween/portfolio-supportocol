@@ -37,15 +37,12 @@ describe("deriveCommentFrame", () => {
 
     const frame = deriveCommentFrame(comments);
 
-    expect(frame.types).toContain("Idea");
-    expect(frame.types).toContain("Question");
-    expect(frame.types).toContain("Agree");
-    expect(frame.types).toContain("Answer");
-    expect(frame.types).toHaveLength(4);
+    expect(frame.types).toEqual(["Agree", "Answer", "Idea", "Question"]);
 
-    expect(frame.paths).toContainEqual({ child: "Question", parent: "Idea" });
-    expect(frame.paths).toContainEqual({ child: "Agree", parent: "Idea" });
-    expect(frame.paths).toContainEqual({ child: "Answer", parent: "Question" });
-    expect(frame.paths).toHaveLength(3);
+    expect(frame.paths).toEqual([
+      { child: "Agree", parent: "Idea" },
+      { child: "Answer", parent: "Question" },
+      { child: "Question", parent: "Idea" },
+    ]);
   });
 });
