@@ -81,6 +81,41 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   }, 10000);
 
+  it("同じタイプの兄弟コメントがグループ化されたコンテナ内に表示されること", async () => {
+    elem.comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root",
+        commentType: "idea",
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "child 1",
+        commentType: "question",
+      },
+      {
+        id: "3",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "child 2",
+        commentType: "question",
+      },
+    ];
+    await elem.updateComplete;
+
+    // .child-group が存在し、その中にバッジと .group-content が含まれていることを確認
+    await expect.element(page.getByText("question")).toBeInTheDocument();
+    await expect.element(page.getByText("child 1")).toBeInTheDocument();
+    await expect.element(page.getByText("child 2")).toBeInTheDocument();
+
+    const groupContent = elem.shadowRoot?.querySelector(".group-content");
+    expect(groupContent).not.toBeNull();
+  });
+
   it("複数のルートコメントが表示されること", async () => {
     elem.comments = [
       {

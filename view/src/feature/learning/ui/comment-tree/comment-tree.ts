@@ -62,7 +62,9 @@ export class LearningCommentTree extends LitElement {
               <learning-comment-type-badge
                 .type=${type}
               ></learning-comment-type-badge>
-              ${typeRoots.map((root) => this.renderComment(root, 0))}
+              <div class="group-content">
+                ${typeRoots.map((root) => this.renderComment(root, 0))}
+              </div>
             </div>
           `
         )}
@@ -94,9 +96,11 @@ export class LearningCommentTree extends LitElement {
                 <learning-comment-type-badge
                   .type=${type}
                 ></learning-comment-type-badge>
-                ${typeChildren.map((child) =>
-                  this.renderComment(child, depth + 1)
-                )}
+                <div class="group-content">
+                  ${typeChildren.map((child) =>
+                    this.renderComment(child, depth + 1)
+                  )}
+                </div>
               </div>
             `
           )}
@@ -119,9 +123,16 @@ export class LearningCommentTree extends LitElement {
         margin-bottom: 16px;
       }
       .children {
-        margin-left: 24px;
+        margin-left: 8px;
       }
       .child-group {
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+      .group-content {
+        margin-left: 8px;
+        padding-left: 8px;
+        border-left: 1px dashed var(--color-border-muted);
         margin-top: 8px;
       }
     `,
