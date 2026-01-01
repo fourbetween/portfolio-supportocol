@@ -46,9 +46,26 @@ export class LearningCommentTree extends LitElement {
   render() {
     if (!this.comments) return html``;
 
+    const groupedRoots = this.rootComments.reduce((acc, root) => {
+      if (!acc[root.commentType]) {
+        acc[root.commentType] = [];
+      }
+      acc[root.commentType].push(root);
+      return acc;
+    }, {} as Record<string, Comment[]>);
+
     return html`
       <div class="tree">
-        ${this.rootComments.map((comment) => this.renderComment(comment, 0))}
+        ${Object.entries(groupedRoots).map(
+          ([type, typeRoots]) => html`
+            <div class="child-group">
+              <learning-comment-type-badge
+                .type=${type}
+              ></learning-comment-type-badge>
+              ${typeRoots.map((root) => this.renderComment(root, 0))}
+            </div>
+          `
+        )}
       </div>
     `;
   }

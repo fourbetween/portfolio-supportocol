@@ -72,8 +72,9 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
 
     // Check for grouping labels (assuming we use the type name as label)
+    // Now root comment also has a type badge, so there might be multiple "idea" badges
     await expect
-      .element(page.getByText("idea", { exact: true }))
+      .element(page.getByText("idea", { exact: true }).first())
       .toBeInTheDocument();
     await expect
       .element(page.getByText("question", { exact: true }))
@@ -153,5 +154,22 @@ describe("learning-comment-tree", async () => {
     await expect.element(page.getByText("root")).toBeInTheDocument();
     await expect.element(page.getByText("level 1")).toBeInTheDocument();
     await expect.element(page.getByText("level 2")).toBeInTheDocument();
+  });
+
+  it("ルートコメントのタイプが表示されること", async () => {
+    elem.comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root comment",
+        commentType: "idea",
+      },
+    ];
+    await elem.updateComplete;
+
+    await expect
+      .element(page.getByText("idea", { exact: true }))
+      .toBeInTheDocument();
   });
 });
