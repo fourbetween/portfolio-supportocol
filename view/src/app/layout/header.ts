@@ -18,7 +18,7 @@ export class AppHeader extends LitElement {
     css`
       .header {
         background-color: var(--color-header-bg);
-        padding: 16px;
+        padding: 4px 16px;
         color: var(--color-header-text);
         display: flex;
         align-items: center;
@@ -26,7 +26,7 @@ export class AppHeader extends LitElement {
       }
 
       .header-logo {
-        font-size: 20px;
+        font-size: 16px;
         font-weight: bold;
         color: inherit;
         text-decoration: none;
