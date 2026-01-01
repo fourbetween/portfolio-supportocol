@@ -81,6 +81,42 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   }, 10000);
 
+  it("コメントをホバーすると編集アイコンが表示され、クリックすると編集フォームが表示されること", async () => {
+    elem.comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root comment",
+        commentType: "idea",
+      },
+    ];
+    await elem.updateComplete;
+
+    const card = page.getByText("root comment");
+    await card.hover();
+
+    const editButton = page.getByRole("button", { name: "edit" });
+    await expect.element(editButton).toBeInTheDocument();
+
+    await editButton.click();
+    await elem.updateComplete;
+
+    // 編集フォームが表示されていることを確認
+    await expect.element(page.getByRole("textbox")).toBeInTheDocument();
+    await expect
+      .element(page.getByText("root comment"))
+      .not.toBeInTheDocument();
+
+    // キャンセルをクリック
+    const cancelButton = page.getByTitle("Cancel");
+    await cancelButton.click();
+    await elem.updateComplete;
+
+    // 元のカードに戻っていることを確認
+    await expect.element(page.getByText("root comment")).toBeInTheDocument();
+  }, 10000);
+
   it("同じタイプの兄弟コメントがグループ化されたコンテナ内に表示されること", async () => {
     elem.comments = [
       {

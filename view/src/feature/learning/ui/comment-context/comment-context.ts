@@ -31,6 +31,7 @@ export class LearningCommentContext extends LitElement {
             <learning-comment-card
               .comment=${comment}
               @click=${() => this.handleCommentClick(comment)}
+              style="cursor: pointer;"
             ></learning-comment-card>
             ${index < this.ancestors.length - 1
               ? html`

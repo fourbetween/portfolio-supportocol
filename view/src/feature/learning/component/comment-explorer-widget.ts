@@ -166,7 +166,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         font-size: 12px;
       }
       .clear-button:hover {
-        background-color: var(--color-bg-subtle);
+        background-color: var(--color-canvas-subtle);
         color: var(--color-fg-default);
       }
       .clear-button .material-symbols-outlined {
