@@ -178,12 +178,23 @@ type ID string
 type LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
 
 type LearningDiscussionsDiscussionIdCommentsCommentIdPutReq struct {
-	Content string `json:"content"`
+	CommentType string `json:"commentType"`
+	Content     string `json:"content"`
+}
+
+// GetCommentType returns the value of CommentType.
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) GetCommentType() string {
+	return s.CommentType
 }
 
 // GetContent returns the value of Content.
 func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) GetContent() string {
 	return s.Content
+}
+
+// SetCommentType sets the value of CommentType.
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetCommentType(val string) {
+	s.CommentType = val
 }
 
 // SetContent sets the value of Content.

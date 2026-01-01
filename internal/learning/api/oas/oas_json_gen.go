@@ -443,13 +443,18 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Encode(e *jx.En
 // encodeFields encodes fields.
 func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) encodeFields(e *jx.Encoder) {
 	{
+		e.FieldStart("commentType")
+		e.Str(s.CommentType)
+	}
+	{
 		e.FieldStart("content")
 		e.Str(s.Content)
 	}
 }
 
-var jsonFieldsNameOfLearningDiscussionsDiscussionIdCommentsCommentIdPutReq = [1]string{
-	0: "content",
+var jsonFieldsNameOfLearningDiscussionsDiscussionIdCommentsCommentIdPutReq = [2]string{
+	0: "commentType",
+	1: "content",
 }
 
 // Decode decodes LearningDiscussionsDiscussionIdCommentsCommentIdPutReq from json.
@@ -461,8 +466,20 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Decode(d *jx.De
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "content":
+		case "commentType":
 			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.CommentType = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"commentType\"")
+			}
+		case "content":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				v, err := d.Str()
 				s.Content = string(v)
@@ -483,7 +500,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Decode(d *jx.De
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

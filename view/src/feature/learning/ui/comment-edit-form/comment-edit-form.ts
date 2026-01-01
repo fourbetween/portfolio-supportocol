@@ -2,6 +2,7 @@ import { LitElement, type PropertyValues, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
+import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 import "../comment-type-badge/comment-type-badge";
 import "../comment-type-popup/comment-type-popup";
@@ -65,11 +66,19 @@ export class LearningCommentEditForm extends LitElement {
         ></textarea>
       </div>
       <div class="actions">
-        <button class="btn cancel-button" @click=${this.handleCancel}>
-          Cancel
+        <button
+          class="btn btn-primary save-button"
+          @click=${this.handleSave}
+          title="Save"
+        >
+          <span class="material-symbols-outlined">save</span>
         </button>
-        <button class="btn btn-primary save-button" @click=${this.handleSave}>
-          Save
+        <button
+          class="btn cancel-button"
+          @click=${this.handleCancel}
+          title="Cancel"
+        >
+          <span class="material-symbols-outlined">close</span>
         </button>
       </div>
     `;
@@ -103,6 +112,7 @@ export class LearningCommentEditForm extends LitElement {
     baseStyle,
     buttonStyle,
     inputStyle,
+    iconStyle,
     css`
       :host {
         display: flex;

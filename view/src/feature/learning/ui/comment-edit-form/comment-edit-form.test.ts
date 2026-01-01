@@ -35,14 +35,21 @@ describe("learning-comment-edit-form", async () => {
     expect(textarea?.value).toBe("これは質問です");
   });
 
-  it("renders save and cancel buttons", async () => {
+  it("renders save and cancel buttons with icons and titles", async () => {
     const saveButton = elem.shadowRoot?.querySelector(".save-button");
     const cancelButton = elem.shadowRoot?.querySelector(".cancel-button");
 
     expect(saveButton).not.toBeNull();
-    expect(saveButton?.textContent?.trim()).toBe("Save");
+    expect(saveButton?.getAttribute("title")).toBe("Save");
+    expect(
+      saveButton?.querySelector(".material-symbols-outlined")?.textContent
+    ).toBe("save");
+
     expect(cancelButton).not.toBeNull();
-    expect(cancelButton?.textContent?.trim()).toBe("Cancel");
+    expect(cancelButton?.getAttribute("title")).toBe("Cancel");
+    expect(
+      cancelButton?.querySelector(".material-symbols-outlined")?.textContent
+    ).toBe("close");
   });
 
   it("calls onSave callback with content", async () => {

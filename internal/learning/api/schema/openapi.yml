@@ -273,9 +273,12 @@ paths:
             schema:
               type: object
               properties:
+                commentType:
+                  type: string
                 content:
                   type: string
               required:
+                - commentType
                 - content
       responses:
         "200":

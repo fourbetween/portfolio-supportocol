@@ -154,6 +154,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx con
 		ID:           params.CommentId,
 		DiscussionID: params.DiscussionId,
 		UserID:       httpctx.GetUserID(ctx),
+		CommentType:  req.CommentType,
 		Content:      req.Content,
 	})
 	if err != nil {

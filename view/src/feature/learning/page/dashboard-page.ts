@@ -139,6 +139,7 @@ export class LearningDashboardPage extends LitElement {
               .discussionId=${this._selectedDiscussionId}
               .comments=${this._comments}
               @comment-created=${() => this.commentsTask.run()}
+              @comment-updated=${() => this.commentsTask.run()}
             ></learning-comment-explorer-widget>
           </div>
         </main>

@@ -305,6 +305,7 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
+                        commentType: string;
                         content: string;
                     };
                 };

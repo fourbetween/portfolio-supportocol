@@ -21,6 +21,7 @@ type UpdateCommentInput struct {
 	ID           string
 	DiscussionID string
 	UserID       string
+	CommentType  string
 	Content      string
 }
 
@@ -44,7 +45,8 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 	}
 
 	comment.Update(domain.UpdateCommentParams{
-		Content: input.Content,
+		CommentType: input.CommentType,
+		Content:     input.Content,
 	})
 
 	if err := u.repo.SaveComment(ctx, comment); err != nil {

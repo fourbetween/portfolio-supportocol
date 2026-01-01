@@ -1,8 +1,10 @@
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
+import { client } from "../api/client";
 import type { Comment } from "../model/comment";
 import "../ui/comment-context/comment-context";
 import "../ui/comment-tree/comment-tree";
@@ -44,6 +46,33 @@ export class LearningCommentExplorerWidget extends LitElement {
   private handleCommentClick(comment: Comment) {
     this.selectedCommentId =
       this.selectedCommentId === comment.id ? undefined : comment.id;
+  }
+
+  private async handleCommentUpdate(
+    commentId: string,
+    detail: { commentType: string; content: string }
+  ) {
+    if (!this.discussionId) return;
+    const { error } = await client.PUT(
+      "/learning/discussions/{discussionId}/comments/{commentId}",
+      {
+        params: {
+          path: {
+            discussionId: this.discussionId,
+            commentId,
+          },
+        },
+        body: detail,
+      }
+    );
+
+    if (error) {
+      showToast(this, error.message, "error");
+      return;
+    }
+
+    showToast(this, "Comment updated.", "success", 2000);
+    this.dispatchEvent(new CustomEvent("comment-updated"));
   }
 
   private getAncestors(selectedId: string): Comment[] {
@@ -120,6 +149,10 @@ export class LearningCommentExplorerWidget extends LitElement {
           <learning-comment-tree
             .comments=${descendants}
             .onCommentClick=${(c: Comment) => this.handleCommentClick(c)}
+            .onCommentUpdate=${(
+              id: string,
+              detail: { commentType: string; content: string }
+            ) => this.handleCommentUpdate(id, detail)}
           ></learning-comment-tree>
         </div>
       </div>
@@ -166,7 +199,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         font-size: 12px;
       }
       .clear-button:hover {
-        background-color: var(--color-bg-subtle);
+        background-color: var(--color-canvas-subtle);
         color: var(--color-fg-default);
       }
       .clear-button .material-symbols-outlined {
