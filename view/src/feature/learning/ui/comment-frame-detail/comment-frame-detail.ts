@@ -52,9 +52,6 @@ export class LearningCommentFrameDetail extends LitElement {
                     ${children.map(
                       (child) => html`
                         <div class="child-node">
-                          <span class="material-symbols-outlined">
-                            north_west
-                          </span>
                           <learning-comment-type-badge
                             .type=${child}
                           ></learning-comment-type-badge>
@@ -103,16 +100,15 @@ export class LearningCommentFrameDetail extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 4px;
-        padding-left: 24px;
+        margin-left: 8px;
+        padding-left: 16px;
+        border-left: 1px dashed var(--color-border-muted);
+        margin-top: 4px;
       }
       .child-node {
         display: flex;
         align-items: center;
         gap: 4px;
-      }
-      .material-symbols-outlined {
-        font-size: 18px;
-        color: var(--color-fg-muted);
       }
     `,
   ];

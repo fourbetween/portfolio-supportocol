@@ -28,7 +28,6 @@ describe("learning-comment-frame-detail", () => {
     await expect.element(page.getByText("Paths")).toBeVisible();
     await expect.element(page.getByText("質問").first()).toBeVisible();
     await expect.element(page.getByText("回答").first()).toBeVisible();
-    await expect.element(page.getByText("north_west")).toBeVisible();
   });
 
   it("同じ親を持つパスがグループ化されて表示されること", async () => {
@@ -54,5 +53,13 @@ describe("learning-comment-frame-detail", () => {
 
     // 現状の実装だと2つ（各パスに1つずつ）表示されるはずなので、これが1つになることを期待するテストにする
     expect(parentBadges.length).toBe(1);
+
+    // 子要素のコンテナにボーダーがあることを確認
+    const childrenNodes = pathsSection.querySelector(
+      ".children-nodes"
+    ) as HTMLElement;
+    expect(childrenNodes).not.toBeNull();
+    const style = window.getComputedStyle(childrenNodes);
+    expect(style.borderLeft).toContain("dashed");
   });
 });
