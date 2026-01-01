@@ -1,12 +1,16 @@
-import { LitElement, css, html, type PropertyValues } from "lit";
+import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { titleStyle } from "../../../shared/style/title";
 import type { Comment } from "../model/comment";
 import "../ui/comment-context/comment-context";
 import "../ui/comment-tree/comment-tree";
+import "./comment-create-widget";
 
 @customElement("learning-comment-explorer-widget")
 export class LearningCommentExplorerWidget extends LitElement {
+  @property({ type: String })
+  discussionId?: string;
+
   @property({ type: Array })
   comments?: Comment[];
 
@@ -91,7 +95,12 @@ export class LearningCommentExplorerWidget extends LitElement {
                 ></learning-comment-context>
               </div>
             `
-          : ""}
+          : nothing}
+        <learning-comment-create-widget
+          .discussionId=${this.discussionId}
+          .parentCommentId=${this.selectedCommentId}
+          .comments=${this.comments}
+        ></learning-comment-create-widget>
         <div class="section">
           <div class="section-title">
             ${this.selectedCommentId ? "Replies" : "All Comments"}

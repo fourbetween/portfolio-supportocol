@@ -23,35 +23,6 @@ export class LearningDashboardPage extends LitElement {
   @state()
   private _selectedDiscussionId?: string;
 
-  constructor() {
-    super();
-
-    new Task(this, {
-      task: async () => {
-        if (!this._selectedDiscussionId) return [] as Comment[];
-        const { data, error } = await client.GET(
-          "/learning/discussions/{discussionId}/comments",
-          {
-            params: {
-              path: {
-                discussionId: this._selectedDiscussionId || "",
-              },
-            },
-          }
-        );
-        if (error) throw new Error(error.message);
-        return data || [];
-      },
-      onComplete: (comments) => {
-        this._comments = comments;
-      },
-      onError: (e: unknown) => {
-        showToast(this, String(e), "error");
-      },
-      args: () => [this._selectedDiscussionId],
-    });
-  }
-
   connectedCallback() {
     super.connectedCallback();
     const params = new URLSearchParams(window.location.search);
@@ -85,6 +56,31 @@ export class LearningDashboardPage extends LitElement {
       showToast(this, String(e), "error");
     },
     args: () => [],
+  });
+
+  private commentsTask = new Task(this, {
+    task: async () => {
+      if (!this._selectedDiscussionId) return [] as Comment[];
+      const { data, error } = await client.GET(
+        "/learning/discussions/{discussionId}/comments",
+        {
+          params: {
+            path: {
+              discussionId: this._selectedDiscussionId || "",
+            },
+          },
+        }
+      );
+      if (error) throw new Error(error.message);
+      return data || [];
+    },
+    onComplete: (comments) => {
+      this._comments = comments;
+    },
+    onError: (e: unknown) => {
+      showToast(this, String(e), "error");
+    },
+    args: () => [this._selectedDiscussionId],
   });
 
   private _handleSelectDiscussion(e: CustomEvent<Discussion>) {
@@ -140,7 +136,9 @@ export class LearningDashboardPage extends LitElement {
           </div>
           <div class="comment-explorer">
             <learning-comment-explorer-widget
+              .discussionId=${this._selectedDiscussionId}
               .comments=${this._comments}
+              @comment-created=${() => this.commentsTask.run()}
             ></learning-comment-explorer-widget>
           </div>
         </main>
