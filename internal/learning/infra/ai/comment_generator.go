@@ -140,6 +140,7 @@ func (cg *CommentGenerator) buildPrompt(discussion *domain.Discussion, ancestors
 	}
 	fmt.Fprintf(&sb, "\n\nBased on the context above, generate 3 appropriate comments as \"%s\".\n", commentType)
 	fmt.Fprintf(&sb, "Each comment should be concise.\n")
+	fmt.Fprintf(&sb, "The style of the generated comments (e.g., use of punctuation, politeness level, tone) should match the existing comments in the context.\n")
 	fmt.Fprintf(&sb, "The language of the generated content must match the language used in the discussion theme and previous comments.")
 	return sb.String()
 }
