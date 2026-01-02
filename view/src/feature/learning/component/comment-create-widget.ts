@@ -1,9 +1,10 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { client } from "../api/client";
 import type { Comment } from "../model/comment";
+import { deriveCommentFrame } from "../model/comment-frame";
 import "../ui/comment-add-button/comment-add-button";
 import "../ui/comment-edit-form/comment-edit-form";
 import "../ui/comment-type-popup/comment-type-popup";
@@ -18,7 +19,7 @@ export class LearningCommentCreateWidget extends LitElement {
   parentCommentId?: string;
 
   @property({ type: Array })
-  comments?: Comment[];
+  comments: Comment[] = [];
 
   @state()
   private isCreating = false;
@@ -29,10 +30,13 @@ export class LearningCommentCreateWidget extends LitElement {
   @query("learning-comment-type-popup")
   private popup!: LearningCommentTypePopup;
 
-  private get availableTypes(): string[] {
-    if (!this.comments) return [];
-    const types = new Set(this.comments.map((c) => c.commentType));
-    return Array.from(types);
+  private availableTypes: string[] = [];
+
+  willUpdate(changedProperties: PropertyValues<this>) {
+    if (changedProperties.has("comments")) {
+      this.availableTypes = [];
+      this.availableTypes = deriveCommentFrame(this.comments).types;
+    }
   }
 
   private handleStartCreate() {
