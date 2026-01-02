@@ -49,4 +49,24 @@ describe("learning-discussion-list", async () => {
 
     expect(deletedId).toBe("1");
   });
+
+  it("削除ボタンが絶対配置されていること", async () => {
+    elem.discussions = [{ id: "1", theme: "テーマ1" }];
+    await elem.updateComplete;
+
+    const deleteButton = elem.shadowRoot?.querySelector(
+      ".delete-button"
+    ) as HTMLElement;
+    const style = window.getComputedStyle(deleteButton);
+    expect(style.position).toBe("absolute");
+  });
+
+  it("アイテムコンテナが相対配置されていること", async () => {
+    elem.discussions = [{ id: "1", theme: "テーマ1" }];
+    await elem.updateComplete;
+
+    const item = elem.shadowRoot?.querySelector(".item") as HTMLElement;
+    const style = window.getComputedStyle(item);
+    expect(style.position).toBe("relative");
+  });
 });
