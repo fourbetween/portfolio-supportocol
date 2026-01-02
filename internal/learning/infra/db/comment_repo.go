@@ -117,28 +117,23 @@ func (r *CommentRepository) PathToRoot(ctx context.Context, commentID string) ([
 	return r.toCommentDomains(dest)
 }
 
-func (r *CommentRepository) Siblings(ctx context.Context, commentID string) ([]*domain.Comment, error) {
-	comment, err := r.Load(ctx, commentID)
-	if err != nil {
-		return nil, err
-	}
-
+func (r *CommentRepository) Children(ctx context.Context, discussionID string, parentCommentID *string) ([]*domain.Comment, error) {
 	var condition mysql.BoolExpression
-	if comment.ParentCommentID() == nil {
-		condition = table.Comments.DiscussionID.EQ(mysql.String(comment.DiscussionID())).
+	if parentCommentID == nil {
+		condition = table.Comments.DiscussionID.EQ(mysql.String(discussionID)).
 			AND(table.Comments.ParentCommentID.IS_NULL())
 	} else {
-		condition = table.Comments.ParentCommentID.EQ(mysql.String(*comment.ParentCommentID()))
+		condition = table.Comments.ParentCommentID.EQ(mysql.String(*parentCommentID))
 	}
 
 	stmt := mysql.
 		SELECT(table.Comments.AllColumns).
 		FROM(table.Comments).
-		WHERE(condition.AND(table.Comments.ID.NOT_EQ(mysql.String(commentID))))
+		WHERE(condition)
 
 	var dest []model.Comments
 	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
-		return nil, fmt.Errorf("failed to fetch siblings: %w", err)
+		return nil, fmt.Errorf("failed to fetch children: %w", err)
 	}
 
 	return r.toCommentDomains(dest)

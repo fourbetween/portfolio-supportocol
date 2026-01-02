@@ -122,6 +122,21 @@ func (m *MockCommentRepository) EXPECT() *MockCommentRepositoryMockRecorder {
 	return m.recorder
 }
 
+// Children mocks base method.
+func (m *MockCommentRepository) Children(ctx context.Context, discussionID string, parentCommentID *string) ([]*Comment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Children", ctx, discussionID, parentCommentID)
+	ret0, _ := ret[0].([]*Comment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Children indicates an expected call of Children.
+func (mr *MockCommentRepositoryMockRecorder) Children(ctx, discussionID, parentCommentID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Children", reflect.TypeOf((*MockCommentRepository)(nil).Children), ctx, discussionID, parentCommentID)
+}
+
 // Delete mocks base method.
 func (m *MockCommentRepository) Delete(ctx context.Context, comment *Comment) error {
 	m.ctrl.T.Helper()
@@ -193,19 +208,4 @@ func (m *MockCommentRepository) Save(ctx context.Context, comment *Comment) erro
 func (mr *MockCommentRepositoryMockRecorder) Save(ctx, comment any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockCommentRepository)(nil).Save), ctx, comment)
-}
-
-// Siblings mocks base method.
-func (m *MockCommentRepository) Siblings(ctx context.Context, commentID string) ([]*Comment, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Siblings", ctx, commentID)
-	ret0, _ := ret[0].([]*Comment)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Siblings indicates an expected call of Siblings.
-func (mr *MockCommentRepositoryMockRecorder) Siblings(ctx, commentID any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Siblings", reflect.TypeOf((*MockCommentRepository)(nil).Siblings), ctx, commentID)
 }
