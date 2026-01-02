@@ -17,14 +17,14 @@ import (
 
 type DiscussionRepository struct {
 	db  *sql.DB
-	fac *domain.Factory
+	fac *domain.DiscussionFactory
 }
 
 func NewDiscussionRepository(db *sql.DB) *DiscussionRepository {
 	return &DiscussionRepository{db: db}
 }
 
-func (r *DiscussionRepository) SetFactory(fac *domain.Factory) {
+func (r *DiscussionRepository) SetFactory(fac *domain.DiscussionFactory) {
 	r.fac = fac
 }
 
@@ -98,9 +98,9 @@ func (r *DiscussionRepository) Delete(ctx context.Context, d *domain.Discussion)
 }
 
 func (r *DiscussionRepository) toDomain(row model.Discussions) *domain.Discussion {
-	return r.fac.BuildDiscussion(domain.BuildDiscussionParams{
+	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
 		ID: row.ID,
-		NewDiscussionParams: domain.NewDiscussionParams{
+		CreateDiscussionParams: domain.CreateDiscussionParams{
 			Theme:     row.Theme,
 			CreatedBy: row.CreatedBy,
 		},

@@ -8,10 +8,10 @@ import (
 
 type CreateDiscussionUsecase struct {
 	repo domain.DiscussionRepository
-	fac  *domain.Factory
+	fac  *domain.DiscussionFactory
 }
 
-func NewCreateDiscussionUsecase(repo domain.DiscussionRepository, fac *domain.Factory) *CreateDiscussionUsecase {
+func NewCreateDiscussionUsecase(repo domain.DiscussionRepository, fac *domain.DiscussionFactory) *CreateDiscussionUsecase {
 	return &CreateDiscussionUsecase{
 		repo: repo,
 		fac:  fac,
@@ -24,7 +24,7 @@ type CreateDiscussionInput struct {
 }
 
 func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscussionInput) (*domain.Discussion, error) {
-	discussion := u.fac.NewDiscussion(domain.NewDiscussionParams{
+	discussion := u.fac.Create(domain.CreateDiscussionParams{
 		Theme:     input.Theme,
 		CreatedBy: input.CreatedBy,
 	})

@@ -10,7 +10,7 @@ func NewFactory() *Factory {
 	return &Factory{}
 }
 
-type BuildParams struct {
+type ReconstructParams struct {
 	ID                          string
 	Email                       string
 	Name                        string
@@ -23,7 +23,7 @@ type BuildParams struct {
 	PasswordResetTokenExpiresAt *time.Time
 }
 
-func (f *Factory) Build(params BuildParams) *User {
+func (f *Factory) Reconstruct(params ReconstructParams) *User {
 	return &User{
 		id:                          params.ID,
 		email:                       params.Email,

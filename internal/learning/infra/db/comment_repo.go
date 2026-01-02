@@ -17,14 +17,14 @@ import (
 
 type CommentRepository struct {
 	db  *sql.DB
-	fac *domain.Factory
+	fac *domain.CommentFactory
 }
 
 func NewCommentRepository(db *sql.DB) *CommentRepository {
 	return &CommentRepository{db: db}
 }
 
-func (r *CommentRepository) SetFactory(fac *domain.Factory) {
+func (r *CommentRepository) SetFactory(fac *domain.CommentFactory) {
 	r.fac = fac
 }
 
@@ -98,9 +98,9 @@ func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error
 }
 
 func (r *CommentRepository) toCommentDomain(row model.Comments) (*domain.Comment, error) {
-	return r.fac.BuildComment(domain.BuildCommentParams{
+	return r.fac.Reconstruct(domain.ReconstructCommentParams{
 		ID: row.ID,
-		NewCommentParams: domain.NewCommentParams{
+		CreateCommentParams: domain.CreateCommentParams{
 			DiscussionID:    row.DiscussionID,
 			ParentCommentID: row.ParentCommentID,
 			CommentTypeID:   row.CommentType,
