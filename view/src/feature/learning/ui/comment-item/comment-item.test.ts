@@ -103,4 +103,38 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
 
     expect(onCommentGenerate).toHaveBeenCalledWith("1", "question");
   });
+
+  it("返信ボタンをクリックし、タイプを選択すると返信フォームが表示され、保存すると onCommentReply が呼ばれる", async () => {
+    const onCommentReply = vi.fn();
+    render(
+      html`
+        <learning-comment-item
+          .comment=${mockComment}
+          .availableTypes=${availableTypes}
+          .onCommentReply=${onCommentReply}
+        ></learning-comment-item>
+      `,
+      container
+    );
+
+    const replyButton = page.getByRole("button", { name: "reply" });
+    await replyButton.click();
+
+    // ポップアップが表示されるのを待つ
+    const typeButton = page.getByRole("button", { name: "question" });
+    await expect.element(typeButton).toBeVisible();
+    await typeButton.click();
+
+    // 返信フォームが表示される
+    const textarea = page.getByRole("textbox");
+    await textarea.fill("This is a reply");
+
+    const saveButton = page.getByRole("button", { name: "Save" });
+    await saveButton.click();
+
+    expect(onCommentReply).toHaveBeenCalledWith("1", {
+      commentType: "question",
+      content: "This is a reply",
+    });
+  });
 });
