@@ -21,24 +21,26 @@ func NewHTTPHandler(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (ht
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
 
-	repo := db.NewDiscussionRepository(dbCon)
+	discussionRepo := db.NewDiscussionRepository(dbCon)
+	commentRepo := db.NewCommentRepository(dbCon)
 	fac := domain.NewFactory(
 		idSrv,
 		clockSrv,
 	)
-	repo.SetFactory(fac)
+	discussionRepo.SetFactory(fac)
+	commentRepo.SetFactory(fac)
 
 	server, err := oas.NewServer(
 		api.NewHandler(api.HandlerParams{
-			CreateDiscussion: usecase.NewCreateDiscussionUsecase(repo, fac),
-			GetDiscussion:    usecase.NewGetDiscussionUsecase(repo),
-			ListDiscussions:  usecase.NewListDiscussionsUsecase(repo),
-			UpdateDiscussion: usecase.NewUpdateDiscussionUsecase(repo),
-			DeleteDiscussion: usecase.NewDeleteDiscussionUsecase(repo),
-			CreateComment:    usecase.NewCreateCommentUsecase(repo, fac),
-			ListComments:     usecase.NewListCommentsUsecase(repo),
-			UpdateComment:    usecase.NewUpdateCommentUsecase(repo),
-			DeleteComment:    usecase.NewDeleteCommentUsecase(repo),
+			CreateDiscussion: usecase.NewCreateDiscussionUsecase(discussionRepo, fac),
+			GetDiscussion:    usecase.NewGetDiscussionUsecase(discussionRepo),
+			ListDiscussions:  usecase.NewListDiscussionsUsecase(discussionRepo),
+			UpdateDiscussion: usecase.NewUpdateDiscussionUsecase(discussionRepo),
+			DeleteDiscussion: usecase.NewDeleteDiscussionUsecase(discussionRepo),
+			CreateComment:    usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, fac),
+			ListComments:     usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
+			UpdateComment:    usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo),
+			DeleteComment:    usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo),
 		}),
 		api.NewSecurityHandler(jwtSrv),
 		oas.WithErrorHandler(httperr.ErrorHandler),

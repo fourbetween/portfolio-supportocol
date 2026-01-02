@@ -7,12 +7,17 @@ import (
 )
 
 type ListCommentsUsecase struct {
-	repo domain.Repository
+	discussionRepo domain.DiscussionRepository
+	commentRepo    domain.CommentRepository
 }
 
-func NewListCommentsUsecase(repo domain.Repository) *ListCommentsUsecase {
+func NewListCommentsUsecase(
+	discussionRepo domain.DiscussionRepository,
+	commentRepo domain.CommentRepository,
+) *ListCommentsUsecase {
 	return &ListCommentsUsecase{
-		repo: repo,
+		discussionRepo: discussionRepo,
+		commentRepo:    commentRepo,
 	}
 }
 
@@ -23,7 +28,7 @@ type ListCommentsInput struct {
 
 func (u *ListCommentsUsecase) Execute(ctx context.Context, input ListCommentsInput) ([]*domain.Comment, error) {
 	// Verify discussion exists and user has access
-	_, err := u.repo.Load(ctx, domain.LoadParams{
+	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
 		ID:        input.DiscussionID,
 		CreatedBy: input.UserID,
 	})
@@ -31,5 +36,5 @@ func (u *ListCommentsUsecase) Execute(ctx context.Context, input ListCommentsInp
 		return nil, err
 	}
 
-	return u.repo.FetchComments(ctx, input.DiscussionID)
+	return u.commentRepo.FetchComments(ctx, input.DiscussionID)
 }

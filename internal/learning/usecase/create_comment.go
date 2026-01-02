@@ -7,14 +7,20 @@ import (
 )
 
 type CreateCommentUsecase struct {
-	repo domain.Repository
-	fac  *domain.Factory
+	discussionRepo domain.DiscussionRepository
+	commentRepo    domain.CommentRepository
+	fac            *domain.Factory
 }
 
-func NewCreateCommentUsecase(repo domain.Repository, fac *domain.Factory) *CreateCommentUsecase {
+func NewCreateCommentUsecase(
+	discussionRepo domain.DiscussionRepository,
+	commentRepo domain.CommentRepository,
+	fac *domain.Factory,
+) *CreateCommentUsecase {
 	return &CreateCommentUsecase{
-		repo: repo,
-		fac:  fac,
+		discussionRepo: discussionRepo,
+		commentRepo:    commentRepo,
+		fac:            fac,
 	}
 }
 
@@ -28,7 +34,7 @@ type CreateCommentInput struct {
 
 func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentInput) (*domain.Comment, error) {
 	// Verify discussion exists and user has access
-	_, err := u.repo.Load(ctx, domain.LoadParams{
+	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
 		ID:        input.DiscussionID,
 		CreatedBy: input.PostedBy,
 	})
@@ -47,7 +53,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		return nil, err
 	}
 
-	if err := u.repo.SaveComment(ctx, comment); err != nil {
+	if err := u.commentRepo.SaveComment(ctx, comment); err != nil {
 		return nil, err
 	}
 

@@ -8,12 +8,17 @@ import (
 )
 
 type DeleteCommentUsecase struct {
-	repo domain.Repository
+	discussionRepo domain.DiscussionRepository
+	commentRepo    domain.CommentRepository
 }
 
-func NewDeleteCommentUsecase(repo domain.Repository) *DeleteCommentUsecase {
+func NewDeleteCommentUsecase(
+	discussionRepo domain.DiscussionRepository,
+	commentRepo domain.CommentRepository,
+) *DeleteCommentUsecase {
 	return &DeleteCommentUsecase{
-		repo: repo,
+		discussionRepo: discussionRepo,
+		commentRepo:    commentRepo,
 	}
 }
 
@@ -25,7 +30,7 @@ type DeleteCommentInput struct {
 
 func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentInput) error {
 	// Verify discussion exists and user has access
-	_, err := u.repo.Load(ctx, domain.LoadParams{
+	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
 		ID:        input.DiscussionID,
 		CreatedBy: input.UserID,
 	})
@@ -33,7 +38,7 @@ func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentI
 		return err
 	}
 
-	comment, err := u.repo.LoadComment(ctx, input.ID)
+	comment, err := u.commentRepo.LoadComment(ctx, input.ID)
 	if err != nil {
 		return err
 	}
@@ -42,5 +47,5 @@ func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentI
 		return apperr.ErrForbidden
 	}
 
-	return u.repo.DeleteComment(ctx, comment)
+	return u.commentRepo.DeleteComment(ctx, comment)
 }
