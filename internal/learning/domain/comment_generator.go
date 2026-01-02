@@ -6,6 +6,7 @@ type GenerateCommentParams struct {
 	DiscussionID    string
 	ParentCommentID *string
 	CommentType     string
+	UserID          string
 }
 
 type CommentGenerator interface {

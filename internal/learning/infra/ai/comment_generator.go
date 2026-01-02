@@ -40,7 +40,10 @@ func NewCommentGenerator(
 }
 
 func (cg *CommentGenerator) Generate(ctx context.Context, params domain.GenerateCommentParams) ([]*domain.Comment, error) {
-	discussion, err := cg.discussionRepo.Load(ctx, domain.LoadParams{ID: params.DiscussionID})
+	discussion, err := cg.discussionRepo.Load(ctx, domain.LoadParams{
+		ID:        params.DiscussionID,
+		CreatedBy: params.UserID,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +118,7 @@ func (cg *CommentGenerator) Generate(ctx context.Context, params domain.Generate
 			CommentTypeID:   params.CommentType,
 			Content:         g.Content,
 			Status:          domain.CommentStatusProposed,
-			PostedBy:        "AI",
+			PostedBy:        params.UserID,
 		})
 		if err != nil {
 			return nil, err

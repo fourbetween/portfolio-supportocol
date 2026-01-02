@@ -45,6 +45,7 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 		DiscussionID:    input.DiscussionID,
 		ParentCommentID: input.ParentCommentID,
 		CommentType:     input.CommentType,
+		UserID:          input.UserID,
 	})
 	if err != nil {
 		return nil, err
