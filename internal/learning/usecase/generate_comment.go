@@ -6,57 +6,55 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 )
 
-type CreateCommentUsecase struct {
+type GenerateCommentUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
-	fac            *domain.Factory
+	generator      domain.CommentGenerator
 }
 
-func NewCreateCommentUsecase(
+func NewGenerateCommentUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
-	fac *domain.Factory,
-) *CreateCommentUsecase {
-	return &CreateCommentUsecase{
+	generator domain.CommentGenerator,
+) *GenerateCommentUsecase {
+	return &GenerateCommentUsecase{
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
-		fac:            fac,
+		generator:      generator,
 	}
 }
 
-type CreateCommentInput struct {
+type GenerateCommentInput struct {
 	DiscussionID    string
 	ParentCommentID *string
 	CommentType     string
-	Content         string
-	PostedBy        string
+	UserID          string
 }
 
-func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentInput) (*domain.Comment, error) {
+func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateCommentInput) ([]*domain.Comment, error) {
 	// Verify discussion exists and user has access
 	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
 		ID:        input.DiscussionID,
-		CreatedBy: input.PostedBy,
+		CreatedBy: input.UserID,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	comment, err := u.fac.NewComment(domain.NewCommentParams{
+	comments, err := u.generator.Generate(ctx, domain.GenerateCommentParams{
 		DiscussionID:    input.DiscussionID,
 		ParentCommentID: input.ParentCommentID,
-		CommentTypeID:   input.CommentType,
-		Content:         input.Content,
-		Status:          domain.CommentStatusActive,
-		PostedBy:        input.PostedBy,
+		CommentType:     input.CommentType,
+		UserID:          input.UserID,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	if err := u.commentRepo.Save(ctx, comment); err != nil {
-		return nil, err
+	for _, c := range comments {
+		if err := u.commentRepo.Save(ctx, c); err != nil {
+			return nil, err
+		}
 	}
-
-	return comment, nil
+	return comments, nil
 }

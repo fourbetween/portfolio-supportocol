@@ -17,6 +17,7 @@ const mockComment: Comment = {
   discussionId: "d1",
   parentCommentId: null,
   commentType: "idea",
+  status: "active" as const,
   content: "This is a test comment",
 };
 
@@ -28,6 +29,8 @@ export const Default: Story = {
       .comment=${mockComment}
       .availableTypes=${availableTypes}
       .onCommentDelete=${(id: string) => console.log("Delete comment:", id)}
+      .onCommentGenerate=${(id: string, type: string) =>
+        console.log("Generate comment for:", id, "with type:", type)}
     ></learning-comment-item>
   `,
 };

@@ -141,6 +141,34 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'g': // Prefix: "generate"
+							origElem := elem
+							if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleLearningDiscussionsDiscussionIdCommentsGeneratePostRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
 						// Param: "commentId"
 						// Leaf parameter, slashes are prohibited
 						idx := strings.IndexByte(elem, '/')
@@ -387,6 +415,37 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'g': // Prefix: "generate"
+							origElem := elem
+							if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = LearningDiscussionsDiscussionIdCommentsGeneratePostOperation
+									r.summary = ""
+									r.operationID = ""
+									r.operationGroup = ""
+									r.pathPattern = "/learning/discussions/{discussionId}/comments/generate"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
 						// Param: "commentId"
 						// Leaf parameter, slashes are prohibited
 						idx := strings.IndexByte(elem, '/')

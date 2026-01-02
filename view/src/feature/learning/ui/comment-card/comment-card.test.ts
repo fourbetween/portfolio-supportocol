@@ -24,6 +24,7 @@ describe("learning-comment-card", async () => {
       parentCommentId: "0",
       content: "content",
       commentType: "idea",
+      status: "active" as const,
     };
     await expect.element(page.getByText("content")).toBeInTheDocument();
   });

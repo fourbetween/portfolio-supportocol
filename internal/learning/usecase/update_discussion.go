@@ -7,10 +7,10 @@ import (
 )
 
 type UpdateDiscussionUsecase struct {
-	repo domain.Repository
+	repo domain.DiscussionRepository
 }
 
-func NewUpdateDiscussionUsecase(repo domain.Repository) *UpdateDiscussionUsecase {
+func NewUpdateDiscussionUsecase(repo domain.DiscussionRepository) *UpdateDiscussionUsecase {
 	return &UpdateDiscussionUsecase{
 		repo: repo,
 	}

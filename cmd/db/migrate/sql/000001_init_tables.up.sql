@@ -14,7 +14,7 @@ CREATE TABLE users (
 	PRIMARY KEY (id),
 	UNIQUE KEY (email),
 	UNIQUE KEY (google_sub)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 議論
 CREATE TABLE discussions (
@@ -25,7 +25,7 @@ CREATE TABLE discussions (
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
 	CONSTRAINT discussions_users_fk FOREIGN KEY (created_by) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- コメント
 CREATE TABLE comments (
@@ -34,6 +34,7 @@ CREATE TABLE comments (
 	parent_comment_id CHAR(36),
 	comment_type VARCHAR(20) NOT NULL,
 	content TEXT NOT NULL,
+	status VARCHAR(20) NOT NULL,
 	posted_by CHAR(36) NOT NULL,
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -41,4 +42,4 @@ CREATE TABLE comments (
 	CONSTRAINT comments_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE,
 	CONSTRAINT comments_parent_fk FOREIGN KEY (parent_comment_id) REFERENCES comments(id) ON DELETE CASCADE,
 	CONSTRAINT comments_users_fk FOREIGN KEY (posted_by) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

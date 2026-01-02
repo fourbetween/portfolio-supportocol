@@ -22,6 +22,7 @@ type commentsTable struct {
 	ParentCommentID mysql.ColumnString
 	CommentType     mysql.ColumnString
 	Content         mysql.ColumnString
+	Status          mysql.ColumnString
 	PostedBy        mysql.ColumnString
 	CreatedAt       mysql.ColumnTimestamp
 	UpdatedAt       mysql.ColumnTimestamp
@@ -71,11 +72,12 @@ func newCommentsTableImpl(schemaName, tableName, alias string) commentsTable {
 		ParentCommentIDColumn = mysql.StringColumn("parent_comment_id")
 		CommentTypeColumn     = mysql.StringColumn("comment_type")
 		ContentColumn         = mysql.StringColumn("content")
+		StatusColumn          = mysql.StringColumn("status")
 		PostedByColumn        = mysql.StringColumn("posted_by")
 		CreatedAtColumn       = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
-		allColumns            = mysql.ColumnList{IDColumn, DiscussionIDColumn, ParentCommentIDColumn, CommentTypeColumn, ContentColumn, PostedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns        = mysql.ColumnList{DiscussionIDColumn, ParentCommentIDColumn, CommentTypeColumn, ContentColumn, PostedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns            = mysql.ColumnList{IDColumn, DiscussionIDColumn, ParentCommentIDColumn, CommentTypeColumn, ContentColumn, StatusColumn, PostedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns        = mysql.ColumnList{DiscussionIDColumn, ParentCommentIDColumn, CommentTypeColumn, ContentColumn, StatusColumn, PostedByColumn, CreatedAtColumn, UpdatedAtColumn}
 		defaultColumns        = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
@@ -88,6 +90,7 @@ func newCommentsTableImpl(schemaName, tableName, alias string) commentsTable {
 		ParentCommentID: ParentCommentIDColumn,
 		CommentType:     CommentTypeColumn,
 		Content:         ContentColumn,
+		Status:          StatusColumn,
 		PostedBy:        PostedByColumn,
 		CreatedAt:       CreatedAtColumn,
 		UpdatedAt:       UpdatedAtColumn,

@@ -368,6 +368,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/learning/discussions/{discussionId}/comments/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description generate comments using AI */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    discussionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        parentCommentId: string | null;
+                        commentType: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"][];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -387,6 +441,8 @@ export interface components {
             parentCommentId: components["schemas"]["Id"] | null;
             commentType: string;
             content: string;
+            /** @enum {string} */
+            status: "active" | "proposed";
         };
     };
     responses: never;

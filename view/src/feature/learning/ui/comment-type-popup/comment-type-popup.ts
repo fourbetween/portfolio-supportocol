@@ -64,8 +64,6 @@ export class LearningCommentTypePopup extends LitElement {
                   @input=${(e: Event) =>
                     (this.otherValue = (e.target as HTMLInputElement).value)}
                   placeholder="Type here..."
-                  @keydown=${(e: KeyboardEvent) =>
-                    e.key === "Enter" && this.handleOtherSubmit()}
                 />
               `
             : html`

@@ -8,6 +8,7 @@ type OperationName = string
 const (
 	LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation OperationName = "LearningDiscussionsDiscussionIdCommentsCommentIdDelete"
 	LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation    OperationName = "LearningDiscussionsDiscussionIdCommentsCommentIdPut"
+	LearningDiscussionsDiscussionIdCommentsGeneratePostOperation    OperationName = "LearningDiscussionsDiscussionIdCommentsGeneratePost"
 	LearningDiscussionsDiscussionIdCommentsGetOperation             OperationName = "LearningDiscussionsDiscussionIdCommentsGet"
 	LearningDiscussionsDiscussionIdCommentsPostOperation            OperationName = "LearningDiscussionsDiscussionIdCommentsPost"
 	LearningDiscussionsDiscussionIdDeleteOperation                  OperationName = "LearningDiscussionsDiscussionIdDelete"

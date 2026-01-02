@@ -23,14 +23,14 @@ describe("learning-comment-context", async () => {
         id: "1",
         discussionId: "d1",
         parentCommentId: null,
-        commentType: "idea",
+        commentType: "idea", status: "active" as const,
         content: "First comment",
       },
       {
         id: "2",
         discussionId: "d1",
         parentCommentId: "1",
-        commentType: "question",
+        commentType: "question", status: "active" as const,
         content: "Second comment",
       },
     ];

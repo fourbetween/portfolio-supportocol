@@ -12,6 +12,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     discussionId: "d1",
     parentCommentId: null,
     commentType: "idea",
+    status: "active" as const,
     content: "This is a test comment",
   };
 
@@ -56,5 +57,25 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     await deleteButton.click();
 
     expect(deletedId).toBe("1");
+  });
+
+  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると onCommentGenerate が呼ばれる", async () => {
+    let generatedId = "";
+    let generatedType = "";
+    element.onCommentGenerate = (id: string, type: string) => {
+      generatedId = id;
+      generatedType = type;
+    };
+
+    const generateButton = page.getByRole("button", { name: "generate" });
+    await generateButton.click();
+
+    // ポップアップが表示されるのを待つ
+    const typeButton = page.getByRole("button", { name: "question" });
+    await expect.element(typeButton).toBeVisible();
+    await typeButton.click();
+
+    expect(generatedId).toBe("1");
+    expect(generatedType).toBe("question");
   });
 });

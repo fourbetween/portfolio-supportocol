@@ -8,12 +8,17 @@ import (
 )
 
 type UpdateCommentUsecase struct {
-	repo domain.Repository
+	discussionRepo domain.DiscussionRepository
+	commentRepo    domain.CommentRepository
 }
 
-func NewUpdateCommentUsecase(repo domain.Repository) *UpdateCommentUsecase {
+func NewUpdateCommentUsecase(
+	discussionRepo domain.DiscussionRepository,
+	commentRepo domain.CommentRepository,
+) *UpdateCommentUsecase {
 	return &UpdateCommentUsecase{
-		repo: repo,
+		discussionRepo: discussionRepo,
+		commentRepo:    commentRepo,
 	}
 }
 
@@ -27,7 +32,7 @@ type UpdateCommentInput struct {
 
 func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentInput) (*domain.Comment, error) {
 	// Verify discussion exists and user has access
-	_, err := u.repo.Load(ctx, domain.LoadParams{
+	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
 		ID:        input.DiscussionID,
 		CreatedBy: input.UserID,
 	})
@@ -35,7 +40,7 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 		return nil, err
 	}
 
-	comment, err := u.repo.LoadComment(ctx, input.ID)
+	comment, err := u.commentRepo.Load(ctx, input.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +54,7 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 		Content:     input.Content,
 	})
 
-	if err := u.repo.SaveComment(ctx, comment); err != nil {
+	if err := u.commentRepo.Save(ctx, comment); err != nil {
 		return nil, err
 	}
 

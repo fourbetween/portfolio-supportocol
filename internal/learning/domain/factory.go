@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
@@ -56,10 +57,11 @@ type NewCommentParams struct {
 	ParentCommentID *string
 	CommentTypeID   string
 	Content         string
+	Status          CommentStatus
 	PostedBy        string
 }
 
-func (f *Factory) NewComment(params NewCommentParams) *Comment {
+func (f *Factory) NewComment(params NewCommentParams) (*Comment, error) {
 	id := f.idSrv.Generate()
 	return f.BuildComment(BuildCommentParams{
 		ID:               id,
@@ -74,14 +76,18 @@ type BuildCommentParams struct {
 	CreatedAt time.Time
 }
 
-func (f *Factory) BuildComment(params BuildCommentParams) *Comment {
+func (f *Factory) BuildComment(params BuildCommentParams) (*Comment, error) {
+	if !params.Status.IsValid() {
+		return nil, fmt.Errorf("invalid comment status")
+	}
 	return &Comment{
 		id:              params.ID,
 		discussionID:    params.DiscussionID,
 		parentCommentID: params.ParentCommentID,
 		commentType:     params.CommentTypeID,
 		content:         params.Content,
+		status:          params.Status,
 		postedBy:        params.PostedBy,
 		createdAt:       params.CreatedAt,
-	}
+	}, nil
 }

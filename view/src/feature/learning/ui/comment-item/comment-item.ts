@@ -1,10 +1,12 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { iconStyle } from "../../../../shared/style/icon";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-edit-form/comment-edit-form";
+import "../comment-type-popup/comment-type-popup";
+import type { LearningCommentTypePopup } from "../comment-type-popup/comment-type-popup";
 
 @customElement("learning-comment-item")
 export class LearningCommentItem extends LitElement {
@@ -26,8 +28,14 @@ export class LearningCommentItem extends LitElement {
   @property({ attribute: false })
   onCommentDelete?: (commentId: string) => void;
 
+  @property({ attribute: false })
+  onCommentGenerate?: (commentId: string, commentType: string) => void;
+
   @state()
   private isEditing = false;
+
+  @query("learning-comment-type-popup")
+  private typePopup!: LearningCommentTypePopup;
 
   render() {
     if (!this.comment) return html``;
@@ -64,6 +72,13 @@ export class LearningCommentItem extends LitElement {
           edit
         </button>
         <button
+          class="generate-button material-symbols-outlined"
+          @click=${this.handleGenerateClick}
+          aria-label="generate"
+        >
+          psychology
+        </button>
+        <button
           class="delete-button material-symbols-outlined"
           @click=${this.handleDeleteClick}
           aria-label="delete"
@@ -71,6 +86,14 @@ export class LearningCommentItem extends LitElement {
           delete
         </button>
       </div>
+      <learning-comment-type-popup
+        .types=${this.availableTypes}
+        .onSelect=${(type: string) => {
+          if (this.onCommentGenerate && this.comment) {
+            this.onCommentGenerate(this.comment.id, type);
+          }
+        }}
+      ></learning-comment-type-popup>
     `;
   }
 
@@ -83,6 +106,12 @@ export class LearningCommentItem extends LitElement {
   private handleEditClick(e: Event) {
     e.stopPropagation();
     this.isEditing = true;
+  }
+
+  private async handleGenerateClick(e: Event) {
+    e.stopPropagation();
+    await this.updateComplete;
+    this.typePopup?.open();
   }
 
   private handleDeleteClick(e: Event) {
@@ -103,6 +132,7 @@ export class LearningCommentItem extends LitElement {
         position: relative;
       }
       .edit-button,
+      .generate-button,
       .delete-button {
         position: absolute;
         bottom: -16px;
@@ -117,25 +147,35 @@ export class LearningCommentItem extends LitElement {
         justify-content: center;
         cursor: pointer;
         opacity: 0;
-        transition: all 0.2s;
+        transition: all 0.1s;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
         z-index: 1;
       }
       .edit-button {
         left: 8px;
       }
-      .delete-button {
+      .generate-button {
         left: 48px;
       }
+      .delete-button {
+        left: 88px;
+      }
       .card-container:hover .edit-button,
+      .card-container:hover .generate-button,
       .card-container:hover .delete-button {
         opacity: 1;
       }
       .edit-button:hover,
+      .generate-button:hover,
       .delete-button:hover {
         background: var(--color-canvas-subtle);
         color: var(--color-accent-fg);
         border-color: var(--color-accent-fg);
+      }
+      .generate-button:hover {
+        background: var(--color-canvas-subtle);
+        color: var(--color-btn-primary-bg);
+        border-color: var(--color-btn-primary-bg);
       }
       .delete-button:hover {
         color: var(--color-danger-fg);

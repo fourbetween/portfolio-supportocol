@@ -13,7 +13,7 @@ export class Popup extends LitElement {
 
   render() {
     return html`
-      <dialog>
+      <dialog @close=${this._handleClose}>
         <div class="header">
           <slot name="header"></slot>
           <button
@@ -35,6 +35,12 @@ export class Popup extends LitElement {
         </div>
       </dialog>
     `;
+  }
+
+  private _handleClose() {
+    this.dispatchEvent(
+      new CustomEvent("close", { bubbles: true, composed: true })
+    );
   }
 
   private _handleFooterSlotChange(e: Event) {

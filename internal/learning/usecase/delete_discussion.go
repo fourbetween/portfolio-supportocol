@@ -7,10 +7,10 @@ import (
 )
 
 type DeleteDiscussionUsecase struct {
-	repo domain.Repository
+	repo domain.DiscussionRepository
 }
 
-func NewDeleteDiscussionUsecase(repo domain.Repository) *DeleteDiscussionUsecase {
+func NewDeleteDiscussionUsecase(repo domain.DiscussionRepository) *DeleteDiscussionUsecase {
 	return &DeleteDiscussionUsecase{
 		repo: repo,
 	}
