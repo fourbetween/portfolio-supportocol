@@ -27,6 +27,11 @@ func NewHTTPHandler(dbCon *sql.DB) (http.Handler, error) {
 		return nil, fmt.Errorf("failed to load app config: %w", err)
 	}
 
+	shareConf, err := conf.NewSSMService("share", awscfg)
+	if err != nil {
+		return nil, fmt.Errorf("failed to load share config: %w", err)
+	}
+
 	domain, err := appConf.Get("domain")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get domain from config: %w", err)
@@ -44,7 +49,7 @@ func NewHTTPHandler(dbCon *sql.DB) (http.Handler, error) {
 		return nil, fmt.Errorf("failed to create identity handler: %w", err)
 	}
 
-	learningHandler, err := learning.NewHTTPHandler(dbCon, appConf, jwtSrv)
+	learningHandler, err := learning.NewHTTPHandler(dbCon, appConf, shareConf, jwtSrv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning handler: %w", err)
 	}

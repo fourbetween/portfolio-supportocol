@@ -323,3 +323,45 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /learning/discussions/{discussionId}/comments/generate:
+    post:
+      description: generate comments using AI
+      security:
+        - cookie_auth: []
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: discussionId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parentCommentId:
+                  oneOf:
+                    - type: string
+                    - type: "null"
+                commentType:
+                  type: string
+              required:
+                - parentCommentId
+                - commentType
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

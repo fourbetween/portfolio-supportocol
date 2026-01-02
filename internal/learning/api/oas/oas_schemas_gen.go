@@ -256,6 +256,31 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetContent(val 
 	s.Content = val
 }
 
+type LearningDiscussionsDiscussionIdCommentsGeneratePostReq struct {
+	ParentCommentId NilString `json:"parentCommentId"`
+	CommentType     string    `json:"commentType"`
+}
+
+// GetParentCommentId returns the value of ParentCommentId.
+func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) GetParentCommentId() NilString {
+	return s.ParentCommentId
+}
+
+// GetCommentType returns the value of CommentType.
+func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) GetCommentType() string {
+	return s.CommentType
+}
+
+// SetParentCommentId sets the value of ParentCommentId.
+func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) SetParentCommentId(val NilString) {
+	s.ParentCommentId = val
+}
+
+// SetCommentType sets the value of CommentType.
+func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) SetCommentType(val string) {
+	s.CommentType = val
+}
+
 type LearningDiscussionsDiscussionIdCommentsPostReq struct {
 	ParentCommentId NilString `json:"parentCommentId"`
 	CommentType     string    `json:"commentType"`

@@ -31,6 +31,15 @@ func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsCommentIdPut(
 	return r, ht.ErrNotImplemented
 }
 
+// LearningDiscussionsDiscussionIdCommentsGeneratePost implements POST /learning/discussions/{discussionId}/comments/generate operation.
+//
+// Generate comments using AI.
+//
+// POST /learning/discussions/{discussionId}/comments/generate
+func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *LearningDiscussionsDiscussionIdCommentsGeneratePostReq, params LearningDiscussionsDiscussionIdCommentsGeneratePostParams) (r []Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // LearningDiscussionsDiscussionIdCommentsGet implements GET /learning/discussions/{discussionId}/comments operation.
 //
 // Get comments for a discussion.

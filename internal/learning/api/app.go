@@ -24,6 +24,7 @@ type HandlerParams struct {
 	ListComments     *usecase.ListCommentsUsecase
 	UpdateComment    *usecase.UpdateCommentUsecase
 	DeleteComment    *usecase.DeleteCommentUsecase
+	GenerateComment  *usecase.GenerateCommentUsecase
 }
 
 type appHandler struct {
@@ -36,6 +37,7 @@ type appHandler struct {
 	listComments     *usecase.ListCommentsUsecase
 	updateComment    *usecase.UpdateCommentUsecase
 	deleteComment    *usecase.DeleteCommentUsecase
+	generateComment  *usecase.GenerateCommentUsecase
 }
 
 func NewHandler(params HandlerParams) oas.Handler {
@@ -49,6 +51,7 @@ func NewHandler(params HandlerParams) oas.Handler {
 		listComments:     params.ListComments,
 		updateComment:    params.UpdateComment,
 		deleteComment:    params.DeleteComment,
+		generateComment:  params.GenerateComment,
 	}
 }
 
@@ -171,6 +174,29 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdDelete(ctx 
 		DiscussionID: params.DiscussionId,
 		UserID:       httpctx.GetUserID(ctx),
 	})
+}
+
+func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *oas.LearningDiscussionsDiscussionIdCommentsGeneratePostReq, params oas.LearningDiscussionsDiscussionIdCommentsGeneratePostParams) ([]oas.Comment, error) {
+	var parentCommentID *string
+	if !req.ParentCommentId.Null {
+		parentCommentID = &req.ParentCommentId.Value
+	}
+
+	items, err := h.generateComment.Execute(ctx, usecase.GenerateCommentInput{
+		DiscussionID:    params.DiscussionId,
+		ParentCommentID: parentCommentID,
+		CommentType:     req.CommentType,
+		UserID:          httpctx.GetUserID(ctx),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]oas.Comment, len(items))
+	for i, item := range items {
+		res[i] = h.toOasComment(item)
+	}
+	return res, nil
 }
 
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
