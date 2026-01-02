@@ -11,7 +11,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     id: "1",
     discussionId: "d1",
     parentCommentId: null,
-    commentType: "idea",
+    commentType: "idea", status: "active" as const,
     content: "This is a test comment",
   };
 

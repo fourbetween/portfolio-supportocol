@@ -11,6 +11,7 @@ describe("deriveCommentFrame", () => {
         parentCommentId: null,
         commentType: "Idea",
         content: "idea 1",
+        status: "active",
       },
       {
         id: "2",
@@ -18,6 +19,7 @@ describe("deriveCommentFrame", () => {
         parentCommentId: "1",
         commentType: "Question",
         content: "question 1",
+        status: "active",
       },
       {
         id: "3",
@@ -25,6 +27,7 @@ describe("deriveCommentFrame", () => {
         parentCommentId: "1",
         commentType: "Agree",
         content: "agree 1",
+        status: "active",
       },
       {
         id: "4",
@@ -32,6 +35,7 @@ describe("deriveCommentFrame", () => {
         parentCommentId: "2",
         commentType: "Answer",
         content: "answer 1",
+        status: "active",
       },
     ];
 

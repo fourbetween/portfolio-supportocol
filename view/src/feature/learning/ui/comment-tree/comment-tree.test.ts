@@ -25,6 +25,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root comment",
         commentType: "idea",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
@@ -39,6 +40,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root comment",
         commentType: "idea",
+        status: "active" as const,
       },
       {
         id: "2",
@@ -46,6 +48,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: "1",
         content: "child idea 1",
         commentType: "idea",
+        status: "active" as const,
       },
       {
         id: "3",
@@ -53,6 +56,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: "1",
         content: "child question 1",
         commentType: "question",
+        status: "active" as const,
       },
       {
         id: "4",
@@ -60,6 +64,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: "1",
         content: "child idea 2",
         commentType: "idea",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
@@ -89,6 +94,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root comment",
         commentType: "idea",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
@@ -125,6 +131,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root",
         commentType: "idea",
+        status: "active" as const,
       },
       {
         id: "2",
@@ -132,6 +139,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: "1",
         content: "child 1",
         commentType: "question",
+        status: "active" as const,
       },
       {
         id: "3",
@@ -139,6 +147,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: "1",
         content: "child 2",
         commentType: "question",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
@@ -160,6 +169,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root 1",
         commentType: "idea",
+        status: "active" as const,
       },
       {
         id: "2",
@@ -167,6 +177,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root 2",
         commentType: "question",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
@@ -183,6 +194,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root 1",
         commentType: "idea",
+        status: "active" as const,
       },
       {
         id: "2",
@@ -190,6 +202,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root 2",
         commentType: "idea",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
@@ -209,6 +222,7 @@ describe("learning-comment-tree", async () => {
       parentCommentId: null,
       content: "root comment",
       commentType: "idea",
+      status: "active" as const,
     };
     elem.comments = [comment];
     await elem.updateComplete;
@@ -231,6 +245,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root",
         commentType: "idea",
+        status: "active" as const,
       },
       {
         id: "2",
@@ -238,6 +253,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: "1",
         content: "level 1",
         commentType: "idea",
+        status: "active" as const,
       },
       {
         id: "3",
@@ -245,6 +261,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: "2",
         content: "level 2",
         commentType: "idea",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
@@ -262,6 +279,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root comment",
         commentType: "idea",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
@@ -279,6 +297,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root",
         commentType: "idea",
+        status: "active" as const,
       },
       {
         id: "2",
@@ -286,6 +305,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: "1",
         content: "child 1",
         commentType: "question",
+        status: "active" as const,
       },
       {
         id: "3",
@@ -293,6 +313,7 @@ describe("learning-comment-tree", async () => {
         parentCommentId: "1",
         content: "child 2",
         commentType: "question",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
@@ -317,12 +338,13 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root comment",
         commentType: "idea",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
 
     const card = page.getByText("root comment");
-    // await card.hover();
+    await card.hover();
 
     const deleteButton = page.getByRole("button", { name: "delete" });
     await deleteButton.click();
@@ -342,12 +364,13 @@ describe("learning-comment-tree", async () => {
         parentCommentId: null,
         content: "root comment",
         commentType: "idea",
+        status: "active" as const,
       },
     ];
     await elem.updateComplete;
 
     const card = page.getByText("root comment");
-    // await card.hover();
+    await card.hover();
 
     const generateButton = page.getByRole("button", { name: "generate" });
     await generateButton.click();

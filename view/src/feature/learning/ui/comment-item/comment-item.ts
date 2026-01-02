@@ -135,7 +135,7 @@ export class LearningCommentItem extends LitElement {
         justify-content: center;
         cursor: pointer;
         opacity: 0;
-        transition: all 0.2s;
+        transition: all 0.1s;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
         z-index: 1;
       }

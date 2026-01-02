@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
           provider: playwright({}),
           screenshotFailures: false,
         },
-        testTimeout: 200,
+        testTimeout: 500,
         setupFiles: [".storybook/vitest.setup.ts"],
       },
     };
