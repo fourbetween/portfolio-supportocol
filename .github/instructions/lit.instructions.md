@@ -4,76 +4,100 @@ applyTo: "view/src/**/*.ts"
 
 # Lit 開発ガイドライン
 
-## ディレクトリ構成 (`view/src/`)
+## 1. ディレクトリ構成 (`view/src/`)
 
-### アプリケーション基盤 (`app/`)
+### 1.1 アプリケーション基盤 (`app/`)
 
-- `context/`: 状態管理（Context API 等）。
-- `layout/`: 共通レイアウト。
-- `routes.ts`: ルーティング定義。
+- `context/`: 状態管理（Context API 等）
+- `layout/`: 共通レイアウト
+- `routes.ts`: ルーティング定義
 
-### 機能別実装 (`feature/[context]/`)
+### 1.2 機能別実装 (`feature/[context]/`)
 
-- `api/`: API クライアント。
-- `component/`: **Container**: ビジネスロジック・副作用を含む。
-- `page/`: ページコンポーネント。
-- `ui/`: **Presenter**: 純粋な UI 部品。
+- `api/`: API クライアント
+- `component/`: **Container**（ビジネスロジック・副作用を担当）
+- `page/`: ページコンポーネント
+- `ui/`: **Presenter**（純粋な UI 部品）
 
-### 共有リソース (`shared/`)
+### 1.3 共有リソース (`shared/`)
 
-- `event/`: カスタムイベント定義。
-- `style/`: 共通 CSS（`base.ts` 等）。
-- `ui/`: 全体共通 UI コンポーネント。
+- `event/`: カスタムイベント定義
+- `style/`: 共通 CSS（`base.ts` 等）
+- `ui/`: 全体共通 UI コンポーネント
 
-## 実装ルール
+## 2. コンポーネント設計 (Container/Presenter)
 
-### Lit コンポーネント
+- **Container** (`component/`):
+  - 状態管理、ビジネスロジック、API 呼び出しを担当する。
+  - 原則として Storybook やテストは不要。
+- **Presenter** (`ui/`):
+  - 表示とユーザー入力の検知に専念する。
+  - アクションはプロパティ経由で受け取ったコールバックを実行する。
+  - API スキーマは `feature/[context]/api/schema.d.ts` を参照する。
 
-- `LitElement` を継承し、名称は `[context]-[name]` 形式（例: `learning-comment-list`）にする。
+## 3. コーディング規約
+
+### 3.1 Lit コンポーネント
+
+- `LitElement` を継承し、名称は `[context]-[name]` 形式（例: `learning-comment-list`）とする。
 - 外部データは `@property`、内部状態は `@state` を使用する。
 - 関数をプロパティとして受け取る場合、`@property({ attribute: false })` を使用する。
-- プロパティ設定時はダブルクォートを使用しない。例: `<my-el .data=${data}></my-el>`
+- プロパティ設定時はダブルクォートを使用しない。
+  - 例: `<my-el .data=${data}></my-el>`
 - `HTMLElementTagNameMap` の拡張は行わない。
 - テキストは英語で記述する（多言語対応は後日）。
-- 記述の順番は以下の通り:
+- クラス内の記述順序:
   1. インポート
-  2. クラスデコレーター（`@customElement`）
+  2. クラスデコレーター (`@customElement`)
   3. クラス定義
-     1. プロパティ・状態定義（`@property`, `@state`）
-     2. ライフサイクルメソッド（`connectedCallback` 等）
+     1. プロパティ・状態定義 (`@property`, `@state`)
+     2. ライフサイクルメソッド (`connectedCallback` 等)
      3. イベントハンドラー
-     4. レンダーメソッド（`render` 等）
-     5. スタイル定義（`static styles`）
+     4. レンダーメソッド (`render` 等)
+     5. スタイル定義 (`static styles`)
 
-### Container/Presentational パターン
-
-- **Container** (`component/`): 状態管理、ビジネスロジック、API 呼出を担当。テスト・ストーリー不要。
-- **Presenter** (`ui/`): 表示に専念。アクションはコールバック経由で実行。
-- API スキーマは `feature/[context]/api/schema.d.ts` を参照。
-
-### スタイル
+### 3.2 スタイル
 
 - Tailwind CSS は使用せず、標準 CSS を使用する。
 - すべての Presenter は `shared/style/base.ts` を `static styles` に含める。
 - アイコンは `shared/style/icon` の `iconStyle` を使用し、`material-symbols-outlined` クラスを適用する。
 
-### メッセージ表示
+### 3.3 メッセージ表示
 
-- API 呼出の成否等の通知には `showToast` ヘルパーを使用する。
-  - 成功例: `showToast(this, "Succeeded.", "success", 2000);`
-  - エラー例: `showToast(this, error.message, "error");`
+- API 呼び出しの成否等の通知には `showToast` ヘルパーを使用する。
+  - 成功時: `showToast(this, "Succeeded.", "success", 2000);`
+  - エラー時: `showToast(this, error.message, "error");`
 
-### Storybook
+## 4. 品質管理
 
-- すべての Presenter (`ui/`) は Storybook ファイル (`.stories.ts`) を作成する。
-- `title` は `[context]/ui/[name]` 形式にする。
+### 4.1 Storybook
+
+- すべての Presenter (`ui/`) に対して Storybook ファイル (`.stories.ts`) を作成する。
+- `title` は `[context]/ui/[name]` 形式とする。
 - `component` にはカスタム要素のタグ名を指定する。
-- `render` 関数内で `html` テンプレートを使用してコンポーネントをレンダリングする。
+- `render` 関数内で `html` テンプレートを使用してレンダリングする。
 
-### テスト
+### 4.2 テスト (Vitest Browser Mode)
 
-- すべての Presenter (`ui/`) は Vitest Browser Mode を使用したテストファイル (`.test.ts`) を作成する。
-- describe の第一引数はコンポーネント名のカスタム要素タグ名にする。
-- it の第一引数は動作内容を**日本語**で記述する。
-- `beforeEach` で要素を作成して `document.body` に追加し、`afterEach` で削除する。
-- アサーションには `expect.element(page.getBy...)` を使用する。
+すべての Presenter (`ui/`) に対してテストファイル (`.test.ts`) を作成する。
+
+#### 4.2.1 レンダリング (Setup)
+
+- `document.createElement` ではなく、`lit` の `render` 関数と `html` テンプレートを使用する。
+- プロパティの受け渡しは、実際の利用シーンに近い `.prop=${value}` 形式で行う。
+- スロット (Slot) を利用する場合は、`render` 内のテンプレートで宣言的に記述する。
+
+#### 4.2.2 要素の特定と検証 (Assertion)
+
+- `elem.shadowRoot.querySelector` 等の内部実装に依存するクエリは避け、`page.getByText` や `page.getByRole` 等のユーザー視点のクエリを優先する。
+- Shadow DOM の境界を意識せずに済むよう、`vitest/browser` の `page` API を活用する。
+
+#### 4.2.3 非同期処理
+
+- Lit の更新サイクルを待機するため、必要に応じて `await elem.updateComplete` を使用するか、`expect.element(...).toBeVisible()` 等の非同期アサーションを使用する。
+
+#### 4.2.4 テストケースの構成
+
+- `describe` 内に `beforeEach` (コンテナの作成と追加) と `afterEach` (コンテナの削除) を含める。
+- `describe` の第一引数はコンポーネント名のカスタム要素タグ名とする。
+- 各 `it` ブロックでは特定の動作や状態を検証し、第一引数は動作内容を**日本語**で記述する。

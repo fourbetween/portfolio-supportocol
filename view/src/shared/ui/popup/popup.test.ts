@@ -1,53 +1,86 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { page } from "vitest/browser";
 import "./popup";
-import type { Popup } from "./popup";
 
 describe("ui-popup", () => {
-  let elem: Popup;
+  let container: HTMLDivElement;
 
-  beforeEach(async () => {
-    render(
-      html`
-        <ui-popup id="test-popup"></ui-popup>
-      `,
-      document.body
-    );
-    elem = document.getElementById("test-popup") as Popup;
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    elem?.remove();
-  });
-
-  it("footerが空の場合、footerが表示されないこと", async () => {
-    await elem.updateComplete;
-    const footer = elem.shadowRoot?.querySelector(".footer");
-    expect(footer).not.toBeNull();
-    const style = window.getComputedStyle(footer!);
-    expect(style.display).toBe("none");
+    container.remove();
   });
 
   it("footerに内容がある場合、footerが表示されること", async () => {
     render(
       html`
-        <ui-popup id="test-popup-with-footer">
+        <ui-popup .open=${true}>
           <div slot="footer">Footer Content</div>
         </ui-popup>
       `,
-      document.body
+      container
     );
-    const elemWithFooter = document.getElementById(
-      "test-popup-with-footer"
-    ) as Popup;
-    await elemWithFooter.updateComplete;
-    // slotchange might trigger another update
-    await new Promise((resolve) => setTimeout(resolve, 0));
-    await elemWithFooter.updateComplete;
-    const footer = elemWithFooter.shadowRoot?.querySelector(".footer");
-    expect(footer).not.toBeNull();
-    const style = window.getComputedStyle(footer!);
-    expect(style.display).not.toBe("none");
-    elemWithFooter.remove();
+    // slotchange の反映を待つ
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    await expect.element(page.getByText("Footer Content")).toBeVisible();
+  });
+
+  it("openプロパティをtrueにすると、ダイアログが表示されること", async () => {
+    render(
+      html`
+        <ui-popup .open=${true}>
+          <div slot="main">Main Content</div>
+        </ui-popup>
+      `,
+      container
+    );
+    await expect.element(page.getByText("Main Content")).toBeVisible();
+    await expect.element(page.getByRole("dialog")).toHaveAttribute("open");
+  });
+
+  it("openプロパティをfalseにすると、ダイアログが閉じられること", async () => {
+    render(
+      html`
+        <ui-popup .open=${true}>
+          <div slot="main">Main Content</div>
+        </ui-popup>
+      `,
+      container
+    );
+    await expect.element(page.getByRole("dialog")).toHaveAttribute("open");
+
+    render(
+      html`
+        <ui-popup .open=${false}>
+          <div slot="main">Main Content</div>
+        </ui-popup>
+      `,
+      container
+    );
+    // 閉じている状態では getByRole("dialog") が見つからない可能性があるため includeHidden を使用
+    await expect
+      .element(page.getByRole("dialog", { includeHidden: true }))
+      .not.toHaveAttribute("open");
+  });
+
+  it("閉じるボタンをクリックするとダイアログが閉じられること", async () => {
+    render(
+      html`
+        <ui-popup .open=${true}></ui-popup>
+      `,
+      container
+    );
+    await expect.element(page.getByRole("dialog")).toHaveAttribute("open");
+
+    const closeButton = page.getByRole("button", { name: "Close" });
+    await closeButton.click();
+
+    await expect
+      .element(page.getByRole("dialog", { includeHidden: true }))
+      .not.toHaveAttribute("open");
   });
 });

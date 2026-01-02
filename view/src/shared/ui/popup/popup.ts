@@ -1,24 +1,53 @@
-import { LitElement, css, html } from "lit";
-import { customElement, query, state } from "lit/decorators.js";
+import { LitElement, type PropertyValues, css, html } from "lit";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../style/base";
 import { buttonStyle } from "../../style/button";
 
 @customElement("ui-popup")
 export class Popup extends LitElement {
+  @property({ type: Boolean, reflect: true })
+  open = false;
+
   @query("dialog")
   private dialog!: HTMLDialogElement;
 
   @state()
   private _hasFooter = false;
 
+  protected updated(changedProperties: PropertyValues) {
+    if (changedProperties.has("open")) {
+      if (this.open) {
+        if (!this.dialog.open) {
+          this.dialog.showModal();
+        }
+      } else {
+        if (this.dialog.open) {
+          this.dialog.close();
+        }
+      }
+    }
+  }
+
+  private _handleClose() {
+    this.open = false;
+    this.dispatchEvent(
+      new CustomEvent("close", { bubbles: true, composed: true })
+    );
+  }
+
+  private _handleFooterSlotChange(e: Event) {
+    const slot = e.target as HTMLSlotElement;
+    this._hasFooter = slot.assignedNodes().length > 0;
+  }
+
   render() {
     return html`
-      <dialog @close=${this._handleClose}>
+      <dialog @close=${this._handleClose} @cancel=${this._handleClose}>
         <div class="header">
           <slot name="header"></slot>
           <button
             class="close-button btn"
-            @click=${this.close}
+            @click=${() => (this.open = false)}
             aria-label="Close"
           >
             ×
@@ -35,25 +64,6 @@ export class Popup extends LitElement {
         </div>
       </dialog>
     `;
-  }
-
-  private _handleClose() {
-    this.dispatchEvent(
-      new CustomEvent("close", { bubbles: true, composed: true })
-    );
-  }
-
-  private _handleFooterSlotChange(e: Event) {
-    const slot = e.target as HTMLSlotElement;
-    this._hasFooter = slot.assignedNodes().length > 0;
-  }
-
-  open() {
-    this.dialog.showModal();
-  }
-
-  close() {
-    this.dialog.close();
   }
 
   static styles = [

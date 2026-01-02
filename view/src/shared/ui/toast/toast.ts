@@ -24,20 +24,6 @@ export class Toast extends LitElement {
 
   private timeoutId: number | null = null;
 
-  render() {
-    if (!this.visible) {
-      return html``;
-    }
-    return html`
-      <div class="toast ${this.type}" role="alert">
-        <span class="message">${this.message}</span>
-        <button class="close-button btn" @click=${this.hide} aria-label="Close">
-          ×
-        </button>
-      </div>
-    `;
-  }
-
   show(options: ToastOptions) {
     this.message = options.message;
     this.type = options.type;
@@ -60,6 +46,20 @@ export class Toast extends LitElement {
       clearTimeout(this.timeoutId);
       this.timeoutId = null;
     }
+  }
+
+  render() {
+    if (!this.visible) {
+      return html``;
+    }
+    return html`
+      <div class="toast ${this.type}" role="alert">
+        <span class="message">${this.message}</span>
+        <button class="close-button btn" @click=${this.hide} aria-label="Close">
+          ×
+        </button>
+      </div>
+    `;
   }
 
   static styles = [
