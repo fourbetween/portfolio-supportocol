@@ -16,7 +16,7 @@ describe("learning-comment-context", async () => {
   });
 
   it("祖先コメントが順番に表示されること", async () => {
-    const ancestors = [
+    const path = [
       {
         id: "1",
         discussionId: "d1",
@@ -37,9 +37,7 @@ describe("learning-comment-context", async () => {
 
     render(
       html`
-        <learning-comment-context
-          .ancestors=${ancestors}
-        ></learning-comment-context>
+        <learning-comment-context .path=${path}></learning-comment-context>
       `,
       container
     );
@@ -51,7 +49,7 @@ describe("learning-comment-context", async () => {
   });
 
   it("末端のコメントは learning-comment-item で表示されること", async () => {
-    const ancestors = [
+    const path = [
       {
         id: "1",
         discussionId: "d1",
@@ -72,9 +70,7 @@ describe("learning-comment-context", async () => {
 
     render(
       html`
-        <learning-comment-context
-          .ancestors=${ancestors}
-        ></learning-comment-context>
+        <learning-comment-context .path=${path}></learning-comment-context>
       `,
       container
     );

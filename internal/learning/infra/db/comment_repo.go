@@ -56,16 +56,7 @@ func (r *CommentRepository) List(ctx context.Context, discussionID string) ([]*d
 		return nil, fmt.Errorf("failed to fetch comments: %w", err)
 	}
 
-	comments := make([]*domain.Comment, len(dest))
-	for i, row := range dest {
-		c, err := r.toCommentDomain(row)
-		if err != nil {
-			return nil, fmt.Errorf("failed to convert comment domain: %w", err)
-		}
-		comments[i] = c
-	}
-
-	return comments, nil
+	return r.toCommentDomains(dest)
 }
 
 func (r *CommentRepository) Save(ctx context.Context, c *domain.Comment) error {
@@ -95,6 +86,74 @@ func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error
 		return fmt.Errorf("failed to delete comment: %w", err)
 	}
 	return nil
+}
+
+func (r *CommentRepository) PathToRoot(ctx context.Context, commentID string) ([]*domain.Comment, error) {
+	ancestors := mysql.CTE("ancestors")
+
+	initialSelect := mysql.
+		SELECT(table.Comments.AllColumns).
+		FROM(table.Comments).
+		WHERE(table.Comments.ID.EQ(mysql.String(commentID)))
+
+	recursiveSelect := mysql.
+		SELECT(table.Comments.AllColumns).
+		FROM(
+			table.Comments.
+				INNER_JOIN(ancestors, table.Comments.ID.EQ(mysql.StringColumn("parent_comment_id"))),
+		)
+
+	stmt := mysql.
+		WITH_RECURSIVE(ancestors.AS(initialSelect.UNION_ALL(recursiveSelect)))(
+		mysql.SELECT(ancestors.AllColumns()).
+			FROM(ancestors),
+	)
+
+	var dest []model.Comments
+	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
+		return nil, fmt.Errorf("failed to fetch path to root: %w", err)
+	}
+
+	return r.toCommentDomains(dest)
+}
+
+func (r *CommentRepository) Siblings(ctx context.Context, commentID string) ([]*domain.Comment, error) {
+	comment, err := r.Load(ctx, commentID)
+	if err != nil {
+		return nil, err
+	}
+
+	var condition mysql.BoolExpression
+	if comment.ParentCommentID() == nil {
+		condition = table.Comments.DiscussionID.EQ(mysql.String(comment.DiscussionID())).
+			AND(table.Comments.ParentCommentID.IS_NULL())
+	} else {
+		condition = table.Comments.ParentCommentID.EQ(mysql.String(*comment.ParentCommentID()))
+	}
+
+	stmt := mysql.
+		SELECT(table.Comments.AllColumns).
+		FROM(table.Comments).
+		WHERE(condition.AND(table.Comments.ID.NOT_EQ(mysql.String(commentID))))
+
+	var dest []model.Comments
+	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
+		return nil, fmt.Errorf("failed to fetch siblings: %w", err)
+	}
+
+	return r.toCommentDomains(dest)
+}
+
+func (r *CommentRepository) toCommentDomains(rows []model.Comments) ([]*domain.Comment, error) {
+	comments := make([]*domain.Comment, len(rows))
+	for i, row := range rows {
+		c, err := r.toCommentDomain(row)
+		if err != nil {
+			return nil, fmt.Errorf("failed to convert comment domain: %w", err)
+		}
+		comments[i] = c
+	}
+	return comments, nil
 }
 
 func (r *CommentRepository) toCommentDomain(row model.Comments) (*domain.Comment, error) {

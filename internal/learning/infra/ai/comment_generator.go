@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
@@ -48,33 +49,17 @@ func (cg *CommentGenerator) Generate(ctx context.Context, params domain.Generate
 		return nil, err
 	}
 
-	var ancestors []*domain.Comment
+	var path []*domain.Comment
 	if params.ParentCommentID != nil {
-		comments, err := cg.commentRepo.List(ctx, params.DiscussionID)
+		p, err := cg.commentRepo.PathToRoot(ctx, *params.ParentCommentID)
 		if err != nil {
 			return nil, err
 		}
-
-		commentMap := make(map[string]*domain.Comment)
-		for _, c := range comments {
-			commentMap[c.ID()] = c
-		}
-
-		currID := *params.ParentCommentID
-		for {
-			c, ok := commentMap[currID]
-			if !ok {
-				break
-			}
-			ancestors = append([]*domain.Comment{c}, ancestors...)
-			if c.ParentCommentID() == nil {
-				break
-			}
-			currID = *c.ParentCommentID()
-		}
+		slices.Reverse(p)
+		path = p
 	}
 
-	prompt := cg.buildPrompt(discussion, ancestors, params.CommentType)
+	prompt := cg.buildPrompt(discussion, path, params.CommentType)
 
 	config := &genai.GenerateContentConfig{
 		ResponseMIMEType: "application/json",
@@ -129,12 +114,12 @@ func (cg *CommentGenerator) Generate(ctx context.Context, params domain.Generate
 	return result, nil
 }
 
-func (cg *CommentGenerator) buildPrompt(discussion *domain.Discussion, ancestors []*domain.Comment, commentType string) string {
+func (cg *CommentGenerator) buildPrompt(discussion *domain.Discussion, path []*domain.Comment, commentType string) string {
 	var sb strings.Builder
 	fmt.Fprintf(&sb, "Discussion Theme: %s\n", discussion.Theme())
-	if len(ancestors) > 0 {
+	if len(path) > 0 {
 		sb.WriteString("Context:\n")
-		for i, c := range ancestors {
+		for i, c := range path {
 			fmt.Fprintf(&sb, "%d. %s: %s\n", i+1, c.CommentType(), c.Content())
 		}
 	}

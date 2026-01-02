@@ -7,7 +7,7 @@ const meta: Meta = {
   component: "learning-comment-context",
   render: (args) => html`
     <learning-comment-context
-      .ancestors=${args.ancestors}
+      .path=${args.path}
       .availableTypes=${args.availableTypes}
       .onCommentClick=${args.onCommentClick}
       .onCommentUpdate=${args.onCommentUpdate}
@@ -24,7 +24,7 @@ type Story = StoryObj;
 export const Default: Story = {
   args: {
     availableTypes: ["idea", "question", "answer", "claim", "evidence"],
-    ancestors: [
+    path: [
       {
         id: "1",
         discussionId: "1",

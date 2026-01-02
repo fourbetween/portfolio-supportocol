@@ -11,7 +11,7 @@ import "../comment-type-badge/comment-type-badge";
 @customElement("learning-comment-context")
 export class LearningCommentContext extends LitElement {
   @property({ type: Array })
-  ancestors: Comment[] = [];
+  path: Comment[] = [];
 
   @property({ type: Array })
   availableTypes: string[] = [];
@@ -45,8 +45,8 @@ export class LearningCommentContext extends LitElement {
     return html`
       <div class="container">
         ${join(
-          this.ancestors.map((comment, index) => {
-            const isLast = index === this.ancestors.length - 1;
+          this.path.map((comment, index) => {
+            const isLast = index === this.path.length - 1;
             if (isLast) {
               return html`
                 <learning-comment-type-badge
