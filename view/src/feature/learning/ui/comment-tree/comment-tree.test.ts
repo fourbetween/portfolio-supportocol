@@ -82,9 +82,9 @@ describe("learning-comment-tree", async () => {
       .element(page.getByText("idea", { exact: true }).first())
       .toBeInTheDocument();
     await expect
-      .element(page.getByText("question", { exact: true }))
+      .element(page.getByText("question", { exact: true }).first())
       .toBeInTheDocument();
-  }, 10000);
+  });
 
   it("コメントをホバーすると編集アイコンが表示され、クリックすると編集フォームが表示されること", async () => {
     elem.comments = [
@@ -153,7 +153,9 @@ describe("learning-comment-tree", async () => {
     await elem.updateComplete;
 
     // .child-group が存在し、その中にバッジと .group-content が含まれていることを確認
-    await expect.element(page.getByText("question")).toBeInTheDocument();
+    await expect
+      .element(page.getByText("question", { exact: true }).first())
+      .toBeInTheDocument();
     await expect.element(page.getByText("child 1")).toBeInTheDocument();
     await expect.element(page.getByText("child 2")).toBeInTheDocument();
 
@@ -211,8 +213,10 @@ describe("learning-comment-tree", async () => {
     await expect.element(page.getByText("root 2")).toBeInTheDocument();
 
     // ideaバッジは1つだけ表示されているはず
-    const ideaBadges = await page.getByText("idea", { exact: true }).all();
-    expect(ideaBadges.length).toBe(1);
+    const ideaBadges = elem.shadowRoot?.querySelectorAll(
+      "learning-comment-type-badge"
+    );
+    expect(ideaBadges?.length).toBe(1);
   });
 
   it("コメントがクリックされたときにコールバックが実行されること", async () => {
@@ -285,7 +289,7 @@ describe("learning-comment-tree", async () => {
     await elem.updateComplete;
 
     await expect
-      .element(page.getByText("idea", { exact: true }))
+      .element(page.getByText("idea", { exact: true }).first())
       .toBeInTheDocument();
   });
 
@@ -321,9 +325,11 @@ describe("learning-comment-tree", async () => {
     await expect.element(page.getByText("child 1")).toBeInTheDocument();
     await expect.element(page.getByText("child 2")).toBeInTheDocument();
 
-    // questionバッジは1つだけ表示されているはず（グループ化されているため）
-    const questionBadges = page.getByText("question", { exact: true }).all();
-    expect(questionBadges.length).toBe(1);
+    // バッジは root(idea) と children(question) の2つ表示されているはず
+    const badges = elem.shadowRoot?.querySelectorAll(
+      "learning-comment-type-badge"
+    );
+    expect(badges?.length).toBe(2);
   });
 
   it("削除ボタンをクリックすると onCommentDelete が呼ばれること", async () => {

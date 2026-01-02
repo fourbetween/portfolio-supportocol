@@ -62,41 +62,20 @@ export class LearningCommentTree extends LitElement {
   render() {
     if (!this.comments) return html``;
 
-    const groupedRoots = this.rootComments.reduce((acc, root) => {
-      if (!acc[root.commentType]) {
-        acc[root.commentType] = [];
-      }
-      acc[root.commentType].push(root);
-      return acc;
-    }, {} as Record<string, Comment[]>);
+    const groupedRoots = this.groupCommentsByType(this.rootComments);
 
     return html`
       <div class="tree">
-        ${Object.entries(groupedRoots).map(
-          ([type, typeRoots]) => html`
-            <div class="child-group">
-              <learning-comment-type-badge
-                .type=${type}
-              ></learning-comment-type-badge>
-              <div class="group-content">
-                ${typeRoots.map((root) => this.renderComment(root, 0))}
-              </div>
-            </div>
-          `
+        ${Object.entries(groupedRoots).map(([type, typeRoots]) =>
+          this.renderGroup(type, typeRoots)
         )}
       </div>
     `;
   }
 
-  private renderComment(comment: Comment, depth: number): any {
+  private renderComment(comment: Comment): any {
     const children = this.childrenMap.get(comment.id) || [];
-    const groupedChildren = children.reduce((acc, child) => {
-      if (!acc[child.commentType]) {
-        acc[child.commentType] = [];
-      }
-      acc[child.commentType].push(child);
-      return acc;
-    }, {} as Record<string, Comment[]>);
+    const groupedChildren = this.groupCommentsByType(children);
 
     return html`
       <div class="comment-node">
@@ -109,23 +88,35 @@ export class LearningCommentTree extends LitElement {
           .onCommentGenerate=${this.onCommentGenerate}
         ></learning-comment-item>
         <div class="children">
-          ${Object.entries(groupedChildren).map(
-            ([type, typeChildren]) => html`
-              <div class="child-group">
-                <learning-comment-type-badge
-                  .type=${type}
-                ></learning-comment-type-badge>
-                <div class="group-content">
-                  ${typeChildren.map((child) =>
-                    this.renderComment(child, depth + 1)
-                  )}
-                </div>
-              </div>
-            `
+          ${Object.entries(groupedChildren).map(([type, typeChildren]) =>
+            this.renderGroup(type, typeChildren)
           )}
         </div>
       </div>
     `;
+  }
+
+  private renderGroup(type: string, comments: Comment[]) {
+    return html`
+      <div class="child-group">
+        <learning-comment-type-badge
+          .type=${type}
+        ></learning-comment-type-badge>
+        <div class="group-content">
+          ${comments.map((comment) => this.renderComment(comment))}
+        </div>
+      </div>
+    `;
+  }
+
+  private groupCommentsByType(comments: Comment[]): Record<string, Comment[]> {
+    return comments.reduce((acc, comment) => {
+      if (!acc[comment.commentType]) {
+        acc[comment.commentType] = [];
+      }
+      acc[comment.commentType].push(comment);
+      return acc;
+    }, {} as Record<string, Comment[]>);
   }
 
   static styles = [
