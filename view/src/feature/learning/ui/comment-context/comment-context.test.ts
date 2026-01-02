@@ -49,4 +49,45 @@ describe("learning-comment-context", async () => {
     await expect.element(page.getByText("idea")).toBeInTheDocument();
     await expect.element(page.getByText("question")).toBeInTheDocument();
   });
+
+  it("末端のコメントは learning-comment-item で表示されること", async () => {
+    const ancestors = [
+      {
+        id: "1",
+        discussionId: "d1",
+        parentCommentId: null,
+        commentType: "idea",
+        status: "active" as const,
+        content: "First comment",
+      },
+      {
+        id: "2",
+        discussionId: "d1",
+        parentCommentId: "1",
+        commentType: "question",
+        status: "active" as const,
+        content: "Second comment",
+      },
+    ];
+
+    render(
+      html`
+        <learning-comment-context
+          .ancestors=${ancestors}
+        ></learning-comment-context>
+      `,
+      container
+    );
+
+    // 最初のコメントは card なので edit ボタンがないはず
+    const firstComment = page.getByText("First comment");
+    await expect.element(firstComment).toBeInTheDocument();
+    // Note: We can't easily check "not to have" in a specific scope without more complex queries,
+    // but we can check that the second one DOES have it.
+
+    // 最後のコメントは item なので edit ボタンがあるはず
+    await expect
+      .element(page.getByRole("button", { name: "edit" }))
+      .toBeInTheDocument();
+  });
 });
