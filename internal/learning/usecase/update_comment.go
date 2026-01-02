@@ -40,7 +40,7 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 		return nil, err
 	}
 
-	comment, err := u.commentRepo.LoadComment(ctx, input.ID)
+	comment, err := u.commentRepo.Load(ctx, input.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 		Content:     input.Content,
 	})
 
-	if err := u.commentRepo.SaveComment(ctx, comment); err != nil {
+	if err := u.commentRepo.Save(ctx, comment); err != nil {
 		return nil, err
 	}
 

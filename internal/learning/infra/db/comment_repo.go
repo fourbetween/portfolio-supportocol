@@ -28,7 +28,7 @@ func (r *CommentRepository) SetFactory(fac *domain.Factory) {
 	r.fac = fac
 }
 
-func (r *CommentRepository) LoadComment(ctx context.Context, id string) (*domain.Comment, error) {
+func (r *CommentRepository) Load(ctx context.Context, id string) (*domain.Comment, error) {
 	stmt := mysql.
 		SELECT(table.Comments.AllColumns).
 		FROM(table.Comments).
@@ -45,7 +45,7 @@ func (r *CommentRepository) LoadComment(ctx context.Context, id string) (*domain
 	return r.toCommentDomain(dest)
 }
 
-func (r *CommentRepository) FetchComments(ctx context.Context, discussionID string) ([]*domain.Comment, error) {
+func (r *CommentRepository) List(ctx context.Context, discussionID string) ([]*domain.Comment, error) {
 	stmt := mysql.
 		SELECT(table.Comments.AllColumns).
 		FROM(table.Comments).
@@ -68,7 +68,7 @@ func (r *CommentRepository) FetchComments(ctx context.Context, discussionID stri
 	return comments, nil
 }
 
-func (r *CommentRepository) SaveComment(ctx context.Context, c *domain.Comment) error {
+func (r *CommentRepository) Save(ctx context.Context, c *domain.Comment) error {
 	model := r.toCommentModel(c)
 
 	stmt := table.Comments.
@@ -86,7 +86,7 @@ func (r *CommentRepository) SaveComment(ctx context.Context, c *domain.Comment) 
 	return nil
 }
 
-func (r *CommentRepository) DeleteComment(ctx context.Context, c *domain.Comment) error {
+func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error {
 	stmt := table.Comments.
 		DELETE().
 		WHERE(table.Comments.ID.EQ(mysql.String(c.ID())))

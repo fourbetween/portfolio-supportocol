@@ -18,9 +18,9 @@ type (
 	}
 
 	CommentRepository interface {
-		LoadComment(ctx context.Context, id string) (*Comment, error)
-		FetchComments(ctx context.Context, discussionID string) ([]*Comment, error)
-		SaveComment(ctx context.Context, comment *Comment) error
-		DeleteComment(ctx context.Context, comment *Comment) error
+		Load(ctx context.Context, id string) (*Comment, error)
+		List(ctx context.Context, discussionID string) ([]*Comment, error)
+		Save(ctx context.Context, comment *Comment) error
+		Delete(ctx context.Context, comment *Comment) error
 	}
 )

@@ -53,7 +53,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		return nil, err
 	}
 
-	if err := u.commentRepo.SaveComment(ctx, comment); err != nil {
+	if err := u.commentRepo.Save(ctx, comment); err != nil {
 		return nil, err
 	}
 

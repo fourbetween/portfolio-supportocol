@@ -122,60 +122,60 @@ func (m *MockCommentRepository) EXPECT() *MockCommentRepositoryMockRecorder {
 	return m.recorder
 }
 
-// DeleteComment mocks base method.
-func (m *MockCommentRepository) DeleteComment(ctx context.Context, comment *Comment) error {
+// Delete mocks base method.
+func (m *MockCommentRepository) Delete(ctx context.Context, comment *Comment) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteComment", ctx, comment)
+	ret := m.ctrl.Call(m, "Delete", ctx, comment)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// DeleteComment indicates an expected call of DeleteComment.
-func (mr *MockCommentRepositoryMockRecorder) DeleteComment(ctx, comment any) *gomock.Call {
+// Delete indicates an expected call of Delete.
+func (mr *MockCommentRepositoryMockRecorder) Delete(ctx, comment any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteComment", reflect.TypeOf((*MockCommentRepository)(nil).DeleteComment), ctx, comment)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCommentRepository)(nil).Delete), ctx, comment)
 }
 
-// FetchComments mocks base method.
-func (m *MockCommentRepository) FetchComments(ctx context.Context, discussionID string) ([]*Comment, error) {
+// List mocks base method.
+func (m *MockCommentRepository) List(ctx context.Context, discussionID string) ([]*Comment, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FetchComments", ctx, discussionID)
+	ret := m.ctrl.Call(m, "List", ctx, discussionID)
 	ret0, _ := ret[0].([]*Comment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FetchComments indicates an expected call of FetchComments.
-func (mr *MockCommentRepositoryMockRecorder) FetchComments(ctx, discussionID any) *gomock.Call {
+// List indicates an expected call of List.
+func (mr *MockCommentRepositoryMockRecorder) List(ctx, discussionID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FetchComments", reflect.TypeOf((*MockCommentRepository)(nil).FetchComments), ctx, discussionID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockCommentRepository)(nil).List), ctx, discussionID)
 }
 
-// LoadComment mocks base method.
-func (m *MockCommentRepository) LoadComment(ctx context.Context, id string) (*Comment, error) {
+// Load mocks base method.
+func (m *MockCommentRepository) Load(ctx context.Context, id string) (*Comment, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "LoadComment", ctx, id)
+	ret := m.ctrl.Call(m, "Load", ctx, id)
 	ret0, _ := ret[0].(*Comment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// LoadComment indicates an expected call of LoadComment.
-func (mr *MockCommentRepositoryMockRecorder) LoadComment(ctx, id any) *gomock.Call {
+// Load indicates an expected call of Load.
+func (mr *MockCommentRepositoryMockRecorder) Load(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoadComment", reflect.TypeOf((*MockCommentRepository)(nil).LoadComment), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Load", reflect.TypeOf((*MockCommentRepository)(nil).Load), ctx, id)
 }
 
-// SaveComment mocks base method.
-func (m *MockCommentRepository) SaveComment(ctx context.Context, comment *Comment) error {
+// Save mocks base method.
+func (m *MockCommentRepository) Save(ctx context.Context, comment *Comment) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SaveComment", ctx, comment)
+	ret := m.ctrl.Call(m, "Save", ctx, comment)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// SaveComment indicates an expected call of SaveComment.
-func (mr *MockCommentRepositoryMockRecorder) SaveComment(ctx, comment any) *gomock.Call {
+// Save indicates an expected call of Save.
+func (mr *MockCommentRepositoryMockRecorder) Save(ctx, comment any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveComment", reflect.TypeOf((*MockCommentRepository)(nil).SaveComment), ctx, comment)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockCommentRepository)(nil).Save), ctx, comment)
 }

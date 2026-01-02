@@ -36,5 +36,5 @@ func (u *ListCommentsUsecase) Execute(ctx context.Context, input ListCommentsInp
 		return nil, err
 	}
 
-	return u.commentRepo.FetchComments(ctx, input.DiscussionID)
+	return u.commentRepo.List(ctx, input.DiscussionID)
 }

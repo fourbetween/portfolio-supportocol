@@ -38,7 +38,7 @@ func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentI
 		return err
 	}
 
-	comment, err := u.commentRepo.LoadComment(ctx, input.ID)
+	comment, err := u.commentRepo.Load(ctx, input.ID)
 	if err != nil {
 		return err
 	}
@@ -47,5 +47,5 @@ func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentI
 		return apperr.ErrForbidden
 	}
 
-	return u.commentRepo.DeleteComment(ctx, comment)
+	return u.commentRepo.Delete(ctx, comment)
 }
