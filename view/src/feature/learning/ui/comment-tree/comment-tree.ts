@@ -25,7 +25,7 @@ export class LearningCommentTree extends LitElement {
   onCommentDelete?: (commentId: string) => void;
 
   @property({ attribute: false })
-  onCommentGenerate?: (commentId: string) => void;
+  onCommentGenerate?: (commentId: string, commentType: string) => void;
 
   private rootComments: Comment[] = [];
   private childrenMap = new Map<string, Comment[]>();

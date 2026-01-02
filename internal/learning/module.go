@@ -63,7 +63,7 @@ func NewHTTPHandler(
 			ListComments:     usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
 			UpdateComment:    usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo),
 			DeleteComment:    usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo),
-			GenerateComment:  usecase.NewGenerateCommentUsecase(discussionRepo, generator),
+			GenerateComment:  usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator),
 		}),
 		api.NewSecurityHandler(jwtSrv),
 		oas.WithErrorHandler(httperr.ErrorHandler),

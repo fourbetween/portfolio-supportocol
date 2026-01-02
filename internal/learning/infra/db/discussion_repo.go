@@ -29,13 +29,16 @@ func (r *DiscussionRepository) SetFactory(fac *domain.Factory) {
 }
 
 func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadParams) (*domain.Discussion, error) {
-	cond := table.Discussions.ID.EQ(mysql.String(params.ID)).
-		AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
+	cond := table.Discussions.ID.EQ(mysql.String(params.ID))
+	if params.CreatedBy != "" {
+		cond = cond.AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
+	}
 
 	stmt := mysql.
 		SELECT(table.Discussions.AllColumns).
 		FROM(table.Discussions).
-		WHERE(cond)
+		WHERE(cond).
+		LIMIT(1)
 
 	var dest model.Discussions
 	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {

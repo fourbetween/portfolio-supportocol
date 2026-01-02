@@ -1,10 +1,12 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { iconStyle } from "../../../../shared/style/icon";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-edit-form/comment-edit-form";
+import "../comment-type-popup/comment-type-popup";
+import type { LearningCommentTypePopup } from "../comment-type-popup/comment-type-popup";
 
 @customElement("learning-comment-item")
 export class LearningCommentItem extends LitElement {
@@ -27,10 +29,13 @@ export class LearningCommentItem extends LitElement {
   onCommentDelete?: (commentId: string) => void;
 
   @property({ attribute: false })
-  onCommentGenerate?: (commentId: string) => void;
+  onCommentGenerate?: (commentId: string, commentType: string) => void;
 
   @state()
   private isEditing = false;
+
+  @query("learning-comment-type-popup")
+  private typePopup!: LearningCommentTypePopup;
 
   render() {
     if (!this.comment) return html``;
@@ -81,6 +86,14 @@ export class LearningCommentItem extends LitElement {
           delete
         </button>
       </div>
+      <learning-comment-type-popup
+        .types=${this.availableTypes}
+        .onSelect=${(type: string) => {
+          if (this.onCommentGenerate && this.comment) {
+            this.onCommentGenerate(this.comment.id, type);
+          }
+        }}
+      ></learning-comment-type-popup>
     `;
   }
 
@@ -95,11 +108,10 @@ export class LearningCommentItem extends LitElement {
     this.isEditing = true;
   }
 
-  private handleGenerateClick(e: Event) {
+  private async handleGenerateClick(e: Event) {
     e.stopPropagation();
-    if (this.onCommentGenerate && this.comment) {
-      this.onCommentGenerate(this.comment.id);
-    }
+    await this.updateComplete;
+    this.typePopup?.open();
   }
 
   private handleDeleteClick(e: Event) {

@@ -352,10 +352,12 @@ describe("learning-comment-tree", async () => {
     expect(deletedId).toBe("1");
   });
 
-  it("AI生成ボタンをクリックすると onCommentGenerate が呼ばれること", async () => {
+  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると onCommentGenerate が呼ばれること", async () => {
     let generatedId = "";
-    elem.onCommentGenerate = (id: string) => {
+    let generatedType = "";
+    elem.onCommentGenerate = (id: string, type: string) => {
       generatedId = id;
+      generatedType = type;
     };
     elem.comments = [
       {
@@ -375,6 +377,12 @@ describe("learning-comment-tree", async () => {
     const generateButton = page.getByRole("button", { name: "generate" });
     await generateButton.click();
 
+    // ポップアップが表示されるのを待つ
+    const typeButton = page.getByRole("button", { name: "idea" });
+    await expect.element(typeButton).toBeVisible();
+    await typeButton.click();
+
     expect(generatedId).toBe("1");
+    expect(generatedType).toBe("idea");
   });
 });

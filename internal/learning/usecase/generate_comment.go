@@ -8,15 +8,18 @@ import (
 
 type GenerateCommentUsecase struct {
 	discussionRepo domain.DiscussionRepository
+	commentRepo    domain.CommentRepository
 	generator      domain.CommentGenerator
 }
 
 func NewGenerateCommentUsecase(
 	discussionRepo domain.DiscussionRepository,
+	commentRepo domain.CommentRepository,
 	generator domain.CommentGenerator,
 ) *GenerateCommentUsecase {
 	return &GenerateCommentUsecase{
 		discussionRepo: discussionRepo,
+		commentRepo:    commentRepo,
 		generator:      generator,
 	}
 }
@@ -38,9 +41,19 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 		return nil, err
 	}
 
-	return u.generator.Generate(ctx, domain.GenerateCommentParams{
+	comments, err := u.generator.Generate(ctx, domain.GenerateCommentParams{
 		DiscussionID:    input.DiscussionID,
 		ParentCommentID: input.ParentCommentID,
 		CommentType:     input.CommentType,
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	for _, c := range comments {
+		if err := u.commentRepo.Save(ctx, c); err != nil {
+			return nil, err
+		}
+	}
+	return comments, nil
 }
