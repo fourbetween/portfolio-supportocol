@@ -43,12 +43,12 @@ func NewCommentGenerator(
 }
 
 func (cg *CommentGenerator) Generate(ctx context.Context, params domain.GenerateCommentParams) ([]*domain.Comment, error) {
-	discussion, path, siblings, err := cg.fetchContext(ctx, params)
+	discussion, path, children, err := cg.fetchContext(ctx, params)
 	if err != nil {
 		return nil, err
 	}
 
-	prompt := cg.buildPrompt(discussion, path, siblings, params.CommentType)
+	prompt := cg.buildPrompt(discussion, path, children, params.CommentType)
 
 	contents, err := cg.generateWithAI(ctx, prompt)
 	if err != nil {
@@ -71,7 +71,6 @@ func (cg *CommentGenerator) fetchContext(
 	}
 
 	var path []*domain.Comment
-	var siblings []*domain.Comment
 	if params.ParentCommentID != nil {
 		p, err := cg.commentRepo.PathToRoot(ctx, *params.ParentCommentID)
 		if err != nil {
@@ -79,14 +78,14 @@ func (cg *CommentGenerator) fetchContext(
 		}
 		slices.Reverse(p)
 		path = p
-
-		siblings, err = cg.commentRepo.Siblings(ctx, *params.ParentCommentID)
-		if err != nil {
-			return nil, nil, nil, err
-		}
 	}
 
-	return discussion, path, siblings, nil
+	children, err := cg.commentRepo.Children(ctx, params.DiscussionID, params.ParentCommentID)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	return discussion, path, children, nil
 }
 
 func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) ([]string, error) {
@@ -150,11 +149,11 @@ func (cg *CommentGenerator) createComments(params domain.GenerateCommentParams, 
 	return result, nil
 }
 
-func (cg *CommentGenerator) buildPrompt(discussion *domain.Discussion, path []*domain.Comment, siblings []*domain.Comment, commentType string) string {
+func (cg *CommentGenerator) buildPrompt(discussion *domain.Discussion, path []*domain.Comment, children []*domain.Comment, commentType string) string {
 	var sb strings.Builder
 	cg.writeDiscussionTheme(&sb, discussion)
 	cg.writeContext(&sb, path)
-	cg.writeSiblings(&sb, siblings)
+	cg.writeChildren(&sb, children)
 	cg.writeInstructions(&sb, commentType)
 	return sb.String()
 }
@@ -173,20 +172,20 @@ func (cg *CommentGenerator) writeContext(sb *strings.Builder, path []*domain.Com
 	}
 }
 
-func (cg *CommentGenerator) writeSiblings(sb *strings.Builder, siblings []*domain.Comment) {
-	if len(siblings) == 0 {
+func (cg *CommentGenerator) writeChildren(sb *strings.Builder, children []*domain.Comment) {
+	if len(children) == 0 {
 		return
 	}
-	sb.WriteString("Existing Sibling Comments (Do NOT duplicate these):\n")
-	for _, s := range siblings {
-		fmt.Fprintf(sb, "- %s\n", s.Content())
+	sb.WriteString("Existing Comments (Do NOT duplicate these):\n")
+	for _, c := range children {
+		fmt.Fprintf(sb, "- %s\n", c.Content())
 	}
 }
 
 func (cg *CommentGenerator) writeInstructions(sb *strings.Builder, commentType string) {
 	fmt.Fprintf(sb, "\n\nBased on the context above, generate 3 appropriate comments as \"%s\".\n", commentType)
 	sb.WriteString("Each comment should be concise.\n")
-	sb.WriteString("Ensure the generated comments provide new perspectives and do not overlap with the existing sibling comments.\n")
+	sb.WriteString("Ensure the generated comments provide new perspectives and do not overlap with the existing comments.\n")
 	sb.WriteString("The style of the generated comments (e.g., use of punctuation, politeness level, tone) should match the existing comments in the context.\n")
 	sb.WriteString("The language of the generated content must match the language used in the discussion theme and previous comments.")
 }

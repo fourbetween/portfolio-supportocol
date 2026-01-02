@@ -23,6 +23,6 @@ type (
 		Save(ctx context.Context, comment *Comment) error
 		Delete(ctx context.Context, comment *Comment) error
 		PathToRoot(ctx context.Context, commentID string) ([]*Comment, error)
-		Siblings(ctx context.Context, commentID string) ([]*Comment, error)
+		Children(ctx context.Context, discussionID string, parentCommentID *string) ([]*Comment, error)
 	}
 )
