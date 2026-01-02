@@ -26,6 +26,9 @@ export class LearningCommentItem extends LitElement {
   @property({ attribute: false })
   onCommentDelete?: (commentId: string) => void;
 
+  @property({ attribute: false })
+  onCommentGenerate?: (commentId: string) => void;
+
   @state()
   private isEditing = false;
 
@@ -64,6 +67,13 @@ export class LearningCommentItem extends LitElement {
           edit
         </button>
         <button
+          class="generate-button material-symbols-outlined"
+          @click=${this.handleGenerateClick}
+          aria-label="generate"
+        >
+          psychology
+        </button>
+        <button
           class="delete-button material-symbols-outlined"
           @click=${this.handleDeleteClick}
           aria-label="delete"
@@ -85,6 +95,13 @@ export class LearningCommentItem extends LitElement {
     this.isEditing = true;
   }
 
+  private handleGenerateClick(e: Event) {
+    e.stopPropagation();
+    if (this.onCommentGenerate && this.comment) {
+      this.onCommentGenerate(this.comment.id);
+    }
+  }
+
   private handleDeleteClick(e: Event) {
     e.stopPropagation();
     if (this.onCommentDelete && this.comment) {
@@ -103,6 +120,7 @@ export class LearningCommentItem extends LitElement {
         position: relative;
       }
       .edit-button,
+      .generate-button,
       .delete-button {
         position: absolute;
         bottom: -16px;
@@ -124,18 +142,28 @@ export class LearningCommentItem extends LitElement {
       .edit-button {
         left: 8px;
       }
-      .delete-button {
+      .generate-button {
         left: 48px;
       }
+      .delete-button {
+        left: 88px;
+      }
       .card-container:hover .edit-button,
+      .card-container:hover .generate-button,
       .card-container:hover .delete-button {
         opacity: 1;
       }
       .edit-button:hover,
+      .generate-button:hover,
       .delete-button:hover {
         background: var(--color-canvas-subtle);
         color: var(--color-accent-fg);
         border-color: var(--color-accent-fg);
+      }
+      .generate-button:hover {
+        background: var(--color-canvas-subtle);
+        color: var(--color-btn-primary-bg);
+        border-color: var(--color-btn-primary-bg);
       }
       .delete-button:hover {
         color: var(--color-danger-fg);

@@ -57,4 +57,17 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
 
     expect(deletedId).toBe("1");
   });
+
+  it("AI生成ボタンをクリックすると onCommentGenerate が呼ばれる", async () => {
+    let generatedId = "";
+    (element as any).onCommentGenerate = (id: string) => {
+      generatedId = id;
+    };
+
+    const generateButton = page.getByRole("button", { name: "generate" });
+    await expect.element(generateButton).toBeVisible();
+    await generateButton.click();
+
+    expect(generatedId).toBe("1");
+  });
 });

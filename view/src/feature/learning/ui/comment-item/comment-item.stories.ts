@@ -28,6 +28,8 @@ export const Default: Story = {
       .comment=${mockComment}
       .availableTypes=${availableTypes}
       .onCommentDelete=${(id: string) => console.log("Delete comment:", id)}
+      .onCommentGenerate=${(id: string) =>
+        console.log("Generate comment for:", id)}
     ></learning-comment-item>
   `,
 };

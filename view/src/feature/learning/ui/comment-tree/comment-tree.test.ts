@@ -322,11 +322,36 @@ describe("learning-comment-tree", async () => {
     await elem.updateComplete;
 
     const card = page.getByText("root comment");
-    await card.hover();
+    // await card.hover();
 
     const deleteButton = page.getByRole("button", { name: "delete" });
     await deleteButton.click();
 
     expect(deletedId).toBe("1");
+  });
+
+  it("AI生成ボタンをクリックすると onCommentGenerate が呼ばれること", async () => {
+    let generatedId = "";
+    elem.onCommentGenerate = (id: string) => {
+      generatedId = id;
+    };
+    elem.comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root comment",
+        commentType: "idea",
+      },
+    ];
+    await elem.updateComplete;
+
+    const card = page.getByText("root comment");
+    // await card.hover();
+
+    const generateButton = page.getByRole("button", { name: "generate" });
+    await generateButton.click();
+
+    expect(generatedId).toBe("1");
   });
 });
