@@ -119,8 +119,8 @@ func (r *CommentRepository) toCommentModel(c *domain.Comment) model.Comments {
 		ParentCommentID: c.ParentCommentID(),
 		CommentType:     c.CommentType(),
 		Content:         c.Content(),
-		PostedBy:        c.PostedBy(),
 		Status:          string(c.Status()),
+		PostedBy:        c.PostedBy(),
 		CreatedAt:       c.CreatedAt(),
 	}
 }
