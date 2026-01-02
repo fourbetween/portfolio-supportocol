@@ -45,4 +45,16 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
       .element(page.getByText("This is a test comment"))
       .not.toBeInTheDocument();
   });
+
+  it("削除ボタンをクリックすると onCommentDelete が呼ばれる", async () => {
+    let deletedId = "";
+    element.onCommentDelete = (id: string) => {
+      deletedId = id;
+    };
+
+    const deleteButton = page.getByRole("button", { name: "delete" });
+    await deleteButton.click();
+
+    expect(deletedId).toBe("1");
+  });
 });

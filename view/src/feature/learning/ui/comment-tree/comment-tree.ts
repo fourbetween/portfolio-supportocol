@@ -21,6 +21,9 @@ export class LearningCommentTree extends LitElement {
     detail: { commentType: string; content: string }
   ) => void;
 
+  @property({ attribute: false })
+  onCommentDelete?: (commentId: string) => void;
+
   private rootComments: Comment[] = [];
   private childrenMap = new Map<string, Comment[]>();
   private availableTypes: string[] = [];
@@ -99,6 +102,7 @@ export class LearningCommentTree extends LitElement {
           .availableTypes=${this.availableTypes}
           .onCommentClick=${this.onCommentClick}
           .onCommentUpdate=${this.onCommentUpdate}
+          .onCommentDelete=${this.onCommentDelete}
         ></learning-comment-item>
         <div class="children">
           ${Object.entries(groupedChildren).map(

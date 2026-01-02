@@ -75,6 +75,43 @@ export class LearningCommentExplorerWidget extends LitElement {
     this.dispatchEvent(
       new CustomEvent("comment-updated", {
         detail: data,
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
+  private async handleCommentDelete(commentId: string) {
+    if (!this.discussionId) return;
+    if (!confirm("Are you sure you want to delete this comment?")) return;
+
+    const { error } = await client.DELETE(
+      "/learning/discussions/{discussionId}/comments/{commentId}",
+      {
+        params: {
+          path: {
+            discussionId: this.discussionId,
+            commentId,
+          },
+        },
+      }
+    );
+
+    if (error) {
+      showToast(this, error.message, "error");
+      return;
+    }
+
+    if (this.selectedCommentId === commentId) {
+      this.selectedCommentId = undefined;
+    }
+
+    showToast(this, "Comment deleted.", "success", 2000);
+    this.dispatchEvent(
+      new CustomEvent("comment-deleted", {
+        detail: { id: commentId },
+        bubbles: true,
+        composed: true,
       })
     );
   }
@@ -157,6 +194,7 @@ export class LearningCommentExplorerWidget extends LitElement {
               id: string,
               detail: { commentType: string; content: string }
             ) => this.handleCommentUpdate(id, detail)}
+            .onCommentDelete=${(id: string) => this.handleCommentDelete(id)}
           ></learning-comment-tree>
         </div>
       </div>
