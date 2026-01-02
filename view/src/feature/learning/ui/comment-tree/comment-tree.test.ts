@@ -304,4 +304,29 @@ describe("learning-comment-tree", async () => {
     const questionBadges = page.getByText("question", { exact: true }).all();
     expect(questionBadges.length).toBe(1);
   });
+
+  it("削除ボタンをクリックすると onCommentDelete が呼ばれること", async () => {
+    let deletedId = "";
+    elem.onCommentDelete = (id: string) => {
+      deletedId = id;
+    };
+    elem.comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root comment",
+        commentType: "idea",
+      },
+    ];
+    await elem.updateComplete;
+
+    const card = page.getByText("root comment");
+    await card.hover();
+
+    const deleteButton = page.getByRole("button", { name: "delete" });
+    await deleteButton.click();
+
+    expect(deletedId).toBe("1");
+  });
 });

@@ -120,6 +120,10 @@ export class LearningDashboardPage extends LitElement {
     );
   }
 
+  private _handleCommentDeleted(e: CustomEvent<{ id: string }>) {
+    this._comments = this._comments.filter((c) => c.id !== e.detail.id);
+  }
+
   render() {
     const selectedDiscussion = this._discussions.find(
       (d) => d.id === this._selectedDiscussionId
@@ -154,6 +158,7 @@ export class LearningDashboardPage extends LitElement {
               .comments=${this._comments}
               @comment-created=${this._handleCommentCreated}
               @comment-updated=${this._handleCommentUpdated}
+              @comment-deleted=${this._handleCommentDeleted}
             ></learning-comment-explorer-widget>
           </div>
         </main>

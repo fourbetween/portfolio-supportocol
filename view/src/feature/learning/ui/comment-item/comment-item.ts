@@ -23,6 +23,9 @@ export class LearningCommentItem extends LitElement {
     detail: { commentType: string; content: string }
   ) => void;
 
+  @property({ attribute: false })
+  onCommentDelete?: (commentId: string) => void;
+
   @state()
   private isEditing = false;
 
@@ -60,6 +63,13 @@ export class LearningCommentItem extends LitElement {
         >
           edit
         </button>
+        <button
+          class="delete-button material-symbols-outlined"
+          @click=${this.handleDeleteClick}
+          aria-label="delete"
+        >
+          delete
+        </button>
       </div>
     `;
   }
@@ -75,6 +85,13 @@ export class LearningCommentItem extends LitElement {
     this.isEditing = true;
   }
 
+  private handleDeleteClick(e: Event) {
+    e.stopPropagation();
+    if (this.onCommentDelete && this.comment) {
+      this.onCommentDelete(this.comment.id);
+    }
+  }
+
   static styles = [
     baseStyle,
     iconStyle,
@@ -85,10 +102,10 @@ export class LearningCommentItem extends LitElement {
       .card-container {
         position: relative;
       }
-      .edit-button {
+      .edit-button,
+      .delete-button {
         position: absolute;
         bottom: -16px;
-        left: 8px;
         background: var(--color-canvas-default);
         color: var(--color-fg-muted);
         border: 1px solid var(--color-border-default);
@@ -104,13 +121,25 @@ export class LearningCommentItem extends LitElement {
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
         z-index: 1;
       }
-      .card-container:hover .edit-button {
+      .edit-button {
+        left: 8px;
+      }
+      .delete-button {
+        left: 48px;
+      }
+      .card-container:hover .edit-button,
+      .card-container:hover .delete-button {
         opacity: 1;
       }
-      .edit-button:hover {
+      .edit-button:hover,
+      .delete-button:hover {
         background: var(--color-canvas-subtle);
         color: var(--color-accent-fg);
         border-color: var(--color-accent-fg);
+      }
+      .delete-button:hover {
+        color: var(--color-danger-fg);
+        border-color: var(--color-danger-fg);
       }
     `,
   ];

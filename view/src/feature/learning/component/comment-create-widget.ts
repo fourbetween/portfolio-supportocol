@@ -19,7 +19,7 @@ export class LearningCommentCreateWidget extends LitElement {
   parentCommentId?: string;
 
   @property({ type: Array })
-  comments: Comment[] = [];
+  comments?: Comment[] = [];
 
   @state()
   private isCreating = false;
@@ -35,7 +35,7 @@ export class LearningCommentCreateWidget extends LitElement {
   willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("comments")) {
       this.availableTypes = [];
-      this.availableTypes = deriveCommentFrame(this.comments).types;
+      this.availableTypes = deriveCommentFrame(this.comments || []).types;
     }
   }
 

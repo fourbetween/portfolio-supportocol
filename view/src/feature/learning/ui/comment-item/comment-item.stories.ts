@@ -27,6 +27,7 @@ export const Default: Story = {
     <learning-comment-item
       .comment=${mockComment}
       .availableTypes=${availableTypes}
+      .onCommentDelete=${(id: string) => console.log("Delete comment:", id)}
     ></learning-comment-item>
   `,
 };
