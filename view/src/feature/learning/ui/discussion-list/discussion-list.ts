@@ -64,6 +64,7 @@ export class LearningDiscussionList extends LitElement {
         overflow: hidden;
       }
       .item {
+        position: relative;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -83,6 +84,10 @@ export class LearningDiscussionList extends LitElement {
       }
       .delete-button {
         display: none;
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
         padding: 4px;
         border: none;
         background: none;
