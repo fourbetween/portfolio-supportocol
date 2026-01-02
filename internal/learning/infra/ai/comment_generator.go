@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
@@ -54,11 +55,8 @@ func (cg *CommentGenerator) Generate(ctx context.Context, params domain.Generate
 		if err != nil {
 			return nil, err
 		}
-		// Reverse to get root-to-parent order
-		path = make([]*domain.Comment, len(p))
-		for i, c := range p {
-			path[len(p)-1-i] = c
-		}
+		slices.Reverse(p)
+		path = p
 	}
 
 	prompt := cg.buildPrompt(discussion, path, params.CommentType)
