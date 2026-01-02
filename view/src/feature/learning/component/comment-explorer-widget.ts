@@ -6,6 +6,7 @@ import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import { client } from "../api/client";
 import type { Comment } from "../model/comment";
+import { deriveCommentFrame } from "../model/comment-frame";
 import "../ui/comment-context/comment-context";
 import "../ui/comment-tree/comment-tree";
 import "./comment-create-widget";
@@ -21,6 +22,9 @@ export class LearningCommentExplorerWidget extends LitElement {
   @state()
   private selectedCommentId?: string;
 
+  @state()
+  private availableTypes: string[] = [];
+
   private commentMap = new Map<string, Comment>();
   private childrenMap = new Map<string, Comment[]>();
 
@@ -28,8 +32,10 @@ export class LearningCommentExplorerWidget extends LitElement {
     if (changedProperties.has("comments")) {
       this.commentMap.clear();
       this.childrenMap.clear();
+      this.availableTypes = [];
 
       if (this.comments) {
+        this.availableTypes = deriveCommentFrame(this.comments).types;
         for (const comment of this.comments) {
           this.commentMap.set(comment.id, comment);
           if (comment.parentCommentId) {
@@ -247,16 +253,33 @@ export class LearningCommentExplorerWidget extends LitElement {
                 </div>
                 <learning-comment-context
                   .ancestors=${ancestors}
+                  .availableTypes=${this.availableTypes}
                   .onCommentClick=${(c: Comment) => this.handleCommentClick(c)}
+                  .onCommentUpdate=${(
+                    id: string,
+                    detail: { commentType: string; content: string }
+                  ) => this.handleCommentUpdate(id, detail)}
+                  .onCommentDelete=${(id: string) =>
+                    this.handleCommentDelete(id)}
+                  .onCommentGenerate=${(id: string, type: string) =>
+                    this.handleCommentGenerate(id, type)}
+                  .onCommentReply=${(
+                    id: string,
+                    detail: { commentType: string; content: string }
+                  ) => this.handleCommentReply(id, detail)}
                 ></learning-comment-context>
               </div>
             `
           : nothing}
-        <learning-comment-create-widget
-          .discussionId=${this.discussionId}
-          .parentCommentId=${this.selectedCommentId}
-          .comments=${this.comments}
-        ></learning-comment-create-widget>
+        ${this.selectedCommentId
+          ? nothing
+          : html`
+              <learning-comment-create-widget
+                .discussionId=${this.discussionId}
+                .parentCommentId=${this.selectedCommentId}
+                .comments=${this.comments}
+              ></learning-comment-create-widget>
+            `}
         <div class="section">
           <div class="section-title">
             ${this.selectedCommentId ? "Replies" : "All Comments"}
