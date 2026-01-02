@@ -31,8 +31,20 @@ export class LearningCommentItem extends LitElement {
   @property({ attribute: false })
   onCommentGenerate?: (commentId: string, commentType: string) => void;
 
+  @property({ attribute: false })
+  onCommentReply?: (
+    parentCommentId: string,
+    detail: { commentType: string; content: string }
+  ) => void;
+
   @state()
   private isEditing = false;
+
+  @state()
+  private isReplying = false;
+
+  @state()
+  private selectedReplyType?: string;
 
   @query("learning-comment-type-popup")
   private typePopup!: LearningCommentTypePopup;
@@ -72,6 +84,13 @@ export class LearningCommentItem extends LitElement {
           edit
         </button>
         <button
+          class="reply-button material-symbols-outlined"
+          @click=${this.handleReplyClick}
+          aria-label="reply"
+        >
+          reply
+        </button>
+        <button
           class="generate-button material-symbols-outlined"
           @click=${this.handleGenerateClick}
           aria-label="generate"
@@ -86,14 +105,33 @@ export class LearningCommentItem extends LitElement {
           delete
         </button>
       </div>
-      <learning-comment-type-popup
-        .types=${this.availableTypes}
-        .onSelect=${(type: string) => {
-          if (this.onCommentGenerate && this.comment) {
-            this.onCommentGenerate(this.comment.id, type);
-          }
-        }}
-      ></learning-comment-type-popup>
+      ${this.isReplying && this.selectedReplyType
+        ? html`
+            <learning-comment-edit-form
+              class="reply-form"
+              .initialType=${this.selectedReplyType}
+              .availableTypes=${this.availableTypes}
+              .onCancel=${() => (this.isReplying = false)}
+              .onSave=${(detail: { commentType: string; content: string }) => {
+                if (this.onCommentReply) {
+                  this.onCommentReply(this.comment!.id, detail);
+                }
+                this.isReplying = false;
+              }}
+            ></learning-comment-edit-form>
+          `
+        : html`
+            <learning-comment-type-popup
+              .types=${this.availableTypes}
+              .onSelect=${(type: string) => {
+                if (this.isReplying) {
+                  this.selectedReplyType = type;
+                } else if (this.onCommentGenerate && this.comment) {
+                  this.onCommentGenerate(this.comment.id, type);
+                }
+              }}
+            ></learning-comment-type-popup>
+          `}
     `;
   }
 
@@ -108,8 +146,16 @@ export class LearningCommentItem extends LitElement {
     this.isEditing = true;
   }
 
+  private async handleReplyClick(e: Event) {
+    e.stopPropagation();
+    this.isReplying = true;
+    await this.updateComplete;
+    this.typePopup?.open();
+  }
+
   private async handleGenerateClick(e: Event) {
     e.stopPropagation();
+    this.isReplying = false;
     await this.updateComplete;
     this.typePopup?.open();
   }
@@ -132,6 +178,7 @@ export class LearningCommentItem extends LitElement {
         position: relative;
       }
       .edit-button,
+      .reply-button,
       .generate-button,
       .delete-button {
         position: absolute;
@@ -154,18 +201,23 @@ export class LearningCommentItem extends LitElement {
       .edit-button {
         left: 8px;
       }
-      .generate-button {
+      .reply-button {
         left: 48px;
       }
-      .delete-button {
+      .generate-button {
         left: 88px;
       }
+      .delete-button {
+        left: 128px;
+      }
       .card-container:hover .edit-button,
+      .card-container:hover .reply-button,
       .card-container:hover .generate-button,
       .card-container:hover .delete-button {
         opacity: 1;
       }
       .edit-button:hover,
+      .reply-button:hover,
       .generate-button:hover,
       .delete-button:hover {
         background: var(--color-canvas-subtle);
@@ -180,6 +232,11 @@ export class LearningCommentItem extends LitElement {
       .delete-button:hover {
         color: var(--color-danger-fg);
         border-color: var(--color-danger-fg);
+      }
+      .reply-form {
+        margin-left: 8px;
+        padding-left: 8px;
+        margin-top: 8px;
       }
     `,
   ];

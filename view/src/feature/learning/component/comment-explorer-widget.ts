@@ -152,6 +152,44 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
+  private async handleCommentReply(
+    parentCommentId: string,
+    detail: { commentType: string; content: string }
+  ) {
+    if (!this.discussionId) return;
+    const { data, error } = await client.POST(
+      "/learning/discussions/{discussionId}/comments",
+      {
+        params: {
+          path: {
+            discussionId: this.discussionId,
+          },
+        },
+        body: {
+          parentCommentId,
+          commentType: detail.commentType,
+          content: detail.content,
+        },
+      }
+    );
+
+    if (error) {
+      showToast(this, error.message, "error");
+      return;
+    }
+
+    showToast(this, "Comment created.", "success", 2000);
+    if (data) {
+      this.dispatchEvent(
+        new CustomEvent("comment-created", {
+          detail: data,
+          bubbles: true,
+          composed: true,
+        })
+      );
+    }
+  }
+
   private getAncestors(selectedId: string): Comment[] {
     const ancestors: Comment[] = [];
     let currentId: string | null = selectedId;
@@ -233,6 +271,10 @@ export class LearningCommentExplorerWidget extends LitElement {
             .onCommentDelete=${(id: string) => this.handleCommentDelete(id)}
             .onCommentGenerate=${(id: string, type: string) =>
               this.handleCommentGenerate(id, type)}
+            .onCommentReply=${(
+              id: string,
+              detail: { commentType: string; content: string }
+            ) => this.handleCommentReply(id, detail)}
           ></learning-comment-tree>
         </div>
       </div>

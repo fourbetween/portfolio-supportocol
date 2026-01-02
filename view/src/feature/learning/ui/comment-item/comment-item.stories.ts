@@ -31,6 +31,8 @@ export const Default: Story = {
       .onCommentDelete=${(id: string) => console.log("Delete comment:", id)}
       .onCommentGenerate=${(id: string, type: string) =>
         console.log("Generate comment for:", id, "with type:", type)}
+      .onCommentReply=${(id: string, detail: any) =>
+        console.log("Reply to comment:", id, "with detail:", detail)}
     ></learning-comment-item>
   `,
 };
