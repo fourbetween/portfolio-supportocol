@@ -1,38 +1,54 @@
+import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import "./comment-add-button";
-import type { LearningCommentAddButton } from "./comment-add-button";
 
 describe("learning-comment-add-button", () => {
-  let el: LearningCommentAddButton;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
-    el = document.createElement(
-      "learning-comment-add-button"
-    ) as LearningCommentAddButton;
-    document.body.appendChild(el);
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    el?.remove();
+    container.remove();
   });
 
   it("isReply が false の場合、'New Comment' と表示されること", async () => {
-    el.isReply = false;
-    await el.updateComplete;
+    render(
+      html`
+        <learning-comment-add-button
+          .isReply=${false}
+        ></learning-comment-add-button>
+      `,
+      container
+    );
     await expect.element(page.getByText("New Comment")).toBeVisible();
   });
 
   it("isReply が true の場合、'Reply' と表示されること", async () => {
-    el.isReply = true;
-    await el.updateComplete;
+    render(
+      html`
+        <learning-comment-add-button
+          .isReply=${true}
+        ></learning-comment-add-button>
+      `,
+      container
+    );
     await expect.element(page.getByText("Reply")).toBeVisible();
   });
 
   it("クリックされたときに onClick コールバックが実行されること", async () => {
     const handleClick = vi.fn();
-    el.onClick = handleClick;
-    await el.updateComplete;
+    render(
+      html`
+        <learning-comment-add-button
+          .onClick=${handleClick}
+        ></learning-comment-add-button>
+      `,
+      container
+    );
 
     await page.getByRole("button").click();
     expect(handleClick).toHaveBeenCalled();

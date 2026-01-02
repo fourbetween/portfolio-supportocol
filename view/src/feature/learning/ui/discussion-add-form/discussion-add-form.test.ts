@@ -1,40 +1,52 @@
+import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { page } from "vitest/browser";
 import "./discussion-add-form";
-import type { LearningDiscussionAddForm } from "./discussion-add-form";
 
-describe("learning-discussion-add-form", async () => {
-  let elem: LearningDiscussionAddForm;
+describe("learning-discussion-add-form", () => {
+  let container: HTMLElement;
 
   beforeEach(() => {
-    elem = document.createElement(
-      "learning-discussion-add-form"
-    ) as LearningDiscussionAddForm;
-    document.body.appendChild(elem);
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    elem.remove();
+    container.remove();
   });
 
   it("テーマを入力して追加ボタンを押したときに onSubmit が呼ばれること", async () => {
     const onSubmit = vi.fn();
-    elem.onSubmit = onSubmit;
-    await elem.updateComplete;
+    render(
+      html`
+        <learning-discussion-add-form
+          .onSubmit=${onSubmit}
+        ></learning-discussion-add-form>
+      `,
+      container
+    );
 
-    const input = elem.shadowRoot!.querySelector("input")!;
-    input.value = "新しい議論";
-    input.dispatchEvent(new InputEvent("input"));
-    await elem.updateComplete;
+    const input = page.getByPlaceholder("New discussion theme");
+    await input.fill("新しい議論");
 
-    const button = elem.shadowRoot!.querySelector("button")!;
-    button.click();
+    await page.getByRole("button", { name: "add" }).click();
 
     expect(onSubmit).toHaveBeenCalledWith("新しい議論");
   });
 
   it("ボタンにアイコンが表示されていること", async () => {
-    const button = elem.shadowRoot!.querySelector("button")!;
-    const icon = button.querySelector(".material-symbols-outlined");
+    render(
+      html`
+        <learning-discussion-add-form></learning-discussion-add-form>
+      `,
+      container
+    );
+
+    const button = page.getByRole("button", { name: "add" });
+    await expect.element(button).toBeVisible();
+
+    const element = button.element();
+    const icon = element.querySelector(".material-symbols-outlined");
     expect(icon).not.toBeNull();
     expect(icon?.textContent).toBe("add");
   });

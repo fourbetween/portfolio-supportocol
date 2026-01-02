@@ -1,24 +1,22 @@
+import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import "./comment-card";
-import type { LearningCommentCard } from "./comment-card";
 
 describe("learning-comment-card", async () => {
-  let elem: LearningCommentCard;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
-    elem = document.createElement(
-      "learning-comment-card"
-    ) as LearningCommentCard;
-    document.body.appendChild(elem);
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    elem.remove();
+    container.remove();
   });
 
   it("本文が表示されること", async () => {
-    elem.comment = {
+    const comment = {
       id: "1",
       discussionId: "1",
       parentCommentId: "0",
@@ -26,6 +24,12 @@ describe("learning-comment-card", async () => {
       commentType: "idea",
       status: "active" as const,
     };
+    render(
+      html`
+        <learning-comment-card .comment=${comment}></learning-comment-card>
+      `,
+      container
+    );
     await expect.element(page.getByText("content")).toBeInTheDocument();
   });
 });

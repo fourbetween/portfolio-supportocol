@@ -1,7 +1,12 @@
-import { LitElement, css, html, type PropertyValues } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import {
+  LitElement,
+  css,
+  html,
+  type HTMLTemplateResult,
+  type PropertyValues,
+} from "lit";
+import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
-import { iconStyle } from "../../../../shared/style/icon";
 import type { Comment } from "../../model/comment";
 import { deriveCommentFrame } from "../../model/comment-frame";
 import "../comment-item/comment-item";
@@ -27,8 +32,13 @@ export class LearningCommentTree extends LitElement {
   @property({ attribute: false })
   onCommentGenerate?: (commentId: string, commentType: string) => void;
 
+  @state()
   private rootComments: Comment[] = [];
+
+  @state()
   private childrenMap = new Map<string, Comment[]>();
+
+  @state()
   private availableTypes: string[] = [];
 
   willUpdate(changedProperties: PropertyValues<this>) {
@@ -73,7 +83,7 @@ export class LearningCommentTree extends LitElement {
     `;
   }
 
-  private renderComment(comment: Comment): any {
+  private renderComment(comment: Comment): HTMLTemplateResult {
     const children = this.childrenMap.get(comment.id) || [];
     const groupedChildren = this.groupCommentsByType(children);
 
@@ -96,7 +106,7 @@ export class LearningCommentTree extends LitElement {
     `;
   }
 
-  private renderGroup(type: string, comments: Comment[]) {
+  private renderGroup(type: string, comments: Comment[]): HTMLTemplateResult {
     return html`
       <div class="child-group">
         <learning-comment-type-badge
@@ -121,7 +131,6 @@ export class LearningCommentTree extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     css`
       .comment-node {
         margin-bottom: 16px;

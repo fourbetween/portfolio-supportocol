@@ -12,9 +12,13 @@ export class LearningCommentAddButton extends LitElement {
   @property({ attribute: false })
   onClick?: () => void;
 
+  private _handleClick() {
+    this.onClick?.();
+  }
+
   render() {
     return html`
-      <button class="btn" @click=${() => this.onClick?.()}>
+      <button class="btn" @click=${this._handleClick}>
         <span class="material-symbols-outlined">add_comment</span>
         <span>${this.isReply ? "Reply" : "New Comment"}</span>
       </button>

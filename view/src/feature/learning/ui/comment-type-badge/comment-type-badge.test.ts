@@ -1,32 +1,50 @@
+import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import "./comment-type-badge";
-import type { LearningCommentTypeBadge } from "./comment-type-badge";
 
-describe("learning-comment-type-badge", async () => {
-  let elem: LearningCommentTypeBadge;
+describe("learning-comment-type-badge", () => {
+  let container: HTMLElement;
 
   beforeEach(() => {
-    elem = document.createElement(
-      "learning-comment-type-badge"
-    ) as LearningCommentTypeBadge;
-    document.body.appendChild(elem);
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    elem.remove();
+    container.remove();
   });
 
   it("コメントの種類が表示されること", async () => {
-    elem.type = "idea";
-    await expect.element(page.getByText("idea")).toBeInTheDocument();
+    const type = "idea";
+    render(
+      html`
+        <learning-comment-type-badge
+          .type=${type}
+        ></learning-comment-type-badge>
+      `,
+      container
+    );
+
+    await expect.element(page.getByText("idea")).toBeVisible();
   });
 
   it("バッジのスタイルが適用されていること", async () => {
-    elem.type = "idea";
-    await elem.updateComplete;
-    const label = elem.shadowRoot?.querySelector(".type-label");
-    const style = window.getComputedStyle(label!);
+    const type = "idea";
+    render(
+      html`
+        <learning-comment-type-badge
+          .type=${type}
+        ></learning-comment-type-badge>
+      `,
+      container
+    );
+
+    const badge = page.getByText("idea");
+    await expect.element(badge).toBeVisible();
+
+    const element = badge.element();
+    const style = window.getComputedStyle(element);
     expect(style.backgroundColor).not.toBe("rgba(0, 0, 0, 0)");
     expect(style.borderRadius).not.toBe("0px");
   });

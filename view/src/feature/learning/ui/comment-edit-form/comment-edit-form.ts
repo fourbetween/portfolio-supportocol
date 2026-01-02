@@ -43,6 +43,30 @@ export class LearningCommentEditForm extends LitElement {
     }
   }
 
+  private handleBadgeClick() {
+    this.popup.open();
+  }
+
+  private handleTypeSelect(type: string) {
+    this._commentType = type;
+  }
+
+  private handleInput(e: Event) {
+    const target = e.target as HTMLTextAreaElement;
+    this._content = target.value;
+  }
+
+  private handleSave() {
+    this.onSave?.({
+      commentType: this._commentType,
+      content: this._content,
+    });
+  }
+
+  private handleCancel() {
+    this.onCancel?.();
+  }
+
   render() {
     return html`
       <div class="header">
@@ -53,7 +77,7 @@ export class LearningCommentEditForm extends LitElement {
         ></learning-comment-type-badge>
         <learning-comment-type-popup
           .types=${this.availableTypes}
-          .onSelect=${this.handleTypeSelect}
+          .onSelect=${(type: string) => this.handleTypeSelect(type)}
         ></learning-comment-type-popup>
       </div>
       <div class="content-field">
@@ -82,30 +106,6 @@ export class LearningCommentEditForm extends LitElement {
         </button>
       </div>
     `;
-  }
-
-  private handleBadgeClick() {
-    this.popup.open();
-  }
-
-  private handleTypeSelect = (type: string) => {
-    this._commentType = type;
-  };
-
-  private handleInput(e: Event) {
-    const target = e.target as HTMLTextAreaElement;
-    this._content = target.value;
-  }
-
-  private handleSave() {
-    this.onSave?.({
-      commentType: this._commentType,
-      content: this._content,
-    });
-  }
-
-  private handleCancel() {
-    this.onCancel?.();
   }
 
   static styles = [

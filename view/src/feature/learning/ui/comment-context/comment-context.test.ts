@@ -1,40 +1,49 @@
+import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import "./comment-context";
-import type { LearningCommentContext } from "./comment-context";
 
 describe("learning-comment-context", async () => {
-  let elem: LearningCommentContext;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
-    elem = document.createElement(
-      "learning-comment-context"
-    ) as LearningCommentContext;
-    document.body.appendChild(elem);
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    elem.remove();
+    container.remove();
   });
 
   it("祖先コメントが順番に表示されること", async () => {
-    elem.ancestors = [
+    const ancestors = [
       {
         id: "1",
         discussionId: "d1",
         parentCommentId: null,
-        commentType: "idea", status: "active" as const,
+        commentType: "idea",
+        status: "active" as const,
         content: "First comment",
       },
       {
         id: "2",
         discussionId: "d1",
         parentCommentId: "1",
-        commentType: "question", status: "active" as const,
+        commentType: "question",
+        status: "active" as const,
         content: "Second comment",
       },
     ];
-    await elem.updateComplete;
+
+    render(
+      html`
+        <learning-comment-context
+          .ancestors=${ancestors}
+        ></learning-comment-context>
+      `,
+      container
+    );
+
     await expect.element(page.getByText("First comment")).toBeInTheDocument();
     await expect.element(page.getByText("Second comment")).toBeInTheDocument();
     await expect.element(page.getByText("idea")).toBeInTheDocument();

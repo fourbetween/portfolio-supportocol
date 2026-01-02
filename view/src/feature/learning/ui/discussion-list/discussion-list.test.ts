@@ -1,72 +1,105 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { html, render } from "lit";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import "./discussion-list";
-import type { LearningDiscussionList } from "./discussion-list";
 
-describe("learning-discussion-list", async () => {
-  let elem: LearningDiscussionList;
+describe("learning-discussion-list", () => {
+  let container: HTMLElement;
 
   beforeEach(() => {
-    elem = document.createElement(
-      "learning-discussion-list"
-    ) as LearningDiscussionList;
-    document.body.appendChild(elem);
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    elem.remove();
+    container.remove();
   });
 
   it("議論のテーマが表示されること", async () => {
-    elem.discussions = [
+    const discussions = [
       { id: "1", theme: "テーマ1" },
       { id: "2", theme: "テーマ2" },
     ];
-    await expect.element(page.getByText("テーマ1")).toBeInTheDocument();
-    await expect.element(page.getByText("テーマ2")).toBeInTheDocument();
+    render(
+      html`
+        <learning-discussion-list
+          .discussions=${discussions}
+        ></learning-discussion-list>
+      `,
+      container
+    );
+
+    await expect.element(page.getByText("テーマ1")).toBeVisible();
+    await expect.element(page.getByText("テーマ2")).toBeVisible();
   });
 
   it("議論がない場合にメッセージが表示されること", async () => {
-    elem.discussions = [];
-    await expect
-      .element(page.getByText("No discussions found."))
-      .toBeInTheDocument();
+    render(
+      html`
+        <learning-discussion-list .discussions=${[]}></learning-discussion-list>
+      `,
+      container
+    );
+
+    await expect.element(page.getByText("No discussions found.")).toBeVisible();
   });
 
   it("削除ボタンをクリックすると onDelete が呼ばれること", async () => {
-    let deletedId = "";
-    elem.discussions = [{ id: "1", theme: "テーマ1" }];
-    elem.onDelete = (d) => {
-      deletedId = d.id;
-    };
-    await elem.updateComplete;
+    const onDelete = vi.fn();
+    const discussions = [{ id: "1", theme: "テーマ1" }];
+    render(
+      html`
+        <learning-discussion-list
+          .discussions=${discussions}
+          .onDelete=${onDelete}
+        ></learning-discussion-list>
+      `,
+      container
+    );
 
-    const deleteButton = elem.shadowRoot?.querySelector(
-      ".delete-button"
-    ) as HTMLElement;
-    expect(deleteButton).not.toBeNull();
-    deleteButton.click();
+    const item = page.getByText("テーマ1");
+    await item.hover();
+    await page.getByRole("button", { name: "delete" }).click();
 
-    expect(deletedId).toBe("1");
+    expect(onDelete).toHaveBeenCalledWith(discussions[0]);
   });
 
   it("削除ボタンが絶対配置されていること", async () => {
-    elem.discussions = [{ id: "1", theme: "テーマ1" }];
-    await elem.updateComplete;
+    const discussions = [{ id: "1", theme: "テーマ1" }];
+    render(
+      html`
+        <learning-discussion-list
+          .discussions=${discussions}
+        ></learning-discussion-list>
+      `,
+      container
+    );
 
-    const deleteButton = elem.shadowRoot?.querySelector(
-      ".delete-button"
-    ) as HTMLElement;
-    const style = window.getComputedStyle(deleteButton);
+    const deleteButton = page.getByRole("button", { name: "delete" });
+    await expect.element(deleteButton).toBeInTheDocument();
+
+    const element = deleteButton.element();
+    const style = window.getComputedStyle(element);
     expect(style.position).toBe("absolute");
   });
 
   it("アイテムコンテナが相対配置されていること", async () => {
-    elem.discussions = [{ id: "1", theme: "テーマ1" }];
-    await elem.updateComplete;
+    const discussions = [{ id: "1", theme: "テーマ1" }];
+    render(
+      html`
+        <learning-discussion-list
+          .discussions=${discussions}
+        ></learning-discussion-list>
+      `,
+      container
+    );
 
-    const item = elem.shadowRoot?.querySelector(".item") as HTMLElement;
-    const style = window.getComputedStyle(item);
+    const item = page.getByText("テーマ1");
+    await expect.element(item).toBeVisible();
+
+    const element = item.element();
+    const itemElement = element.closest(".item");
+    const style = window.getComputedStyle(itemElement!);
     expect(style.position).toBe("relative");
   });
 });

@@ -1,7 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
-import { iconStyle } from "../../../../shared/style/icon";
 import type { Comment } from "../../model/comment";
 
 @customElement("learning-comment-card")
@@ -19,7 +18,6 @@ export class LearningCommentCard extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     css`
       :host {
         display: block;
