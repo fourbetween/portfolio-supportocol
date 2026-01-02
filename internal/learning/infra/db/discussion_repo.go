@@ -110,7 +110,7 @@ func (r *DiscussionRepository) LoadComment(ctx context.Context, id string) (*dom
 		return nil, fmt.Errorf("failed to load comment: %w", err)
 	}
 
-	return r.toCommentDomain(dest), nil
+	return r.toCommentDomain(dest)
 }
 
 func (r *DiscussionRepository) FetchComments(ctx context.Context, discussionID string) ([]*domain.Comment, error) {
@@ -126,7 +126,11 @@ func (r *DiscussionRepository) FetchComments(ctx context.Context, discussionID s
 
 	comments := make([]*domain.Comment, len(dest))
 	for i, row := range dest {
-		comments[i] = r.toCommentDomain(row)
+		c, err := r.toCommentDomain(row)
+		if err != nil {
+			return nil, fmt.Errorf("failed to convert comment domain: %w", err)
+		}
+		comments[i] = c
 	}
 
 	return comments, nil
@@ -181,7 +185,7 @@ func (r *DiscussionRepository) toModel(d *domain.Discussion) model.Discussions {
 	}
 }
 
-func (r *DiscussionRepository) toCommentDomain(row model.Comments) *domain.Comment {
+func (r *DiscussionRepository) toCommentDomain(row model.Comments) (*domain.Comment, error) {
 	return r.fac.BuildComment(domain.BuildCommentParams{
 		ID: row.ID,
 		NewCommentParams: domain.NewCommentParams{
@@ -189,6 +193,7 @@ func (r *DiscussionRepository) toCommentDomain(row model.Comments) *domain.Comme
 			ParentCommentID: row.ParentCommentID,
 			CommentTypeID:   row.CommentType,
 			Content:         row.Content,
+			Status:          domain.CommentStatus(row.Status),
 			PostedBy:        row.PostedBy,
 		},
 		CreatedAt: row.CreatedAt,

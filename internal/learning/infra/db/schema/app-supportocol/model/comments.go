@@ -17,6 +17,7 @@ type Comments struct {
 	ParentCommentID *string
 	CommentType     string
 	Content         string
+	Status          string
 	PostedBy        string
 	CreatedAt       time.Time
 	UpdatedAt       time.Time

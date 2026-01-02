@@ -40,14 +40,19 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 		e.FieldStart("content")
 		e.Str(s.Content)
 	}
+	{
+		e.FieldStart("status")
+		s.Status.Encode(e)
+	}
 }
 
-var jsonFieldsNameOfComment = [5]string{
+var jsonFieldsNameOfComment = [6]string{
 	0: "id",
 	1: "discussionId",
 	2: "parentCommentId",
 	3: "commentType",
 	4: "content",
+	5: "status",
 }
 
 // Decode decodes Comment from json.
@@ -113,6 +118,16 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"content\"")
 			}
+		case "status":
+			requiredBitSet[0] |= 1 << 5
+			if err := func() error {
+				if err := s.Status.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"status\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -123,7 +138,7 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011111,
+		0b00111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -165,6 +180,46 @@ func (s *Comment) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Comment) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes CommentStatus as json.
+func (s CommentStatus) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes CommentStatus from json.
+func (s *CommentStatus) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CommentStatus to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch CommentStatus(v) {
+	case CommentStatusActive:
+		*s = CommentStatusActive
+	case CommentStatusProposed:
+		*s = CommentStatusProposed
+	default:
+		*s = CommentStatus(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s CommentStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CommentStatus) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

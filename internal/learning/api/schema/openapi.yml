@@ -50,12 +50,18 @@ components:
           type: string
         content:
           type: string
+        status:
+          type: string
+          enum:
+            - active
+            - proposed
       required:
         - id
         - discussionId
         - parentCommentId
         - commentType
         - content
+        - status
 paths:
   /learning/discussions:
     get:

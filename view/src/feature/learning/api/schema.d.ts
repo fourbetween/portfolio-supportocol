@@ -387,6 +387,8 @@ export interface components {
             parentCommentId: components["schemas"]["Id"] | null;
             commentType: string;
             content: string;
+            /** @enum {string} */
+            status: "active" | "proposed";
         };
     };
     responses: never;

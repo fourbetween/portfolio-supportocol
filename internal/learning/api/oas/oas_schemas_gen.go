@@ -4,6 +4,8 @@ package oas
 
 import (
 	"fmt"
+
+	"github.com/go-faster/errors"
 )
 
 func (s *ErrorStatusCode) Error() string {
@@ -12,11 +14,12 @@ func (s *ErrorStatusCode) Error() string {
 
 // Ref: #/components/schemas/Comment
 type Comment struct {
-	ID              ID     `json:"id"`
-	DiscussionId    ID     `json:"discussionId"`
-	ParentCommentId NilID  `json:"parentCommentId"`
-	CommentType     string `json:"commentType"`
-	Content         string `json:"content"`
+	ID              ID            `json:"id"`
+	DiscussionId    ID            `json:"discussionId"`
+	ParentCommentId NilID         `json:"parentCommentId"`
+	CommentType     string        `json:"commentType"`
+	Content         string        `json:"content"`
+	Status          CommentStatus `json:"status"`
 }
 
 // GetID returns the value of ID.
@@ -44,6 +47,11 @@ func (s *Comment) GetContent() string {
 	return s.Content
 }
 
+// GetStatus returns the value of Status.
+func (s *Comment) GetStatus() CommentStatus {
+	return s.Status
+}
+
 // SetID sets the value of ID.
 func (s *Comment) SetID(val ID) {
 	s.ID = val
@@ -67,6 +75,52 @@ func (s *Comment) SetCommentType(val string) {
 // SetContent sets the value of Content.
 func (s *Comment) SetContent(val string) {
 	s.Content = val
+}
+
+// SetStatus sets the value of Status.
+func (s *Comment) SetStatus(val CommentStatus) {
+	s.Status = val
+}
+
+type CommentStatus string
+
+const (
+	CommentStatusActive   CommentStatus = "active"
+	CommentStatusProposed CommentStatus = "proposed"
+)
+
+// AllValues returns all CommentStatus values.
+func (CommentStatus) AllValues() []CommentStatus {
+	return []CommentStatus{
+		CommentStatusActive,
+		CommentStatusProposed,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CommentStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case CommentStatusActive:
+		return []byte(s), nil
+	case CommentStatusProposed:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CommentStatus) UnmarshalText(data []byte) error {
+	switch CommentStatus(data) {
+	case CommentStatusActive:
+		*s = CommentStatusActive
+		return nil
+	case CommentStatusProposed:
+		*s = CommentStatusProposed
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type CookieAuth struct {

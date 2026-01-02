@@ -8,6 +8,7 @@ type Comment struct {
 	parentCommentID *string
 	commentType     string
 	content         string
+	status          CommentStatus
 	postedBy        string
 	createdAt       time.Time
 }
@@ -30,6 +31,10 @@ func (c *Comment) CommentType() string {
 
 func (c *Comment) Content() string {
 	return c.content
+}
+
+func (c *Comment) Status() CommentStatus {
+	return c.status
 }
 
 func (c *Comment) PostedBy() string {

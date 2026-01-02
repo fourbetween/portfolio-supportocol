@@ -36,13 +36,16 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		return nil, err
 	}
 
-	comment := u.fac.NewComment(domain.NewCommentParams{
+	comment, err := u.fac.NewComment(domain.NewCommentParams{
 		DiscussionID:    input.DiscussionID,
 		ParentCommentID: input.ParentCommentID,
 		CommentTypeID:   input.CommentType,
 		Content:         input.Content,
 		PostedBy:        input.PostedBy,
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	if err := u.repo.SaveComment(ctx, comment); err != nil {
 		return nil, err
