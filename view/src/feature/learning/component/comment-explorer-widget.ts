@@ -196,18 +196,18 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private getAncestors(selectedId: string): Comment[] {
-    const ancestors: Comment[] = [];
+  private getPathToRoot(selectedId: string): Comment[] {
+    const path: Comment[] = [];
     let currentId: string | null = selectedId;
 
     while (currentId) {
       const comment = this.commentMap.get(currentId);
       if (!comment) break;
-      ancestors.unshift(comment);
+      path.unshift(comment);
       currentId = comment.parentCommentId;
     }
 
-    return ancestors;
+    return path;
   }
 
   private getDescendants(selectedId: string): Comment[] {
@@ -229,8 +229,8 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   render() {
-    const ancestors = this.selectedCommentId
-      ? this.getAncestors(this.selectedCommentId)
+    const path = this.selectedCommentId
+      ? this.getPathToRoot(this.selectedCommentId)
       : [];
     const descendants = this.selectedCommentId
       ? this.getDescendants(this.selectedCommentId)
@@ -238,7 +238,7 @@ export class LearningCommentExplorerWidget extends LitElement {
 
     return html`
       <div class="container">
-        ${ancestors.length > 0
+        ${path.length > 0
           ? html`
               <div class="section">
                 <div class="section-header">
@@ -252,7 +252,7 @@ export class LearningCommentExplorerWidget extends LitElement {
                   </button>
                 </div>
                 <learning-comment-context
-                  .ancestors=${ancestors}
+                  .path=${path}
                   .availableTypes=${this.availableTypes}
                   .onCommentClick=${(c: Comment) => this.handleCommentClick(c)}
                   .onCommentUpdate=${(

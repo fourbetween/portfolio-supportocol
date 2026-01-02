@@ -166,6 +166,21 @@ func (mr *MockCommentRepositoryMockRecorder) Load(ctx, id any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Load", reflect.TypeOf((*MockCommentRepository)(nil).Load), ctx, id)
 }
 
+// PathToRoot mocks base method.
+func (m *MockCommentRepository) PathToRoot(ctx context.Context, commentID string) ([]*Comment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "PathToRoot", ctx, commentID)
+	ret0, _ := ret[0].([]*Comment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// PathToRoot indicates an expected call of PathToRoot.
+func (mr *MockCommentRepositoryMockRecorder) PathToRoot(ctx, commentID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PathToRoot", reflect.TypeOf((*MockCommentRepository)(nil).PathToRoot), ctx, commentID)
+}
+
 // Save mocks base method.
 func (m *MockCommentRepository) Save(ctx context.Context, comment *Comment) error {
 	m.ctrl.T.Helper()
@@ -178,4 +193,19 @@ func (m *MockCommentRepository) Save(ctx context.Context, comment *Comment) erro
 func (mr *MockCommentRepositoryMockRecorder) Save(ctx, comment any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockCommentRepository)(nil).Save), ctx, comment)
+}
+
+// Siblings mocks base method.
+func (m *MockCommentRepository) Siblings(ctx context.Context, commentID string) ([]*Comment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Siblings", ctx, commentID)
+	ret0, _ := ret[0].([]*Comment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Siblings indicates an expected call of Siblings.
+func (mr *MockCommentRepositoryMockRecorder) Siblings(ctx, commentID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Siblings", reflect.TypeOf((*MockCommentRepository)(nil).Siblings), ctx, commentID)
 }
