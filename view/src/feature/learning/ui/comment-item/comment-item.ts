@@ -77,13 +77,6 @@ export class LearningCommentItem extends LitElement {
           style="cursor: pointer;"
         ></learning-comment-card>
         <button
-          class="edit-button material-symbols-outlined"
-          @click=${this.handleEditClick}
-          aria-label="edit"
-        >
-          edit
-        </button>
-        <button
           class="reply-button material-symbols-outlined"
           @click=${this.handleReplyClick}
           aria-label="reply"
@@ -96,6 +89,13 @@ export class LearningCommentItem extends LitElement {
           aria-label="generate"
         >
           psychology
+        </button>
+        <button
+          class="edit-button material-symbols-outlined"
+          @click=${this.handleEditClick}
+          aria-label="edit"
+        >
+          edit
         </button>
         <button
           class="delete-button material-symbols-outlined"
@@ -198,13 +198,13 @@ export class LearningCommentItem extends LitElement {
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
         z-index: 1;
       }
-      .edit-button {
+      .reply-button {
         left: 8px;
       }
-      .reply-button {
+      .generate-button {
         left: 48px;
       }
-      .generate-button {
+      .edit-button {
         left: 88px;
       }
       .delete-button {

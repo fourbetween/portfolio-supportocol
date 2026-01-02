@@ -137,4 +137,26 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
       content: "This is a reply",
     });
   });
+
+  it("アクションボタンが正しい順序（reply, generate, edit, delete）で並んでいる", async () => {
+    render(
+      html`
+        <learning-comment-item
+          .comment=${mockComment}
+          .availableTypes=${availableTypes}
+        ></learning-comment-item>
+      `,
+      container
+    );
+
+    const buttons = page.getByRole("button");
+    await expect.element(buttons.nth(0)).toHaveAttribute("aria-label", "reply");
+    await expect
+      .element(buttons.nth(1))
+      .toHaveAttribute("aria-label", "generate");
+    await expect.element(buttons.nth(2)).toHaveAttribute("aria-label", "edit");
+    await expect
+      .element(buttons.nth(3))
+      .toHaveAttribute("aria-label", "delete");
+  });
 });
