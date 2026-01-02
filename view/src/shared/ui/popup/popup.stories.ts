@@ -9,7 +9,7 @@ const meta: Meta = {
   render: (args) => {
     const open = () => {
       const popup = document.querySelector("ui-popup") as Popup;
-      popup.open();
+      popup.open = true;
     };
     return html`
       <button @click=${open}>Open Popup</button>

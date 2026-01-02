@@ -39,11 +39,11 @@ export class IdentityAuthPopup extends LitElement {
   }
 
   open() {
-    this.popup.open();
+    this.popup.open = true;
   }
 
   close() {
-    this.popup.close();
+    this.popup.open = false;
   }
 
   private handleSwitchClick(e: Event) {

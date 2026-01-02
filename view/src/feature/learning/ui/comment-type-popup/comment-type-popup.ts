@@ -25,11 +25,11 @@ export class LearningCommentTypePopup extends LitElement {
   open() {
     this.isOtherSelected = false;
     this.otherValue = "";
-    this.popup.open();
+    this.popup.open = true;
   }
 
   close() {
-    this.popup.close();
+    this.popup.open = false;
   }
 
   private handleSelect(type: string) {
