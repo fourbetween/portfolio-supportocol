@@ -1,29 +1,33 @@
+import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { page } from "vitest/browser";
 import "./discussion-search-bar";
-import type { LearningDiscussionSearchBar } from "./discussion-search-bar";
 
 describe("learning-discussion-search-bar", async () => {
-  let elem: LearningDiscussionSearchBar;
+  let container: HTMLDivElement;
 
   beforeEach(() => {
-    elem = document.createElement(
-      "learning-discussion-search-bar"
-    ) as LearningDiscussionSearchBar;
-    document.body.appendChild(elem);
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    elem.remove();
+    container.remove();
   });
 
   it("入力値が変更されたときに onInput が呼ばれること", async () => {
     const onInput = vi.fn();
-    elem.onInput = onInput;
-    await elem.updateComplete;
+    render(
+      html`
+        <learning-discussion-search-bar
+          .onInput=${onInput}
+        ></learning-discussion-search-bar>
+      `,
+      container
+    );
 
-    const input = elem.shadowRoot!.querySelector("input")!;
-    input.value = "test query";
-    input.dispatchEvent(new InputEvent("input"));
+    const input = page.getByRole("textbox", { name: "Search discussions" });
+    await input.fill("test query");
 
     expect(onInput).toHaveBeenCalledWith("test query");
   });

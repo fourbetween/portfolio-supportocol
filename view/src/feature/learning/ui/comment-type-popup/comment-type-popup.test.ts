@@ -1,73 +1,85 @@
+import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { page } from "vitest/browser";
 import "./comment-type-popup";
 import type { LearningCommentTypePopup } from "./comment-type-popup";
 
 describe("learning-comment-type-popup", () => {
-  let el: LearningCommentTypePopup;
+  let container: HTMLElement;
 
-  beforeEach(async () => {
-    el = document.createElement(
-      "learning-comment-type-popup"
-    ) as LearningCommentTypePopup;
-    document.body.appendChild(el);
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    el.remove();
+    container.remove();
   });
 
   it("提供された種類が表示されること", async () => {
     const types = ["Question", "Idea", "Agreement"];
-    el.types = types;
+    render(
+      html`
+        <learning-comment-type-popup
+          id="popup"
+          .types=${types}
+        ></learning-comment-type-popup>
+      `,
+      container
+    );
+    const el = container.querySelector("#popup") as LearningCommentTypePopup;
     await el.updateComplete;
+    el.open();
 
-    const buttons = el.shadowRoot?.querySelectorAll(".type-button");
-    expect(buttons?.length).toBe(3);
-    expect(buttons?.[0].textContent?.trim()).toBe("Question");
-    expect(buttons?.[1].textContent?.trim()).toBe("Idea");
-    expect(buttons?.[2].textContent?.trim()).toBe("Agreement");
+    await expect.element(page.getByText("Question")).toBeVisible();
+    await expect.element(page.getByText("Idea")).toBeVisible();
+    await expect.element(page.getByText("Agreement")).toBeVisible();
   });
 
   it("種類がクリックされたときに onSelect が呼ばれること", async () => {
     const types = ["Question"];
     const onSelect = vi.fn();
-    el.types = types;
-    el.onSelect = onSelect;
+    render(
+      html`
+        <learning-comment-type-popup
+          id="popup"
+          .types=${types}
+          .onSelect=${onSelect}
+        ></learning-comment-type-popup>
+      `,
+      container
+    );
+    const el = container.querySelector("#popup") as LearningCommentTypePopup;
     await el.updateComplete;
+    el.open();
 
-    const button = el.shadowRoot?.querySelector(
-      ".type-button"
-    ) as HTMLButtonElement;
-    button.click();
+    await page.getByRole("button", { name: "Question" }).click();
 
     expect(onSelect).toHaveBeenCalledWith("Question");
   });
 
   it("'Other...'がクリックされたときに入力フォームが表示され、入力値で onSelect が呼ばれること", async () => {
     const onSelect = vi.fn();
-    el.onSelect = onSelect;
+    render(
+      html`
+        <learning-comment-type-popup
+          id="popup"
+          .onSelect=${onSelect}
+        ></learning-comment-type-popup>
+      `,
+      container
+    );
+    const el = container.querySelector("#popup") as LearningCommentTypePopup;
     await el.updateComplete;
+    el.open();
 
-    const otherButton = el.shadowRoot?.querySelector(
-      ".other-button"
-    ) as HTMLButtonElement;
-    otherButton.click();
-    await el.updateComplete;
+    await page.getByRole("button", { name: "Other..." }).click();
 
-    const input = el.shadowRoot?.querySelector(
-      ".other-input"
-    ) as HTMLInputElement;
-    expect(input).toBeDefined();
+    const input = page.getByPlaceholder("Type here...");
+    await expect.element(input).toBeVisible();
 
-    input.value = "Custom Type";
-    input.dispatchEvent(new Event("input"));
-    await el.updateComplete;
-
-    const submitButton = el.shadowRoot?.querySelector(
-      ".other-submit"
-    ) as HTMLButtonElement;
-    expect(submitButton.disabled).toBe(false);
-    submitButton.click();
+    await input.fill("Custom Type");
+    await page.getByRole("button", { name: "OK" }).click();
 
     expect(onSelect).toHaveBeenCalledWith("Custom Type");
   });

@@ -1,18 +1,19 @@
+import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import type { CommentFrame } from "../../model/comment-frame";
 import "./comment-frame-detail";
 
 describe("learning-comment-frame-detail", () => {
-  let element: HTMLElement;
+  let container: HTMLElement;
 
   beforeEach(() => {
-    element = document.createElement("learning-comment-frame-detail");
-    document.body.appendChild(element);
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    element.remove();
+    container.remove();
   });
 
   it("CommentFrame の内容が表示されること", async () => {
@@ -21,8 +22,16 @@ describe("learning-comment-frame-detail", () => {
       paths: [{ child: "回答", parent: "質問" }],
     };
 
-    (element as any).frame = frame;
-    await new Promise((resolve) => setTimeout(resolve, 0)); // Wait for render
+    render(
+      html`
+        <learning-comment-frame-detail
+          .frame=${frame}
+        ></learning-comment-frame-detail>
+      `,
+      container
+    );
+    const element = container.querySelector("learning-comment-frame-detail")!;
+    await (element as any).updateComplete;
 
     await expect.element(page.getByText("Types")).toBeVisible();
     await expect.element(page.getByText("Paths")).toBeVisible();
@@ -39,27 +48,27 @@ describe("learning-comment-frame-detail", () => {
       ],
     };
 
-    (element as any).frame = frame;
-    await new Promise((resolve) => setTimeout(resolve, 0));
-
-    // 質問（親）が1つだけ表示されていることを確認（Pathsセクション内）
-    const pathsSection = page.getByText("Paths").element().parentElement!;
-    const badges = Array.from(
-      pathsSection.querySelectorAll("learning-comment-type-badge")
+    render(
+      html`
+        <learning-comment-frame-detail
+          .frame=${frame}
+        ></learning-comment-frame-detail>
+      `,
+      container
     );
-    const parentBadges = badges.filter((el) =>
-      el.shadowRoot?.textContent?.includes("質問")
-    );
+    const element = container.querySelector("learning-comment-frame-detail")!;
+    await (element as any).updateComplete;
 
-    // 現状の実装だと2つ（各パスに1つずつ）表示されるはずなので、これが1つになることを期待するテストにする
-    expect(parentBadges.length).toBe(1);
+    // 質問（親）が合計2つ表示されていることを確認（Typesセクションに1つ、Pathsセクションに1つ）
+    const questions = page.getByText("質問").all();
+    expect(questions.length).toBe(2);
 
     // 子要素のコンテナにボーダーがあることを確認
-    const childrenNodes = pathsSection.querySelector(
+    const childrenNodes = element.shadowRoot?.querySelector(
       ".children-nodes"
     ) as HTMLElement;
     expect(childrenNodes).not.toBeNull();
-    const style = window.getComputedStyle(childrenNodes);
+    const style = window.getComputedStyle(childrenNodes!);
     expect(style.borderLeft).toContain("dashed");
   });
 });

@@ -1,7 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
-import { iconStyle } from "../../../../shared/style/icon";
 import { titleStyle } from "../../../../shared/style/title";
 import type { CommentFrame } from "../../model/comment-frame";
 import "../comment-type-badge/comment-type-badge";
@@ -11,16 +10,19 @@ export class LearningCommentFrameDetail extends LitElement {
   @property({ type: Object })
   frame?: CommentFrame;
 
-  render() {
-    if (!this.frame) return html``;
-
-    const groupedPaths = this.frame.paths.reduce((acc, p) => {
+  private get _groupedPaths() {
+    if (!this.frame) return {};
+    return this.frame.paths.reduce((acc, p) => {
       if (!acc[p.parent]) {
         acc[p.parent] = [];
       }
       acc[p.parent].push(p.child);
       return acc;
     }, {} as Record<string, string[]>);
+  }
+
+  render() {
+    if (!this.frame) return html``;
 
     return html`
       <div class="container">
@@ -40,7 +42,7 @@ export class LearningCommentFrameDetail extends LitElement {
         <section>
           <div class="section-title">Paths</div>
           <div class="paths">
-            ${Object.entries(groupedPaths).map(
+            ${Object.entries(this._groupedPaths).map(
               ([parent, children]) => html`
                 <div class="path-group">
                   <div class="parent-node">
@@ -70,7 +72,6 @@ export class LearningCommentFrameDetail extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     titleStyle,
     css`
       .container {

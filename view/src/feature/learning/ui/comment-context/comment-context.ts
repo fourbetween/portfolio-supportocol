@@ -1,5 +1,6 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { join } from "lit/directives/join.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { iconStyle } from "../../../../shared/style/icon";
 import type { Comment } from "../../model/comment";
@@ -15,31 +16,28 @@ export class LearningCommentContext extends LitElement {
   onCommentClick?: (comment: Comment) => void;
 
   private handleCommentClick(comment: Comment) {
-    if (this.onCommentClick) {
-      this.onCommentClick(comment);
-    }
+    this.onCommentClick?.(comment);
   }
 
   render() {
     return html`
       <div class="container">
-        ${this.ancestors.map(
-          (comment, index) => html`
-            <learning-comment-type-badge
-              .type=${comment.commentType}
-            ></learning-comment-type-badge>
-            <learning-comment-card
-              .comment=${comment}
-              @click=${() => this.handleCommentClick(comment)}
-              style="cursor: pointer;"
-            ></learning-comment-card>
-            ${index < this.ancestors.length - 1
-              ? html`
-                  <div class="separator">
-                    <span class="material-symbols-outlined">north</span>
-                  </div>
-                `
-              : nothing}
+        ${join(
+          this.ancestors.map(
+            (comment) => html`
+              <learning-comment-type-badge
+                .type=${comment.commentType}
+              ></learning-comment-type-badge>
+              <learning-comment-card
+                .comment=${comment}
+                @click=${() => this.handleCommentClick(comment)}
+              ></learning-comment-card>
+            `
+          ),
+          html`
+            <div class="separator">
+              <span class="material-symbols-outlined">north</span>
+            </div>
           `
         )}
       </div>
@@ -57,6 +55,9 @@ export class LearningCommentContext extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 4px;
+      }
+      learning-comment-card {
+        cursor: pointer;
       }
       .separator {
         display: flex;

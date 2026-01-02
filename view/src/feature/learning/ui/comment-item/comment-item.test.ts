@@ -1,11 +1,11 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { html, render } from "lit";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import type { Comment } from "../../model/comment";
 import "./comment-item";
-import type { LearningCommentItem } from "./comment-item";
 
 describe("learning-comment-item", { timeout: 5000 }, () => {
-  let element: LearningCommentItem;
+  let container: HTMLDivElement;
 
   const mockComment: Comment = {
     id: "1",
@@ -19,25 +19,39 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
   const availableTypes = ["idea", "question", "answer"];
 
   beforeEach(() => {
-    element = document.createElement(
-      "learning-comment-item"
-    ) as LearningCommentItem;
-    element.comment = mockComment;
-    element.availableTypes = availableTypes;
-    document.body.appendChild(element);
+    container = document.createElement("div");
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
-    element.remove();
+    container.remove();
   });
 
   it("デフォルトで learning-comment-card を表示する", async () => {
+    render(
+      html`
+        <learning-comment-item
+          .comment=${mockComment}
+          .availableTypes=${availableTypes}
+        ></learning-comment-item>
+      `,
+      container
+    );
     await expect
       .element(page.getByText("This is a test comment"))
       .toBeVisible();
   });
 
   it("編集ボタンをクリックすると編集フォームを表示する", async () => {
+    render(
+      html`
+        <learning-comment-item
+          .comment=${mockComment}
+          .availableTypes=${availableTypes}
+        ></learning-comment-item>
+      `,
+      container
+    );
     const editButton = page.getByRole("button", { name: "edit" });
     await editButton.click();
 
@@ -48,24 +62,36 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
   });
 
   it("削除ボタンをクリックすると onCommentDelete が呼ばれる", async () => {
-    let deletedId = "";
-    element.onCommentDelete = (id: string) => {
-      deletedId = id;
-    };
+    const onCommentDelete = vi.fn();
+    render(
+      html`
+        <learning-comment-item
+          .comment=${mockComment}
+          .availableTypes=${availableTypes}
+          .onCommentDelete=${onCommentDelete}
+        ></learning-comment-item>
+      `,
+      container
+    );
 
     const deleteButton = page.getByRole("button", { name: "delete" });
     await deleteButton.click();
 
-    expect(deletedId).toBe("1");
+    expect(onCommentDelete).toHaveBeenCalledWith("1");
   });
 
   it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると onCommentGenerate が呼ばれる", async () => {
-    let generatedId = "";
-    let generatedType = "";
-    element.onCommentGenerate = (id: string, type: string) => {
-      generatedId = id;
-      generatedType = type;
-    };
+    const onCommentGenerate = vi.fn();
+    render(
+      html`
+        <learning-comment-item
+          .comment=${mockComment}
+          .availableTypes=${availableTypes}
+          .onCommentGenerate=${onCommentGenerate}
+        ></learning-comment-item>
+      `,
+      container
+    );
 
     const generateButton = page.getByRole("button", { name: "generate" });
     await generateButton.click();
@@ -75,7 +101,6 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     await expect.element(typeButton).toBeVisible();
     await typeButton.click();
 
-    expect(generatedId).toBe("1");
-    expect(generatedType).toBe("question");
+    expect(onCommentGenerate).toHaveBeenCalledWith("1", "question");
   });
 });
