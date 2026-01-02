@@ -114,7 +114,7 @@ func (r *UserRepository) findByCondition(ctx context.Context, cond mysql.BoolExp
 		return nil, fmt.Errorf("failed to query user: %w", err)
 	}
 
-	return r.fac.Build(domain.BuildParams{
+	return r.fac.Reconstruct(domain.ReconstructParams{
 		ID:                          dest.ID,
 		Email:                       dest.Email,
 		Name:                        dest.Name,

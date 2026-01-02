@@ -29,7 +29,7 @@ func NewHTTPHandler(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (ht
 	userRepo.SetFactory(userFac)
 
 	buildUser := func(p auth.BuildParams) *domain.User {
-		return userFac.Build(domain.BuildParams{
+		return userFac.Reconstruct(domain.ReconstructParams{
 			ID:                          p.ID,
 			Email:                       p.Email,
 			Name:                        p.Name,

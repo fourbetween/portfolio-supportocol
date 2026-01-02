@@ -35,17 +35,21 @@ func NewHTTPHandler(
 
 	discussionRepo := db.NewDiscussionRepository(dbCon)
 	commentRepo := db.NewCommentRepository(dbCon)
-	fac := domain.NewFactory(
+	discussionFac := domain.NewDiscussionFactory(
 		idSrv,
 		clockSrv,
 	)
-	discussionRepo.SetFactory(fac)
-	commentRepo.SetFactory(fac)
+	commentFac := domain.NewCommentFactory(
+		idSrv,
+		clockSrv,
+	)
+	discussionRepo.SetFactory(discussionFac)
+	commentRepo.SetFactory(commentFac)
 
 	generator, err := ai.NewCommentGenerator(
 		discussionRepo,
 		commentRepo,
-		fac,
+		commentFac,
 		geminiAPIKey,
 	)
 	if err != nil {
@@ -54,12 +58,12 @@ func NewHTTPHandler(
 
 	server, err := oas.NewServer(
 		api.NewHandler(api.HandlerParams{
-			CreateDiscussion: usecase.NewCreateDiscussionUsecase(discussionRepo, fac),
+			CreateDiscussion: usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac),
 			GetDiscussion:    usecase.NewGetDiscussionUsecase(discussionRepo),
 			ListDiscussions:  usecase.NewListDiscussionsUsecase(discussionRepo),
 			UpdateDiscussion: usecase.NewUpdateDiscussionUsecase(discussionRepo),
 			DeleteDiscussion: usecase.NewDeleteDiscussionUsecase(discussionRepo),
-			CreateComment:    usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, fac),
+			CreateComment:    usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac),
 			ListComments:     usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
 			UpdateComment:    usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo),
 			DeleteComment:    usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo),

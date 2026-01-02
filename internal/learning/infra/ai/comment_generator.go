@@ -13,14 +13,14 @@ import (
 type CommentGenerator struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
-	factory        *domain.Factory
+	factory        *domain.CommentFactory
 	client         *genai.Client
 }
 
 func NewCommentGenerator(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
-	factory *domain.Factory,
+	factory *domain.CommentFactory,
 	apiKey string,
 ) (*CommentGenerator, error) {
 	client, err := genai.NewClient(context.TODO(), &genai.ClientConfig{
@@ -112,7 +112,7 @@ func (cg *CommentGenerator) Generate(ctx context.Context, params domain.Generate
 
 	var result []*domain.Comment
 	for _, g := range generated {
-		c, err := cg.factory.NewComment(domain.NewCommentParams{
+		c, err := cg.factory.Create(domain.CreateCommentParams{
 			DiscussionID:    params.DiscussionID,
 			ParentCommentID: params.ParentCommentID,
 			CommentTypeID:   params.CommentType,

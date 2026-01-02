@@ -9,13 +9,13 @@ import (
 type CreateCommentUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
-	fac            *domain.Factory
+	fac            *domain.CommentFactory
 }
 
 func NewCreateCommentUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
-	fac *domain.Factory,
+	fac *domain.CommentFactory,
 ) *CreateCommentUsecase {
 	return &CreateCommentUsecase{
 		discussionRepo: discussionRepo,
@@ -42,7 +42,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		return nil, err
 	}
 
-	comment, err := u.fac.NewComment(domain.NewCommentParams{
+	comment, err := u.fac.Create(domain.CreateCommentParams{
 		DiscussionID:    input.DiscussionID,
 		ParentCommentID: input.ParentCommentID,
 		CommentTypeID:   input.CommentType,
