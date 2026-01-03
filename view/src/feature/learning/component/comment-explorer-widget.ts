@@ -19,8 +19,8 @@ export class LearningCommentExplorerWidget extends LitElement {
   @property({ type: Array })
   comments?: Comment[];
 
-  @state()
-  private selectedCommentId?: string;
+  @property({ type: String })
+  selectedCommentId?: string;
 
   @state()
   private availableTypes: string[] = [];
@@ -52,6 +52,13 @@ export class LearningCommentExplorerWidget extends LitElement {
   private handleCommentClick(comment: Comment) {
     this.selectedCommentId =
       this.selectedCommentId === comment.id ? undefined : comment.id;
+    this.dispatchEvent(
+      new CustomEvent("select-comment", {
+        detail: { id: this.selectedCommentId },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   private async handleCommentUpdate(

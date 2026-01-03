@@ -119,9 +119,7 @@ export class LearningCommentProposedWidget extends LitElement {
         flex-direction: column;
         gap: 16px;
         padding: 16px;
-        border: 1px solid var(--color-border-default);
         border-radius: 6px;
-        background-color: var(--color-canvas-subtle);
       }
     `,
   ];
