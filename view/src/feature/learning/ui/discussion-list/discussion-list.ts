@@ -61,7 +61,6 @@ export class LearningDiscussionList extends LitElement {
         flex-direction: column;
         border: 1px solid var(--color-border-default);
         border-radius: 6px;
-        overflow: hidden;
       }
       .item {
         position: relative;
@@ -69,37 +68,51 @@ export class LearningDiscussionList extends LitElement {
         justify-content: space-between;
         align-items: center;
         padding: 16px;
+        padding-right: 48px;
         border-bottom: 1px solid var(--color-border-muted);
         background-color: var(--color-canvas-default);
         cursor: pointer;
       }
+      .item:first-child {
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+      }
       .item:last-child {
         border-bottom: none;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
       }
       .item:hover {
         background-color: var(--color-canvas-subtle);
       }
       .theme {
+        font-size: 0.9rem;
         color: var(--color-accent-fg);
       }
       .delete-button {
-        display: none;
         position: absolute;
-        right: 16px;
+        right: -16px;
         top: 50%;
         transform: translateY(-50%);
-        padding: 4px;
-        border: none;
-        background: none;
+        background: var(--color-canvas-default);
         color: var(--color-fg-muted);
+        border: 1px solid var(--color-border-default);
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
-        border-radius: 4px;
+        opacity: 0;
+        transition: all 0.1s;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        z-index: 1;
       }
       .item:hover .delete-button {
-        display: flex;
+        opacity: 1;
       }
       .delete-button:hover {
-        background-color: var(--color-neutral-muted);
         color: var(--color-danger-fg);
       }
     `,
