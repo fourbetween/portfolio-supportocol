@@ -1,5 +1,5 @@
 import { Task } from "@lit/task";
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
@@ -139,6 +139,9 @@ export class LearningDashboardPage extends LitElement {
       (d) => d.id === this._selectedDiscussionId
     );
     const activeComments = this._comments.filter((c) => c.status === "active");
+    const hasProposedComments = this._comments.some(
+      (c) => c.status === "proposed"
+    );
 
     return html`
       <div class="dashboard">
@@ -175,15 +178,19 @@ export class LearningDashboardPage extends LitElement {
             ></learning-comment-explorer-widget>
           </div>
         </main>
-        <aside class="sidebar sidebar-right">
-          <learning-comment-proposed-widget
-            .discussionId=${this._selectedDiscussionId}
-            .comments=${this._comments}
-            @comment-updated=${this._handleCommentUpdated}
-            @comment-deleted=${this._handleCommentDeleted}
-            @select-comment=${this._handleSelectComment}
-          ></learning-comment-proposed-widget>
-        </aside>
+        ${hasProposedComments
+          ? html`
+              <aside class="sidebar sidebar-right">
+                <learning-comment-proposed-widget
+                  .discussionId=${this._selectedDiscussionId}
+                  .comments=${this._comments}
+                  @comment-updated=${this._handleCommentUpdated}
+                  @comment-deleted=${this._handleCommentDeleted}
+                  @select-comment=${this._handleSelectComment}
+                ></learning-comment-proposed-widget>
+              </aside>
+            `
+          : nothing}
       </div>
     `;
   }
