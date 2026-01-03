@@ -72,7 +72,7 @@ func (cg *CommentGenerator) fetchContext(
 
 	var path []*domain.Comment
 	if params.ParentCommentID != nil {
-		p, err := cg.commentRepo.PathToRoot(ctx, *params.ParentCommentID)
+		p, err := cg.commentRepo.GetPathToRoot(ctx, *params.ParentCommentID)
 		if err != nil {
 			return nil, nil, nil, err
 		}
@@ -80,7 +80,11 @@ func (cg *CommentGenerator) fetchContext(
 		path = p
 	}
 
-	children, err := cg.commentRepo.Children(ctx, params.DiscussionID, params.ParentCommentID)
+	children, err := cg.commentRepo.ListChildren(ctx, domain.ListChildrenParams{
+		DiscussionID:    params.DiscussionID,
+		ParentCommentID: params.ParentCommentID,
+		CommentType:     params.CommentType,
+	})
 	if err != nil {
 		return nil, nil, nil, err
 	}

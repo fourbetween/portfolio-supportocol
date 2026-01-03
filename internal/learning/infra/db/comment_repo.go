@@ -113,7 +113,7 @@ func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error
 	return nil
 }
 
-func (r *CommentRepository) PathToRoot(ctx context.Context, commentID string) ([]*domain.Comment, error) {
+func (r *CommentRepository) GetPathToRoot(ctx context.Context, commentID string) ([]*domain.Comment, error) {
 	ancestors := mysql.CTE("ancestors")
 
 	initialSelect := mysql.
@@ -142,13 +142,17 @@ func (r *CommentRepository) PathToRoot(ctx context.Context, commentID string) ([
 	return r.toCommentDomains(dest)
 }
 
-func (r *CommentRepository) Children(ctx context.Context, discussionID string, parentCommentID *string) ([]*domain.Comment, error) {
+func (r *CommentRepository) ListChildren(ctx context.Context, params domain.ListChildrenParams) ([]*domain.Comment, error) {
 	var condition mysql.BoolExpression
-	if parentCommentID == nil {
-		condition = table.Comments.DiscussionID.EQ(mysql.String(discussionID)).
+	if params.ParentCommentID == nil {
+		condition = table.Comments.DiscussionID.EQ(mysql.String(params.DiscussionID)).
 			AND(table.Comments.ParentCommentID.IS_NULL())
 	} else {
-		condition = table.Comments.ParentCommentID.EQ(mysql.String(*parentCommentID))
+		condition = table.Comments.ParentCommentID.EQ(mysql.String(*params.ParentCommentID))
+	}
+
+	if params.CommentType != "" {
+		condition = condition.AND(table.Comments.CommentType.EQ(mysql.String(params.CommentType)))
 	}
 
 	stmt := mysql.

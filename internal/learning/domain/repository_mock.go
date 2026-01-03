@@ -136,21 +136,6 @@ func (mr *MockCommentRepositoryMockRecorder) BatchSave(ctx, comments any) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchSave", reflect.TypeOf((*MockCommentRepository)(nil).BatchSave), ctx, comments)
 }
 
-// Children mocks base method.
-func (m *MockCommentRepository) Children(ctx context.Context, discussionID string, parentCommentID *string) ([]*Comment, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Children", ctx, discussionID, parentCommentID)
-	ret0, _ := ret[0].([]*Comment)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Children indicates an expected call of Children.
-func (mr *MockCommentRepositoryMockRecorder) Children(ctx, discussionID, parentCommentID any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Children", reflect.TypeOf((*MockCommentRepository)(nil).Children), ctx, discussionID, parentCommentID)
-}
-
 // Delete mocks base method.
 func (m *MockCommentRepository) Delete(ctx context.Context, comment *Comment) error {
 	m.ctrl.T.Helper()
@@ -163,6 +148,21 @@ func (m *MockCommentRepository) Delete(ctx context.Context, comment *Comment) er
 func (mr *MockCommentRepositoryMockRecorder) Delete(ctx, comment any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCommentRepository)(nil).Delete), ctx, comment)
+}
+
+// GetPathToRoot mocks base method.
+func (m *MockCommentRepository) GetPathToRoot(ctx context.Context, commentID string) ([]*Comment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPathToRoot", ctx, commentID)
+	ret0, _ := ret[0].([]*Comment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPathToRoot indicates an expected call of GetPathToRoot.
+func (mr *MockCommentRepositoryMockRecorder) GetPathToRoot(ctx, commentID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPathToRoot", reflect.TypeOf((*MockCommentRepository)(nil).GetPathToRoot), ctx, commentID)
 }
 
 // List mocks base method.
@@ -180,6 +180,21 @@ func (mr *MockCommentRepositoryMockRecorder) List(ctx, discussionID any) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockCommentRepository)(nil).List), ctx, discussionID)
 }
 
+// ListChildren mocks base method.
+func (m *MockCommentRepository) ListChildren(ctx context.Context, params ListChildrenParams) ([]*Comment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListChildren", ctx, params)
+	ret0, _ := ret[0].([]*Comment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListChildren indicates an expected call of ListChildren.
+func (mr *MockCommentRepositoryMockRecorder) ListChildren(ctx, params any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListChildren", reflect.TypeOf((*MockCommentRepository)(nil).ListChildren), ctx, params)
+}
+
 // Load mocks base method.
 func (m *MockCommentRepository) Load(ctx context.Context, id string) (*Comment, error) {
 	m.ctrl.T.Helper()
@@ -193,21 +208,6 @@ func (m *MockCommentRepository) Load(ctx context.Context, id string) (*Comment, 
 func (mr *MockCommentRepositoryMockRecorder) Load(ctx, id any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Load", reflect.TypeOf((*MockCommentRepository)(nil).Load), ctx, id)
-}
-
-// PathToRoot mocks base method.
-func (m *MockCommentRepository) PathToRoot(ctx context.Context, commentID string) ([]*Comment, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PathToRoot", ctx, commentID)
-	ret0, _ := ret[0].([]*Comment)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// PathToRoot indicates an expected call of PathToRoot.
-func (mr *MockCommentRepositoryMockRecorder) PathToRoot(ctx, commentID any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PathToRoot", reflect.TypeOf((*MockCommentRepository)(nil).PathToRoot), ctx, commentID)
 }
 
 // Save mocks base method.

@@ -10,6 +10,12 @@ type (
 		CreatedBy string
 	}
 
+	ListChildrenParams struct {
+		DiscussionID    string
+		ParentCommentID *string
+		CommentType     string
+	}
+
 	DiscussionRepository interface {
 		Load(ctx context.Context, params LoadParams) (*Discussion, error)
 		List(ctx context.Context, createdBy string) ([]*Discussion, error)
@@ -23,7 +29,7 @@ type (
 		Save(ctx context.Context, comment *Comment) error
 		BatchSave(ctx context.Context, comments []*Comment) error
 		Delete(ctx context.Context, comment *Comment) error
-		PathToRoot(ctx context.Context, commentID string) ([]*Comment, error)
-		Children(ctx context.Context, discussionID string, parentCommentID *string) ([]*Comment, error)
+		GetPathToRoot(ctx context.Context, commentID string) ([]*Comment, error)
+		ListChildren(ctx context.Context, params ListChildrenParams) ([]*Comment, error)
 	}
 )
