@@ -6,14 +6,15 @@ package oas
 type OperationName = string
 
 const (
-	LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation OperationName = "LearningDiscussionsDiscussionIdCommentsCommentIdDelete"
-	LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation    OperationName = "LearningDiscussionsDiscussionIdCommentsCommentIdPut"
-	LearningDiscussionsDiscussionIdCommentsGeneratePostOperation    OperationName = "LearningDiscussionsDiscussionIdCommentsGeneratePost"
-	LearningDiscussionsDiscussionIdCommentsGetOperation             OperationName = "LearningDiscussionsDiscussionIdCommentsGet"
-	LearningDiscussionsDiscussionIdCommentsPostOperation            OperationName = "LearningDiscussionsDiscussionIdCommentsPost"
-	LearningDiscussionsDiscussionIdDeleteOperation                  OperationName = "LearningDiscussionsDiscussionIdDelete"
-	LearningDiscussionsDiscussionIdGetOperation                     OperationName = "LearningDiscussionsDiscussionIdGet"
-	LearningDiscussionsDiscussionIdPutOperation                     OperationName = "LearningDiscussionsDiscussionIdPut"
-	LearningDiscussionsGetOperation                                 OperationName = "LearningDiscussionsGet"
-	LearningDiscussionsPostOperation                                OperationName = "LearningDiscussionsPost"
+	LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation    OperationName = "LearningDiscussionsDiscussionIdCommentsCommentIdDelete"
+	LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation       OperationName = "LearningDiscussionsDiscussionIdCommentsCommentIdPut"
+	LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation OperationName = "LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut"
+	LearningDiscussionsDiscussionIdCommentsGeneratePostOperation       OperationName = "LearningDiscussionsDiscussionIdCommentsGeneratePost"
+	LearningDiscussionsDiscussionIdCommentsGetOperation                OperationName = "LearningDiscussionsDiscussionIdCommentsGet"
+	LearningDiscussionsDiscussionIdCommentsPostOperation               OperationName = "LearningDiscussionsDiscussionIdCommentsPost"
+	LearningDiscussionsDiscussionIdDeleteOperation                     OperationName = "LearningDiscussionsDiscussionIdDelete"
+	LearningDiscussionsDiscussionIdGetOperation                        OperationName = "LearningDiscussionsDiscussionIdGet"
+	LearningDiscussionsDiscussionIdPutOperation                        OperationName = "LearningDiscussionsDiscussionIdPut"
+	LearningDiscussionsGetOperation                                    OperationName = "LearningDiscussionsGet"
+	LearningDiscussionsPostOperation                                   OperationName = "LearningDiscussionsPost"
 )

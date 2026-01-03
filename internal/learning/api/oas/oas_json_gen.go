@@ -34,11 +34,11 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("commentType")
-		e.Str(s.CommentType)
+		s.CommentType.Encode(e)
 	}
 	{
 		e.FieldStart("content")
-		e.Str(s.Content)
+		s.Content.Encode(e)
 	}
 	{
 		e.FieldStart("status")
@@ -97,9 +97,7 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 		case "commentType":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				v, err := d.Str()
-				s.CommentType = string(v)
-				if err != nil {
+				if err := s.CommentType.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -109,9 +107,7 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 		case "content":
 			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
-				v, err := d.Str()
-				s.Content = string(v)
-				if err != nil {
+				if err := s.Content.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -184,6 +180,46 @@ func (s *Comment) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes CommentContent as json.
+func (s CommentContent) Encode(e *jx.Encoder) {
+	unwrapped := string(s)
+
+	e.Str(unwrapped)
+}
+
+// Decode decodes CommentContent from json.
+func (s *CommentContent) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CommentContent to nil")
+	}
+	var unwrapped string
+	if err := func() error {
+		v, err := d.Str()
+		unwrapped = string(v)
+		if err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = CommentContent(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s CommentContent) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CommentContent) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes CommentStatus as json.
 func (s CommentStatus) Encode(e *jx.Encoder) {
 	e.Str(string(s))
@@ -224,6 +260,46 @@ func (s *CommentStatus) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes CommentType as json.
+func (s CommentType) Encode(e *jx.Encoder) {
+	unwrapped := string(s)
+
+	e.Str(unwrapped)
+}
+
+// Decode decodes CommentType from json.
+func (s *CommentType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CommentType to nil")
+	}
+	var unwrapped string
+	if err := func() error {
+		v, err := d.Str()
+		unwrapped = string(v)
+		if err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = CommentType(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s CommentType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CommentType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
 func (s *Discussion) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -239,7 +315,7 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("theme")
-		e.Str(s.Theme)
+		s.Theme.Encode(e)
 	}
 }
 
@@ -270,9 +346,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 		case "theme":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := d.Str()
-				s.Theme = string(v)
-				if err != nil {
+				if err := s.Theme.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -331,6 +405,46 @@ func (s *Discussion) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Discussion) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes DiscussionTheme as json.
+func (s DiscussionTheme) Encode(e *jx.Encoder) {
+	unwrapped := string(s)
+
+	e.Str(unwrapped)
+}
+
+// Decode decodes DiscussionTheme from json.
+func (s *DiscussionTheme) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode DiscussionTheme to nil")
+	}
+	var unwrapped string
+	if err := func() error {
+		v, err := d.Str()
+		unwrapped = string(v)
+		if err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = DiscussionTheme(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s DiscussionTheme) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *DiscussionTheme) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -499,11 +613,11 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Encode(e *jx.En
 func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("commentType")
-		e.Str(s.CommentType)
+		s.CommentType.Encode(e)
 	}
 	{
 		e.FieldStart("content")
-		e.Str(s.Content)
+		s.Content.Encode(e)
 	}
 }
 
@@ -524,9 +638,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Decode(d *jx.De
 		case "commentType":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Str()
-				s.CommentType = string(v)
-				if err != nil {
+				if err := s.CommentType.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -536,9 +648,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Decode(d *jx.De
 		case "content":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := d.Str()
-				s.Content = string(v)
-				if err != nil {
+				if err := s.Content.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -602,6 +712,100 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) UnmarshalJSON(d
 }
 
 // Encode implements json.Marshaler.
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("status")
+		s.Status.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq = [1]string{
+	0: "status",
+}
+
+// Decode decodes LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq from json.
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "status":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.Status.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"status\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) {
+					name = jsonFieldsNameOfLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -616,7 +820,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) encodeFields(e 
 	}
 	{
 		e.FieldStart("commentType")
-		e.Str(s.CommentType)
+		s.CommentType.Encode(e)
 	}
 }
 
@@ -647,9 +851,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Decode(d *jx.De
 		case "commentType":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := d.Str()
-				s.CommentType = string(v)
-				if err != nil {
+				if err := s.CommentType.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -727,11 +929,11 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) encodeFields(e *jx.Enco
 	}
 	{
 		e.FieldStart("commentType")
-		e.Str(s.CommentType)
+		s.CommentType.Encode(e)
 	}
 	{
 		e.FieldStart("content")
-		e.Str(s.Content)
+		s.Content.Encode(e)
 	}
 }
 
@@ -763,9 +965,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) Decode(d *jx.Decoder) e
 		case "commentType":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				v, err := d.Str()
-				s.CommentType = string(v)
-				if err != nil {
+				if err := s.CommentType.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -775,9 +975,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) Decode(d *jx.Decoder) e
 		case "content":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				v, err := d.Str()
-				s.Content = string(v)
-				if err != nil {
+				if err := s.Content.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -851,7 +1049,7 @@ func (s *LearningDiscussionsDiscussionIdPutReq) Encode(e *jx.Encoder) {
 func (s *LearningDiscussionsDiscussionIdPutReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("theme")
-		e.Str(s.Theme)
+		s.Theme.Encode(e)
 	}
 }
 
@@ -871,9 +1069,7 @@ func (s *LearningDiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
 		case "theme":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Str()
-				s.Theme = string(v)
-				if err != nil {
+				if err := s.Theme.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -947,7 +1143,7 @@ func (s *LearningDiscussionsPostReq) Encode(e *jx.Encoder) {
 func (s *LearningDiscussionsPostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("theme")
-		e.Str(s.Theme)
+		s.Theme.Encode(e)
 	}
 }
 
@@ -967,9 +1163,7 @@ func (s *LearningDiscussionsPostReq) Decode(d *jx.Decoder) error {
 		case "theme":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				v, err := d.Str()
-				s.Theme = string(v)
-				if err != nil {
+				if err := s.Theme.Decode(d); err != nil {
 					return err
 				}
 				return nil
@@ -1072,52 +1266,6 @@ func (s NilID) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *NilID) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes string as json.
-func (o NilString) Encode(e *jx.Encoder) {
-	if o.Null {
-		e.Null()
-		return
-	}
-	e.Str(string(o.Value))
-}
-
-// Decode decodes string from json.
-func (o *NilString) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode NilString to nil")
-	}
-	if d.Next() == jx.Null {
-		if err := d.Null(); err != nil {
-			return err
-		}
-
-		var v string
-		o.Value = v
-		o.Null = true
-		return nil
-	}
-	o.Null = false
-	v, err := d.Str()
-	if err != nil {
-		return err
-	}
-	o.Value = string(v)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s NilString) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *NilString) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

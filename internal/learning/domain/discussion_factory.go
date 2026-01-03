@@ -27,7 +27,7 @@ type CreateDiscussionParams struct {
 	CreatedBy string
 }
 
-func (f *DiscussionFactory) Create(params CreateDiscussionParams) *Discussion {
+func (f *DiscussionFactory) Create(params CreateDiscussionParams) (*Discussion, error) {
 	id := f.idSrv.Generate()
 	return f.Reconstruct(ReconstructDiscussionParams{
 		ID:                     id,
@@ -42,11 +42,15 @@ type ReconstructDiscussionParams struct {
 	CreatedAt time.Time
 }
 
-func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) *Discussion {
+func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Discussion, error) {
+	theme, err := NewDiscussionTheme(params.Theme)
+	if err != nil {
+		return nil, err
+	}
 	return &Discussion{
 		id:        params.ID,
-		theme:     params.Theme,
+		theme:     theme,
 		createdBy: params.CreatedBy,
 		createdAt: params.CreatedAt,
-	}
+	}, nil
 }

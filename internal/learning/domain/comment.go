@@ -1,13 +1,17 @@
 package domain
 
-import "time"
+import (
+	"time"
+
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+)
 
 type Comment struct {
 	id              string
 	discussionID    string
 	parentCommentID *string
 	commentType     string
-	content         string
+	content         CommentContent
 	status          CommentStatus
 	postedBy        string
 	createdAt       time.Time
@@ -30,7 +34,7 @@ func (c *Comment) CommentType() string {
 }
 
 func (c *Comment) Content() string {
-	return c.content
+	return c.content.String()
 }
 
 func (c *Comment) Status() CommentStatus {
@@ -50,7 +54,23 @@ type UpdateCommentParams struct {
 	Content     string
 }
 
-func (c *Comment) Update(params UpdateCommentParams) {
+func (c *Comment) Update(params UpdateCommentParams) error {
+	content, err := NewCommentContent(params.Content)
+	if err != nil {
+		return err
+	}
 	c.commentType = params.CommentType
-	c.content = params.Content
+	c.content = content
+	return nil
+}
+
+func (c *Comment) UpdateStatus(status CommentStatus) error {
+	if !status.IsValid() {
+		return apperr.ErrInvalidRequest
+	}
+	if c.status == CommentStatusActive && status == CommentStatusProposed {
+		return apperr.ErrInvalidRequest
+	}
+	c.status = status
+	return nil
 }

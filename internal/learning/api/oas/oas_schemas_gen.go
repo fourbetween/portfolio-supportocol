@@ -14,12 +14,12 @@ func (s *ErrorStatusCode) Error() string {
 
 // Ref: #/components/schemas/Comment
 type Comment struct {
-	ID              ID            `json:"id"`
-	DiscussionId    ID            `json:"discussionId"`
-	ParentCommentId NilID         `json:"parentCommentId"`
-	CommentType     string        `json:"commentType"`
-	Content         string        `json:"content"`
-	Status          CommentStatus `json:"status"`
+	ID              ID             `json:"id"`
+	DiscussionId    ID             `json:"discussionId"`
+	ParentCommentId NilID          `json:"parentCommentId"`
+	CommentType     CommentType    `json:"commentType"`
+	Content         CommentContent `json:"content"`
+	Status          CommentStatus  `json:"status"`
 }
 
 // GetID returns the value of ID.
@@ -38,12 +38,12 @@ func (s *Comment) GetParentCommentId() NilID {
 }
 
 // GetCommentType returns the value of CommentType.
-func (s *Comment) GetCommentType() string {
+func (s *Comment) GetCommentType() CommentType {
 	return s.CommentType
 }
 
 // GetContent returns the value of Content.
-func (s *Comment) GetContent() string {
+func (s *Comment) GetContent() CommentContent {
 	return s.Content
 }
 
@@ -68,12 +68,12 @@ func (s *Comment) SetParentCommentId(val NilID) {
 }
 
 // SetCommentType sets the value of CommentType.
-func (s *Comment) SetCommentType(val string) {
+func (s *Comment) SetCommentType(val CommentType) {
 	s.CommentType = val
 }
 
 // SetContent sets the value of Content.
-func (s *Comment) SetContent(val string) {
+func (s *Comment) SetContent(val CommentContent) {
 	s.Content = val
 }
 
@@ -82,6 +82,9 @@ func (s *Comment) SetStatus(val CommentStatus) {
 	s.Status = val
 }
 
+type CommentContent string
+
+// Ref: #/components/schemas/CommentStatus
 type CommentStatus string
 
 const (
@@ -123,6 +126,8 @@ func (s *CommentStatus) UnmarshalText(data []byte) error {
 	}
 }
 
+type CommentType string
+
 type CookieAuth struct {
 	APIKey string
 	Roles  []string
@@ -150,8 +155,8 @@ func (s *CookieAuth) SetRoles(val []string) {
 
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID    ID     `json:"id"`
-	Theme string `json:"theme"`
+	ID    ID              `json:"id"`
+	Theme DiscussionTheme `json:"theme"`
 }
 
 // GetID returns the value of ID.
@@ -160,7 +165,7 @@ func (s *Discussion) GetID() ID {
 }
 
 // GetTheme returns the value of Theme.
-func (s *Discussion) GetTheme() string {
+func (s *Discussion) GetTheme() DiscussionTheme {
 	return s.Theme
 }
 
@@ -170,9 +175,11 @@ func (s *Discussion) SetID(val ID) {
 }
 
 // SetTheme sets the value of Theme.
-func (s *Discussion) SetTheme(val string) {
+func (s *Discussion) SetTheme(val DiscussionTheme) {
 	s.Theme = val
 }
+
+type DiscussionTheme string
 
 // Ref: #/components/schemas/Error
 type Error struct {
@@ -232,88 +239,102 @@ type ID string
 type LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
 
 type LearningDiscussionsDiscussionIdCommentsCommentIdPutReq struct {
-	CommentType string `json:"commentType"`
-	Content     string `json:"content"`
+	CommentType CommentType    `json:"commentType"`
+	Content     CommentContent `json:"content"`
 }
 
 // GetCommentType returns the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) GetCommentType() string {
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) GetCommentType() CommentType {
 	return s.CommentType
 }
 
 // GetContent returns the value of Content.
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) GetContent() string {
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) GetContent() CommentContent {
 	return s.Content
 }
 
 // SetCommentType sets the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetCommentType(val string) {
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetCommentType(val CommentType) {
 	s.CommentType = val
 }
 
 // SetContent sets the value of Content.
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetContent(val string) {
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetContent(val CommentContent) {
 	s.Content = val
 }
 
+type LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq struct {
+	Status CommentStatus `json:"status"`
+}
+
+// GetStatus returns the value of Status.
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) GetStatus() CommentStatus {
+	return s.Status
+}
+
+// SetStatus sets the value of Status.
+func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) SetStatus(val CommentStatus) {
+	s.Status = val
+}
+
 type LearningDiscussionsDiscussionIdCommentsGeneratePostReq struct {
-	ParentCommentId NilString `json:"parentCommentId"`
-	CommentType     string    `json:"commentType"`
+	ParentCommentId NilID       `json:"parentCommentId"`
+	CommentType     CommentType `json:"commentType"`
 }
 
 // GetParentCommentId returns the value of ParentCommentId.
-func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) GetParentCommentId() NilString {
+func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) GetParentCommentId() NilID {
 	return s.ParentCommentId
 }
 
 // GetCommentType returns the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) GetCommentType() string {
+func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) GetCommentType() CommentType {
 	return s.CommentType
 }
 
 // SetParentCommentId sets the value of ParentCommentId.
-func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) SetParentCommentId(val NilString) {
+func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) SetParentCommentId(val NilID) {
 	s.ParentCommentId = val
 }
 
 // SetCommentType sets the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) SetCommentType(val string) {
+func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) SetCommentType(val CommentType) {
 	s.CommentType = val
 }
 
 type LearningDiscussionsDiscussionIdCommentsPostReq struct {
-	ParentCommentId NilString `json:"parentCommentId"`
-	CommentType     string    `json:"commentType"`
-	Content         string    `json:"content"`
+	ParentCommentId NilID          `json:"parentCommentId"`
+	CommentType     CommentType    `json:"commentType"`
+	Content         CommentContent `json:"content"`
 }
 
 // GetParentCommentId returns the value of ParentCommentId.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() NilString {
+func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() NilID {
 	return s.ParentCommentId
 }
 
 // GetCommentType returns the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetCommentType() string {
+func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetCommentType() CommentType {
 	return s.CommentType
 }
 
 // GetContent returns the value of Content.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetContent() string {
+func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetContent() CommentContent {
 	return s.Content
 }
 
 // SetParentCommentId sets the value of ParentCommentId.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val NilString) {
+func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val NilID) {
 	s.ParentCommentId = val
 }
 
 // SetCommentType sets the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetCommentType(val string) {
+func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetCommentType(val CommentType) {
 	s.CommentType = val
 }
 
 // SetContent sets the value of Content.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetContent(val string) {
+func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentContent) {
 	s.Content = val
 }
 
@@ -321,30 +342,30 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetContent(val string) 
 type LearningDiscussionsDiscussionIdDeleteNoContent struct{}
 
 type LearningDiscussionsDiscussionIdPutReq struct {
-	Theme string `json:"theme"`
+	Theme DiscussionTheme `json:"theme"`
 }
 
 // GetTheme returns the value of Theme.
-func (s *LearningDiscussionsDiscussionIdPutReq) GetTheme() string {
+func (s *LearningDiscussionsDiscussionIdPutReq) GetTheme() DiscussionTheme {
 	return s.Theme
 }
 
 // SetTheme sets the value of Theme.
-func (s *LearningDiscussionsDiscussionIdPutReq) SetTheme(val string) {
+func (s *LearningDiscussionsDiscussionIdPutReq) SetTheme(val DiscussionTheme) {
 	s.Theme = val
 }
 
 type LearningDiscussionsPostReq struct {
-	Theme string `json:"theme"`
+	Theme DiscussionTheme `json:"theme"`
 }
 
 // GetTheme returns the value of Theme.
-func (s *LearningDiscussionsPostReq) GetTheme() string {
+func (s *LearningDiscussionsPostReq) GetTheme() DiscussionTheme {
 	return s.Theme
 }
 
 // SetTheme sets the value of Theme.
-func (s *LearningDiscussionsPostReq) SetTheme(val string) {
+func (s *LearningDiscussionsPostReq) SetTheme(val DiscussionTheme) {
 	s.Theme = val
 }
 
@@ -387,51 +408,6 @@ func (o NilID) Get() (v ID, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o NilID) Or(d ID) ID {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewNilString returns new NilString with value set to v.
-func NewNilString(v string) NilString {
-	return NilString{
-		Value: v,
-	}
-}
-
-// NilString is nullable string.
-type NilString struct {
-	Value string
-	Null  bool
-}
-
-// SetTo sets value to v.
-func (o *NilString) SetTo(v string) {
-	o.Null = false
-	o.Value = v
-}
-
-// IsNull returns true if value is Null.
-func (o NilString) IsNull() bool { return o.Null }
-
-// SetToNull sets value to null.
-func (o *NilString) SetToNull() {
-	o.Null = true
-	var v string
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o NilString) Get() (v string, ok bool) {
-	if o.Null {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o NilString) Or(d string) string {
 	if v, ok := o.Get(); ok {
 		return v
 	}

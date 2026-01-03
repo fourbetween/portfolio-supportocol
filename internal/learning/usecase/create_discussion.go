@@ -24,10 +24,13 @@ type CreateDiscussionInput struct {
 }
 
 func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscussionInput) (*domain.Discussion, error) {
-	discussion := u.fac.Create(domain.CreateDiscussionParams{
+	discussion, err := u.fac.Create(domain.CreateDiscussionParams{
 		Theme:     input.Theme,
 		CreatedBy: input.CreatedBy,
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	if err := u.repo.Save(ctx, discussion); err != nil {
 		return nil, err

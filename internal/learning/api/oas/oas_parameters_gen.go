@@ -16,8 +16,8 @@ import (
 
 // LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams is parameters of DELETE /learning/discussions/{discussionId}/comments/{commentId} operation.
 type LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams struct {
-	DiscussionId string
-	CommentId    string
+	DiscussionId ID
+	CommentId    ID
 }
 
 func unpackLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams) {
@@ -26,14 +26,14 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(packed m
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(string)
+		params.DiscussionId = packed[key].(ID)
 	}
 	{
 		key := middleware.ParameterKey{
 			Name: "commentId",
 			In:   "path",
 		}
-		params.CommentId = packed[key].(string)
+		params.CommentId = packed[key].(ID)
 	}
 	return params
 }
@@ -58,17 +58,32 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]
 			})
 
 			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotDiscussionIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.DiscussionId.Validate(); err != nil {
 					return err
 				}
-
-				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -103,17 +118,32 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]
 			})
 
 			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotCommentIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotCommentIdVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
+				params.CommentId = ID(paramsDotCommentIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.CommentId.Validate(); err != nil {
 					return err
 				}
-
-				params.CommentId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -134,8 +164,8 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]
 
 // LearningDiscussionsDiscussionIdCommentsCommentIdPutParams is parameters of PUT /learning/discussions/{discussionId}/comments/{commentId} operation.
 type LearningDiscussionsDiscussionIdCommentsCommentIdPutParams struct {
-	DiscussionId string
-	CommentId    string
+	DiscussionId ID
+	CommentId    ID
 }
 
 func unpackLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdPutParams) {
@@ -144,14 +174,14 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(packed midd
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(string)
+		params.DiscussionId = packed[key].(ID)
 	}
 	{
 		key := middleware.ParameterKey{
 			Name: "commentId",
 			In:   "path",
 		}
-		params.CommentId = packed[key].(string)
+		params.CommentId = packed[key].(ID)
 	}
 	return params
 }
@@ -176,17 +206,32 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]str
 			})
 
 			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotDiscussionIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.DiscussionId.Validate(); err != nil {
 					return err
 				}
-
-				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -221,17 +266,180 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]str
 			})
 
 			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotCommentIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotCommentIdVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
+				params.CommentId = ID(paramsDotCommentIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.CommentId.Validate(); err != nil {
 					return err
 				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "commentId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
 
-				params.CommentId = c
+// LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams is parameters of PUT /learning/discussions/{discussionId}/comments/{commentId}/status operation.
+type LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams struct {
+	DiscussionId ID
+	CommentId    ID
+}
+
+func unpackLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "discussionId",
+			In:   "path",
+		}
+		params.DiscussionId = packed[key].(ID)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "commentId",
+			In:   "path",
+		}
+		params.CommentId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams, _ error) {
+	// Decode path: discussionId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "discussionId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotDiscussionIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.DiscussionId.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "discussionId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: commentId.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "commentId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotCommentIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotCommentIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.CommentId = ID(paramsDotCommentIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.CommentId.Validate(); err != nil {
+					return err
+				}
 				return nil
 			}(); err != nil {
 				return err
@@ -252,7 +460,7 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]str
 
 // LearningDiscussionsDiscussionIdCommentsGeneratePostParams is parameters of POST /learning/discussions/{discussionId}/comments/generate operation.
 type LearningDiscussionsDiscussionIdCommentsGeneratePostParams struct {
-	DiscussionId string
+	DiscussionId ID
 }
 
 func unpackLearningDiscussionsDiscussionIdCommentsGeneratePostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsGeneratePostParams) {
@@ -261,7 +469,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsGeneratePostParams(packed midd
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(string)
+		params.DiscussionId = packed[key].(ID)
 	}
 	return params
 }
@@ -286,17 +494,32 @@ func decodeLearningDiscussionsDiscussionIdCommentsGeneratePostParams(args [1]str
 			})
 
 			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotDiscussionIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.DiscussionId.Validate(); err != nil {
 					return err
 				}
-
-				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -317,7 +540,7 @@ func decodeLearningDiscussionsDiscussionIdCommentsGeneratePostParams(args [1]str
 
 // LearningDiscussionsDiscussionIdCommentsGetParams is parameters of GET /learning/discussions/{discussionId}/comments operation.
 type LearningDiscussionsDiscussionIdCommentsGetParams struct {
-	DiscussionId string
+	DiscussionId ID
 }
 
 func unpackLearningDiscussionsDiscussionIdCommentsGetParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsGetParams) {
@@ -326,7 +549,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsGetParams(packed middleware.Pa
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(string)
+		params.DiscussionId = packed[key].(ID)
 	}
 	return params
 }
@@ -351,17 +574,32 @@ func decodeLearningDiscussionsDiscussionIdCommentsGetParams(args [1]string, args
 			})
 
 			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotDiscussionIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.DiscussionId.Validate(); err != nil {
 					return err
 				}
-
-				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -382,7 +620,7 @@ func decodeLearningDiscussionsDiscussionIdCommentsGetParams(args [1]string, args
 
 // LearningDiscussionsDiscussionIdCommentsPostParams is parameters of POST /learning/discussions/{discussionId}/comments operation.
 type LearningDiscussionsDiscussionIdCommentsPostParams struct {
-	DiscussionId string
+	DiscussionId ID
 }
 
 func unpackLearningDiscussionsDiscussionIdCommentsPostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsPostParams) {
@@ -391,7 +629,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsPostParams(packed middleware.P
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(string)
+		params.DiscussionId = packed[key].(ID)
 	}
 	return params
 }
@@ -416,17 +654,32 @@ func decodeLearningDiscussionsDiscussionIdCommentsPostParams(args [1]string, arg
 			})
 
 			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotDiscussionIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.DiscussionId.Validate(); err != nil {
 					return err
 				}
-
-				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -447,7 +700,7 @@ func decodeLearningDiscussionsDiscussionIdCommentsPostParams(args [1]string, arg
 
 // LearningDiscussionsDiscussionIdDeleteParams is parameters of DELETE /learning/discussions/{discussionId} operation.
 type LearningDiscussionsDiscussionIdDeleteParams struct {
-	DiscussionId string
+	DiscussionId ID
 }
 
 func unpackLearningDiscussionsDiscussionIdDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdDeleteParams) {
@@ -456,7 +709,7 @@ func unpackLearningDiscussionsDiscussionIdDeleteParams(packed middleware.Paramet
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(string)
+		params.DiscussionId = packed[key].(ID)
 	}
 	return params
 }
@@ -481,17 +734,32 @@ func decodeLearningDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscap
 			})
 
 			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotDiscussionIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.DiscussionId.Validate(); err != nil {
 					return err
 				}
-
-				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -512,7 +780,7 @@ func decodeLearningDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscap
 
 // LearningDiscussionsDiscussionIdGetParams is parameters of GET /learning/discussions/{discussionId} operation.
 type LearningDiscussionsDiscussionIdGetParams struct {
-	DiscussionId string
+	DiscussionId ID
 }
 
 func unpackLearningDiscussionsDiscussionIdGetParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdGetParams) {
@@ -521,7 +789,7 @@ func unpackLearningDiscussionsDiscussionIdGetParams(packed middleware.Parameters
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(string)
+		params.DiscussionId = packed[key].(ID)
 	}
 	return params
 }
@@ -546,17 +814,32 @@ func decodeLearningDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped 
 			})
 
 			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotDiscussionIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.DiscussionId.Validate(); err != nil {
 					return err
 				}
-
-				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err
@@ -577,7 +860,7 @@ func decodeLearningDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped 
 
 // LearningDiscussionsDiscussionIdPutParams is parameters of PUT /learning/discussions/{discussionId} operation.
 type LearningDiscussionsDiscussionIdPutParams struct {
-	DiscussionId string
+	DiscussionId ID
 }
 
 func unpackLearningDiscussionsDiscussionIdPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdPutParams) {
@@ -586,7 +869,7 @@ func unpackLearningDiscussionsDiscussionIdPutParams(packed middleware.Parameters
 			Name: "discussionId",
 			In:   "path",
 		}
-		params.DiscussionId = packed[key].(string)
+		params.DiscussionId = packed[key].(ID)
 	}
 	return params
 }
@@ -611,17 +894,32 @@ func decodeLearningDiscussionsDiscussionIdPutParams(args [1]string, argsEscaped 
 			})
 
 			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
+				var paramsDotDiscussionIdVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
 					return err
 				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.DiscussionId.Validate(); err != nil {
 					return err
 				}
-
-				params.DiscussionId = c
 				return nil
 			}(); err != nil {
 				return err

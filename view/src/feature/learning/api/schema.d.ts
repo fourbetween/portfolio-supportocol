@@ -53,7 +53,7 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        theme: string;
+                        theme: components["schemas"]["DiscussionTheme"];
                     };
                 };
             };
@@ -97,7 +97,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: string;
+                    discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
             };
@@ -129,14 +129,14 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: string;
+                    discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
             };
             requestBody: {
                 content: {
                     "application/json": {
-                        theme: string;
+                        theme: components["schemas"]["DiscussionTheme"];
                     };
                 };
             };
@@ -168,7 +168,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: string;
+                    discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
             };
@@ -210,7 +210,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: string;
+                    discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
             };
@@ -243,16 +243,16 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: string;
+                    discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
             };
             requestBody: {
                 content: {
                     "application/json": {
-                        parentCommentId: string | null;
-                        commentType: string;
-                        content: string;
+                        parentCommentId: components["schemas"]["Id"] | null;
+                        commentType: components["schemas"]["CommentType"];
+                        content: components["schemas"]["CommentContent"];
                     };
                 };
             };
@@ -297,16 +297,16 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: string;
-                    commentId: string;
+                    discussionId: components["schemas"]["Id"];
+                    commentId: components["schemas"]["Id"];
                 };
                 cookie?: never;
             };
             requestBody: {
                 content: {
                     "application/json": {
-                        commentType: string;
-                        content: string;
+                        commentType: components["schemas"]["CommentType"];
+                        content: components["schemas"]["CommentContent"];
                     };
                 };
             };
@@ -338,8 +338,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: string;
-                    commentId: string;
+                    discussionId: components["schemas"]["Id"];
+                    commentId: components["schemas"]["Id"];
                 };
                 cookie?: never;
             };
@@ -368,6 +368,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/learning/discussions/{discussionId}/comments/{commentId}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description update comment status */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    discussionId: components["schemas"]["Id"];
+                    commentId: components["schemas"]["Id"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        status: components["schemas"]["CommentStatus"];
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/learning/discussions/{discussionId}/comments/generate": {
         parameters: {
             query?: never;
@@ -383,15 +437,15 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: string;
+                    discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
             };
             requestBody: {
                 content: {
                     "application/json": {
-                        parentCommentId: string | null;
-                        commentType: string;
+                        parentCommentId: components["schemas"]["Id"] | null;
+                        commentType: components["schemas"]["CommentType"];
                     };
                 };
             };
@@ -431,18 +485,22 @@ export interface components {
             message: string;
         };
         Id: string;
+        /** @enum {string} */
+        CommentStatus: "active" | "proposed";
+        DiscussionTheme: string;
+        CommentType: string;
+        CommentContent: string;
         Discussion: {
             id: components["schemas"]["Id"];
-            theme: string;
+            theme: components["schemas"]["DiscussionTheme"];
         };
         Comment: {
             id: components["schemas"]["Id"];
             discussionId: components["schemas"]["Id"];
             parentCommentId: components["schemas"]["Id"] | null;
-            commentType: string;
-            content: string;
-            /** @enum {string} */
-            status: "active" | "proposed";
+            commentType: components["schemas"]["CommentType"];
+            content: components["schemas"]["CommentContent"];
+            status: components["schemas"]["CommentStatus"];
         };
     };
     responses: never;

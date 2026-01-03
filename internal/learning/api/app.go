@@ -16,43 +16,46 @@ import (
 )
 
 type HandlerParams struct {
-	CreateDiscussion *usecase.CreateDiscussionUsecase
-	GetDiscussion    *usecase.GetDiscussionUsecase
-	ListDiscussions  *usecase.ListDiscussionsUsecase
-	UpdateDiscussion *usecase.UpdateDiscussionUsecase
-	DeleteDiscussion *usecase.DeleteDiscussionUsecase
-	CreateComment    *usecase.CreateCommentUsecase
-	ListComments     *usecase.ListCommentsUsecase
-	UpdateComment    *usecase.UpdateCommentUsecase
-	DeleteComment    *usecase.DeleteCommentUsecase
-	GenerateComment  *usecase.GenerateCommentUsecase
+	CreateDiscussion    *usecase.CreateDiscussionUsecase
+	GetDiscussion       *usecase.GetDiscussionUsecase
+	ListDiscussions     *usecase.ListDiscussionsUsecase
+	UpdateDiscussion    *usecase.UpdateDiscussionUsecase
+	DeleteDiscussion    *usecase.DeleteDiscussionUsecase
+	CreateComment       *usecase.CreateCommentUsecase
+	ListComments        *usecase.ListCommentsUsecase
+	UpdateComment       *usecase.UpdateCommentUsecase
+	DeleteComment       *usecase.DeleteCommentUsecase
+	UpdateCommentStatus *usecase.UpdateCommentStatusUsecase
+	GenerateComment     *usecase.GenerateCommentUsecase
 }
 
 type appHandler struct {
-	createDiscussion *usecase.CreateDiscussionUsecase
-	getDiscussion    *usecase.GetDiscussionUsecase
-	listDiscussions  *usecase.ListDiscussionsUsecase
-	updateDiscussion *usecase.UpdateDiscussionUsecase
-	deleteDiscussion *usecase.DeleteDiscussionUsecase
-	createComment    *usecase.CreateCommentUsecase
-	listComments     *usecase.ListCommentsUsecase
-	updateComment    *usecase.UpdateCommentUsecase
-	deleteComment    *usecase.DeleteCommentUsecase
-	generateComment  *usecase.GenerateCommentUsecase
+	createDiscussion    *usecase.CreateDiscussionUsecase
+	getDiscussion       *usecase.GetDiscussionUsecase
+	listDiscussions     *usecase.ListDiscussionsUsecase
+	updateDiscussion    *usecase.UpdateDiscussionUsecase
+	deleteDiscussion    *usecase.DeleteDiscussionUsecase
+	createComment       *usecase.CreateCommentUsecase
+	listComments        *usecase.ListCommentsUsecase
+	updateComment       *usecase.UpdateCommentUsecase
+	deleteComment       *usecase.DeleteCommentUsecase
+	updateCommentStatus *usecase.UpdateCommentStatusUsecase
+	generateComment     *usecase.GenerateCommentUsecase
 }
 
 func NewHandler(params HandlerParams) oas.Handler {
 	return &appHandler{
-		createDiscussion: params.CreateDiscussion,
-		getDiscussion:    params.GetDiscussion,
-		listDiscussions:  params.ListDiscussions,
-		updateDiscussion: params.UpdateDiscussion,
-		deleteDiscussion: params.DeleteDiscussion,
-		createComment:    params.CreateComment,
-		listComments:     params.ListComments,
-		updateComment:    params.UpdateComment,
-		deleteComment:    params.DeleteComment,
-		generateComment:  params.GenerateComment,
+		createDiscussion:    params.CreateDiscussion,
+		getDiscussion:       params.GetDiscussion,
+		listDiscussions:     params.ListDiscussions,
+		updateDiscussion:    params.UpdateDiscussion,
+		deleteDiscussion:    params.DeleteDiscussion,
+		createComment:       params.CreateComment,
+		listComments:        params.ListComments,
+		updateComment:       params.UpdateComment,
+		deleteComment:       params.DeleteComment,
+		updateCommentStatus: params.UpdateCommentStatus,
+		generateComment:     params.GenerateComment,
 	}
 }
 
@@ -71,7 +74,7 @@ func (h *appHandler) LearningDiscussionsGet(ctx context.Context) ([]oas.Discussi
 
 func (h *appHandler) LearningDiscussionsPost(ctx context.Context, req *oas.LearningDiscussionsPostReq) (*oas.Discussion, error) {
 	item, err := h.createDiscussion.Execute(ctx, usecase.CreateDiscussionInput{
-		Theme:     req.Theme,
+		Theme:     string(req.Theme),
 		CreatedBy: httpctx.GetUserID(ctx),
 	})
 	if err != nil {
@@ -84,7 +87,7 @@ func (h *appHandler) LearningDiscussionsPost(ctx context.Context, req *oas.Learn
 
 func (h *appHandler) LearningDiscussionsDiscussionIdGet(ctx context.Context, params oas.LearningDiscussionsDiscussionIdGetParams) (*oas.Discussion, error) {
 	item, err := h.getDiscussion.Execute(ctx, usecase.GetDiscussionInput{
-		ID:        params.DiscussionId,
+		ID:        string(params.DiscussionId),
 		CreatedBy: httpctx.GetUserID(ctx),
 	})
 	if err != nil {
@@ -97,9 +100,9 @@ func (h *appHandler) LearningDiscussionsDiscussionIdGet(ctx context.Context, par
 
 func (h *appHandler) LearningDiscussionsDiscussionIdPut(ctx context.Context, req *oas.LearningDiscussionsDiscussionIdPutReq, params oas.LearningDiscussionsDiscussionIdPutParams) (*oas.Discussion, error) {
 	item, err := h.updateDiscussion.Execute(ctx, usecase.UpdateDiscussionInput{
-		ID:        params.DiscussionId,
+		ID:        string(params.DiscussionId),
 		CreatedBy: httpctx.GetUserID(ctx),
-		Theme:     req.Theme,
+		Theme:     string(req.Theme),
 	})
 	if err != nil {
 		return nil, err
@@ -111,14 +114,14 @@ func (h *appHandler) LearningDiscussionsDiscussionIdPut(ctx context.Context, req
 
 func (h *appHandler) LearningDiscussionsDiscussionIdDelete(ctx context.Context, params oas.LearningDiscussionsDiscussionIdDeleteParams) error {
 	return h.deleteDiscussion.Execute(ctx, usecase.DeleteDiscussionInput{
-		ID:        params.DiscussionId,
+		ID:        string(params.DiscussionId),
 		CreatedBy: httpctx.GetUserID(ctx),
 	})
 }
 
 func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(ctx context.Context, params oas.LearningDiscussionsDiscussionIdCommentsGetParams) ([]oas.Comment, error) {
 	items, err := h.listComments.Execute(ctx, usecase.ListCommentsInput{
-		DiscussionID: params.DiscussionId,
+		DiscussionID: string(params.DiscussionId),
 		UserID:       httpctx.GetUserID(ctx),
 	})
 	if err != nil {
@@ -135,14 +138,15 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(ctx context.Cont
 func (h *appHandler) LearningDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *oas.LearningDiscussionsDiscussionIdCommentsPostReq, params oas.LearningDiscussionsDiscussionIdCommentsPostParams) (*oas.Comment, error) {
 	var parentCommentID *string
 	if !req.ParentCommentId.Null {
-		parentCommentID = &req.ParentCommentId.Value
+		s := string(req.ParentCommentId.Value)
+		parentCommentID = &s
 	}
 
 	item, err := h.createComment.Execute(ctx, usecase.CreateCommentInput{
-		DiscussionID:    params.DiscussionId,
+		DiscussionID:    string(params.DiscussionId),
 		ParentCommentID: parentCommentID,
-		CommentType:     req.CommentType,
-		Content:         req.Content,
+		CommentType:     string(req.CommentType),
+		Content:         string(req.Content),
 		PostedBy:        httpctx.GetUserID(ctx),
 	})
 	if err != nil {
@@ -155,11 +159,11 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsPost(ctx context.Con
 
 func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req *oas.LearningDiscussionsDiscussionIdCommentsCommentIdPutReq, params oas.LearningDiscussionsDiscussionIdCommentsCommentIdPutParams) (*oas.Comment, error) {
 	item, err := h.updateComment.Execute(ctx, usecase.UpdateCommentInput{
-		ID:           params.CommentId,
-		DiscussionID: params.DiscussionId,
+		ID:           string(params.CommentId),
+		DiscussionID: string(params.DiscussionId),
 		UserID:       httpctx.GetUserID(ctx),
-		CommentType:  req.CommentType,
-		Content:      req.Content,
+		CommentType:  string(req.CommentType),
+		Content:      string(req.Content),
 	})
 	if err != nil {
 		return nil, err
@@ -171,22 +175,38 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx con
 
 func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdDelete(ctx context.Context, params oas.LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams) error {
 	return h.deleteComment.Execute(ctx, usecase.DeleteCommentInput{
-		ID:           params.CommentId,
-		DiscussionID: params.DiscussionId,
+		ID:           string(params.CommentId),
+		DiscussionID: string(params.DiscussionId),
 		UserID:       httpctx.GetUserID(ctx),
 	})
+}
+
+func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx context.Context, req *oas.LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq, params oas.LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) (*oas.Comment, error) {
+	item, err := h.updateCommentStatus.Execute(ctx, usecase.UpdateCommentStatusInput{
+		ID:           string(params.CommentId),
+		DiscussionID: string(params.DiscussionId),
+		UserID:       httpctx.GetUserID(ctx),
+		Status:       string(req.Status),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := h.toOasComment(item)
+	return &res, nil
 }
 
 func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *oas.LearningDiscussionsDiscussionIdCommentsGeneratePostReq, params oas.LearningDiscussionsDiscussionIdCommentsGeneratePostParams) ([]oas.Comment, error) {
 	var parentCommentID *string
 	if !req.ParentCommentId.Null {
-		parentCommentID = &req.ParentCommentId.Value
+		s := string(req.ParentCommentId.Value)
+		parentCommentID = &s
 	}
 
 	items, err := h.generateComment.Execute(ctx, usecase.GenerateCommentInput{
-		DiscussionID:    params.DiscussionId,
+		DiscussionID:    string(params.DiscussionId),
 		ParentCommentID: parentCommentID,
-		CommentType:     req.CommentType,
+		CommentType:     string(req.CommentType),
 		UserID:          httpctx.GetUserID(ctx),
 	})
 	if err != nil {
@@ -228,7 +248,7 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	return oas.Discussion{
 		ID:    oas.ID(item.ID()),
-		Theme: item.Theme(),
+		Theme: oas.DiscussionTheme(item.Theme()),
 	}
 }
 
@@ -244,7 +264,8 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		ID:              oas.ID(item.ID()),
 		DiscussionId:    oas.ID(item.DiscussionID()),
 		ParentCommentId: parentCommentID,
-		CommentType:     item.CommentType(),
-		Content:         item.Content(),
+		CommentType:     oas.CommentType(item.CommentType()),
+		Content:         oas.CommentContent(item.Content()),
+		Status:          oas.CommentStatus(item.Status()),
 	}
 }

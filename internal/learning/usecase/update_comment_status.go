@@ -7,30 +7,29 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
-type UpdateCommentUsecase struct {
+type UpdateCommentStatusUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
 }
 
-func NewUpdateCommentUsecase(
+func NewUpdateCommentStatusUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
-) *UpdateCommentUsecase {
-	return &UpdateCommentUsecase{
+) *UpdateCommentStatusUsecase {
+	return &UpdateCommentStatusUsecase{
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
 	}
 }
 
-type UpdateCommentInput struct {
+type UpdateCommentStatusInput struct {
 	ID           string
 	DiscussionID string
 	UserID       string
-	CommentType  string
-	Content      string
+	Status       string
 }
 
-func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentInput) (*domain.Comment, error) {
+func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCommentStatusInput) (*domain.Comment, error) {
 	// Verify discussion exists and user has access
 	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
 		ID:        input.DiscussionID,
@@ -49,10 +48,8 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 		return nil, apperr.ErrForbidden
 	}
 
-	if err := comment.Update(domain.UpdateCommentParams{
-		CommentType: input.CommentType,
-		Content:     input.Content,
-	}); err != nil {
+	status := domain.CommentStatus(input.Status)
+	if err := comment.UpdateStatus(status); err != nil {
 		return nil, err
 	}
 

@@ -33,16 +33,17 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 }
 
 var operationRolesCookieAuth = map[string][]string{
-	LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation: []string{},
-	LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation:    []string{},
-	LearningDiscussionsDiscussionIdCommentsGeneratePostOperation:    []string{},
-	LearningDiscussionsDiscussionIdCommentsGetOperation:             []string{},
-	LearningDiscussionsDiscussionIdCommentsPostOperation:            []string{},
-	LearningDiscussionsDiscussionIdDeleteOperation:                  []string{},
-	LearningDiscussionsDiscussionIdGetOperation:                     []string{},
-	LearningDiscussionsDiscussionIdPutOperation:                     []string{},
-	LearningDiscussionsGetOperation:                                 []string{},
-	LearningDiscussionsPostOperation:                                []string{},
+	LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation:    []string{},
+	LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation:       []string{},
+	LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation: []string{},
+	LearningDiscussionsDiscussionIdCommentsGeneratePostOperation:       []string{},
+	LearningDiscussionsDiscussionIdCommentsGetOperation:                []string{},
+	LearningDiscussionsDiscussionIdCommentsPostOperation:               []string{},
+	LearningDiscussionsDiscussionIdDeleteOperation:                     []string{},
+	LearningDiscussionsDiscussionIdGetOperation:                        []string{},
+	LearningDiscussionsDiscussionIdPutOperation:                        []string{},
+	LearningDiscussionsGetOperation:                                    []string{},
+	LearningDiscussionsPostOperation:                                   []string{},
 }
 
 func (s *Server) securityCookieAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {

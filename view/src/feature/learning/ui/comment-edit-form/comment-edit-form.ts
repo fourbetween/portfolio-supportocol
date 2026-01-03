@@ -87,7 +87,11 @@ export class LearningCommentEditForm extends LitElement {
           .value=${this._content}
           @input=${this.handleInput}
           placeholder="Enter your comment..."
+          maxlength="400"
         ></textarea>
+        <div class="char-counter ${this._content.length > 400 ? "error" : ""}">
+          ${this._content.length} / 400
+        </div>
       </div>
       <div class="actions">
         <button
@@ -152,6 +156,15 @@ export class LearningCommentEditForm extends LitElement {
         clip: rect(0, 0, 0, 0);
         white-space: nowrap;
         border-width: 0;
+      }
+      .char-counter {
+        font-size: 0.8rem;
+        color: var(--color-text-secondary, #666);
+        text-align: right;
+        margin-top: 4px;
+      }
+      .char-counter.error {
+        color: var(--color-error, #d32f2f);
       }
     `,
   ];
