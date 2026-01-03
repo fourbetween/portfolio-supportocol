@@ -69,6 +69,7 @@ func (r *CommentRepository) Save(ctx context.Context, c *domain.Comment) error {
 		ON_DUPLICATE_KEY_UPDATE(
 			table.Comments.CommentType.SET(table.Comments.NEW.CommentType),
 			table.Comments.Content.SET(table.Comments.NEW.Content),
+			table.Comments.Status.SET(table.Comments.NEW.Status),
 		)
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
@@ -94,6 +95,7 @@ func (r *CommentRepository) BatchSave(ctx context.Context, comments []*domain.Co
 		ON_DUPLICATE_KEY_UPDATE(
 			table.Comments.CommentType.SET(table.Comments.NEW.CommentType),
 			table.Comments.Content.SET(table.Comments.NEW.Content),
+			table.Comments.Status.SET(table.Comments.NEW.Status),
 		)
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
