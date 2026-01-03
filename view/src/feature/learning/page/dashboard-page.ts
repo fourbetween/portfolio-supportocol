@@ -7,6 +7,7 @@ import { buttonStyle } from "../../../shared/style/button";
 import { client } from "../api/client";
 import "../component/comment-explorer-widget";
 import "../component/comment-frame-widget";
+import "../component/comment-proposed-widget";
 import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
 import type { Comment } from "../model/comment";
@@ -131,7 +132,7 @@ export class LearningDashboardPage extends LitElement {
 
     return html`
       <div class="dashboard">
-        <aside class="sidebar">
+        <aside class="sidebar sidebar-left">
           <learning-discussion-list-widget
             .discussions=${this._discussions}
             @select-discussion=${this._handleSelectDiscussion}
@@ -162,6 +163,14 @@ export class LearningDashboardPage extends LitElement {
             ></learning-comment-explorer-widget>
           </div>
         </main>
+        <aside class="sidebar sidebar-right">
+          <learning-comment-proposed-widget
+            .discussionId=${this._selectedDiscussionId}
+            .comments=${this._comments}
+            @comment-updated=${this._handleCommentUpdated}
+            @comment-deleted=${this._handleCommentDeleted}
+          ></learning-comment-proposed-widget>
+        </aside>
       </div>
     `;
   }
@@ -181,8 +190,13 @@ export class LearningDashboardPage extends LitElement {
       }
       .sidebar {
         width: 300px;
-        border-right: 1px solid var(--color-border-default);
         overflow-y: auto;
+      }
+      .sidebar-left {
+        border-right: 1px solid var(--color-border-default);
+      }
+      .sidebar-right {
+        border-left: 1px solid var(--color-border-default);
       }
       .main {
         flex: 1;
@@ -193,6 +207,7 @@ export class LearningDashboardPage extends LitElement {
       }
       .detail,
       .comment-frame,
+      .comment-proposed,
       .comment-explorer {
         padding: 0 16px;
       }
