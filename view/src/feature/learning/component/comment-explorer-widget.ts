@@ -4,9 +4,9 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
-import { client } from "../api/client";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
+import { commentRepository } from "../repository/comment-repository";
 import "../ui/comment-context/comment-context";
 import "../ui/comment-tree/comment-tree";
 import "./comment-create-widget";
@@ -65,98 +65,68 @@ export class LearningCommentExplorerWidget extends LitElement {
     detail: { commentType: string; content: string }
   ) {
     if (!this.discussionId) return;
-    const { data, error } = await client.PUT(
-      "/learning/discussions/{discussionId}/comments/{commentId}",
-      {
-        params: {
-          path: {
-            discussionId: this.discussionId,
-            commentId,
-          },
-        },
-        body: detail,
-      }
-    );
+    try {
+      const data = await commentRepository.update(
+        this.discussionId,
+        commentId,
+        detail
+      );
 
-    if (error) {
+      showToast(this, "Comment updated.", "success", 2000);
+      this.dispatchEvent(
+        new CustomEvent("comment-updated", {
+          detail: data,
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } catch (error: any) {
       showToast(this, error.message, "error");
-      return;
     }
-
-    showToast(this, "Comment updated.", "success", 2000);
-    this.dispatchEvent(
-      new CustomEvent("comment-updated", {
-        detail: data,
-        bubbles: true,
-        composed: true,
-      })
-    );
   }
 
   private async handleCommentDelete(commentId: string) {
     if (!this.discussionId) return;
     if (!confirm("Are you sure you want to delete this comment?")) return;
 
-    const { error } = await client.DELETE(
-      "/learning/discussions/{discussionId}/comments/{commentId}",
-      {
-        params: {
-          path: {
-            discussionId: this.discussionId,
-            commentId,
-          },
-        },
-      }
-    );
+    try {
+      await commentRepository.delete(this.discussionId, commentId);
 
-    if (error) {
+      showToast(this, "Comment deleted.", "success", 2000);
+      this.dispatchEvent(
+        new CustomEvent("comment-deleted", {
+          detail: { id: commentId },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } catch (error: any) {
       showToast(this, error.message, "error");
-      return;
     }
-
-    showToast(this, "Comment deleted.", "success", 2000);
-    this.dispatchEvent(
-      new CustomEvent("comment-deleted", {
-        detail: { id: commentId },
-        bubbles: true,
-        composed: true,
-      })
-    );
   }
 
   private async handleCommentGenerate(commentId: string, commentType: string) {
     if (!this.discussionId) return;
-    const { data, error } = await client.POST(
-      "/learning/discussions/{discussionId}/comments/generate",
-      {
-        params: {
-          path: {
-            discussionId: this.discussionId,
-          },
-        },
-        body: {
-          parentCommentId: commentId,
-          commentType,
-        },
-      }
-    );
+    try {
+      const data = await commentRepository.generate(this.discussionId, {
+        parentCommentId: commentId,
+        commentType,
+      });
 
-    if (error) {
+      showToast(this, "Comments generated.", "success", 2000);
+      if (data) {
+        for (const comment of data) {
+          this.dispatchEvent(
+            new CustomEvent("comment-created", {
+              detail: comment,
+              bubbles: true,
+              composed: true,
+            })
+          );
+        }
+      }
+    } catch (error: any) {
       showToast(this, error.message, "error");
-      return;
-    }
-
-    showToast(this, "Comments generated.", "success", 2000);
-    if (data) {
-      for (const comment of data) {
-        this.dispatchEvent(
-          new CustomEvent("comment-created", {
-            detail: comment,
-            bubbles: true,
-            composed: true,
-          })
-        );
-      }
     }
   }
 
@@ -165,36 +135,25 @@ export class LearningCommentExplorerWidget extends LitElement {
     detail: { commentType: string; content: string }
   ) {
     if (!this.discussionId) return;
-    const { data, error } = await client.POST(
-      "/learning/discussions/{discussionId}/comments",
-      {
-        params: {
-          path: {
-            discussionId: this.discussionId,
-          },
-        },
-        body: {
-          parentCommentId,
-          commentType: detail.commentType,
-          content: detail.content,
-        },
+    try {
+      const data = await commentRepository.create(this.discussionId, {
+        parentCommentId,
+        commentType: detail.commentType,
+        content: detail.content,
+      });
+
+      showToast(this, "Comment created.", "success", 2000);
+      if (data) {
+        this.dispatchEvent(
+          new CustomEvent("comment-created", {
+            detail: data,
+            bubbles: true,
+            composed: true,
+          })
+        );
       }
-    );
-
-    if (error) {
+    } catch (error: any) {
       showToast(this, error.message, "error");
-      return;
-    }
-
-    showToast(this, "Comment created.", "success", 2000);
-    if (data) {
-      this.dispatchEvent(
-        new CustomEvent("comment-created", {
-          detail: data,
-          bubbles: true,
-          composed: true,
-        })
-      );
     }
   }
 

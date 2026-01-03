@@ -4,7 +4,6 @@ import { customElement, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import { client } from "../api/client";
 import "../component/comment-explorer-widget";
 import "../component/comment-frame-widget";
 import "../component/comment-proposed-widget";
@@ -12,6 +11,8 @@ import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
+import { commentRepository } from "../repository/comment-repository";
+import { discussionRepository } from "../repository/discussion-repository";
 
 @customElement("learning-dashboard-page")
 export class LearningDashboardPage extends LitElement {
@@ -33,18 +34,7 @@ export class LearningDashboardPage extends LitElement {
     new Task(this, {
       task: async () => {
         if (!this._selectedDiscussionId) return [] as Comment[];
-        const { data, error } = await client.GET(
-          "/learning/discussions/{discussionId}/comments",
-          {
-            params: {
-              path: {
-                discussionId: this._selectedDiscussionId || "",
-              },
-            },
-          }
-        );
-        if (error) throw new Error(error.message);
-        return data || [];
+        return await commentRepository.list(this._selectedDiscussionId);
       },
       onComplete: (comments) => {
         this._comments = comments;
@@ -78,9 +68,7 @@ export class LearningDashboardPage extends LitElement {
 
   private discussionsTask = new Task(this, {
     task: async () => {
-      const { data, error } = await client.GET("/learning/discussions");
-      if (error) throw new Error(error.message);
-      return data || [];
+      return await discussionRepository.list();
     },
     onComplete: (discussions) => {
       this._discussions = discussions;

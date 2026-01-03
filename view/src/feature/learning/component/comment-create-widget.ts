@@ -2,9 +2,9 @@ import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
-import { client } from "../api/client";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
+import { commentRepository } from "../repository/comment-repository";
 import "../ui/comment-add-button/comment-add-button";
 import "../ui/comment-edit-form/comment-edit-form";
 import "../ui/comment-type-popup/comment-type-popup";
@@ -52,24 +52,11 @@ export class LearningCommentCreateWidget extends LitElement {
     if (!this.discussionId) return;
 
     try {
-      const { data, error } = await client.POST(
-        "/learning/discussions/{discussionId}/comments",
-        {
-          params: {
-            path: { discussionId: this.discussionId },
-          },
-          body: {
-            parentCommentId: this.parentCommentId || null,
-            commentType: detail.commentType,
-            content: detail.content,
-          },
-        }
-      );
-
-      if (error) {
-        showToast(this, error.message, "error");
-        return;
-      }
+      const data = await commentRepository.create(this.discussionId, {
+        parentCommentId: this.parentCommentId || null,
+        commentType: detail.commentType,
+        content: detail.content,
+      });
 
       showToast(this, "Comment created.", "success", 2000);
       this.handleCancel();
@@ -80,8 +67,8 @@ export class LearningCommentCreateWidget extends LitElement {
           composed: true,
         })
       );
-    } catch (e) {
-      showToast(this, String(e), "error");
+    } catch (e: any) {
+      showToast(this, e.message, "error");
     }
   }
 
