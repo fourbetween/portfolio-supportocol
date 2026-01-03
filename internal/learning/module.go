@@ -29,6 +29,63 @@ func NewHTTPHandler(
 	jwtSrv jwt.Service,
 	awscfg aws.Config,
 ) (http.Handler, error) {
+	idSrv := id.NewUUIDService()
+	clockSrv := clock.NewRealService()
+
+	discussionRepo := db.NewDiscussionRepository(dbCon)
+	commentRepo := db.NewCommentRepository(dbCon)
+	discussionFac := domain.NewDiscussionFactory(
+		idSrv,
+		clockSrv,
+	)
+	commentFac := domain.NewCommentFactory(
+		idSrv,
+		clockSrv,
+	)
+	discussionRepo.SetFactory(discussionFac)
+	commentRepo.SetFactory(commentFac)
+
+	queueURL, err := appConf.Get("sqs/comment-generation/queue-url")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get comment generation queue URL from config: %w", err)
+	}
+	commentGenerationQueue := queue.NewCommentGenerationQueue(
+		sqs.NewDefaultQueue[domain.GenerateCommentParams](queueURL, awscfg),
+	)
+
+	server, err := oas.NewServer(
+		api.NewHandler(api.HandlerParams{
+			CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac),
+			GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo),
+			ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionRepo),
+			UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo),
+			DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo),
+			CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac),
+			ListComments:             usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
+			UpdateComment:            usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo),
+			DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo),
+			UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo),
+			EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, commentGenerationQueue),
+		}),
+		api.NewSecurityHandler(jwtSrv),
+		oas.WithErrorHandler(httperr.ErrorHandler),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := httpctx.WithResponseWriter(r.Context(), w)
+		server.ServeHTTP(w, r.WithContext(ctx))
+	})
+
+	return handler, nil
+}
+
+func NewGenerateCommentUsecase(
+	dbCon *sql.DB,
+	shareConf conf.Service,
+) (*usecase.GenerateCommentUsecase, error) {
 	geminiAPIKey, err := shareConf.Get("google/gemini/apikey")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get Gemini API key from config: %w", err)
@@ -60,39 +117,5 @@ func NewHTTPHandler(
 		return nil, fmt.Errorf("failed to create comment generator: %w", err)
 	}
 
-	queueURL, err := appConf.Get("sqs/comment-generation/queue-url")
-	if err != nil {
-		return nil, fmt.Errorf("failed to get comment generation queue URL from config: %w", err)
-	}
-	q := sqs.NewDefaultQueue[domain.GenerateCommentParams](queueURL, awscfg)
-	commentGenerationQueue := queue.NewCommentGenerationQueue(q)
-
-	server, err := oas.NewServer(
-		api.NewHandler(api.HandlerParams{
-			CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac),
-			GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo),
-			ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionRepo),
-			UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo),
-			DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo),
-			CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac),
-			ListComments:             usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
-			UpdateComment:            usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo),
-			DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo),
-			UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo),
-			GenerateComment:          usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator),
-			EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, commentGenerationQueue),
-		}),
-		api.NewSecurityHandler(jwtSrv),
-		oas.WithErrorHandler(httperr.ErrorHandler),
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := httpctx.WithResponseWriter(r.Context(), w)
-		server.ServeHTTP(w, r.WithContext(ctx))
-	})
-
-	return handler, nil
+	return usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator), nil
 }

@@ -26,7 +26,6 @@ type HandlerParams struct {
 	UpdateComment            *usecase.UpdateCommentUsecase
 	DeleteComment            *usecase.DeleteCommentUsecase
 	UpdateCommentStatus      *usecase.UpdateCommentStatusUsecase
-	GenerateComment          *usecase.GenerateCommentUsecase
 	EnqueueCommentGeneration *usecase.EnqueueCommentGenerationUsecase
 }
 
@@ -41,7 +40,6 @@ type appHandler struct {
 	updateComment            *usecase.UpdateCommentUsecase
 	deleteComment            *usecase.DeleteCommentUsecase
 	updateCommentStatus      *usecase.UpdateCommentStatusUsecase
-	generateComment          *usecase.GenerateCommentUsecase
 	enqueueCommentGeneration *usecase.EnqueueCommentGenerationUsecase
 }
 
@@ -57,7 +55,6 @@ func NewHandler(params HandlerParams) oas.Handler {
 		updateComment:            params.UpdateComment,
 		deleteComment:            params.DeleteComment,
 		updateCommentStatus:      params.UpdateCommentStatus,
-		generateComment:          params.GenerateComment,
 		enqueueCommentGeneration: params.EnqueueCommentGeneration,
 	}
 }
