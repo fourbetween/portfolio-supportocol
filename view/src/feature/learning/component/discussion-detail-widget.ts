@@ -2,9 +2,9 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
-import { client } from "../api/client";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
+import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-detail/discussion-detail";
 
 @customElement("learning-discussion-detail-widget")
@@ -20,30 +20,22 @@ export class LearningDiscussionDetailWidget extends LitElement {
 
   private async handleSave(theme: string) {
     if (!this.discussion) return;
-    const { data, error } = await client.PUT(
-      "/learning/discussions/{discussionId}",
-      {
-        params: {
-          path: { discussionId: this.discussion.id },
-        },
-        body: { theme },
-      }
-    );
-    if (error) {
-      showToast(this, "Failed to update theme.", "error");
-      return;
-    }
-    this.discussion = data;
-    this.isEditing = false;
-    showToast(this, "Theme updated.", "success", 2000);
+    try {
+      const data = await discussionRepository.update(this.discussion.id, theme);
+      this.discussion = data;
+      this.isEditing = false;
+      showToast(this, "Theme updated.", "success", 2000);
 
-    this.dispatchEvent(
-      new CustomEvent("discussion-updated", {
-        detail: data,
-        bubbles: true,
-        composed: true,
-      })
-    );
+      this.dispatchEvent(
+        new CustomEvent("discussion-updated", {
+          detail: data,
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } catch (error: any) {
+      showToast(this, "Failed to update theme.", "error");
+    }
   }
 
   render() {

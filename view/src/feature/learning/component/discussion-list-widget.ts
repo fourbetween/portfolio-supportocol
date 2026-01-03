@@ -2,8 +2,8 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
-import { client } from "../api/client";
 import type { Discussion } from "../model/discussion";
+import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-add-form/discussion-add-form";
 import "../ui/discussion-list/discussion-list";
 import "../ui/discussion-search-bar/discussion-search-bar";
@@ -17,20 +17,18 @@ export class LearningDiscussionListWidget extends LitElement {
   private _searchQuery = "";
 
   private async _handleAddDiscussion(theme: string) {
-    const { data, error } = await client.POST("/learning/discussions", {
-      body: { theme },
-    });
-    if (error) {
+    try {
+      const data = await discussionRepository.create(theme);
+      this.dispatchEvent(
+        new CustomEvent("discussion-created", {
+          detail: data,
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } catch (error: any) {
       showToast(this, error.message, "error");
-      return;
     }
-    this.dispatchEvent(
-      new CustomEvent("discussion-created", {
-        detail: data,
-        bubbles: true,
-        composed: true,
-      })
-    );
   }
 
   private _handleSearch(query: string) {
@@ -51,26 +49,19 @@ export class LearningDiscussionListWidget extends LitElement {
     if (!confirm(`Are you sure you want to delete "${discussion.theme}"?`)) {
       return;
     }
-    const { error } = await client.DELETE(
-      "/learning/discussions/{discussionId}",
-      {
-        params: {
-          path: { discussionId: discussion.id },
-        },
-      }
-    );
-    if (error) {
+    try {
+      await discussionRepository.delete(discussion.id);
+      this.dispatchEvent(
+        new CustomEvent("discussion-deleted", {
+          detail: discussion,
+          bubbles: true,
+          composed: true,
+        })
+      );
+      showToast(this, "Deleted.", "success", 2000);
+    } catch (error: any) {
       showToast(this, error.message, "error");
-      return;
     }
-    this.dispatchEvent(
-      new CustomEvent("discussion-deleted", {
-        detail: discussion,
-        bubbles: true,
-        composed: true,
-      })
-    );
-    showToast(this, "Deleted.", "success", 2000);
   }
 
   render() {

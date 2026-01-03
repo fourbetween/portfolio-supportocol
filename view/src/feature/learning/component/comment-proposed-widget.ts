@@ -3,8 +3,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { titleStyle } from "../../../shared/style/title";
-import { client } from "../api/client";
 import type { Comment } from "../model/comment";
+import { commentRepository } from "../repository/comment-repository";
 import "../ui/proposed-comment-list/proposed-comment-list";
 
 @customElement("learning-comment-proposed-widget")
@@ -28,34 +28,24 @@ export class LearningCommentProposedWidget extends LitElement {
   private async handleAccept(comment: Comment) {
     if (!this.discussionId) return;
 
-    const { data, error } = await client.PUT(
-      "/learning/discussions/{discussionId}/comments/{commentId}/status",
-      {
-        params: {
-          path: {
-            discussionId: this.discussionId,
-            commentId: comment.id,
-          },
-        },
-        body: {
-          status: "active",
-        },
-      }
-    );
+    try {
+      const data = await commentRepository.updateStatus(
+        this.discussionId,
+        comment.id,
+        "active"
+      );
 
-    if (error) {
+      showToast(this, "Comment activated.", "success", 2000);
+      this.dispatchEvent(
+        new CustomEvent("comment-updated", {
+          detail: data,
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } catch (error: any) {
       showToast(this, error.message, "error");
-      return;
     }
-
-    showToast(this, "Comment activated.", "success", 2000);
-    this.dispatchEvent(
-      new CustomEvent("comment-updated", {
-        detail: data,
-        bubbles: true,
-        composed: true,
-      })
-    );
   }
 
   private async handleReject(comment: Comment) {
@@ -63,31 +53,20 @@ export class LearningCommentProposedWidget extends LitElement {
     if (!confirm("Are you sure you want to delete this proposed comment?"))
       return;
 
-    const { error } = await client.DELETE(
-      "/learning/discussions/{discussionId}/comments/{commentId}",
-      {
-        params: {
-          path: {
-            discussionId: this.discussionId,
-            commentId: comment.id,
-          },
-        },
-      }
-    );
+    try {
+      await commentRepository.delete(this.discussionId, comment.id);
 
-    if (error) {
+      showToast(this, "Comment deleted.", "success", 2000);
+      this.dispatchEvent(
+        new CustomEvent("comment-deleted", {
+          detail: { id: comment.id },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    } catch (error: any) {
       showToast(this, error.message, "error");
-      return;
     }
-
-    showToast(this, "Comment deleted.", "success", 2000);
-    this.dispatchEvent(
-      new CustomEvent("comment-deleted", {
-        detail: { id: comment.id },
-        bubbles: true,
-        composed: true,
-      })
-    );
   }
 
   private handleClick(comment: Comment) {
