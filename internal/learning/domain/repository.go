@@ -21,6 +21,7 @@ type (
 		Load(ctx context.Context, id string) (*Comment, error)
 		List(ctx context.Context, discussionID string) ([]*Comment, error)
 		Save(ctx context.Context, comment *Comment) error
+		BatchSave(ctx context.Context, comments []*Comment) error
 		Delete(ctx context.Context, comment *Comment) error
 		PathToRoot(ctx context.Context, commentID string) ([]*Comment, error)
 		Children(ctx context.Context, discussionID string, parentCommentID *string) ([]*Comment, error)

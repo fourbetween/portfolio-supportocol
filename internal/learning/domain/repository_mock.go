@@ -122,6 +122,20 @@ func (m *MockCommentRepository) EXPECT() *MockCommentRepositoryMockRecorder {
 	return m.recorder
 }
 
+// BatchSave mocks base method.
+func (m *MockCommentRepository) BatchSave(ctx context.Context, comments []*Comment) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BatchSave", ctx, comments)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// BatchSave indicates an expected call of BatchSave.
+func (mr *MockCommentRepositoryMockRecorder) BatchSave(ctx, comments any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchSave", reflect.TypeOf((*MockCommentRepository)(nil).BatchSave), ctx, comments)
+}
+
 // Children mocks base method.
 func (m *MockCommentRepository) Children(ctx context.Context, discussionID string, parentCommentID *string) ([]*Comment, error) {
 	m.ctrl.T.Helper()
