@@ -31,6 +31,15 @@ func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsCommentIdPut(
 	return r, ht.ErrNotImplemented
 }
 
+// LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut implements PUT /learning/discussions/{discussionId}/comments/{commentId}/status operation.
+//
+// Update comment status.
+//
+// PUT /learning/discussions/{discussionId}/comments/{commentId}/status
+func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx context.Context, req *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq, params LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) (r *Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // LearningDiscussionsDiscussionIdCommentsGeneratePost implements POST /learning/discussions/{discussionId}/comments/generate operation.
 //
 // Generate comments using AI.

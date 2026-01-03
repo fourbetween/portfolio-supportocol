@@ -31,9 +31,11 @@ func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscu
 		return nil, err
 	}
 
-	discussion.Update(domain.UpdateParams{
+	if err := discussion.Update(domain.UpdateParams{
 		Theme: input.Theme,
-	})
+	}); err != nil {
+		return nil, err
+	}
 
 	if err := u.repo.Save(ctx, discussion); err != nil {
 		return nil, err

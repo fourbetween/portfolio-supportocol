@@ -19,8 +19,8 @@ export class LearningCommentExplorerWidget extends LitElement {
   @property({ type: Array })
   comments?: Comment[];
 
-  @state()
-  private selectedCommentId?: string;
+  @property({ type: String })
+  selectedCommentId?: string;
 
   @state()
   private availableTypes: string[] = [];
@@ -50,8 +50,14 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private handleCommentClick(comment: Comment) {
-    this.selectedCommentId =
-      this.selectedCommentId === comment.id ? undefined : comment.id;
+    const id = this.selectedCommentId === comment.id ? undefined : comment.id;
+    this.dispatchEvent(
+      new CustomEvent("select-comment", {
+        detail: { id },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   private async handleCommentUpdate(
@@ -106,10 +112,6 @@ export class LearningCommentExplorerWidget extends LitElement {
     if (error) {
       showToast(this, error.message, "error");
       return;
-    }
-
-    if (this.selectedCommentId === commentId) {
-      this.selectedCommentId = undefined;
     }
 
     showToast(this, "Comment deleted.", "success", 2000);
@@ -196,6 +198,16 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
+  private handleClearSelection() {
+    this.dispatchEvent(
+      new CustomEvent("select-comment", {
+        detail: { id: undefined },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
   private getPathToRoot(selectedId: string): Comment[] {
     const path: Comment[] = [];
     let currentId: string | null = selectedId;
@@ -245,7 +257,7 @@ export class LearningCommentExplorerWidget extends LitElement {
                   <div class="section-title">Context</div>
                   <button
                     class="clear-button"
-                    @click=${() => (this.selectedCommentId = undefined)}
+                    @click=${this.handleClearSelection}
                   >
                     <span class="material-symbols-outlined">close</span>
                     <span>Clear Selection</span>

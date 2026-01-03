@@ -188,8 +188,9 @@ func (cg *CommentGenerator) writeChildren(sb *strings.Builder, children []*domai
 
 func (cg *CommentGenerator) writeInstructions(sb *strings.Builder, commentType string) {
 	fmt.Fprintf(sb, "\n\nBased on the context above, generate 3 appropriate comments as \"%s\".\n", commentType)
-	sb.WriteString("Each comment should be concise.\n")
+	fmt.Fprintf(sb, "Each comment should be concise and MUST be under %d characters.\n", domain.MaxContentLength)
 	sb.WriteString("Ensure the generated comments provide new perspectives and do not overlap with the existing comments.\n")
+	sb.WriteString("The generated comments must be logically consistent with the context (ancestors) and must not contradict any information or positions established in the preceding comments.\n")
 	sb.WriteString("The style of the generated comments (e.g., use of punctuation, politeness level, tone) should match the existing comments in the context.\n")
 	sb.WriteString("The language of the generated content must match the language used in the discussion theme and previous comments.")
 }

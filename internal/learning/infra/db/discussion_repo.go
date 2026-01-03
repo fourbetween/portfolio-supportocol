@@ -46,7 +46,7 @@ func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadParam
 		return nil, fmt.Errorf("failed to load discussion: %w", err)
 	}
 
-	return r.toDomain(dest), nil
+	return r.toDomain(dest)
 }
 
 func (r *DiscussionRepository) List(ctx context.Context, createdBy string) ([]*domain.Discussion, error) {
@@ -63,7 +63,11 @@ func (r *DiscussionRepository) List(ctx context.Context, createdBy string) ([]*d
 
 	discussions := make([]*domain.Discussion, len(dest))
 	for i, row := range dest {
-		discussions[i] = r.toDomain(row)
+		d, err := r.toDomain(row)
+		if err != nil {
+			return nil, err
+		}
+		discussions[i] = d
 	}
 
 	return discussions, nil
@@ -97,7 +101,7 @@ func (r *DiscussionRepository) Delete(ctx context.Context, d *domain.Discussion)
 	return nil
 }
 
-func (r *DiscussionRepository) toDomain(row model.Discussions) *domain.Discussion {
+func (r *DiscussionRepository) toDomain(row model.Discussions) (*domain.Discussion, error) {
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
 		ID: row.ID,
 		CreateDiscussionParams: domain.CreateDiscussionParams{

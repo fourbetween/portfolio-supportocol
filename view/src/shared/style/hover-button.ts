@@ -14,7 +14,7 @@ export const hoverButtonStyle = css`
     justify-content: center;
     cursor: pointer;
     opacity: 0;
-    transition: all 0.1s;
+    transition: all 0.2s;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     z-index: 1;
   }
@@ -25,14 +25,31 @@ export const hoverButtonStyle = css`
     border-color: var(--color-accent-fg);
   }
 
+  .btn-hover.primary {
+    color: var(--color-btn-primary-bg);
+  }
+
   .btn-hover.primary:hover {
     color: var(--color-btn-primary-bg);
     border-color: var(--color-btn-primary-bg);
   }
 
+  .btn-hover.danger {
+    color: var(--color-danger-fg);
+  }
+
   .btn-hover.danger:hover {
     color: var(--color-danger-fg);
     border-color: var(--color-danger-fg);
+  }
+
+  .btn-hover.success {
+    color: var(--color-success-fg);
+  }
+
+  .btn-hover.success:hover {
+    color: var(--color-success-fg);
+    border-color: var(--color-success-fg);
   }
 
   /* Container hover trigger */

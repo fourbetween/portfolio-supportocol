@@ -20,6 +20,7 @@ export const baseStyle: CSSResultGroup = [
       --color-header-bg: #24292f;
       --color-header-text: #ffffff;
       --color-danger-fg: #cf222e;
+      --color-success-fg: #1a7f37;
     }
 
     * {

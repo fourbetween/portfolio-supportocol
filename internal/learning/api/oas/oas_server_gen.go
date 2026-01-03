@@ -20,6 +20,12 @@ type Handler interface {
 	//
 	// PUT /learning/discussions/{discussionId}/comments/{commentId}
 	LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq, params LearningDiscussionsDiscussionIdCommentsCommentIdPutParams) (*Comment, error)
+	// LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut implements PUT /learning/discussions/{discussionId}/comments/{commentId}/status operation.
+	//
+	// Update comment status.
+	//
+	// PUT /learning/discussions/{discussionId}/comments/{commentId}/status
+	LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx context.Context, req *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq, params LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) (*Comment, error)
 	// LearningDiscussionsDiscussionIdCommentsGeneratePost implements POST /learning/discussions/{discussionId}/comments/generate operation.
 	//
 	// Generate comments using AI.
