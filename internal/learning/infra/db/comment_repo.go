@@ -118,6 +118,8 @@ func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error
 func (r *CommentRepository) GetPathToRoot(ctx context.Context, commentID string) ([]*domain.Comment, error) {
 	ancestors := mysql.CTE("ancestors")
 
+	parentCommentID := table.Comments.ParentCommentID.From(ancestors)
+
 	initialSelect := mysql.
 		SELECT(table.Comments.AllColumns).
 		FROM(table.Comments).
@@ -127,7 +129,7 @@ func (r *CommentRepository) GetPathToRoot(ctx context.Context, commentID string)
 		SELECT(table.Comments.AllColumns).
 		FROM(
 			table.Comments.
-				INNER_JOIN(ancestors, table.Comments.ID.EQ(mysql.StringColumn("parent_comment_id"))),
+				INNER_JOIN(ancestors, table.Comments.ID.EQ(parentCommentID)),
 		)
 
 	stmt := mysql.
