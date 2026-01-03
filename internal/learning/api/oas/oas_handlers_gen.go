@@ -584,7 +584,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 		}
 	}()
 
-	var response []Comment
+	var response *LearningDiscussionsDiscussionIdCommentsGeneratePostOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -605,7 +605,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 		type (
 			Request  = *LearningDiscussionsDiscussionIdCommentsGeneratePostReq
 			Params   = LearningDiscussionsDiscussionIdCommentsGeneratePostParams
-			Response = []Comment
+			Response = *LearningDiscussionsDiscussionIdCommentsGeneratePostOK
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -616,12 +616,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 			mreq,
 			unpackLearningDiscussionsDiscussionIdCommentsGeneratePostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx, request, params)
+				err = s.h.LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx, request, params)
+		err = s.h.LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {

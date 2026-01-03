@@ -20,6 +20,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3assets"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3deployment"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awssecretsmanager"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
 	"github.com/aws/jsii-runtime-go"
 	"github.com/fourbetween/pkg-conf/conf"
 )
@@ -32,16 +33,17 @@ type (
 		certContainer *CertContainer
 		shareConf     conf.Service
 
-		vpc        awsec2.IVpc
-		secret     awssecretsmanager.ISecret
-		rds        awsrds.IDatabaseInstance
-		logGroup   awslogs.ILogGroup
-		viewBucket awss3.Bucket
-		apiFunc    awslambda.Function
-		mainApi    awsapigatewayv2.HttpApi
-		cdn        awscloudfront.Distribution
-		dns        awsroute53.IHostedZone
-		mainRecord awsroute53.ARecord
+		vpc             awsec2.IVpc
+		secret          awssecretsmanager.ISecret
+		rds             awsrds.IDatabaseInstance
+		logGroup        awslogs.ILogGroup
+		viewBucket      awss3.Bucket
+		commentGenQueue awssqs.IQueue
+		apiFunc         awslambda.Function
+		mainApi         awsapigatewayv2.HttpApi
+		cdn             awscloudfront.Distribution
+		dns             awsroute53.IHostedZone
+		mainRecord      awsroute53.ARecord
 	}
 
 	AppContainerProps struct {
@@ -68,6 +70,7 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 	}
 
 	c.setParam("domain", c.domain())
+	c.buildCommentGenQueue()
 
 	if c.stage != "dev" {
 		// shared resources
@@ -87,6 +90,33 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 	}
 
 	return c
+}
+
+func (c *AppContainer) buildCommentGenQueue() {
+	dlq := awssqs.NewQueue(
+		c.stack,
+		jsii.String("CommentGenDeadLetterQueue"),
+		&awssqs.QueueProps{
+			Fifo:                      jsii.Bool(true),
+			ContentBasedDeduplication: jsii.Bool(true),
+		},
+	)
+	queue := awssqs.NewQueue(
+		c.stack,
+		jsii.String("CommentGenQueue"),
+		&awssqs.QueueProps{
+			Fifo:                      jsii.Bool(true),
+			ContentBasedDeduplication: jsii.Bool(true),
+			VisibilityTimeout:         awscdk.Duration_Minutes(jsii.Number(3)),
+			DeadLetterQueue: &awssqs.DeadLetterQueue{
+				MaxReceiveCount: jsii.Number(1),
+				Queue:           dlq,
+			},
+			ReceiveMessageWaitTime: awscdk.Duration_Seconds(jsii.Number(20)),
+		},
+	)
+	c.commentGenQueue = queue
+	c.setParam("sqs/comment-generation/url", *queue.QueueUrl())
 }
 
 func (c *AppContainer) buildVPC() {

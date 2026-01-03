@@ -404,12 +404,6 @@ paths:
       responses:
         "200":
           description: success response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Comment"
         default:
           description: default error
           content:

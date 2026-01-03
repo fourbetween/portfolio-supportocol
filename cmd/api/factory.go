@@ -49,7 +49,7 @@ func NewHTTPHandler(dbCon *sql.DB) (http.Handler, error) {
 		return nil, fmt.Errorf("failed to create identity handler: %w", err)
 	}
 
-	learningHandler, err := learning.NewHTTPHandler(dbCon, appConf, shareConf, jwtSrv)
+	learningHandler, err := learning.NewHTTPHandler(dbCon, appConf, shareConf, jwtSrv, awscfg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning handler: %w", err)
 	}

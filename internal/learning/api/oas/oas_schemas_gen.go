@@ -277,6 +277,9 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) SetStatus
 	s.Status = val
 }
 
+// LearningDiscussionsDiscussionIdCommentsGeneratePostOK is response for LearningDiscussionsDiscussionIdCommentsGeneratePost operation.
+type LearningDiscussionsDiscussionIdCommentsGeneratePostOK struct{}
+
 type LearningDiscussionsDiscussionIdCommentsGeneratePostReq struct {
 	ParentCommentId NilID       `json:"parentCommentId"`
 	CommentType     CommentType `json:"commentType"`

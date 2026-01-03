@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/fourbetween/app-supportocol/internal/learning/api"
 	"github.com/fourbetween/app-supportocol/internal/learning/api/oas"
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/ai"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/db"
+	"github.com/fourbetween/app-supportocol/internal/learning/infra/queue"
 	"github.com/fourbetween/app-supportocol/internal/learning/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
@@ -17,6 +19,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 	"github.com/fourbetween/pkg-auth/jwt"
 	"github.com/fourbetween/pkg-conf/conf"
+	"github.com/fourbetween/pkg-queue/sqs"
 )
 
 func NewHTTPHandler(
@@ -24,6 +27,7 @@ func NewHTTPHandler(
 	appConf conf.Service,
 	shareConf conf.Service,
 	jwtSrv jwt.Service,
+	awscfg aws.Config,
 ) (http.Handler, error) {
 	geminiAPIKey, err := shareConf.Get("google/gemini/apikey")
 	if err != nil {
@@ -56,19 +60,27 @@ func NewHTTPHandler(
 		return nil, fmt.Errorf("failed to create comment generator: %w", err)
 	}
 
+	queueURL, err := appConf.Get("sqs/comment-generation/queue-url")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get comment generation queue URL from config: %w", err)
+	}
+	q := sqs.NewDefaultQueue[domain.GenerateCommentParams](queueURL, awscfg)
+	commentGenerationQueue := queue.NewCommentGenerationQueue(q)
+
 	server, err := oas.NewServer(
 		api.NewHandler(api.HandlerParams{
-			CreateDiscussion:    usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac),
-			GetDiscussion:       usecase.NewGetDiscussionUsecase(discussionRepo),
-			ListDiscussions:     usecase.NewListDiscussionsUsecase(discussionRepo),
-			UpdateDiscussion:    usecase.NewUpdateDiscussionUsecase(discussionRepo),
-			DeleteDiscussion:    usecase.NewDeleteDiscussionUsecase(discussionRepo),
-			CreateComment:       usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac),
-			ListComments:        usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
-			UpdateComment:       usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo),
-			DeleteComment:       usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo),
-			UpdateCommentStatus: usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo),
-			GenerateComment:     usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator),
+			CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac),
+			GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo),
+			ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionRepo),
+			UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo),
+			DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo),
+			CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac),
+			ListComments:             usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
+			UpdateComment:            usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo),
+			DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo),
+			UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo),
+			GenerateComment:          usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator),
+			EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, commentGenerationQueue),
 		}),
 		api.NewSecurityHandler(jwtSrv),
 		oas.WithErrorHandler(httperr.ErrorHandler),

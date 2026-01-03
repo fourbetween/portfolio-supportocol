@@ -42,19 +42,8 @@ func encodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutResponse(res
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdCommentsGeneratePostResponse(response []Comment, w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+func encodeLearningDiscussionsDiscussionIdCommentsGeneratePostResponse(response *LearningDiscussionsDiscussionIdCommentsGeneratePostOK, w http.ResponseWriter) error {
 	w.WriteHeader(200)
-
-	e := new(jx.Encoder)
-	e.ArrStart()
-	for _, elem := range response {
-		elem.Encode(e)
-	}
-	e.ArrEnd()
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
 
 	return nil
 }
