@@ -56,8 +56,6 @@ export class LearningDiscussionEditForm extends LitElement {
 
       .theme-input {
         width: 100%;
-        font-size: 32px;
-        font-weight: 600;
         padding: 8px;
         margin-bottom: 8px;
         background-color: var(--color-canvas-subtle);

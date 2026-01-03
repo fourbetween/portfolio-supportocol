@@ -33,6 +33,19 @@ export class LearningDashboardPage extends LitElement {
 
     new Task(this, {
       task: async () => {
+        return await discussionRepository.list();
+      },
+      onComplete: (discussions) => {
+        this._discussions = discussions;
+      },
+      onError: (e: unknown) => {
+        showToast(this, String(e), "error");
+      },
+      args: () => [],
+    });
+
+    new Task(this, {
+      task: async () => {
         if (!this._selectedDiscussionId) return [] as Comment[];
         return await commentRepository.list(this._selectedDiscussionId);
       },
@@ -66,19 +79,6 @@ export class LearningDashboardPage extends LitElement {
     this._selectedDiscussionId = params.get("id") || undefined;
   };
 
-  private discussionsTask = new Task(this, {
-    task: async () => {
-      return await discussionRepository.list();
-    },
-    onComplete: (discussions) => {
-      this._discussions = discussions;
-    },
-    onError: (e: unknown) => {
-      showToast(this, String(e), "error");
-    },
-    args: () => [],
-  });
-
   private _handleSelectDiscussion(e: CustomEvent<Discussion>) {
     if (this._selectedDiscussionId === e.detail.id) return;
     this._selectedDiscussionId = e.detail.id;
@@ -89,7 +89,14 @@ export class LearningDashboardPage extends LitElement {
 
   private _handleDiscussionUpdated(e: CustomEvent<Discussion>) {
     this._selectedDiscussionId = e.detail.id;
-    this.discussionsTask.run();
+    const exists = this._discussions.some((d) => d.id === e.detail.id);
+    if (exists) {
+      this._discussions = this._discussions.map((d) =>
+        d.id === e.detail.id ? e.detail : d
+      );
+    } else {
+      this._discussions = [...this._discussions, e.detail];
+    }
   }
 
   private _handleDiscussionDeleted(e: CustomEvent<Discussion>) {
@@ -99,7 +106,7 @@ export class LearningDashboardPage extends LitElement {
       url.searchParams.delete("id");
       window.history.pushState({}, "", url);
     }
-    this.discussionsTask.run();
+    this._discussions = this._discussions.filter((d) => d.id !== e.detail.id);
   }
 
   private _handleCommentCreated(e: CustomEvent<Comment>) {
