@@ -9,6 +9,8 @@ const meta: Meta = {
     html`
       <learning-comment-type-badge
         .type=${args.type}
+        .active=${args.active}
+        .clickable=${args.clickable}
       ></learning-comment-type-badge>
     `,
 };
@@ -26,5 +28,19 @@ export const Idea: Story = {
 export const Question: Story = {
   args: {
     type: "question",
+  },
+};
+
+export const Active: Story = {
+  args: {
+    type: "idea",
+    active: true,
+  },
+};
+
+export const Clickable: Story = {
+  args: {
+    type: "idea",
+    clickable: true,
   },
 };
