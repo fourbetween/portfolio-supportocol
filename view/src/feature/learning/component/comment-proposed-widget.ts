@@ -107,7 +107,7 @@ export class LearningCommentProposedWidget extends LitElement {
 
     return html`
       <section>
-        <h2 class="section-title">Proposed Comments</h2>
+        <div class="section-title">Proposed Comments</div>
         <learning-proposed-comment-list
           .comments=${this.proposedComments}
           .onAccept=${(c: Comment) => this.handleAccept(c)}
