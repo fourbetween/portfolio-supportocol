@@ -3,6 +3,7 @@ package httperr
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/go-faster/jx"
 	"github.com/ogen-go/ogen/ogenerrors"
@@ -16,7 +17,7 @@ func ErrorHandler(ctx context.Context, w http.ResponseWriter, r *http.Request, e
 	e := jx.GetEncoder()
 	e.ObjStart()
 	e.FieldStart("message")
-	e.StrEscape(err.Error())
+	e.StrEscape(strings.Split(err.Error(), ":")[0])
 	e.FieldStart("code")
 	e.Int(code)
 	e.ObjEnd()

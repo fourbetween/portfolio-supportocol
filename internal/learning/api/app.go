@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
+	"strings"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/api/oas"
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
@@ -201,7 +202,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx con
 
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
 	code := 500
-	msg := err.Error()
+	msg := strings.Split(err.Error(), ":")[0]
 	if errors.Is(err, apperr.ErrUnauthorized) ||
 		errors.Is(err, auth.ErrNotFound) ||
 		errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied) {
