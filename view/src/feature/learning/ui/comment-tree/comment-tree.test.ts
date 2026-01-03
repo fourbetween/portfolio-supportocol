@@ -92,6 +92,73 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   });
 
+  it("タイプバッジをクリックすると、孫コメントが非表示になること", async () => {
+    const comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root",
+        commentType: "idea",
+        status: "active" as const,
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "child",
+        commentType: "question",
+        status: "active" as const,
+      },
+      {
+        id: "3",
+        discussionId: "1",
+        parentCommentId: "2",
+        content: "grandchild",
+        commentType: "answer",
+        status: "active" as const,
+      },
+    ];
+    render(
+      html`
+        <learning-comment-tree .comments=${comments}></learning-comment-tree>
+      `,
+      container
+    );
+
+    // 最初はすべて表示されている
+    await expect
+      .element(page.getByText("root", { exact: true }))
+      .toBeInTheDocument();
+    await expect
+      .element(page.getByText("child", { exact: true }))
+      .toBeInTheDocument();
+    await expect
+      .element(page.getByText("grandchild", { exact: true }))
+      .toBeInTheDocument();
+
+    // childが属するグループ（question）のタイプバッジをクリック
+    const typeBadge = page.getByText("question", { exact: true }).nth(1);
+    await typeBadge.click();
+
+    // rootとchildは表示されたまま、grandchildが非表示になる
+    await expect
+      .element(page.getByText("root", { exact: true }))
+      .toBeInTheDocument();
+    await expect
+      .element(page.getByText("child", { exact: true }))
+      .toBeInTheDocument();
+    await expect
+      .element(page.getByText("grandchild", { exact: true }))
+      .not.toBeInTheDocument();
+
+    // もう一度クリックすると元に戻る
+    await typeBadge.click();
+    await expect
+      .element(page.getByText("grandchild", { exact: true }))
+      .toBeInTheDocument();
+  });
+
   it("コメントをホバーすると編集アイコンが表示され、クリックすると編集フォームが表示されること", async () => {
     const comments = [
       {

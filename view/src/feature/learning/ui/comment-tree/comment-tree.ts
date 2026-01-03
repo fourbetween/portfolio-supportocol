@@ -2,11 +2,13 @@ import {
   LitElement,
   css,
   html,
+  nothing,
   type HTMLTemplateResult,
   type PropertyValues,
 } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { iconStyle } from "../../../../shared/style/icon";
 import type { Comment } from "../../model/comment";
 import { deriveCommentFrame } from "../../model/comment-frame";
 import "../comment-item/comment-item";
@@ -47,6 +49,17 @@ export class LearningCommentTree extends LitElement {
   @state()
   private availableTypes: string[] = [];
 
+  @state()
+  private focusedGroupId?: string;
+
+  private toggleFocus(groupId: string) {
+    if (this.focusedGroupId === groupId) {
+      this.focusedGroupId = undefined;
+    } else {
+      this.focusedGroupId = groupId;
+    }
+  }
+
   willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("comments")) {
       this.childrenMap.clear();
@@ -76,7 +89,7 @@ export class LearningCommentTree extends LitElement {
   }
 
   render() {
-    if (!this.comments) return html``;
+    if (!this.comments) return nothing;
 
     const groupedRoots = this.groupCommentsByType(this.rootComments);
 
@@ -89,7 +102,10 @@ export class LearningCommentTree extends LitElement {
     `;
   }
 
-  private renderComment(comment: Comment): HTMLTemplateResult {
+  private renderComment(
+    comment: Comment,
+    hideChildren: boolean = false
+  ): HTMLTemplateResult {
     const children = this.childrenMap.get(comment.id) || [];
     const groupedChildren = this.groupCommentsByType(children);
 
@@ -104,23 +120,40 @@ export class LearningCommentTree extends LitElement {
           .onCommentGenerate=${this.onCommentGenerate}
           .onCommentReply=${this.onCommentReply}
         ></learning-comment-item>
-        <div class="children">
-          ${Object.entries(groupedChildren).map(([type, typeChildren]) =>
-            this.renderGroup(type, typeChildren)
-          )}
-        </div>
+        ${!hideChildren && children.length > 0
+          ? html`
+              <div class="children">
+                ${Object.entries(groupedChildren).map(([type, typeChildren]) =>
+                  this.renderGroup(type, typeChildren, comment.id)
+                )}
+              </div>
+            `
+          : nothing}
       </div>
     `;
   }
 
-  private renderGroup(type: string, comments: Comment[]): HTMLTemplateResult {
+  private renderGroup(
+    type: string,
+    comments: Comment[],
+    parentCommentId?: string
+  ): HTMLTemplateResult {
+    const groupId = `${parentCommentId ?? "root"}-${type}`;
+    const isFocused = this.focusedGroupId === groupId;
+
     return html`
       <div class="child-group">
-        <learning-comment-type-badge
-          .type=${type}
-        ></learning-comment-type-badge>
+        <div class="group-header">
+          <learning-comment-type-badge
+            .type=${type}
+            .active=${isFocused}
+            .clickable=${true}
+            @click=${() => this.toggleFocus(groupId)}
+            title="Click to focus on this group"
+          ></learning-comment-type-badge>
+        </div>
         <div class="group-content">
-          ${comments.map((comment) => this.renderComment(comment))}
+          ${comments.map((comment) => this.renderComment(comment, isFocused))}
         </div>
       </div>
     `;
@@ -138,6 +171,7 @@ export class LearningCommentTree extends LitElement {
 
   static styles = [
     baseStyle,
+    iconStyle,
     css`
       .comment-node {
         margin-bottom: 16px;
@@ -149,11 +183,16 @@ export class LearningCommentTree extends LitElement {
         margin-top: 12px;
         margin-bottom: 12px;
       }
+      .group-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
       .group-content {
         margin-left: 8px;
         padding-left: 8px;
         border-left: 1px dashed var(--color-border-muted);
-        margin-top: 8px;
       }
     `,
   ];
