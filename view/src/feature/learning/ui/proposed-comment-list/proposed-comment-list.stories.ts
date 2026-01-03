@@ -41,6 +41,7 @@ export const Default: Story = {
       .comments=${args.comments}
       .onAccept=${(c: Comment) => console.log("Accepted", c)}
       .onReject=${(c: Comment) => console.log("Rejected", c)}
+      .onClick=${(c: Comment) => console.log("Clicked", c)}
     ></learning-proposed-comment-list>
   `,
 };

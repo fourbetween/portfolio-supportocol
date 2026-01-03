@@ -18,6 +18,9 @@ export class LearningProposedCommentList extends LitElement {
   @property({ attribute: false })
   onReject?: (comment: Comment) => void;
 
+  @property({ attribute: false })
+  onClick?: (comment: Comment) => void;
+
   render() {
     if (this.comments.length === 0) {
       return html`
@@ -36,7 +39,11 @@ export class LearningProposedCommentList extends LitElement {
           <learning-comment-type-badge
             .type=${c.commentType}
           ></learning-comment-type-badge>
-          <learning-comment-card .comment=${c}></learning-comment-card>
+          <learning-comment-card
+            class="clickable"
+            .comment=${c}
+            @click=${() => this.onClick?.(c)}
+          ></learning-comment-card>
         </div>
         <button
           class="btn-hover success accept-button"
@@ -84,6 +91,12 @@ export class LearningProposedCommentList extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 8px;
+      }
+      .clickable {
+        cursor: pointer;
+      }
+      .clickable:hover {
+        opacity: 0.8;
       }
       .accept-button {
         bottom: -16px;

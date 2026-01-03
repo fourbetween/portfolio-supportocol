@@ -186,6 +186,7 @@ export class LearningDashboardPage extends LitElement {
             .comments=${this._comments}
             @comment-updated=${this._handleCommentUpdated}
             @comment-deleted=${this._handleCommentDeleted}
+            @select-comment=${this._handleSelectComment}
           ></learning-comment-proposed-widget>
         </aside>
       </div>

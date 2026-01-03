@@ -90,6 +90,16 @@ export class LearningCommentProposedWidget extends LitElement {
     );
   }
 
+  private handleClick(comment: Comment) {
+    this.dispatchEvent(
+      new CustomEvent("select-comment", {
+        detail: { id: comment.parentCommentId },
+        bubbles: true,
+        composed: true,
+      })
+    );
+  }
+
   render() {
     if (this.proposedComments.length === 0) {
       return html``;
@@ -102,6 +112,7 @@ export class LearningCommentProposedWidget extends LitElement {
           .comments=${this.proposedComments}
           .onAccept=${(c: Comment) => this.handleAccept(c)}
           .onReject=${(c: Comment) => this.handleReject(c)}
+          .onClick=${(c: Comment) => this.handleClick(c)}
         ></learning-proposed-comment-list>
       </section>
     `;

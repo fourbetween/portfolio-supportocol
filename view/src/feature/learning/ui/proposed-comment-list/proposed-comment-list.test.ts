@@ -120,6 +120,34 @@ describe("learning-proposed-comment-list", () => {
     expect(onReject).toHaveBeenCalledWith(comments[0]);
   });
 
+  it("コメントをクリックすると onClick が呼ばれること", async () => {
+    const onClick = vi.fn();
+    const comments: Comment[] = [
+      {
+        id: "1",
+        discussionId: "d1",
+        parentCommentId: "p1",
+        content: "提案1",
+        commentType: "idea",
+        status: "proposed",
+      },
+    ];
+
+    render(
+      html`
+        <learning-proposed-comment-list
+          .comments=${comments}
+          .onClick=${onClick}
+        ></learning-proposed-comment-list>
+      `,
+      container
+    );
+
+    await page.getByText("提案1").click();
+
+    expect(onClick).toHaveBeenCalledWith(comments[0]);
+  });
+
   it("ボタンがホバーコンテナ内にあり、btn-hoverクラスを持っていること", async () => {
     const comments: Comment[] = [
       {
