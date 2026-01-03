@@ -14,7 +14,7 @@ export const hoverButtonStyle = css`
     justify-content: center;
     cursor: pointer;
     opacity: 0;
-    transition: all 0.1s;
+    transition: all 0.2s;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     z-index: 1;
   }
