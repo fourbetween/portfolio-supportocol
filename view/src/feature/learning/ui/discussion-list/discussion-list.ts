@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import type { Discussion } from "../../model/discussion";
 
@@ -23,23 +24,25 @@ export class LearningDiscussionList extends LitElement {
     }
     return html`
       <div class="list">
-        ${this.discussions.map(
-          (d) => html`
-            <div class="item" @click=${() => this.onSelect?.(d)}>
-              <span class="theme">${d.theme}</span>
-              <button
-                class="delete-button"
-                aria-label="delete"
-                @click=${(e: Event) => {
-                  e.stopPropagation();
-                  this.onDelete?.(d);
-                }}
-              >
-                <span class="material-symbols-outlined">delete</span>
-              </button>
-            </div>
-          `
-        )}
+        ${this.discussions.map((d) => this.renderDiscussion(d))}
+      </div>
+    `;
+  }
+
+  private renderDiscussion(d: Discussion) {
+    return html`
+      <div class="item hover-container" @click=${() => this.onSelect?.(d)}>
+        <span class="theme">${d.theme}</span>
+        <button
+          class="btn-hover danger delete-button"
+          aria-label="delete"
+          @click=${(e: Event) => {
+            e.stopPropagation();
+            this.onDelete?.(d);
+          }}
+        >
+          <span class="material-symbols-outlined">delete</span>
+        </button>
       </div>
     `;
   }
@@ -47,6 +50,7 @@ export class LearningDiscussionList extends LitElement {
   static styles = [
     baseStyle,
     iconStyle,
+    hoverButtonStyle,
     css`
       .empty {
         padding: 16px;
@@ -90,30 +94,9 @@ export class LearningDiscussionList extends LitElement {
         color: var(--color-accent-fg);
       }
       .delete-button {
-        position: absolute;
         right: -16px;
         top: 50%;
         transform: translateY(-50%);
-        background: var(--color-canvas-default);
-        color: var(--color-fg-muted);
-        border: 1px solid var(--color-border-default);
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        opacity: 0;
-        transition: all 0.1s;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-        z-index: 1;
-      }
-      .item:hover .delete-button {
-        opacity: 1;
-      }
-      .delete-button:hover {
-        color: var(--color-danger-fg);
       }
     `,
   ];

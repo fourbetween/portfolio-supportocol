@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
@@ -49,92 +50,6 @@ export class LearningCommentItem extends LitElement {
   @query("learning-comment-type-popup")
   private typePopup!: LearningCommentTypePopup;
 
-  render() {
-    if (!this.comment) return html``;
-
-    if (this.isEditing) {
-      return html`
-        <learning-comment-edit-form
-          .initialType=${this.comment.commentType}
-          .initialContent=${this.comment.content}
-          .availableTypes=${this.availableTypes}
-          .onCancel=${() => (this.isEditing = false)}
-          .onSave=${(detail: { commentType: string; content: string }) => {
-            if (this.onCommentUpdate) {
-              this.onCommentUpdate(this.comment!.id, detail);
-            }
-            this.isEditing = false;
-          }}
-        ></learning-comment-edit-form>
-      `;
-    }
-
-    return html`
-      <div class="card-container">
-        <learning-comment-card
-          .comment=${this.comment}
-          @click=${this.handleCommentClick}
-          style="cursor: pointer;"
-        ></learning-comment-card>
-        <button
-          class="reply-button material-symbols-outlined"
-          @click=${this.handleReplyClick}
-          aria-label="reply"
-        >
-          reply
-        </button>
-        <button
-          class="generate-button material-symbols-outlined"
-          @click=${this.handleGenerateClick}
-          aria-label="generate"
-        >
-          psychology
-        </button>
-        <button
-          class="edit-button material-symbols-outlined"
-          @click=${this.handleEditClick}
-          aria-label="edit"
-        >
-          edit
-        </button>
-        <button
-          class="delete-button material-symbols-outlined"
-          @click=${this.handleDeleteClick}
-          aria-label="delete"
-        >
-          delete
-        </button>
-      </div>
-      ${this.isReplying && this.selectedReplyType
-        ? html`
-            <learning-comment-edit-form
-              class="reply-form"
-              .initialType=${this.selectedReplyType}
-              .availableTypes=${this.availableTypes}
-              .onCancel=${() => (this.isReplying = false)}
-              .onSave=${(detail: { commentType: string; content: string }) => {
-                if (this.onCommentReply) {
-                  this.onCommentReply(this.comment!.id, detail);
-                }
-                this.isReplying = false;
-              }}
-            ></learning-comment-edit-form>
-          `
-        : html`
-            <learning-comment-type-popup
-              .types=${this.availableTypes}
-              .onSelect=${(type: string) => {
-                if (this.isReplying) {
-                  this.selectedReplyType = type;
-                } else if (this.onCommentGenerate && this.comment) {
-                  this.onCommentGenerate(this.comment.id, type);
-                }
-              }}
-            ></learning-comment-type-popup>
-          `}
-    `;
-  }
-
   private handleCommentClick() {
     if (this.onCommentClick && this.comment) {
       this.onCommentClick(this.comment);
@@ -167,71 +82,132 @@ export class LearningCommentItem extends LitElement {
     }
   }
 
+  render() {
+    if (!this.comment) return html``;
+
+    if (this.isEditing) {
+      return this.renderEditForm();
+    }
+
+    return html`
+      <div class="hover-container">${this.renderCommentContent()}</div>
+      ${this.renderReplyFormOrPopup()}
+    `;
+  }
+
+  private renderCommentContent() {
+    return html`
+      <learning-comment-card
+        .comment=${this.comment}
+        @click=${this.handleCommentClick}
+        style="cursor: pointer;"
+      ></learning-comment-card>
+      <button
+        class="btn-hover reply-button material-symbols-outlined"
+        @click=${this.handleReplyClick}
+        aria-label="reply"
+      >
+        reply
+      </button>
+      <button
+        class="btn-hover primary generate-button material-symbols-outlined"
+        @click=${this.handleGenerateClick}
+        aria-label="generate"
+      >
+        psychology
+      </button>
+      <button
+        class="btn-hover edit-button material-symbols-outlined"
+        @click=${this.handleEditClick}
+        aria-label="edit"
+      >
+        edit
+      </button>
+      <button
+        class="btn-hover danger delete-button material-symbols-outlined"
+        @click=${this.handleDeleteClick}
+        aria-label="delete"
+      >
+        delete
+      </button>
+    `;
+  }
+
+  private renderReplyFormOrPopup() {
+    if (this.isReplying && this.selectedReplyType) {
+      return html`
+        <learning-comment-edit-form
+          class="reply-form"
+          .initialType=${this.selectedReplyType}
+          .availableTypes=${this.availableTypes}
+          .onCancel=${() => (this.isReplying = false)}
+          .onSave=${(detail: { commentType: string; content: string }) => {
+            if (this.onCommentReply) {
+              this.onCommentReply(this.comment!.id, detail);
+            }
+            this.isReplying = false;
+          }}
+        ></learning-comment-edit-form>
+      `;
+    }
+
+    return html`
+      <learning-comment-type-popup
+        .types=${this.availableTypes}
+        .onSelect=${(type: string) => {
+          if (this.isReplying) {
+            this.selectedReplyType = type;
+          } else if (this.onCommentGenerate && this.comment) {
+            this.onCommentGenerate(this.comment.id, type);
+          }
+        }}
+      ></learning-comment-type-popup>
+    `;
+  }
+
+  private renderEditForm() {
+    return html`
+      <learning-comment-edit-form
+        .initialType=${this.comment!.commentType}
+        .initialContent=${this.comment!.content}
+        .availableTypes=${this.availableTypes}
+        .onCancel=${() => (this.isEditing = false)}
+        .onSave=${(detail: { commentType: string; content: string }) => {
+          if (this.onCommentUpdate) {
+            this.onCommentUpdate(this.comment!.id, detail);
+          }
+          this.isEditing = false;
+        }}
+      ></learning-comment-edit-form>
+    `;
+  }
+
   static styles = [
     baseStyle,
     iconStyle,
+    hoverButtonStyle,
     css`
       :host {
         display: block;
       }
-      .card-container {
+      .hover-container {
         position: relative;
       }
-      .edit-button,
-      .reply-button,
-      .generate-button,
-      .delete-button {
-        position: absolute;
-        bottom: -16px;
-        background: var(--color-canvas-default);
-        color: var(--color-fg-muted);
-        border: 1px solid var(--color-border-default);
-        border-radius: 50%;
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        opacity: 0;
-        transition: all 0.1s;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-        z-index: 1;
-      }
       .reply-button {
+        bottom: -16px;
         left: 8px;
       }
       .generate-button {
+        bottom: -16px;
         left: 48px;
       }
       .edit-button {
+        bottom: -16px;
         left: 88px;
       }
       .delete-button {
+        bottom: -16px;
         left: 128px;
-      }
-      .card-container:hover .edit-button,
-      .card-container:hover .reply-button,
-      .card-container:hover .generate-button,
-      .card-container:hover .delete-button {
-        opacity: 1;
-      }
-      .edit-button:hover,
-      .reply-button:hover,
-      .generate-button:hover,
-      .delete-button:hover {
-        background: var(--color-canvas-subtle);
-        color: var(--color-accent-fg);
-        border-color: var(--color-accent-fg);
-      }
-      .generate-button:hover {
-        background: var(--color-canvas-subtle);
-        color: var(--color-btn-primary-bg);
-        border-color: var(--color-btn-primary-bg);
-      }
-      .delete-button:hover {
-        color: var(--color-danger-fg);
-        border-color: var(--color-danger-fg);
       }
       .reply-form {
         margin-left: 8px;
