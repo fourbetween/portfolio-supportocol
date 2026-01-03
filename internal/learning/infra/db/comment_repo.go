@@ -77,6 +77,31 @@ func (r *CommentRepository) Save(ctx context.Context, c *domain.Comment) error {
 	return nil
 }
 
+func (r *CommentRepository) BatchSave(ctx context.Context, comments []*domain.Comment) error {
+	if len(comments) == 0 {
+		return nil
+	}
+
+	models := make([]model.Comments, len(comments))
+	for i, c := range comments {
+		models[i] = r.toCommentModel(c)
+	}
+
+	stmt := table.Comments.
+		INSERT(table.Comments.AllColumns.Except(table.Comments.UpdatedAt)).
+		MODELS(models).
+		AS_NEW().
+		ON_DUPLICATE_KEY_UPDATE(
+			table.Comments.CommentType.SET(table.Comments.NEW.CommentType),
+			table.Comments.Content.SET(table.Comments.NEW.Content),
+		)
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to batch save comments: %w", err)
+	}
+	return nil
+}
+
 func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error {
 	stmt := table.Comments.
 		DELETE().

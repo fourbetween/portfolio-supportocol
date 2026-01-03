@@ -51,10 +51,8 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 		return nil, err
 	}
 
-	for _, c := range comments {
-		if err := u.commentRepo.Save(ctx, c); err != nil {
-			return nil, err
-		}
+	if err := u.commentRepo.BatchSave(ctx, comments); err != nil {
+		return nil, err
 	}
 	return comments, nil
 }
