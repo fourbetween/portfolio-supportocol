@@ -6,9 +6,9 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/fourbetween/app-supportocol/internal/identity"
 	"github.com/fourbetween/app-supportocol/internal/identity/api/oas"
 	"github.com/fourbetween/app-supportocol/internal/identity/domain"
-	"github.com/fourbetween/app-supportocol/internal/identity/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
@@ -16,20 +16,13 @@ import (
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
-type HandlerParams struct {
-	LoginWithGoogle *usecase.LoginWithGoogleUsecase
-	GetUser         *usecase.GetUserUsecase
-}
-
 type appHandler struct {
-	loginWithGoogle *usecase.LoginWithGoogleUsecase
-	getUser         *usecase.GetUserUsecase
+	con *identity.APIContainer
 }
 
-func NewHandler(params HandlerParams) oas.Handler {
+func NewHandler(con *identity.APIContainer) oas.Handler {
 	return &appHandler{
-		loginWithGoogle: params.LoginWithGoogle,
-		getUser:         params.GetUser,
+		con: con,
 	}
 }
 
@@ -42,7 +35,7 @@ func (h *appHandler) IdentityErrorsPost(ctx context.Context, req *oas.IdentityEr
 }
 
 func (h *appHandler) IdentityGooglePost(ctx context.Context, req *oas.GoogleLoginRequest) error {
-	token, err := h.loginWithGoogle.Execute(ctx, req.IdToken)
+	token, err := h.con.LoginWithGoogle.Execute(ctx, req.IdToken)
 	if err != nil {
 		return err
 	}
@@ -76,7 +69,7 @@ func (h *appHandler) IdentityLogoutPost(ctx context.Context) error {
 
 func (h *appHandler) IdentityMeGet(ctx context.Context) (*oas.User, error) {
 	uid := httpctx.GetUserID(ctx)
-	u, err := h.getUser.Execute(ctx, uid)
+	u, err := h.con.GetUser.Execute(ctx, uid)
 	if err != nil {
 		return nil, err
 	}

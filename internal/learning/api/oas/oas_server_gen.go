@@ -31,7 +31,7 @@ type Handler interface {
 	// Generate comments using AI.
 	//
 	// POST /learning/discussions/{discussionId}/comments/generate
-	LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *LearningDiscussionsDiscussionIdCommentsGeneratePostReq, params LearningDiscussionsDiscussionIdCommentsGeneratePostParams) ([]Comment, error)
+	LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *LearningDiscussionsDiscussionIdCommentsGeneratePostReq, params LearningDiscussionsDiscussionIdCommentsGeneratePostParams) error
 	// LearningDiscussionsDiscussionIdCommentsGet implements GET /learning/discussions/{discussionId}/comments operation.
 	//
 	// Get comments for a discussion.

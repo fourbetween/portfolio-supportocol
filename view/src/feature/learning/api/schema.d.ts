@@ -455,9 +455,7 @@ export interface paths {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content: {
-                        "application/json": components["schemas"]["Comment"][];
-                    };
+                    content?: never;
                 };
                 /** @description default error */
                 default: {
