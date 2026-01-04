@@ -134,6 +134,36 @@ export class LearningDashboardPage extends LitElement {
     this._selectedCommentId = e.detail.id;
   }
 
+  private _handleCommentGenerated() {
+    setTimeout(async () => {
+      if (!this._selectedDiscussionId) return;
+
+      const since =
+        this._comments.length > 0
+          ? this._comments.reduce(
+              (max, c) => (c.createdAt > max ? c.createdAt : max),
+              this._comments[0].createdAt
+            )
+          : undefined;
+
+      try {
+        const newComments = await commentRepository.list(
+          this._selectedDiscussionId,
+          since
+        );
+        if (newComments.length > 0) {
+          const existingIds = new Set(this._comments.map((c) => c.id));
+          const filteredNewComments = newComments.filter(
+            (c) => !existingIds.has(c.id)
+          );
+          this._comments = [...this._comments, ...filteredNewComments];
+        }
+      } catch (e) {
+        showToast(this, String(e), "error");
+      }
+    }, 10000);
+  }
+
   render() {
     const selectedDiscussion = this._discussions.find(
       (d) => d.id === this._selectedDiscussionId
@@ -174,6 +204,7 @@ export class LearningDashboardPage extends LitElement {
               @comment-created=${this._handleCommentCreated}
               @comment-updated=${this._handleCommentUpdated}
               @comment-deleted=${this._handleCommentDeleted}
+              @comment-generated=${this._handleCommentGenerated}
               @select-comment=${this._handleSelectComment}
             ></learning-comment-explorer-widget>
           </div>

@@ -54,7 +54,7 @@ func NewAPIContainer(
 	discussionRepo.SetFactory(discussionFac)
 	commentRepo.SetFactory(commentFac)
 
-	queueURL, err := appConf.Get("sqs/comment-generation/queue-url")
+	queueURL, err := appConf.Get("sqs/comment-generation/url")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get comment generation queue URL from config: %w", err)
 	}
@@ -119,7 +119,7 @@ func NewCommentGenerationContainer(
 		return nil, fmt.Errorf("failed to create comment generator: %w", err)
 	}
 
-	queueURL, err := appConf.Get("sqs/comment-generation/queue-url")
+	queueURL, err := appConf.Get("sqs/comment-generation/url")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get comment generation queue URL from config: %w", err)
 	}

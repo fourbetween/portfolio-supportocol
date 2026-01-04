@@ -15,6 +15,9 @@ dev-view: setup-view
 dev:
 	npx concurrently --kill-others --prefix "[{name}]" -n "api,view" -c "blue,cyan" "make dev-api" "make dev-view"
 
+dev-commentgen:
+	cd ${BASE_DIR}/cmd/comment-generation/dev && AWS_PROFILE=${STAGE} go run .
+
 watch-view:
 	cd ${VIEW_DIR} && npm run watch:all
 

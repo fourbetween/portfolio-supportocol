@@ -108,23 +108,19 @@ export class LearningCommentExplorerWidget extends LitElement {
   private async handleCommentGenerate(commentId: string, commentType: string) {
     if (!this.discussionId) return;
     try {
-      const data = await commentRepository.generate(this.discussionId, {
+      await commentRepository.generate(this.discussionId, {
         parentCommentId: commentId,
         commentType,
       });
 
       showToast(this, "Comments generated.", "success", 2000);
-      if (data) {
-        for (const comment of data) {
-          this.dispatchEvent(
-            new CustomEvent("comment-created", {
-              detail: comment,
-              bubbles: true,
-              composed: true,
-            })
-          );
-        }
-      }
+      this.dispatchEvent(
+        new CustomEvent("comment-generated", {
+          detail: { parentCommentId: commentId, commentType },
+          bubbles: true,
+          composed: true,
+        })
+      );
     } catch (error: any) {
       showToast(this, error.message, "error");
     }

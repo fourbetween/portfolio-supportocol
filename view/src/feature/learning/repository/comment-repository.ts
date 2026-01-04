@@ -2,12 +2,13 @@ import { client } from "../api/client";
 import type { Comment } from "../model/comment";
 
 export class CommentRepository {
-  async list(discussionId: string): Promise<Comment[]> {
+  async list(discussionId: string, since?: string): Promise<Comment[]> {
     const { data, error } = await client.GET(
       "/learning/discussions/{discussionId}/comments",
       {
         params: {
           path: { discussionId },
+          query: { since },
         },
       }
     );
@@ -75,8 +76,8 @@ export class CommentRepository {
       parentCommentId: string | null;
       commentType: string;
     }
-  ): Promise<Comment[]> {
-    const { data, error } = await client.POST(
+  ): Promise<void> {
+    const { error } = await client.POST(
       "/learning/discussions/{discussionId}/comments/generate",
       {
         params: {
@@ -86,7 +87,6 @@ export class CommentRepository {
       }
     );
     if (error) throw new Error(error.message);
-    return data || [];
   }
 
   async updateStatus(
