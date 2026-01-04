@@ -82,6 +82,7 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 		c.buildDNS()
 
 		// app resources
+		c.buildCommentGenFunction()
 		c.buildViewBucket()
 		c.buildApiFunction()
 		c.buildMainAPI()
