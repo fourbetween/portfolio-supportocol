@@ -25,9 +25,10 @@ const mockComment: Comment = {
 const availableTypes = ["idea", "question", "answer", "agreement"];
 
 export const Default: Story = {
-  render: () => html`
+  render: (args) => html`
     <learning-comment-item
       .comment=${mockComment}
+      .activeChildrenCount=${args.activeChildrenCount}
       .availableTypes=${availableTypes}
       .onCommentDelete=${(id: string) => console.log("Delete comment:", id)}
       .onCommentGenerate=${(id: string, type: string) =>
@@ -36,6 +37,9 @@ export const Default: Story = {
         console.log("Reply to comment:", id, "with detail:", detail)}
     ></learning-comment-item>
   `,
+  args: {
+    activeChildrenCount: 3,
+  },
 };
 
 export const LongContent: Story = {
