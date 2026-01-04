@@ -6,5 +6,26 @@
   "hosted-zone:account=008544129142:domainName=hick-r.com:region=ap-northeast-1": {
     "Id": "/hostedzone/Z0505746KXIR8XKLAT0T",
     "Name": "hick-r.com."
+  },
+  "hosted-zone:account=966392475035:domainName=hick-r.com:region=us-east-1": {
+    "Id": "/hostedzone/Z07807321CYKJCDMMD9PY",
+    "Name": "hick-r.com."
+  },
+  "cc-api-provider:account=966392475035:exactIdentifier=share-rds34d05673-rwvqczm9n8vg:propertiesToReturn.0=DBInstanceArn:propertiesToReturn.1=Endpoint.Address:propertiesToReturn.2=Endpoint.Port:propertiesToReturn.3=DbiResourceId:propertiesToReturn.4=DBSecurityGroups:propertiesToReturn.5=VPCSecurityGroups:region=ap-northeast-1:typeName=AWS$:$:RDS$:$:DBInstance": [
+    {
+      "DBInstanceArn": "arn:aws:rds:ap-northeast-1:966392475035:db:share-rds34d05673-rwvqczm9n8vg",
+      "Endpoint.Address": "share-rds34d05673-rwvqczm9n8vg.cxc6s8w24jlm.ap-northeast-1.rds.amazonaws.com",
+      "Endpoint.Port": "3306",
+      "DbiResourceId": "db-MXKI66NPPVQLFTOG42GUQ6KJ24",
+      "DBSecurityGroups": [],
+      "VPCSecurityGroups": [
+        "sg-052c20f1ba93ffae1"
+      ],
+      "Identifier": "share-rds34d05673-rwvqczm9n8vg"
+    }
+  ],
+  "hosted-zone:account=966392475035:domainName=hick-r.com:region=ap-northeast-1": {
+    "Id": "/hostedzone/Z07807321CYKJCDMMD9PY",
+    "Name": "hick-r.com."
   }
 }
