@@ -13,6 +13,9 @@ export class LearningCommentContext extends LitElement {
   @property({ type: Array })
   path: Comment[] = [];
 
+  @property({ type: Object })
+  childCounts = new Map<string, number>();
+
   @property({ type: Array })
   availableTypes: string[] = [];
 
@@ -47,6 +50,7 @@ export class LearningCommentContext extends LitElement {
         ${join(
           this.path.map((comment, index) => {
             const isLast = index === this.path.length - 1;
+            const childCount = this.childCounts.get(comment.id) || 0;
             if (isLast) {
               return html`
                 <learning-comment-type-badge
@@ -54,6 +58,7 @@ export class LearningCommentContext extends LitElement {
                 ></learning-comment-type-badge>
                 <learning-comment-item
                   .comment=${comment}
+                  .activeChildrenCount=${childCount}
                   .availableTypes=${this.availableTypes}
                   .onCommentClick=${this.onCommentClick}
                   .onCommentUpdate=${this.onCommentUpdate}
@@ -69,6 +74,7 @@ export class LearningCommentContext extends LitElement {
               ></learning-comment-type-badge>
               <learning-comment-card
                 .comment=${comment}
+                .activeChildrenCount=${childCount}
                 @click=${() => this.handleCommentClick(comment)}
               ></learning-comment-card>
             `;

@@ -14,6 +14,9 @@ export class LearningCommentItem extends LitElement {
   @property({ type: Object })
   comment?: Comment;
 
+  @property({ type: Number })
+  activeChildrenCount = 0;
+
   @property({ type: Array })
   availableTypes: string[] = [];
 
@@ -99,6 +102,7 @@ export class LearningCommentItem extends LitElement {
     return html`
       <learning-comment-card
         .comment=${this.comment}
+        .activeChildrenCount=${this.activeChildrenCount}
         @click=${this.handleCommentClick}
         style="cursor: pointer;"
       ></learning-comment-card>

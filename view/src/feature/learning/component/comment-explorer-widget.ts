@@ -25,6 +25,9 @@ export class LearningCommentExplorerWidget extends LitElement {
   @state()
   private availableTypes: string[] = [];
 
+  @state()
+  private childCounts = new Map<string, number>();
+
   private commentMap = new Map<string, Comment>();
   private childrenMap = new Map<string, Comment[]>();
 
@@ -32,6 +35,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     if (changedProperties.has("comments")) {
       this.commentMap.clear();
       this.childrenMap.clear();
+      this.childCounts = new Map();
       this.availableTypes = [];
 
       if (this.comments) {
@@ -44,6 +48,13 @@ export class LearningCommentExplorerWidget extends LitElement {
             children.push(comment);
             this.childrenMap.set(comment.parentCommentId, children);
           }
+        }
+
+        for (const [parentId, children] of this.childrenMap) {
+          this.childCounts.set(
+            parentId,
+            children.filter((c) => c.status === "active").length
+          );
         }
       }
     }
@@ -220,6 +231,7 @@ export class LearningCommentExplorerWidget extends LitElement {
                 </div>
                 <learning-comment-context
                   .path=${path}
+                  .childCounts=${this.childCounts}
                   .availableTypes=${this.availableTypes}
                   .onCommentClick=${(c: Comment) => this.handleCommentClick(c)}
                   .onCommentUpdate=${(

@@ -33,4 +33,73 @@ describe("learning-comment-card", async () => {
     );
     await expect.element(page.getByText("content")).toBeInTheDocument();
   });
+
+  it("子コメント数が表示されること", async () => {
+    const comment = {
+      id: "1",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "content",
+      commentType: "idea",
+      status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
+    };
+    render(
+      html`
+        <learning-comment-card
+          .comment=${comment}
+          .activeChildrenCount=${5}
+        ></learning-comment-card>
+      `,
+      container
+    );
+    await expect.element(page.getByText("5")).toBeInTheDocument();
+  });
+
+  it("子コメント数が0の場合は表示されないこと", async () => {
+    const comment = {
+      id: "1",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "content",
+      commentType: "idea",
+      status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
+    };
+    render(
+      html`
+        <learning-comment-card
+          .comment=${comment}
+          .activeChildrenCount=${0}
+        ></learning-comment-card>
+      `,
+      container
+    );
+    // 5などの数字が表示されていないことを確認（より正確には .child-count が存在しないこと）
+    const childCount = container
+      .querySelector("learning-comment-card")
+      ?.shadowRoot?.querySelector(".child-count");
+    expect(childCount).toBeNull();
+  });
+
+  it("作成日時が表示されること", async () => {
+    const comment = {
+      id: "1",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "content",
+      commentType: "idea",
+      status: "active" as const,
+      createdAt: "2026-01-04T12:34:56Z",
+    };
+    render(
+      html`
+        <learning-comment-card .comment=${comment}></learning-comment-card>
+      `,
+      container
+    );
+    // ロケールに依存しない形式でチェックするか、特定の文字列が含まれているかを確認
+    // ここでは 2026-01-04 12:34:56 が含まれていることを確認する
+    await expect.element(page.getByText("2026-01-04 12:34:56")).toBeVisible();
+  });
 });

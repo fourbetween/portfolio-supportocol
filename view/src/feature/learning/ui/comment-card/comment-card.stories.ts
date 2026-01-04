@@ -6,7 +6,10 @@ const meta: Meta = {
   title: "learning/ui/comment-card",
   component: "learning-comment-card",
   render: (args) => html`
-    <learning-comment-card .comment=${args.comment}></learning-comment-card>
+    <learning-comment-card
+      .comment=${args.comment}
+      .activeChildrenCount=${args.activeChildrenCount}
+    ></learning-comment-card>
   `,
 };
 
@@ -25,6 +28,22 @@ export const Default: Story = {
       status: "active" as const,
       createdAt: "2026-01-04T00:00:00Z",
     },
+    activeChildrenCount: 0,
+  },
+};
+
+export const WithChildren: Story = {
+  args: {
+    comment: {
+      id: "3",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "子コメントを持つコメントの表示テストです。",
+      commentType: "idea",
+      status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
+    },
+    activeChildrenCount: 5,
   },
 };
 

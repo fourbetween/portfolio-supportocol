@@ -72,7 +72,6 @@ export class LearningDiscussionList extends LitElement {
         justify-content: space-between;
         align-items: center;
         padding: 16px;
-        padding-right: 48px;
         border-bottom: 1px solid var(--color-border-muted);
         background-color: var(--color-canvas-default);
         cursor: pointer;

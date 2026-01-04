@@ -107,12 +107,16 @@ export class LearningCommentTree extends LitElement {
     hideChildren: boolean = false
   ): HTMLTemplateResult {
     const children = this.childrenMap.get(comment.id) || [];
+    const activeChildrenCount = children.filter(
+      (c) => c.status === "active"
+    ).length;
     const groupedChildren = this.groupCommentsByType(children);
 
     return html`
       <div class="comment-node">
         <learning-comment-item
           .comment=${comment}
+          .activeChildrenCount=${activeChildrenCount}
           .availableTypes=${this.availableTypes}
           .onCommentClick=${this.onCommentClick}
           .onCommentUpdate=${this.onCommentUpdate}
