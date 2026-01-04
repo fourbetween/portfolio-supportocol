@@ -136,7 +136,7 @@ export class LearningDashboardPage extends LitElement {
 
   private _handleCommentGenerated() {
     setTimeout(async () => {
-      if (!this._selectedDiscussionId) return;
+      if (!this.isConnected || !this._selectedDiscussionId) return;
 
       const since =
         this._comments.length > 0
@@ -151,17 +151,18 @@ export class LearningDashboardPage extends LitElement {
           this._selectedDiscussionId,
           since
         );
-        if (newComments.length > 0) {
-          const existingIds = new Set(this._comments.map((c) => c.id));
-          const filteredNewComments = newComments.filter(
-            (c) => !existingIds.has(c.id)
-          );
+        const existingIds = new Set(this._comments.map((c) => c.id));
+        const filteredNewComments = newComments.filter(
+          (c) => !existingIds.has(c.id)
+        );
+
+        if (filteredNewComments.length > 0) {
           this._comments = [...this._comments, ...filteredNewComments];
         }
       } catch (e) {
         showToast(this, String(e), "error");
       }
-    }, 10000);
+    }, 15000);
   }
 
   render() {
