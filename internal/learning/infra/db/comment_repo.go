@@ -193,7 +193,7 @@ func (r *CommentRepository) toCommentDomain(row model.Comments) (*domain.Comment
 			CommentTypeID:   row.CommentType,
 			Content:         row.Content,
 			Status:          domain.CommentStatus(row.Status),
-			PostedBy:        row.PostedBy,
+			CreatedBy:       row.CreatedBy,
 		},
 		CreatedAt: row.CreatedAt,
 	})
@@ -207,7 +207,7 @@ func (r *CommentRepository) toCommentModel(c *domain.Comment) model.Comments {
 		CommentType:     c.CommentType(),
 		Content:         c.Content(),
 		Status:          string(c.Status()),
-		PostedBy:        c.PostedBy(),
+		CreatedBy:       c.CreatedBy(),
 		CreatedAt:       c.CreatedAt(),
 	}
 }

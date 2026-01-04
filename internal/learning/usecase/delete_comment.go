@@ -43,7 +43,7 @@ func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentI
 		return err
 	}
 
-	if comment.PostedBy() != input.UserID {
+	if comment.CreatedBy() != input.UserID {
 		return apperr.ErrForbidden
 	}
 
