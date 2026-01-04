@@ -24,6 +24,7 @@ describe("learning-comment-context", async () => {
         commentType: "idea",
         status: "active" as const,
         content: "First comment",
+        createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "2",
@@ -32,6 +33,7 @@ describe("learning-comment-context", async () => {
         commentType: "question",
         status: "active" as const,
         content: "Second comment",
+        createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 
@@ -57,6 +59,7 @@ describe("learning-comment-context", async () => {
         commentType: "idea",
         status: "active" as const,
         content: "First comment",
+        createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "2",
@@ -65,6 +68,7 @@ describe("learning-comment-context", async () => {
         commentType: "question",
         status: "active" as const,
         content: "Second comment",
+        createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 

@@ -12,7 +12,8 @@ describe("deriveCommentFrame", () => {
         commentType: "Idea",
         content: "idea 1",
         status: "active",
-      },
+      createdAt: "2026-01-04T00:00:00Z",
+        },
       {
         id: "2",
         discussionId: "d1",
@@ -20,7 +21,8 @@ describe("deriveCommentFrame", () => {
         commentType: "Question",
         content: "question 1",
         status: "active",
-      },
+      createdAt: "2026-01-04T00:00:00Z",
+        },
       {
         id: "3",
         discussionId: "d1",
@@ -28,7 +30,8 @@ describe("deriveCommentFrame", () => {
         commentType: "Agree",
         content: "agree 1",
         status: "active",
-      },
+      createdAt: "2026-01-04T00:00:00Z",
+        },
       {
         id: "4",
         discussionId: "d1",
@@ -36,7 +39,8 @@ describe("deriveCommentFrame", () => {
         commentType: "Answer",
         content: "answer 1",
         status: "active",
-      },
+      createdAt: "2026-01-04T00:00:00Z",
+        },
     ];
 
     const frame = deriveCommentFrame(comments);

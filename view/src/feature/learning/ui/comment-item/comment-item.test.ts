@@ -14,6 +14,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     commentType: "idea",
     status: "active" as const,
     content: "This is a test comment",
+    createdAt: "2026-01-04T00:00:00Z",
   };
 
   const availableTypes = ["idea", "question", "answer"];

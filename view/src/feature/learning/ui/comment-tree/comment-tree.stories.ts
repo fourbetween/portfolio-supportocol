@@ -29,6 +29,7 @@ export const Default: Story = {
         content: "論理的な議論を支援するためのプラットフォームについて",
         commentType: "idea",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "2",
@@ -37,6 +38,7 @@ export const Default: Story = {
         content: "具体的にどのような機能がありますか？",
         commentType: "question",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "3",
@@ -45,6 +47,7 @@ export const Default: Story = {
         content: "コメントフレームと木構造を用います。",
         commentType: "answer",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "4",
@@ -53,6 +56,7 @@ export const Default: Story = {
         content: "それは使いやすそうですね。",
         commentType: "agree",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "5",
@@ -61,6 +65,7 @@ export const Default: Story = {
         content: "モバイルでの表示はどうなりますか？",
         commentType: "question",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "6",
@@ -69,6 +74,7 @@ export const Default: Story = {
         content: "AIサポート機能も検討しています。",
         commentType: "idea",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
     ],
   },
@@ -84,6 +90,7 @@ export const DeepNesting: Story = {
         content: "Level 0",
         commentType: "idea",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "2",
@@ -92,6 +99,7 @@ export const DeepNesting: Story = {
         content: "Level 1",
         commentType: "idea",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "3",
@@ -100,6 +108,7 @@ export const DeepNesting: Story = {
         content: "Level 2",
         commentType: "idea",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "4",
@@ -108,6 +117,7 @@ export const DeepNesting: Story = {
         content: "Level 3",
         commentType: "idea",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
     ],
   },
@@ -123,6 +133,7 @@ export const SameTypeChildren: Story = {
         content: "Root",
         commentType: "idea",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "2",
@@ -131,6 +142,7 @@ export const SameTypeChildren: Story = {
         content: "Child 1",
         commentType: "question",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "3",
@@ -139,6 +151,7 @@ export const SameTypeChildren: Story = {
         content: "Child 2",
         commentType: "question",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "4",
@@ -147,6 +160,7 @@ export const SameTypeChildren: Story = {
         content: "Child 3",
         commentType: "idea",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
     ],
   },
@@ -162,6 +176,7 @@ export const SameTypeRoots: Story = {
         content: "Root 1",
         commentType: "idea",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "2",
@@ -170,6 +185,7 @@ export const SameTypeRoots: Story = {
         content: "Root 2",
         commentType: "idea",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "3",
@@ -178,6 +194,7 @@ export const SameTypeRoots: Story = {
         content: "Root 3",
         commentType: "question",
         status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
       },
     ],
   },

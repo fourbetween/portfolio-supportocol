@@ -25,6 +25,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
+      createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "2",
@@ -33,6 +34,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案2",
         commentType: "question",
         status: "proposed",
+      createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 
@@ -74,6 +76,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
+      createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 
@@ -102,6 +105,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
+      createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 
@@ -130,6 +134,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
+      createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 
@@ -157,6 +162,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
+      createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 

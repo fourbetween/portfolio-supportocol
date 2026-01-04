@@ -21,7 +21,9 @@ export const Default: Story = {
       parentCommentId: "0",
       content:
         "これはテストコメントです。論理的な議論を支援するためのコメントフレームと木構造を用います。",
-      commentType: "idea", status: "active" as const,
+      commentType: "idea",
+      status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
     },
   },
 };
@@ -33,7 +35,9 @@ export const Question: Story = {
       discussionId: "1",
       parentCommentId: "1",
       content: "この前提条件についてはどうお考えですか？",
-      commentType: "question", status: "active" as const,
+      commentType: "question",
+      status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
     },
   },
 };

@@ -23,6 +23,7 @@ describe("learning-comment-card", async () => {
       content: "content",
       commentType: "idea",
       status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
     };
     render(
       html`
