@@ -8,6 +8,7 @@ const meta: Meta = {
   render: (args) => html`
     <learning-comment-context
       .path=${args.path}
+      .childCounts=${args.childCounts}
       .availableTypes=${args.availableTypes}
       .onCommentClick=${args.onCommentClick}
       .onCommentUpdate=${args.onCommentUpdate}
@@ -24,6 +25,11 @@ type Story = StoryObj;
 export const Default: Story = {
   args: {
     availableTypes: ["idea", "question", "answer", "claim", "evidence"],
+    childCounts: new Map([
+      ["1", 5],
+      ["2", 3],
+      ["3", 0],
+    ]),
     path: [
       {
         id: "1",

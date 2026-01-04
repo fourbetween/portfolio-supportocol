@@ -90,4 +90,31 @@ describe("learning-comment-context", async () => {
       .element(page.getByRole("button", { name: "edit" }))
       .toBeInTheDocument();
   });
+
+  it("子コメント数が表示されること", async () => {
+    const path = [
+      {
+        id: "1",
+        discussionId: "d1",
+        parentCommentId: null,
+        commentType: "idea",
+        status: "active" as const,
+        content: "First comment",
+        createdAt: "2026-01-04T00:00:00Z",
+      },
+    ];
+    const childCounts = new Map([["1", 5]]);
+
+    render(
+      html`
+        <learning-comment-context
+          .path=${path}
+          .childCounts=${childCounts}
+        ></learning-comment-context>
+      `,
+      container
+    );
+
+    await expect.element(page.getByText("5")).toBeInTheDocument();
+  });
 });
