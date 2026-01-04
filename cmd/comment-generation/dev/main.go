@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/fourbetween/app-supportocol/internal/learning"
@@ -18,15 +19,22 @@ func main() {
 		panic(err)
 	}
 
-	if err := exec(con); err != nil {
-		panic(err)
+	for {
+		fmt.Printf("[%s] executing...\n", time.Now().Format(time.RFC3339))
+		if err := exec(con); err != nil {
+			fmt.Printf("[%s] error: %v\n", time.Now().Format(time.RFC3339), err)
+		}
 	}
 }
 
 func exec(con *learning.CommentGenerationContainer) error {
-	items, err := con.Queue.Dequeue(1)
+	items, err := con.Queue.Dequeue(10)
 	if err != nil {
 		return fmt.Errorf("failed to dequeue reservation: %w", err)
+	}
+
+	if len(items) > 0 {
+		fmt.Printf("[%s] dequeued %d items\n", time.Now().Format(time.RFC3339), len(items))
 	}
 
 	for _, item := range items {
