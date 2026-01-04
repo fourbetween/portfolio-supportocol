@@ -146,7 +146,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsPost(
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
 		Content:         string(req.Content),
-		PostedBy:        httpctx.GetUserID(ctx),
+		CreatedBy:       httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err

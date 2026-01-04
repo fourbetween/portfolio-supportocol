@@ -13,7 +13,7 @@ type Comment struct {
 	commentType     string
 	content         CommentContent
 	status          CommentStatus
-	postedBy        string
+	createdBy       string
 	createdAt       time.Time
 }
 
@@ -41,8 +41,8 @@ func (c *Comment) Status() CommentStatus {
 	return c.status
 }
 
-func (c *Comment) PostedBy() string {
-	return c.postedBy
+func (c *Comment) CreatedBy() string {
+	return c.createdBy
 }
 
 func (c *Comment) CreatedAt() time.Time {

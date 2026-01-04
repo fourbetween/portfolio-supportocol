@@ -143,7 +143,7 @@ func (cg *CommentGenerator) createComments(params domain.GenerateCommentParams, 
 			CommentTypeID:   params.CommentType,
 			Content:         content,
 			Status:          domain.CommentStatusProposed,
-			PostedBy:        params.UserID,
+			CreatedBy:       params.UserID,
 		})
 		if err != nil {
 			return nil, err

@@ -29,14 +29,14 @@ type CreateCommentInput struct {
 	ParentCommentID *string
 	CommentType     string
 	Content         string
-	PostedBy        string
+	CreatedBy       string
 }
 
 func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentInput) (*domain.Comment, error) {
 	// Verify discussion exists and user has access
 	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
 		ID:        input.DiscussionID,
-		CreatedBy: input.PostedBy,
+		CreatedBy: input.CreatedBy,
 	})
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		CommentTypeID:   input.CommentType,
 		Content:         input.Content,
 		Status:          domain.CommentStatusActive,
-		PostedBy:        input.PostedBy,
+		CreatedBy:       input.CreatedBy,
 	})
 	if err != nil {
 		return nil, err

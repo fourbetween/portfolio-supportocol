@@ -45,7 +45,7 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 		return nil, err
 	}
 
-	if comment.PostedBy() != input.UserID {
+	if comment.CreatedBy() != input.UserID {
 		return nil, apperr.ErrForbidden
 	}
 

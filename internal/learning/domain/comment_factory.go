@@ -29,7 +29,7 @@ type CreateCommentParams struct {
 	CommentTypeID   string
 	Content         string
 	Status          CommentStatus
-	PostedBy        string
+	CreatedBy       string
 }
 
 func (f *CommentFactory) Create(params CreateCommentParams) (*Comment, error) {
@@ -62,7 +62,7 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 		commentType:     params.CommentTypeID,
 		content:         content,
 		status:          params.Status,
-		postedBy:        params.PostedBy,
+		createdBy:       params.CreatedBy,
 		createdAt:       params.CreatedAt,
 	}, nil
 }
