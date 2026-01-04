@@ -279,5 +279,6 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		CommentType:     oas.CommentType(item.CommentType()),
 		Content:         oas.CommentContent(item.Content()),
 		Status:          oas.CommentStatus(item.Status()),
+		CreatedAt:       item.CreatedAt(),
 	}
 }
