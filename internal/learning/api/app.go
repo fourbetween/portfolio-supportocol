@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log/slog"
 	"strings"
+	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/learning"
 	"github.com/fourbetween/app-supportocol/internal/learning/api/oas"
@@ -115,9 +116,15 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(
 	ctx context.Context,
 	params oas.LearningDiscussionsDiscussionIdCommentsGetParams,
 ) ([]oas.Comment, error) {
+	var since *time.Time
+	if params.Since.Set {
+		since = &params.Since.Value
+	}
+
 	items, err := h.con.ListComments.Execute(ctx, usecase.ListCommentsInput{
 		DiscussionID: string(params.DiscussionId),
 		UserID:       httpctx.GetUserID(ctx),
+		Since:        since,
 	})
 	if err != nil {
 		return nil, err

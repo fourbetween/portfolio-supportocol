@@ -22,7 +22,7 @@ type GetDiscussionInput struct {
 }
 
 func (u *GetDiscussionUsecase) Execute(ctx context.Context, input GetDiscussionInput) (*domain.Discussion, error) {
-	return u.repo.Load(ctx, domain.LoadParams{
+	return u.repo.Load(ctx, domain.LoadDiscussionParams{
 		ID:        input.ID,
 		CreatedBy: input.CreatedBy,
 	})

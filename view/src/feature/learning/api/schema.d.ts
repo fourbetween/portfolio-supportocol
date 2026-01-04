@@ -207,7 +207,9 @@ export interface paths {
         /** @description get comments for a discussion */
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    since?: string;
+                };
                 header?: never;
                 path: {
                     discussionId: components["schemas"]["Id"];
@@ -499,6 +501,8 @@ export interface components {
             commentType: components["schemas"]["CommentType"];
             content: components["schemas"]["CommentContent"];
             status: components["schemas"]["CommentStatus"];
+            /** Format: date-time */
+            createdAt: string;
         };
     };
     responses: never;

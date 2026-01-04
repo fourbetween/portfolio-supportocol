@@ -62,7 +62,7 @@ func (cg *CommentGenerator) fetchContext(
 	ctx context.Context,
 	params domain.GenerateCommentParams,
 ) (*domain.Discussion, []*domain.Comment, []*domain.Comment, error) {
-	discussion, err := cg.discussionRepo.Load(ctx, domain.LoadParams{
+	discussion, err := cg.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:        params.DiscussionID,
 		CreatedBy: params.UserID,
 	})
@@ -80,7 +80,7 @@ func (cg *CommentGenerator) fetchContext(
 		path = p
 	}
 
-	children, err := cg.commentRepo.ListChildren(ctx, domain.ListChildrenParams{
+	children, err := cg.commentRepo.ListChildren(ctx, domain.ListCommentChildrenParams{
 		DiscussionID:    params.DiscussionID,
 		ParentCommentID: params.ParentCommentID,
 		CommentType:     params.CommentType,

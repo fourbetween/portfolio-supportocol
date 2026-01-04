@@ -45,11 +45,16 @@ func (r *CommentRepository) Load(ctx context.Context, id string) (*domain.Commen
 	return r.toCommentDomain(dest)
 }
 
-func (r *CommentRepository) List(ctx context.Context, discussionID string) ([]*domain.Comment, error) {
+func (r *CommentRepository) Search(ctx context.Context, params domain.SearchCommentsParams) ([]*domain.Comment, error) {
+	cond := table.Comments.DiscussionID.EQ(mysql.String(params.DiscussionID))
+	if params.Since != nil {
+		cond = cond.AND(table.Comments.CreatedAt.GT(mysql.TimestampT(*params.Since)))
+	}
+
 	stmt := mysql.
 		SELECT(table.Comments.AllColumns).
 		FROM(table.Comments).
-		WHERE(table.Comments.DiscussionID.EQ(mysql.String(discussionID)))
+		WHERE(cond)
 
 	var dest []model.Comments
 	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
@@ -146,7 +151,7 @@ func (r *CommentRepository) GetPathToRoot(ctx context.Context, commentID string)
 	return r.toCommentDomains(dest)
 }
 
-func (r *CommentRepository) ListChildren(ctx context.Context, params domain.ListChildrenParams) ([]*domain.Comment, error) {
+func (r *CommentRepository) ListChildren(ctx context.Context, params domain.ListCommentChildrenParams) ([]*domain.Comment, error) {
 	var condition mysql.BoolExpression
 	if params.ParentCommentID == nil {
 		condition = table.Comments.DiscussionID.EQ(mysql.String(params.DiscussionID)).

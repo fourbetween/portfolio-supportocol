@@ -739,6 +739,10 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGetRequest(args [1
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
+				{
+					Name: "since",
+					In:   "query",
+				}: params.Since,
 			},
 			Raw: r,
 		}

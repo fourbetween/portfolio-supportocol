@@ -33,7 +33,7 @@ type GenerateCommentInput struct {
 
 func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateCommentInput) ([]*domain.Comment, error) {
 	// Verify discussion exists and user has access
-	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
+	_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:        input.DiscussionID,
 		CreatedBy: input.UserID,
 	})

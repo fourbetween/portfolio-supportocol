@@ -54,23 +54,8 @@ func (mr *MockDiscussionRepositoryMockRecorder) Delete(ctx, discussion any) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockDiscussionRepository)(nil).Delete), ctx, discussion)
 }
 
-// List mocks base method.
-func (m *MockDiscussionRepository) List(ctx context.Context, createdBy string) ([]*Discussion, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "List", ctx, createdBy)
-	ret0, _ := ret[0].([]*Discussion)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// List indicates an expected call of List.
-func (mr *MockDiscussionRepositoryMockRecorder) List(ctx, createdBy any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockDiscussionRepository)(nil).List), ctx, createdBy)
-}
-
 // Load mocks base method.
-func (m *MockDiscussionRepository) Load(ctx context.Context, params LoadParams) (*Discussion, error) {
+func (m *MockDiscussionRepository) Load(ctx context.Context, params LoadDiscussionParams) (*Discussion, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Load", ctx, params)
 	ret0, _ := ret[0].(*Discussion)
@@ -96,6 +81,21 @@ func (m *MockDiscussionRepository) Save(ctx context.Context, discussion *Discuss
 func (mr *MockDiscussionRepositoryMockRecorder) Save(ctx, discussion any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockDiscussionRepository)(nil).Save), ctx, discussion)
+}
+
+// Search mocks base method.
+func (m *MockDiscussionRepository) Search(ctx context.Context, createdBy string) ([]*Discussion, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Search", ctx, createdBy)
+	ret0, _ := ret[0].([]*Discussion)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Search indicates an expected call of Search.
+func (mr *MockDiscussionRepositoryMockRecorder) Search(ctx, createdBy any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockDiscussionRepository)(nil).Search), ctx, createdBy)
 }
 
 // MockCommentRepository is a mock of CommentRepository interface.
@@ -165,23 +165,8 @@ func (mr *MockCommentRepositoryMockRecorder) GetPathToRoot(ctx, commentID any) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPathToRoot", reflect.TypeOf((*MockCommentRepository)(nil).GetPathToRoot), ctx, commentID)
 }
 
-// List mocks base method.
-func (m *MockCommentRepository) List(ctx context.Context, discussionID string) ([]*Comment, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "List", ctx, discussionID)
-	ret0, _ := ret[0].([]*Comment)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// List indicates an expected call of List.
-func (mr *MockCommentRepositoryMockRecorder) List(ctx, discussionID any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockCommentRepository)(nil).List), ctx, discussionID)
-}
-
 // ListChildren mocks base method.
-func (m *MockCommentRepository) ListChildren(ctx context.Context, params ListChildrenParams) ([]*Comment, error) {
+func (m *MockCommentRepository) ListChildren(ctx context.Context, params ListCommentChildrenParams) ([]*Comment, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListChildren", ctx, params)
 	ret0, _ := ret[0].([]*Comment)
@@ -222,4 +207,19 @@ func (m *MockCommentRepository) Save(ctx context.Context, comment *Comment) erro
 func (mr *MockCommentRepositoryMockRecorder) Save(ctx, comment any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockCommentRepository)(nil).Save), ctx, comment)
+}
+
+// Search mocks base method.
+func (m *MockCommentRepository) Search(ctx context.Context, params SearchCommentsParams) ([]*Comment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Search", ctx, params)
+	ret0, _ := ret[0].([]*Comment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Search indicates an expected call of Search.
+func (mr *MockCommentRepositoryMockRecorder) Search(ctx, params any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockCommentRepository)(nil).Search), ctx, params)
 }

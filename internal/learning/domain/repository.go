@@ -1,35 +1,43 @@
 package domain
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 //go:generate go tool mockgen -package domain -destination ./repository_mock.go . DiscussionRepository,CommentRepository
 
 type (
-	LoadParams struct {
-		ID        string
-		CreatedBy string
-	}
-
-	ListChildrenParams struct {
-		DiscussionID    string
-		ParentCommentID *string
-		CommentType     string
-	}
-
 	DiscussionRepository interface {
-		Load(ctx context.Context, params LoadParams) (*Discussion, error)
-		List(ctx context.Context, createdBy string) ([]*Discussion, error)
+		Load(ctx context.Context, params LoadDiscussionParams) (*Discussion, error)
+		Search(ctx context.Context, createdBy string) ([]*Discussion, error)
 		Save(ctx context.Context, discussion *Discussion) error
 		Delete(ctx context.Context, discussion *Discussion) error
 	}
 
+	LoadDiscussionParams struct {
+		ID        string
+		CreatedBy string
+	}
+
 	CommentRepository interface {
 		Load(ctx context.Context, id string) (*Comment, error)
-		List(ctx context.Context, discussionID string) ([]*Comment, error)
+		Search(ctx context.Context, params SearchCommentsParams) ([]*Comment, error)
 		Save(ctx context.Context, comment *Comment) error
 		BatchSave(ctx context.Context, comments []*Comment) error
 		Delete(ctx context.Context, comment *Comment) error
 		GetPathToRoot(ctx context.Context, commentID string) ([]*Comment, error)
-		ListChildren(ctx context.Context, params ListChildrenParams) ([]*Comment, error)
+		ListChildren(ctx context.Context, params ListCommentChildrenParams) ([]*Comment, error)
+	}
+
+	SearchCommentsParams struct {
+		DiscussionID string
+		Since        *time.Time
+	}
+
+	ListCommentChildrenParams struct {
+		DiscussionID    string
+		ParentCommentID *string
+		CommentType     string
 	}
 )

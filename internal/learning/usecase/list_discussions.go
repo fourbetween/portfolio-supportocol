@@ -17,5 +17,5 @@ func NewListDiscussionsUsecase(repo domain.DiscussionRepository) *ListDiscussion
 }
 
 func (u *ListDiscussionsUsecase) Execute(ctx context.Context, createdBy string) ([]*domain.Discussion, error) {
-	return u.repo.List(ctx, createdBy)
+	return u.repo.Search(ctx, createdBy)
 }

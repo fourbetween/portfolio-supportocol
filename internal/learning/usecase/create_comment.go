@@ -34,7 +34,7 @@ type CreateCommentInput struct {
 
 func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentInput) (*domain.Comment, error) {
 	// Verify discussion exists and user has access
-	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
+	_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:        input.DiscussionID,
 		CreatedBy: input.CreatedBy,
 	})

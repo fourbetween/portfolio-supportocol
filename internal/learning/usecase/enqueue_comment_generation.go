@@ -23,7 +23,7 @@ func NewEnqueueCommentGenerationUsecase(
 
 func (u *EnqueueCommentGenerationUsecase) Execute(ctx context.Context, input GenerateCommentInput) error {
 	// Verify discussion exists and user has access
-	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
+	_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:        input.DiscussionID,
 		CreatedBy: input.UserID,
 	})

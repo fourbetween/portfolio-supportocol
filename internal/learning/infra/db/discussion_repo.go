@@ -28,7 +28,7 @@ func (r *DiscussionRepository) SetFactory(fac *domain.DiscussionFactory) {
 	r.fac = fac
 }
 
-func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadParams) (*domain.Discussion, error) {
+func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscussionParams) (*domain.Discussion, error) {
 	cond := table.Discussions.ID.EQ(mysql.String(params.ID)).
 		AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
 
@@ -49,7 +49,7 @@ func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadParam
 	return r.toDomain(dest)
 }
 
-func (r *DiscussionRepository) List(ctx context.Context, createdBy string) ([]*domain.Discussion, error) {
+func (r *DiscussionRepository) Search(ctx context.Context, createdBy string) ([]*domain.Discussion, error) {
 	stmt := mysql.
 		SELECT(table.Discussions.AllColumns).
 		FROM(table.Discussions).

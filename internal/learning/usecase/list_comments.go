@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 )
@@ -24,11 +25,12 @@ func NewListCommentsUsecase(
 type ListCommentsInput struct {
 	DiscussionID string
 	UserID       string
+	Since        *time.Time
 }
 
 func (u *ListCommentsUsecase) Execute(ctx context.Context, input ListCommentsInput) ([]*domain.Comment, error) {
 	// Verify discussion exists and user has access
-	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
+	_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:        input.DiscussionID,
 		CreatedBy: input.UserID,
 	})
@@ -36,5 +38,8 @@ func (u *ListCommentsUsecase) Execute(ctx context.Context, input ListCommentsInp
 		return nil, err
 	}
 
-	return u.commentRepo.List(ctx, input.DiscussionID)
+	return u.commentRepo.Search(ctx, domain.SearchCommentsParams{
+		DiscussionID: input.DiscussionID,
+		Since:        input.Since,
+	})
 }

@@ -30,7 +30,7 @@ type DeleteCommentInput struct {
 
 func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentInput) error {
 	// Verify discussion exists and user has access
-	_, err := u.discussionRepo.Load(ctx, domain.LoadParams{
+	_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:        input.DiscussionID,
 		CreatedBy: input.UserID,
 	})
