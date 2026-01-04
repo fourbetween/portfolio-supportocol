@@ -39,6 +39,7 @@ type (
 		logGroup        awslogs.ILogGroup
 		viewBucket      awss3.Bucket
 		commentGenQueue awssqs.IQueue
+		commentGenFunc  awslambda.Function
 		apiFunc         awslambda.Function
 		mainApi         awsapigatewayv2.HttpApi
 		cdn             awscloudfront.Distribution
@@ -107,9 +108,9 @@ func (c *AppContainer) buildCommentGenQueue() {
 		&awssqs.QueueProps{
 			Fifo:                      jsii.Bool(true),
 			ContentBasedDeduplication: jsii.Bool(true),
-			VisibilityTimeout:         awscdk.Duration_Minutes(jsii.Number(3)),
+			VisibilityTimeout:         awscdk.Duration_Seconds(jsii.Number(121)),
 			DeadLetterQueue: &awssqs.DeadLetterQueue{
-				MaxReceiveCount: jsii.Number(1),
+				MaxReceiveCount: jsii.Number(3),
 				Queue:           dlq,
 			},
 			ReceiveMessageWaitTime: awscdk.Duration_Seconds(jsii.Number(20)),
@@ -117,6 +118,40 @@ func (c *AppContainer) buildCommentGenQueue() {
 	)
 	c.commentGenQueue = queue
 	c.setParam("sqs/comment-generation/url", *queue.QueueUrl())
+}
+
+func (c *AppContainer) buildCommentGenFunction() {
+	f := awslambda.NewFunction(
+		c.stack,
+		jsii.String("CommentGenFunc"),
+		&awslambda.FunctionProps{
+			Architecture:  awslambda.Architecture_ARM_64(),
+			LogGroup:      c.logGroup,
+			LoggingFormat: awslambda.LoggingFormat_JSON,
+			Timeout:       awscdk.Duration_Seconds(jsii.Number(120)),
+			Handler:       jsii.String("bootstrap"),
+			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
+			Code: awslambda.AssetCode_FromAsset(
+				jsii.String("../cmd/comment-generation/lambda/build"),
+				&awss3assets.AssetOptions{},
+			),
+			Environment: &map[string]*string{
+				"APP_NAME": jsii.String(c.appName),
+				"STAGE":    jsii.String(c.stage),
+			},
+			Vpc: c.vpc,
+		})
+	f.AddEventSource(awslambdaeventsources.NewSqsEventSource(
+		c.commentGenQueue,
+		&awslambdaeventsources.SqsEventSourceProps{
+			BatchSize:               jsii.Number(10),
+			MaxConcurrency:          jsii.Number(2),
+			ReportBatchItemFailures: jsii.Bool(true),
+		},
+	))
+	c.commentGenQueue.GrantConsumeMessages(f)
+	c.setLambdaBasePermissions(f)
+	c.commentGenFunc = f
 }
 
 func (c *AppContainer) buildVPC() {
@@ -253,12 +288,8 @@ func (c *AppContainer) buildApiFunction() {
 			},
 			Vpc: c.vpc,
 		})
-	f.AddToRolePolicy(awsiam.NewPolicyStatement(&awsiam.PolicyStatementProps{
-		Actions:   &[]*string{jsii.String("ssm:Get*")},
-		Resources: &[]*string{jsii.String("*")},
-	}))
-	c.secret.GrantRead(f, nil)
-	c.rds.Connections().AllowDefaultPortFrom(f, nil)
+	c.commentGenQueue.GrantSendMessages(f)
+	c.setLambdaBasePermissions(f)
 	c.apiFunc = f
 }
 
@@ -369,4 +400,13 @@ func (c *AppContainer) domain() string {
 
 func (c *AppContainer) setParam(key, val string) {
 	setParam(c.stack, c.appName, key, val)
+}
+
+func (c *AppContainer) setLambdaBasePermissions(f awslambda.Function) {
+	f.AddToRolePolicy(awsiam.NewPolicyStatement(&awsiam.PolicyStatementProps{
+		Actions:   &[]*string{jsii.String("ssm:Get*")},
+		Resources: &[]*string{jsii.String("*")},
+	}))
+	c.secret.GrantRead(f, nil)
+	c.rds.Connections().AllowDefaultPortFrom(f, nil)
 }

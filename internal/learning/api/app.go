@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"strings"
 
+	"github.com/fourbetween/app-supportocol/internal/learning"
 	"github.com/fourbetween/app-supportocol/internal/learning/api/oas"
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 	"github.com/fourbetween/app-supportocol/internal/learning/usecase"
@@ -30,37 +31,15 @@ type HandlerParams struct {
 }
 
 type appHandler struct {
-	createDiscussion         *usecase.CreateDiscussionUsecase
-	getDiscussion            *usecase.GetDiscussionUsecase
-	listDiscussions          *usecase.ListDiscussionsUsecase
-	updateDiscussion         *usecase.UpdateDiscussionUsecase
-	deleteDiscussion         *usecase.DeleteDiscussionUsecase
-	createComment            *usecase.CreateCommentUsecase
-	listComments             *usecase.ListCommentsUsecase
-	updateComment            *usecase.UpdateCommentUsecase
-	deleteComment            *usecase.DeleteCommentUsecase
-	updateCommentStatus      *usecase.UpdateCommentStatusUsecase
-	enqueueCommentGeneration *usecase.EnqueueCommentGenerationUsecase
+	con *learning.APIContainer
 }
 
-func NewHandler(params HandlerParams) oas.Handler {
-	return &appHandler{
-		createDiscussion:         params.CreateDiscussion,
-		getDiscussion:            params.GetDiscussion,
-		listDiscussions:          params.ListDiscussions,
-		updateDiscussion:         params.UpdateDiscussion,
-		deleteDiscussion:         params.DeleteDiscussion,
-		createComment:            params.CreateComment,
-		listComments:             params.ListComments,
-		updateComment:            params.UpdateComment,
-		deleteComment:            params.DeleteComment,
-		updateCommentStatus:      params.UpdateCommentStatus,
-		enqueueCommentGeneration: params.EnqueueCommentGeneration,
-	}
+func NewHandler(con *learning.APIContainer) oas.Handler {
+	return &appHandler{con: con}
 }
 
 func (h *appHandler) LearningDiscussionsGet(ctx context.Context) ([]oas.Discussion, error) {
-	items, err := h.listDiscussions.Execute(ctx, httpctx.GetUserID(ctx))
+	items, err := h.con.ListDiscussions.Execute(ctx, httpctx.GetUserID(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +55,7 @@ func (h *appHandler) LearningDiscussionsPost(
 	ctx context.Context,
 	req *oas.LearningDiscussionsPostReq,
 ) (*oas.Discussion, error) {
-	item, err := h.createDiscussion.Execute(ctx, usecase.CreateDiscussionInput{
+	item, err := h.con.CreateDiscussion.Execute(ctx, usecase.CreateDiscussionInput{
 		Theme:     string(req.Theme),
 		CreatedBy: httpctx.GetUserID(ctx),
 	})
@@ -92,7 +71,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdGet(
 	ctx context.Context,
 	params oas.LearningDiscussionsDiscussionIdGetParams,
 ) (*oas.Discussion, error) {
-	item, err := h.getDiscussion.Execute(ctx, usecase.GetDiscussionInput{
+	item, err := h.con.GetDiscussion.Execute(ctx, usecase.GetDiscussionInput{
 		ID:        string(params.DiscussionId),
 		CreatedBy: httpctx.GetUserID(ctx),
 	})
@@ -109,7 +88,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdPut(
 	req *oas.LearningDiscussionsDiscussionIdPutReq,
 	params oas.LearningDiscussionsDiscussionIdPutParams,
 ) (*oas.Discussion, error) {
-	item, err := h.updateDiscussion.Execute(ctx, usecase.UpdateDiscussionInput{
+	item, err := h.con.UpdateDiscussion.Execute(ctx, usecase.UpdateDiscussionInput{
 		ID:        string(params.DiscussionId),
 		CreatedBy: httpctx.GetUserID(ctx),
 		Theme:     string(req.Theme),
@@ -126,7 +105,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdDelete(
 	ctx context.Context,
 	params oas.LearningDiscussionsDiscussionIdDeleteParams,
 ) error {
-	return h.deleteDiscussion.Execute(ctx, usecase.DeleteDiscussionInput{
+	return h.con.DeleteDiscussion.Execute(ctx, usecase.DeleteDiscussionInput{
 		ID:        string(params.DiscussionId),
 		CreatedBy: httpctx.GetUserID(ctx),
 	})
@@ -136,7 +115,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(
 	ctx context.Context,
 	params oas.LearningDiscussionsDiscussionIdCommentsGetParams,
 ) ([]oas.Comment, error) {
-	items, err := h.listComments.Execute(ctx, usecase.ListCommentsInput{
+	items, err := h.con.ListComments.Execute(ctx, usecase.ListCommentsInput{
 		DiscussionID: string(params.DiscussionId),
 		UserID:       httpctx.GetUserID(ctx),
 	})
@@ -162,7 +141,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsPost(
 		parentCommentID = &s
 	}
 
-	item, err := h.createComment.Execute(ctx, usecase.CreateCommentInput{
+	item, err := h.con.CreateComment.Execute(ctx, usecase.CreateCommentInput{
 		DiscussionID:    string(params.DiscussionId),
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
@@ -182,7 +161,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdPut(
 	req *oas.LearningDiscussionsDiscussionIdCommentsCommentIdPutReq,
 	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdPutParams,
 ) (*oas.Comment, error) {
-	item, err := h.updateComment.Execute(ctx, usecase.UpdateCommentInput{
+	item, err := h.con.UpdateComment.Execute(ctx, usecase.UpdateCommentInput{
 		ID:           string(params.CommentId),
 		DiscussionID: string(params.DiscussionId),
 		UserID:       httpctx.GetUserID(ctx),
@@ -201,7 +180,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdDelete(
 	ctx context.Context,
 	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams,
 ) error {
-	return h.deleteComment.Execute(ctx, usecase.DeleteCommentInput{
+	return h.con.DeleteComment.Execute(ctx, usecase.DeleteCommentInput{
 		ID:           string(params.CommentId),
 		DiscussionID: string(params.DiscussionId),
 		UserID:       httpctx.GetUserID(ctx),
@@ -213,7 +192,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(
 	req *oas.LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq,
 	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams,
 ) (*oas.Comment, error) {
-	item, err := h.updateCommentStatus.Execute(ctx, usecase.UpdateCommentStatusInput{
+	item, err := h.con.UpdateCommentStatus.Execute(ctx, usecase.UpdateCommentStatusInput{
 		ID:           string(params.CommentId),
 		DiscussionID: string(params.DiscussionId),
 		UserID:       httpctx.GetUserID(ctx),
@@ -238,7 +217,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(
 		parentCommentID = &s
 	}
 
-	return h.enqueueCommentGeneration.Execute(ctx, usecase.GenerateCommentInput{
+	return h.con.EnqueueCommentGeneration.Execute(ctx, usecase.GenerateCommentInput{
 		DiscussionID:    string(params.DiscussionId),
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
