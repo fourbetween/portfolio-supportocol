@@ -23,6 +23,9 @@ export class IdentityAuthPopup extends LitElement {
   @property({ type: String })
   errorMessage = "";
 
+  @property({ type: Boolean })
+  loading = false;
+
   @state()
   private validationErrorMessage = "";
 
@@ -71,34 +74,42 @@ export class IdentityAuthPopup extends LitElement {
     this.validationErrorMessage = "";
 
     const form = e.target as HTMLFormElement;
-    const email = (form.elements.namedItem("email") as HTMLInputElement).value;
-    const password = (form.elements.namedItem("password") as HTMLInputElement)
-      .value;
+    const formData = new FormData(form);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
     if (this.mode === "login") {
       this.dispatchEvent(new LoginEvent(email, password));
-    } else {
-      const passwordConfirm = (
-        form.elements.namedItem("passwordConfirm") as HTMLInputElement
-      ).value;
-
-      if (password !== passwordConfirm) {
-        this.validationErrorMessage = "Passwords do not match";
-        return;
-      }
-
-      const hasLowerCase = /[a-z]/.test(password);
-      const hasUpperCase = /[A-Z]/.test(password);
-      const hasNumber = /[0-9]/.test(password);
-
-      if (!hasLowerCase || !hasUpperCase || !hasNumber) {
-        this.validationErrorMessage =
-          "Password must include lowercase, uppercase, and numbers";
-        return;
-      }
-
-      this.dispatchEvent(new SignupEvent(email, password));
+      return;
     }
+
+    const passwordConfirm = formData.get("passwordConfirm") as string;
+    const validationError = this.validateSignup(password, passwordConfirm);
+    if (validationError) {
+      this.validationErrorMessage = validationError;
+      return;
+    }
+
+    this.dispatchEvent(new SignupEvent(email, password));
+  }
+
+  private validateSignup(
+    password: string,
+    passwordConfirm: string
+  ): string | null {
+    if (password !== passwordConfirm) {
+      return "Passwords do not match";
+    }
+
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+
+    if (!hasLowerCase || !hasUpperCase || !hasNumber) {
+      return "Password must include lowercase, uppercase, and numbers";
+    }
+
+    return null;
   }
 
   private renderForm() {
@@ -128,21 +139,7 @@ export class IdentityAuthPopup extends LitElement {
             required
           />
         </div>
-        ${this.mode === "signup"
-          ? html`
-              <div class="form-group">
-                <label for="passwordConfirm">Confirm password</label>
-                <input
-                  type="password"
-                  name="passwordConfirm"
-                  id="passwordConfirm"
-                  placeholder="Re-enter password"
-                  minlength="8"
-                  required
-                />
-              </div>
-            `
-          : ""}
+        ${this.renderSignupFields()}
         <button type="submit" class="submit-button btn btn-primary">
           ${this.mode === "login" ? "Log in" : "Sign up"}
         </button>
@@ -153,26 +150,55 @@ export class IdentityAuthPopup extends LitElement {
     `;
   }
 
-  render() {
-    const displayedErrorMessage =
-      this.validationErrorMessage || this.errorMessage;
+  private renderSignupFields() {
+    if (this.mode !== "signup") return "";
 
+    return html`
+      <div class="form-group">
+        <label for="passwordConfirm">Confirm password</label>
+        <input
+          type="password"
+          name="passwordConfirm"
+          id="passwordConfirm"
+          placeholder="Re-enter password"
+          minlength="8"
+          required
+        />
+      </div>
+    `;
+  }
+
+  render() {
     return html`
       <ui-popup>
         <span slot="header" class="popup-title">
           ${this.mode === "login" ? "Log in" : "Sign up"}
         </span>
         <div slot="main" class="popup-content">
-          ${displayedErrorMessage
-            ? html`
-                <div class="error-message">${displayedErrorMessage}</div>
-              `
-            : ""}
-          ${this.renderForm()}
+          ${this.renderErrorMessage()} ${this.renderForm()}
           <div class="google-button-container"></div>
           <p class="switch-prompt">${this.renderSwitchPrompt()}</p>
+          ${this.renderLoadingOverlay()}
         </div>
       </ui-popup>
+    `;
+  }
+
+  private renderErrorMessage() {
+    const displayedErrorMessage =
+      this.validationErrorMessage || this.errorMessage;
+    if (!displayedErrorMessage) return "";
+
+    return html`
+      <div class="error-message">${displayedErrorMessage}</div>
+    `;
+  }
+
+  private renderLoadingOverlay() {
+    if (!this.loading) return "";
+
+    return html`
+      <div class="loading-overlay"></div>
     `;
   }
 
@@ -272,6 +298,18 @@ export class IdentityAuthPopup extends LitElement {
 
       .switch-link:hover {
         text-decoration: underline;
+      }
+
+      .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.7);
+        z-index: 1001;
+        cursor: wait;
+        border-radius: 12px;
       }
     `,
   ];

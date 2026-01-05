@@ -1,7 +1,7 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
-import { client } from "../api/client";
+import { GoogleAuthService } from "../api/google-auth";
 import {
   LoginEvent,
   SignupEvent,
@@ -22,15 +22,14 @@ export class IdentityAuthWidget extends LitElement {
   @state()
   private errorMessage = "";
 
-  @state()
-  private googleInitialized = false;
+  private googleAuth?: GoogleAuthService;
 
   @query("identity-auth-popup")
   private popup!: IdentityAuthPopup;
 
   connectedCallback() {
     super.connectedCallback();
-    this.initializeGoogleSignIn();
+    this.initializeGoogleAuth();
     document.addEventListener("open-auth-popup", this.handleOpenAuthPopup);
   }
 
@@ -53,49 +52,27 @@ export class IdentityAuthWidget extends LitElement {
     this.open();
   };
 
-  private initializeGoogleSignIn() {
+  private initializeGoogleAuth() {
     const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
     if (!clientId) {
       console.warn("VITE_GOOGLE_CLIENT_ID is not set");
       return;
     }
 
-    // Google Identity Servicesがロードされるまで待機
-    if (typeof google === "undefined" || !google.accounts) {
-      setTimeout(() => this.initializeGoogleSignIn(), 100);
-      return;
-    }
-
-    google.accounts.id.initialize({
-      client_id: clientId,
-      callback: (response) => this.handleGoogleCallback(response),
+    this.googleAuth = new GoogleAuthService({
+      clientId,
+      onSuccess: () => {
+        this.close();
+        window.location.reload();
+      },
+      onError: (message) => {
+        this.errorMessage = message;
+      },
+      onLoading: (isLoading) => {
+        this.isLoading = isLoading;
+      },
     });
-    this.googleInitialized = true;
-  }
-
-  private async handleGoogleCallback(
-    response: google.accounts.id.CredentialResponse
-  ) {
-    this.isLoading = true;
-    this.errorMessage = "";
-
-    try {
-      const { error } = await client.POST("/identity/google", {
-        body: { idToken: response.credential },
-      });
-
-      if (error) {
-        this.errorMessage = error.message || "Google authentication failed";
-        return;
-      }
-
-      this.close();
-      window.location.reload();
-    } catch {
-      this.errorMessage = "Google authentication failed";
-    } finally {
-      this.isLoading = false;
-    }
+    this.googleAuth.initialize();
   }
 
   private handleSwitchMode(mode: AuthMode) {
@@ -113,38 +90,19 @@ export class IdentityAuthWidget extends LitElement {
     // TODO: Implement email/password signup
   }
 
-  private renderGoogleButton(container: HTMLElement) {
-    if (!this.googleInitialized || !container) {
-      return;
-    }
-
-    container.innerHTML = "";
-
-    google.accounts.id.renderButton(container, {
-      type: "standard",
-      theme: "outline",
-      size: "large",
-      width: 280,
-      text: this.currentMode === "signup" ? "signup_with" : "signin_with",
-    });
-  }
-
   protected async updated() {
     await this.updateComplete;
-    this.renderGoogleButtonToPresenter();
+    this.renderGoogleButton();
   }
 
-  private renderGoogleButtonToPresenter() {
-    if (!this.googleInitialized) {
+  private renderGoogleButton() {
+    if (!this.googleAuth?.isInitialized()) {
       return;
     }
 
-    const presenter = this.popup;
-    if (presenter) {
-      const container = presenter.googleButtonContainer;
-      if (container) {
-        this.renderGoogleButton(container);
-      }
+    const container = this.popup?.googleButtonContainer;
+    if (container) {
+      this.googleAuth.renderButton(container, this.currentMode);
     }
   }
 
@@ -153,31 +111,13 @@ export class IdentityAuthWidget extends LitElement {
       <identity-auth-popup
         .mode=${this.currentMode}
         .errorMessage=${this.errorMessage}
+        .loading=${this.isLoading}
         @switch-mode=${(e: SwitchModeEvent) => this.handleSwitchMode(e.mode)}
         @login=${(e: LoginEvent) => this.handleLogin(e.email, e.password)}
         @signup=${(e: SignupEvent) => this.handleSignup(e.email, e.password)}
       ></identity-auth-popup>
-      ${this.isLoading
-        ? html`
-            <div class="loading-overlay"></div>
-          `
-        : ""}
     `;
   }
 
-  static styles = [
-    baseStyle,
-    css`
-      .loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(255, 255, 255, 0.7);
-        z-index: 1001;
-        cursor: wait;
-      }
-    `,
-  ];
+  static styles = [baseStyle];
 }
