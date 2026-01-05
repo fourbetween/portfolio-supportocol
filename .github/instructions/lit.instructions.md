@@ -41,7 +41,7 @@ applyTo: "view/src/**/*.ts"
 
 - `LitElement` を継承し、名称は `[context]-[name]` 形式（例: `learning-comment-list`）とする。
 - 外部データは `@property`、内部状態は `@state` を使用する。
-- 関数を渡すのではなく、イベントを発火して親コンポーネントに通知する。
+- コールバックを渡すのではなく、イベントを発火して親コンポーネントに通知する。
 - プロパティ設定時はダブルクォートを使用しない。
   - 例: `<my-el .data=${data}></my-el>`
 - `HTMLElementTagNameMap` の拡張は行わない。
