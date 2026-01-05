@@ -70,17 +70,19 @@ applyTo: "view/src/**/*.ts"
 
 ### 3.4 イベント
 
-- イベント名はケバブケース（例: `item-selected`）とする。
 - 独自イベントの定義は `CustomEvent` を使用せず、`Event` を継承する。
 - @click などのデフォルトイベントで対処できる場合は、独自イベントを作成しない。
+- アクションを要求するイベントとアクションの完了を通知するイベントは区別する。
+  - 要求イベント: `comment-select`
+  - 通知イベント: `comment-selected`
 - イベントの定義は以下を参考にする。
 
   ```ts
-  export class SelectCommentEvent extends Event {
+  export class CommentSelectEvent extends Event {
     public readonly commentId?: string;
 
     constructor(commentId?: string) {
-      super(SELECT_COMMENT_EVENT_NAME, { bubbles: true, composed: true });
+      super(COMMENT_SELECT_EVENT_NAME, { bubbles: true, composed: true });
       this.commentId = commentId;
     }
   }
