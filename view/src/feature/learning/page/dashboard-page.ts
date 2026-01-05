@@ -9,6 +9,17 @@ import "../component/comment-frame-widget";
 import "../component/comment-proposed-widget";
 import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
+import {
+  type CommentCreatedEvent,
+  type CommentDeletedEvent,
+  type CommentUpdatedEvent,
+  type SelectCommentEvent,
+} from "../event/comment";
+import {
+  type DiscussionDeletedEvent,
+  type DiscussionUpdatedEvent,
+  type SelectDiscussionEvent,
+} from "../event/discussion";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
@@ -79,59 +90,61 @@ export class LearningDashboardPage extends LitElement {
     this._selectedDiscussionId = params.get("id") || undefined;
   };
 
-  private _handleSelectDiscussion(e: CustomEvent<Discussion>) {
-    if (this._selectedDiscussionId === e.detail.id) return;
-    this._selectedDiscussionId = e.detail.id;
+  private _handleSelectDiscussion(e: SelectDiscussionEvent) {
+    if (this._selectedDiscussionId === e.discussion.id) return;
+    this._selectedDiscussionId = e.discussion.id;
     const url = new URL(window.location.href);
-    url.searchParams.set("id", e.detail.id);
+    url.searchParams.set("id", e.discussion.id);
     window.history.pushState({}, "", url);
   }
 
-  private _handleDiscussionUpdated(e: CustomEvent<Discussion>) {
-    this._selectedDiscussionId = e.detail.id;
-    const exists = this._discussions.some((d) => d.id === e.detail.id);
+  private _handleDiscussionUpdated(e: DiscussionUpdatedEvent) {
+    this._selectedDiscussionId = e.discussion.id;
+    const exists = this._discussions.some((d) => d.id === e.discussion.id);
     if (exists) {
       this._discussions = this._discussions.map((d) =>
-        d.id === e.detail.id ? e.detail : d
+        d.id === e.discussion.id ? e.discussion : d
       );
     } else {
-      this._discussions = [...this._discussions, e.detail];
+      this._discussions = [...this._discussions, e.discussion];
     }
   }
 
-  private _handleDiscussionDeleted(e: CustomEvent<Discussion>) {
-    if (this._selectedDiscussionId === e.detail.id) {
+  private _handleDiscussionDeleted(e: DiscussionDeletedEvent) {
+    if (this._selectedDiscussionId === e.discussion.id) {
       this._selectedDiscussionId = undefined;
       const url = new URL(window.location.href);
       url.searchParams.delete("id");
       window.history.pushState({}, "", url);
     }
-    this._discussions = this._discussions.filter((d) => d.id !== e.detail.id);
-  }
-
-  private _handleCommentCreated(e: CustomEvent<Comment>) {
-    this._comments = [...this._comments, e.detail];
-  }
-
-  private _handleCommentUpdated(e: CustomEvent<Comment>) {
-    const oldComment = this._comments.find((c) => c.id === e.detail.id);
-    this._comments = this._comments.map((c) =>
-      c.id === e.detail.id ? e.detail : c
+    this._discussions = this._discussions.filter(
+      (d) => d.id !== e.discussion.id
     );
-    if (oldComment?.status === "proposed" && e.detail.status === "active") {
-      this._selectedCommentId = e.detail.id;
+  }
+
+  private _handleCommentCreated(e: CommentCreatedEvent) {
+    this._comments = [...this._comments, e.comment];
+  }
+
+  private _handleCommentUpdated(e: CommentUpdatedEvent) {
+    const oldComment = this._comments.find((c) => c.id === e.comment.id);
+    this._comments = this._comments.map((c) =>
+      c.id === e.comment.id ? e.comment : c
+    );
+    if (oldComment?.status === "proposed" && e.comment.status === "active") {
+      this._selectedCommentId = e.comment.id;
     }
   }
 
-  private _handleCommentDeleted(e: CustomEvent<{ id: string }>) {
-    this._comments = this._comments.filter((c) => c.id !== e.detail.id);
-    if (this._selectedCommentId === e.detail.id) {
+  private _handleCommentDeleted(e: CommentDeletedEvent) {
+    this._comments = this._comments.filter((c) => c.id !== e.commentId);
+    if (this._selectedCommentId === e.commentId) {
       this._selectedCommentId = undefined;
     }
   }
 
-  private _handleSelectComment(e: CustomEvent<{ id?: string }>) {
-    this._selectedCommentId = e.detail.id;
+  private _handleSelectComment(e: SelectCommentEvent) {
+    this._selectedCommentId = e.commentId;
   }
 
   private _handleCommentGenerated() {

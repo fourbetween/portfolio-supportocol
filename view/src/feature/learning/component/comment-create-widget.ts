@@ -2,6 +2,7 @@ import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import { CommentCreatedEvent } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
 import { commentRepository } from "../repository/comment-repository";
@@ -60,13 +61,7 @@ export class LearningCommentCreateWidget extends LitElement {
 
       showToast(this, "Comment created.", "success", 2000);
       this.handleCancel();
-      this.dispatchEvent(
-        new CustomEvent("comment-created", {
-          detail: data,
-          bubbles: true,
-          composed: true,
-        })
-      );
+      this.dispatchEvent(new CommentCreatedEvent(data));
     } catch (e: any) {
       showToast(this, e.message, "error");
     }

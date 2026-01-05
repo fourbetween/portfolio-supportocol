@@ -1,16 +1,13 @@
-export const OPEN_AUTH_POPUP_EVENT_NAME = "open-auth-popup";
+const OPEN_AUTH_POPUP_EVENT_NAME = "open-auth-popup";
 
-declare global {
-  interface HTMLElementEventMap {
-    [OPEN_AUTH_POPUP_EVENT_NAME]: CustomEvent<void>;
+export class OpenAuthPopupEvent extends Event {
+  constructor() {
+    super(OPEN_AUTH_POPUP_EVENT_NAME, { bubbles: true, composed: true });
   }
 }
 
-export function openAuthPopup(element: HTMLElement): void {
-  element.dispatchEvent(
-    new CustomEvent(OPEN_AUTH_POPUP_EVENT_NAME, {
-      bubbles: true,
-      composed: true,
-    })
-  );
+declare global {
+  interface HTMLElementEventMap {
+    [OPEN_AUTH_POPUP_EVENT_NAME]: OpenAuthPopupEvent;
+  }
 }

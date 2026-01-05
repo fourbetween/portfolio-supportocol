@@ -2,6 +2,11 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import {
+  DiscussionCreatedEvent,
+  DiscussionDeletedEvent,
+  SelectDiscussionEvent,
+} from "../event/discussion";
 import type { Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-add-form/discussion-add-form";
@@ -19,13 +24,7 @@ export class LearningDiscussionListWidget extends LitElement {
   private async _handleAddDiscussion(theme: string) {
     try {
       const data = await discussionRepository.create(theme);
-      this.dispatchEvent(
-        new CustomEvent("discussion-created", {
-          detail: data,
-          bubbles: true,
-          composed: true,
-        })
-      );
+      this.dispatchEvent(new DiscussionCreatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
@@ -36,13 +35,7 @@ export class LearningDiscussionListWidget extends LitElement {
   }
 
   private _handleSelect(discussion: Discussion) {
-    this.dispatchEvent(
-      new CustomEvent("select-discussion", {
-        detail: discussion,
-        bubbles: true,
-        composed: true,
-      })
-    );
+    this.dispatchEvent(new SelectDiscussionEvent(discussion));
   }
 
   private async _handleDeleteDiscussion(discussion: Discussion) {
@@ -51,13 +44,7 @@ export class LearningDiscussionListWidget extends LitElement {
     }
     try {
       await discussionRepository.delete(discussion.id);
-      this.dispatchEvent(
-        new CustomEvent("discussion-deleted", {
-          detail: discussion,
-          bubbles: true,
-          composed: true,
-        })
-      );
+      this.dispatchEvent(new DiscussionDeletedEvent(discussion));
       showToast(this, "Deleted.", "success", 2000);
     } catch (error: any) {
       showToast(this, error.message, "error");

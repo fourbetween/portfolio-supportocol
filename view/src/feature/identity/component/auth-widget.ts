@@ -2,7 +2,6 @@ import { LitElement, css, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { client } from "../api/client";
-import { OPEN_AUTH_POPUP_EVENT_NAME } from "../event/auth";
 import "../ui/auth-popup";
 import type { AuthMode, IdentityAuthPopup } from "../ui/auth-popup";
 
@@ -26,18 +25,12 @@ export class IdentityAuthWidget extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.initializeGoogleSignIn();
-    document.addEventListener(
-      OPEN_AUTH_POPUP_EVENT_NAME,
-      this.handleOpenAuthPopup
-    );
+    document.addEventListener("open-auth-popup", this.handleOpenAuthPopup);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener(
-      OPEN_AUTH_POPUP_EVENT_NAME,
-      this.handleOpenAuthPopup
-    );
+    document.removeEventListener("open-auth-popup", this.handleOpenAuthPopup);
   }
 
   open() {

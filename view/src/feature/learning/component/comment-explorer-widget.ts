@@ -4,6 +4,13 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
+import {
+  CommentCreatedEvent,
+  CommentDeletedEvent,
+  CommentGeneratedEvent,
+  CommentUpdatedEvent,
+  SelectCommentEvent,
+} from "../event/comment";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
 import { commentRepository } from "../repository/comment-repository";
@@ -62,13 +69,7 @@ export class LearningCommentExplorerWidget extends LitElement {
 
   private handleCommentClick(comment: Comment) {
     const id = this.selectedCommentId === comment.id ? undefined : comment.id;
-    this.dispatchEvent(
-      new CustomEvent("select-comment", {
-        detail: { id },
-        bubbles: true,
-        composed: true,
-      })
-    );
+    this.dispatchEvent(new SelectCommentEvent(id));
   }
 
   private async handleCommentUpdate(
@@ -84,13 +85,7 @@ export class LearningCommentExplorerWidget extends LitElement {
       );
 
       showToast(this, "Comment updated.", "success", 2000);
-      this.dispatchEvent(
-        new CustomEvent("comment-updated", {
-          detail: data,
-          bubbles: true,
-          composed: true,
-        })
-      );
+      this.dispatchEvent(new CommentUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
@@ -104,13 +99,7 @@ export class LearningCommentExplorerWidget extends LitElement {
       await commentRepository.delete(this.discussionId, commentId);
 
       showToast(this, "Comment deleted.", "success", 2000);
-      this.dispatchEvent(
-        new CustomEvent("comment-deleted", {
-          detail: { id: commentId },
-          bubbles: true,
-          composed: true,
-        })
-      );
+      this.dispatchEvent(new CommentDeletedEvent(commentId));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
@@ -125,13 +114,7 @@ export class LearningCommentExplorerWidget extends LitElement {
       });
 
       showToast(this, "Comments generated.", "success", 2000);
-      this.dispatchEvent(
-        new CustomEvent("comment-generated", {
-          detail: { parentCommentId: commentId, commentType },
-          bubbles: true,
-          composed: true,
-        })
-      );
+      this.dispatchEvent(new CommentGeneratedEvent(commentId, commentType));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
@@ -151,13 +134,7 @@ export class LearningCommentExplorerWidget extends LitElement {
 
       showToast(this, "Comment created.", "success", 2000);
       if (data) {
-        this.dispatchEvent(
-          new CustomEvent("comment-created", {
-            detail: data,
-            bubbles: true,
-            composed: true,
-          })
-        );
+        this.dispatchEvent(new CommentCreatedEvent(data));
       }
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -165,13 +142,7 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private handleClearSelection() {
-    this.dispatchEvent(
-      new CustomEvent("select-comment", {
-        detail: { id: undefined },
-        bubbles: true,
-        composed: true,
-      })
-    );
+    this.dispatchEvent(new SelectCommentEvent(undefined));
   }
 
   private getPathToRoot(selectedId: string): Comment[] {
