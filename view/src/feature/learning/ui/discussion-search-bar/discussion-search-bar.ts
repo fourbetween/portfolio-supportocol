@@ -1,7 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
-import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 import { SearchDiscussionEvent } from "../../event/discussion";
 
@@ -20,7 +19,6 @@ export class LearningDiscussionSearchBar extends LitElement {
   render() {
     return html`
       <div class="search-container">
-        <span class="material-symbols-outlined search-icon">search</span>
         <input
           type="text"
           .value=${this.value}
@@ -35,23 +33,10 @@ export class LearningDiscussionSearchBar extends LitElement {
   static styles = [
     baseStyle,
     inputStyle,
-    iconStyle,
     css`
       :host {
         display: block;
         width: 100%;
-      }
-      .search-container {
-        position: relative;
-        display: flex;
-        align-items: center;
-      }
-      .search-icon {
-        position: absolute;
-        left: 8px;
-        color: var(--color-fg-muted);
-        pointer-events: none;
-        font-size: 20px;
       }
       input {
         width: 100%;

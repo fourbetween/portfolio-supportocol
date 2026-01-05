@@ -48,13 +48,18 @@ export class LearningDiscussionList extends LitElement {
         flex-direction: column;
         border: 1px solid var(--color-border-default);
         border-radius: 6px;
-        overflow: hidden;
       }
       learning-discussion-item {
         border-bottom: 1px solid var(--color-border-muted);
       }
+      learning-discussion-item:first-child {
+        --item-border-top-left-radius: 6px;
+        --item-border-top-right-radius: 6px;
+      }
       learning-discussion-item:last-child {
         border-bottom: none;
+        --item-border-bottom-left-radius: 6px;
+        --item-border-bottom-right-radius: 6px;
       }
     `,
   ];

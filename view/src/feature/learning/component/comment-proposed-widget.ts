@@ -48,9 +48,6 @@ export class LearningCommentProposedWidget extends LitElement {
   private async handleReject(e: RejectProposedCommentEvent) {
     if (!this.discussionId) return;
     const comment = e.comment;
-    if (!confirm("Are you sure you want to delete this proposed comment?"))
-      return;
-
     try {
       await commentRepository.delete(this.discussionId, comment.id);
 

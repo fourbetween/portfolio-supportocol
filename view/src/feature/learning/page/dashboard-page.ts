@@ -147,6 +147,18 @@ export class LearningDashboardPage extends LitElement {
     this._selectedCommentId = e.commentId;
   }
 
+  private get _selectedDiscussion() {
+    return this._discussions.find((d) => d.id === this._selectedDiscussionId);
+  }
+
+  private get _activeComments() {
+    return this._comments.filter((c) => c.status === "active");
+  }
+
+  private get _hasProposedComments() {
+    return this._comments.some((c) => c.status === "proposed");
+  }
+
   private _handleCommentGenerated() {
     setTimeout(async () => {
       if (!this.isConnected || !this._selectedDiscussionId) return;
@@ -179,14 +191,6 @@ export class LearningDashboardPage extends LitElement {
   }
 
   render() {
-    const selectedDiscussion = this._discussions.find(
-      (d) => d.id === this._selectedDiscussionId
-    );
-    const activeComments = this._comments.filter((c) => c.status === "active");
-    const hasProposedComments = this._comments.some(
-      (c) => c.status === "proposed"
-    );
-
     return html`
       <div class="dashboard">
         <aside class="sidebar sidebar-left">
@@ -200,19 +204,19 @@ export class LearningDashboardPage extends LitElement {
         <main class="main">
           <div class="detail">
             <learning-discussion-detail-widget
-              .discussion=${selectedDiscussion}
+              .discussion=${this._selectedDiscussion}
               @discussion-updated=${this._handleDiscussionUpdated}
             ></learning-discussion-detail-widget>
           </div>
           <div class="comment-frame">
             <learning-comment-frame-widget
-              .comments=${activeComments}
+              .comments=${this._activeComments}
             ></learning-comment-frame-widget>
           </div>
           <div class="comment-explorer">
             <learning-comment-explorer-widget
               .discussionId=${this._selectedDiscussionId}
-              .comments=${activeComments}
+              .comments=${this._activeComments}
               .selectedCommentId=${this._selectedCommentId}
               @comment-created=${this._handleCommentCreated}
               @comment-updated=${this._handleCommentUpdated}
@@ -222,7 +226,7 @@ export class LearningDashboardPage extends LitElement {
             ></learning-comment-explorer-widget>
           </div>
         </main>
-        ${hasProposedComments
+        ${this._hasProposedComments
           ? html`
               <aside class="sidebar sidebar-right">
                 <learning-comment-proposed-widget

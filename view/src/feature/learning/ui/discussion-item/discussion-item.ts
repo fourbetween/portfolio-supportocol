@@ -51,6 +51,10 @@ export class LearningDiscussionItem extends LitElement {
         padding: 16px;
         background-color: var(--color-canvas-default);
         cursor: pointer;
+        border-top-left-radius: var(--item-border-top-left-radius, 0);
+        border-top-right-radius: var(--item-border-top-right-radius, 0);
+        border-bottom-left-radius: var(--item-border-bottom-left-radius, 0);
+        border-bottom-right-radius: var(--item-border-bottom-right-radius, 0);
       }
       .item:hover {
         background-color: var(--color-canvas-subtle);
@@ -60,9 +64,9 @@ export class LearningDiscussionItem extends LitElement {
         color: var(--color-accent-fg);
       }
       .delete-button {
-        right: -16px;
+        right: 0;
         top: 50%;
-        transform: translateY(-50%);
+        transform: translate(50%, -50%);
       }
     `,
   ];
