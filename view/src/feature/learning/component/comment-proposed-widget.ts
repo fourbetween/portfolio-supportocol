@@ -1,5 +1,5 @@
-import { LitElement, css, html, type PropertyValues } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { LitElement, css, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { titleStyle } from "../../../shared/style/title";
@@ -23,14 +23,8 @@ export class LearningCommentProposedWidget extends LitElement {
   @property({ type: Array })
   comments?: Comment[];
 
-  @state()
-  private proposedComments: Comment[] = [];
-
-  willUpdate(changedProperties: PropertyValues<this>) {
-    if (changedProperties.has("comments")) {
-      this.proposedComments =
-        this.comments?.filter((c) => c.status === "proposed") ?? [];
-    }
+  private get proposedComments(): Comment[] {
+    return this.comments?.filter((c) => c.status === "proposed") ?? [];
   }
 
   private async handleAccept(e: AcceptProposedCommentEvent) {
@@ -67,7 +61,7 @@ export class LearningCommentProposedWidget extends LitElement {
     }
   }
 
-  private handleClick(e: SelectProposedCommentEvent) {
+  private handleSelect(e: SelectProposedCommentEvent) {
     const comment = e.comment;
     this.dispatchEvent(
       new SelectCommentEvent(comment.parentCommentId || undefined)
@@ -86,7 +80,7 @@ export class LearningCommentProposedWidget extends LitElement {
           .comments=${this.proposedComments}
           @accept-proposed-comment=${this.handleAccept}
           @reject-proposed-comment=${this.handleReject}
-          @select-proposed-comment=${this.handleClick}
+          @select-proposed-comment=${this.handleSelect}
         ></learning-proposed-comment-list>
       </section>
     `;

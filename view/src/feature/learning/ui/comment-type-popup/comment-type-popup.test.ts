@@ -47,7 +47,7 @@ describe("learning-comment-type-popup", () => {
         <learning-comment-type-popup
           id="popup"
           .types=${types}
-          @select=${onSelect}
+          @comment-type-select=${onSelect}
         ></learning-comment-type-popup>
       `,
       container
@@ -70,7 +70,7 @@ describe("learning-comment-type-popup", () => {
       html`
         <learning-comment-type-popup
           id="popup"
-          @select=${onSelect}
+          @comment-type-select=${onSelect}
         ></learning-comment-type-popup>
       `,
       container

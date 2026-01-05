@@ -64,7 +64,7 @@ describe("learning-comment-edit-form", async () => {
     render(
       html`
         <learning-comment-edit-form
-          @save=${onSave}
+          @comment-save=${onSave}
         ></learning-comment-edit-form>
       `,
       container
@@ -88,7 +88,7 @@ describe("learning-comment-edit-form", async () => {
     render(
       html`
         <learning-comment-edit-form
-          @cancel=${onCancel}
+          @comment-cancel=${onCancel}
         ></learning-comment-edit-form>
       `,
       container

@@ -8,7 +8,6 @@ import {
   DiscussionDeletedEvent,
   RequestDeleteDiscussionEvent,
   SearchDiscussionEvent,
-  SelectDiscussionEvent,
 } from "../event/discussion";
 import type { Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
@@ -37,29 +36,27 @@ export class LearningDiscussionListWidget extends LitElement {
     this._searchQuery = e.query;
   }
 
-  private _handleSelect(e: SelectDiscussionEvent) {
-    this.dispatchEvent(new SelectDiscussionEvent(e.discussion));
-  }
-
   private async _handleDeleteDiscussion(e: RequestDeleteDiscussionEvent) {
-    const discussion = e.discussion;
+    const { discussion } = e;
     if (!confirm(`Are you sure you want to delete "${discussion.theme}"?`)) {
       return;
     }
     try {
       await discussionRepository.delete(discussion.id);
       this.dispatchEvent(new DiscussionDeletedEvent(discussion));
-      showToast(this, "Deleted.", "success", 2000);
+      showToast(this, "Succeeded.", "success", 2000);
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  render() {
-    const filteredDiscussions = this.discussions.filter((d) =>
+  private get _filteredDiscussions() {
+    return this.discussions.filter((d) =>
       d.theme.toLowerCase().includes(this._searchQuery.toLowerCase())
     );
+  }
 
+  render() {
     return html`
       <div class="widget">
         <div class="header">
@@ -75,8 +72,7 @@ export class LearningDiscussionListWidget extends LitElement {
         </div>
         <div class="content">
           <learning-discussion-list
-            .discussions=${filteredDiscussions}
-            @select-discussion=${this._handleSelect}
+            .discussions=${this._filteredDiscussions}
             @request-delete-discussion=${this._handleDeleteDiscussion}
           ></learning-discussion-list>
         </div>

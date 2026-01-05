@@ -201,7 +201,6 @@ export class LearningDashboardPage extends LitElement {
           <div class="detail">
             <learning-discussion-detail-widget
               .discussion=${selectedDiscussion}
-              .comments=${activeComments}
               @discussion-updated=${this._handleDiscussionUpdated}
             ></learning-discussion-detail-widget>
           </div>

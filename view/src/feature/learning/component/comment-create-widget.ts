@@ -32,14 +32,14 @@ export class LearningCommentCreateWidget extends LitElement {
   @state()
   private selectedType?: string;
 
+  @state()
+  private availableTypes: string[] = [];
+
   @query("learning-comment-type-popup")
   private popup!: LearningCommentTypePopup;
 
-  private availableTypes: string[] = [];
-
   willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("comments")) {
-      this.availableTypes = [];
       this.availableTypes = deriveCommentFrame(this.comments || []).types;
     }
   }
@@ -48,8 +48,8 @@ export class LearningCommentCreateWidget extends LitElement {
     this.popup.open();
   }
 
-  private handleTypeSelect(type: string) {
-    this.selectedType = type;
+  private handleTypeSelect(e: CommentTypeSelectEvent) {
+    this.selectedType = e.commentType;
     this.isCreating = true;
   }
 
@@ -76,30 +76,35 @@ export class LearningCommentCreateWidget extends LitElement {
     this.selectedType = undefined;
   }
 
+  private renderContent() {
+    if (this.isCreating && this.selectedType) {
+      return html`
+        <learning-comment-edit-form
+          .availableTypes=${this.availableTypes}
+          .initialType=${this.selectedType}
+          @comment-save=${this.handleSave}
+          @comment-cancel=${this.handleCancel}
+        ></learning-comment-edit-form>
+      `;
+    }
+
+    return html`
+      <learning-comment-add-button
+        .isReply=${!!this.parentCommentId}
+        @click=${this.handleStartCreate}
+      ></learning-comment-add-button>
+    `;
+  }
+
   render() {
     if (!this.discussionId) return nothing;
 
     return html`
       <div class="container">
-        ${this.isCreating && this.selectedType
-          ? html`
-              <learning-comment-edit-form
-                .availableTypes=${this.availableTypes}
-                .initialType=${this.selectedType}
-                @comment-save=${(e: CommentSaveEvent) => this.handleSave(e)}
-                @comment-cancel=${() => this.handleCancel()}
-              ></learning-comment-edit-form>
-            `
-          : html`
-              <learning-comment-add-button
-                .isReply=${!!this.parentCommentId}
-                @click=${this.handleStartCreate}
-              ></learning-comment-add-button>
-            `}
+        ${this.renderContent()}
         <learning-comment-type-popup
           .types=${this.availableTypes}
-          @comment-type-select=${(e: CommentTypeSelectEvent) =>
-            this.handleTypeSelect(e.commentType)}
+          @comment-type-select=${this.handleTypeSelect}
         ></learning-comment-type-popup>
       </div>
     `;
