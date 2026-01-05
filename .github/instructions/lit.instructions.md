@@ -72,6 +72,18 @@ applyTo: "view/src/**/*.ts"
 
 - イベント名はケバブケース（例: `item-selected`）とする。
 - 独自イベントの定義は `CustomEvent` を使用せず、`Event` を継承する。
+- イベントの定義は以下を参考にする。
+
+  ```ts
+  export class SelectCommentEvent extends Event {
+    public readonly commentId?: string;
+
+    constructor(commentId?: string) {
+      super(SELECT_COMMENT_EVENT_NAME, { bubbles: true, composed: true });
+      this.commentId = commentId;
+    }
+  }
+  ```
 
 ## 4. 品質管理
 

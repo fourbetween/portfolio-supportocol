@@ -5,8 +5,12 @@ import { buttonStyle } from "../../../shared/style/button";
 import { inputStyle } from "../../../shared/style/input";
 import "../../../shared/ui/popup/popup";
 import type { Popup } from "../../../shared/ui/popup/popup";
-
-export type AuthMode = "login" | "signup";
+import {
+  LoginEvent,
+  SignupEvent,
+  SwitchModeEvent,
+  type AuthMode,
+} from "../event/auth";
 
 @customElement("identity-auth-popup")
 export class IdentityAuthPopup extends LitElement {
@@ -18,15 +22,6 @@ export class IdentityAuthPopup extends LitElement {
 
   @property({ type: String })
   errorMessage = "";
-
-  @property({ attribute: false })
-  onSwitchMode?: (mode: AuthMode) => void;
-
-  @property({ attribute: false })
-  onLogin?: (email: string, password: string) => void;
-
-  @property({ attribute: false })
-  onSignup?: (email: string, password: string) => void;
 
   @state()
   private validationErrorMessage = "";
@@ -49,7 +44,7 @@ export class IdentityAuthPopup extends LitElement {
   private handleSwitchClick(e: Event) {
     e.preventDefault();
     const newMode = this.mode === "login" ? "signup" : "login";
-    this.onSwitchMode?.(newMode);
+    this.dispatchEvent(new SwitchModeEvent(newMode));
   }
 
   private renderSwitchPrompt() {
@@ -81,7 +76,7 @@ export class IdentityAuthPopup extends LitElement {
       .value;
 
     if (this.mode === "login") {
-      this.onLogin?.(email, password);
+      this.dispatchEvent(new LoginEvent(email, password));
     } else {
       const passwordConfirm = (
         form.elements.namedItem("passwordConfirm") as HTMLInputElement
@@ -102,7 +97,7 @@ export class IdentityAuthPopup extends LitElement {
         return;
       }
 
-      this.onSignup?.(email, password);
+      this.dispatchEvent(new SignupEvent(email, password));
     }
   }
 

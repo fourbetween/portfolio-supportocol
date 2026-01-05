@@ -2,8 +2,14 @@ import { LitElement, css, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { client } from "../api/client";
+import {
+  LoginEvent,
+  SignupEvent,
+  SwitchModeEvent,
+  type AuthMode,
+} from "../event/auth";
 import "../ui/auth-popup";
-import type { AuthMode, IdentityAuthPopup } from "../ui/auth-popup";
+import type { IdentityAuthPopup } from "../ui/auth-popup";
 
 @customElement("identity-auth-widget")
 export class IdentityAuthWidget extends LitElement {
@@ -97,6 +103,16 @@ export class IdentityAuthWidget extends LitElement {
     this.errorMessage = "";
   }
 
+  private handleLogin(email: string, _password: string) {
+    console.log("Login attempt:", email);
+    // TODO: Implement email/password login
+  }
+
+  private handleSignup(email: string, _password: string) {
+    console.log("Signup attempt:", email);
+    // TODO: Implement email/password signup
+  }
+
   private renderGoogleButton(container: HTMLElement) {
     if (!this.googleInitialized || !container) {
       return;
@@ -137,7 +153,9 @@ export class IdentityAuthWidget extends LitElement {
       <identity-auth-popup
         .mode=${this.currentMode}
         .errorMessage=${this.errorMessage}
-        .onSwitchMode=${(mode: AuthMode) => this.handleSwitchMode(mode)}
+        @switch-mode=${(e: SwitchModeEvent) => this.handleSwitchMode(e.mode)}
+        @login=${(e: LoginEvent) => this.handleLogin(e.email, e.password)}
+        @signup=${(e: SignupEvent) => this.handleSignup(e.email, e.password)}
       ></identity-auth-popup>
       ${this.isLoading
         ? html`
