@@ -2,6 +2,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import { DiscussionUpdatedEvent } from "../event/discussion";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
@@ -26,13 +27,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
       this.isEditing = false;
       showToast(this, "Theme updated.", "success", 2000);
 
-      this.dispatchEvent(
-        new CustomEvent("discussion-updated", {
-          detail: data,
-          bubbles: true,
-          composed: true,
-        })
-      );
+      this.dispatchEvent(new DiscussionUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, "Failed to update theme.", "error");
     }

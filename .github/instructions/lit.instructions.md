@@ -16,12 +16,13 @@ applyTo: "view/src/**/*.ts"
 
 - `api/`: API クライアント
 - `component/`: **Container**（ビジネスロジック・副作用を担当）
+- `event/`: イベント定義
 - `page/`: ページコンポーネント
 - `ui/`: **Presenter**（純粋な UI 部品）
 
 ### 1.3 共有リソース (`shared/`)
 
-- `event/`: カスタムイベント定義
+- `event/`: イベント定義
 - `style/`: 共通 CSS（`base.ts` 等）
 - `ui/`: 全体共通 UI コンポーネント
 
@@ -32,7 +33,6 @@ applyTo: "view/src/**/*.ts"
   - 原則として Storybook やテストは不要。
 - **Presenter** (`ui/`):
   - 表示とユーザー入力の検知に専念する。
-  - アクションはプロパティ経由で受け取ったコールバックを実行する。
   - API スキーマは `feature/[context]/api/schema.d.ts` を参照する。
 
 ## 3. コーディング規約
@@ -41,7 +41,7 @@ applyTo: "view/src/**/*.ts"
 
 - `LitElement` を継承し、名称は `[context]-[name]` 形式（例: `learning-comment-list`）とする。
 - 外部データは `@property`、内部状態は `@state` を使用する。
-- 関数をプロパティとして受け取る場合、`@property({ attribute: false })` を使用する。
+- 関数を渡すのではなく、イベントを発火して親コンポーネントに通知する。
 - プロパティ設定時はダブルクォートを使用しない。
   - 例: `<my-el .data=${data}></my-el>`
 - `HTMLElementTagNameMap` の拡張は行わない。
@@ -67,6 +67,11 @@ applyTo: "view/src/**/*.ts"
 - API 呼び出しの成否等の通知には `showToast` ヘルパーを使用する。
   - 成功時: `showToast(this, "Succeeded.", "success", 2000);`
   - エラー時: `showToast(this, error.message, "error");`
+
+### 3.4 イベント
+
+- イベント名はケバブケース（例: `item-selected`）とする。
+- 独自イベントの定義は `CustomEvent` を使用せず、`Event` を継承する。
 
 ## 4. 品質管理
 

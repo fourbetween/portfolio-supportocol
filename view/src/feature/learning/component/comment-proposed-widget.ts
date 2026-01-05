@@ -3,6 +3,11 @@ import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { titleStyle } from "../../../shared/style/title";
+import {
+  CommentDeletedEvent,
+  CommentUpdatedEvent,
+  SelectCommentEvent,
+} from "../event/comment";
 import type { Comment } from "../model/comment";
 import { commentRepository } from "../repository/comment-repository";
 import "../ui/proposed-comment-list/proposed-comment-list";
@@ -36,13 +41,7 @@ export class LearningCommentProposedWidget extends LitElement {
       );
 
       showToast(this, "Comment activated.", "success", 2000);
-      this.dispatchEvent(
-        new CustomEvent("comment-updated", {
-          detail: data,
-          bubbles: true,
-          composed: true,
-        })
-      );
+      this.dispatchEvent(new CommentUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
@@ -57,13 +56,7 @@ export class LearningCommentProposedWidget extends LitElement {
       await commentRepository.delete(this.discussionId, comment.id);
 
       showToast(this, "Comment deleted.", "success", 2000);
-      this.dispatchEvent(
-        new CustomEvent("comment-deleted", {
-          detail: { id: comment.id },
-          bubbles: true,
-          composed: true,
-        })
-      );
+      this.dispatchEvent(new CommentDeletedEvent(comment.id));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
@@ -71,11 +64,7 @@ export class LearningCommentProposedWidget extends LitElement {
 
   private handleClick(comment: Comment) {
     this.dispatchEvent(
-      new CustomEvent("select-comment", {
-        detail: { id: comment.parentCommentId },
-        bubbles: true,
-        composed: true,
-      })
+      new SelectCommentEvent(comment.parentCommentId || undefined)
     );
   }
 

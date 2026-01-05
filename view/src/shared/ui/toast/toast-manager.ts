@@ -1,9 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
-import {
-  SHOW_TOAST_EVENT_NAME,
-  type ToastEventDetail,
-} from "../../event/toast";
+import { SHOW_TOAST_EVENT_NAME, ShowToastEvent } from "../../event/toast";
 import "./toast";
 import type { Toast } from "./toast";
 
@@ -34,11 +31,11 @@ export class ToastManager extends LitElement {
     `;
   }
 
-  private handleShowToast = (event: CustomEvent<ToastEventDetail>) => {
+  private handleShowToast = (event: ShowToastEvent) => {
     this.toast.show({
-      message: event.detail.message,
-      type: event.detail.type,
-      duration: event.detail.duration,
+      message: event.message,
+      type: event.toastType,
+      duration: event.duration,
     });
   };
 }

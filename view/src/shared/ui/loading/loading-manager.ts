@@ -1,9 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import {
-  LOADING_EVENT_NAME,
-  type LoadingEventDetail,
-} from "../../event/loading";
+import { LOADING_EVENT_NAME, LoadingEvent } from "../../event/loading";
 import "./loading";
 
 @customElement("loading-manager")
@@ -36,8 +33,8 @@ export class LoadingManager extends LitElement {
     `;
   }
 
-  private handleLoading = (event: CustomEvent<LoadingEventDetail>) => {
-    this.show = event.detail.show;
-    this.progress = event.detail.progress;
+  private handleLoading = (event: LoadingEvent) => {
+    this.show = event.show;
+    this.progress = event.progress;
   };
 }
