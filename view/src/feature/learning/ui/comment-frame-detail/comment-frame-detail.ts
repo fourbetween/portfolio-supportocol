@@ -28,44 +28,49 @@ export class LearningCommentFrameDetail extends LitElement {
       <div class="container">
         <section>
           <div class="section-title">Types</div>
-          <div class="types">
-            ${this.frame.types.map(
-              (t) =>
-                html`
-                  <learning-comment-type-badge
-                    .type=${t}
-                  ></learning-comment-type-badge>
-                `
-            )}
-          </div>
+          <div class="types">${this._renderTypes()}</div>
         </section>
         <section>
           <div class="section-title">Paths</div>
-          <div class="paths">
-            ${Object.entries(this._groupedPaths).map(
-              ([parent, children]) => html`
-                <div class="path-group">
-                  <div class="parent-node">
-                    <learning-comment-type-badge
-                      .type=${parent}
-                    ></learning-comment-type-badge>
-                  </div>
-                  <div class="children-nodes">
-                    ${children.map(
-                      (child) => html`
-                        <div class="child-node">
-                          <learning-comment-type-badge
-                            .type=${child}
-                          ></learning-comment-type-badge>
-                        </div>
-                      `
-                    )}
-                  </div>
-                </div>
-              `
-            )}
-          </div>
+          <div class="paths">${this._renderPaths()}</div>
         </section>
+      </div>
+    `;
+  }
+
+  private _renderTypes() {
+    return this.frame!.types.map(
+      (t) => html`
+        <learning-comment-type-badge .type=${t}></learning-comment-type-badge>
+      `
+    );
+  }
+
+  private _renderPaths() {
+    return Object.entries(this._groupedPaths).map(([parent, children]) =>
+      this._renderPathGroup(parent, children)
+    );
+  }
+
+  private _renderPathGroup(parent: string, children: string[]) {
+    return html`
+      <div class="path-group">
+        <div class="parent-node">
+          <learning-comment-type-badge
+            .type=${parent}
+          ></learning-comment-type-badge>
+        </div>
+        <div class="children-nodes">
+          ${children.map(
+            (child) => html`
+              <div class="child-node">
+                <learning-comment-type-badge
+                  .type=${child}
+                ></learning-comment-type-badge>
+              </div>
+            `
+          )}
+        </div>
       </div>
     `;
   }

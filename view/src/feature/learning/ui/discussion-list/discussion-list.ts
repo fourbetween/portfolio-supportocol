@@ -1,13 +1,9 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../../shared/style/base";
-import { hoverButtonStyle } from "../../../../shared/style/hover-button";
-import { iconStyle } from "../../../../shared/style/icon";
-import {
-  RequestDeleteDiscussionEvent,
-  SelectDiscussionEvent,
-} from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
+import "../discussion-item/discussion-item";
 
 @customElement("learning-discussion-list")
 export class LearningDiscussionList extends LitElement {
@@ -22,36 +18,22 @@ export class LearningDiscussionList extends LitElement {
     }
     return html`
       <div class="list">
-        ${this.discussions.map((d) => this.renderDiscussion(d))}
-      </div>
-    `;
-  }
-
-  private renderDiscussion(d: Discussion) {
-    return html`
-      <div
-        class="item hover-container"
-        @click=${() => this.dispatchEvent(new SelectDiscussionEvent(d))}
-      >
-        <span class="theme">${d.theme}</span>
-        <button
-          class="btn-hover danger delete-button"
-          aria-label="delete"
-          @click=${(e: Event) => {
-            e.stopPropagation();
-            this.dispatchEvent(new RequestDeleteDiscussionEvent(d));
-          }}
-        >
-          <span class="material-symbols-outlined">delete</span>
-        </button>
+        ${repeat(
+          this.discussions,
+          (d) => d.id,
+          (d) =>
+            html`
+              <learning-discussion-item
+                .discussion=${d}
+              ></learning-discussion-item>
+            `
+        )}
       </div>
     `;
   }
 
   static styles = [
     baseStyle,
-    iconStyle,
-    hoverButtonStyle,
     css`
       .empty {
         padding: 16px;
@@ -66,37 +48,13 @@ export class LearningDiscussionList extends LitElement {
         flex-direction: column;
         border: 1px solid var(--color-border-default);
         border-radius: 6px;
+        overflow: hidden;
       }
-      .item {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px;
+      learning-discussion-item {
         border-bottom: 1px solid var(--color-border-muted);
-        background-color: var(--color-canvas-default);
-        cursor: pointer;
       }
-      .item:first-child {
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
-      }
-      .item:last-child {
+      learning-discussion-item:last-child {
         border-bottom: none;
-        border-bottom-left-radius: 6px;
-        border-bottom-right-radius: 6px;
-      }
-      .item:hover {
-        background-color: var(--color-canvas-subtle);
-      }
-      .theme {
-        font-size: 0.9rem;
-        color: var(--color-accent-fg);
-      }
-      .delete-button {
-        right: -16px;
-        top: 50%;
-        transform: translateY(-50%);
       }
     `,
   ];

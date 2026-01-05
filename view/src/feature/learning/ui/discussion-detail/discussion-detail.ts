@@ -16,30 +16,40 @@ export class LearningDiscussionDetail extends LitElement {
   isEditing = false;
 
   render() {
+    if (!this.discussion && !this.isEditing) {
+      return html``;
+    }
+
     return html`
       <div class="container">
         <div class="header">
-          ${this.isEditing
-            ? html`
-                <learning-discussion-edit-form
-                  .theme=${this.discussion?.theme ?? ""}
-                ></learning-discussion-edit-form>
-              `
-            : html`
-                <div class="display">
-                  <h1 class="theme">${this.discussion?.theme}</h1>
-                  <button
-                    class="btn"
-                    @click=${() =>
-                      this.dispatchEvent(new RequestEditDiscussionEvent())}
-                  >
-                    <span class="material-symbols-outlined">edit</span>
-                  </button>
-                </div>
-              `}
+          ${this.isEditing ? this._renderEditForm() : this._renderDisplay()}
         </div>
       </div>
     `;
+  }
+
+  private _renderEditForm() {
+    return html`
+      <learning-discussion-edit-form
+        .theme=${this.discussion?.theme ?? ""}
+      ></learning-discussion-edit-form>
+    `;
+  }
+
+  private _renderDisplay() {
+    return html`
+      <div class="display">
+        <h1 class="theme">${this.discussion?.theme}</h1>
+        <button class="btn" @click=${this._handleEditClick}>
+          <span class="material-symbols-outlined">edit</span>
+        </button>
+      </div>
+    `;
+  }
+
+  private _handleEditClick() {
+    this.dispatchEvent(new RequestEditDiscussionEvent());
   }
 
   static styles = [
@@ -47,10 +57,6 @@ export class LearningDiscussionDetail extends LitElement {
     buttonStyle,
     iconStyle,
     css`
-      learning-discussion-edit-form {
-        width: 100%;
-      }
-
       .container {
         padding: 8px 0;
         background-color: var(--color-canvas-default);
@@ -59,14 +65,17 @@ export class LearningDiscussionDetail extends LitElement {
       .header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+      }
+
+      learning-discussion-edit-form,
+      .display {
+        width: 100%;
       }
 
       .display {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 100%;
       }
 
       .theme {

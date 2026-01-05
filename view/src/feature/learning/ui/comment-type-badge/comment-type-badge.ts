@@ -1,5 +1,6 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../../shared/style/base";
 
 @customElement("learning-comment-type-badge")
@@ -14,15 +15,16 @@ export class LearningCommentTypeBadge extends LitElement {
   clickable = false;
 
   render() {
-    if (!this.type) return html``;
+    if (!this.type) return nothing;
+
+    const classes = {
+      "type-label": true,
+      active: this.active,
+      clickable: this.clickable,
+    };
+
     return html`
-      <div
-        class="type-label ${this.active ? "active" : ""} ${this.clickable
-          ? "clickable"
-          : ""}"
-      >
-        ${this.type}
-      </div>
+      <div class=${classMap(classes)}>${this.type}</div>
     `;
   }
 

@@ -17,6 +17,16 @@ export class LearningDiscussionEditForm extends LitElement {
   @query("input")
   private inputElement?: HTMLInputElement;
 
+  private handleSave() {
+    this.dispatchEvent(
+      new RequestUpdateDiscussionEvent(this.inputElement?.value ?? "")
+    );
+  }
+
+  private handleCancel() {
+    this.dispatchEvent(new CancelEditDiscussionEvent());
+  }
+
   render() {
     return html`
       <div class="edit-form">
@@ -29,19 +39,12 @@ export class LearningDiscussionEditForm extends LitElement {
         <div class="actions">
           <button
             class="btn btn-primary"
-            @click=${() =>
-              this.dispatchEvent(
-                new RequestUpdateDiscussionEvent(this.inputElement?.value ?? "")
-              )}
+            @click=${this.handleSave}
             title="Save"
           >
             <span class="material-symbols-outlined">save</span>
           </button>
-          <button
-            class="btn"
-            @click=${() => this.dispatchEvent(new CancelEditDiscussionEvent())}
-            title="Cancel"
-          >
+          <button class="btn" @click=${this.handleCancel} title="Cancel">
             <span class="material-symbols-outlined">close</span>
           </button>
         </div>

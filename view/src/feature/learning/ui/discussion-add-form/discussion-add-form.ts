@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { live } from "lit/directives/live.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
@@ -11,6 +12,10 @@ export class LearningDiscussionAddForm extends LitElement {
   @state()
   private _theme = "";
 
+  private get _canSubmit() {
+    return this._theme.trim().length > 0;
+  }
+
   private _handleInput(e: InputEvent) {
     const input = e.target as HTMLInputElement;
     this._theme = input.value;
@@ -18,7 +23,7 @@ export class LearningDiscussionAddForm extends LitElement {
 
   private _handleSubmit(e: Event) {
     e.preventDefault();
-    if (this._theme.trim()) {
+    if (this._canSubmit) {
       this.dispatchEvent(new CreateDiscussionEvent(this._theme));
       this._theme = "";
     }
@@ -29,7 +34,7 @@ export class LearningDiscussionAddForm extends LitElement {
       <form @submit=${this._handleSubmit}>
         <input
           type="text"
-          .value=${this._theme}
+          .value=${live(this._theme)}
           @input=${this._handleInput}
           placeholder="New discussion theme"
           aria-label="New discussion theme"
@@ -37,7 +42,7 @@ export class LearningDiscussionAddForm extends LitElement {
         <button
           type="submit"
           class="btn btn-primary"
-          ?disabled=${!this._theme.trim()}
+          ?disabled=${!this._canSubmit}
           title="New discussion"
         >
           <span class="material-symbols-outlined">add</span>

@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
@@ -17,6 +18,18 @@ export class LearningProposedCommentList extends LitElement {
   @property({ type: Array })
   comments: Comment[] = [];
 
+  private onSelect(comment: Comment) {
+    this.dispatchEvent(new SelectProposedCommentEvent(comment));
+  }
+
+  private onAccept(comment: Comment) {
+    this.dispatchEvent(new AcceptProposedCommentEvent(comment));
+  }
+
+  private onReject(comment: Comment) {
+    this.dispatchEvent(new RejectProposedCommentEvent(comment));
+  }
+
   render() {
     if (this.comments.length === 0) {
       return html`
@@ -24,35 +37,40 @@ export class LearningProposedCommentList extends LitElement {
       `;
     }
     return html`
-      <div class="list">${this.comments.map((c) => this.renderComment(c))}</div>
+      <div class="list">
+        ${repeat(
+          this.comments,
+          (comment) => comment.id,
+          (comment) => this.renderComment(comment)
+        )}
+      </div>
     `;
   }
 
-  private renderComment(c: Comment) {
+  private renderComment(comment: Comment) {
     return html`
       <div class="item hover-container">
         <div class="comment-container">
           <learning-comment-type-badge
-            .type=${c.commentType}
+            .type=${comment.commentType}
           ></learning-comment-type-badge>
           <learning-comment-card
             class="clickable"
-            .comment=${c}
-            @click=${() =>
-              this.dispatchEvent(new SelectProposedCommentEvent(c))}
+            .comment=${comment}
+            @click=${() => this.onSelect(comment)}
           ></learning-comment-card>
         </div>
         <button
           class="btn-hover success accept-button"
           aria-label="check"
-          @click=${() => this.dispatchEvent(new AcceptProposedCommentEvent(c))}
+          @click=${() => this.onAccept(comment)}
         >
           <span class="material-symbols-outlined">check</span>
         </button>
         <button
           class="btn-hover danger reject-button"
           aria-label="close"
-          @click=${() => this.dispatchEvent(new RejectProposedCommentEvent(c))}
+          @click=${() => this.onReject(comment)}
         >
           <span class="material-symbols-outlined">close</span>
         </button>

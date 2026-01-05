@@ -24,41 +24,46 @@ export class LearningCommentContext extends LitElement {
     this.dispatchEvent(new SelectCommentEvent(comment.id));
   }
 
+  private renderItem(comment: Comment, isLast: boolean) {
+    const childCount = this.childCounts.get(comment.id) || 0;
+    return html`
+      <learning-comment-type-badge
+        .type=${comment.commentType}
+      ></learning-comment-type-badge>
+      ${isLast
+        ? html`
+            <learning-comment-item
+              .comment=${comment}
+              .activeChildrenCount=${childCount}
+              .availableTypes=${this.availableTypes}
+            ></learning-comment-item>
+          `
+        : html`
+            <learning-comment-card
+              .comment=${comment}
+              .activeChildrenCount=${childCount}
+              @click=${() => this.handleCommentClick(comment)}
+            ></learning-comment-card>
+          `}
+    `;
+  }
+
+  private renderSeparator() {
+    return html`
+      <div class="separator">
+        <span class="material-symbols-outlined">north</span>
+      </div>
+    `;
+  }
+
   render() {
     return html`
       <div class="container">
         ${join(
-          this.path.map((comment, index) => {
-            const isLast = index === this.path.length - 1;
-            const childCount = this.childCounts.get(comment.id) || 0;
-            if (isLast) {
-              return html`
-                <learning-comment-type-badge
-                  .type=${comment.commentType}
-                ></learning-comment-type-badge>
-                <learning-comment-item
-                  .comment=${comment}
-                  .activeChildrenCount=${childCount}
-                  .availableTypes=${this.availableTypes}
-                ></learning-comment-item>
-              `;
-            }
-            return html`
-              <learning-comment-type-badge
-                .type=${comment.commentType}
-              ></learning-comment-type-badge>
-              <learning-comment-card
-                .comment=${comment}
-                .activeChildrenCount=${childCount}
-                @click=${() => this.handleCommentClick(comment)}
-              ></learning-comment-card>
-            `;
-          }),
-          html`
-            <div class="separator">
-              <span class="material-symbols-outlined">north</span>
-            </div>
-          `
+          this.path.map((comment, index) =>
+            this.renderItem(comment, index === this.path.length - 1)
+          ),
+          this.renderSeparator()
         )}
       </div>
     `;
