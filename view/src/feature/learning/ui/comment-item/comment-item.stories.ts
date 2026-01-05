@@ -6,6 +6,13 @@ import "./comment-item";
 const meta: Meta = {
   title: "learning/ui/comment-item",
   component: "learning-comment-item",
+  argTypes: {
+    onSelectComment: { action: "select-comment" },
+    onCommentDeleted: { action: "comment-deleted" },
+    onCommentGenerated: { action: "comment-generated" },
+    onRequestCommentUpdate: { action: "request-comment-update" },
+    onRequestCommentReply: { action: "request-comment-reply" },
+  },
 };
 
 export default meta;
@@ -30,11 +37,11 @@ export const Default: Story = {
       .comment=${mockComment}
       .activeChildrenCount=${args.activeChildrenCount}
       .availableTypes=${availableTypes}
-      .onCommentDelete=${(id: string) => console.log("Delete comment:", id)}
-      .onCommentGenerate=${(id: string, type: string) =>
-        console.log("Generate comment for:", id, "with type:", type)}
-      .onCommentReply=${(id: string, detail: any) =>
-        console.log("Reply to comment:", id, "with detail:", detail)}
+      @select-comment=${args.onSelectComment}
+      @comment-deleted=${args.onCommentDeleted}
+      @comment-generated=${args.onCommentGenerated}
+      @request-comment-update=${args.onRequestCommentUpdate}
+      @request-comment-reply=${args.onRequestCommentReply}
     ></learning-comment-item>
   `,
   args: {

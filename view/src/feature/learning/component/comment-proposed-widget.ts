@@ -4,9 +4,12 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { titleStyle } from "../../../shared/style/title";
 import {
+  AcceptProposedCommentEvent,
   CommentDeletedEvent,
   CommentUpdatedEvent,
+  RejectProposedCommentEvent,
   SelectCommentEvent,
+  SelectProposedCommentEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { commentRepository } from "../repository/comment-repository";
@@ -30,8 +33,9 @@ export class LearningCommentProposedWidget extends LitElement {
     }
   }
 
-  private async handleAccept(comment: Comment) {
+  private async handleAccept(e: AcceptProposedCommentEvent) {
     if (!this.discussionId) return;
+    const comment = e.comment;
 
     try {
       const data = await commentRepository.updateStatus(
@@ -47,8 +51,9 @@ export class LearningCommentProposedWidget extends LitElement {
     }
   }
 
-  private async handleReject(comment: Comment) {
+  private async handleReject(e: RejectProposedCommentEvent) {
     if (!this.discussionId) return;
+    const comment = e.comment;
     if (!confirm("Are you sure you want to delete this proposed comment?"))
       return;
 
@@ -62,7 +67,8 @@ export class LearningCommentProposedWidget extends LitElement {
     }
   }
 
-  private handleClick(comment: Comment) {
+  private handleClick(e: SelectProposedCommentEvent) {
+    const comment = e.comment;
     this.dispatchEvent(
       new SelectCommentEvent(comment.parentCommentId || undefined)
     );
@@ -78,9 +84,9 @@ export class LearningCommentProposedWidget extends LitElement {
         <div class="section-title">Proposed Comments</div>
         <learning-proposed-comment-list
           .comments=${this.proposedComments}
-          .onAccept=${(c: Comment) => this.handleAccept(c)}
-          .onReject=${(c: Comment) => this.handleReject(c)}
-          .onClick=${(c: Comment) => this.handleClick(c)}
+          @accept-proposed-comment=${this.handleAccept}
+          @reject-proposed-comment=${this.handleReject}
+          @select-proposed-comment=${this.handleClick}
         ></learning-proposed-comment-list>
       </section>
     `;

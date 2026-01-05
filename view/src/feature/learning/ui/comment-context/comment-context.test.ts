@@ -91,6 +91,38 @@ describe("learning-comment-context", async () => {
       .toBeInTheDocument();
   });
 
+  it("コメントをクリックしたときに select-comment イベントが発火されること", async () => {
+    const path = [
+      {
+        id: "1",
+        discussionId: "d1",
+        parentCommentId: null,
+        commentType: "idea",
+        status: "active" as const,
+        content: "First comment",
+        createdAt: "2026-01-04T00:00:00Z",
+      },
+    ];
+
+    let clickedCommentId = "";
+    const handleSelectComment = (e: any) => {
+      clickedCommentId = e.commentId;
+    };
+
+    render(
+      html`
+        <learning-comment-context
+          .path=${path}
+          @select-comment=${handleSelectComment}
+        ></learning-comment-context>
+      `,
+      container
+    );
+
+    await page.getByText("First comment").click();
+    expect(clickedCommentId).toBe("1");
+  });
+
   it("子コメント数が表示されること", async () => {
     const path = [
       {

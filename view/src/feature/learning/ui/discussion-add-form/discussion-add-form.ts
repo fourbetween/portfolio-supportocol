@@ -1,15 +1,13 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
+import { CreateDiscussionEvent } from "../../event/discussion";
 
 @customElement("learning-discussion-add-form")
 export class LearningDiscussionAddForm extends LitElement {
-  @property({ attribute: false })
-  onSubmit?: (theme: string) => void;
-
   @state()
   private _theme = "";
 
@@ -21,7 +19,7 @@ export class LearningDiscussionAddForm extends LitElement {
   private _handleSubmit(e: Event) {
     e.preventDefault();
     if (this._theme.trim()) {
-      this.onSubmit?.(this._theme);
+      this.dispatchEvent(new CreateDiscussionEvent(this._theme));
       this._theme = "";
     }
   }

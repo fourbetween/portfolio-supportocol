@@ -1,6 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
+import type { CreateDiscussionEvent } from "../../event/discussion";
 import "./discussion-add-form";
 
 describe("learning-discussion-add-form", () => {
@@ -15,12 +16,12 @@ describe("learning-discussion-add-form", () => {
     container.remove();
   });
 
-  it("テーマを入力して追加ボタンを押したときに onSubmit が呼ばれること", async () => {
-    const onSubmit = vi.fn();
+  it("テーマを入力して追加ボタンを押したときに create-discussion イベントが発火されること", async () => {
+    const onCreate = vi.fn();
     render(
       html`
         <learning-discussion-add-form
-          .onSubmit=${onSubmit}
+          @create-discussion=${(e: CreateDiscussionEvent) => onCreate(e.theme)}
         ></learning-discussion-add-form>
       `,
       container
@@ -31,7 +32,7 @@ describe("learning-discussion-add-form", () => {
 
     await page.getByRole("button", { name: "add" }).click();
 
-    expect(onSubmit).toHaveBeenCalledWith("新しい議論");
+    expect(onCreate).toHaveBeenCalledWith("新しい議論");
   });
 
   it("ボタンにアイコンが表示されていること", async () => {

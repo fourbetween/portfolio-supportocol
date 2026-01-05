@@ -3,6 +3,15 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
+import {
+  CommentDeletedEvent,
+  CommentGeneratedEvent,
+  CommentSaveEvent,
+  CommentTypeSelectEvent,
+  RequestCommentReplyEvent,
+  RequestCommentUpdateEvent,
+  SelectCommentEvent,
+} from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-edit-form/comment-edit-form";
@@ -20,27 +29,6 @@ export class LearningCommentItem extends LitElement {
   @property({ type: Array })
   availableTypes: string[] = [];
 
-  @property({ attribute: false })
-  onCommentClick?: (comment: Comment) => void;
-
-  @property({ attribute: false })
-  onCommentUpdate?: (
-    commentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
-  @property({ attribute: false })
-  onCommentDelete?: (commentId: string) => void;
-
-  @property({ attribute: false })
-  onCommentGenerate?: (commentId: string, commentType: string) => void;
-
-  @property({ attribute: false })
-  onCommentReply?: (
-    parentCommentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
   @state()
   private isEditing = false;
 
@@ -54,8 +42,8 @@ export class LearningCommentItem extends LitElement {
   private typePopup!: LearningCommentTypePopup;
 
   private handleCommentClick() {
-    if (this.onCommentClick && this.comment) {
-      this.onCommentClick(this.comment);
+    if (this.comment) {
+      this.dispatchEvent(new SelectCommentEvent(this.comment.id));
     }
   }
 
@@ -80,9 +68,41 @@ export class LearningCommentItem extends LitElement {
 
   private handleDeleteClick(e: Event) {
     e.stopPropagation();
-    if (this.onCommentDelete && this.comment) {
-      this.onCommentDelete(this.comment.id);
+    if (this.comment) {
+      this.dispatchEvent(new CommentDeletedEvent(this.comment.id));
     }
+  }
+
+  private handleTypeSelected(e: CommentTypeSelectEvent) {
+    const commentType = e.commentType;
+    if (this.isReplying) {
+      this.selectedReplyType = commentType;
+    } else {
+      if (this.comment) {
+        this.dispatchEvent(
+          new CommentGeneratedEvent(this.comment.id, commentType)
+        );
+      }
+    }
+  }
+
+  private handleUpdate(e: CommentSaveEvent) {
+    if (this.comment) {
+      this.dispatchEvent(
+        new RequestCommentUpdateEvent(this.comment.id, e.commentType, e.content)
+      );
+    }
+    this.isEditing = false;
+  }
+
+  private handleReply(e: CommentSaveEvent) {
+    if (this.comment) {
+      this.dispatchEvent(
+        new RequestCommentReplyEvent(this.comment.id, e.commentType, e.content)
+      );
+    }
+    this.isReplying = false;
+    this.selectedReplyType = undefined;
   }
 
   render() {
@@ -144,13 +164,8 @@ export class LearningCommentItem extends LitElement {
           class="reply-form"
           .initialType=${this.selectedReplyType}
           .availableTypes=${this.availableTypes}
-          .onCancel=${() => (this.isReplying = false)}
-          .onSave=${(detail: { commentType: string; content: string }) => {
-            if (this.onCommentReply) {
-              this.onCommentReply(this.comment!.id, detail);
-            }
-            this.isReplying = false;
-          }}
+          @comment-cancel=${() => (this.isReplying = false)}
+          @comment-save=${this.handleReply}
         ></learning-comment-edit-form>
       `;
     }
@@ -158,13 +173,7 @@ export class LearningCommentItem extends LitElement {
     return html`
       <learning-comment-type-popup
         .types=${this.availableTypes}
-        .onSelect=${(type: string) => {
-          if (this.isReplying) {
-            this.selectedReplyType = type;
-          } else if (this.onCommentGenerate && this.comment) {
-            this.onCommentGenerate(this.comment.id, type);
-          }
-        }}
+        @comment-type-select=${this.handleTypeSelected}
       ></learning-comment-type-popup>
     `;
   }
@@ -175,13 +184,8 @@ export class LearningCommentItem extends LitElement {
         .initialType=${this.comment!.commentType}
         .initialContent=${this.comment!.content}
         .availableTypes=${this.availableTypes}
-        .onCancel=${() => (this.isEditing = false)}
-        .onSave=${(detail: { commentType: string; content: string }) => {
-          if (this.onCommentUpdate) {
-            this.onCommentUpdate(this.comment!.id, detail);
-          }
-          this.isEditing = false;
-        }}
+        @comment-cancel=${() => (this.isEditing = false)}
+        @comment-save=${this.handleUpdate}
       ></learning-comment-edit-form>
     `;
   }

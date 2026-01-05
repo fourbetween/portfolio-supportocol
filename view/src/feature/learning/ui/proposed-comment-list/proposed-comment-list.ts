@@ -3,6 +3,11 @@ import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
+import {
+  AcceptProposedCommentEvent,
+  RejectProposedCommentEvent,
+  SelectProposedCommentEvent,
+} from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-type-badge/comment-type-badge";
@@ -11,15 +16,6 @@ import "../comment-type-badge/comment-type-badge";
 export class LearningProposedCommentList extends LitElement {
   @property({ type: Array })
   comments: Comment[] = [];
-
-  @property({ attribute: false })
-  onAccept?: (comment: Comment) => void;
-
-  @property({ attribute: false })
-  onReject?: (comment: Comment) => void;
-
-  @property({ attribute: false })
-  onClick?: (comment: Comment) => void;
 
   render() {
     if (this.comments.length === 0) {
@@ -42,20 +38,21 @@ export class LearningProposedCommentList extends LitElement {
           <learning-comment-card
             class="clickable"
             .comment=${c}
-            @click=${() => this.onClick?.(c)}
+            @click=${() =>
+              this.dispatchEvent(new SelectProposedCommentEvent(c))}
           ></learning-comment-card>
         </div>
         <button
           class="btn-hover success accept-button"
           aria-label="check"
-          @click=${() => this.onAccept?.(c)}
+          @click=${() => this.dispatchEvent(new AcceptProposedCommentEvent(c))}
         >
           <span class="material-symbols-outlined">check</span>
         </button>
         <button
           class="btn-hover danger reject-button"
           aria-label="close"
-          @click=${() => this.onReject?.(c)}
+          @click=${() => this.dispatchEvent(new RejectProposedCommentEvent(c))}
         >
           <span class="material-symbols-outlined">close</span>
         </button>

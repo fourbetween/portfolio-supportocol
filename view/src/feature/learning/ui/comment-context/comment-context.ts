@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { join } from "lit/directives/join.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { iconStyle } from "../../../../shared/style/icon";
+import { SelectCommentEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-item/comment-item";
@@ -19,29 +20,8 @@ export class LearningCommentContext extends LitElement {
   @property({ type: Array })
   availableTypes: string[] = [];
 
-  @property({ attribute: false })
-  onCommentClick?: (comment: Comment) => void;
-
-  @property({ attribute: false })
-  onCommentUpdate?: (
-    commentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
-  @property({ attribute: false })
-  onCommentDelete?: (commentId: string) => void;
-
-  @property({ attribute: false })
-  onCommentGenerate?: (commentId: string, commentType: string) => void;
-
-  @property({ attribute: false })
-  onCommentReply?: (
-    parentCommentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
   private handleCommentClick(comment: Comment) {
-    this.onCommentClick?.(comment);
+    this.dispatchEvent(new SelectCommentEvent(comment.id));
   }
 
   render() {
@@ -60,11 +40,6 @@ export class LearningCommentContext extends LitElement {
                   .comment=${comment}
                   .activeChildrenCount=${childCount}
                   .availableTypes=${this.availableTypes}
-                  .onCommentClick=${this.onCommentClick}
-                  .onCommentUpdate=${this.onCommentUpdate}
-                  .onCommentDelete=${this.onCommentDelete}
-                  .onCommentGenerate=${this.onCommentGenerate}
-                  .onCommentReply=${this.onCommentReply}
                 ></learning-comment-item>
               `;
             }

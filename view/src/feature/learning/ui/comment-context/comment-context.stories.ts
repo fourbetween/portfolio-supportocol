@@ -5,16 +5,27 @@ import "./comment-context";
 const meta: Meta = {
   title: "learning/ui/comment-context",
   component: "learning-comment-context",
+  argTypes: {
+    onSelectComment: { action: "select-comment" },
+    onCommentUpdated: { action: "comment-updated" },
+    onCommentDeleted: { action: "comment-deleted" },
+    onCommentGenerated: { action: "comment-generated" },
+    onCommentCreated: { action: "comment-created" },
+    onRequestCommentUpdate: { action: "request-comment-update" },
+    onRequestCommentReply: { action: "request-comment-reply" },
+  },
   render: (args) => html`
     <learning-comment-context
       .path=${args.path}
       .childCounts=${args.childCounts}
       .availableTypes=${args.availableTypes}
-      .onCommentClick=${args.onCommentClick}
-      .onCommentUpdate=${args.onCommentUpdate}
-      .onCommentDelete=${args.onCommentDelete}
-      .onCommentGenerate=${args.onCommentGenerate}
-      .onCommentReply=${args.onCommentReply}
+      @select-comment=${args.onSelectComment}
+      @comment-updated=${args.onCommentUpdated}
+      @comment-deleted=${args.onCommentDeleted}
+      @comment-generated=${args.onCommentGenerated}
+      @comment-created=${args.onCommentCreated}
+      @request-comment-update=${args.onRequestCommentUpdate}
+      @request-comment-reply=${args.onRequestCommentReply}
     ></learning-comment-context>
   `,
 };

@@ -19,27 +19,6 @@ export class LearningCommentTree extends LitElement {
   @property({ type: Array })
   comments?: Comment[];
 
-  @property({ attribute: false })
-  onCommentClick?: (comment: Comment) => void;
-
-  @property({ attribute: false })
-  onCommentUpdate?: (
-    commentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
-  @property({ attribute: false })
-  onCommentDelete?: (commentId: string) => void;
-
-  @property({ attribute: false })
-  onCommentGenerate?: (commentId: string, commentType: string) => void;
-
-  @property({ attribute: false })
-  onCommentReply?: (
-    parentCommentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
   @state()
   private rootComments: Comment[] = [];
 
@@ -118,11 +97,6 @@ export class LearningCommentTree extends LitElement {
           .comment=${comment}
           .activeChildrenCount=${activeChildrenCount}
           .availableTypes=${this.availableTypes}
-          .onCommentClick=${this.onCommentClick}
-          .onCommentUpdate=${this.onCommentUpdate}
-          .onCommentDelete=${this.onCommentDelete}
-          .onCommentGenerate=${this.onCommentGenerate}
-          .onCommentReply=${this.onCommentReply}
         ></learning-comment-item>
         ${!hideChildren && children.length > 0
           ? html`

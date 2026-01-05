@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
+import { RequestEditDiscussionEvent } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-edit-form/discussion-edit-form";
 
@@ -14,15 +15,6 @@ export class LearningDiscussionDetail extends LitElement {
   @property({ type: Boolean })
   isEditing = false;
 
-  @property({ attribute: false })
-  onEdit?: () => void;
-
-  @property({ attribute: false })
-  onSave?: (theme: string) => void;
-
-  @property({ attribute: false })
-  onCancel?: () => void;
-
   render() {
     return html`
       <div class="container">
@@ -31,14 +23,16 @@ export class LearningDiscussionDetail extends LitElement {
             ? html`
                 <learning-discussion-edit-form
                   .theme=${this.discussion?.theme ?? ""}
-                  .onSave=${(theme: string) => this.onSave?.(theme)}
-                  .onCancel=${() => this.onCancel?.()}
                 ></learning-discussion-edit-form>
               `
             : html`
                 <div class="display">
                   <h1 class="theme">${this.discussion?.theme}</h1>
-                  <button class="btn" @click=${() => this.onEdit?.()}>
+                  <button
+                    class="btn"
+                    @click=${() =>
+                      this.dispatchEvent(new RequestEditDiscussionEvent())}
+                  >
                     <span class="material-symbols-outlined">edit</span>
                   </button>
                 </div>

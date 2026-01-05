@@ -1,6 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
+import type { RequestUpdateDiscussionEvent } from "../../event/discussion";
 import "./discussion-detail";
 
 describe("learning-discussion-detail", async () => {
@@ -28,14 +29,14 @@ describe("learning-discussion-detail", async () => {
     await expect.element(page.getByText("テストテーマ")).toBeVisible();
   });
 
-  it("編集ボタンをクリックすると onEdit が呼ばれること", async () => {
+  it("編集ボタンをクリックすると request-edit-discussion イベントが発火されること", async () => {
     const onEdit = vi.fn();
     const discussion = { id: "1", theme: "テストテーマ" };
     render(
       html`
         <learning-discussion-detail
           .discussion=${discussion}
-          .onEdit=${onEdit}
+          @request-edit-discussion=${onEdit}
         ></learning-discussion-detail>
       `,
       container
@@ -61,7 +62,7 @@ describe("learning-discussion-detail", async () => {
     await expect.element(input).toHaveValue("テストテーマ");
   });
 
-  it("保存ボタンをクリックすると onSave が呼ばれること", async () => {
+  it("保存ボタンをクリックすると request-update-discussion イベントが発火されること", async () => {
     const onSave = vi.fn();
     const discussion = { id: "1", theme: "元のテーマ" };
     render(
@@ -69,7 +70,8 @@ describe("learning-discussion-detail", async () => {
         <learning-discussion-detail
           .discussion=${discussion}
           .isEditing=${true}
-          .onSave=${onSave}
+          @request-update-discussion=${(e: RequestUpdateDiscussionEvent) =>
+            onSave(e.theme)}
         ></learning-discussion-detail>
       `,
       container
@@ -82,13 +84,13 @@ describe("learning-discussion-detail", async () => {
     expect(onSave).toHaveBeenCalledWith("新しいテーマ");
   });
 
-  it("キャンセルボタンをクリックすると onCancel が呼ばれること", async () => {
+  it("キャンセルボタンをクリックすると cancel-edit-discussion イベントが発火されること", async () => {
     const onCancel = vi.fn();
     render(
       html`
         <learning-discussion-detail
           .isEditing=${true}
-          .onCancel=${onCancel}
+          @cancel-edit-discussion=${onCancel}
         ></learning-discussion-detail>
       `,
       container

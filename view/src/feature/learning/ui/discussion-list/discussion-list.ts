@@ -3,18 +3,16 @@ import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
+import {
+  RequestDeleteDiscussionEvent,
+  SelectDiscussionEvent,
+} from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 
 @customElement("learning-discussion-list")
 export class LearningDiscussionList extends LitElement {
   @property({ type: Array })
   discussions: Discussion[] = [];
-
-  @property({ attribute: false })
-  onSelect?: (discussion: Discussion) => void;
-
-  @property({ attribute: false })
-  onDelete?: (discussion: Discussion) => void;
 
   render() {
     if (this.discussions.length === 0) {
@@ -31,14 +29,17 @@ export class LearningDiscussionList extends LitElement {
 
   private renderDiscussion(d: Discussion) {
     return html`
-      <div class="item hover-container" @click=${() => this.onSelect?.(d)}>
+      <div
+        class="item hover-container"
+        @click=${() => this.dispatchEvent(new SelectDiscussionEvent(d))}
+      >
         <span class="theme">${d.theme}</span>
         <button
           class="btn-hover danger delete-button"
           aria-label="delete"
           @click=${(e: Event) => {
             e.stopPropagation();
-            this.onDelete?.(d);
+            this.dispatchEvent(new RequestDeleteDiscussionEvent(d));
           }}
         >
           <span class="material-symbols-outlined">delete</span>

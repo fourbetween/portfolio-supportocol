@@ -1,6 +1,11 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
+import {
+  AcceptProposedCommentEvent,
+  RejectProposedCommentEvent,
+  SelectProposedCommentEvent,
+} from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "./proposed-comment-list";
 
@@ -25,7 +30,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
-      createdAt: "2026-01-04T00:00:00Z",
+        createdAt: "2026-01-04T00:00:00Z",
       },
       {
         id: "2",
@@ -34,7 +39,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案2",
         commentType: "question",
         status: "proposed",
-      createdAt: "2026-01-04T00:00:00Z",
+        createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 
@@ -66,7 +71,7 @@ describe("learning-proposed-comment-list", () => {
       .toBeVisible();
   });
 
-  it("採用ボタンをクリックすると onAccept が呼ばれること", async () => {
+  it("採用ボタンをクリックすると accept-proposed-comment イベントが発火されること", async () => {
     const onAccept = vi.fn();
     const comments: Comment[] = [
       {
@@ -76,7 +81,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
-      createdAt: "2026-01-04T00:00:00Z",
+        createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 
@@ -84,7 +89,8 @@ describe("learning-proposed-comment-list", () => {
       html`
         <learning-proposed-comment-list
           .comments=${comments}
-          .onAccept=${onAccept}
+          @accept-proposed-comment=${(e: AcceptProposedCommentEvent) =>
+            onAccept(e.comment)}
         ></learning-proposed-comment-list>
       `,
       container
@@ -95,7 +101,7 @@ describe("learning-proposed-comment-list", () => {
     expect(onAccept).toHaveBeenCalledWith(comments[0]);
   });
 
-  it("却下ボタンをクリックすると onReject が呼ばれること", async () => {
+  it("却下ボタンをクリックすると reject-proposed-comment イベントが発火されること", async () => {
     const onReject = vi.fn();
     const comments: Comment[] = [
       {
@@ -105,7 +111,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
-      createdAt: "2026-01-04T00:00:00Z",
+        createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 
@@ -113,7 +119,8 @@ describe("learning-proposed-comment-list", () => {
       html`
         <learning-proposed-comment-list
           .comments=${comments}
-          .onReject=${onReject}
+          @reject-proposed-comment=${(e: RejectProposedCommentEvent) =>
+            onReject(e.comment)}
         ></learning-proposed-comment-list>
       `,
       container
@@ -122,6 +129,36 @@ describe("learning-proposed-comment-list", () => {
     await page.getByRole("button", { name: "close" }).click();
 
     expect(onReject).toHaveBeenCalledWith(comments[0]);
+  });
+
+  it("コメントをクリックすると select-proposed-comment イベントが発火されること", async () => {
+    const onClick = vi.fn();
+    const comments: Comment[] = [
+      {
+        id: "1",
+        discussionId: "d1",
+        parentCommentId: null,
+        content: "提案1",
+        commentType: "idea",
+        status: "proposed",
+        createdAt: "2026-01-04T00:00:00Z",
+      },
+    ];
+
+    render(
+      html`
+        <learning-proposed-comment-list
+          .comments=${comments}
+          @select-proposed-comment=${(e: SelectProposedCommentEvent) =>
+            onClick(e.comment)}
+        ></learning-proposed-comment-list>
+      `,
+      container
+    );
+
+    await page.getByText("提案1").click();
+
+    expect(onClick).toHaveBeenCalledWith(comments[0]);
   });
 
   it("コメントをクリックすると onClick が呼ばれること", async () => {
@@ -134,7 +171,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
-      createdAt: "2026-01-04T00:00:00Z",
+        createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 
@@ -142,7 +179,7 @@ describe("learning-proposed-comment-list", () => {
       html`
         <learning-proposed-comment-list
           .comments=${comments}
-          .onClick=${onClick}
+          @select-proposed-comment=${(e: any) => onClick(e.comment)}
         ></learning-proposed-comment-list>
       `,
       container
@@ -162,7 +199,7 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
-      createdAt: "2026-01-04T00:00:00Z",
+        createdAt: "2026-01-04T00:00:00Z",
       },
     ];
 

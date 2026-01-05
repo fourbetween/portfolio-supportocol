@@ -3,8 +3,11 @@ import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import {
+  CreateDiscussionEvent,
   DiscussionCreatedEvent,
   DiscussionDeletedEvent,
+  RequestDeleteDiscussionEvent,
+  SearchDiscussionEvent,
   SelectDiscussionEvent,
 } from "../event/discussion";
 import type { Discussion } from "../model/discussion";
@@ -21,24 +24,25 @@ export class LearningDiscussionListWidget extends LitElement {
   @state()
   private _searchQuery = "";
 
-  private async _handleAddDiscussion(theme: string) {
+  private async _handleAddDiscussion(e: CreateDiscussionEvent) {
     try {
-      const data = await discussionRepository.create(theme);
+      const data = await discussionRepository.create(e.theme);
       this.dispatchEvent(new DiscussionCreatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private _handleSearch(query: string) {
-    this._searchQuery = query;
+  private _handleSearch(e: SearchDiscussionEvent) {
+    this._searchQuery = e.query;
   }
 
-  private _handleSelect(discussion: Discussion) {
-    this.dispatchEvent(new SelectDiscussionEvent(discussion));
+  private _handleSelect(e: SelectDiscussionEvent) {
+    this.dispatchEvent(new SelectDiscussionEvent(e.discussion));
   }
 
-  private async _handleDeleteDiscussion(discussion: Discussion) {
+  private async _handleDeleteDiscussion(e: RequestDeleteDiscussionEvent) {
+    const discussion = e.discussion;
     if (!confirm(`Are you sure you want to delete "${discussion.theme}"?`)) {
       return;
     }
@@ -61,19 +65,19 @@ export class LearningDiscussionListWidget extends LitElement {
         <div class="header">
           <learning-discussion-search-bar
             .value=${this._searchQuery}
-            .onInput=${(q: string) => this._handleSearch(q)}
+            @search-discussion=${this._handleSearch}
           ></learning-discussion-search-bar>
         </div>
         <div class="add-form">
           <learning-discussion-add-form
-            .onSubmit=${(t: string) => this._handleAddDiscussion(t)}
+            @create-discussion=${this._handleAddDiscussion}
           ></learning-discussion-add-form>
         </div>
         <div class="content">
           <learning-discussion-list
             .discussions=${filteredDiscussions}
-            .onSelect=${(d: Discussion) => this._handleSelect(d)}
-            .onDelete=${(d: Discussion) => this._handleDeleteDiscussion(d)}
+            @select-discussion=${this._handleSelect}
+            @request-delete-discussion=${this._handleDeleteDiscussion}
           ></learning-discussion-list>
         </div>
       </div>

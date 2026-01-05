@@ -2,7 +2,11 @@ import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
-import { CommentCreatedEvent } from "../event/comment";
+import {
+  CommentCreatedEvent,
+  CommentSaveEvent,
+  CommentTypeSelectEvent,
+} from "../event/comment";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
 import { commentRepository } from "../repository/comment-repository";
@@ -49,14 +53,14 @@ export class LearningCommentCreateWidget extends LitElement {
     this.isCreating = true;
   }
 
-  private async handleSave(detail: { commentType: string; content: string }) {
+  private async handleSave(e: CommentSaveEvent) {
     if (!this.discussionId) return;
 
     try {
       const data = await commentRepository.create(this.discussionId, {
         parentCommentId: this.parentCommentId || null,
-        commentType: detail.commentType,
-        content: detail.content,
+        commentType: e.commentType,
+        content: e.content,
       });
 
       showToast(this, "Comment created.", "success", 2000);
@@ -82,9 +86,8 @@ export class LearningCommentCreateWidget extends LitElement {
               <learning-comment-edit-form
                 .availableTypes=${this.availableTypes}
                 .initialType=${this.selectedType}
-                .onSave=${(detail: { commentType: string; content: string }) =>
-                  this.handleSave(detail)}
-                .onCancel=${() => this.handleCancel()}
+                @comment-save=${(e: CommentSaveEvent) => this.handleSave(e)}
+                @comment-cancel=${() => this.handleCancel()}
               ></learning-comment-edit-form>
             `
           : html`
@@ -95,7 +98,8 @@ export class LearningCommentCreateWidget extends LitElement {
             `}
         <learning-comment-type-popup
           .types=${this.availableTypes}
-          .onSelect=${(type: string) => this.handleTypeSelect(type)}
+          @comment-type-select=${(e: CommentTypeSelectEvent) =>
+            this.handleTypeSelect(e.commentType)}
         ></learning-comment-type-popup>
       </div>
     `;

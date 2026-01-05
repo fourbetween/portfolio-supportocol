@@ -2,7 +2,10 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
-import { DiscussionUpdatedEvent } from "../event/discussion";
+import {
+  DiscussionUpdatedEvent,
+  RequestUpdateDiscussionEvent,
+} from "../event/discussion";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
@@ -19,10 +22,13 @@ export class LearningDiscussionDetailWidget extends LitElement {
   @state()
   private isEditing = false;
 
-  private async handleSave(theme: string) {
+  private async handleSave(e: RequestUpdateDiscussionEvent) {
     if (!this.discussion) return;
     try {
-      const data = await discussionRepository.update(this.discussion.id, theme);
+      const data = await discussionRepository.update(
+        this.discussion.id,
+        e.theme
+      );
       this.discussion = data;
       this.isEditing = false;
       showToast(this, "Theme updated.", "success", 2000);
@@ -40,9 +46,9 @@ export class LearningDiscussionDetailWidget extends LitElement {
       <learning-discussion-detail
         .discussion=${this.discussion}
         .isEditing=${this.isEditing}
-        .onEdit=${() => (this.isEditing = true)}
-        .onSave=${(theme: string) => this.handleSave(theme)}
-        .onCancel=${() => (this.isEditing = false)}
+        @request-edit-discussion=${() => (this.isEditing = true)}
+        @request-update-discussion=${this.handleSave}
+        @cancel-edit-discussion=${() => (this.isEditing = false)}
       ></learning-discussion-detail>
     `;
   }

@@ -9,6 +9,8 @@ import {
   CommentDeletedEvent,
   CommentGeneratedEvent,
   CommentUpdatedEvent,
+  RequestCommentReplyEvent,
+  RequestCommentUpdateEvent,
   SelectCommentEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
@@ -67,8 +69,8 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private handleCommentClick(comment: Comment) {
-    const id = this.selectedCommentId === comment.id ? undefined : comment.id;
+  private handleCommentClick(commentId?: string) {
+    const id = this.selectedCommentId === commentId ? undefined : commentId;
     this.dispatchEvent(new SelectCommentEvent(id));
   }
 
@@ -204,19 +206,25 @@ export class LearningCommentExplorerWidget extends LitElement {
                   .path=${path}
                   .childCounts=${this.childCounts}
                   .availableTypes=${this.availableTypes}
-                  .onCommentClick=${(c: Comment) => this.handleCommentClick(c)}
-                  .onCommentUpdate=${(
-                    id: string,
-                    detail: { commentType: string; content: string }
-                  ) => this.handleCommentUpdate(id, detail)}
-                  .onCommentDelete=${(id: string) =>
-                    this.handleCommentDelete(id)}
-                  .onCommentGenerate=${(id: string, type: string) =>
-                    this.handleCommentGenerate(id, type)}
-                  .onCommentReply=${(
-                    id: string,
-                    detail: { commentType: string; content: string }
-                  ) => this.handleCommentReply(id, detail)}
+                  @select-comment=${(e: SelectCommentEvent) =>
+                    this.handleCommentClick(e.commentId)}
+                  @request-comment-update=${(e: RequestCommentUpdateEvent) =>
+                    this.handleCommentUpdate(e.commentId, {
+                      commentType: e.commentType,
+                      content: e.content,
+                    })}
+                  @comment-deleted=${(e: CommentDeletedEvent) =>
+                    this.handleCommentDelete(e.commentId)}
+                  @comment-generated=${(e: CommentGeneratedEvent) =>
+                    this.handleCommentGenerate(
+                      e.parentCommentId!,
+                      e.commentType!
+                    )}
+                  @request-comment-reply=${(e: RequestCommentReplyEvent) =>
+                    this.handleCommentReply(e.parentCommentId, {
+                      commentType: e.commentType,
+                      content: e.content,
+                    })}
                 ></learning-comment-context>
               </div>
             `
@@ -236,18 +244,22 @@ export class LearningCommentExplorerWidget extends LitElement {
           </div>
           <learning-comment-tree
             .comments=${descendants}
-            .onCommentClick=${(c: Comment) => this.handleCommentClick(c)}
-            .onCommentUpdate=${(
-              id: string,
-              detail: { commentType: string; content: string }
-            ) => this.handleCommentUpdate(id, detail)}
-            .onCommentDelete=${(id: string) => this.handleCommentDelete(id)}
-            .onCommentGenerate=${(id: string, type: string) =>
-              this.handleCommentGenerate(id, type)}
-            .onCommentReply=${(
-              id: string,
-              detail: { commentType: string; content: string }
-            ) => this.handleCommentReply(id, detail)}
+            @select-comment=${(e: SelectCommentEvent) =>
+              this.handleCommentClick(e.commentId)}
+            @request-comment-update=${(e: RequestCommentUpdateEvent) =>
+              this.handleCommentUpdate(e.commentId, {
+                commentType: e.commentType,
+                content: e.content,
+              })}
+            @comment-deleted=${(e: CommentDeletedEvent) =>
+              this.handleCommentDelete(e.commentId)}
+            @comment-generated=${(e: CommentGeneratedEvent) =>
+              this.handleCommentGenerate(e.parentCommentId!, e.commentType!)}
+            @request-comment-reply=${(e: RequestCommentReplyEvent) =>
+              this.handleCommentReply(e.parentCommentId, {
+                commentType: e.commentType,
+                content: e.content,
+              })}
           ></learning-comment-tree>
         </div>
       </div>
