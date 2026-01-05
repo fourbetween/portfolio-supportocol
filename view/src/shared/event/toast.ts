@@ -1,6 +1,6 @@
 import type { ToastType } from "../ui/toast/toast";
 
-export const SHOW_TOAST_EVENT_NAME = "show-toast";
+const SHOW_TOAST_EVENT_NAME = "show-toast";
 
 export class ShowToastEvent extends Event {
   public readonly message: string;

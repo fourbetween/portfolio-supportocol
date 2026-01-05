@@ -10,21 +10,12 @@ import "../component/comment-proposed-widget";
 import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
 import {
-  COMMENT_CREATED_EVENT_NAME,
-  COMMENT_DELETED_EVENT_NAME,
-  COMMENT_GENERATED_EVENT_NAME,
-  COMMENT_UPDATED_EVENT_NAME,
-  SELECT_COMMENT_EVENT_NAME,
   type CommentCreatedEvent,
   type CommentDeletedEvent,
   type CommentUpdatedEvent,
   type SelectCommentEvent,
 } from "../event/comment";
 import {
-  DISCUSSION_CREATED_EVENT_NAME,
-  DISCUSSION_DELETED_EVENT_NAME,
-  DISCUSSION_UPDATED_EVENT_NAME,
-  SELECT_DISCUSSION_EVENT_NAME,
   type DiscussionDeletedEvent,
   type DiscussionUpdatedEvent,
   type SelectDiscussionEvent,
@@ -202,9 +193,8 @@ export class LearningDashboardPage extends LitElement {
           <learning-discussion-list-widget
             .discussions=${this._discussions}
             @select-discussion=${this._handleSelectDiscussion}
-            @${SELECT_DISCUSSION_EVENT_NAME}=${this._handleSelectDiscussion}
-            @${DISCUSSION_CREATED_EVENT_NAME}=${this._handleDiscussionUpdated}
-            @${DISCUSSION_DELETED_EVENT_NAME}=${this._handleDiscussionDeleted}
+            @discussion-created=${this._handleDiscussionUpdated}
+            @discussion-deleted=${this._handleDiscussionDeleted}
           ></learning-discussion-list-widget>
         </aside>
         <main class="main">
@@ -212,7 +202,7 @@ export class LearningDashboardPage extends LitElement {
             <learning-discussion-detail-widget
               .discussion=${selectedDiscussion}
               .comments=${activeComments}
-              @${DISCUSSION_UPDATED_EVENT_NAME}=${this._handleDiscussionUpdated}
+              @discussion-updated=${this._handleDiscussionUpdated}
             ></learning-discussion-detail-widget>
           </div>
           <div class="comment-frame">
@@ -225,11 +215,11 @@ export class LearningDashboardPage extends LitElement {
               .discussionId=${this._selectedDiscussionId}
               .comments=${activeComments}
               .selectedCommentId=${this._selectedCommentId}
-              @${COMMENT_CREATED_EVENT_NAME}=${this._handleCommentCreated}
-              @${COMMENT_UPDATED_EVENT_NAME}=${this._handleCommentUpdated}
-              @${COMMENT_DELETED_EVENT_NAME}=${this._handleCommentDeleted}
-              @${COMMENT_GENERATED_EVENT_NAME}=${this._handleCommentGenerated}
-              @${SELECT_COMMENT_EVENT_NAME}=${this._handleSelectComment}
+              @comment-created=${this._handleCommentCreated}
+              @comment-updated=${this._handleCommentUpdated}
+              @comment-deleted=${this._handleCommentDeleted}
+              @comment-generated=${this._handleCommentGenerated}
+              @select-comment=${this._handleSelectComment}
             ></learning-comment-explorer-widget>
           </div>
         </main>
@@ -239,9 +229,9 @@ export class LearningDashboardPage extends LitElement {
                 <learning-comment-proposed-widget
                   .discussionId=${this._selectedDiscussionId}
                   .comments=${this._comments}
-                  @${COMMENT_UPDATED_EVENT_NAME}=${this._handleCommentUpdated}
-                  @${COMMENT_DELETED_EVENT_NAME}=${this._handleCommentDeleted}
-                  @${SELECT_COMMENT_EVENT_NAME}=${this._handleSelectComment}
+                  @comment-updated=${this._handleCommentUpdated}
+                  @comment-deleted=${this._handleCommentDeleted}
+                  @select-comment=${this._handleSelectComment}
                 ></learning-comment-proposed-widget>
               </aside>
             `

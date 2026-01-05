@@ -1,4 +1,4 @@
-export const OPEN_AUTH_POPUP_EVENT_NAME = "open-auth-popup";
+const OPEN_AUTH_POPUP_EVENT_NAME = "open-auth-popup";
 
 export class OpenAuthPopupEvent extends Event {
   constructor() {

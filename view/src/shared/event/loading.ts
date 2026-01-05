@@ -1,4 +1,4 @@
-export const LOADING_EVENT_NAME = "loading";
+const LOADING_EVENT_NAME = "loading";
 
 export class LoadingEvent extends Event {
   public readonly show: boolean;

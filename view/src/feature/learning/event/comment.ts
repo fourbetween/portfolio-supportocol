@@ -1,10 +1,10 @@
 import type { Comment } from "../model/comment";
 
-export const SELECT_COMMENT_EVENT_NAME = "select-comment";
-export const COMMENT_CREATED_EVENT_NAME = "comment-created";
-export const COMMENT_UPDATED_EVENT_NAME = "comment-updated";
-export const COMMENT_DELETED_EVENT_NAME = "comment-deleted";
-export const COMMENT_GENERATED_EVENT_NAME = "comment-generated";
+const SELECT_COMMENT_EVENT_NAME = "select-comment";
+const COMMENT_CREATED_EVENT_NAME = "comment-created";
+const COMMENT_UPDATED_EVENT_NAME = "comment-updated";
+const COMMENT_DELETED_EVENT_NAME = "comment-deleted";
+const COMMENT_GENERATED_EVENT_NAME = "comment-generated";
 
 export class SelectCommentEvent extends Event {
   public readonly commentId?: string;

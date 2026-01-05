@@ -1,9 +1,9 @@
 import type { Discussion } from "../model/discussion";
 
-export const SELECT_DISCUSSION_EVENT_NAME = "select-discussion";
-export const DISCUSSION_CREATED_EVENT_NAME = "discussion-created";
-export const DISCUSSION_UPDATED_EVENT_NAME = "discussion-updated";
-export const DISCUSSION_DELETED_EVENT_NAME = "discussion-deleted";
+const SELECT_DISCUSSION_EVENT_NAME = "select-discussion";
+const DISCUSSION_CREATED_EVENT_NAME = "discussion-created";
+const DISCUSSION_UPDATED_EVENT_NAME = "discussion-updated";
+const DISCUSSION_DELETED_EVENT_NAME = "discussion-deleted";
 
 export class SelectDiscussionEvent extends Event {
   public readonly discussion: Discussion;

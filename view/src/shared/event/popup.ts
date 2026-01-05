@@ -1,4 +1,4 @@
-export const POPUP_CLOSE_EVENT_NAME = "close";
+const POPUP_CLOSE_EVENT_NAME = "close";
 
 export class PopupCloseEvent extends Event {
   constructor() {
