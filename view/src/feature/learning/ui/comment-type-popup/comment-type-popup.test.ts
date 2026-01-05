@@ -1,5 +1,5 @@
 import { html, render } from "lit";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import "./comment-type-popup";
 import type { LearningCommentTypePopup } from "./comment-type-popup";
@@ -36,15 +36,18 @@ describe("learning-comment-type-popup", () => {
     await expect.element(page.getByText("Agreement")).toBeVisible();
   });
 
-  it("種類がクリックされたときに onSelect が呼ばれること", async () => {
+  it("種類がクリックされたときに select イベントが発火されること", async () => {
     const types = ["Question"];
-    const onSelect = vi.fn();
+    let selectedType = "";
+    const onSelect = (e: any) => {
+      selectedType = e.commentType;
+    };
     render(
       html`
         <learning-comment-type-popup
           id="popup"
           .types=${types}
-          .onSelect=${onSelect}
+          @comment-type-select=${onSelect}
         ></learning-comment-type-popup>
       `,
       container
@@ -55,16 +58,19 @@ describe("learning-comment-type-popup", () => {
 
     await page.getByRole("button", { name: "Question" }).click();
 
-    expect(onSelect).toHaveBeenCalledWith("Question");
+    expect(selectedType).toBe("Question");
   });
 
-  it("'Other...'がクリックされたときに入力フォームが表示され、入力値で onSelect が呼ばれること", async () => {
-    const onSelect = vi.fn();
+  it("'Other...'がクリックされたときに入力フォームが表示され、入力値で select イベントが発火されること", async () => {
+    let selectedType = "";
+    const onSelect = (e: any) => {
+      selectedType = e.commentType;
+    };
     render(
       html`
         <learning-comment-type-popup
           id="popup"
-          .onSelect=${onSelect}
+          @comment-type-select=${onSelect}
         ></learning-comment-type-popup>
       `,
       container
@@ -81,6 +87,6 @@ describe("learning-comment-type-popup", () => {
     await input.fill("Custom Type");
     await page.getByRole("button", { name: "OK" }).click();
 
-    expect(onSelect).toHaveBeenCalledWith("Custom Type");
+    expect(selectedType).toBe("Custom Type");
   });
 });

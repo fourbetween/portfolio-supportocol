@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
+import { RequestEditDiscussionEvent } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-edit-form/discussion-edit-form";
 
@@ -14,38 +15,41 @@ export class LearningDiscussionDetail extends LitElement {
   @property({ type: Boolean })
   isEditing = false;
 
-  @property({ attribute: false })
-  onEdit?: () => void;
-
-  @property({ attribute: false })
-  onSave?: (theme: string) => void;
-
-  @property({ attribute: false })
-  onCancel?: () => void;
-
   render() {
+    if (!this.discussion && !this.isEditing) {
+      return html``;
+    }
+
     return html`
       <div class="container">
         <div class="header">
-          ${this.isEditing
-            ? html`
-                <learning-discussion-edit-form
-                  .theme=${this.discussion?.theme ?? ""}
-                  .onSave=${(theme: string) => this.onSave?.(theme)}
-                  .onCancel=${() => this.onCancel?.()}
-                ></learning-discussion-edit-form>
-              `
-            : html`
-                <div class="display">
-                  <h1 class="theme">${this.discussion?.theme}</h1>
-                  <button class="btn" @click=${() => this.onEdit?.()}>
-                    <span class="material-symbols-outlined">edit</span>
-                  </button>
-                </div>
-              `}
+          ${this.isEditing ? this._renderEditForm() : this._renderDisplay()}
         </div>
       </div>
     `;
+  }
+
+  private _renderEditForm() {
+    return html`
+      <learning-discussion-edit-form
+        .theme=${this.discussion?.theme ?? ""}
+      ></learning-discussion-edit-form>
+    `;
+  }
+
+  private _renderDisplay() {
+    return html`
+      <div class="display">
+        <h1 class="theme">${this.discussion?.theme}</h1>
+        <button class="btn" @click=${this._handleEditClick}>
+          <span class="material-symbols-outlined">edit</span>
+        </button>
+      </div>
+    `;
+  }
+
+  private _handleEditClick() {
+    this.dispatchEvent(new RequestEditDiscussionEvent());
   }
 
   static styles = [
@@ -53,10 +57,6 @@ export class LearningDiscussionDetail extends LitElement {
     buttonStyle,
     iconStyle,
     css`
-      learning-discussion-edit-form {
-        width: 100%;
-      }
-
       .container {
         padding: 8px 0;
         background-color: var(--color-canvas-default);
@@ -65,14 +65,17 @@ export class LearningDiscussionDetail extends LitElement {
       .header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+      }
+
+      learning-discussion-edit-form,
+      .display {
+        width: 100%;
       }
 
       .display {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 100%;
       }
 
       .theme {

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
+import type { CreateDiscussionEvent } from "../../event/discussion";
 import "./discussion-add-form";
 
 const meta: Meta = {
@@ -14,7 +15,8 @@ type Story = StoryObj;
 export const Default: Story = {
   render: () => html`
     <learning-discussion-add-form
-      .onSubmit=${(t: string) => console.log("submit", t)}
+      @create-discussion=${(e: CreateDiscussionEvent) =>
+        console.log("submit", e.theme)}
     ></learning-discussion-add-form>
   `,
 };

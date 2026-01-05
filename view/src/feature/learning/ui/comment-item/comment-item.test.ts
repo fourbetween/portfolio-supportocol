@@ -1,5 +1,5 @@
 import { html, render } from "lit";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import type { Comment } from "../../model/comment";
 import "./comment-item";
@@ -62,14 +62,17 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
       .not.toBeInTheDocument();
   });
 
-  it("削除ボタンをクリックすると onCommentDelete が呼ばれる", async () => {
-    const onCommentDelete = vi.fn();
+  it("削除ボタンをクリックすると comment-deleted イベントが発火される", async () => {
+    let deletedCommentId = "";
+    const handleDelete = (e: any) => {
+      deletedCommentId = e.commentId;
+    };
     render(
       html`
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          .onCommentDelete=${onCommentDelete}
+          @comment-deleted=${handleDelete}
         ></learning-comment-item>
       `,
       container
@@ -78,17 +81,22 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     const deleteButton = page.getByRole("button", { name: "delete" });
     await deleteButton.click();
 
-    expect(onCommentDelete).toHaveBeenCalledWith("1");
+    expect(deletedCommentId).toBe("1");
   });
 
-  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると onCommentGenerate が呼ばれる", async () => {
-    const onCommentGenerate = vi.fn();
+  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generated イベントが発火される", async () => {
+    let generatedParentId = "";
+    let generatedType = "";
+    const handleGenerate = (e: any) => {
+      generatedParentId = e.parentCommentId;
+      generatedType = e.commentType;
+    };
     render(
       html`
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          .onCommentGenerate=${onCommentGenerate}
+          @comment-generated=${handleGenerate}
         ></learning-comment-item>
       `,
       container
@@ -102,17 +110,25 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     await expect.element(typeButton).toBeVisible();
     await typeButton.click();
 
-    expect(onCommentGenerate).toHaveBeenCalledWith("1", "question");
+    expect(generatedParentId).toBe("1");
+    expect(generatedType).toBe("question");
   });
 
-  it("返信ボタンをクリックし、タイプを選択すると返信フォームが表示され、保存すると onCommentReply が呼ばれる", async () => {
-    const onCommentReply = vi.fn();
+  it("返信ボタンをクリックし、タイプを選択すると返信フォームが表示され、保存すると request-comment-reply イベントが発火される", async () => {
+    let replyParentId = "";
+    let replyType = "";
+    let replyContent = "";
+    const handleReply = (e: any) => {
+      replyParentId = e.parentCommentId;
+      replyType = e.commentType;
+      replyContent = e.content;
+    };
     render(
       html`
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          .onCommentReply=${onCommentReply}
+          @request-comment-reply=${handleReply}
         ></learning-comment-item>
       `,
       container
@@ -133,10 +149,9 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     const saveButton = page.getByRole("button", { name: "Save" });
     await saveButton.click();
 
-    expect(onCommentReply).toHaveBeenCalledWith("1", {
-      commentType: "question",
-      content: "This is a reply",
-    });
+    expect(replyParentId).toBe("1");
+    expect(replyType).toBe("question");
+    expect(replyContent).toBe("This is a reply");
   });
 
   it("アクションボタンが正しい順序（reply, generate, edit, delete）で並んでいる", async () => {

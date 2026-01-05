@@ -11,8 +11,8 @@ const meta: Meta = {
         .initialType=${args.commentType}
         .initialContent=${args.content}
         .availableTypes=${args.availableTypes}
-        .onSave=${(detail: any) => console.log("save", detail)}
-        .onCancel=${() => console.log("cancel")}
+        @comment-save=${(e: any) => console.log("save", e.detail)}
+        @comment-cancel=${() => console.log("cancel")}
       ></learning-comment-edit-form>
     `,
 };
@@ -23,7 +23,8 @@ type Story = StoryObj;
 
 export const Default: Story = {
   args: {
-    commentType: "質問", status: "active" as const,
+    commentType: "質問",
+    status: "active" as const,
     content: "",
     availableTypes: ["質問", "回答", "アイデア", "賛成", "反対"],
   },
@@ -31,7 +32,8 @@ export const Default: Story = {
 
 export const WithContent: Story = {
   args: {
-    commentType: "回答", status: "active" as const,
+    commentType: "回答",
+    status: "active" as const,
     content: "これは回答です。",
     availableTypes: ["質問", "回答", "アイデア", "賛成", "反対"],
   },

@@ -55,16 +55,16 @@ describe("learning-comment-edit-form", async () => {
     await expect.element(page.getByTitle("Cancel")).toBeVisible();
   });
 
-  it("calls onSave callback with content", async () => {
+  it("calls save event with content", async () => {
     let savedContent = "";
-    const onSave = (detail: { commentType: string; content: string }) => {
-      savedContent = detail.content;
+    const onSave = (e: any) => {
+      savedContent = e.content;
     };
 
     render(
       html`
         <learning-comment-edit-form
-          .onSave=${onSave}
+          @comment-save=${onSave}
         ></learning-comment-edit-form>
       `,
       container
@@ -79,7 +79,7 @@ describe("learning-comment-edit-form", async () => {
     expect(savedContent).toBe("新しいコメント");
   });
 
-  it("calls onCancel callback", async () => {
+  it("calls cancel event", async () => {
     let cancelled = false;
     const onCancel = () => {
       cancelled = true;
@@ -88,7 +88,7 @@ describe("learning-comment-edit-form", async () => {
     render(
       html`
         <learning-comment-edit-form
-          .onCancel=${onCancel}
+          @comment-cancel=${onCancel}
         ></learning-comment-edit-form>
       `,
       container

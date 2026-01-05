@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { join } from "lit/directives/join.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { iconStyle } from "../../../../shared/style/icon";
+import { SelectCommentEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-item/comment-item";
@@ -19,71 +20,50 @@ export class LearningCommentContext extends LitElement {
   @property({ type: Array })
   availableTypes: string[] = [];
 
-  @property({ attribute: false })
-  onCommentClick?: (comment: Comment) => void;
-
-  @property({ attribute: false })
-  onCommentUpdate?: (
-    commentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
-  @property({ attribute: false })
-  onCommentDelete?: (commentId: string) => void;
-
-  @property({ attribute: false })
-  onCommentGenerate?: (commentId: string, commentType: string) => void;
-
-  @property({ attribute: false })
-  onCommentReply?: (
-    parentCommentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
   private handleCommentClick(comment: Comment) {
-    this.onCommentClick?.(comment);
+    this.dispatchEvent(new SelectCommentEvent(comment.id));
+  }
+
+  private renderItem(comment: Comment, isLast: boolean) {
+    const childCount = this.childCounts.get(comment.id) || 0;
+    return html`
+      <learning-comment-type-badge
+        .type=${comment.commentType}
+      ></learning-comment-type-badge>
+      ${isLast
+        ? html`
+            <learning-comment-item
+              .comment=${comment}
+              .activeChildrenCount=${childCount}
+              .availableTypes=${this.availableTypes}
+            ></learning-comment-item>
+          `
+        : html`
+            <learning-comment-card
+              .comment=${comment}
+              .activeChildrenCount=${childCount}
+              @click=${() => this.handleCommentClick(comment)}
+            ></learning-comment-card>
+          `}
+    `;
+  }
+
+  private renderSeparator() {
+    return html`
+      <div class="separator">
+        <span class="material-symbols-outlined">north</span>
+      </div>
+    `;
   }
 
   render() {
     return html`
       <div class="container">
         ${join(
-          this.path.map((comment, index) => {
-            const isLast = index === this.path.length - 1;
-            const childCount = this.childCounts.get(comment.id) || 0;
-            if (isLast) {
-              return html`
-                <learning-comment-type-badge
-                  .type=${comment.commentType}
-                ></learning-comment-type-badge>
-                <learning-comment-item
-                  .comment=${comment}
-                  .activeChildrenCount=${childCount}
-                  .availableTypes=${this.availableTypes}
-                  .onCommentClick=${this.onCommentClick}
-                  .onCommentUpdate=${this.onCommentUpdate}
-                  .onCommentDelete=${this.onCommentDelete}
-                  .onCommentGenerate=${this.onCommentGenerate}
-                  .onCommentReply=${this.onCommentReply}
-                ></learning-comment-item>
-              `;
-            }
-            return html`
-              <learning-comment-type-badge
-                .type=${comment.commentType}
-              ></learning-comment-type-badge>
-              <learning-comment-card
-                .comment=${comment}
-                .activeChildrenCount=${childCount}
-                @click=${() => this.handleCommentClick(comment)}
-              ></learning-comment-card>
-            `;
-          }),
-          html`
-            <div class="separator">
-              <span class="material-symbols-outlined">north</span>
-            </div>
-          `
+          this.path.map((comment, index) =>
+            this.renderItem(comment, index === this.path.length - 1)
+          ),
+          this.renderSeparator()
         )}
       </div>
     `;

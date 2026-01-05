@@ -1,5 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
+import type {
+  AcceptProposedCommentEvent,
+  RejectProposedCommentEvent,
+  SelectProposedCommentEvent,
+} from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "./proposed-comment-list";
 
@@ -21,8 +26,8 @@ const comments: Comment[] = [
       "これは提案されたコメントの例です。AIによって生成された可能性があります。",
     commentType: "idea",
     status: "proposed",
-  createdAt: "2026-01-04T00:00:00Z",
-      },
+    createdAt: "2026-01-04T00:00:00Z",
+  },
   {
     id: "2",
     discussionId: "d1",
@@ -30,8 +35,8 @@ const comments: Comment[] = [
     content: "別の視点からの提案です。議論を深めるための質問が含まれています。",
     commentType: "question",
     status: "proposed",
-  createdAt: "2026-01-04T00:00:00Z",
-      },
+    createdAt: "2026-01-04T00:00:00Z",
+  },
 ];
 
 export const Default: Story = {
@@ -41,9 +46,12 @@ export const Default: Story = {
   render: (args) => html`
     <learning-proposed-comment-list
       .comments=${args.comments}
-      .onAccept=${(c: Comment) => console.log("Accepted", c)}
-      .onReject=${(c: Comment) => console.log("Rejected", c)}
-      .onClick=${(c: Comment) => console.log("Clicked", c)}
+      @accept-proposed-comment=${(e: AcceptProposedCommentEvent) =>
+        console.log("Accepted", e.comment)}
+      @reject-proposed-comment=${(e: RejectProposedCommentEvent) =>
+        console.log("Rejected", e.comment)}
+      @select-proposed-comment=${(e: SelectProposedCommentEvent) =>
+        console.log("Clicked", e.comment)}
     ></learning-proposed-comment-list>
   `,
 };

@@ -3,9 +3,11 @@ import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import {
+  CreateDiscussionEvent,
   DiscussionCreatedEvent,
   DiscussionDeletedEvent,
-  SelectDiscussionEvent,
+  RequestDeleteDiscussionEvent,
+  SearchDiscussionEvent,
 } from "../event/discussion";
 import type { Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
@@ -21,59 +23,57 @@ export class LearningDiscussionListWidget extends LitElement {
   @state()
   private _searchQuery = "";
 
-  private async _handleAddDiscussion(theme: string) {
+  private async _handleAddDiscussion(e: CreateDiscussionEvent) {
     try {
-      const data = await discussionRepository.create(theme);
+      const data = await discussionRepository.create(e.theme);
       this.dispatchEvent(new DiscussionCreatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private _handleSearch(query: string) {
-    this._searchQuery = query;
+  private _handleSearch(e: SearchDiscussionEvent) {
+    this._searchQuery = e.query;
   }
 
-  private _handleSelect(discussion: Discussion) {
-    this.dispatchEvent(new SelectDiscussionEvent(discussion));
-  }
-
-  private async _handleDeleteDiscussion(discussion: Discussion) {
+  private async _handleDeleteDiscussion(e: RequestDeleteDiscussionEvent) {
+    const { discussion } = e;
     if (!confirm(`Are you sure you want to delete "${discussion.theme}"?`)) {
       return;
     }
     try {
       await discussionRepository.delete(discussion.id);
       this.dispatchEvent(new DiscussionDeletedEvent(discussion));
-      showToast(this, "Deleted.", "success", 2000);
+      showToast(this, "Succeeded.", "success", 2000);
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  render() {
-    const filteredDiscussions = this.discussions.filter((d) =>
+  private get _filteredDiscussions() {
+    return this.discussions.filter((d) =>
       d.theme.toLowerCase().includes(this._searchQuery.toLowerCase())
     );
+  }
 
+  render() {
     return html`
       <div class="widget">
         <div class="header">
           <learning-discussion-search-bar
             .value=${this._searchQuery}
-            .onInput=${(q: string) => this._handleSearch(q)}
+            @search-discussion=${this._handleSearch}
           ></learning-discussion-search-bar>
         </div>
         <div class="add-form">
           <learning-discussion-add-form
-            .onSubmit=${(t: string) => this._handleAddDiscussion(t)}
+            @create-discussion=${this._handleAddDiscussion}
           ></learning-discussion-add-form>
         </div>
         <div class="content">
           <learning-discussion-list
-            .discussions=${filteredDiscussions}
-            .onSelect=${(d: Discussion) => this._handleSelect(d)}
-            .onDelete=${(d: Discussion) => this._handleDeleteDiscussion(d)}
+            .discussions=${this._filteredDiscussions}
+            @request-delete-discussion=${this._handleDeleteDiscussion}
           ></learning-discussion-list>
         </div>
       </div>

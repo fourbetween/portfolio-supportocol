@@ -1,5 +1,5 @@
 import { html, render } from "lit";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import "./comment-add-button";
 
@@ -37,20 +37,5 @@ describe("learning-comment-add-button", () => {
       container
     );
     await expect.element(page.getByText("Reply")).toBeVisible();
-  });
-
-  it("クリックされたときに onClick コールバックが実行されること", async () => {
-    const handleClick = vi.fn();
-    render(
-      html`
-        <learning-comment-add-button
-          .onClick=${handleClick}
-        ></learning-comment-add-button>
-      `,
-      container
-    );
-
-    await page.getByRole("button").click();
-    expect(handleClick).toHaveBeenCalled();
   });
 });

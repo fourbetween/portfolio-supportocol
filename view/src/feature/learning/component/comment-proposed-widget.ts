@@ -1,12 +1,15 @@
-import { LitElement, css, html, type PropertyValues } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { LitElement, css, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { titleStyle } from "../../../shared/style/title";
 import {
+  AcceptProposedCommentEvent,
   CommentDeletedEvent,
   CommentUpdatedEvent,
+  RejectProposedCommentEvent,
   SelectCommentEvent,
+  SelectProposedCommentEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { commentRepository } from "../repository/comment-repository";
@@ -20,18 +23,13 @@ export class LearningCommentProposedWidget extends LitElement {
   @property({ type: Array })
   comments?: Comment[];
 
-  @state()
-  private proposedComments: Comment[] = [];
-
-  willUpdate(changedProperties: PropertyValues<this>) {
-    if (changedProperties.has("comments")) {
-      this.proposedComments =
-        this.comments?.filter((c) => c.status === "proposed") ?? [];
-    }
+  private get proposedComments(): Comment[] {
+    return this.comments?.filter((c) => c.status === "proposed") ?? [];
   }
 
-  private async handleAccept(comment: Comment) {
+  private async handleAccept(e: AcceptProposedCommentEvent) {
     if (!this.discussionId) return;
+    const comment = e.comment;
 
     try {
       const data = await commentRepository.updateStatus(
@@ -47,11 +45,9 @@ export class LearningCommentProposedWidget extends LitElement {
     }
   }
 
-  private async handleReject(comment: Comment) {
+  private async handleReject(e: RejectProposedCommentEvent) {
     if (!this.discussionId) return;
-    if (!confirm("Are you sure you want to delete this proposed comment?"))
-      return;
-
+    const comment = e.comment;
     try {
       await commentRepository.delete(this.discussionId, comment.id);
 
@@ -62,7 +58,8 @@ export class LearningCommentProposedWidget extends LitElement {
     }
   }
 
-  private handleClick(comment: Comment) {
+  private handleSelect(e: SelectProposedCommentEvent) {
+    const comment = e.comment;
     this.dispatchEvent(
       new SelectCommentEvent(comment.parentCommentId || undefined)
     );
@@ -78,9 +75,9 @@ export class LearningCommentProposedWidget extends LitElement {
         <div class="section-title">Proposed Comments</div>
         <learning-proposed-comment-list
           .comments=${this.proposedComments}
-          .onAccept=${(c: Comment) => this.handleAccept(c)}
-          .onReject=${(c: Comment) => this.handleReject(c)}
-          .onClick=${(c: Comment) => this.handleClick(c)}
+          @accept-proposed-comment=${this.handleAccept}
+          @reject-proposed-comment=${this.handleReject}
+          @select-proposed-comment=${this.handleSelect}
         ></learning-proposed-comment-list>
       </section>
     `;

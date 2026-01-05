@@ -3,6 +3,15 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
+import {
+  CommentDeletedEvent,
+  CommentGeneratedEvent,
+  CommentSaveEvent,
+  CommentTypeSelectEvent,
+  RequestCommentReplyEvent,
+  RequestCommentUpdateEvent,
+  SelectCommentEvent,
+} from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-edit-form/comment-edit-form";
@@ -20,32 +29,8 @@ export class LearningCommentItem extends LitElement {
   @property({ type: Array })
   availableTypes: string[] = [];
 
-  @property({ attribute: false })
-  onCommentClick?: (comment: Comment) => void;
-
-  @property({ attribute: false })
-  onCommentUpdate?: (
-    commentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
-  @property({ attribute: false })
-  onCommentDelete?: (commentId: string) => void;
-
-  @property({ attribute: false })
-  onCommentGenerate?: (commentId: string, commentType: string) => void;
-
-  @property({ attribute: false })
-  onCommentReply?: (
-    parentCommentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
   @state()
-  private isEditing = false;
-
-  @state()
-  private isReplying = false;
+  private mode: "view" | "edit" | "reply" | "generate" = "view";
 
   @state()
   private selectedReplyType?: string;
@@ -54,41 +39,67 @@ export class LearningCommentItem extends LitElement {
   private typePopup!: LearningCommentTypePopup;
 
   private handleCommentClick() {
-    if (this.onCommentClick && this.comment) {
-      this.onCommentClick(this.comment);
+    if (this.comment) {
+      this.dispatchEvent(new SelectCommentEvent(this.comment.id));
     }
   }
 
   private handleEditClick(e: Event) {
     e.stopPropagation();
-    this.isEditing = true;
+    this.mode = "edit";
   }
 
-  private async handleReplyClick(e: Event) {
+  private async handleOpenTypePopup(e: Event, mode: "reply" | "generate") {
     e.stopPropagation();
-    this.isReplying = true;
-    await this.updateComplete;
-    this.typePopup?.open();
-  }
-
-  private async handleGenerateClick(e: Event) {
-    e.stopPropagation();
-    this.isReplying = false;
+    this.mode = mode;
     await this.updateComplete;
     this.typePopup?.open();
   }
 
   private handleDeleteClick(e: Event) {
     e.stopPropagation();
-    if (this.onCommentDelete && this.comment) {
-      this.onCommentDelete(this.comment.id);
+    if (this.comment) {
+      this.dispatchEvent(new CommentDeletedEvent(this.comment.id));
     }
+  }
+
+  private handleTypeSelected(e: CommentTypeSelectEvent) {
+    const commentType = e.commentType;
+    if (this.mode === "reply") {
+      this.selectedReplyType = commentType;
+    } else if (this.mode === "generate") {
+      if (this.comment) {
+        this.dispatchEvent(
+          new CommentGeneratedEvent(this.comment.id, commentType)
+        );
+      }
+      this.mode = "view";
+    }
+  }
+
+  private handleUpdate(e: CommentSaveEvent) {
+    if (this.comment) {
+      this.dispatchEvent(
+        new RequestCommentUpdateEvent(this.comment.id, e.commentType, e.content)
+      );
+    }
+    this.mode = "view";
+  }
+
+  private handleReply(e: CommentSaveEvent) {
+    if (this.comment) {
+      this.dispatchEvent(
+        new RequestCommentReplyEvent(this.comment.id, e.commentType, e.content)
+      );
+    }
+    this.mode = "view";
+    this.selectedReplyType = undefined;
   }
 
   render() {
     if (!this.comment) return html``;
 
-    if (this.isEditing) {
+    if (this.mode === "edit") {
       return this.renderEditForm();
     }
 
@@ -106,51 +117,59 @@ export class LearningCommentItem extends LitElement {
         @click=${this.handleCommentClick}
         style="cursor: pointer;"
       ></learning-comment-card>
+      ${this.renderIconButton("reply", "reply", (e) =>
+        this.handleOpenTypePopup(e, "reply")
+      )}
+      ${this.renderIconButton(
+        "psychology",
+        "generate",
+        (e) => this.handleOpenTypePopup(e, "generate"),
+        "primary generate-button"
+      )}
+      ${this.renderIconButton(
+        "edit",
+        "edit",
+        this.handleEditClick,
+        "edit-button"
+      )}
+      ${this.renderIconButton(
+        "delete",
+        "delete",
+        this.handleDeleteClick,
+        "danger delete-button"
+      )}
+    `;
+  }
+
+  private renderIconButton(
+    icon: string,
+    label: string,
+    handler: (e: Event) => void,
+    extraClass = ""
+  ) {
+    const className = extraClass.includes("-button")
+      ? extraClass
+      : `${label}-button ${extraClass}`;
+    return html`
       <button
-        class="btn-hover reply-button material-symbols-outlined"
-        @click=${this.handleReplyClick}
-        aria-label="reply"
+        class="btn-hover ${className} material-symbols-outlined"
+        @click=${handler}
+        aria-label=${label}
       >
-        reply
-      </button>
-      <button
-        class="btn-hover primary generate-button material-symbols-outlined"
-        @click=${this.handleGenerateClick}
-        aria-label="generate"
-      >
-        psychology
-      </button>
-      <button
-        class="btn-hover edit-button material-symbols-outlined"
-        @click=${this.handleEditClick}
-        aria-label="edit"
-      >
-        edit
-      </button>
-      <button
-        class="btn-hover danger delete-button material-symbols-outlined"
-        @click=${this.handleDeleteClick}
-        aria-label="delete"
-      >
-        delete
+        ${icon}
       </button>
     `;
   }
 
   private renderReplyFormOrPopup() {
-    if (this.isReplying && this.selectedReplyType) {
+    if (this.mode === "reply" && this.selectedReplyType) {
       return html`
         <learning-comment-edit-form
           class="reply-form"
           .initialType=${this.selectedReplyType}
           .availableTypes=${this.availableTypes}
-          .onCancel=${() => (this.isReplying = false)}
-          .onSave=${(detail: { commentType: string; content: string }) => {
-            if (this.onCommentReply) {
-              this.onCommentReply(this.comment!.id, detail);
-            }
-            this.isReplying = false;
-          }}
+          @comment-cancel=${() => (this.mode = "view")}
+          @comment-save=${this.handleReply}
         ></learning-comment-edit-form>
       `;
     }
@@ -158,13 +177,7 @@ export class LearningCommentItem extends LitElement {
     return html`
       <learning-comment-type-popup
         .types=${this.availableTypes}
-        .onSelect=${(type: string) => {
-          if (this.isReplying) {
-            this.selectedReplyType = type;
-          } else if (this.onCommentGenerate && this.comment) {
-            this.onCommentGenerate(this.comment.id, type);
-          }
-        }}
+        @comment-type-select=${this.handleTypeSelected}
       ></learning-comment-type-popup>
     `;
   }
@@ -175,13 +188,8 @@ export class LearningCommentItem extends LitElement {
         .initialType=${this.comment!.commentType}
         .initialContent=${this.comment!.content}
         .availableTypes=${this.availableTypes}
-        .onCancel=${() => (this.isEditing = false)}
-        .onSave=${(detail: { commentType: string; content: string }) => {
-          if (this.onCommentUpdate) {
-            this.onCommentUpdate(this.comment!.id, detail);
-          }
-          this.isEditing = false;
-        }}
+        @comment-cancel=${() => (this.mode = "view")}
+        @comment-save=${this.handleUpdate}
       ></learning-comment-edit-form>
     `;
   }

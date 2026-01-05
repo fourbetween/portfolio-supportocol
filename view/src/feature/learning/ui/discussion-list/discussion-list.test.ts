@@ -1,6 +1,10 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
+import type {
+  RequestDeleteDiscussionEvent,
+  SelectDiscussionEvent,
+} from "../../event/discussion";
 import "./discussion-list";
 
 describe("learning-discussion-list", () => {
@@ -44,14 +48,34 @@ describe("learning-discussion-list", () => {
     await expect.element(page.getByText("No discussions found.")).toBeVisible();
   });
 
-  it("削除ボタンをクリックすると onDelete が呼ばれること", async () => {
+  it("アイテムをクリックすると select-discussion イベントが発火されること", async () => {
+    const onSelect = vi.fn();
+    const discussions = [{ id: "1", theme: "テーマ1" }];
+    render(
+      html`
+        <learning-discussion-list
+          .discussions=${discussions}
+          @select-discussion=${(e: SelectDiscussionEvent) =>
+            onSelect(e.discussion)}
+        ></learning-discussion-list>
+      `,
+      container
+    );
+
+    await page.getByText("テーマ1").click();
+
+    expect(onSelect).toHaveBeenCalledWith(discussions[0]);
+  });
+
+  it("削除ボタンをクリックすると request-delete-discussion イベントが発火されること", async () => {
     const onDelete = vi.fn();
     const discussions = [{ id: "1", theme: "テーマ1" }];
     render(
       html`
         <learning-discussion-list
           .discussions=${discussions}
-          .onDelete=${onDelete}
+          @request-delete-discussion=${(e: RequestDeleteDiscussionEvent) =>
+            onDelete(e.discussion)}
         ></learning-discussion-list>
       `,
       container

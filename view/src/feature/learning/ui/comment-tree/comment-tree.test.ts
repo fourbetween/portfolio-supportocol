@@ -322,7 +322,7 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   });
 
-  it("コメントがクリックされたときにコールバックが実行されること", async () => {
+  it("コメントがクリックされたときに select-comment イベントが発火されること", async () => {
     const comment = {
       id: "1",
       discussionId: "1",
@@ -332,15 +332,15 @@ describe("learning-comment-tree", async () => {
       status: "active" as const,
       createdAt: "2026-01-04T00:00:00Z",
     };
-    let clickedComment: any = null;
-    const onCommentClick = (c: any) => {
-      clickedComment = c;
+    let clickedId = "";
+    const onSelect = (e: any) => {
+      clickedId = e.commentId;
     };
     render(
       html`
         <learning-comment-tree
           .comments=${[comment]}
-          .onCommentClick=${onCommentClick}
+          @select-comment=${onSelect}
         ></learning-comment-tree>
       `,
       container
@@ -348,7 +348,7 @@ describe("learning-comment-tree", async () => {
 
     await page.getByText("root comment").click();
 
-    expect(clickedComment).toEqual(comment);
+    expect(clickedId).toBe("1");
   });
 
   it("深い階層のコメントが表示されること", async () => {
@@ -466,10 +466,10 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   });
 
-  it("削除ボタンをクリックすると onCommentDelete が呼ばれること", async () => {
+  it("削除ボタンをクリックすると comment-deleted イベントが発火されること", async () => {
     let deletedId = "";
-    const onCommentDelete = (id: string) => {
-      deletedId = id;
+    const onCommentDelete = (e: any) => {
+      deletedId = e.commentId;
     };
     const comments = [
       {
@@ -486,7 +486,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${comments}
-          .onCommentDelete=${onCommentDelete}
+          @comment-deleted=${onCommentDelete}
         ></learning-comment-tree>
       `,
       container
@@ -501,12 +501,12 @@ describe("learning-comment-tree", async () => {
     expect(deletedId).toBe("1");
   });
 
-  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると onCommentGenerate が呼ばれること", async () => {
+  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generated イベントが発火されること", async () => {
     let generatedId = "";
     let generatedType = "";
-    const onCommentGenerate = (id: string, type: string) => {
-      generatedId = id;
-      generatedType = type;
+    const onCommentGenerate = (e: any) => {
+      generatedId = e.parentCommentId;
+      generatedType = e.commentType;
     };
     const comments = [
       {
@@ -523,7 +523,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${comments}
-          .onCommentGenerate=${onCommentGenerate}
+          @comment-generated=${onCommentGenerate}
         ></learning-comment-tree>
       `,
       container

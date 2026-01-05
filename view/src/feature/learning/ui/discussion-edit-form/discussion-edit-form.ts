@@ -4,20 +4,28 @@ import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
+import {
+  CancelEditDiscussionEvent,
+  RequestUpdateDiscussionEvent,
+} from "../../event/discussion";
 
 @customElement("learning-discussion-edit-form")
 export class LearningDiscussionEditForm extends LitElement {
   @property({ type: String })
   theme = "";
 
-  @property({ attribute: false })
-  onSave?: (theme: string) => void;
-
-  @property({ attribute: false })
-  onCancel?: () => void;
-
   @query("input")
   private inputElement?: HTMLInputElement;
+
+  private handleSave() {
+    this.dispatchEvent(
+      new RequestUpdateDiscussionEvent(this.inputElement?.value ?? "")
+    );
+  }
+
+  private handleCancel() {
+    this.dispatchEvent(new CancelEditDiscussionEvent());
+  }
 
   render() {
     return html`
@@ -31,12 +39,12 @@ export class LearningDiscussionEditForm extends LitElement {
         <div class="actions">
           <button
             class="btn btn-primary"
-            @click=${() => this.onSave?.(this.inputElement?.value ?? "")}
+            @click=${this.handleSave}
             title="Save"
           >
             <span class="material-symbols-outlined">save</span>
           </button>
-          <button class="btn" @click=${() => this.onCancel?.()} title="Cancel">
+          <button class="btn" @click=${this.handleCancel} title="Cancel">
             <span class="material-symbols-outlined">close</span>
           </button>
         </div>

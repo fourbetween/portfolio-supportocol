@@ -1,19 +1,19 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { inputStyle } from "../../../../shared/style/input";
+import { SearchDiscussionEvent } from "../../event/discussion";
 
 @customElement("learning-discussion-search-bar")
 export class LearningDiscussionSearchBar extends LitElement {
   @property({ type: String })
   value = "";
 
-  @property({ attribute: false })
-  onInput?: (value: string) => void;
+  @query("input")
+  private _inputElement!: HTMLInputElement;
 
-  private _handleInput(e: InputEvent) {
-    const input = e.target as HTMLInputElement;
-    this.onInput?.(input.value);
+  private _handleInput() {
+    this.dispatchEvent(new SearchDiscussionEvent(this._inputElement.value));
   }
 
   render() {
@@ -40,6 +40,7 @@ export class LearningDiscussionSearchBar extends LitElement {
       }
       input {
         width: 100%;
+        padding-left: 32px;
         background-color: var(--color-canvas-subtle);
       }
       input:focus {

@@ -4,9 +4,16 @@ import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
+import {
+  CommentCancelEvent,
+  CommentSaveEvent,
+  CommentTypeSelectEvent,
+} from "../../event/comment";
 import "../comment-type-badge/comment-type-badge";
 import "../comment-type-popup/comment-type-popup";
 import type { LearningCommentTypePopup } from "../comment-type-popup/comment-type-popup";
+
+const MAX_CONTENT_LENGTH = 400;
 
 @customElement("learning-comment-edit-form")
 export class LearningCommentEditForm extends LitElement {
@@ -18,12 +25,6 @@ export class LearningCommentEditForm extends LitElement {
 
   @property({ type: Array })
   availableTypes: string[] = [];
-
-  @property({ attribute: false })
-  onSave?: (detail: { commentType: string; content: string }) => void;
-
-  @property({ attribute: false })
-  onCancel?: () => void;
 
   @state()
   private _commentType = "";
@@ -47,8 +48,8 @@ export class LearningCommentEditForm extends LitElement {
     this.popup.open();
   }
 
-  private handleTypeSelect(type: string) {
-    this._commentType = type;
+  private handleTypeSelect(e: CommentTypeSelectEvent) {
+    this._commentType = e.commentType;
   }
 
   private handleInput(e: Event) {
@@ -57,17 +58,18 @@ export class LearningCommentEditForm extends LitElement {
   }
 
   private handleSave() {
-    this.onSave?.({
-      commentType: this._commentType,
-      content: this._content,
-    });
+    this.dispatchEvent(new CommentSaveEvent(this._commentType, this._content));
   }
 
   private handleCancel() {
-    this.onCancel?.();
+    this.dispatchEvent(new CommentCancelEvent());
   }
 
-  render() {
+  private isContentOverLimit() {
+    return this._content.length > MAX_CONTENT_LENGTH;
+  }
+
+  private renderHeader() {
     return html`
       <div class="header">
         <learning-comment-type-badge
@@ -77,9 +79,14 @@ export class LearningCommentEditForm extends LitElement {
         ></learning-comment-type-badge>
         <learning-comment-type-popup
           .types=${this.availableTypes}
-          .onSelect=${(type: string) => this.handleTypeSelect(type)}
+          @comment-type-select=${this.handleTypeSelect}
         ></learning-comment-type-popup>
       </div>
+    `;
+  }
+
+  private renderContentField() {
+    return html`
       <div class="content-field">
         <label for="content-textarea" class="sr-only">Comment content</label>
         <textarea
@@ -87,12 +94,17 @@ export class LearningCommentEditForm extends LitElement {
           .value=${this._content}
           @input=${this.handleInput}
           placeholder="Enter your comment..."
-          maxlength="400"
+          maxlength=${MAX_CONTENT_LENGTH}
         ></textarea>
-        <div class="char-counter ${this._content.length > 400 ? "error" : ""}">
-          ${this._content.length} / 400
+        <div class="char-counter ${this.isContentOverLimit() ? "error" : ""}">
+          ${this._content.length} / ${MAX_CONTENT_LENGTH}
         </div>
       </div>
+    `;
+  }
+
+  private renderActions() {
+    return html`
       <div class="actions">
         <button
           class="btn btn-primary save-button"
@@ -109,6 +121,13 @@ export class LearningCommentEditForm extends LitElement {
           <span class="material-symbols-outlined">close</span>
         </button>
       </div>
+    `;
+  }
+
+  render() {
+    return html`
+      ${this.renderHeader()} ${this.renderContentField()}
+      ${this.renderActions()}
     `;
   }
 

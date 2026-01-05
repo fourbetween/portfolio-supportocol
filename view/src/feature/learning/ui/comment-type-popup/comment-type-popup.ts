@@ -4,14 +4,12 @@ import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import "../../../../shared/ui/popup/popup";
 import type { Popup } from "../../../../shared/ui/popup/popup";
+import { CommentTypeSelectEvent } from "../../event/comment";
 
 @customElement("learning-comment-type-popup")
 export class LearningCommentTypePopup extends LitElement {
   @property({ type: Array })
   types: string[] = [];
-
-  @property({ attribute: false })
-  onSelect: (type: string) => void = () => {};
 
   @state()
   private isOtherSelected = false;
@@ -33,7 +31,7 @@ export class LearningCommentTypePopup extends LitElement {
   }
 
   private handleSelect(type: string) {
-    this.onSelect(type);
+    this.dispatchEvent(new CommentTypeSelectEvent(type));
     this.close();
   }
 
@@ -43,9 +41,69 @@ export class LearningCommentTypePopup extends LitElement {
 
   private handleOtherSubmit() {
     if (this.otherValue.trim()) {
-      this.onSelect(this.otherValue.trim());
+      this.dispatchEvent(new CommentTypeSelectEvent(this.otherValue.trim()));
       this.close();
     }
+  }
+
+  private handleOtherInput(e: Event) {
+    this.otherValue = (e.target as HTMLInputElement).value;
+  }
+
+  private renderTypeList() {
+    return html`
+      <div class="type-list">
+        ${this.types.map(
+          (type) => html`
+            <button
+              class="type-button btn btn-block"
+              @click=${() => this.handleSelect(type)}
+            >
+              ${type}
+            </button>
+          `
+        )}
+        <button
+          class="other-button btn btn-block btn-outline"
+          @click=${this.handleOtherClick}
+        >
+          Other...
+        </button>
+      </div>
+    `;
+  }
+
+  private renderOtherInput() {
+    return html`
+      <input
+        type="text"
+        class="other-input form-control"
+        .value=${this.otherValue}
+        @input=${this.handleOtherInput}
+        placeholder="Type here..."
+      />
+    `;
+  }
+
+  private renderFooter() {
+    if (!this.isOtherSelected) return nothing;
+
+    return html`
+      <div slot="footer" class="footer-content">
+        <div class="other-actions">
+          <button class="btn" @click=${() => (this.isOtherSelected = false)}>
+            Back
+          </button>
+          <button
+            class="other-submit btn btn-primary"
+            @click=${this.handleOtherSubmit}
+            ?disabled=${!this.otherValue.trim()}
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    `;
   }
 
   render() {
@@ -56,58 +114,10 @@ export class LearningCommentTypePopup extends LitElement {
         </span>
         <div slot="main">
           ${this.isOtherSelected
-            ? html`
-                <input
-                  type="text"
-                  class="other-input form-control"
-                  .value=${this.otherValue}
-                  @input=${(e: Event) =>
-                    (this.otherValue = (e.target as HTMLInputElement).value)}
-                  placeholder="Type here..."
-                />
-              `
-            : html`
-                <div class="type-list">
-                  ${this.types.map(
-                    (type) => html`
-                      <button
-                        class="type-button btn btn-block"
-                        @click=${() => this.handleSelect(type)}
-                      >
-                        ${type}
-                      </button>
-                    `
-                  )}
-                  <button
-                    class="other-button btn btn-block btn-outline"
-                    @click=${this.handleOtherClick}
-                  >
-                    Other...
-                  </button>
-                </div>
-              `}
+            ? this.renderOtherInput()
+            : this.renderTypeList()}
         </div>
-        ${this.isOtherSelected
-          ? html`
-              <div slot="footer" class="footer-content">
-                <div class="other-actions">
-                  <button
-                    class="btn"
-                    @click=${() => (this.isOtherSelected = false)}
-                  >
-                    Back
-                  </button>
-                  <button
-                    class="other-submit btn btn-primary"
-                    @click=${this.handleOtherSubmit}
-                    ?disabled=${!this.otherValue.trim()}
-                  >
-                    OK
-                  </button>
-                </div>
-              </div>
-            `
-          : nothing}
+        ${this.renderFooter()}
       </ui-popup>
     `;
   }

@@ -9,6 +9,8 @@ import {
   CommentDeletedEvent,
   CommentGeneratedEvent,
   CommentUpdatedEvent,
+  RequestCommentReplyEvent,
+  RequestCommentUpdateEvent,
   SelectCommentEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
@@ -40,48 +42,48 @@ export class LearningCommentExplorerWidget extends LitElement {
 
   willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("comments")) {
-      this.commentMap.clear();
-      this.childrenMap.clear();
-      this.childCounts = new Map();
-      this.availableTypes = [];
+      this.updateDerivedData();
+    }
+  }
 
-      if (this.comments) {
-        this.availableTypes = deriveCommentFrame(this.comments).types;
-        for (const comment of this.comments) {
-          this.commentMap.set(comment.id, comment);
-          if (comment.parentCommentId) {
-            const children =
-              this.childrenMap.get(comment.parentCommentId) || [];
-            children.push(comment);
-            this.childrenMap.set(comment.parentCommentId, children);
-          }
-        }
+  private updateDerivedData() {
+    this.commentMap.clear();
+    this.childrenMap.clear();
+    this.childCounts = new Map();
+    this.availableTypes = [];
 
-        for (const [parentId, children] of this.childrenMap) {
-          this.childCounts.set(
-            parentId,
-            children.filter((c) => c.status === "active").length
-          );
+    if (this.comments) {
+      this.availableTypes = deriveCommentFrame(this.comments).types;
+      for (const comment of this.comments) {
+        this.commentMap.set(comment.id, comment);
+        if (comment.parentCommentId) {
+          const children = this.childrenMap.get(comment.parentCommentId) || [];
+          children.push(comment);
+          this.childrenMap.set(comment.parentCommentId, children);
         }
+      }
+
+      for (const [parentId, children] of this.childrenMap) {
+        this.childCounts.set(
+          parentId,
+          children.filter((c) => c.status === "active").length
+        );
       }
     }
   }
 
-  private handleCommentClick(comment: Comment) {
-    const id = this.selectedCommentId === comment.id ? undefined : comment.id;
+  private handleSelectComment(e: SelectCommentEvent) {
+    const id = this.selectedCommentId === e.commentId ? undefined : e.commentId;
     this.dispatchEvent(new SelectCommentEvent(id));
   }
 
-  private async handleCommentUpdate(
-    commentId: string,
-    detail: { commentType: string; content: string }
-  ) {
+  private async handleRequestCommentUpdate(e: RequestCommentUpdateEvent) {
     if (!this.discussionId) return;
     try {
       const data = await commentRepository.update(
         this.discussionId,
-        commentId,
-        detail
+        e.commentId,
+        { commentType: e.commentType, content: e.content }
       );
 
       showToast(this, "Comment updated.", "success", 2000);
@@ -91,45 +93,44 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private async handleCommentDelete(commentId: string) {
+  private async handleCommentDeleted(e: CommentDeletedEvent) {
     if (!this.discussionId) return;
     if (!confirm("Are you sure you want to delete this comment?")) return;
 
     try {
-      await commentRepository.delete(this.discussionId, commentId);
+      await commentRepository.delete(this.discussionId, e.commentId);
 
       showToast(this, "Comment deleted.", "success", 2000);
-      this.dispatchEvent(new CommentDeletedEvent(commentId));
+      this.dispatchEvent(new CommentDeletedEvent(e.commentId));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private async handleCommentGenerate(commentId: string, commentType: string) {
-    if (!this.discussionId) return;
+  private async handleCommentGenerated(e: CommentGeneratedEvent) {
+    if (!this.discussionId || !e.parentCommentId || !e.commentType) return;
     try {
       await commentRepository.generate(this.discussionId, {
-        parentCommentId: commentId,
-        commentType,
+        parentCommentId: e.parentCommentId,
+        commentType: e.commentType,
       });
 
       showToast(this, "Comments generated.", "success", 2000);
-      this.dispatchEvent(new CommentGeneratedEvent(commentId, commentType));
+      this.dispatchEvent(
+        new CommentGeneratedEvent(e.parentCommentId, e.commentType)
+      );
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private async handleCommentReply(
-    parentCommentId: string,
-    detail: { commentType: string; content: string }
-  ) {
+  private async handleRequestCommentReply(e: RequestCommentReplyEvent) {
     if (!this.discussionId) return;
     try {
       const data = await commentRepository.create(this.discussionId, {
-        parentCommentId,
-        commentType: detail.commentType,
-        content: detail.content,
+        parentCommentId: e.parentCommentId,
+        commentType: e.commentType,
+        content: e.content,
       });
 
       showToast(this, "Comment created.", "success", 2000);
@@ -143,6 +144,18 @@ export class LearningCommentExplorerWidget extends LitElement {
 
   private handleClearSelection() {
     this.dispatchEvent(new SelectCommentEvent(undefined));
+  }
+
+  private get _path(): Comment[] {
+    return this.selectedCommentId
+      ? this.getPathToRoot(this.selectedCommentId)
+      : [];
+  }
+
+  private get _descendants(): Comment[] {
+    return this.selectedCommentId
+      ? this.getDescendants(this.selectedCommentId)
+      : this.comments || [];
   }
 
   private getPathToRoot(selectedId: string): Comment[] {
@@ -178,49 +191,12 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   render() {
-    const path = this.selectedCommentId
-      ? this.getPathToRoot(this.selectedCommentId)
-      : [];
-    const descendants = this.selectedCommentId
-      ? this.getDescendants(this.selectedCommentId)
-      : this.comments || [];
+    const path = this._path;
+    const descendants = this._descendants;
 
     return html`
       <div class="container">
-        ${path.length > 0
-          ? html`
-              <div class="section">
-                <div class="section-header">
-                  <div class="section-title">Context</div>
-                  <button
-                    class="clear-button"
-                    @click=${this.handleClearSelection}
-                  >
-                    <span class="material-symbols-outlined">close</span>
-                    <span>Clear Selection</span>
-                  </button>
-                </div>
-                <learning-comment-context
-                  .path=${path}
-                  .childCounts=${this.childCounts}
-                  .availableTypes=${this.availableTypes}
-                  .onCommentClick=${(c: Comment) => this.handleCommentClick(c)}
-                  .onCommentUpdate=${(
-                    id: string,
-                    detail: { commentType: string; content: string }
-                  ) => this.handleCommentUpdate(id, detail)}
-                  .onCommentDelete=${(id: string) =>
-                    this.handleCommentDelete(id)}
-                  .onCommentGenerate=${(id: string, type: string) =>
-                    this.handleCommentGenerate(id, type)}
-                  .onCommentReply=${(
-                    id: string,
-                    detail: { commentType: string; content: string }
-                  ) => this.handleCommentReply(id, detail)}
-                ></learning-comment-context>
-              </div>
-            `
-          : nothing}
+        ${this.renderContextSection(path)}
         ${this.selectedCommentId
           ? nothing
           : html`
@@ -236,20 +212,39 @@ export class LearningCommentExplorerWidget extends LitElement {
           </div>
           <learning-comment-tree
             .comments=${descendants}
-            .onCommentClick=${(c: Comment) => this.handleCommentClick(c)}
-            .onCommentUpdate=${(
-              id: string,
-              detail: { commentType: string; content: string }
-            ) => this.handleCommentUpdate(id, detail)}
-            .onCommentDelete=${(id: string) => this.handleCommentDelete(id)}
-            .onCommentGenerate=${(id: string, type: string) =>
-              this.handleCommentGenerate(id, type)}
-            .onCommentReply=${(
-              id: string,
-              detail: { commentType: string; content: string }
-            ) => this.handleCommentReply(id, detail)}
+            @select-comment=${this.handleSelectComment}
+            @request-comment-update=${this.handleRequestCommentUpdate}
+            @comment-deleted=${this.handleCommentDeleted}
+            @comment-generated=${this.handleCommentGenerated}
+            @request-comment-reply=${this.handleRequestCommentReply}
           ></learning-comment-tree>
         </div>
+      </div>
+    `;
+  }
+
+  private renderContextSection(path: Comment[]) {
+    if (path.length === 0) return nothing;
+
+    return html`
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">Context</div>
+          <button class="clear-button" @click=${this.handleClearSelection}>
+            <span class="material-symbols-outlined">close</span>
+            <span>Clear Selection</span>
+          </button>
+        </div>
+        <learning-comment-context
+          .path=${path}
+          .childCounts=${this.childCounts}
+          .availableTypes=${this.availableTypes}
+          @select-comment=${this.handleSelectComment}
+          @request-comment-update=${this.handleRequestCommentUpdate}
+          @comment-deleted=${this.handleCommentDeleted}
+          @comment-generated=${this.handleCommentGenerated}
+          @request-comment-reply=${this.handleRequestCommentReply}
+        ></learning-comment-context>
       </div>
     `;
   }

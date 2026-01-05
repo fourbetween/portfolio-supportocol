@@ -1,6 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
+import type { SearchDiscussionEvent } from "../../event/discussion";
 import "./discussion-search-bar";
 
 describe("learning-discussion-search-bar", async () => {
@@ -15,12 +16,12 @@ describe("learning-discussion-search-bar", async () => {
     container.remove();
   });
 
-  it("入力値が変更されたときに onInput が呼ばれること", async () => {
-    const onInput = vi.fn();
+  it("入力値が変更されたときに search-discussion イベントが発火されること", async () => {
+    const onSearch = vi.fn();
     render(
       html`
         <learning-discussion-search-bar
-          .onInput=${onInput}
+          @search-discussion=${(e: SearchDiscussionEvent) => onSearch(e.query)}
         ></learning-discussion-search-bar>
       `,
       container
@@ -29,6 +30,6 @@ describe("learning-discussion-search-bar", async () => {
     const input = page.getByRole("textbox", { name: "Search discussions" });
     await input.fill("test query");
 
-    expect(onInput).toHaveBeenCalledWith("test query");
+    expect(onSearch).toHaveBeenCalledWith("test query");
   });
 });

@@ -19,30 +19,6 @@ export class LearningCommentTree extends LitElement {
   @property({ type: Array })
   comments?: Comment[];
 
-  @property({ attribute: false })
-  onCommentClick?: (comment: Comment) => void;
-
-  @property({ attribute: false })
-  onCommentUpdate?: (
-    commentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
-  @property({ attribute: false })
-  onCommentDelete?: (commentId: string) => void;
-
-  @property({ attribute: false })
-  onCommentGenerate?: (commentId: string, commentType: string) => void;
-
-  @property({ attribute: false })
-  onCommentReply?: (
-    parentCommentId: string,
-    detail: { commentType: string; content: string }
-  ) => void;
-
-  @state()
-  private rootComments: Comment[] = [];
-
   @state()
   private childrenMap = new Map<string, Comment[]>();
 
@@ -53,37 +29,31 @@ export class LearningCommentTree extends LitElement {
   private focusedGroupId?: string;
 
   private toggleFocus(groupId: string) {
-    if (this.focusedGroupId === groupId) {
-      this.focusedGroupId = undefined;
-    } else {
-      this.focusedGroupId = groupId;
-    }
+    this.focusedGroupId = this.focusedGroupId === groupId ? undefined : groupId;
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("comments")) {
-      this.childrenMap.clear();
-      this.rootComments = [];
-      this.availableTypes = [];
+      this.updateTreeData();
+    }
+  }
 
-      if (this.comments) {
-        this.availableTypes = deriveCommentFrame(this.comments).types;
-        const commentIds = new Set(this.comments.map((c) => c.id));
-        for (const comment of this.comments) {
-          if (comment.parentCommentId) {
-            const children =
-              this.childrenMap.get(comment.parentCommentId) || [];
-            children.push(comment);
-            this.childrenMap.set(comment.parentCommentId, children);
-          }
+  private updateTreeData() {
+    this.childrenMap.clear();
+    this.availableTypes = [];
 
-          if (
-            !comment.parentCommentId ||
-            !commentIds.has(comment.parentCommentId)
-          ) {
-            this.rootComments.push(comment);
-          }
-        }
+    if (this.comments) {
+      this.availableTypes = deriveCommentFrame(this.comments).types;
+      const commentIds = new Set(this.comments.map((c) => c.id));
+      for (const comment of this.comments) {
+        const parentId =
+          comment.parentCommentId && commentIds.has(comment.parentCommentId)
+            ? comment.parentCommentId
+            : "root";
+
+        const children = this.childrenMap.get(parentId) || [];
+        children.push(comment);
+        this.childrenMap.set(parentId, children);
       }
     }
   }
@@ -91,14 +61,8 @@ export class LearningCommentTree extends LitElement {
   render() {
     if (!this.comments) return nothing;
 
-    const groupedRoots = this.groupCommentsByType(this.rootComments);
-
     return html`
-      <div class="tree">
-        ${Object.entries(groupedRoots).map(([type, typeRoots]) =>
-          this.renderGroup(type, typeRoots)
-        )}
-      </div>
+      <div class="tree">${this.renderChildren("root")}</div>
     `;
   }
 
@@ -110,7 +74,6 @@ export class LearningCommentTree extends LitElement {
     const activeChildrenCount = children.filter(
       (c) => c.status === "active"
     ).length;
-    const groupedChildren = this.groupCommentsByType(children);
 
     return html`
       <div class="comment-node">
@@ -118,21 +81,23 @@ export class LearningCommentTree extends LitElement {
           .comment=${comment}
           .activeChildrenCount=${activeChildrenCount}
           .availableTypes=${this.availableTypes}
-          .onCommentClick=${this.onCommentClick}
-          .onCommentUpdate=${this.onCommentUpdate}
-          .onCommentDelete=${this.onCommentDelete}
-          .onCommentGenerate=${this.onCommentGenerate}
-          .onCommentReply=${this.onCommentReply}
         ></learning-comment-item>
-        ${!hideChildren && children.length > 0
-          ? html`
-              <div class="children">
-                ${Object.entries(groupedChildren).map(([type, typeChildren]) =>
-                  this.renderGroup(type, typeChildren, comment.id)
-                )}
-              </div>
-            `
-          : nothing}
+        ${!hideChildren ? this.renderChildren(comment.id) : nothing}
+      </div>
+    `;
+  }
+
+  private renderChildren(parentId: string) {
+    const children = this.childrenMap.get(parentId) || [];
+    if (children.length === 0) return nothing;
+
+    const groupedChildren = this.groupCommentsByType(children);
+
+    return html`
+      <div class="children">
+        ${Object.entries(groupedChildren).map(([type, typeChildren]) =>
+          this.renderGroup(type, typeChildren, parentId)
+        )}
       </div>
     `;
   }
@@ -142,7 +107,7 @@ export class LearningCommentTree extends LitElement {
     comments: Comment[],
     parentCommentId?: string
   ): HTMLTemplateResult {
-    const groupId = `${parentCommentId ?? "root"}-${type}`;
+    const groupId = this.getGroupId(type, parentCommentId);
     const isFocused = this.focusedGroupId === groupId;
 
     return html`
@@ -161,6 +126,10 @@ export class LearningCommentTree extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  private getGroupId(type: string, parentCommentId?: string): string {
+    return `${parentCommentId ?? "root"}-${type}`;
   }
 
   private groupCommentsByType(comments: Comment[]): Record<string, Comment[]> {
