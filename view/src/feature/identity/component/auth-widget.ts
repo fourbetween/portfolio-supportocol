@@ -3,9 +3,9 @@ import { customElement, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { GoogleAuthService } from "../api/google-auth";
 import {
-  LoginEvent,
-  SignupEvent,
-  SwitchModeEvent,
+  AuthLoginEvent,
+  AuthModeSwitchEvent,
+  AuthSignupEvent,
   type AuthMode,
 } from "../event/auth";
 import "../ui/auth-popup";
@@ -30,12 +30,12 @@ export class IdentityAuthWidget extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.initializeGoogleAuth();
-    document.addEventListener("open-auth-popup", this.handleOpenAuthPopup);
+    document.addEventListener("auth-popup-open", this.handleOpenAuthPopup);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener("open-auth-popup", this.handleOpenAuthPopup);
+    document.removeEventListener("auth-popup-open", this.handleOpenAuthPopup);
   }
 
   open() {
@@ -112,9 +112,12 @@ export class IdentityAuthWidget extends LitElement {
         .mode=${this.currentMode}
         .errorMessage=${this.errorMessage}
         .loading=${this.isLoading}
-        @switch-mode=${(e: SwitchModeEvent) => this.handleSwitchMode(e.mode)}
-        @login=${(e: LoginEvent) => this.handleLogin(e.email, e.password)}
-        @signup=${(e: SignupEvent) => this.handleSignup(e.email, e.password)}
+        @auth-mode-switch=${(e: AuthModeSwitchEvent) =>
+          this.handleSwitchMode(e.mode)}
+        @auth-login=${(e: AuthLoginEvent) =>
+          this.handleLogin(e.email, e.password)}
+        @auth-signup=${(e: AuthSignupEvent) =>
+          this.handleSignup(e.email, e.password)}
       ></identity-auth-popup>
     `;
   }

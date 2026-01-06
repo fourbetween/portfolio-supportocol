@@ -6,9 +6,9 @@ import { inputStyle } from "../../../shared/style/input";
 import "../../../shared/ui/popup/popup";
 import type { Popup } from "../../../shared/ui/popup/popup";
 import {
-  LoginEvent,
-  SignupEvent,
-  SwitchModeEvent,
+  AuthLoginEvent,
+  AuthModeSwitchEvent,
+  AuthSignupEvent,
   type AuthMode,
 } from "../event/auth";
 
@@ -47,7 +47,7 @@ export class IdentityAuthPopup extends LitElement {
   private handleSwitchClick(e: Event) {
     e.preventDefault();
     const newMode = this.mode === "login" ? "signup" : "login";
-    this.dispatchEvent(new SwitchModeEvent(newMode));
+    this.dispatchEvent(new AuthModeSwitchEvent(newMode));
   }
 
   private renderSwitchPrompt() {
@@ -79,7 +79,7 @@ export class IdentityAuthPopup extends LitElement {
     const password = formData.get("password") as string;
 
     if (this.mode === "login") {
-      this.dispatchEvent(new LoginEvent(email, password));
+      this.dispatchEvent(new AuthLoginEvent(email, password));
       return;
     }
 
@@ -90,7 +90,7 @@ export class IdentityAuthPopup extends LitElement {
       return;
     }
 
-    this.dispatchEvent(new SignupEvent(email, password));
+    this.dispatchEvent(new AuthSignupEvent(email, password));
   }
 
   private validateSignup(
