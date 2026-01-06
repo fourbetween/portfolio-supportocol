@@ -3,8 +3,8 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import {
+  CommentCreateEvent,
   CommentCreatedEvent,
-  CommentSaveEvent,
   CommentTypeSelectEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
@@ -53,19 +53,21 @@ export class LearningCommentCreateWidget extends LitElement {
     this.isCreating = true;
   }
 
-  private async handleSave(e: CommentSaveEvent) {
+  private async handleSave(e: CommentCreateEvent) {
     if (!this.discussionId) return;
 
     try {
       const data = await commentRepository.create(this.discussionId, {
-        parentCommentId: this.parentCommentId || null,
+        parentCommentId: e.parentCommentId,
         commentType: e.commentType,
         content: e.content,
       });
 
       showToast(this, "Comment created.", "success", 2000);
       this.handleCancel();
-      this.dispatchEvent(new CommentCreatedEvent(data));
+      if (data) {
+        this.dispatchEvent(new CommentCreatedEvent(data));
+      }
     } catch (e: any) {
       showToast(this, e.message, "error");
     }
@@ -82,7 +84,8 @@ export class LearningCommentCreateWidget extends LitElement {
         <learning-comment-edit-form
           .availableTypes=${this.availableTypes}
           .initialType=${this.selectedType}
-          @comment-save=${this.handleSave}
+          .parentCommentId=${this.parentCommentId}
+          @comment-create=${this.handleSave}
           @comment-cancel=${this.handleCancel}
         ></learning-comment-edit-form>
       `;

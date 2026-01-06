@@ -4,13 +4,10 @@ import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
-  CommentCreateEvent,
   CommentDeleteEvent,
   CommentGenerateEvent,
-  CommentSaveEvent,
   CommentSelectEvent,
   CommentTypeSelectEvent,
-  CommentUpdateEvent,
 } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
@@ -77,21 +74,7 @@ export class LearningCommentItem extends LitElement {
     }
   }
 
-  private handleUpdate(e: CommentSaveEvent) {
-    if (this.comment) {
-      this.dispatchEvent(
-        new CommentUpdateEvent(this.comment.id, e.commentType, e.content)
-      );
-    }
-    this.mode = "view";
-  }
-
-  private handleReply(e: CommentSaveEvent) {
-    if (this.comment) {
-      this.dispatchEvent(
-        new CommentCreateEvent(this.comment.id, e.commentType, e.content)
-      );
-    }
+  private handleFormSave() {
     this.mode = "view";
     this.selectedReplyType = undefined;
   }
@@ -166,10 +149,11 @@ export class LearningCommentItem extends LitElement {
       return html`
         <learning-comment-edit-form
           class="reply-form"
+          .parentCommentId=${this.comment?.id}
           .initialType=${this.selectedReplyType}
           .availableTypes=${this.availableTypes}
           @comment-cancel=${() => (this.mode = "view")}
-          @comment-save=${this.handleReply}
+          @comment-create=${this.handleFormSave}
         ></learning-comment-edit-form>
       `;
     }
@@ -185,11 +169,12 @@ export class LearningCommentItem extends LitElement {
   private renderEditForm() {
     return html`
       <learning-comment-edit-form
+        .commentId=${this.comment?.id}
         .initialType=${this.comment!.commentType}
         .initialContent=${this.comment!.content}
         .availableTypes=${this.availableTypes}
         @comment-cancel=${() => (this.mode = "view")}
-        @comment-save=${this.handleUpdate}
+        @comment-update=${this.handleFormSave}
       ></learning-comment-edit-form>
     `;
   }

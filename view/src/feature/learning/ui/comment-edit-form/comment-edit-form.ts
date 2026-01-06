@@ -6,8 +6,9 @@ import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 import {
   CommentCancelEvent,
-  CommentSaveEvent,
+  CommentCreateEvent,
   CommentTypeSelectEvent,
+  CommentUpdateEvent,
 } from "../../event/comment";
 import "../comment-type-badge/comment-type-badge";
 import "../comment-type-popup/comment-type-popup";
@@ -17,6 +18,12 @@ const MAX_CONTENT_LENGTH = 400;
 
 @customElement("learning-comment-edit-form")
 export class LearningCommentEditForm extends LitElement {
+  @property({ type: String })
+  commentId?: string;
+
+  @property({ type: String })
+  parentCommentId?: string | null;
+
   @property({ type: String })
   initialType = "";
 
@@ -58,14 +65,21 @@ export class LearningCommentEditForm extends LitElement {
   }
 
   private handleSave() {
-    this.dispatchEvent(new CommentSaveEvent(this._commentType, this._content));
+    const { _commentType: type, _content: content } = this;
+    if (this.commentId) {
+      this.dispatchEvent(new CommentUpdateEvent(this.commentId, type, content));
+    } else {
+      this.dispatchEvent(
+        new CommentCreateEvent(this.parentCommentId ?? null, type, content)
+      );
+    }
   }
 
   private handleCancel() {
     this.dispatchEvent(new CommentCancelEvent());
   }
 
-  private isContentOverLimit() {
+  private get _isContentOverLimit() {
     return this._content.length > MAX_CONTENT_LENGTH;
   }
 
@@ -96,7 +110,7 @@ export class LearningCommentEditForm extends LitElement {
           placeholder="Enter your comment..."
           maxlength=${MAX_CONTENT_LENGTH}
         ></textarea>
-        <div class="char-counter ${this.isContentOverLimit() ? "error" : ""}">
+        <div class="char-counter ${this._isContentOverLimit ? "error" : ""}">
           ${this._content.length} / ${MAX_CONTENT_LENGTH}
         </div>
       </div>

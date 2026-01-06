@@ -11,7 +11,8 @@ const meta: Meta = {
         .initialType=${args.commentType}
         .initialContent=${args.content}
         .availableTypes=${args.availableTypes}
-        @comment-save=${(e: any) => console.log("save", e.detail)}
+        @comment-create=${(e: any) => console.log("create", e)}
+        @comment-update=${(e: any) => console.log("update", e)}
         @comment-cancel=${() => console.log("cancel")}
       ></learning-comment-edit-form>
     `,

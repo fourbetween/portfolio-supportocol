@@ -12,7 +12,6 @@ const COMMENT_DELETE_EVENT_NAME = "comment-delete";
 const COMMENT_DELETED_EVENT_NAME = "comment-deleted";
 const COMMENT_GENERATE_EVENT_NAME = "comment-generate";
 const COMMENT_GENERATED_EVENT_NAME = "comment-generated";
-const COMMENT_SAVE_EVENT_NAME = "comment-save";
 const COMMENT_CANCEL_EVENT_NAME = "comment-cancel";
 const COMMENT_TYPE_SELECT_EVENT_NAME = "comment-type-select";
 
@@ -149,17 +148,6 @@ export class CommentGeneratedEvent extends Event {
   }
 }
 
-export class CommentSaveEvent extends Event {
-  public readonly commentType: string;
-  public readonly content: string;
-
-  constructor(commentType: string, content: string) {
-    super(COMMENT_SAVE_EVENT_NAME, { bubbles: true, composed: true });
-    this.commentType = commentType;
-    this.content = content;
-  }
-}
-
 export class CommentCancelEvent extends Event {
   constructor() {
     super(COMMENT_CANCEL_EVENT_NAME, { bubbles: true, composed: true });
@@ -189,7 +177,6 @@ declare global {
     [COMMENT_DELETED_EVENT_NAME]: CommentDeletedEvent;
     [COMMENT_GENERATE_EVENT_NAME]: CommentGenerateEvent;
     [COMMENT_GENERATED_EVENT_NAME]: CommentGeneratedEvent;
-    [COMMENT_SAVE_EVENT_NAME]: CommentSaveEvent;
     [COMMENT_CANCEL_EVENT_NAME]: CommentCancelEvent;
     [COMMENT_TYPE_SELECT_EVENT_NAME]: CommentTypeSelectEvent;
   }

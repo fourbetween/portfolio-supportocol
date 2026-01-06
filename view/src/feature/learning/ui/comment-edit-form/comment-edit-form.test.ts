@@ -15,7 +15,7 @@ describe("learning-comment-edit-form", async () => {
     container.remove();
   });
 
-  it("is defined", async () => {
+  it("定義されていること", async () => {
     render(
       html`
         <learning-comment-edit-form></learning-comment-edit-form>
@@ -27,7 +27,7 @@ describe("learning-comment-edit-form", async () => {
     expect(elem).toBeInstanceOf(HTMLElement);
   });
 
-  it("renders initialType and initialContent", async () => {
+  it("初期の種類と内容がレンダリングされること", async () => {
     render(
       html`
         <learning-comment-edit-form
@@ -44,7 +44,7 @@ describe("learning-comment-edit-form", async () => {
     await expect.element(page.getByText("質問").first()).toBeVisible();
   });
 
-  it("renders save and cancel buttons with icons and titles", async () => {
+  it("アイコンとタイトル付きの保存およびキャンセルボタンがレンダリングされること", async () => {
     render(
       html`
         <learning-comment-edit-form></learning-comment-edit-form>
@@ -55,16 +55,19 @@ describe("learning-comment-edit-form", async () => {
     await expect.element(page.getByTitle("Cancel")).toBeVisible();
   });
 
-  it("calls save event with content", async () => {
+  it("parentCommentIdが設定されている場合、comment-createイベントが発火すること", async () => {
     let savedContent = "";
+    let parentCommentId = "";
     const onSave = (e: any) => {
       savedContent = e.content;
+      parentCommentId = e.parentCommentId;
     };
 
     render(
       html`
         <learning-comment-edit-form
-          @comment-save=${onSave}
+          .parentCommentId=${"p1"}
+          @comment-create=${onSave}
         ></learning-comment-edit-form>
       `,
       container
@@ -77,9 +80,38 @@ describe("learning-comment-edit-form", async () => {
     await saveButton.click();
 
     expect(savedContent).toBe("新しいコメント");
+    expect(parentCommentId).toBe("p1");
   });
 
-  it("calls cancel event", async () => {
+  it("commentIdが設定されている場合、comment-updateイベントが発火すること", async () => {
+    let savedContent = "";
+    let commentId = "";
+    const onUpdate = (e: any) => {
+      savedContent = e.content;
+      commentId = e.commentId;
+    };
+
+    render(
+      html`
+        <learning-comment-edit-form
+          .commentId=${"c1"}
+          @comment-update=${onUpdate}
+        ></learning-comment-edit-form>
+      `,
+      container
+    );
+
+    const textarea = page.getByPlaceholder("Enter your comment...");
+    await textarea.fill("更新されたコメント");
+
+    const saveButton = page.getByTitle("Save");
+    await saveButton.click();
+
+    expect(savedContent).toBe("更新されたコメント");
+    expect(commentId).toBe("c1");
+  });
+
+  it("キャンセルイベントが発火すること", async () => {
     let cancelled = false;
     const onCancel = () => {
       cancelled = true;
@@ -100,7 +132,7 @@ describe("learning-comment-edit-form", async () => {
     expect(cancelled).toBe(true);
   });
 
-  it("opens popup on badge click and updates type on select", async () => {
+  it("バッジクリックでポップアップが開き、選択した種類に更新されること", async () => {
     render(
       html`
         <learning-comment-edit-form
@@ -123,7 +155,7 @@ describe("learning-comment-edit-form", async () => {
     await expect.element(page.getByText("回答").first()).toBeVisible();
   });
 
-  it("has styled textarea and buttons", async () => {
+  it("テキストエリアとボタンがスタイルされていること", async () => {
     render(
       html`
         <learning-comment-edit-form></learning-comment-edit-form>
