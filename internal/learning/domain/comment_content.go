@@ -12,7 +12,7 @@ type CommentContent struct {
 
 func NewCommentContent(v string) (CommentContent, error) {
 	if len([]rune(v)) > MaxContentLength {
-		return CommentContent{}, apperr.ErrInvalidRequest
+		return CommentContent{}, apperr.ErrInvalidArgument
 	}
 	return CommentContent{value: v}, nil
 }

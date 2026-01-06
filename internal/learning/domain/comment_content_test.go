@@ -26,7 +26,7 @@ func TestNewCommentContent(t *testing.T) {
 		{
 			name:    "401文字以上の場合はエラーを返すこと",
 			value:   string(make([]rune, 401)),
-			wantErr: apperr.ErrInvalidRequest,
+			wantErr: apperr.ErrInvalidArgument,
 		},
 	}
 

@@ -31,13 +31,13 @@ func TestComment_UpdateStatus(t *testing.T) {
 			name:          "activeからproposedには変更できないこと",
 			currentStatus: CommentStatusActive,
 			status:        CommentStatusProposed,
-			wantErr:       apperr.ErrInvalidRequest,
+			wantErr:       apperr.ErrInvalidArgument,
 		},
 		{
 			name:          "無効なステータスの場合にエラーを返すこと",
 			currentStatus: CommentStatusProposed,
 			status:        CommentStatus("invalid"),
-			wantErr:       apperr.ErrInvalidRequest,
+			wantErr:       apperr.ErrInvalidArgument,
 		},
 	}
 
@@ -74,7 +74,7 @@ func TestComment_Update(t *testing.T) {
 		{
 			name:    fmt.Sprintf("%d文字以上の場合はエラーを返すこと", MaxContentLength+1),
 			content: string(make([]rune, MaxContentLength+1)),
-			wantErr: apperr.ErrInvalidRequest,
+			wantErr: apperr.ErrInvalidArgument,
 		},
 	}
 

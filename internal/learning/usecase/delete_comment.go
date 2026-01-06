@@ -44,7 +44,7 @@ func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentI
 	}
 
 	if comment.CreatedBy() != input.UserID {
-		return apperr.ErrForbidden
+		return apperr.ErrPermissionDenied
 	}
 
 	return u.commentRepo.Delete(ctx, comment)

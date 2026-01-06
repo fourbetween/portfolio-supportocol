@@ -28,7 +28,7 @@ func TestCommentFactory_Create(t *testing.T) {
 		{
 			name:    fmt.Sprintf("%d文字以上の場合はエラーを返すこと", MaxContentLength+1),
 			content: string(make([]rune, MaxContentLength+1)),
-			wantErr: apperr.ErrInvalidRequest,
+			wantErr: apperr.ErrInvalidArgument,
 		},
 	}
 
