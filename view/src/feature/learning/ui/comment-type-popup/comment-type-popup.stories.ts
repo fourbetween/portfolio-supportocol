@@ -6,9 +6,6 @@ import type { LearningCommentTypePopup } from "./comment-type-popup";
 const meta: Meta<LearningCommentTypePopup> = {
   title: "learning/ui/comment-type-popup",
   component: "learning-comment-type-popup",
-  argTypes: {
-    onSelect: { action: "onSelect" },
-  },
 };
 
 export default meta;
@@ -28,7 +25,6 @@ export const Default: Story = {
     </button>
     <learning-comment-type-popup
       .types=${args.types}
-      .onSelect=${args.onSelect}
     ></learning-comment-type-popup>
   `,
 };
