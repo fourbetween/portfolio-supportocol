@@ -4,12 +4,12 @@ const COMMENT_SELECT_EVENT_NAME = "comment-select";
 const PROPOSED_COMMENT_ACCEPT_EVENT_NAME = "proposed-comment-accept";
 const PROPOSED_COMMENT_REJECT_EVENT_NAME = "proposed-comment-reject";
 const PROPOSED_COMMENT_SELECT_EVENT_NAME = "proposed-comment-select";
+const COMMENT_CREATE_EVENT_NAME = "comment-create";
 const COMMENT_CREATED_EVENT_NAME = "comment-created";
 const COMMENT_UPDATED_EVENT_NAME = "comment-updated";
 const COMMENT_DELETED_EVENT_NAME = "comment-deleted";
 const COMMENT_GENERATED_EVENT_NAME = "comment-generated";
 const REQUEST_COMMENT_UPDATE_EVENT_NAME = "request-comment-update";
-const REQUEST_COMMENT_REPLY_EVENT_NAME = "request-comment-reply";
 const COMMENT_SAVE_EVENT_NAME = "comment-save";
 const COMMENT_CANCEL_EVENT_NAME = "comment-cancel";
 const COMMENT_TYPE_SELECT_EVENT_NAME = "comment-type-select";
@@ -56,6 +56,23 @@ export class ProposedCommentSelectEvent extends Event {
       composed: true,
     });
     this.comment = comment;
+  }
+}
+
+export class CommentCreateEvent extends Event {
+  public readonly parentCommentId: string | null;
+  public readonly commentType: string;
+  public readonly content: string;
+
+  constructor(
+    parentCommentId: string | null,
+    commentType: string,
+    content: string
+  ) {
+    super(COMMENT_CREATE_EVENT_NAME, { bubbles: true, composed: true });
+    this.parentCommentId = parentCommentId;
+    this.commentType = commentType;
+    this.content = content;
   }
 }
 
@@ -110,19 +127,6 @@ export class RequestCommentUpdateEvent extends Event {
   }
 }
 
-export class RequestCommentReplyEvent extends Event {
-  public readonly parentCommentId: string;
-  public readonly commentType: string;
-  public readonly content: string;
-
-  constructor(parentCommentId: string, commentType: string, content: string) {
-    super(REQUEST_COMMENT_REPLY_EVENT_NAME, { bubbles: true, composed: true });
-    this.parentCommentId = parentCommentId;
-    this.commentType = commentType;
-    this.content = content;
-  }
-}
-
 export class CommentSaveEvent extends Event {
   public readonly commentType: string;
   public readonly content: string;
@@ -155,12 +159,12 @@ declare global {
     [PROPOSED_COMMENT_ACCEPT_EVENT_NAME]: ProposedCommentAcceptEvent;
     [PROPOSED_COMMENT_REJECT_EVENT_NAME]: ProposedCommentRejectEvent;
     [PROPOSED_COMMENT_SELECT_EVENT_NAME]: ProposedCommentSelectEvent;
+    [COMMENT_CREATE_EVENT_NAME]: CommentCreateEvent;
     [COMMENT_CREATED_EVENT_NAME]: CommentCreatedEvent;
     [COMMENT_UPDATED_EVENT_NAME]: CommentUpdatedEvent;
     [COMMENT_DELETED_EVENT_NAME]: CommentDeletedEvent;
     [COMMENT_GENERATED_EVENT_NAME]: CommentGeneratedEvent;
     [REQUEST_COMMENT_UPDATE_EVENT_NAME]: RequestCommentUpdateEvent;
-    [REQUEST_COMMENT_REPLY_EVENT_NAME]: RequestCommentReplyEvent;
     [COMMENT_SAVE_EVENT_NAME]: CommentSaveEvent;
     [COMMENT_CANCEL_EVENT_NAME]: CommentCancelEvent;
     [COMMENT_TYPE_SELECT_EVENT_NAME]: CommentTypeSelectEvent;

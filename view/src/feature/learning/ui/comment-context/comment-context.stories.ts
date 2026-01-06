@@ -12,7 +12,7 @@ const meta: Meta = {
     onCommentGenerated: { action: "comment-generated" },
     onCommentCreated: { action: "comment-created" },
     onRequestCommentUpdate: { action: "request-comment-update" },
-    onRequestCommentReply: { action: "request-comment-reply" },
+    onCommentCreate: { action: "comment-create" },
   },
   render: (args) => html`
     <learning-comment-context
@@ -25,7 +25,7 @@ const meta: Meta = {
       @comment-generated=${args.onCommentGenerated}
       @comment-created=${args.onCommentCreated}
       @request-comment-update=${args.onRequestCommentUpdate}
-      @request-comment-reply=${args.onRequestCommentReply}
+      @comment-create=${args.onCommentCreate}
     ></learning-comment-context>
   `,
 };

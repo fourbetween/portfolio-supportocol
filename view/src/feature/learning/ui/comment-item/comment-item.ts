@@ -4,12 +4,12 @@ import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
+  CommentCreateEvent,
   CommentDeletedEvent,
   CommentGeneratedEvent,
   CommentSaveEvent,
   CommentSelectEvent,
   CommentTypeSelectEvent,
-  RequestCommentReplyEvent,
   RequestCommentUpdateEvent,
 } from "../../event/comment";
 import type { Comment } from "../../model/comment";
@@ -89,7 +89,7 @@ export class LearningCommentItem extends LitElement {
   private handleReply(e: CommentSaveEvent) {
     if (this.comment) {
       this.dispatchEvent(
-        new RequestCommentReplyEvent(this.comment.id, e.commentType, e.content)
+        new CommentCreateEvent(this.comment.id, e.commentType, e.content)
       );
     }
     this.mode = "view";

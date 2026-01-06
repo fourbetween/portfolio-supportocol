@@ -114,11 +114,11 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     expect(generatedType).toBe("question");
   });
 
-  it("返信ボタンをクリックし、タイプを選択すると返信フォームが表示され、保存すると request-comment-reply イベントが発火される", async () => {
+  it("返信ボタンをクリックし、タイプを選択すると返信フォームが表示され、保存すると comment-create イベントが発火される", async () => {
     let replyParentId = "";
     let replyType = "";
     let replyContent = "";
-    const handleReply = (e: any) => {
+    const handleCreate = (e: any) => {
       replyParentId = e.parentCommentId;
       replyType = e.commentType;
       replyContent = e.content;
@@ -128,7 +128,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          @request-comment-reply=${handleReply}
+          @comment-create=${handleCreate}
         ></learning-comment-item>
       `,
       container

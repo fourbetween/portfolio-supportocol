@@ -5,12 +5,12 @@ import { baseStyle } from "../../../shared/style/base";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import {
+  CommentCreateEvent,
   CommentCreatedEvent,
   CommentDeletedEvent,
   CommentGeneratedEvent,
   CommentSelectEvent,
   CommentUpdatedEvent,
-  RequestCommentReplyEvent,
   RequestCommentUpdateEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
@@ -124,7 +124,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private async handleRequestCommentReply(e: RequestCommentReplyEvent) {
+  private async handleCommentCreate(e: CommentCreateEvent) {
     if (!this.discussionId) return;
     try {
       const data = await commentRepository.create(this.discussionId, {
@@ -213,10 +213,10 @@ export class LearningCommentExplorerWidget extends LitElement {
           <learning-comment-tree
             .comments=${descendants}
             @comment-select=${this.handleSelectComment}
+            @comment-create=${this.handleCommentCreate}
             @request-comment-update=${this.handleRequestCommentUpdate}
             @comment-deleted=${this.handleCommentDeleted}
             @comment-generated=${this.handleCommentGenerated}
-            @request-comment-reply=${this.handleRequestCommentReply}
           ></learning-comment-tree>
         </div>
       </div>
@@ -240,10 +240,10 @@ export class LearningCommentExplorerWidget extends LitElement {
           .childCounts=${this.childCounts}
           .availableTypes=${this.availableTypes}
           @comment-select=${this.handleSelectComment}
+          @comment-create=${this.handleCommentCreate}
           @request-comment-update=${this.handleRequestCommentUpdate}
           @comment-deleted=${this.handleCommentDeleted}
           @comment-generated=${this.handleCommentGenerated}
-          @request-comment-reply=${this.handleRequestCommentReply}
         ></learning-comment-context>
       </div>
     `;

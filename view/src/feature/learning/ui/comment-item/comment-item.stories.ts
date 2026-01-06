@@ -11,7 +11,7 @@ const meta: Meta = {
     onCommentDeleted: { action: "comment-deleted" },
     onCommentGenerated: { action: "comment-generated" },
     onRequestCommentUpdate: { action: "request-comment-update" },
-    onRequestCommentReply: { action: "request-comment-reply" },
+    onCommentCreate: { action: "comment-create" },
   },
 };
 
@@ -41,7 +41,7 @@ export const Default: Story = {
       @comment-deleted=${args.onCommentDeleted}
       @comment-generated=${args.onCommentGenerated}
       @request-comment-update=${args.onRequestCommentUpdate}
-      @request-comment-reply=${args.onRequestCommentReply}
+      @comment-create=${args.onCommentCreate}
     ></learning-comment-item>
   `,
   args: {
