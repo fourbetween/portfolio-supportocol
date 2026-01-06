@@ -120,7 +120,7 @@ describe("learning-comment-edit-form", async () => {
     render(
       html`
         <learning-comment-edit-form
-          @comment-cancel=${onCancel}
+          @comment-form-close=${onCancel}
         ></learning-comment-edit-form>
       `,
       container

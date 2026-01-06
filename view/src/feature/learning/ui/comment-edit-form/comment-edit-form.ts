@@ -5,8 +5,8 @@ import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 import {
-  CommentCancelEvent,
   CommentCreateEvent,
+  CommentFormCloseEvent,
   CommentTypeSelectEvent,
   CommentUpdateEvent,
 } from "../../event/comment";
@@ -76,7 +76,7 @@ export class LearningCommentEditForm extends LitElement {
   }
 
   private handleCancel() {
-    this.dispatchEvent(new CommentCancelEvent());
+    this.dispatchEvent(new CommentFormCloseEvent());
   }
 
   private get _isContentOverLimit() {

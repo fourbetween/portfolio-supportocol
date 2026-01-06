@@ -13,7 +13,7 @@ const meta: Meta = {
         .availableTypes=${args.availableTypes}
         @comment-create=${(e: any) => console.log("create", e)}
         @comment-update=${(e: any) => console.log("update", e)}
-        @comment-cancel=${() => console.log("cancel")}
+        @comment-form-close=${() => console.log("form-close")}
       ></learning-comment-edit-form>
     `,
 };

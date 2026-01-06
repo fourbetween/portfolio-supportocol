@@ -86,7 +86,7 @@ export class LearningCommentCreateWidget extends LitElement {
           .initialType=${this.selectedType}
           .parentCommentId=${this.parentCommentId}
           @comment-create=${this.handleSave}
-          @comment-cancel=${this.handleCancel}
+          @comment-form-close=${this.handleCancel}
         ></learning-comment-edit-form>
       `;
     }

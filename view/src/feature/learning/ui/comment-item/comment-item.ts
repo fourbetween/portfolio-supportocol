@@ -152,7 +152,7 @@ export class LearningCommentItem extends LitElement {
           .parentCommentId=${this.comment?.id}
           .initialType=${this.selectedReplyType}
           .availableTypes=${this.availableTypes}
-          @comment-cancel=${() => (this.mode = "view")}
+          @comment-form-close=${() => (this.mode = "view")}
           @comment-create=${this.handleFormSave}
         ></learning-comment-edit-form>
       `;
@@ -173,7 +173,7 @@ export class LearningCommentItem extends LitElement {
         .initialType=${this.comment!.commentType}
         .initialContent=${this.comment!.content}
         .availableTypes=${this.availableTypes}
-        @comment-cancel=${() => (this.mode = "view")}
+        @comment-form-close=${() => (this.mode = "view")}
         @comment-update=${this.handleFormSave}
       ></learning-comment-edit-form>
     `;
