@@ -15,7 +15,7 @@ type Story = StoryObj;
 export const Default: Story = {
   render: () => html`
     <learning-discussion-add-form
-      @create-discussion=${(e: CreateDiscussionEvent) =>
+      @discussion-create=${(e: CreateDiscussionEvent) =>
         console.log("submit", e.theme)}
     ></learning-discussion-add-form>
   `,

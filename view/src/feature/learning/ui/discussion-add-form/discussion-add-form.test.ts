@@ -16,12 +16,12 @@ describe("learning-discussion-add-form", () => {
     container.remove();
   });
 
-  it("テーマを入力して追加ボタンを押したときに create-discussion イベントが発火されること", async () => {
+  it("テーマを入力して追加ボタンを押したときに discussion-create イベントが発火されること", async () => {
     const onCreate = vi.fn();
     render(
       html`
         <learning-discussion-add-form
-          @create-discussion=${(e: CreateDiscussionEvent) => onCreate(e.theme)}
+          @discussion-create=${(e: CreateDiscussionEvent) => onCreate(e.theme)}
         ></learning-discussion-add-form>
       `,
       container

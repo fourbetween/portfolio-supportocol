@@ -1,15 +1,15 @@
 import type { Discussion } from "../model/discussion";
 
 export const DISCUSSION_SELECT_EVENT_NAME = "discussion-select";
-export const CREATE_DISCUSSION_EVENT_NAME = "create-discussion";
+export const DISCUSSION_CREATE_EVENT_NAME = "discussion-create";
+export const DISCUSSION_CREATED_EVENT_NAME = "discussion-created";
+export const REQUEST_UPDATE_DISCUSSION_EVENT_NAME = "request-update-discussion";
+export const DISCUSSION_UPDATED_EVENT_NAME = "discussion-updated";
+export const REQUEST_DELETE_DISCUSSION_EVENT_NAME = "request-delete-discussion";
+export const DISCUSSION_DELETED_EVENT_NAME = "discussion-deleted";
 export const SEARCH_DISCUSSION_EVENT_NAME = "search-discussion";
 export const REQUEST_EDIT_DISCUSSION_EVENT_NAME = "request-edit-discussion";
-export const REQUEST_UPDATE_DISCUSSION_EVENT_NAME = "request-update-discussion";
-export const REQUEST_DELETE_DISCUSSION_EVENT_NAME = "request-delete-discussion";
 export const CANCEL_EDIT_DISCUSSION_EVENT_NAME = "cancel-edit-discussion";
-export const DISCUSSION_CREATED_EVENT_NAME = "discussion-created";
-export const DISCUSSION_UPDATED_EVENT_NAME = "discussion-updated";
-export const DISCUSSION_DELETED_EVENT_NAME = "discussion-deleted";
 
 export class SelectDiscussionEvent extends Event {
   public readonly discussion: Discussion;
@@ -24,8 +24,59 @@ export class CreateDiscussionEvent extends Event {
   public readonly theme: string;
 
   constructor(theme: string) {
-    super(CREATE_DISCUSSION_EVENT_NAME, { bubbles: true, composed: true });
+    super(DISCUSSION_CREATE_EVENT_NAME, { bubbles: true, composed: true });
     this.theme = theme;
+  }
+}
+
+export class DiscussionCreatedEvent extends Event {
+  public readonly discussion: Discussion;
+
+  constructor(discussion: Discussion) {
+    super(DISCUSSION_CREATED_EVENT_NAME, { bubbles: true, composed: true });
+    this.discussion = discussion;
+  }
+}
+
+export class RequestUpdateDiscussionEvent extends Event {
+  public readonly theme: string;
+
+  constructor(theme: string) {
+    super(REQUEST_UPDATE_DISCUSSION_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+    this.theme = theme;
+  }
+}
+
+export class DiscussionUpdatedEvent extends Event {
+  public readonly discussion: Discussion;
+
+  constructor(discussion: Discussion) {
+    super(DISCUSSION_UPDATED_EVENT_NAME, { bubbles: true, composed: true });
+    this.discussion = discussion;
+  }
+}
+
+export class RequestDeleteDiscussionEvent extends Event {
+  public readonly discussion: Discussion;
+
+  constructor(discussion: Discussion) {
+    super(REQUEST_DELETE_DISCUSSION_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+    this.discussion = discussion;
+  }
+}
+
+export class DiscussionDeletedEvent extends Event {
+  public readonly discussion: Discussion;
+
+  constructor(discussion: Discussion) {
+    super(DISCUSSION_DELETED_EVENT_NAME, { bubbles: true, composed: true });
+    this.discussion = discussion;
   }
 }
 
@@ -47,74 +98,23 @@ export class RequestEditDiscussionEvent extends Event {
   }
 }
 
-export class RequestUpdateDiscussionEvent extends Event {
-  public readonly theme: string;
-
-  constructor(theme: string) {
-    super(REQUEST_UPDATE_DISCUSSION_EVENT_NAME, {
-      bubbles: true,
-      composed: true,
-    });
-    this.theme = theme;
-  }
-}
-
-export class RequestDeleteDiscussionEvent extends Event {
-  public readonly discussion: Discussion;
-
-  constructor(discussion: Discussion) {
-    super(REQUEST_DELETE_DISCUSSION_EVENT_NAME, {
-      bubbles: true,
-      composed: true,
-    });
-    this.discussion = discussion;
-  }
-}
-
 export class CancelEditDiscussionEvent extends Event {
   constructor() {
     super(CANCEL_EDIT_DISCUSSION_EVENT_NAME, { bubbles: true, composed: true });
   }
 }
 
-export class DiscussionCreatedEvent extends Event {
-  public readonly discussion: Discussion;
-
-  constructor(discussion: Discussion) {
-    super(DISCUSSION_CREATED_EVENT_NAME, { bubbles: true, composed: true });
-    this.discussion = discussion;
-  }
-}
-
-export class DiscussionUpdatedEvent extends Event {
-  public readonly discussion: Discussion;
-
-  constructor(discussion: Discussion) {
-    super(DISCUSSION_UPDATED_EVENT_NAME, { bubbles: true, composed: true });
-    this.discussion = discussion;
-  }
-}
-
-export class DiscussionDeletedEvent extends Event {
-  public readonly discussion: Discussion;
-
-  constructor(discussion: Discussion) {
-    super(DISCUSSION_DELETED_EVENT_NAME, { bubbles: true, composed: true });
-    this.discussion = discussion;
-  }
-}
-
 declare global {
   interface HTMLElementEventMap {
     [DISCUSSION_SELECT_EVENT_NAME]: SelectDiscussionEvent;
-    [CREATE_DISCUSSION_EVENT_NAME]: CreateDiscussionEvent;
+    [DISCUSSION_CREATE_EVENT_NAME]: CreateDiscussionEvent;
+    [DISCUSSION_CREATED_EVENT_NAME]: DiscussionCreatedEvent;
+    [REQUEST_UPDATE_DISCUSSION_EVENT_NAME]: RequestUpdateDiscussionEvent;
+    [DISCUSSION_UPDATED_EVENT_NAME]: DiscussionUpdatedEvent;
+    [REQUEST_DELETE_DISCUSSION_EVENT_NAME]: RequestDeleteDiscussionEvent;
+    [DISCUSSION_DELETED_EVENT_NAME]: DiscussionDeletedEvent;
     [SEARCH_DISCUSSION_EVENT_NAME]: SearchDiscussionEvent;
     [REQUEST_EDIT_DISCUSSION_EVENT_NAME]: RequestEditDiscussionEvent;
-    [REQUEST_UPDATE_DISCUSSION_EVENT_NAME]: RequestUpdateDiscussionEvent;
-    [REQUEST_DELETE_DISCUSSION_EVENT_NAME]: RequestDeleteDiscussionEvent;
     [CANCEL_EDIT_DISCUSSION_EVENT_NAME]: CancelEditDiscussionEvent;
-    [DISCUSSION_CREATED_EVENT_NAME]: DiscussionCreatedEvent;
-    [DISCUSSION_UPDATED_EVENT_NAME]: DiscussionUpdatedEvent;
-    [DISCUSSION_DELETED_EVENT_NAME]: DiscussionDeletedEvent;
   }
 }

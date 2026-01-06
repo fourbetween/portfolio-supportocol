@@ -67,7 +67,7 @@ export class LearningDiscussionListWidget extends LitElement {
         </div>
         <div class="add-form">
           <learning-discussion-add-form
-            @create-discussion=${this._handleAddDiscussion}
+            @discussion-create=${this._handleAddDiscussion}
           ></learning-discussion-add-form>
         </div>
         <div class="content">
