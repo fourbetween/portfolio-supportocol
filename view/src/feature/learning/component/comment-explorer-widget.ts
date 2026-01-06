@@ -7,6 +7,7 @@ import { titleStyle } from "../../../shared/style/title";
 import {
   CommentCreateEvent,
   CommentCreatedEvent,
+  CommentDeleteEvent,
   CommentDeletedEvent,
   CommentGeneratedEvent,
   CommentSelectEvent,
@@ -93,7 +94,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private async handleCommentDeleted(e: CommentDeletedEvent) {
+  private async handleCommentDelete(e: CommentDeleteEvent) {
     if (!this.discussionId) return;
     if (!confirm("Are you sure you want to delete this comment?")) return;
 
@@ -215,7 +216,7 @@ export class LearningCommentExplorerWidget extends LitElement {
             @comment-select=${this.handleSelectComment}
             @comment-create=${this.handleCommentCreate}
             @comment-update=${this.handleCommentUpdate}
-            @comment-deleted=${this.handleCommentDeleted}
+            @comment-delete=${this.handleCommentDelete}
             @comment-generated=${this.handleCommentGenerated}
           ></learning-comment-tree>
         </div>
@@ -242,7 +243,7 @@ export class LearningCommentExplorerWidget extends LitElement {
           @comment-select=${this.handleSelectComment}
           @comment-create=${this.handleCommentCreate}
           @comment-update=${this.handleCommentUpdate}
-          @comment-deleted=${this.handleCommentDeleted}
+          @comment-delete=${this.handleCommentDelete}
           @comment-generated=${this.handleCommentGenerated}
         ></learning-comment-context>
       </div>

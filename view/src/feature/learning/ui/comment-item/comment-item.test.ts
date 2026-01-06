@@ -62,7 +62,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
       .not.toBeInTheDocument();
   });
 
-  it("削除ボタンをクリックすると comment-deleted イベントが発火される", async () => {
+  it("削除ボタンをクリックすると comment-delete イベントが発火される", async () => {
     let deletedCommentId = "";
     const handleDelete = (e: any) => {
       deletedCommentId = e.commentId;
@@ -72,7 +72,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          @comment-deleted=${handleDelete}
+          @comment-delete=${handleDelete}
         ></learning-comment-item>
       `,
       container

@@ -466,7 +466,7 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   });
 
-  it("削除ボタンをクリックすると comment-deleted イベントが発火されること", async () => {
+  it("削除ボタンをクリックすると comment-delete イベントが発火されること", async () => {
     let deletedId = "";
     const onCommentDelete = (e: any) => {
       deletedId = e.commentId;
@@ -486,7 +486,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${comments}
-          @comment-deleted=${onCommentDelete}
+          @comment-delete=${onCommentDelete}
         ></learning-comment-tree>
       `,
       container

@@ -5,7 +5,7 @@ import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
   CommentCreateEvent,
-  CommentDeletedEvent,
+  CommentDeleteEvent,
   CommentGeneratedEvent,
   CommentSaveEvent,
   CommentSelectEvent,
@@ -59,7 +59,7 @@ export class LearningCommentItem extends LitElement {
   private handleDeleteClick(e: Event) {
     e.stopPropagation();
     if (this.comment) {
-      this.dispatchEvent(new CommentDeletedEvent(this.comment.id));
+      this.dispatchEvent(new CommentDeleteEvent(this.comment.id));
     }
   }
 
