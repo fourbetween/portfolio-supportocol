@@ -11,7 +11,7 @@ const meta: Meta = {
     onCommentDeleted: { action: "comment-deleted" },
     onCommentGenerated: { action: "comment-generated" },
     onCommentCreated: { action: "comment-created" },
-    onRequestCommentUpdate: { action: "request-comment-update" },
+    onCommentUpdate: { action: "comment-update" },
     onCommentCreate: { action: "comment-create" },
   },
   render: (args) => html`
@@ -24,7 +24,7 @@ const meta: Meta = {
       @comment-deleted=${args.onCommentDeleted}
       @comment-generated=${args.onCommentGenerated}
       @comment-created=${args.onCommentCreated}
-      @request-comment-update=${args.onRequestCommentUpdate}
+      @comment-update=${args.onCommentUpdate}
       @comment-create=${args.onCommentCreate}
     ></learning-comment-context>
   `,

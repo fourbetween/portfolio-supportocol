@@ -10,7 +10,7 @@ import {
   CommentSaveEvent,
   CommentSelectEvent,
   CommentTypeSelectEvent,
-  RequestCommentUpdateEvent,
+  CommentUpdateEvent,
 } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
@@ -80,7 +80,7 @@ export class LearningCommentItem extends LitElement {
   private handleUpdate(e: CommentSaveEvent) {
     if (this.comment) {
       this.dispatchEvent(
-        new RequestCommentUpdateEvent(this.comment.id, e.commentType, e.content)
+        new CommentUpdateEvent(this.comment.id, e.commentType, e.content)
       );
     }
     this.mode = "view";

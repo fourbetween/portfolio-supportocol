@@ -9,7 +9,7 @@ const COMMENT_CREATED_EVENT_NAME = "comment-created";
 const COMMENT_UPDATED_EVENT_NAME = "comment-updated";
 const COMMENT_DELETED_EVENT_NAME = "comment-deleted";
 const COMMENT_GENERATED_EVENT_NAME = "comment-generated";
-const REQUEST_COMMENT_UPDATE_EVENT_NAME = "request-comment-update";
+const COMMENT_UPDATE_EVENT_NAME = "comment-update";
 const COMMENT_SAVE_EVENT_NAME = "comment-save";
 const COMMENT_CANCEL_EVENT_NAME = "comment-cancel";
 const COMMENT_TYPE_SELECT_EVENT_NAME = "comment-type-select";
@@ -85,6 +85,19 @@ export class CommentCreatedEvent extends Event {
   }
 }
 
+export class CommentUpdateEvent extends Event {
+  public readonly commentId: string;
+  public readonly commentType: string;
+  public readonly content: string;
+
+  constructor(commentId: string, commentType: string, content: string) {
+    super(COMMENT_UPDATE_EVENT_NAME, { bubbles: true, composed: true });
+    this.commentId = commentId;
+    this.commentType = commentType;
+    this.content = content;
+  }
+}
+
 export class CommentUpdatedEvent extends Event {
   public readonly comment: Comment;
 
@@ -111,19 +124,6 @@ export class CommentGeneratedEvent extends Event {
     super(COMMENT_GENERATED_EVENT_NAME, { bubbles: true, composed: true });
     this.parentCommentId = parentCommentId;
     this.commentType = commentType;
-  }
-}
-
-export class RequestCommentUpdateEvent extends Event {
-  public readonly commentId: string;
-  public readonly commentType: string;
-  public readonly content: string;
-
-  constructor(commentId: string, commentType: string, content: string) {
-    super(REQUEST_COMMENT_UPDATE_EVENT_NAME, { bubbles: true, composed: true });
-    this.commentId = commentId;
-    this.commentType = commentType;
-    this.content = content;
   }
 }
 
@@ -161,10 +161,10 @@ declare global {
     [PROPOSED_COMMENT_SELECT_EVENT_NAME]: ProposedCommentSelectEvent;
     [COMMENT_CREATE_EVENT_NAME]: CommentCreateEvent;
     [COMMENT_CREATED_EVENT_NAME]: CommentCreatedEvent;
+    [COMMENT_UPDATE_EVENT_NAME]: CommentUpdateEvent;
     [COMMENT_UPDATED_EVENT_NAME]: CommentUpdatedEvent;
     [COMMENT_DELETED_EVENT_NAME]: CommentDeletedEvent;
     [COMMENT_GENERATED_EVENT_NAME]: CommentGeneratedEvent;
-    [REQUEST_COMMENT_UPDATE_EVENT_NAME]: RequestCommentUpdateEvent;
     [COMMENT_SAVE_EVENT_NAME]: CommentSaveEvent;
     [COMMENT_CANCEL_EVENT_NAME]: CommentCancelEvent;
     [COMMENT_TYPE_SELECT_EVENT_NAME]: CommentTypeSelectEvent;

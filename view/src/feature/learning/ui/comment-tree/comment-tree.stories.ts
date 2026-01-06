@@ -9,7 +9,7 @@ const meta: Meta = {
     onSelectComment: { action: "comment-select" },
     onCommentDeleted: { action: "comment-deleted" },
     onCommentGenerated: { action: "comment-generated" },
-    onRequestCommentUpdate: { action: "request-comment-update" },
+    onCommentUpdate: { action: "comment-update" },
     onCommentCreate: { action: "comment-create" },
   },
   render: (args) => html`
@@ -18,7 +18,7 @@ const meta: Meta = {
       @comment-select=${args.onSelectComment}
       @comment-deleted=${args.onCommentDeleted}
       @comment-generated=${args.onCommentGenerated}
-      @request-comment-update=${args.onRequestCommentUpdate}
+      @comment-update=${args.onCommentUpdate}
       @comment-create=${args.onCommentCreate}
     ></learning-comment-tree>
   `,

@@ -10,8 +10,8 @@ import {
   CommentDeletedEvent,
   CommentGeneratedEvent,
   CommentSelectEvent,
+  CommentUpdateEvent,
   CommentUpdatedEvent,
-  RequestCommentUpdateEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
@@ -77,7 +77,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     this.dispatchEvent(new CommentSelectEvent(id));
   }
 
-  private async handleRequestCommentUpdate(e: RequestCommentUpdateEvent) {
+  private async handleCommentUpdate(e: CommentUpdateEvent) {
     if (!this.discussionId) return;
     try {
       const data = await commentRepository.update(
@@ -214,7 +214,7 @@ export class LearningCommentExplorerWidget extends LitElement {
             .comments=${descendants}
             @comment-select=${this.handleSelectComment}
             @comment-create=${this.handleCommentCreate}
-            @request-comment-update=${this.handleRequestCommentUpdate}
+            @comment-update=${this.handleCommentUpdate}
             @comment-deleted=${this.handleCommentDeleted}
             @comment-generated=${this.handleCommentGenerated}
           ></learning-comment-tree>
@@ -241,7 +241,7 @@ export class LearningCommentExplorerWidget extends LitElement {
           .availableTypes=${this.availableTypes}
           @comment-select=${this.handleSelectComment}
           @comment-create=${this.handleCommentCreate}
-          @request-comment-update=${this.handleRequestCommentUpdate}
+          @comment-update=${this.handleCommentUpdate}
           @comment-deleted=${this.handleCommentDeleted}
           @comment-generated=${this.handleCommentGenerated}
         ></learning-comment-context>
