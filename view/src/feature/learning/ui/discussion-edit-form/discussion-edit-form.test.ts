@@ -1,7 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import type { RequestUpdateDiscussionEvent } from "../../event/discussion";
+import type { DiscussionUpdateEvent } from "../../event/discussion";
 import "./discussion-edit-form";
 
 describe("learning-discussion-edit-form", () => {
@@ -72,8 +72,7 @@ describe("learning-discussion-edit-form", () => {
       html`
         <learning-discussion-edit-form
           .theme=${theme}
-          @discussion-update=${(e: RequestUpdateDiscussionEvent) =>
-            onSave(e.theme)}
+          @discussion-update=${(e: DiscussionUpdateEvent) => onSave(e.theme)}
         ></learning-discussion-edit-form>
       `,
       container

@@ -2,7 +2,7 @@ import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import type {
-  RequestDeleteDiscussionEvent,
+  DiscussionDeleteEvent,
   SelectDiscussionEvent,
 } from "../../event/discussion";
 import "./discussion-list";
@@ -74,7 +74,7 @@ describe("learning-discussion-list", () => {
       html`
         <learning-discussion-list
           .discussions=${discussions}
-          @discussion-delete=${(e: RequestDeleteDiscussionEvent) =>
+          @discussion-delete=${(e: DiscussionDeleteEvent) =>
             onDelete(e.discussion)}
         ></learning-discussion-list>
       `,

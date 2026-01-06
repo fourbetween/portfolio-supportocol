@@ -7,7 +7,7 @@ const DISCUSSION_UPDATE_EVENT_NAME = "discussion-update";
 const DISCUSSION_UPDATED_EVENT_NAME = "discussion-updated";
 const DISCUSSION_DELETE_EVENT_NAME = "discussion-delete";
 const DISCUSSION_DELETED_EVENT_NAME = "discussion-deleted";
-const SEARCH_DISCUSSION_EVENT_NAME = "search-discussion";
+const DISCUSSION_SEARCH_EVENT_NAME = "search-discussion";
 const REQUEST_EDIT_DISCUSSION_EVENT_NAME = "request-edit-discussion";
 const CANCEL_EDIT_DISCUSSION_EVENT_NAME = "cancel-edit-discussion";
 
@@ -38,7 +38,7 @@ export class DiscussionCreatedEvent extends Event {
   }
 }
 
-export class RequestUpdateDiscussionEvent extends Event {
+export class DiscussionUpdateEvent extends Event {
   public readonly theme: string;
 
   constructor(theme: string) {
@@ -59,7 +59,7 @@ export class DiscussionUpdatedEvent extends Event {
   }
 }
 
-export class RequestDeleteDiscussionEvent extends Event {
+export class DiscussionDeleteEvent extends Event {
   public readonly discussion: Discussion;
 
   constructor(discussion: Discussion) {
@@ -80,11 +80,11 @@ export class DiscussionDeletedEvent extends Event {
   }
 }
 
-export class SearchDiscussionEvent extends Event {
+export class DiscussionSearchEvent extends Event {
   public readonly query: string;
 
   constructor(query: string) {
-    super(SEARCH_DISCUSSION_EVENT_NAME, { bubbles: true, composed: true });
+    super(DISCUSSION_SEARCH_EVENT_NAME, { bubbles: true, composed: true });
     this.query = query;
   }
 }
@@ -109,11 +109,11 @@ declare global {
     [DISCUSSION_SELECT_EVENT_NAME]: SelectDiscussionEvent;
     [DISCUSSION_CREATE_EVENT_NAME]: CreateDiscussionEvent;
     [DISCUSSION_CREATED_EVENT_NAME]: DiscussionCreatedEvent;
-    [DISCUSSION_UPDATE_EVENT_NAME]: RequestUpdateDiscussionEvent;
+    [DISCUSSION_UPDATE_EVENT_NAME]: DiscussionUpdateEvent;
     [DISCUSSION_UPDATED_EVENT_NAME]: DiscussionUpdatedEvent;
-    [DISCUSSION_DELETE_EVENT_NAME]: RequestDeleteDiscussionEvent;
+    [DISCUSSION_DELETE_EVENT_NAME]: DiscussionDeleteEvent;
     [DISCUSSION_DELETED_EVENT_NAME]: DiscussionDeletedEvent;
-    [SEARCH_DISCUSSION_EVENT_NAME]: SearchDiscussionEvent;
+    [DISCUSSION_SEARCH_EVENT_NAME]: DiscussionSearchEvent;
     [REQUEST_EDIT_DISCUSSION_EVENT_NAME]: RequestEditDiscussionEvent;
     [CANCEL_EDIT_DISCUSSION_EVENT_NAME]: CancelEditDiscussionEvent;
   }

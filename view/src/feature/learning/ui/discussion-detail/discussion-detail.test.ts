@@ -1,7 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import type { RequestUpdateDiscussionEvent } from "../../event/discussion";
+import type { DiscussionUpdateEvent } from "../../event/discussion";
 import "./discussion-detail";
 
 describe("learning-discussion-detail", async () => {
@@ -70,8 +70,7 @@ describe("learning-discussion-detail", async () => {
         <learning-discussion-detail
           .discussion=${discussion}
           .isEditing=${true}
-          @discussion-update=${(e: RequestUpdateDiscussionEvent) =>
-            onSave(e.theme)}
+          @discussion-update=${(e: DiscussionUpdateEvent) => onSave(e.theme)}
         ></learning-discussion-detail>
       `,
       container

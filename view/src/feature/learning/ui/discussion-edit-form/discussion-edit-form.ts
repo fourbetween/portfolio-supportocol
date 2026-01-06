@@ -6,7 +6,7 @@ import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 import {
   CancelEditDiscussionEvent,
-  RequestUpdateDiscussionEvent,
+  DiscussionUpdateEvent,
 } from "../../event/discussion";
 
 @customElement("learning-discussion-edit-form")
@@ -19,7 +19,7 @@ export class LearningDiscussionEditForm extends LitElement {
 
   private handleSave() {
     this.dispatchEvent(
-      new RequestUpdateDiscussionEvent(this.inputElement?.value ?? "")
+      new DiscussionUpdateEvent(this.inputElement?.value ?? "")
     );
   }
 
