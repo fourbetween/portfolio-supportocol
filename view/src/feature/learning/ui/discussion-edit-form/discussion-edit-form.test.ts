@@ -92,7 +92,7 @@ describe("learning-discussion-edit-form", () => {
     render(
       html`
         <learning-discussion-edit-form
-          @cancel-edit-discussion=${onCancel}
+          @cancel-edit-discussion=${() => onCancel()}
         ></learning-discussion-edit-form>
       `,
       container

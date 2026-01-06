@@ -36,7 +36,7 @@ describe("learning-discussion-detail", async () => {
       html`
         <learning-discussion-detail
           .discussion=${discussion}
-          @request-edit-discussion=${onEdit}
+          @request-edit-discussion=${() => onEdit()}
         ></learning-discussion-detail>
       `,
       container
@@ -90,7 +90,7 @@ describe("learning-discussion-detail", async () => {
       html`
         <learning-discussion-detail
           .isEditing=${true}
-          @cancel-edit-discussion=${onCancel}
+          @cancel-edit-discussion=${() => onCancel()}
         ></learning-discussion-detail>
       `,
       container

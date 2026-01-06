@@ -13,7 +13,7 @@
     "gen:learning": "npx openapi-typescript ../internal/learning/api/schema/openapi.yml -o ./src/feature/learning/api/schema.d.ts",
     "storybook": "storybook dev --no-open",
     "build-storybook": "storybook build",
-    "check:lit": "npx lit-analyzer \"src/**/*.ts\""
+    "check:lit": "lit-analyzer \"src/**/*.ts\""
   },
   "dependencies": {
     "@lit-labs/router": "^0.1.4",
