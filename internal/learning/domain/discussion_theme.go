@@ -12,7 +12,7 @@ type DiscussionTheme struct {
 
 func NewDiscussionTheme(v string) (DiscussionTheme, error) {
 	if len([]rune(v)) > MaxThemeLength {
-		return DiscussionTheme{}, apperr.ErrInvalidRequest
+		return DiscussionTheme{}, apperr.ErrInvalidArgument
 	}
 	return DiscussionTheme{value: v}, nil
 }

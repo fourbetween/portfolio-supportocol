@@ -27,12 +27,12 @@ func (h *securityHandler) HandleCookieAuth(
 	t oas.CookieAuth,
 ) (context.Context, error) {
 	if t.APIKey == "" {
-		return ctx, apperr.ErrUnauthorized
+		return ctx, apperr.ErrUnauthenticated
 	}
 
 	userID, err := h.jwtSrv.Parse(t.APIKey)
 	if err != nil || userID == "" {
-		return ctx, apperr.ErrUnauthorized
+		return ctx, apperr.ErrUnauthenticated
 	}
 
 	return httpctx.WithUserID(ctx, userID), nil

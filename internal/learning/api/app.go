@@ -235,15 +235,15 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
 	code := 500
 	msg := strings.Split(err.Error(), ":")[0]
-	if errors.Is(err, apperr.ErrUnauthorized) ||
+	if errors.Is(err, apperr.ErrUnauthenticated) ||
 		errors.Is(err, auth.ErrNotFound) ||
 		errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied) {
 		code = 401
-	} else if errors.Is(err, apperr.ErrForbidden) {
+	} else if errors.Is(err, apperr.ErrPermissionDenied) {
 		code = 403
 	} else if errors.Is(err, apperr.ErrNotFound) {
 		code = 404
-	} else if errors.Is(err, apperr.ErrConflict) {
+	} else if errors.Is(err, apperr.ErrAlreadyExists) {
 		code = 409
 	} else if code == 500 {
 		slog.Error(err.Error())

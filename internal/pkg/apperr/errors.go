@@ -5,9 +5,9 @@ import (
 )
 
 var (
-	ErrForbidden      = errors.New("forbidden error")
-	ErrNotFound       = errors.New("not found error")
-	ErrConflict       = errors.New("conflict error")
-	ErrUnauthorized   = errors.New("unauthorized error")
-	ErrInvalidRequest = errors.New("invalid request error")
+	ErrPermissionDenied = errors.New("permission denied error")
+	ErrNotFound         = errors.New("not found error")
+	ErrAlreadyExists    = errors.New("already exists error")
+	ErrUnauthenticated  = errors.New("unauthenticated error")
+	ErrInvalidArgument  = errors.New("invalid argument error")
 )

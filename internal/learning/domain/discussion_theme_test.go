@@ -26,7 +26,7 @@ func TestNewDiscussionTheme(t *testing.T) {
 		{
 			name:    "256文字以上の場合はエラーを返すこと",
 			value:   string(make([]rune, 256)),
-			wantErr: apperr.ErrInvalidRequest,
+			wantErr: apperr.ErrInvalidArgument,
 		},
 	}
 

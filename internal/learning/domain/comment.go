@@ -66,10 +66,10 @@ func (c *Comment) Update(params UpdateCommentParams) error {
 
 func (c *Comment) UpdateStatus(status CommentStatus) error {
 	if !status.IsValid() {
-		return apperr.ErrInvalidRequest
+		return apperr.ErrInvalidArgument
 	}
 	if c.status == CommentStatusActive && status == CommentStatusProposed {
-		return apperr.ErrInvalidRequest
+		return apperr.ErrInvalidArgument
 	}
 	c.status = status
 	return nil
