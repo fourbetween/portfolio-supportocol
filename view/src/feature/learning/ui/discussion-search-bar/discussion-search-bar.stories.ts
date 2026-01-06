@@ -19,7 +19,7 @@ export const Default: Story = {
   render: (args) => html`
     <learning-discussion-search-bar
       .value=${args.value}
-      @search-discussion=${(e: DiscussionSearchEvent) =>
+      @discussion-search=${(e: DiscussionSearchEvent) =>
         console.log("input", e.query)}
     ></learning-discussion-search-bar>
   `,

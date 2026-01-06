@@ -16,12 +16,12 @@ describe("learning-discussion-search-bar", async () => {
     container.remove();
   });
 
-  it("入力値が変更されたときに search-discussion イベントが発火されること", async () => {
+  it("入力値が変更されたときに discussion-search イベントが発火されること", async () => {
     const onSearch = vi.fn();
     render(
       html`
         <learning-discussion-search-bar
-          @search-discussion=${(e: DiscussionSearchEvent) => onSearch(e.query)}
+          @discussion-search=${(e: DiscussionSearchEvent) => onSearch(e.query)}
         ></learning-discussion-search-bar>
       `,
       container

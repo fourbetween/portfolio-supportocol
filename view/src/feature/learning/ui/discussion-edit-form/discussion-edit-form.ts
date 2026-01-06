@@ -5,7 +5,7 @@ import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 import {
-  CancelEditDiscussionEvent,
+  DiscussionFormCloseEvent,
   DiscussionUpdateEvent,
 } from "../../event/discussion";
 
@@ -24,7 +24,7 @@ export class LearningDiscussionEditForm extends LitElement {
   }
 
   private handleCancel() {
-    this.dispatchEvent(new CancelEditDiscussionEvent());
+    this.dispatchEvent(new DiscussionFormCloseEvent());
   }
 
   render() {

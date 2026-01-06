@@ -42,9 +42,9 @@ export class LearningDiscussionDetailWidget extends LitElement {
       <learning-discussion-detail
         .discussion=${this.discussion}
         .isEditing=${this._isEditing}
-        @request-edit-discussion=${() => (this._isEditing = true)}
+        @discussion-form-open=${() => (this._isEditing = true)}
         @discussion-update=${this._handleUpdateDiscussion}
-        @cancel-edit-discussion=${() => (this._isEditing = false)}
+        @discussion-form-close=${() => (this._isEditing = false)}
       ></learning-discussion-detail>
     `;
   }

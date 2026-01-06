@@ -62,7 +62,7 @@ export class LearningDiscussionListWidget extends LitElement {
         <div class="header">
           <learning-discussion-search-bar
             .value=${this._searchQuery}
-            @search-discussion=${this._handleSearch}
+            @discussion-search=${this._handleSearch}
           ></learning-discussion-search-bar>
         </div>
         <div class="add-form">

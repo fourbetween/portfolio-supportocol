@@ -86,12 +86,12 @@ describe("learning-discussion-edit-form", () => {
     expect(onSave).toHaveBeenCalledWith("新しいテーマ");
   });
 
-  it("キャンセルボタンをクリックすると cancel-edit-discussion イベントが発火されること", async () => {
+  it("キャンセルボタンをクリックすると discussion-form-close イベントが発火されること", async () => {
     const onCancel = vi.fn();
     render(
       html`
         <learning-discussion-edit-form
-          @cancel-edit-discussion=${() => onCancel()}
+          @discussion-form-close=${() => onCancel()}
         ></learning-discussion-edit-form>
       `,
       container

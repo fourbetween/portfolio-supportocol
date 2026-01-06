@@ -24,10 +24,10 @@ export const Default: Story = {
     <learning-discussion-detail
       .discussion=${args.discussion}
       .isEditing=${args.isEditing}
-      @request-edit-discussion=${() => console.log("edit clicked")}
+      @discussion-form-open=${() => console.log("edit clicked")}
       @discussion-update=${(e: DiscussionUpdateEvent) =>
         console.log("save clicked", e.theme)}
-      @cancel-edit-discussion=${() => console.log("cancel clicked")}
+      @discussion-form-close=${() => console.log("cancel clicked")}
     ></learning-discussion-detail>
   `,
 };

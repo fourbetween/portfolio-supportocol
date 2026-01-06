@@ -7,9 +7,9 @@ const DISCUSSION_UPDATE_EVENT_NAME = "discussion-update";
 const DISCUSSION_UPDATED_EVENT_NAME = "discussion-updated";
 const DISCUSSION_DELETE_EVENT_NAME = "discussion-delete";
 const DISCUSSION_DELETED_EVENT_NAME = "discussion-deleted";
-const DISCUSSION_SEARCH_EVENT_NAME = "search-discussion";
-const REQUEST_EDIT_DISCUSSION_EVENT_NAME = "request-edit-discussion";
-const CANCEL_EDIT_DISCUSSION_EVENT_NAME = "cancel-edit-discussion";
+const DISCUSSION_SEARCH_EVENT_NAME = "discussion-search";
+const DISCUSSION_FORM_OPEN_EVENT_NAME = "discussion-form-open";
+const DISCUSSION_FORM_CLOSE_EVENT_NAME = "discussion-form-close";
 
 export class SelectDiscussionEvent extends Event {
   public readonly discussion: Discussion;
@@ -89,18 +89,18 @@ export class DiscussionSearchEvent extends Event {
   }
 }
 
-export class RequestEditDiscussionEvent extends Event {
+export class DiscussionFormOpenEvent extends Event {
   constructor() {
-    super(REQUEST_EDIT_DISCUSSION_EVENT_NAME, {
+    super(DISCUSSION_FORM_OPEN_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
   }
 }
 
-export class CancelEditDiscussionEvent extends Event {
+export class DiscussionFormCloseEvent extends Event {
   constructor() {
-    super(CANCEL_EDIT_DISCUSSION_EVENT_NAME, { bubbles: true, composed: true });
+    super(DISCUSSION_FORM_CLOSE_EVENT_NAME, { bubbles: true, composed: true });
   }
 }
 
@@ -114,7 +114,7 @@ declare global {
     [DISCUSSION_DELETE_EVENT_NAME]: DiscussionDeleteEvent;
     [DISCUSSION_DELETED_EVENT_NAME]: DiscussionDeletedEvent;
     [DISCUSSION_SEARCH_EVENT_NAME]: DiscussionSearchEvent;
-    [REQUEST_EDIT_DISCUSSION_EVENT_NAME]: RequestEditDiscussionEvent;
-    [CANCEL_EDIT_DISCUSSION_EVENT_NAME]: CancelEditDiscussionEvent;
+    [DISCUSSION_FORM_OPEN_EVENT_NAME]: DiscussionFormOpenEvent;
+    [DISCUSSION_FORM_CLOSE_EVENT_NAME]: DiscussionFormCloseEvent;
   }
 }

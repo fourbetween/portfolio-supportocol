@@ -29,14 +29,14 @@ describe("learning-discussion-detail", async () => {
     await expect.element(page.getByText("テストテーマ")).toBeVisible();
   });
 
-  it("編集ボタンをクリックすると request-edit-discussion イベントが発火されること", async () => {
+  it("編集ボタンをクリックすると discussion-form-open イベントが発火されること", async () => {
     const onEdit = vi.fn();
     const discussion = { id: "1", theme: "テストテーマ" };
     render(
       html`
         <learning-discussion-detail
           .discussion=${discussion}
-          @request-edit-discussion=${() => onEdit()}
+          @discussion-form-open=${() => onEdit()}
         ></learning-discussion-detail>
       `,
       container
@@ -83,13 +83,13 @@ describe("learning-discussion-detail", async () => {
     expect(onSave).toHaveBeenCalledWith("新しいテーマ");
   });
 
-  it("キャンセルボタンをクリックすると cancel-edit-discussion イベントが発火されること", async () => {
+  it("キャンセルボタンをクリックすると discussion-form-close イベントが発火されること", async () => {
     const onCancel = vi.fn();
     render(
       html`
         <learning-discussion-detail
           .isEditing=${true}
-          @cancel-edit-discussion=${() => onCancel()}
+          @discussion-form-close=${() => onCancel()}
         ></learning-discussion-detail>
       `,
       container

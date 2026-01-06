@@ -21,7 +21,7 @@ export const Default: Story = {
       .theme=${args.theme}
       @discussion-update=${(e: DiscussionUpdateEvent) =>
         console.log("save clicked", e.theme)}
-      @cancel-edit-discussion=${() => console.log("cancel clicked")}
+      @discussion-form-close=${() => console.log("cancel clicked")}
     ></learning-discussion-edit-form>
   `,
 };
