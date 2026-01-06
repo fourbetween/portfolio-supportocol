@@ -6,8 +6,8 @@ import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
   ProposedCommentAcceptEvent,
-  RejectProposedCommentEvent,
-  SelectProposedCommentEvent,
+  ProposedCommentRejectEvent,
+  ProposedCommentSelectEvent,
 } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
@@ -19,7 +19,7 @@ export class LearningProposedCommentList extends LitElement {
   comments: Comment[] = [];
 
   private onSelect(comment: Comment) {
-    this.dispatchEvent(new SelectProposedCommentEvent(comment));
+    this.dispatchEvent(new ProposedCommentSelectEvent(comment));
   }
 
   private onAccept(comment: Comment) {
@@ -27,7 +27,7 @@ export class LearningProposedCommentList extends LitElement {
   }
 
   private onReject(comment: Comment) {
-    this.dispatchEvent(new RejectProposedCommentEvent(comment));
+    this.dispatchEvent(new ProposedCommentRejectEvent(comment));
   }
 
   render() {

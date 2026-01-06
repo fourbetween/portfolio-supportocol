@@ -3,8 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import {
   ProposedCommentAcceptEvent,
-  RejectProposedCommentEvent,
-  SelectProposedCommentEvent,
+  ProposedCommentRejectEvent,
+  ProposedCommentSelectEvent,
 } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "./proposed-comment-list";
@@ -101,7 +101,7 @@ describe("learning-proposed-comment-list", () => {
     expect(onAccept).toHaveBeenCalledWith(comments[0]);
   });
 
-  it("却下ボタンをクリックすると reject-proposed-comment イベントが発火されること", async () => {
+  it("却下ボタンをクリックすると proposed-comment-reject イベントが発火されること", async () => {
     const onReject = vi.fn();
     const comments: Comment[] = [
       {
@@ -119,7 +119,7 @@ describe("learning-proposed-comment-list", () => {
       html`
         <learning-proposed-comment-list
           .comments=${comments}
-          @reject-proposed-comment=${(e: RejectProposedCommentEvent) =>
+          @proposed-comment-reject=${(e: ProposedCommentRejectEvent) =>
             onReject(e.comment)}
         ></learning-proposed-comment-list>
       `,
@@ -131,7 +131,7 @@ describe("learning-proposed-comment-list", () => {
     expect(onReject).toHaveBeenCalledWith(comments[0]);
   });
 
-  it("コメントをクリックすると select-proposed-comment イベントが発火されること", async () => {
+  it("コメントをクリックすると proposed-comment-select イベントが発火されること", async () => {
     const onClick = vi.fn();
     const comments: Comment[] = [
       {
@@ -149,7 +149,7 @@ describe("learning-proposed-comment-list", () => {
       html`
         <learning-proposed-comment-list
           .comments=${comments}
-          @select-proposed-comment=${(e: SelectProposedCommentEvent) =>
+          @proposed-comment-select=${(e: ProposedCommentSelectEvent) =>
             onClick(e.comment)}
         ></learning-proposed-comment-list>
       `,
@@ -179,7 +179,7 @@ describe("learning-proposed-comment-list", () => {
       html`
         <learning-proposed-comment-list
           .comments=${comments}
-          @select-proposed-comment=${(e: any) => onClick(e.comment)}
+          @proposed-comment-select=${(e: any) => onClick(e.comment)}
         ></learning-proposed-comment-list>
       `,
       container

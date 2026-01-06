@@ -2,8 +2,8 @@ import type { Comment } from "../model/comment";
 
 const COMMENT_SELECT_EVENT_NAME = "comment-select";
 const PROPOSED_COMMENT_ACCEPT_EVENT_NAME = "proposed-comment-accept";
-const REJECT_PROPOSED_COMMENT_EVENT_NAME = "reject-proposed-comment";
-const SELECT_PROPOSED_COMMENT_EVENT_NAME = "select-proposed-comment";
+const PROPOSED_COMMENT_REJECT_EVENT_NAME = "proposed-comment-reject";
+const PROPOSED_COMMENT_SELECT_EVENT_NAME = "proposed-comment-select";
 const COMMENT_CREATED_EVENT_NAME = "comment-created";
 const COMMENT_UPDATED_EVENT_NAME = "comment-updated";
 const COMMENT_DELETED_EVENT_NAME = "comment-deleted";
@@ -35,11 +35,11 @@ export class ProposedCommentAcceptEvent extends Event {
   }
 }
 
-export class RejectProposedCommentEvent extends Event {
+export class ProposedCommentRejectEvent extends Event {
   public readonly comment: Comment;
 
   constructor(comment: Comment) {
-    super(REJECT_PROPOSED_COMMENT_EVENT_NAME, {
+    super(PROPOSED_COMMENT_REJECT_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
@@ -47,11 +47,11 @@ export class RejectProposedCommentEvent extends Event {
   }
 }
 
-export class SelectProposedCommentEvent extends Event {
+export class ProposedCommentSelectEvent extends Event {
   public readonly comment: Comment;
 
   constructor(comment: Comment) {
-    super(SELECT_PROPOSED_COMMENT_EVENT_NAME, {
+    super(PROPOSED_COMMENT_SELECT_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
@@ -153,8 +153,8 @@ declare global {
   interface HTMLElementEventMap {
     [COMMENT_SELECT_EVENT_NAME]: CommentSelectEvent;
     [PROPOSED_COMMENT_ACCEPT_EVENT_NAME]: ProposedCommentAcceptEvent;
-    [REJECT_PROPOSED_COMMENT_EVENT_NAME]: RejectProposedCommentEvent;
-    [SELECT_PROPOSED_COMMENT_EVENT_NAME]: SelectProposedCommentEvent;
+    [PROPOSED_COMMENT_REJECT_EVENT_NAME]: ProposedCommentRejectEvent;
+    [PROPOSED_COMMENT_SELECT_EVENT_NAME]: ProposedCommentSelectEvent;
     [COMMENT_CREATED_EVENT_NAME]: CommentCreatedEvent;
     [COMMENT_UPDATED_EVENT_NAME]: CommentUpdatedEvent;
     [COMMENT_DELETED_EVENT_NAME]: CommentDeletedEvent;

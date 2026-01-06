@@ -8,8 +8,8 @@ import {
   CommentSelectEvent,
   CommentUpdatedEvent,
   ProposedCommentAcceptEvent,
-  RejectProposedCommentEvent,
-  SelectProposedCommentEvent,
+  ProposedCommentRejectEvent,
+  ProposedCommentSelectEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { commentRepository } from "../repository/comment-repository";
@@ -45,7 +45,7 @@ export class LearningCommentProposedWidget extends LitElement {
     }
   }
 
-  private async handleReject(e: RejectProposedCommentEvent) {
+  private async handleReject(e: ProposedCommentRejectEvent) {
     if (!this.discussionId) return;
     const comment = e.comment;
     try {
@@ -58,7 +58,7 @@ export class LearningCommentProposedWidget extends LitElement {
     }
   }
 
-  private handleSelect(e: SelectProposedCommentEvent) {
+  private handleSelect(e: ProposedCommentSelectEvent) {
     const comment = e.comment;
     this.dispatchEvent(
       new CommentSelectEvent(comment.parentCommentId || undefined)
@@ -76,8 +76,8 @@ export class LearningCommentProposedWidget extends LitElement {
         <learning-proposed-comment-list
           .comments=${this.proposedComments}
           @proposed-comment-accept=${this.handleAccept}
-          @reject-proposed-comment=${this.handleReject}
-          @select-proposed-comment=${this.handleSelect}
+          @proposed-comment-reject=${this.handleReject}
+          @proposed-comment-select=${this.handleSelect}
         ></learning-proposed-comment-list>
       </section>
     `;
