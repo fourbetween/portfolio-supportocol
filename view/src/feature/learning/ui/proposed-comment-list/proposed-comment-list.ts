@@ -5,7 +5,7 @@ import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
-  AcceptProposedCommentEvent,
+  ProposedCommentAcceptEvent,
   RejectProposedCommentEvent,
   SelectProposedCommentEvent,
 } from "../../event/comment";
@@ -23,7 +23,7 @@ export class LearningProposedCommentList extends LitElement {
   }
 
   private onAccept(comment: Comment) {
-    this.dispatchEvent(new AcceptProposedCommentEvent(comment));
+    this.dispatchEvent(new ProposedCommentAcceptEvent(comment));
   }
 
   private onReject(comment: Comment) {

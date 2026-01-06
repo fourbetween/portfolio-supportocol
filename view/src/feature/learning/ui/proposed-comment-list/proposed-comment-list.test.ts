@@ -2,7 +2,7 @@ import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import {
-  AcceptProposedCommentEvent,
+  ProposedCommentAcceptEvent,
   RejectProposedCommentEvent,
   SelectProposedCommentEvent,
 } from "../../event/comment";
@@ -71,7 +71,7 @@ describe("learning-proposed-comment-list", () => {
       .toBeVisible();
   });
 
-  it("採用ボタンをクリックすると accept-proposed-comment イベントが発火されること", async () => {
+  it("採用ボタンをクリックすると proposed-comment-accept イベントが発火されること", async () => {
     const onAccept = vi.fn();
     const comments: Comment[] = [
       {
@@ -89,7 +89,7 @@ describe("learning-proposed-comment-list", () => {
       html`
         <learning-proposed-comment-list
           .comments=${comments}
-          @accept-proposed-comment=${(e: AcceptProposedCommentEvent) =>
+          @proposed-comment-accept=${(e: ProposedCommentAcceptEvent) =>
             onAccept(e.comment)}
         ></learning-proposed-comment-list>
       `,

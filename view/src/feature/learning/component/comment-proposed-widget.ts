@@ -4,10 +4,10 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { titleStyle } from "../../../shared/style/title";
 import {
-  AcceptProposedCommentEvent,
   CommentDeletedEvent,
   CommentSelectEvent,
   CommentUpdatedEvent,
+  ProposedCommentAcceptEvent,
   RejectProposedCommentEvent,
   SelectProposedCommentEvent,
 } from "../event/comment";
@@ -27,7 +27,7 @@ export class LearningCommentProposedWidget extends LitElement {
     return this.comments?.filter((c) => c.status === "proposed") ?? [];
   }
 
-  private async handleAccept(e: AcceptProposedCommentEvent) {
+  private async handleAccept(e: ProposedCommentAcceptEvent) {
     if (!this.discussionId) return;
     const comment = e.comment;
 
@@ -75,7 +75,7 @@ export class LearningCommentProposedWidget extends LitElement {
         <div class="section-title">Proposed Comments</div>
         <learning-proposed-comment-list
           .comments=${this.proposedComments}
-          @accept-proposed-comment=${this.handleAccept}
+          @proposed-comment-accept=${this.handleAccept}
           @reject-proposed-comment=${this.handleReject}
           @select-proposed-comment=${this.handleSelect}
         ></learning-proposed-comment-list>
