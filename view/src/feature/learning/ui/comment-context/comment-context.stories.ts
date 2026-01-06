@@ -6,7 +6,7 @@ const meta: Meta = {
   title: "learning/ui/comment-context",
   component: "learning-comment-context",
   argTypes: {
-    onSelectComment: { action: "select-comment" },
+    onSelectComment: { action: "comment-select" },
     onCommentUpdated: { action: "comment-updated" },
     onCommentDeleted: { action: "comment-deleted" },
     onCommentGenerated: { action: "comment-generated" },
@@ -19,7 +19,7 @@ const meta: Meta = {
       .path=${args.path}
       .childCounts=${args.childCounts}
       .availableTypes=${args.availableTypes}
-      @select-comment=${args.onSelectComment}
+      @comment-select=${args.onSelectComment}
       @comment-updated=${args.onCommentUpdated}
       @comment-deleted=${args.onCommentDeleted}
       @comment-generated=${args.onCommentGenerated}

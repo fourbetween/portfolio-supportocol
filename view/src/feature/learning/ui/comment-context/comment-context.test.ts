@@ -91,7 +91,7 @@ describe("learning-comment-context", async () => {
       .toBeInTheDocument();
   });
 
-  it("コメントをクリックしたときに select-comment イベントが発火されること", async () => {
+  it("コメントをクリックしたときに comment-select イベントが発火されること", async () => {
     const path = [
       {
         id: "1",
@@ -113,7 +113,7 @@ describe("learning-comment-context", async () => {
       html`
         <learning-comment-context
           .path=${path}
-          @select-comment=${handleSelectComment}
+          @comment-select=${handleSelectComment}
         ></learning-comment-context>
       `,
       container

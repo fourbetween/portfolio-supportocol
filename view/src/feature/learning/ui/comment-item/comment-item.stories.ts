@@ -7,7 +7,7 @@ const meta: Meta = {
   title: "learning/ui/comment-item",
   component: "learning-comment-item",
   argTypes: {
-    onSelectComment: { action: "select-comment" },
+    onSelectComment: { action: "comment-select" },
     onCommentDeleted: { action: "comment-deleted" },
     onCommentGenerated: { action: "comment-generated" },
     onRequestCommentUpdate: { action: "request-comment-update" },
@@ -37,7 +37,7 @@ export const Default: Story = {
       .comment=${mockComment}
       .activeChildrenCount=${args.activeChildrenCount}
       .availableTypes=${availableTypes}
-      @select-comment=${args.onSelectComment}
+      @comment-select=${args.onSelectComment}
       @comment-deleted=${args.onCommentDeleted}
       @comment-generated=${args.onCommentGenerated}
       @request-comment-update=${args.onRequestCommentUpdate}

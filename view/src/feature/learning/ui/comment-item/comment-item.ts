@@ -7,10 +7,10 @@ import {
   CommentDeletedEvent,
   CommentGeneratedEvent,
   CommentSaveEvent,
+  CommentSelectEvent,
   CommentTypeSelectEvent,
   RequestCommentReplyEvent,
   RequestCommentUpdateEvent,
-  SelectCommentEvent,
 } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
@@ -40,7 +40,7 @@ export class LearningCommentItem extends LitElement {
 
   private handleCommentClick() {
     if (this.comment) {
-      this.dispatchEvent(new SelectCommentEvent(this.comment.id));
+      this.dispatchEvent(new CommentSelectEvent(this.comment.id));
     }
   }
 

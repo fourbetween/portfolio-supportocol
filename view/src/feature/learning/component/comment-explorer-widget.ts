@@ -8,10 +8,10 @@ import {
   CommentCreatedEvent,
   CommentDeletedEvent,
   CommentGeneratedEvent,
+  CommentSelectEvent,
   CommentUpdatedEvent,
   RequestCommentReplyEvent,
   RequestCommentUpdateEvent,
-  SelectCommentEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
@@ -72,9 +72,9 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private handleSelectComment(e: SelectCommentEvent) {
+  private handleSelectComment(e: CommentSelectEvent) {
     const id = this.selectedCommentId === e.commentId ? undefined : e.commentId;
-    this.dispatchEvent(new SelectCommentEvent(id));
+    this.dispatchEvent(new CommentSelectEvent(id));
   }
 
   private async handleRequestCommentUpdate(e: RequestCommentUpdateEvent) {
@@ -143,7 +143,7 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private handleClearSelection() {
-    this.dispatchEvent(new SelectCommentEvent(undefined));
+    this.dispatchEvent(new CommentSelectEvent(undefined));
   }
 
   private get _path(): Comment[] {
@@ -212,7 +212,7 @@ export class LearningCommentExplorerWidget extends LitElement {
           </div>
           <learning-comment-tree
             .comments=${descendants}
-            @select-comment=${this.handleSelectComment}
+            @comment-select=${this.handleSelectComment}
             @request-comment-update=${this.handleRequestCommentUpdate}
             @comment-deleted=${this.handleCommentDeleted}
             @comment-generated=${this.handleCommentGenerated}
@@ -239,7 +239,7 @@ export class LearningCommentExplorerWidget extends LitElement {
           .path=${path}
           .childCounts=${this.childCounts}
           .availableTypes=${this.availableTypes}
-          @select-comment=${this.handleSelectComment}
+          @comment-select=${this.handleSelectComment}
           @request-comment-update=${this.handleRequestCommentUpdate}
           @comment-deleted=${this.handleCommentDeleted}
           @comment-generated=${this.handleCommentGenerated}

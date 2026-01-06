@@ -6,9 +6,9 @@ import { titleStyle } from "../../../shared/style/title";
 import {
   AcceptProposedCommentEvent,
   CommentDeletedEvent,
+  CommentSelectEvent,
   CommentUpdatedEvent,
   RejectProposedCommentEvent,
-  SelectCommentEvent,
   SelectProposedCommentEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
@@ -61,7 +61,7 @@ export class LearningCommentProposedWidget extends LitElement {
   private handleSelect(e: SelectProposedCommentEvent) {
     const comment = e.comment;
     this.dispatchEvent(
-      new SelectCommentEvent(comment.parentCommentId || undefined)
+      new CommentSelectEvent(comment.parentCommentId || undefined)
     );
   }
 

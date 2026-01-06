@@ -1,6 +1,6 @@
 import type { Comment } from "../model/comment";
 
-const SELECT_COMMENT_EVENT_NAME = "select-comment";
+const COMMENT_SELECT_EVENT_NAME = "comment-select";
 const ACCEPT_PROPOSED_COMMENT_EVENT_NAME = "accept-proposed-comment";
 const REJECT_PROPOSED_COMMENT_EVENT_NAME = "reject-proposed-comment";
 const SELECT_PROPOSED_COMMENT_EVENT_NAME = "select-proposed-comment";
@@ -14,11 +14,11 @@ const COMMENT_SAVE_EVENT_NAME = "comment-save";
 const COMMENT_CANCEL_EVENT_NAME = "comment-cancel";
 const COMMENT_TYPE_SELECT_EVENT_NAME = "comment-type-select";
 
-export class SelectCommentEvent extends Event {
+export class CommentSelectEvent extends Event {
   public readonly commentId?: string;
 
   constructor(commentId?: string) {
-    super(SELECT_COMMENT_EVENT_NAME, { bubbles: true, composed: true });
+    super(COMMENT_SELECT_EVENT_NAME, { bubbles: true, composed: true });
     this.commentId = commentId;
   }
 }
@@ -151,7 +151,7 @@ export class CommentTypeSelectEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [SELECT_COMMENT_EVENT_NAME]: SelectCommentEvent;
+    [COMMENT_SELECT_EVENT_NAME]: CommentSelectEvent;
     [ACCEPT_PROPOSED_COMMENT_EVENT_NAME]: AcceptProposedCommentEvent;
     [REJECT_PROPOSED_COMMENT_EVENT_NAME]: RejectProposedCommentEvent;
     [SELECT_PROPOSED_COMMENT_EVENT_NAME]: SelectProposedCommentEvent;

@@ -322,7 +322,7 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   });
 
-  it("コメントがクリックされたときに select-comment イベントが発火されること", async () => {
+  it("コメントがクリックされたときに comment-select イベントが発火されること", async () => {
     const comment = {
       id: "1",
       discussionId: "1",
@@ -340,7 +340,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${[comment]}
-          @select-comment=${onSelect}
+          @comment-select=${onSelect}
         ></learning-comment-tree>
       `,
       container

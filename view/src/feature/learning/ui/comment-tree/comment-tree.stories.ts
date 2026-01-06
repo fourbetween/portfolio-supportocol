@@ -6,7 +6,7 @@ const meta: Meta = {
   title: "learning/ui/comment-tree",
   component: "learning-comment-tree",
   argTypes: {
-    onSelectComment: { action: "select-comment" },
+    onSelectComment: { action: "comment-select" },
     onCommentDeleted: { action: "comment-deleted" },
     onCommentGenerated: { action: "comment-generated" },
     onRequestCommentUpdate: { action: "request-comment-update" },
@@ -15,7 +15,7 @@ const meta: Meta = {
   render: (args) => html`
     <learning-comment-tree
       .comments=${args.comments}
-      @select-comment=${args.onSelectComment}
+      @comment-select=${args.onSelectComment}
       @comment-deleted=${args.onCommentDeleted}
       @comment-generated=${args.onCommentGenerated}
       @request-comment-update=${args.onRequestCommentUpdate}
