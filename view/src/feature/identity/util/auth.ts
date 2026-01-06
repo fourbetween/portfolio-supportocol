@@ -1,9 +1,9 @@
 import { client } from "../api/client";
-import { OpenAuthPopupEvent } from "../event/auth";
+import { AuthPopupOpenEvent } from "../event/auth";
 
 export const auth = {
   login: () => {
-    document.body.dispatchEvent(new OpenAuthPopupEvent());
+    document.body.dispatchEvent(new AuthPopupOpenEvent());
   },
   logout: async () => {
     await client.POST("/identity/logout", {});

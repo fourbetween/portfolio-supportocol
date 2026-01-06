@@ -6,26 +6,26 @@ const meta: Meta = {
   title: "learning/ui/comment-context",
   component: "learning-comment-context",
   argTypes: {
-    onSelectComment: { action: "select-comment" },
+    onSelectComment: { action: "comment-select" },
     onCommentUpdated: { action: "comment-updated" },
     onCommentDeleted: { action: "comment-deleted" },
-    onCommentGenerated: { action: "comment-generated" },
+    onCommentGenerate: { action: "comment-generate" },
     onCommentCreated: { action: "comment-created" },
-    onRequestCommentUpdate: { action: "request-comment-update" },
-    onRequestCommentReply: { action: "request-comment-reply" },
+    onCommentUpdate: { action: "comment-update" },
+    onCommentCreate: { action: "comment-create" },
   },
   render: (args) => html`
     <learning-comment-context
       .path=${args.path}
       .childCounts=${args.childCounts}
       .availableTypes=${args.availableTypes}
-      @select-comment=${args.onSelectComment}
+      @comment-select=${args.onSelectComment}
       @comment-updated=${args.onCommentUpdated}
       @comment-deleted=${args.onCommentDeleted}
-      @comment-generated=${args.onCommentGenerated}
+      @comment-generate=${args.onCommentGenerate}
       @comment-created=${args.onCommentCreated}
-      @request-comment-update=${args.onRequestCommentUpdate}
-      @request-comment-reply=${args.onRequestCommentReply}
+      @comment-update=${args.onCommentUpdate}
+      @comment-create=${args.onCommentCreate}
     ></learning-comment-context>
   `,
 };

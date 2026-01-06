@@ -1,6 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { LoadingEvent } from "../../event/loading";
+import { LOADING_SHOW_EVENT_NAME, LoadingShowEvent } from "../../event/loading";
 import "./loading";
 
 @customElement("loading-manager")
@@ -13,13 +13,16 @@ export class LoadingManager extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener("loading", this.handleLoading as EventListener);
+    document.addEventListener(
+      LOADING_SHOW_EVENT_NAME,
+      this.handleLoading as EventListener
+    );
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener(
-      "loading",
+      LOADING_SHOW_EVENT_NAME,
       this.handleLoading as EventListener
     );
   }
@@ -30,7 +33,7 @@ export class LoadingManager extends LitElement {
     `;
   }
 
-  private handleLoading = (event: LoadingEvent) => {
+  private handleLoading = (event: LoadingShowEvent) => {
     this.show = event.show;
     this.progress = event.progress;
   };

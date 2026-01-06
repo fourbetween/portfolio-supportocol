@@ -62,7 +62,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
       .not.toBeInTheDocument();
   });
 
-  it("削除ボタンをクリックすると comment-deleted イベントが発火される", async () => {
+  it("削除ボタンをクリックすると comment-delete イベントが発火される", async () => {
     let deletedCommentId = "";
     const handleDelete = (e: any) => {
       deletedCommentId = e.commentId;
@@ -72,7 +72,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          @comment-deleted=${handleDelete}
+          @comment-delete=${handleDelete}
         ></learning-comment-item>
       `,
       container
@@ -84,7 +84,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     expect(deletedCommentId).toBe("1");
   });
 
-  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generated イベントが発火される", async () => {
+  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generate イベントが発火される", async () => {
     let generatedParentId = "";
     let generatedType = "";
     const handleGenerate = (e: any) => {
@@ -96,7 +96,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          @comment-generated=${handleGenerate}
+          @comment-generate=${handleGenerate}
         ></learning-comment-item>
       `,
       container
@@ -114,11 +114,11 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     expect(generatedType).toBe("question");
   });
 
-  it("返信ボタンをクリックし、タイプを選択すると返信フォームが表示され、保存すると request-comment-reply イベントが発火される", async () => {
+  it("返信ボタンをクリックし、タイプを選択すると返信フォームが表示され、保存すると comment-create イベントが発火される", async () => {
     let replyParentId = "";
     let replyType = "";
     let replyContent = "";
-    const handleReply = (e: any) => {
+    const handleCreate = (e: any) => {
       replyParentId = e.parentCommentId;
       replyType = e.commentType;
       replyContent = e.content;
@@ -128,7 +128,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          @request-comment-reply=${handleReply}
+          @comment-create=${handleCreate}
         ></learning-comment-item>
       `,
       container

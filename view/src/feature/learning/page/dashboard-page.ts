@@ -12,8 +12,8 @@ import "../component/discussion-list-widget";
 import {
   type CommentCreatedEvent,
   type CommentDeletedEvent,
+  type CommentSelectEvent,
   type CommentUpdatedEvent,
-  type SelectCommentEvent,
 } from "../event/comment";
 import {
   type DiscussionDeletedEvent,
@@ -143,7 +143,7 @@ export class LearningDashboardPage extends LitElement {
     }
   }
 
-  private _handleSelectComment(e: SelectCommentEvent) {
+  private _handleSelectComment(e: CommentSelectEvent) {
     this._selectedCommentId = e.commentId;
   }
 
@@ -196,7 +196,7 @@ export class LearningDashboardPage extends LitElement {
         <aside class="sidebar sidebar-left">
           <learning-discussion-list-widget
             .discussions=${this._discussions}
-            @select-discussion=${this._handleSelectDiscussion}
+            @discussion-select=${this._handleSelectDiscussion}
             @discussion-created=${this._handleDiscussionUpdated}
             @discussion-deleted=${this._handleDiscussionDeleted}
           ></learning-discussion-list-widget>
@@ -222,7 +222,7 @@ export class LearningDashboardPage extends LitElement {
               @comment-updated=${this._handleCommentUpdated}
               @comment-deleted=${this._handleCommentDeleted}
               @comment-generated=${this._handleCommentGenerated}
-              @select-comment=${this._handleSelectComment}
+              @comment-select=${this._handleSelectComment}
             ></learning-comment-explorer-widget>
           </div>
         </main>
@@ -234,7 +234,7 @@ export class LearningDashboardPage extends LitElement {
                   .comments=${this._comments}
                   @comment-updated=${this._handleCommentUpdated}
                   @comment-deleted=${this._handleCommentDeleted}
-                  @select-comment=${this._handleSelectComment}
+                  @comment-select=${this._handleSelectComment}
                 ></learning-comment-proposed-widget>
               </aside>
             `

@@ -5,13 +5,15 @@ import { baseStyle } from "../../../shared/style/base";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import {
+  CommentCreateEvent,
   CommentCreatedEvent,
+  CommentDeleteEvent,
   CommentDeletedEvent,
+  CommentGenerateEvent,
   CommentGeneratedEvent,
+  CommentSelectEvent,
+  CommentUpdateEvent,
   CommentUpdatedEvent,
-  RequestCommentReplyEvent,
-  RequestCommentUpdateEvent,
-  SelectCommentEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
@@ -72,12 +74,12 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private handleSelectComment(e: SelectCommentEvent) {
+  private handleSelectComment(e: CommentSelectEvent) {
     const id = this.selectedCommentId === e.commentId ? undefined : e.commentId;
-    this.dispatchEvent(new SelectCommentEvent(id));
+    this.dispatchEvent(new CommentSelectEvent(id));
   }
 
-  private async handleRequestCommentUpdate(e: RequestCommentUpdateEvent) {
+  private async handleCommentUpdate(e: CommentUpdateEvent) {
     if (!this.discussionId) return;
     try {
       const data = await commentRepository.update(
@@ -93,7 +95,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private async handleCommentDeleted(e: CommentDeletedEvent) {
+  private async handleCommentDelete(e: CommentDeleteEvent) {
     if (!this.discussionId) return;
     if (!confirm("Are you sure you want to delete this comment?")) return;
 
@@ -107,7 +109,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private async handleCommentGenerated(e: CommentGeneratedEvent) {
+  private async handleCommentGenerate(e: CommentGenerateEvent) {
     if (!this.discussionId || !e.parentCommentId || !e.commentType) return;
     try {
       await commentRepository.generate(this.discussionId, {
@@ -124,7 +126,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private async handleRequestCommentReply(e: RequestCommentReplyEvent) {
+  private async handleCommentCreate(e: CommentCreateEvent) {
     if (!this.discussionId) return;
     try {
       const data = await commentRepository.create(this.discussionId, {
@@ -143,7 +145,7 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private handleClearSelection() {
-    this.dispatchEvent(new SelectCommentEvent(undefined));
+    this.dispatchEvent(new CommentSelectEvent(undefined));
   }
 
   private get _path(): Comment[] {
@@ -212,11 +214,11 @@ export class LearningCommentExplorerWidget extends LitElement {
           </div>
           <learning-comment-tree
             .comments=${descendants}
-            @select-comment=${this.handleSelectComment}
-            @request-comment-update=${this.handleRequestCommentUpdate}
-            @comment-deleted=${this.handleCommentDeleted}
-            @comment-generated=${this.handleCommentGenerated}
-            @request-comment-reply=${this.handleRequestCommentReply}
+            @comment-select=${this.handleSelectComment}
+            @comment-create=${this.handleCommentCreate}
+            @comment-update=${this.handleCommentUpdate}
+            @comment-delete=${this.handleCommentDelete}
+            @comment-generate=${this.handleCommentGenerate}
           ></learning-comment-tree>
         </div>
       </div>
@@ -239,11 +241,11 @@ export class LearningCommentExplorerWidget extends LitElement {
           .path=${path}
           .childCounts=${this.childCounts}
           .availableTypes=${this.availableTypes}
-          @select-comment=${this.handleSelectComment}
-          @request-comment-update=${this.handleRequestCommentUpdate}
-          @comment-deleted=${this.handleCommentDeleted}
-          @comment-generated=${this.handleCommentGenerated}
-          @request-comment-reply=${this.handleRequestCommentReply}
+          @comment-select=${this.handleSelectComment}
+          @comment-create=${this.handleCommentCreate}
+          @comment-update=${this.handleCommentUpdate}
+          @comment-delete=${this.handleCommentDelete}
+          @comment-generate=${this.handleCommentGenerate}
         ></learning-comment-context>
       </div>
     `;

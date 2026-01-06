@@ -1,42 +1,42 @@
 export type AuthMode = "login" | "signup";
 
-const OPEN_AUTH_POPUP_EVENT_NAME = "open-auth-popup";
-const SWITCH_MODE_EVENT_NAME = "switch-mode";
-const LOGIN_EVENT_NAME = "login";
-const SIGNUP_EVENT_NAME = "signup";
+const AUTH_POPUP_OPEN_EVENT_NAME = "auth-popup-open";
+const AUTH_MODE_SWITCH_EVENT_NAME = "auth-mode-switch";
+const AUTH_LOGIN_EVENT_NAME = "auth-login";
+const AUTH_SIGNUP_EVENT_NAME = "auth-signup";
 
-export class OpenAuthPopupEvent extends Event {
+export class AuthPopupOpenEvent extends Event {
   constructor() {
-    super(OPEN_AUTH_POPUP_EVENT_NAME, { bubbles: true, composed: true });
+    super(AUTH_POPUP_OPEN_EVENT_NAME, { bubbles: true, composed: true });
   }
 }
 
-export class SwitchModeEvent extends Event {
+export class AuthModeSwitchEvent extends Event {
   public readonly mode: AuthMode;
 
   constructor(mode: AuthMode) {
-    super(SWITCH_MODE_EVENT_NAME, { bubbles: true, composed: true });
+    super(AUTH_MODE_SWITCH_EVENT_NAME, { bubbles: true, composed: true });
     this.mode = mode;
   }
 }
 
-export class LoginEvent extends Event {
+export class AuthLoginEvent extends Event {
   public readonly email: string;
   public readonly password: string;
 
   constructor(email: string, password: string) {
-    super(LOGIN_EVENT_NAME, { bubbles: true, composed: true });
+    super(AUTH_LOGIN_EVENT_NAME, { bubbles: true, composed: true });
     this.email = email;
     this.password = password;
   }
 }
 
-export class SignupEvent extends Event {
+export class AuthSignupEvent extends Event {
   public readonly email: string;
   public readonly password: string;
 
   constructor(email: string, password: string) {
-    super(SIGNUP_EVENT_NAME, { bubbles: true, composed: true });
+    super(AUTH_SIGNUP_EVENT_NAME, { bubbles: true, composed: true });
     this.email = email;
     this.password = password;
   }
@@ -44,9 +44,9 @@ export class SignupEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [OPEN_AUTH_POPUP_EVENT_NAME]: OpenAuthPopupEvent;
-    [SWITCH_MODE_EVENT_NAME]: SwitchModeEvent;
-    [LOGIN_EVENT_NAME]: LoginEvent;
-    [SIGNUP_EVENT_NAME]: SignupEvent;
+    [AUTH_POPUP_OPEN_EVENT_NAME]: AuthPopupOpenEvent;
+    [AUTH_MODE_SWITCH_EVENT_NAME]: AuthModeSwitchEvent;
+    [AUTH_LOGIN_EVENT_NAME]: AuthLoginEvent;
+    [AUTH_SIGNUP_EVENT_NAME]: AuthSignupEvent;
   }
 }

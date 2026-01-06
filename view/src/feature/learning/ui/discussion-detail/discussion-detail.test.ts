@@ -1,7 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import type { RequestUpdateDiscussionEvent } from "../../event/discussion";
+import type { DiscussionUpdateEvent } from "../../event/discussion";
 import "./discussion-detail";
 
 describe("learning-discussion-detail", async () => {
@@ -29,14 +29,14 @@ describe("learning-discussion-detail", async () => {
     await expect.element(page.getByText("テストテーマ")).toBeVisible();
   });
 
-  it("編集ボタンをクリックすると request-edit-discussion イベントが発火されること", async () => {
+  it("編集ボタンをクリックすると discussion-form-open イベントが発火されること", async () => {
     const onEdit = vi.fn();
     const discussion = { id: "1", theme: "テストテーマ" };
     render(
       html`
         <learning-discussion-detail
           .discussion=${discussion}
-          @request-edit-discussion=${() => onEdit()}
+          @discussion-form-open=${() => onEdit()}
         ></learning-discussion-detail>
       `,
       container
@@ -62,7 +62,7 @@ describe("learning-discussion-detail", async () => {
     await expect.element(input).toHaveValue("テストテーマ");
   });
 
-  it("保存ボタンをクリックすると request-update-discussion イベントが発火されること", async () => {
+  it("保存ボタンをクリックすると discussion-update イベントが発火されること", async () => {
     const onSave = vi.fn();
     const discussion = { id: "1", theme: "元のテーマ" };
     render(
@@ -70,8 +70,7 @@ describe("learning-discussion-detail", async () => {
         <learning-discussion-detail
           .discussion=${discussion}
           .isEditing=${true}
-          @request-update-discussion=${(e: RequestUpdateDiscussionEvent) =>
-            onSave(e.theme)}
+          @discussion-update=${(e: DiscussionUpdateEvent) => onSave(e.theme)}
         ></learning-discussion-detail>
       `,
       container
@@ -84,13 +83,13 @@ describe("learning-discussion-detail", async () => {
     expect(onSave).toHaveBeenCalledWith("新しいテーマ");
   });
 
-  it("キャンセルボタンをクリックすると cancel-edit-discussion イベントが発火されること", async () => {
+  it("キャンセルボタンをクリックすると discussion-form-close イベントが発火されること", async () => {
     const onCancel = vi.fn();
     render(
       html`
         <learning-discussion-detail
           .isEditing=${true}
-          @cancel-edit-discussion=${() => onCancel()}
+          @discussion-form-close=${() => onCancel()}
         ></learning-discussion-detail>
       `,
       container

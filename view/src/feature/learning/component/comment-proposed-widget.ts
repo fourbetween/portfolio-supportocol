@@ -4,12 +4,12 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { titleStyle } from "../../../shared/style/title";
 import {
-  AcceptProposedCommentEvent,
   CommentDeletedEvent,
+  CommentSelectEvent,
   CommentUpdatedEvent,
-  RejectProposedCommentEvent,
-  SelectCommentEvent,
-  SelectProposedCommentEvent,
+  ProposedCommentAcceptEvent,
+  ProposedCommentRejectEvent,
+  ProposedCommentSelectEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { commentRepository } from "../repository/comment-repository";
@@ -27,7 +27,7 @@ export class LearningCommentProposedWidget extends LitElement {
     return this.comments?.filter((c) => c.status === "proposed") ?? [];
   }
 
-  private async handleAccept(e: AcceptProposedCommentEvent) {
+  private async handleAccept(e: ProposedCommentAcceptEvent) {
     if (!this.discussionId) return;
     const comment = e.comment;
 
@@ -45,7 +45,7 @@ export class LearningCommentProposedWidget extends LitElement {
     }
   }
 
-  private async handleReject(e: RejectProposedCommentEvent) {
+  private async handleReject(e: ProposedCommentRejectEvent) {
     if (!this.discussionId) return;
     const comment = e.comment;
     try {
@@ -58,10 +58,10 @@ export class LearningCommentProposedWidget extends LitElement {
     }
   }
 
-  private handleSelect(e: SelectProposedCommentEvent) {
+  private handleSelect(e: ProposedCommentSelectEvent) {
     const comment = e.comment;
     this.dispatchEvent(
-      new SelectCommentEvent(comment.parentCommentId || undefined)
+      new CommentSelectEvent(comment.parentCommentId || undefined)
     );
   }
 
@@ -75,9 +75,9 @@ export class LearningCommentProposedWidget extends LitElement {
         <div class="section-title">Proposed Comments</div>
         <learning-proposed-comment-list
           .comments=${this.proposedComments}
-          @accept-proposed-comment=${this.handleAccept}
-          @reject-proposed-comment=${this.handleReject}
-          @select-proposed-comment=${this.handleSelect}
+          @proposed-comment-accept=${this.handleAccept}
+          @proposed-comment-reject=${this.handleReject}
+          @proposed-comment-select=${this.handleSelect}
         ></learning-proposed-comment-list>
       </section>
     `;

@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
-import { RequestEditDiscussionEvent } from "../../event/discussion";
+import { DiscussionFormOpenEvent } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-edit-form/discussion-edit-form";
 
@@ -49,7 +49,7 @@ export class LearningDiscussionDetail extends LitElement {
   }
 
   private _handleEditClick() {
-    this.dispatchEvent(new RequestEditDiscussionEvent());
+    this.dispatchEvent(new DiscussionFormOpenEvent());
   }
 
   static styles = [

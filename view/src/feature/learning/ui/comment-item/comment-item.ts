@@ -4,13 +4,10 @@ import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
-  CommentDeletedEvent,
-  CommentGeneratedEvent,
-  CommentSaveEvent,
+  CommentDeleteEvent,
+  CommentGenerateEvent,
+  CommentSelectEvent,
   CommentTypeSelectEvent,
-  RequestCommentReplyEvent,
-  RequestCommentUpdateEvent,
-  SelectCommentEvent,
 } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
@@ -40,7 +37,7 @@ export class LearningCommentItem extends LitElement {
 
   private handleCommentClick() {
     if (this.comment) {
-      this.dispatchEvent(new SelectCommentEvent(this.comment.id));
+      this.dispatchEvent(new CommentSelectEvent(this.comment.id));
     }
   }
 
@@ -59,7 +56,7 @@ export class LearningCommentItem extends LitElement {
   private handleDeleteClick(e: Event) {
     e.stopPropagation();
     if (this.comment) {
-      this.dispatchEvent(new CommentDeletedEvent(this.comment.id));
+      this.dispatchEvent(new CommentDeleteEvent(this.comment.id));
     }
   }
 
@@ -70,28 +67,14 @@ export class LearningCommentItem extends LitElement {
     } else if (this.mode === "generate") {
       if (this.comment) {
         this.dispatchEvent(
-          new CommentGeneratedEvent(this.comment.id, commentType)
+          new CommentGenerateEvent(this.comment.id, commentType)
         );
       }
       this.mode = "view";
     }
   }
 
-  private handleUpdate(e: CommentSaveEvent) {
-    if (this.comment) {
-      this.dispatchEvent(
-        new RequestCommentUpdateEvent(this.comment.id, e.commentType, e.content)
-      );
-    }
-    this.mode = "view";
-  }
-
-  private handleReply(e: CommentSaveEvent) {
-    if (this.comment) {
-      this.dispatchEvent(
-        new RequestCommentReplyEvent(this.comment.id, e.commentType, e.content)
-      );
-    }
+  private handleFormSave() {
     this.mode = "view";
     this.selectedReplyType = undefined;
   }
@@ -166,10 +149,11 @@ export class LearningCommentItem extends LitElement {
       return html`
         <learning-comment-edit-form
           class="reply-form"
+          .parentCommentId=${this.comment?.id}
           .initialType=${this.selectedReplyType}
           .availableTypes=${this.availableTypes}
-          @comment-cancel=${() => (this.mode = "view")}
-          @comment-save=${this.handleReply}
+          @comment-form-close=${() => (this.mode = "view")}
+          @comment-create=${this.handleFormSave}
         ></learning-comment-edit-form>
       `;
     }
@@ -185,11 +169,12 @@ export class LearningCommentItem extends LitElement {
   private renderEditForm() {
     return html`
       <learning-comment-edit-form
+        .commentId=${this.comment?.id}
         .initialType=${this.comment!.commentType}
         .initialContent=${this.comment!.content}
         .availableTypes=${this.availableTypes}
-        @comment-cancel=${() => (this.mode = "view")}
-        @comment-save=${this.handleUpdate}
+        @comment-form-close=${() => (this.mode = "view")}
+        @comment-update=${this.handleFormSave}
       ></learning-comment-edit-form>
     `;
   }

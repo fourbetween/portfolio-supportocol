@@ -4,7 +4,7 @@ import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
-  RequestDeleteDiscussionEvent,
+  DiscussionDeleteEvent,
   SelectDiscussionEvent,
 } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
@@ -20,7 +20,7 @@ export class LearningDiscussionItem extends LitElement {
 
   private handleDelete(e: Event) {
     e.stopPropagation();
-    this.dispatchEvent(new RequestDeleteDiscussionEvent(this.discussion));
+    this.dispatchEvent(new DiscussionDeleteEvent(this.discussion));
   }
 
   render() {

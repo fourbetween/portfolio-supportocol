@@ -1,10 +1,10 @@
-import { LitElement, html, nothing } from "lit";
+import { html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import {
   DiscussionUpdatedEvent,
-  RequestUpdateDiscussionEvent,
+  DiscussionUpdateEvent,
 } from "../event/discussion";
 import type { Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
@@ -18,7 +18,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
   @state()
   private _isEditing = false;
 
-  private async _handleUpdateDiscussion(e: RequestUpdateDiscussionEvent) {
+  private async _handleUpdateDiscussion(e: DiscussionUpdateEvent) {
     if (!this.discussion) return;
     try {
       const data = await discussionRepository.update(
@@ -42,9 +42,9 @@ export class LearningDiscussionDetailWidget extends LitElement {
       <learning-discussion-detail
         .discussion=${this.discussion}
         .isEditing=${this._isEditing}
-        @request-edit-discussion=${() => (this._isEditing = true)}
-        @request-update-discussion=${this._handleUpdateDiscussion}
-        @cancel-edit-discussion=${() => (this._isEditing = false)}
+        @discussion-form-open=${() => (this._isEditing = true)}
+        @discussion-update=${this._handleUpdateDiscussion}
+        @discussion-form-close=${() => (this._isEditing = false)}
       ></learning-discussion-detail>
     `;
   }

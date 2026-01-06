@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
-import type { SearchDiscussionEvent } from "../../event/discussion";
+import type { DiscussionSearchEvent } from "../../event/discussion";
 import "./discussion-search-bar";
 
 const meta: Meta = {
@@ -19,7 +19,7 @@ export const Default: Story = {
   render: (args) => html`
     <learning-discussion-search-bar
       .value=${args.value}
-      @search-discussion=${(e: SearchDiscussionEvent) =>
+      @discussion-search=${(e: DiscussionSearchEvent) =>
         console.log("input", e.query)}
     ></learning-discussion-search-bar>
   `,

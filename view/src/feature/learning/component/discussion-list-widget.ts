@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
@@ -6,8 +6,8 @@ import {
   CreateDiscussionEvent,
   DiscussionCreatedEvent,
   DiscussionDeletedEvent,
-  RequestDeleteDiscussionEvent,
-  SearchDiscussionEvent,
+  DiscussionDeleteEvent,
+  DiscussionSearchEvent,
 } from "../event/discussion";
 import type { Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
@@ -32,11 +32,11 @@ export class LearningDiscussionListWidget extends LitElement {
     }
   }
 
-  private _handleSearch(e: SearchDiscussionEvent) {
+  private _handleSearch(e: DiscussionSearchEvent) {
     this._searchQuery = e.query;
   }
 
-  private async _handleDeleteDiscussion(e: RequestDeleteDiscussionEvent) {
+  private async _handleDeleteDiscussion(e: DiscussionDeleteEvent) {
     const { discussion } = e;
     if (!confirm(`Are you sure you want to delete "${discussion.theme}"?`)) {
       return;
@@ -62,18 +62,18 @@ export class LearningDiscussionListWidget extends LitElement {
         <div class="header">
           <learning-discussion-search-bar
             .value=${this._searchQuery}
-            @search-discussion=${this._handleSearch}
+            @discussion-search=${this._handleSearch}
           ></learning-discussion-search-bar>
         </div>
         <div class="add-form">
           <learning-discussion-add-form
-            @create-discussion=${this._handleAddDiscussion}
+            @discussion-create=${this._handleAddDiscussion}
           ></learning-discussion-add-form>
         </div>
         <div class="content">
           <learning-discussion-list
             .discussions=${this._filteredDiscussions}
-            @request-delete-discussion=${this._handleDeleteDiscussion}
+            @discussion-delete=${this._handleDeleteDiscussion}
           ></learning-discussion-list>
         </div>
       </div>

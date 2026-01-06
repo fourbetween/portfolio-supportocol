@@ -322,7 +322,7 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   });
 
-  it("コメントがクリックされたときに select-comment イベントが発火されること", async () => {
+  it("コメントがクリックされたときに comment-select イベントが発火されること", async () => {
     const comment = {
       id: "1",
       discussionId: "1",
@@ -340,7 +340,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${[comment]}
-          @select-comment=${onSelect}
+          @comment-select=${onSelect}
         ></learning-comment-tree>
       `,
       container
@@ -466,7 +466,7 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   });
 
-  it("削除ボタンをクリックすると comment-deleted イベントが発火されること", async () => {
+  it("削除ボタンをクリックすると comment-delete イベントが発火されること", async () => {
     let deletedId = "";
     const onCommentDelete = (e: any) => {
       deletedId = e.commentId;
@@ -486,7 +486,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${comments}
-          @comment-deleted=${onCommentDelete}
+          @comment-delete=${onCommentDelete}
         ></learning-comment-tree>
       `,
       container
@@ -501,7 +501,7 @@ describe("learning-comment-tree", async () => {
     expect(deletedId).toBe("1");
   });
 
-  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generated イベントが発火されること", async () => {
+  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generate イベントが発火されること", async () => {
     let generatedId = "";
     let generatedType = "";
     const onCommentGenerate = (e: any) => {
@@ -523,7 +523,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${comments}
-          @comment-generated=${onCommentGenerate}
+          @comment-generate=${onCommentGenerate}
         ></learning-comment-tree>
       `,
       container

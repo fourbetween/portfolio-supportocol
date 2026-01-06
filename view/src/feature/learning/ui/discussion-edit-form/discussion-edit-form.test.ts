@@ -1,7 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import type { RequestUpdateDiscussionEvent } from "../../event/discussion";
+import type { DiscussionUpdateEvent } from "../../event/discussion";
 import "./discussion-edit-form";
 
 describe("learning-discussion-edit-form", () => {
@@ -65,15 +65,14 @@ describe("learning-discussion-edit-form", () => {
     expect(icon?.textContent).toBe("close");
   });
 
-  it("保存ボタンをクリックすると request-update-discussion イベントが入力値とともに発火されること", async () => {
+  it("保存ボタンをクリックすると discussion-update イベントが入力値とともに発火されること", async () => {
     const onSave = vi.fn();
     const theme = "元のテーマ";
     render(
       html`
         <learning-discussion-edit-form
           .theme=${theme}
-          @request-update-discussion=${(e: RequestUpdateDiscussionEvent) =>
-            onSave(e.theme)}
+          @discussion-update=${(e: DiscussionUpdateEvent) => onSave(e.theme)}
         ></learning-discussion-edit-form>
       `,
       container
@@ -87,12 +86,12 @@ describe("learning-discussion-edit-form", () => {
     expect(onSave).toHaveBeenCalledWith("新しいテーマ");
   });
 
-  it("キャンセルボタンをクリックすると cancel-edit-discussion イベントが発火されること", async () => {
+  it("キャンセルボタンをクリックすると discussion-form-close イベントが発火されること", async () => {
     const onCancel = vi.fn();
     render(
       html`
         <learning-discussion-edit-form
-          @cancel-edit-discussion=${() => onCancel()}
+          @discussion-form-close=${() => onCancel()}
         ></learning-discussion-edit-form>
       `,
       container

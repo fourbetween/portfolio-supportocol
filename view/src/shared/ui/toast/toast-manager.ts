@@ -1,6 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
-import { ShowToastEvent } from "../../event/toast";
+import { TOAST_SHOW_EVENT_NAME, ToastShowEvent } from "../../event/toast";
 import "./toast";
 import type { Toast } from "./toast";
 
@@ -12,7 +12,7 @@ export class ToastManager extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     document.addEventListener(
-      "show-toast",
+      TOAST_SHOW_EVENT_NAME,
       this.handleShowToast as EventListener
     );
   }
@@ -20,7 +20,7 @@ export class ToastManager extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener(
-      "show-toast",
+      TOAST_SHOW_EVENT_NAME,
       this.handleShowToast as EventListener
     );
   }
@@ -31,7 +31,7 @@ export class ToastManager extends LitElement {
     `;
   }
 
-  private handleShowToast = (event: ShowToastEvent) => {
+  private handleShowToast = (event: ToastShowEvent) => {
     this.toast.show({
       message: event.message,
       type: event.toastType,
