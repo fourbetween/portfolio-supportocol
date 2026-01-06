@@ -1,15 +1,15 @@
 import type { Discussion } from "../model/discussion";
 
-export const DISCUSSION_SELECT_EVENT_NAME = "discussion-select";
-export const DISCUSSION_CREATE_EVENT_NAME = "discussion-create";
-export const DISCUSSION_CREATED_EVENT_NAME = "discussion-created";
-export const DISCUSSION_UPDATE_EVENT_NAME = "discussion-update";
-export const DISCUSSION_UPDATED_EVENT_NAME = "discussion-updated";
-export const DISCUSSION_DELETE_EVENT_NAME = "discussion-delete";
-export const DISCUSSION_DELETED_EVENT_NAME = "discussion-deleted";
-export const SEARCH_DISCUSSION_EVENT_NAME = "search-discussion";
-export const REQUEST_EDIT_DISCUSSION_EVENT_NAME = "request-edit-discussion";
-export const CANCEL_EDIT_DISCUSSION_EVENT_NAME = "cancel-edit-discussion";
+const DISCUSSION_SELECT_EVENT_NAME = "discussion-select";
+const DISCUSSION_CREATE_EVENT_NAME = "discussion-create";
+const DISCUSSION_CREATED_EVENT_NAME = "discussion-created";
+const DISCUSSION_UPDATE_EVENT_NAME = "discussion-update";
+const DISCUSSION_UPDATED_EVENT_NAME = "discussion-updated";
+const DISCUSSION_DELETE_EVENT_NAME = "discussion-delete";
+const DISCUSSION_DELETED_EVENT_NAME = "discussion-deleted";
+const SEARCH_DISCUSSION_EVENT_NAME = "search-discussion";
+const REQUEST_EDIT_DISCUSSION_EVENT_NAME = "request-edit-discussion";
+const CANCEL_EDIT_DISCUSSION_EVENT_NAME = "cancel-edit-discussion";
 
 export class SelectDiscussionEvent extends Event {
   public readonly discussion: Discussion;
