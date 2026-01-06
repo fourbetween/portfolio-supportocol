@@ -9,6 +9,7 @@ import {
   CommentCreatedEvent,
   CommentDeleteEvent,
   CommentDeletedEvent,
+  CommentGenerateEvent,
   CommentGeneratedEvent,
   CommentSelectEvent,
   CommentUpdateEvent,
@@ -108,7 +109,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private async handleCommentGenerated(e: CommentGeneratedEvent) {
+  private async handleCommentGenerate(e: CommentGenerateEvent) {
     if (!this.discussionId || !e.parentCommentId || !e.commentType) return;
     try {
       await commentRepository.generate(this.discussionId, {
@@ -217,7 +218,7 @@ export class LearningCommentExplorerWidget extends LitElement {
             @comment-create=${this.handleCommentCreate}
             @comment-update=${this.handleCommentUpdate}
             @comment-delete=${this.handleCommentDelete}
-            @comment-generated=${this.handleCommentGenerated}
+            @comment-generate=${this.handleCommentGenerate}
           ></learning-comment-tree>
         </div>
       </div>
@@ -244,7 +245,7 @@ export class LearningCommentExplorerWidget extends LitElement {
           @comment-create=${this.handleCommentCreate}
           @comment-update=${this.handleCommentUpdate}
           @comment-delete=${this.handleCommentDelete}
-          @comment-generated=${this.handleCommentGenerated}
+          @comment-generate=${this.handleCommentGenerate}
         ></learning-comment-context>
       </div>
     `;

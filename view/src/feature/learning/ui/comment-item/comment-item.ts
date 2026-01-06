@@ -6,7 +6,7 @@ import { iconStyle } from "../../../../shared/style/icon";
 import {
   CommentCreateEvent,
   CommentDeleteEvent,
-  CommentGeneratedEvent,
+  CommentGenerateEvent,
   CommentSaveEvent,
   CommentSelectEvent,
   CommentTypeSelectEvent,
@@ -70,7 +70,7 @@ export class LearningCommentItem extends LitElement {
     } else if (this.mode === "generate") {
       if (this.comment) {
         this.dispatchEvent(
-          new CommentGeneratedEvent(this.comment.id, commentType)
+          new CommentGenerateEvent(this.comment.id, commentType)
         );
       }
       this.mode = "view";

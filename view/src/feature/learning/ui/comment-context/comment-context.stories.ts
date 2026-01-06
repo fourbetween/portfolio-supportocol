@@ -9,7 +9,7 @@ const meta: Meta = {
     onSelectComment: { action: "comment-select" },
     onCommentUpdated: { action: "comment-updated" },
     onCommentDeleted: { action: "comment-deleted" },
-    onCommentGenerated: { action: "comment-generated" },
+    onCommentGenerate: { action: "comment-generate" },
     onCommentCreated: { action: "comment-created" },
     onCommentUpdate: { action: "comment-update" },
     onCommentCreate: { action: "comment-create" },
@@ -22,7 +22,7 @@ const meta: Meta = {
       @comment-select=${args.onSelectComment}
       @comment-updated=${args.onCommentUpdated}
       @comment-deleted=${args.onCommentDeleted}
-      @comment-generated=${args.onCommentGenerated}
+      @comment-generate=${args.onCommentGenerate}
       @comment-created=${args.onCommentCreated}
       @comment-update=${args.onCommentUpdate}
       @comment-create=${args.onCommentCreate}

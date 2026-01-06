@@ -8,7 +8,7 @@ const meta: Meta = {
   argTypes: {
     onSelectComment: { action: "comment-select" },
     onCommentDeleted: { action: "comment-deleted" },
-    onCommentGenerated: { action: "comment-generated" },
+    onCommentGenerate: { action: "comment-generate" },
     onCommentUpdate: { action: "comment-update" },
     onCommentCreate: { action: "comment-create" },
   },
@@ -17,7 +17,7 @@ const meta: Meta = {
       .comments=${args.comments}
       @comment-select=${args.onSelectComment}
       @comment-deleted=${args.onCommentDeleted}
-      @comment-generated=${args.onCommentGenerated}
+      @comment-generate=${args.onCommentGenerate}
       @comment-update=${args.onCommentUpdate}
       @comment-create=${args.onCommentCreate}
     ></learning-comment-tree>

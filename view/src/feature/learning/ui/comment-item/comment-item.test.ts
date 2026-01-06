@@ -84,7 +84,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     expect(deletedCommentId).toBe("1");
   });
 
-  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generated イベントが発火される", async () => {
+  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generate イベントが発火される", async () => {
     let generatedParentId = "";
     let generatedType = "";
     const handleGenerate = (e: any) => {
@@ -96,7 +96,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          @comment-generated=${handleGenerate}
+          @comment-generate=${handleGenerate}
         ></learning-comment-item>
       `,
       container

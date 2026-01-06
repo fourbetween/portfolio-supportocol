@@ -501,7 +501,7 @@ describe("learning-comment-tree", async () => {
     expect(deletedId).toBe("1");
   });
 
-  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generated イベントが発火されること", async () => {
+  it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generate イベントが発火されること", async () => {
     let generatedId = "";
     let generatedType = "";
     const onCommentGenerate = (e: any) => {
@@ -523,7 +523,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${comments}
-          @comment-generated=${onCommentGenerate}
+          @comment-generate=${onCommentGenerate}
         ></learning-comment-tree>
       `,
       container
