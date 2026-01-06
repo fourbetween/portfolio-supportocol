@@ -196,7 +196,7 @@ export class LearningDashboardPage extends LitElement {
         <aside class="sidebar sidebar-left">
           <learning-discussion-list-widget
             .discussions=${this._discussions}
-            @select-discussion=${this._handleSelectDiscussion}
+            @discussion-select=${this._handleSelectDiscussion}
             @discussion-created=${this._handleDiscussionUpdated}
             @discussion-deleted=${this._handleDiscussionDeleted}
           ></learning-discussion-list-widget>

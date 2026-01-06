@@ -26,7 +26,7 @@ export const Default: Story = {
   render: (args) => html`
     <learning-discussion-list
       .discussions=${args.discussions}
-      @select-discussion=${(e: SelectDiscussionEvent) =>
+      @discussion-select=${(e: SelectDiscussionEvent) =>
         console.log("selected", e.discussion)}
       @request-delete-discussion=${(e: RequestDeleteDiscussionEvent) =>
         console.log("deleted", e.discussion)}

@@ -2,8 +2,8 @@ import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import {
+  DISCUSSION_SELECT_EVENT_NAME,
   REQUEST_DELETE_DISCUSSION_EVENT_NAME,
-  SELECT_DISCUSSION_EVENT_NAME,
 } from "../../event/discussion";
 import "./discussion-item";
 
@@ -46,7 +46,7 @@ describe("learning-discussion-item", () => {
       html`
         <learning-discussion-item
           .discussion=${discussion}
-          @select-discussion=${(e: Event) => selectHandler(e)}
+          @discussion-select=${(e: Event) => selectHandler(e)}
         ></learning-discussion-item>
       `,
       container
@@ -55,7 +55,7 @@ describe("learning-discussion-item", () => {
     await page.getByText("Test Theme").click();
     expect(selectHandler).toHaveBeenCalled();
     const event = selectHandler.mock.calls[0][0];
-    expect(event.type).toBe(SELECT_DISCUSSION_EVENT_NAME);
+    expect(event.type).toBe(DISCUSSION_SELECT_EVENT_NAME);
     expect(event.discussion).toEqual(discussion);
   });
 

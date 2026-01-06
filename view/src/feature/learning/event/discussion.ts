@@ -1,6 +1,6 @@
 import type { Discussion } from "../model/discussion";
 
-export const SELECT_DISCUSSION_EVENT_NAME = "select-discussion";
+export const DISCUSSION_SELECT_EVENT_NAME = "discussion-select";
 export const CREATE_DISCUSSION_EVENT_NAME = "create-discussion";
 export const SEARCH_DISCUSSION_EVENT_NAME = "search-discussion";
 export const REQUEST_EDIT_DISCUSSION_EVENT_NAME = "request-edit-discussion";
@@ -15,7 +15,7 @@ export class SelectDiscussionEvent extends Event {
   public readonly discussion: Discussion;
 
   constructor(discussion: Discussion) {
-    super(SELECT_DISCUSSION_EVENT_NAME, { bubbles: true, composed: true });
+    super(DISCUSSION_SELECT_EVENT_NAME, { bubbles: true, composed: true });
     this.discussion = discussion;
   }
 }
@@ -106,7 +106,7 @@ export class DiscussionDeletedEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [SELECT_DISCUSSION_EVENT_NAME]: SelectDiscussionEvent;
+    [DISCUSSION_SELECT_EVENT_NAME]: SelectDiscussionEvent;
     [CREATE_DISCUSSION_EVENT_NAME]: CreateDiscussionEvent;
     [SEARCH_DISCUSSION_EVENT_NAME]: SearchDiscussionEvent;
     [REQUEST_EDIT_DISCUSSION_EVENT_NAME]: RequestEditDiscussionEvent;

@@ -48,14 +48,14 @@ describe("learning-discussion-list", () => {
     await expect.element(page.getByText("No discussions found.")).toBeVisible();
   });
 
-  it("アイテムをクリックすると select-discussion イベントが発火されること", async () => {
+  it("アイテムをクリックすると discussion-select イベントが発火されること", async () => {
     const onSelect = vi.fn();
     const discussions = [{ id: "1", theme: "テーマ1" }];
     render(
       html`
         <learning-discussion-list
           .discussions=${discussions}
-          @select-discussion=${(e: SelectDiscussionEvent) =>
+          @discussion-select=${(e: SelectDiscussionEvent) =>
             onSelect(e.discussion)}
         ></learning-discussion-list>
       `,
