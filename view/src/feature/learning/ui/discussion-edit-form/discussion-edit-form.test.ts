@@ -65,14 +65,14 @@ describe("learning-discussion-edit-form", () => {
     expect(icon?.textContent).toBe("close");
   });
 
-  it("保存ボタンをクリックすると request-update-discussion イベントが入力値とともに発火されること", async () => {
+  it("保存ボタンをクリックすると discussion-update イベントが入力値とともに発火されること", async () => {
     const onSave = vi.fn();
     const theme = "元のテーマ";
     render(
       html`
         <learning-discussion-edit-form
           .theme=${theme}
-          @request-update-discussion=${(e: RequestUpdateDiscussionEvent) =>
+          @discussion-update=${(e: RequestUpdateDiscussionEvent) =>
             onSave(e.theme)}
         ></learning-discussion-edit-form>
       `,

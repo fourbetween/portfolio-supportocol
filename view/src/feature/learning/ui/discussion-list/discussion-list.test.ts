@@ -67,14 +67,14 @@ describe("learning-discussion-list", () => {
     expect(onSelect).toHaveBeenCalledWith(discussions[0]);
   });
 
-  it("削除ボタンをクリックすると request-delete-discussion イベントが発火されること", async () => {
+  it("削除ボタンをクリックすると discussion-delete イベントが発火されること", async () => {
     const onDelete = vi.fn();
     const discussions = [{ id: "1", theme: "テーマ1" }];
     render(
       html`
         <learning-discussion-list
           .discussions=${discussions}
-          @request-delete-discussion=${(e: RequestDeleteDiscussionEvent) =>
+          @discussion-delete=${(e: RequestDeleteDiscussionEvent) =>
             onDelete(e.discussion)}
         ></learning-discussion-list>
       `,

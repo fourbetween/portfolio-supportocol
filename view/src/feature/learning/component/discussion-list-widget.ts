@@ -73,7 +73,7 @@ export class LearningDiscussionListWidget extends LitElement {
         <div class="content">
           <learning-discussion-list
             .discussions=${this._filteredDiscussions}
-            @request-delete-discussion=${this._handleDeleteDiscussion}
+            @discussion-delete=${this._handleDeleteDiscussion}
           ></learning-discussion-list>
         </div>
       </div>

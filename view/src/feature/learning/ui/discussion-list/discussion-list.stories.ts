@@ -28,7 +28,7 @@ export const Default: Story = {
       .discussions=${args.discussions}
       @discussion-select=${(e: SelectDiscussionEvent) =>
         console.log("selected", e.discussion)}
-      @request-delete-discussion=${(e: RequestDeleteDiscussionEvent) =>
+      @discussion-delete=${(e: RequestDeleteDiscussionEvent) =>
         console.log("deleted", e.discussion)}
     ></learning-discussion-list>
   `,

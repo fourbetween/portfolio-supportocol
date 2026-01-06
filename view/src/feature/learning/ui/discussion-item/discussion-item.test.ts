@@ -2,8 +2,8 @@ import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import {
+  DISCUSSION_DELETE_EVENT_NAME,
   DISCUSSION_SELECT_EVENT_NAME,
-  REQUEST_DELETE_DISCUSSION_EVENT_NAME,
 } from "../../event/discussion";
 import "./discussion-item";
 
@@ -65,7 +65,7 @@ describe("learning-discussion-item", () => {
       html`
         <learning-discussion-item
           .discussion=${discussion}
-          @request-delete-discussion=${(e: Event) => deleteHandler(e)}
+          @discussion-delete=${(e: Event) => deleteHandler(e)}
         ></learning-discussion-item>
       `,
       container
@@ -74,7 +74,7 @@ describe("learning-discussion-item", () => {
     await page.getByRole("button", { name: "delete" }).click();
     expect(deleteHandler).toHaveBeenCalled();
     const event = deleteHandler.mock.calls[0][0];
-    expect(event.type).toBe(REQUEST_DELETE_DISCUSSION_EVENT_NAME);
+    expect(event.type).toBe(DISCUSSION_DELETE_EVENT_NAME);
     expect(event.discussion).toEqual(discussion);
   });
 });

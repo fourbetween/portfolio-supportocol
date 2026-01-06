@@ -25,7 +25,7 @@ export const Default: Story = {
       .discussion=${args.discussion}
       .isEditing=${args.isEditing}
       @request-edit-discussion=${() => console.log("edit clicked")}
-      @request-update-discussion=${(e: RequestUpdateDiscussionEvent) =>
+      @discussion-update=${(e: RequestUpdateDiscussionEvent) =>
         console.log("save clicked", e.theme)}
       @cancel-edit-discussion=${() => console.log("cancel clicked")}
     ></learning-discussion-detail>

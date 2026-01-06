@@ -3,9 +3,9 @@ import type { Discussion } from "../model/discussion";
 export const DISCUSSION_SELECT_EVENT_NAME = "discussion-select";
 export const DISCUSSION_CREATE_EVENT_NAME = "discussion-create";
 export const DISCUSSION_CREATED_EVENT_NAME = "discussion-created";
-export const REQUEST_UPDATE_DISCUSSION_EVENT_NAME = "request-update-discussion";
+export const DISCUSSION_UPDATE_EVENT_NAME = "discussion-update";
 export const DISCUSSION_UPDATED_EVENT_NAME = "discussion-updated";
-export const REQUEST_DELETE_DISCUSSION_EVENT_NAME = "request-delete-discussion";
+export const DISCUSSION_DELETE_EVENT_NAME = "discussion-delete";
 export const DISCUSSION_DELETED_EVENT_NAME = "discussion-deleted";
 export const SEARCH_DISCUSSION_EVENT_NAME = "search-discussion";
 export const REQUEST_EDIT_DISCUSSION_EVENT_NAME = "request-edit-discussion";
@@ -42,7 +42,7 @@ export class RequestUpdateDiscussionEvent extends Event {
   public readonly theme: string;
 
   constructor(theme: string) {
-    super(REQUEST_UPDATE_DISCUSSION_EVENT_NAME, {
+    super(DISCUSSION_UPDATE_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
@@ -63,7 +63,7 @@ export class RequestDeleteDiscussionEvent extends Event {
   public readonly discussion: Discussion;
 
   constructor(discussion: Discussion) {
-    super(REQUEST_DELETE_DISCUSSION_EVENT_NAME, {
+    super(DISCUSSION_DELETE_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
@@ -109,9 +109,9 @@ declare global {
     [DISCUSSION_SELECT_EVENT_NAME]: SelectDiscussionEvent;
     [DISCUSSION_CREATE_EVENT_NAME]: CreateDiscussionEvent;
     [DISCUSSION_CREATED_EVENT_NAME]: DiscussionCreatedEvent;
-    [REQUEST_UPDATE_DISCUSSION_EVENT_NAME]: RequestUpdateDiscussionEvent;
+    [DISCUSSION_UPDATE_EVENT_NAME]: RequestUpdateDiscussionEvent;
     [DISCUSSION_UPDATED_EVENT_NAME]: DiscussionUpdatedEvent;
-    [REQUEST_DELETE_DISCUSSION_EVENT_NAME]: RequestDeleteDiscussionEvent;
+    [DISCUSSION_DELETE_EVENT_NAME]: RequestDeleteDiscussionEvent;
     [DISCUSSION_DELETED_EVENT_NAME]: DiscussionDeletedEvent;
     [SEARCH_DISCUSSION_EVENT_NAME]: SearchDiscussionEvent;
     [REQUEST_EDIT_DISCUSSION_EVENT_NAME]: RequestEditDiscussionEvent;

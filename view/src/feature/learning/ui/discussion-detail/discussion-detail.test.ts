@@ -62,7 +62,7 @@ describe("learning-discussion-detail", async () => {
     await expect.element(input).toHaveValue("テストテーマ");
   });
 
-  it("保存ボタンをクリックすると request-update-discussion イベントが発火されること", async () => {
+  it("保存ボタンをクリックすると discussion-update イベントが発火されること", async () => {
     const onSave = vi.fn();
     const discussion = { id: "1", theme: "元のテーマ" };
     render(
@@ -70,7 +70,7 @@ describe("learning-discussion-detail", async () => {
         <learning-discussion-detail
           .discussion=${discussion}
           .isEditing=${true}
-          @request-update-discussion=${(e: RequestUpdateDiscussionEvent) =>
+          @discussion-update=${(e: RequestUpdateDiscussionEvent) =>
             onSave(e.theme)}
         ></learning-discussion-detail>
       `,
