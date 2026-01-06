@@ -1,11 +1,11 @@
-const LOADING_EVENT_NAME = "loading";
+export const LOADING_SHOW_EVENT_NAME = "loading-show";
 
-export class LoadingEvent extends Event {
+export class LoadingShowEvent extends Event {
   public readonly show: boolean;
   public readonly progress?: number;
 
   constructor(show: boolean, progress?: number) {
-    super(LOADING_EVENT_NAME, { bubbles: true, composed: true });
+    super(LOADING_SHOW_EVENT_NAME, { bubbles: true, composed: true });
     this.show = show;
     this.progress = progress;
   }
@@ -13,7 +13,7 @@ export class LoadingEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [LOADING_EVENT_NAME]: LoadingEvent;
+    [LOADING_SHOW_EVENT_NAME]: LoadingShowEvent;
   }
 }
 
@@ -22,5 +22,5 @@ export function showLoading(
   show: boolean,
   progress?: number
 ): void {
-  element.dispatchEvent(new LoadingEvent(show, progress));
+  element.dispatchEvent(new LoadingShowEvent(show, progress));
 }
