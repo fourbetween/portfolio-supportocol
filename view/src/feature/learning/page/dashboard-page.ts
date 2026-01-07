@@ -85,6 +85,8 @@ export class LearningDashboardPage extends LitElement {
     const id = params.get("id");
     if (id) {
       this._selectedDiscussionId = id;
+    } else if (this._touch.isTouchDevice) {
+      this._activeDrawer = "left";
     }
     window.addEventListener("popstate", this._handlePopState);
   }
@@ -97,6 +99,9 @@ export class LearningDashboardPage extends LitElement {
   private _handlePopState = () => {
     const params = new URLSearchParams(window.location.search);
     this._selectedDiscussionId = params.get("id") || undefined;
+    if (!this._selectedDiscussionId && this._touch.isTouchDevice) {
+      this._activeDrawer = "left";
+    }
   };
 
   private _handleSelectDiscussion(e: SelectDiscussionEvent) {
@@ -127,6 +132,10 @@ export class LearningDashboardPage extends LitElement {
       const url = new URL(window.location.href);
       url.searchParams.delete("id");
       window.history.pushState({}, "", url);
+
+      if (this._touch.isTouchDevice) {
+        this._activeDrawer = "left";
+      }
     }
     this._discussions = this._discussions.filter(
       (d) => d.id !== e.discussion.id
