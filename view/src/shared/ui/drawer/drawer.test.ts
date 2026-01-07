@@ -82,7 +82,7 @@ describe("ui-drawer", () => {
     expect(drawer.open).toBe(false);
   });
 
-  it("閉じられるときにui-drawer-closeイベントが発火すること", async () => {
+  it("閉じられるときにdrawer-closeイベントが発火すること", async () => {
     render(
       html`
         <ui-drawer .open=${true}></ui-drawer>

@@ -1,4 +1,4 @@
-export const DRAWER_CLOSE_EVENT_NAME = "ui-drawer-close";
+export const DRAWER_CLOSE_EVENT_NAME = "drawer-close";
 
 export class DrawerCloseEvent extends Event {
   constructor() {

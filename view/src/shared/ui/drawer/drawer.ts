@@ -13,6 +13,14 @@ export class Drawer extends LitElement {
   public placement: "left" | "right" = "right";
 
   private close() {
+    const activeElement = (this.shadowRoot?.activeElement ||
+      document.activeElement) as HTMLElement;
+    if (
+      activeElement &&
+      (this.renderRoot.contains(activeElement) || this.contains(activeElement))
+    ) {
+      activeElement.blur();
+    }
     this.open = false;
     this.dispatchEvent(new DrawerCloseEvent());
   }
@@ -32,7 +40,7 @@ export class Drawer extends LitElement {
         class="drawer-content ${this.open ? "open" : ""} ${this.placement}"
         role="dialog"
         aria-modal="true"
-        aria-hidden=${!this.open}
+        .inert=${!this.open}
         data-testid="drawer-content"
       >
         <div class="drawer-header">
@@ -115,7 +123,6 @@ export class Drawer extends LitElement {
       .drawer-body {
         flex: 1;
         overflow-y: auto;
-        padding: 16px;
       }
 
       .close-button {

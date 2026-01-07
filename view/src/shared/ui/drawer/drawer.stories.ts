@@ -31,7 +31,7 @@ export const Default: StoryObj = {
       <ui-drawer
         .open=${args.open}
         .placement=${args.placement}
-        @ui-drawer-close=${() => updateOpen(false)}
+        @drawer-close=${() => updateOpen(false)}
       >
         <div slot="header">Drawer Header</div>
         <div>
