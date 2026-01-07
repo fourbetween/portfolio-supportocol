@@ -4,9 +4,13 @@ import "./drawer";
 
 const meta: Meta = {
   title: "shared/ui/drawer",
-  component: "shared-ui-drawer",
+  component: "ui-drawer",
   argTypes: {
     open: { control: "boolean" },
+    placement: {
+      control: "select",
+      options: ["left", "right"],
+    },
   },
 };
 
@@ -24,7 +28,11 @@ export const Default: StoryObj = {
 
     return html`
       <button @click=${() => updateOpen(true)}>Open Drawer</button>
-      <ui-drawer .open=${args.open} @close=${() => updateOpen(false)}>
+      <ui-drawer
+        .open=${args.open}
+        .placement=${args.placement}
+        @ui-drawer-close=${() => updateOpen(false)}
+      >
         <div slot="header">Drawer Header</div>
         <div>
           <p>This is the drawer content.</p>
@@ -35,5 +43,14 @@ export const Default: StoryObj = {
   },
   args: {
     open: true,
+    placement: "right",
+  },
+};
+
+export const Left: StoryObj = {
+  ...Default,
+  args: {
+    open: true,
+    placement: "left",
   },
 };

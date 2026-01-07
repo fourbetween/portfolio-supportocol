@@ -9,6 +9,9 @@ export class Drawer extends LitElement {
   @property({ type: Boolean, reflect: true })
   public open = false;
 
+  @property({ type: String, reflect: true })
+  public placement: "left" | "right" = "right";
+
   private close() {
     this.open = false;
     this.dispatchEvent(new DrawerCloseEvent());
@@ -26,7 +29,7 @@ export class Drawer extends LitElement {
         data-testid="drawer-backdrop"
       ></div>
       <div
-        class="drawer-content ${this.open ? "open" : ""}"
+        class="drawer-content ${this.open ? "open" : ""} ${this.placement}"
         role="dialog"
         aria-modal="true"
         aria-hidden=${!this.open}
@@ -74,17 +77,26 @@ export class Drawer extends LitElement {
       .drawer-content {
         position: fixed;
         top: 0;
-        right: 0;
         width: 300px;
         height: 100%;
         background-color: var(--color-canvas-default);
-        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
         transition: transform 0.3s ease, visibility 0.3s ease;
-        transform: translateX(100%);
         visibility: hidden;
         z-index: 1001;
         display: flex;
         flex-direction: column;
+      }
+
+      .drawer-content.right {
+        right: 0;
+        transform: translateX(100%);
+        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .drawer-content.left {
+        left: 0;
+        transform: translateX(-100%);
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
       }
 
       .drawer-content.open {

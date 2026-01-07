@@ -100,4 +100,25 @@ describe("ui-drawer", () => {
 
     expect(onClose).toHaveBeenCalled();
   });
+
+  it("placement属性で左右を切り替えられること", async () => {
+    render(
+      html`
+        <ui-drawer .open=${true} placement="left"></ui-drawer>
+      `,
+      container
+    );
+    const drawer = container.querySelector("ui-drawer") as any;
+    await drawer.updateComplete;
+
+    const content = page.getByTestId("drawer-content");
+    // leftクラスが付与されていることを確認（実装予定）
+    await expect.element(content).toHaveClass("left");
+
+    // rightに変更
+    drawer.placement = "right";
+    await drawer.updateComplete;
+    await expect.element(content).toHaveClass("right");
+    await expect.element(content).not.toHaveClass("left");
+  });
 });
