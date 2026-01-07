@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { TouchController } from "../../../app/controller/touch";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { titleStyle } from "../../../shared/style/title";
@@ -17,6 +18,8 @@ import "../ui/proposed-comment-list/proposed-comment-list";
 
 @customElement("learning-comment-proposed-widget")
 export class LearningCommentProposedWidget extends LitElement {
+  private touch = new TouchController(this);
+
   @property({ type: String })
   discussionId?: string;
 
@@ -72,7 +75,11 @@ export class LearningCommentProposedWidget extends LitElement {
 
     return html`
       <section>
-        <div class="section-title">Proposed Comments</div>
+        ${!this.touch.isTouchDevice
+          ? html`
+              <div class="section-title">Proposed Comments</div>
+            `
+          : ""}
         <learning-proposed-comment-list
           .comments=${this.proposedComments}
           @proposed-comment-accept=${this.handleAccept}

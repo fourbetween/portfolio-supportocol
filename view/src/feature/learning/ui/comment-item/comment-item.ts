@@ -1,5 +1,6 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
+import { TouchController } from "../../../../app/controller/touch";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
@@ -35,7 +36,16 @@ export class LearningCommentItem extends LitElement {
   @query("learning-comment-type-popup")
   private typePopup!: LearningCommentTypePopup;
 
+  private touch = new TouchController(this);
+
   private handleCommentClick() {
+    if (this.comment && !this.touch.isTouchDevice) {
+      this.dispatchEvent(new CommentSelectEvent(this.comment.id));
+    }
+  }
+
+  private handleFocusClick(e: Event) {
+    e.stopPropagation();
     if (this.comment) {
       this.dispatchEvent(new CommentSelectEvent(this.comment.id));
     }
@@ -104,16 +114,16 @@ export class LearningCommentItem extends LitElement {
         this.handleOpenTypePopup(e, "reply")
       )}
       ${this.renderIconButton(
-        "psychology",
-        "generate",
-        (e) => this.handleOpenTypePopup(e, "generate"),
-        "primary generate-button"
-      )}
-      ${this.renderIconButton(
         "edit",
         "edit",
         this.handleEditClick,
         "edit-button"
+      )}
+      ${this.renderIconButton(
+        "psychology",
+        "generate",
+        (e) => this.handleOpenTypePopup(e, "generate"),
+        "primary generate-button"
       )}
       ${this.renderIconButton(
         "delete",
@@ -121,6 +131,11 @@ export class LearningCommentItem extends LitElement {
         this.handleDeleteClick,
         "danger delete-button"
       )}
+      ${this.touch.isTouchDevice
+        ? this.renderIconButton("ads_click", "focus", (e) =>
+            this.handleFocusClick(e)
+          )
+        : nothing}
     `;
   }
 
@@ -194,17 +209,21 @@ export class LearningCommentItem extends LitElement {
         bottom: -16px;
         left: 8px;
       }
-      .generate-button {
+      .edit-button {
         bottom: -16px;
         left: 48px;
       }
-      .edit-button {
+      .generate-button {
         bottom: -16px;
         left: 88px;
       }
       .delete-button {
         bottom: -16px;
         left: 128px;
+      }
+      .focus-button {
+        bottom: -16px;
+        left: 168px;
       }
       .reply-form {
         margin-left: 8px;

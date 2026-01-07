@@ -1,9 +1,13 @@
 import { Task } from "@lit/task";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { TouchController } from "../../../app/controller/touch";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
+import { hoverButtonStyle } from "../../../shared/style/hover-button";
+import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/drawer/drawer";
 import "../component/comment-explorer-widget";
 import "../component/comment-frame-widget";
 import "../component/comment-proposed-widget";
@@ -27,6 +31,8 @@ import { discussionRepository } from "../repository/discussion-repository";
 
 @customElement("learning-dashboard-page")
 export class LearningDashboardPage extends LitElement {
+  private _touch = new TouchController(this);
+
   @state()
   private _discussions: Discussion[] = [];
 
@@ -38,6 +44,9 @@ export class LearningDashboardPage extends LitElement {
 
   @state()
   private _selectedCommentId?: string;
+
+  @state()
+  private _activeDrawer?: "left" | "right";
 
   constructor() {
     super();
@@ -56,9 +65,9 @@ export class LearningDashboardPage extends LitElement {
     });
 
     new Task(this, {
-      task: async () => {
-        if (!this._selectedDiscussionId) return [] as Comment[];
-        return await commentRepository.list(this._selectedDiscussionId);
+      task: async ([id]) => {
+        if (!id) return [] as Comment[];
+        return await commentRepository.list(id);
       },
       onComplete: (comments) => {
         this._comments = comments;
@@ -76,6 +85,8 @@ export class LearningDashboardPage extends LitElement {
     const id = params.get("id");
     if (id) {
       this._selectedDiscussionId = id;
+    } else if (this._touch.isTouchDevice) {
+      this._activeDrawer = "left";
     }
     window.addEventListener("popstate", this._handlePopState);
   }
@@ -88,6 +99,9 @@ export class LearningDashboardPage extends LitElement {
   private _handlePopState = () => {
     const params = new URLSearchParams(window.location.search);
     this._selectedDiscussionId = params.get("id") || undefined;
+    if (!this._selectedDiscussionId && this._touch.isTouchDevice) {
+      this._activeDrawer = "left";
+    }
   };
 
   private _handleSelectDiscussion(e: SelectDiscussionEvent) {
@@ -96,6 +110,7 @@ export class LearningDashboardPage extends LitElement {
     const url = new URL(window.location.href);
     url.searchParams.set("id", e.discussion.id);
     window.history.pushState({}, "", url);
+    this._activeDrawer = undefined;
   }
 
   private _handleDiscussionUpdated(e: DiscussionUpdatedEvent) {
@@ -108,6 +123,7 @@ export class LearningDashboardPage extends LitElement {
     } else {
       this._discussions = [...this._discussions, e.discussion];
     }
+    this._activeDrawer = undefined;
   }
 
   private _handleDiscussionDeleted(e: DiscussionDeletedEvent) {
@@ -116,6 +132,10 @@ export class LearningDashboardPage extends LitElement {
       const url = new URL(window.location.href);
       url.searchParams.delete("id");
       window.history.pushState({}, "", url);
+
+      if (this._touch.isTouchDevice) {
+        this._activeDrawer = "left";
+      }
     }
     this._discussions = this._discussions.filter(
       (d) => d.id !== e.discussion.id
@@ -133,6 +153,7 @@ export class LearningDashboardPage extends LitElement {
     );
     if (oldComment?.status === "proposed" && e.comment.status === "active") {
       this._selectedCommentId = e.comment.id;
+      this._activeDrawer = undefined;
     }
   }
 
@@ -190,55 +211,129 @@ export class LearningDashboardPage extends LitElement {
     }, 15000);
   }
 
-  render() {
+  private _renderDiscussionList() {
     return html`
-      <div class="dashboard">
-        <aside class="sidebar sidebar-left">
-          <learning-discussion-list-widget
-            .discussions=${this._discussions}
-            @discussion-select=${this._handleSelectDiscussion}
-            @discussion-created=${this._handleDiscussionUpdated}
-            @discussion-deleted=${this._handleDiscussionDeleted}
-          ></learning-discussion-list-widget>
-        </aside>
-        <main class="main">
-          <div class="detail">
-            <learning-discussion-detail-widget
-              .discussion=${this._selectedDiscussion}
-              @discussion-updated=${this._handleDiscussionUpdated}
-            ></learning-discussion-detail-widget>
-          </div>
-          <div class="comment-frame">
-            <learning-comment-frame-widget
-              .comments=${this._activeComments}
-            ></learning-comment-frame-widget>
-          </div>
-          <div class="comment-explorer">
-            <learning-comment-explorer-widget
-              .discussionId=${this._selectedDiscussionId}
-              .comments=${this._activeComments}
-              .selectedCommentId=${this._selectedCommentId}
-              @comment-created=${this._handleCommentCreated}
-              @comment-updated=${this._handleCommentUpdated}
-              @comment-deleted=${this._handleCommentDeleted}
-              @comment-generated=${this._handleCommentGenerated}
-              @comment-select=${this._handleSelectComment}
-            ></learning-comment-explorer-widget>
-          </div>
-        </main>
-        ${this._hasProposedComments
-          ? html`
-              <aside class="sidebar sidebar-right">
-                <learning-comment-proposed-widget
-                  .discussionId=${this._selectedDiscussionId}
-                  .comments=${this._comments}
-                  @comment-updated=${this._handleCommentUpdated}
-                  @comment-deleted=${this._handleCommentDeleted}
-                  @comment-select=${this._handleSelectComment}
-                ></learning-comment-proposed-widget>
-              </aside>
-            `
-          : nothing}
+      <learning-discussion-list-widget
+        .discussions=${this._discussions}
+        @discussion-select=${this._handleSelectDiscussion}
+        @discussion-created=${this._handleDiscussionUpdated}
+        @discussion-deleted=${this._handleDiscussionDeleted}
+      ></learning-discussion-list-widget>
+    `;
+  }
+
+  private _renderProposedComments() {
+    return html`
+      <learning-comment-proposed-widget
+        .discussionId=${this._selectedDiscussionId}
+        .comments=${this._comments}
+        @comment-updated=${this._handleCommentUpdated}
+        @comment-deleted=${this._handleCommentDeleted}
+        @comment-select=${this._handleSelectComment}
+      ></learning-comment-proposed-widget>
+    `;
+  }
+
+  private _renderLeftSidebar(isTouch: boolean) {
+    const list = this._renderDiscussionList();
+    if (isTouch) {
+      return html`
+        <ui-drawer
+          placement="left"
+          .open=${this._activeDrawer === "left"}
+          @drawer-close=${() => (this._activeDrawer = undefined)}
+        >
+          <span slot="header">Discussions</span>
+          ${list}
+        </ui-drawer>
+      `;
+    }
+    return html`
+      <aside class="sidebar sidebar-left">${list}</aside>
+    `;
+  }
+
+  private _renderRightSidebar(isTouch: boolean) {
+    if (!this._hasProposedComments) return nothing;
+
+    const list = this._renderProposedComments();
+    if (isTouch) {
+      return html`
+        <ui-drawer
+          placement="right"
+          .open=${this._activeDrawer === "right"}
+          @drawer-close=${() => (this._activeDrawer = undefined)}
+        >
+          <span slot="header">Proposed Comments</span>
+          ${list}
+        </ui-drawer>
+      `;
+    }
+    return html`
+      <aside class="sidebar sidebar-right">${list}</aside>
+    `;
+  }
+
+  private _renderMainContent() {
+    return html`
+      <main class="main">
+        <div class="detail">
+          <learning-discussion-detail-widget
+            .discussion=${this._selectedDiscussion}
+            @discussion-updated=${this._handleDiscussionUpdated}
+          ></learning-discussion-detail-widget>
+        </div>
+        <div class="comment-frame">
+          <learning-comment-frame-widget
+            .comments=${this._activeComments}
+          ></learning-comment-frame-widget>
+        </div>
+        <div class="comment-explorer">
+          <learning-comment-explorer-widget
+            .discussionId=${this._selectedDiscussionId}
+            .comments=${this._activeComments}
+            .selectedCommentId=${this._selectedCommentId}
+            @comment-created=${this._handleCommentCreated}
+            @comment-updated=${this._handleCommentUpdated}
+            @comment-deleted=${this._handleCommentDeleted}
+            @comment-generated=${this._handleCommentGenerated}
+            @comment-select=${this._handleSelectComment}
+          ></learning-comment-explorer-widget>
+        </div>
+      </main>
+    `;
+  }
+
+  private _renderFABs() {
+    if (!this._touch.isTouchDevice) return nothing;
+
+    return html`
+      <button
+        class="btn-hover btn-left"
+        @click=${() => (this._activeDrawer = "left")}
+      >
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      ${this._hasProposedComments
+        ? html`
+            <button
+              class="btn-hover btn-right"
+              @click=${() => (this._activeDrawer = "right")}
+            >
+              <span class="material-symbols-outlined">reviews</span>
+            </button>
+          `
+        : nothing}
+    `;
+  }
+
+  render() {
+    const isTouch = this._touch.isTouchDevice;
+
+    return html`
+      <div class="dashboard hover-container">
+        ${this._renderLeftSidebar(isTouch)} ${this._renderMainContent()}
+        ${this._renderRightSidebar(isTouch)} ${this._renderFABs()}
       </div>
     `;
   }
@@ -246,6 +341,8 @@ export class LearningDashboardPage extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
+    iconStyle,
+    hoverButtonStyle,
     css`
       :host {
         display: block;
@@ -255,6 +352,7 @@ export class LearningDashboardPage extends LitElement {
         display: flex;
         height: 100%;
         overflow: hidden;
+        position: relative;
       }
       .sidebar {
         width: 300px;
@@ -275,12 +373,31 @@ export class LearningDashboardPage extends LitElement {
       }
       .detail,
       .comment-frame,
-      .comment-proposed,
       .comment-explorer {
         padding: 0 16px;
       }
       .detail {
         border-bottom: 1px solid var(--color-border-default);
+      }
+      .btn-hover {
+        width: 48px;
+        height: 48px;
+      }
+      .btn-hover .material-symbols-outlined {
+        font-size: 24px;
+      }
+      .btn-left {
+        left: 16px;
+        bottom: 16px;
+      }
+      .btn-right {
+        right: 16px;
+        bottom: 16px;
+      }
+      @media (hover: none) {
+        .btn-hover {
+          opacity: 1;
+        }
       }
     `,
   ];

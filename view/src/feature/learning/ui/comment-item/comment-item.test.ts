@@ -154,7 +154,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     expect(replyContent).toBe("This is a reply");
   });
 
-  it("アクションボタンが正しい順序（reply, generate, edit, delete）で並んでいる", async () => {
+  it("アクションボタンが正しい順序（reply, edit, generate, delete）で並んでいる", async () => {
     render(
       html`
         <learning-comment-item
@@ -167,12 +167,205 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
 
     const buttons = page.getByRole("button");
     await expect.element(buttons.nth(0)).toHaveAttribute("aria-label", "reply");
+    await expect.element(buttons.nth(1)).toHaveAttribute("aria-label", "edit");
     await expect
-      .element(buttons.nth(1))
+      .element(buttons.nth(2))
       .toHaveAttribute("aria-label", "generate");
-    await expect.element(buttons.nth(2)).toHaveAttribute("aria-label", "edit");
     await expect
       .element(buttons.nth(3))
       .toHaveAttribute("aria-label", "delete");
+  });
+
+  describe("touch device", () => {
+    const originalMatchMedia = window.matchMedia;
+    const originalMaxTouchPoints = navigator.maxTouchPoints;
+
+    beforeEach(() => {
+      // Mock touch device
+      window.matchMedia = (query) =>
+        ({
+          matches: query === "(pointer: coarse)",
+          media: query,
+          onchange: null,
+          addListener: () => {},
+          removeListener: () => {},
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          dispatchEvent: () => false,
+        } as any);
+      Object.defineProperty(navigator, "maxTouchPoints", {
+        value: 1,
+        configurable: true,
+      });
+    });
+
+    afterEach(() => {
+      window.matchMedia = originalMatchMedia;
+      Object.defineProperty(navigator, "maxTouchPoints", {
+        value: originalMaxTouchPoints,
+        configurable: true,
+      });
+    });
+
+    it("タッチデバイスでは focus ボタンが表示される", async () => {
+      render(
+        html`
+          <learning-comment-item
+            .comment=${mockComment}
+            .availableTypes=${availableTypes}
+          ></learning-comment-item>
+        `,
+        container
+      );
+      await expect
+        .element(page.getByRole("button", { name: "focus" }))
+        .toBeVisible();
+    });
+
+    it("タッチデバイスではカードをクリックしても選択イベントが発火されない", async () => {
+      let selectedId = "";
+      const handleSelect = (e: any) => {
+        selectedId = e.commentId;
+      };
+      render(
+        html`
+          <learning-comment-item
+            .comment=${mockComment}
+            .availableTypes=${availableTypes}
+            @comment-select=${handleSelect}
+          ></learning-comment-item>
+        `,
+        container
+      );
+
+      const card = page.getByText("This is a test comment");
+      await card.click();
+
+      expect(selectedId).toBe("");
+    });
+
+    it("タッチデバイスでは focus ボタンをクリックすると選択イベントが発火される", async () => {
+      let selectedId = "";
+      const handleSelect = (e: any) => {
+        selectedId = e.commentId;
+      };
+      render(
+        html`
+          <learning-comment-item
+            .comment=${mockComment}
+            .availableTypes=${availableTypes}
+            @comment-select=${handleSelect}
+          ></learning-comment-item>
+        `,
+        container
+      );
+
+      const focusButton = page.getByRole("button", { name: "focus" });
+      await focusButton.click();
+
+      expect(selectedId).toBe("1");
+    });
+
+    it("タッチデバイスではアクションボタンが正しい順序（reply, edit, generate, delete, focus）で並んでいる", async () => {
+      render(
+        html`
+          <learning-comment-item
+            .comment=${mockComment}
+            .availableTypes=${availableTypes}
+          ></learning-comment-item>
+        `,
+        container
+      );
+
+      const buttons = page.getByRole("button");
+      await expect
+        .element(buttons.nth(0))
+        .toHaveAttribute("aria-label", "reply");
+      await expect
+        .element(buttons.nth(1))
+        .toHaveAttribute("aria-label", "edit");
+      await expect
+        .element(buttons.nth(2))
+        .toHaveAttribute("aria-label", "generate");
+      await expect
+        .element(buttons.nth(3))
+        .toHaveAttribute("aria-label", "delete");
+      await expect
+        .element(buttons.nth(4))
+        .toHaveAttribute("aria-label", "focus");
+    });
+  });
+
+  describe("non-touch device", () => {
+    const originalMatchMedia = window.matchMedia;
+    const originalMaxTouchPoints = navigator.maxTouchPoints;
+
+    beforeEach(() => {
+      // Mock non-touch device
+      window.matchMedia = (query) =>
+        ({
+          matches: false,
+          media: query,
+          onchange: null,
+          addListener: () => {},
+          removeListener: () => {},
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          dispatchEvent: () => false,
+        } as any);
+      Object.defineProperty(navigator, "maxTouchPoints", {
+        value: 0,
+        configurable: true,
+      });
+      // ontouchstart を一時的に消去（存在する場合）
+      if ("ontouchstart" in window) {
+        delete (window as any).ontouchstart;
+      }
+    });
+
+    afterEach(() => {
+      window.matchMedia = originalMatchMedia;
+      Object.defineProperty(navigator, "maxTouchPoints", {
+        value: originalMaxTouchPoints,
+        configurable: true,
+      });
+    });
+
+    it("非タッチデバイスでは focus ボタンが表示されない", async () => {
+      render(
+        html`
+          <learning-comment-item
+            .comment=${mockComment}
+            .availableTypes=${availableTypes}
+          ></learning-comment-item>
+        `,
+        container
+      );
+      await expect
+        .element(page.getByRole("button", { name: "focus" }))
+        .not.toBeInTheDocument();
+    });
+
+    it("非タッチデバイスではカードをクリックすると選択イベントが発火される", async () => {
+      let selectedId = "";
+      const handleSelect = (e: any) => {
+        selectedId = e.commentId;
+      };
+      render(
+        html`
+          <learning-comment-item
+            .comment=${mockComment}
+            .availableTypes=${availableTypes}
+            @comment-select=${handleSelect}
+          ></learning-comment-item>
+        `,
+        container
+      );
+
+      const card = page.getByText("This is a test comment");
+      await card.click();
+
+      expect(selectedId).toBe("1");
+    });
   });
 });
