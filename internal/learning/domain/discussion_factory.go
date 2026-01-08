@@ -24,6 +24,7 @@ func NewDiscussionFactory(
 
 type CreateDiscussionParams struct {
 	Theme     string
+	Status    DiscussionStatus
 	CreatedBy string
 }
 
@@ -46,6 +47,7 @@ func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Di
 	return &Discussion{
 		id:        params.ID,
 		theme:     params.Theme,
+		status:    params.Status,
 		createdBy: params.CreatedBy,
 		createdAt: params.CreatedAt,
 	}, nil

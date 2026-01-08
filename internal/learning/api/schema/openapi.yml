@@ -30,6 +30,11 @@ components:
       enum:
         - active
         - proposed
+    DiscussionStatus:
+      type: string
+      enum:
+        - private
+        - public
     DiscussionTheme:
       type: string
       maxLength: 255
@@ -46,9 +51,12 @@ components:
           $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
+        status:
+          $ref: "#/components/schemas/DiscussionStatus"
       required:
         - id
         - theme
+        - status
     Comment:
       type: object
       properties:
@@ -111,8 +119,11 @@ paths:
               properties:
                 theme:
                   $ref: "#/components/schemas/DiscussionTheme"
+                status:
+                  $ref: "#/components/schemas/DiscussionStatus"
               required:
                 - theme
+                - status
       responses:
         "200":
           description: success response
@@ -169,8 +180,11 @@ paths:
               properties:
                 theme:
                   $ref: "#/components/schemas/DiscussionTheme"
+                status:
+                  $ref: "#/components/schemas/DiscussionStatus"
               required:
                 - theme
+                - status
       responses:
         "200":
           description: success response

@@ -3,8 +3,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import {
-  CreateDiscussionEvent,
   DiscussionCreatedEvent,
+  DiscussionCreateEvent,
   DiscussionDeletedEvent,
   DiscussionDeleteEvent,
   DiscussionSearchEvent,
@@ -23,9 +23,9 @@ export class LearningDiscussionListWidget extends LitElement {
   @state()
   private _searchQuery = "";
 
-  private async _handleAddDiscussion(e: CreateDiscussionEvent) {
+  private async _handleAddDiscussion(e: DiscussionCreateEvent) {
     try {
-      const data = await discussionRepository.create(e.theme);
+      const data = await discussionRepository.create(e.theme, e.status);
       this.dispatchEvent(new DiscussionCreatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");

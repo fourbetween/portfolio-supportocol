@@ -2,15 +2,16 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import type { CommentFrame } from "../../model/comment-frame";
 import "./comment-frame-detail";
+import type { LearningCommentFrameDetail } from "./comment-frame-detail";
 
-const meta: Meta = {
+const meta: Meta<LearningCommentFrameDetail> = {
   title: "learning/ui/comment-frame-detail",
   component: "learning-comment-frame-detail",
 };
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<LearningCommentFrameDetail>;
 
 const frame: CommentFrame = {
   types: ["質問", "回答", "アイデア", "賛成"],

@@ -5,9 +5,10 @@ import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
   DiscussionDeleteEvent,
-  SelectDiscussionEvent,
+  DiscussionSelectEvent,
 } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
+import "../discussion-status-badge/discussion-status-badge";
 
 @customElement("learning-discussion-item")
 export class LearningDiscussionItem extends LitElement {
@@ -15,7 +16,7 @@ export class LearningDiscussionItem extends LitElement {
   discussion!: Discussion;
 
   private handleSelect() {
-    this.dispatchEvent(new SelectDiscussionEvent(this.discussion));
+    this.dispatchEvent(new DiscussionSelectEvent(this.discussion));
   }
 
   private handleDelete(e: Event) {
@@ -26,7 +27,12 @@ export class LearningDiscussionItem extends LitElement {
   render() {
     return html`
       <div class="item hover-container" @click=${this.handleSelect}>
-        <span class="theme">${this.discussion.theme}</span>
+        <div class="info">
+          <span class="theme">${this.discussion.theme}</span>
+          <learning-discussion-status-badge
+            .status=${this.discussion?.status}
+          ></learning-discussion-status-badge>
+        </div>
         <button
           class="btn-hover danger delete-button"
           aria-label="delete"
@@ -58,6 +64,12 @@ export class LearningDiscussionItem extends LitElement {
       }
       .item:hover {
         background-color: var(--color-canvas-subtle);
+      }
+      .info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
       }
       .theme {
         font-size: 0.9rem;

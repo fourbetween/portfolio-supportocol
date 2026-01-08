@@ -3,15 +3,16 @@ import { html } from "lit";
 import { CommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "./proposed-comment-list";
+import type { LearningProposedCommentList } from "./proposed-comment-list";
 
-const meta: Meta = {
+const meta: Meta<LearningProposedCommentList> = {
   title: "learning/ui/proposed-comment-list",
   component: "learning-proposed-comment-list",
 };
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<LearningProposedCommentList>;
 
 const comments: Comment[] = [
   {

@@ -2,8 +2,19 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import type { Comment } from "../../model/comment";
 import "./comment-item";
+import type { LearningCommentItem } from "./comment-item";
 
-const meta: Meta = {
+const meta: Meta<
+  LearningCommentItem & {
+    onSelectComment: (e: Event) => void;
+    onCommentDeleted: (e: Event) => void;
+    onCommentGenerate: (e: Event) => void;
+    onCommentUpdate: (e: Event) => void;
+    onCommentCreate: (e: Event) => void;
+    onProposedCommentAccept: (e: Event) => void;
+    onProposedCommentReject: (e: Event) => void;
+  }
+> = {
   title: "learning/ui/comment-item",
   component: "learning-comment-item",
   argTypes: {
@@ -19,7 +30,17 @@ const meta: Meta = {
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<
+  LearningCommentItem & {
+    onSelectComment: (e: Event) => void;
+    onCommentDeleted: (e: Event) => void;
+    onCommentGenerate: (e: Event) => void;
+    onCommentUpdate: (e: Event) => void;
+    onCommentCreate: (e: Event) => void;
+    onProposedCommentAccept: (e: Event) => void;
+    onProposedCommentReject: (e: Event) => void;
+  }
+>;
 
 const mockComment: Comment = {
   id: "1",

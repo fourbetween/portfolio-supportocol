@@ -20,12 +20,14 @@ func NewCreateDiscussionUsecase(repo domain.DiscussionRepository, fac *domain.Di
 
 type CreateDiscussionInput struct {
 	Theme     string
+	Status    domain.DiscussionStatus
 	CreatedBy string
 }
 
 func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscussionInput) (*domain.Discussion, error) {
 	discussion, err := u.fac.Create(domain.CreateDiscussionParams{
 		Theme:     input.Theme,
+		Status:    input.Status,
 		CreatedBy: input.CreatedBy,
 	})
 	if err != nil {

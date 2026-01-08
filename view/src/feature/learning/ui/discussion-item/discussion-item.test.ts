@@ -18,9 +18,7 @@ describe("learning-discussion-item", () => {
   const discussion = {
     id: "1",
     theme: "Test Theme",
-    authorId: "user1",
-    createdAt: "2023-01-01T00:00:00Z",
-    updatedAt: "2023-01-01T00:00:00Z",
+    status: "public" as const,
   };
 
   it("テーマが表示されること", async () => {

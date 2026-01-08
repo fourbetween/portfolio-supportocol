@@ -75,7 +75,7 @@ applyTo: "view/src/**/*.ts"
 - アクションを要求するイベントとアクションの完了を通知するイベントは区別する。
   - 要求イベント: `comment-select`
   - 通知イベント: `comment-selected`
-- イベントの定義は以下を参考にする。
+- イベントは以下のように定義する。
 
   ```ts
   export class CommentSelectEvent extends Event {
@@ -96,6 +96,11 @@ applyTo: "view/src/**/*.ts"
 - `title` は `[context]/ui/[name]` 形式とする。
 - `component` にはカスタム要素のタグ名を指定する。
 - `render` 関数内で `html` テンプレートを使用してレンダリングする。
+- Story は以下のように型定義する。
+
+  ```ts
+  type Story = StoryObj<LearningDiscussionItem>;
+  ```
 
 ### 4.2 テスト (Vitest Browser Mode)
 

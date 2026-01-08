@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import "./comment-card";
+import type { LearningCommentCard } from "./comment-card";
 
-const meta: Meta = {
+const meta: Meta<LearningCommentCard> = {
   title: "learning/ui/comment-card",
   component: "learning-comment-card",
   render: (args) => html`
@@ -14,7 +15,7 @@ const meta: Meta = {
 };
 
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<LearningCommentCard>;
 
 export const Default: Story = {
   args: {

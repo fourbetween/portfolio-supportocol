@@ -1,8 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import "./comment-context";
+import type { LearningCommentContext } from "./comment-context";
 
-const meta: Meta = {
+type LearningCommentContextArgs = LearningCommentContext & {
+  onSelectComment: (e: Event) => void;
+  onCommentUpdated: (e: Event) => void;
+  onCommentDeleted: (e: Event) => void;
+  onCommentGenerate: (e: Event) => void;
+  onCommentCreated: (e: Event) => void;
+  onCommentUpdate: (e: Event) => void;
+  onCommentCreate: (e: Event) => void;
+};
+
+const meta: Meta<LearningCommentContextArgs> = {
   title: "learning/ui/comment-context",
   component: "learning-comment-context",
   argTypes: {
@@ -31,7 +42,7 @@ const meta: Meta = {
 };
 
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<LearningCommentContextArgs>;
 
 export const Default: Story = {
   args: {

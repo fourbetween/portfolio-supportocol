@@ -6,6 +6,7 @@ import { iconStyle } from "../../../../shared/style/icon";
 import { DiscussionFormOpenEvent } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-edit-form/discussion-edit-form";
+import "../discussion-status-badge/discussion-status-badge";
 
 @customElement("learning-discussion-detail")
 export class LearningDiscussionDetail extends LitElement {
@@ -33,6 +34,7 @@ export class LearningDiscussionDetail extends LitElement {
     return html`
       <learning-discussion-edit-form
         .theme=${this.discussion?.theme ?? ""}
+        .status=${this.discussion?.status ?? "private"}
       ></learning-discussion-edit-form>
     `;
   }
@@ -40,7 +42,12 @@ export class LearningDiscussionDetail extends LitElement {
   private _renderDisplay() {
     return html`
       <div class="display">
-        <h1 class="theme">${this.discussion?.theme}</h1>
+        <div class="theme-info">
+          <h1 class="theme">${this.discussion?.theme}</h1>
+          <learning-discussion-status-badge
+            .status=${this.discussion?.status}
+          ></learning-discussion-status-badge>
+        </div>
         <button class="btn" @click=${this._handleEditClick}>
           <span class="material-symbols-outlined">edit</span>
         </button>
@@ -82,6 +89,12 @@ export class LearningDiscussionDetail extends LitElement {
         font-size: 16px;
         font-weight: 400;
         margin: 0;
+      }
+
+      .theme-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
 
       .material-symbols-outlined {

@@ -8,22 +8,29 @@ export class DiscussionRepository {
     return data || [];
   }
 
-  async create(theme: string): Promise<Discussion> {
+  async create(
+    theme: string,
+    status: Discussion["status"]
+  ): Promise<Discussion> {
     const { data, error } = await client.POST("/learning/discussions", {
-      body: { theme },
+      body: { theme, status },
     });
     if (error) throw new Error(error.message);
     return data;
   }
 
-  async update(discussionId: string, theme: string): Promise<Discussion> {
+  async update(
+    discussionId: string,
+    theme: string,
+    status: Discussion["status"]
+  ): Promise<Discussion> {
     const { data, error } = await client.PUT(
       "/learning/discussions/{discussionId}",
       {
         params: {
           path: { discussionId },
         },
-        body: { theme },
+        body: { theme, status },
       }
     );
     if (error) throw new Error(error.message);

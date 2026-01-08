@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import "./comment-add-button";
+import type { LearningCommentAddButton } from "./comment-add-button";
 
-const meta: Meta = {
+const meta: Meta<LearningCommentAddButton> = {
   title: "learning/ui/comment-add-button",
   component: "learning-comment-add-button",
   render: (args) => html`
@@ -13,7 +14,7 @@ const meta: Meta = {
 };
 
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<LearningCommentAddButton>;
 
 export const NewComment: Story = {
   args: {

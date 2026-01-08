@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import "./discussion-item";
+import type { LearningDiscussionItem } from "./discussion-item";
 
-const meta: Meta = {
+const meta: Meta<LearningDiscussionItem> = {
   title: "learning/ui/discussion-item",
   component: "learning-discussion-item",
   render: (args) =>
@@ -14,16 +15,14 @@ const meta: Meta = {
 };
 
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<LearningDiscussionItem>;
 
 export const Default: Story = {
   args: {
     discussion: {
       id: "1",
       theme: "Sample Discussion Theme",
-      authorId: "user1",
-      createdAt: "2023-01-01T00:00:00Z",
-      updatedAt: "2023-01-01T00:00:00Z",
+      status: "public",
     },
   },
 };

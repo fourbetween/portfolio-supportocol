@@ -17,7 +17,11 @@ describe("learning-discussion-detail", async () => {
   });
 
   it("テーマが表示されること", async () => {
-    const discussion = { id: "1", theme: "テストテーマ" };
+    const discussion = {
+      id: "1",
+      theme: "テストテーマ",
+      status: "public" as const,
+    };
     render(
       html`
         <learning-discussion-detail
@@ -31,7 +35,11 @@ describe("learning-discussion-detail", async () => {
 
   it("編集ボタンをクリックすると discussion-form-open イベントが発火されること", async () => {
     const onEdit = vi.fn();
-    const discussion = { id: "1", theme: "テストテーマ" };
+    const discussion = {
+      id: "1",
+      theme: "テストテーマ",
+      status: "public" as const,
+    };
     render(
       html`
         <learning-discussion-detail
@@ -47,7 +55,11 @@ describe("learning-discussion-detail", async () => {
   });
 
   it("isEditing が true のときに入力フォームが表示されること", async () => {
-    const discussion = { id: "1", theme: "テストテーマ" };
+    const discussion = {
+      id: "1",
+      theme: "テストテーマ",
+      status: "public" as const,
+    };
     render(
       html`
         <learning-discussion-detail
@@ -64,7 +76,11 @@ describe("learning-discussion-detail", async () => {
 
   it("保存ボタンをクリックすると discussion-update イベントが発火されること", async () => {
     const onSave = vi.fn();
-    const discussion = { id: "1", theme: "元のテーマ" };
+    const discussion = {
+      id: "1",
+      theme: "元のテーマ",
+      status: "public" as const,
+    };
     render(
       html`
         <learning-discussion-detail
@@ -101,7 +117,11 @@ describe("learning-discussion-detail", async () => {
   });
 
   it("編集ボタンに正しいアイコンクラスが設定されていること", async () => {
-    const discussion = { id: "1", theme: "テストテーマ" };
+    const discussion = {
+      id: "1",
+      theme: "テストテーマ",
+      status: "public" as const,
+    };
     render(
       html`
         <learning-discussion-detail

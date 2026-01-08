@@ -167,8 +167,9 @@ func (s *CookieAuth) SetRoles(val []string) {
 
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID    ID              `json:"id"`
-	Theme DiscussionTheme `json:"theme"`
+	ID     ID               `json:"id"`
+	Theme  DiscussionTheme  `json:"theme"`
+	Status DiscussionStatus `json:"status"`
 }
 
 // GetID returns the value of ID.
@@ -181,6 +182,11 @@ func (s *Discussion) GetTheme() DiscussionTheme {
 	return s.Theme
 }
 
+// GetStatus returns the value of Status.
+func (s *Discussion) GetStatus() DiscussionStatus {
+	return s.Status
+}
+
 // SetID sets the value of ID.
 func (s *Discussion) SetID(val ID) {
 	s.ID = val
@@ -189,6 +195,53 @@ func (s *Discussion) SetID(val ID) {
 // SetTheme sets the value of Theme.
 func (s *Discussion) SetTheme(val DiscussionTheme) {
 	s.Theme = val
+}
+
+// SetStatus sets the value of Status.
+func (s *Discussion) SetStatus(val DiscussionStatus) {
+	s.Status = val
+}
+
+// Ref: #/components/schemas/DiscussionStatus
+type DiscussionStatus string
+
+const (
+	DiscussionStatusPrivate DiscussionStatus = "private"
+	DiscussionStatusPublic  DiscussionStatus = "public"
+)
+
+// AllValues returns all DiscussionStatus values.
+func (DiscussionStatus) AllValues() []DiscussionStatus {
+	return []DiscussionStatus{
+		DiscussionStatusPrivate,
+		DiscussionStatusPublic,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s DiscussionStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case DiscussionStatusPrivate:
+		return []byte(s), nil
+	case DiscussionStatusPublic:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *DiscussionStatus) UnmarshalText(data []byte) error {
+	switch DiscussionStatus(data) {
+	case DiscussionStatusPrivate:
+		*s = DiscussionStatusPrivate
+		return nil
+	case DiscussionStatusPublic:
+		*s = DiscussionStatusPublic
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type DiscussionTheme string
@@ -357,7 +410,8 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentC
 type LearningDiscussionsDiscussionIdDeleteNoContent struct{}
 
 type LearningDiscussionsDiscussionIdPutReq struct {
-	Theme DiscussionTheme `json:"theme"`
+	Theme  DiscussionTheme  `json:"theme"`
+	Status DiscussionStatus `json:"status"`
 }
 
 // GetTheme returns the value of Theme.
@@ -365,13 +419,24 @@ func (s *LearningDiscussionsDiscussionIdPutReq) GetTheme() DiscussionTheme {
 	return s.Theme
 }
 
+// GetStatus returns the value of Status.
+func (s *LearningDiscussionsDiscussionIdPutReq) GetStatus() DiscussionStatus {
+	return s.Status
+}
+
 // SetTheme sets the value of Theme.
 func (s *LearningDiscussionsDiscussionIdPutReq) SetTheme(val DiscussionTheme) {
 	s.Theme = val
 }
 
+// SetStatus sets the value of Status.
+func (s *LearningDiscussionsDiscussionIdPutReq) SetStatus(val DiscussionStatus) {
+	s.Status = val
+}
+
 type LearningDiscussionsPostReq struct {
-	Theme DiscussionTheme `json:"theme"`
+	Theme  DiscussionTheme  `json:"theme"`
+	Status DiscussionStatus `json:"status"`
 }
 
 // GetTheme returns the value of Theme.
@@ -379,9 +444,19 @@ func (s *LearningDiscussionsPostReq) GetTheme() DiscussionTheme {
 	return s.Theme
 }
 
+// GetStatus returns the value of Status.
+func (s *LearningDiscussionsPostReq) GetStatus() DiscussionStatus {
+	return s.Status
+}
+
 // SetTheme sets the value of Theme.
 func (s *LearningDiscussionsPostReq) SetTheme(val DiscussionTheme) {
 	s.Theme = val
+}
+
+// SetStatus sets the value of Status.
+func (s *LearningDiscussionsPostReq) SetStatus(val DiscussionStatus) {
+	s.Status = val
 }
 
 // NewNilID returns new NilID with value set to v.

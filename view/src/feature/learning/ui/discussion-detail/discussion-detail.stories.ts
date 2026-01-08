@@ -2,21 +2,23 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import type { DiscussionUpdateEvent } from "../../event/discussion";
 import "./discussion-detail";
+import type { LearningDiscussionDetail } from "./discussion-detail";
 
-const meta: Meta = {
+const meta: Meta<LearningDiscussionDetail> = {
   title: "learning/ui/discussion-detail",
   component: "learning-discussion-detail",
 };
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<LearningDiscussionDetail>;
 
 export const Default: Story = {
   args: {
     discussion: {
       id: "1",
       theme: "論理的な議論とは何か",
+      status: "public",
     },
     isEditing: false,
   },

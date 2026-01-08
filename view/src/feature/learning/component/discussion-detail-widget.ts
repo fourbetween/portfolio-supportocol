@@ -23,7 +23,8 @@ export class LearningDiscussionDetailWidget extends LitElement {
     try {
       const data = await discussionRepository.update(
         this.discussion.id,
-        e.theme
+        e.theme,
+        e.status
       );
       this.discussion = data;
       this._isEditing = false;
