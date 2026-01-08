@@ -54,6 +54,7 @@ export interface paths {
                 content: {
                     "application/json": {
                         theme: components["schemas"]["DiscussionTheme"];
+                        status: components["schemas"]["DiscussionStatus"];
                     };
                 };
             };
@@ -137,6 +138,7 @@ export interface paths {
                 content: {
                     "application/json": {
                         theme: components["schemas"]["DiscussionTheme"];
+                        status: components["schemas"]["DiscussionStatus"];
                     };
                 };
             };
@@ -487,12 +489,15 @@ export interface components {
         Id: string;
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
+        /** @enum {string} */
+        DiscussionStatus: "private" | "public";
         DiscussionTheme: string;
         CommentType: string;
         CommentContent: string;
         Discussion: {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
+            status: components["schemas"]["DiscussionStatus"];
         };
         Comment: {
             id: components["schemas"]["Id"];

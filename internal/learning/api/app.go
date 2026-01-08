@@ -58,6 +58,7 @@ func (h *appHandler) LearningDiscussionsPost(
 ) (*oas.Discussion, error) {
 	item, err := h.con.CreateDiscussion.Execute(ctx, usecase.CreateDiscussionInput{
 		Theme:     string(req.Theme),
+		Status:    domain.DiscussionStatus(req.Status),
 		CreatedBy: httpctx.GetUserID(ctx),
 	})
 	if err != nil {
@@ -93,6 +94,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdPut(
 		ID:        string(params.DiscussionId),
 		CreatedBy: httpctx.GetUserID(ctx),
 		Theme:     string(req.Theme),
+		Status:    domain.DiscussionStatus(req.Status),
 	})
 	if err != nil {
 		return nil, err
@@ -259,8 +261,9 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	return oas.Discussion{
-		ID:    oas.ID(item.ID()),
-		Theme: oas.DiscussionTheme(item.Theme()),
+		ID:     oas.ID(item.ID()),
+		Theme:  oas.DiscussionTheme(item.Theme()),
+		Status: oas.DiscussionStatus(item.Status()),
 	}
 }
 

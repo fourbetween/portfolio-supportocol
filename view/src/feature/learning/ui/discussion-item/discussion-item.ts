@@ -5,9 +5,10 @@ import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
   DiscussionDeleteEvent,
-  SelectDiscussionEvent,
+  DiscussionSelectEvent,
 } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
+import "../discussion-status-badge/discussion-status-badge";
 
 @customElement("learning-discussion-item")
 export class LearningDiscussionItem extends LitElement {
@@ -15,7 +16,7 @@ export class LearningDiscussionItem extends LitElement {
   discussion!: Discussion;
 
   private handleSelect() {
-    this.dispatchEvent(new SelectDiscussionEvent(this.discussion));
+    this.dispatchEvent(new DiscussionSelectEvent(this.discussion));
   }
 
   private handleDelete(e: Event) {
@@ -24,9 +25,16 @@ export class LearningDiscussionItem extends LitElement {
   }
 
   render() {
+    const { theme, status } = this.discussion;
     return html`
       <div class="item hover-container" @click=${this.handleSelect}>
-        <span class="theme">${this.discussion.theme}</span>
+        <div class="info">
+          <span class="theme">${theme}</span>
+        </div>
+        <learning-discussion-status-badge
+          class="status-badge"
+          .status=${status}
+        ></learning-discussion-status-badge>
         <button
           class="btn-hover danger delete-button"
           aria-label="delete"
@@ -51,17 +59,29 @@ export class LearningDiscussionItem extends LitElement {
         padding: 16px;
         background-color: var(--color-canvas-default);
         cursor: pointer;
-        border-top-left-radius: var(--item-border-top-left-radius, 0);
-        border-top-right-radius: var(--item-border-top-right-radius, 0);
-        border-bottom-left-radius: var(--item-border-bottom-left-radius, 0);
-        border-bottom-right-radius: var(--item-border-bottom-right-radius, 0);
+        border-radius: var(--item-border-top-left-radius, 0)
+          var(--item-border-top-right-radius, 0)
+          var(--item-border-bottom-right-radius, 0)
+          var(--item-border-bottom-left-radius, 0);
       }
       .item:hover {
         background-color: var(--color-canvas-subtle);
       }
+      .info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        flex: 1;
+      }
       .theme {
         font-size: 0.9rem;
         color: var(--color-accent-fg);
+      }
+      .status-badge {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
       }
       .delete-button {
         right: 0;

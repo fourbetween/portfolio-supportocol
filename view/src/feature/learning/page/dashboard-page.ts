@@ -21,8 +21,8 @@ import {
 } from "../event/comment";
 import {
   type DiscussionDeletedEvent,
+  type DiscussionSelectEvent,
   type DiscussionUpdatedEvent,
-  type SelectDiscussionEvent,
 } from "../event/discussion";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
@@ -104,7 +104,7 @@ export class LearningDashboardPage extends LitElement {
     }
   };
 
-  private _handleSelectDiscussion(e: SelectDiscussionEvent) {
+  private _handleDiscussionSelect(e: DiscussionSelectEvent) {
     if (this._selectedDiscussionId === e.discussion.id) return;
     this._selectedDiscussionId = e.discussion.id;
     const url = new URL(window.location.href);
@@ -164,7 +164,7 @@ export class LearningDashboardPage extends LitElement {
     }
   }
 
-  private _handleSelectComment(e: CommentSelectEvent) {
+  private _handleCommentSelect(e: CommentSelectEvent) {
     this._selectedCommentId = e.commentId;
   }
 
@@ -211,7 +211,7 @@ export class LearningDashboardPage extends LitElement {
     return html`
       <learning-discussion-list-widget
         .discussions=${this._discussions}
-        @discussion-select=${this._handleSelectDiscussion}
+        @discussion-select=${this._handleDiscussionSelect}
         @discussion-created=${this._handleDiscussionUpdated}
         @discussion-deleted=${this._handleDiscussionDeleted}
       ></learning-discussion-list-widget>
@@ -225,7 +225,7 @@ export class LearningDashboardPage extends LitElement {
         .comments=${this._comments}
         @comment-updated=${this._handleCommentUpdated}
         @comment-deleted=${this._handleCommentDeleted}
-        @comment-select=${this._handleSelectComment}
+        @comment-select=${this._handleCommentSelect}
       ></learning-comment-proposed-widget>
     `;
   }
@@ -293,7 +293,7 @@ export class LearningDashboardPage extends LitElement {
             @comment-updated=${this._handleCommentUpdated}
             @comment-deleted=${this._handleCommentDeleted}
             @comment-generated=${this._handleCommentGenerated}
-            @comment-select=${this._handleSelectComment}
+            @comment-select=${this._handleCommentSelect}
           ></learning-comment-explorer-widget>
         </div>
       </main>

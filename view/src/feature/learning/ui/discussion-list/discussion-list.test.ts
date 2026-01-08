@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import type {
   DiscussionDeleteEvent,
-  SelectDiscussionEvent,
+  DiscussionSelectEvent,
 } from "../../event/discussion";
 import "./discussion-list";
 
@@ -21,8 +21,8 @@ describe("learning-discussion-list", () => {
 
   it("議論のテーマが表示されること", async () => {
     const discussions = [
-      { id: "1", theme: "テーマ1" },
-      { id: "2", theme: "テーマ2" },
+      { id: "1", theme: "テーマ1", status: "public" as const },
+      { id: "2", theme: "テーマ2", status: "public" as const },
     ];
     render(
       html`
@@ -50,12 +50,14 @@ describe("learning-discussion-list", () => {
 
   it("アイテムをクリックすると discussion-select イベントが発火されること", async () => {
     const onSelect = vi.fn();
-    const discussions = [{ id: "1", theme: "テーマ1" }];
+    const discussions = [
+      { id: "1", theme: "テーマ1", status: "public" as const },
+    ];
     render(
       html`
         <learning-discussion-list
           .discussions=${discussions}
-          @discussion-select=${(e: SelectDiscussionEvent) =>
+          @discussion-select=${(e: DiscussionSelectEvent) =>
             onSelect(e.discussion)}
         ></learning-discussion-list>
       `,
@@ -69,7 +71,9 @@ describe("learning-discussion-list", () => {
 
   it("削除ボタンをクリックすると discussion-delete イベントが発火されること", async () => {
     const onDelete = vi.fn();
-    const discussions = [{ id: "1", theme: "テーマ1" }];
+    const discussions = [
+      { id: "1", theme: "テーマ1", status: "public" as const },
+    ];
     render(
       html`
         <learning-discussion-list
@@ -89,7 +93,9 @@ describe("learning-discussion-list", () => {
   });
 
   it("削除ボタンが絶対配置されていること", async () => {
-    const discussions = [{ id: "1", theme: "テーマ1" }];
+    const discussions = [
+      { id: "1", theme: "テーマ1", status: "public" as const },
+    ];
     render(
       html`
         <learning-discussion-list
@@ -108,7 +114,9 @@ describe("learning-discussion-list", () => {
   });
 
   it("アイテムコンテナが相対配置されていること", async () => {
-    const discussions = [{ id: "1", theme: "テーマ1" }];
+    const discussions = [
+      { id: "1", theme: "テーマ1", status: "public" as const },
+    ];
     render(
       html`
         <learning-discussion-list

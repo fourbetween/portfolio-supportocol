@@ -82,6 +82,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(
 			table.Discussions.Theme.SET(table.Discussions.NEW.Theme),
+			table.Discussions.Status.SET(table.Discussions.NEW.Status),
 		)
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
@@ -106,6 +107,7 @@ func (r *DiscussionRepository) toDomain(row model.Discussions) (*domain.Discussi
 		ID: row.ID,
 		CreateDiscussionParams: domain.CreateDiscussionParams{
 			Theme:     row.Theme,
+			Status:    domain.DiscussionStatus(row.Status),
 			CreatedBy: row.CreatedBy,
 		},
 		CreatedAt: row.CreatedAt,
@@ -116,6 +118,7 @@ func (r *DiscussionRepository) toModel(d *domain.Discussion) model.Discussions {
 	return model.Discussions{
 		ID:        d.ID(),
 		Theme:     d.Theme(),
+		Status:    string(d.Status()),
 		CreatedBy: d.CreatedBy(),
 		CreatedAt: d.CreatedAt(),
 	}

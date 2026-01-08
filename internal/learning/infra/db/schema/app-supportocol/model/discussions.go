@@ -14,6 +14,7 @@ import (
 type Discussions struct {
 	ID        string `sql:"primary_key"`
 	Theme     string
+	Status    string
 	CreatedBy string
 	CreatedAt time.Time
 	UpdatedAt time.Time

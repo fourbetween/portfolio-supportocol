@@ -1,6 +1,10 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
+import {
+  DiscussionDeleteEvent,
+  DiscussionSelectEvent,
+} from "../../event/discussion";
 import "./discussion-item";
 
 describe("learning-discussion-item", () => {
@@ -18,9 +22,7 @@ describe("learning-discussion-item", () => {
   const discussion = {
     id: "1",
     theme: "Test Theme",
-    authorId: "user1",
-    createdAt: "2023-01-01T00:00:00Z",
-    updatedAt: "2023-01-01T00:00:00Z",
+    status: "public" as const,
   };
 
   it("テーマが表示されること", async () => {
@@ -50,7 +52,7 @@ describe("learning-discussion-item", () => {
 
     await page.getByText("Test Theme").click();
     expect(selectHandler).toHaveBeenCalled();
-    const event = selectHandler.mock.calls[0][0];
+    const event = selectHandler.mock.calls[0][0] as DiscussionSelectEvent;
     expect(event.type).toBe("discussion-select");
     expect(event.discussion).toEqual(discussion);
   });
@@ -69,8 +71,43 @@ describe("learning-discussion-item", () => {
 
     await page.getByRole("button", { name: "delete" }).click();
     expect(deleteHandler).toHaveBeenCalled();
-    const event = deleteHandler.mock.calls[0][0];
+    const event = deleteHandler.mock.calls[0][0] as DiscussionDeleteEvent;
     expect(event.type).toBe("discussion-delete");
     expect(event.discussion).toEqual(discussion);
+  });
+
+  it("ステータスとテーマが表示されること", async () => {
+    render(
+      html`
+        <learning-discussion-item
+          .discussion=${discussion}
+        ></learning-discussion-item>
+      `,
+      container
+    );
+
+    await expect.element(page.getByText("public").first()).toBeVisible();
+    await expect.element(page.getByText("Test Theme")).toBeVisible();
+  });
+
+  it("バッジが絶対配置され、右下に位置していること", async () => {
+    render(
+      html`
+        <learning-discussion-item
+          .discussion=${discussion}
+        ></learning-discussion-item>
+      `,
+      container
+    );
+
+    const el = container.querySelector("learning-discussion-item")!;
+    // Lit update waiting
+    await (el as any).updateComplete;
+    const badge = el.shadowRoot!.querySelector(
+      "learning-discussion-status-badge"
+    )! as HTMLElement;
+    const styles = window.getComputedStyle(badge);
+
+    expect(styles.position).toBe("absolute");
   });
 });

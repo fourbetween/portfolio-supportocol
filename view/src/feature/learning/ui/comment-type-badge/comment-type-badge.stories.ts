@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import "./comment-type-badge";
+import type { LearningCommentTypeBadge } from "./comment-type-badge";
 
-const meta: Meta = {
+const meta: Meta<LearningCommentTypeBadge> = {
   title: "learning/ui/comment-type-badge",
   component: "learning-comment-type-badge",
   render: (args) =>
@@ -17,7 +18,7 @@ const meta: Meta = {
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<LearningCommentTypeBadge>;
 
 export const Idea: Story = {
   args: {

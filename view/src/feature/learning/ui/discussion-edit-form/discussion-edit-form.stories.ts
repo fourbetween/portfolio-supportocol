@@ -2,15 +2,16 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import type { DiscussionUpdateEvent } from "../../event/discussion";
 import "./discussion-edit-form";
+import type { LearningDiscussionEditForm } from "./discussion-edit-form";
 
-const meta: Meta = {
+const meta: Meta<LearningDiscussionEditForm> = {
   title: "learning/ui/discussion-edit-form",
   component: "learning-discussion-edit-form",
 };
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<LearningDiscussionEditForm>;
 
 export const Default: Story = {
   args: {

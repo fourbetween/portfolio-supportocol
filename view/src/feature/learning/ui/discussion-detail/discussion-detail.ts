@@ -6,6 +6,7 @@ import { iconStyle } from "../../../../shared/style/icon";
 import { DiscussionFormOpenEvent } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-edit-form/discussion-edit-form";
+import "../discussion-status-badge/discussion-status-badge";
 
 @customElement("learning-discussion-detail")
 export class LearningDiscussionDetail extends LitElement {
@@ -33,6 +34,7 @@ export class LearningDiscussionDetail extends LitElement {
     return html`
       <learning-discussion-edit-form
         .theme=${this.discussion?.theme ?? ""}
+        .status=${this.discussion?.status ?? "private"}
       ></learning-discussion-edit-form>
     `;
   }
@@ -40,10 +42,17 @@ export class LearningDiscussionDetail extends LitElement {
   private _renderDisplay() {
     return html`
       <div class="display">
-        <h1 class="theme">${this.discussion?.theme}</h1>
-        <button class="btn" @click=${this._handleEditClick}>
-          <span class="material-symbols-outlined">edit</span>
-        </button>
+        <div class="badge-row">
+          <learning-discussion-status-badge
+            .status=${this.discussion?.status}
+          ></learning-discussion-status-badge>
+        </div>
+        <div class="content-row">
+          <h1 class="theme">${this.discussion?.theme}</h1>
+          <button class="btn" @click=${this._handleEditClick}>
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+        </div>
       </div>
     `;
   }
@@ -73,6 +82,11 @@ export class LearningDiscussionDetail extends LitElement {
       }
 
       .display {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .content-row {
         display: flex;
         align-items: center;
         justify-content: space-between;

@@ -1,15 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import "./comment-edit-form";
+import type { LearningCommentEditForm } from "./comment-edit-form";
 
-const meta: Meta = {
+const meta: Meta<LearningCommentEditForm> = {
   title: "learning/ui/comment-edit-form",
   component: "learning-comment-edit-form",
   render: (args) =>
     html`
       <learning-comment-edit-form
-        .initialType=${args.commentType}
-        .initialContent=${args.content}
+        .initialType=${args.initialType}
+        .initialContent=${args.initialContent}
         .availableTypes=${args.availableTypes}
         @comment-create=${(e: any) => console.log("create", e)}
         @comment-update=${(e: any) => console.log("update", e)}
@@ -20,22 +21,20 @@ const meta: Meta = {
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<LearningCommentEditForm>;
 
 export const Default: Story = {
   args: {
-    commentType: "質問",
-    status: "active" as const,
-    content: "",
+    initialType: "質問",
+    initialContent: "",
     availableTypes: ["質問", "回答", "アイデア", "賛成", "反対"],
   },
 };
 
 export const WithContent: Story = {
   args: {
-    commentType: "回答",
-    status: "active" as const,
-    content: "これは回答です。",
+    initialType: "回答",
+    initialContent: "これは回答です。",
     availableTypes: ["質問", "回答", "アイデア", "賛成", "反対"],
   },
 };

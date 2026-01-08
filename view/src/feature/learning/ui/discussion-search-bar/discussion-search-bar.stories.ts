@@ -2,15 +2,16 @@ import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import type { DiscussionSearchEvent } from "../../event/discussion";
 import "./discussion-search-bar";
+import type { LearningDiscussionSearchBar } from "./discussion-search-bar";
 
-const meta: Meta = {
+const meta: Meta<LearningDiscussionSearchBar> = {
   title: "learning/ui/discussion-search-bar",
   component: "learning-discussion-search-bar",
 };
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<LearningDiscussionSearchBar>;
 
 export const Default: Story = {
   args: {

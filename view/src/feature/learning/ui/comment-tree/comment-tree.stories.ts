@@ -1,8 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import "./comment-tree";
+import type { LearningCommentTree } from "./comment-tree";
 
-const meta: Meta = {
+const meta: Meta<
+  LearningCommentTree & {
+    onSelectComment: (e: Event) => void;
+    onCommentDeleted: (e: Event) => void;
+    onCommentGenerate: (e: Event) => void;
+    onCommentUpdate: (e: Event) => void;
+    onCommentCreate: (e: Event) => void;
+  }
+> = {
   title: "learning/ui/comment-tree",
   component: "learning-comment-tree",
   argTypes: {
@@ -25,7 +34,15 @@ const meta: Meta = {
 };
 
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<
+  LearningCommentTree & {
+    onSelectComment: (e: Event) => void;
+    onCommentDeleted: (e: Event) => void;
+    onCommentGenerate: (e: Event) => void;
+    onCommentUpdate: (e: Event) => void;
+    onCommentCreate: (e: Event) => void;
+  }
+>;
 
 export const Default: Story = {
   args: {

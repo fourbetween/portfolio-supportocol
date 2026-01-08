@@ -22,6 +22,10 @@ export const baseStyle: CSSResultGroup = [
       --color-header-text: #ffffff;
       --color-danger-fg: #cf222e;
       --color-success-fg: #1a7f37;
+      --color-success-muted: rgba(26, 127, 55, 0.15);
+      --color-success-subtle: rgba(26, 127, 55, 0.05);
+      --color-neutral-muted: rgba(175, 184, 193, 0.2);
+      --color-neutral-subtle: rgba(175, 184, 193, 0.05);
     }
 
     * {

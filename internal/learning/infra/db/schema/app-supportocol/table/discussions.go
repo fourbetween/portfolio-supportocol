@@ -19,6 +19,7 @@ type discussionsTable struct {
 	// Columns
 	ID        mysql.ColumnString
 	Theme     mysql.ColumnString
+	Status    mysql.ColumnString
 	CreatedBy mysql.ColumnString
 	CreatedAt mysql.ColumnTimestamp
 	UpdatedAt mysql.ColumnTimestamp
@@ -65,12 +66,13 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 	var (
 		IDColumn        = mysql.StringColumn("id")
 		ThemeColumn     = mysql.StringColumn("theme")
+		StatusColumn    = mysql.StringColumn("status")
 		CreatedByColumn = mysql.StringColumn("created_by")
 		CreatedAtColumn = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn = mysql.TimestampColumn("updated_at")
-		allColumns      = mysql.ColumnList{IDColumn, ThemeColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns  = mysql.ColumnList{ThemeColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		defaultColumns  = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
+		allColumns      = mysql.ColumnList{IDColumn, ThemeColumn, StatusColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns  = mysql.ColumnList{ThemeColumn, StatusColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns  = mysql.ColumnList{StatusColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return discussionsTable{
@@ -79,6 +81,7 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		//Columns
 		ID:        IDColumn,
 		Theme:     ThemeColumn,
+		Status:    StatusColumn,
 		CreatedBy: CreatedByColumn,
 		CreatedAt: CreatedAtColumn,
 		UpdatedAt: UpdatedAtColumn,

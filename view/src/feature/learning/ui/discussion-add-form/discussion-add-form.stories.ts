@@ -1,21 +1,22 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
-import type { CreateDiscussionEvent } from "../../event/discussion";
+import type { DiscussionCreateEvent } from "../../event/discussion";
 import "./discussion-add-form";
+import type { LearningDiscussionAddForm } from "./discussion-add-form";
 
-const meta: Meta = {
+const meta: Meta<LearningDiscussionAddForm> = {
   title: "learning/ui/discussion-add-form",
   component: "learning-discussion-add-form",
 };
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<LearningDiscussionAddForm>;
 
 export const Default: Story = {
   render: () => html`
     <learning-discussion-add-form
-      @discussion-create=${(e: CreateDiscussionEvent) =>
+      @discussion-create=${(e: DiscussionCreateEvent) =>
         console.log("submit", e.theme)}
     ></learning-discussion-add-form>
   `,

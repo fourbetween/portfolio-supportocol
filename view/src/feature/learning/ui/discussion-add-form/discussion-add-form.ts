@@ -5,7 +5,7 @@ import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
-import { CreateDiscussionEvent } from "../../event/discussion";
+import { DiscussionCreateEvent } from "../../event/discussion";
 
 @customElement("learning-discussion-add-form")
 export class LearningDiscussionAddForm extends LitElement {
@@ -24,7 +24,7 @@ export class LearningDiscussionAddForm extends LitElement {
   private _handleSubmit(e: Event) {
     e.preventDefault();
     if (this._canSubmit) {
-      this.dispatchEvent(new CreateDiscussionEvent(this._theme));
+      this.dispatchEvent(new DiscussionCreateEvent(this._theme, "private"));
       this._theme = "";
     }
   }

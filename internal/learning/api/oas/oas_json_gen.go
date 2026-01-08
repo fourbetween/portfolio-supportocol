@@ -335,11 +335,16 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 		e.FieldStart("theme")
 		s.Theme.Encode(e)
 	}
+	{
+		e.FieldStart("status")
+		s.Status.Encode(e)
+	}
 }
 
-var jsonFieldsNameOfDiscussion = [2]string{
+var jsonFieldsNameOfDiscussion = [3]string{
 	0: "id",
 	1: "theme",
+	2: "status",
 }
 
 // Decode decodes Discussion from json.
@@ -371,6 +376,16 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
+		case "status":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Status.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"status\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -381,7 +396,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -423,6 +438,46 @@ func (s *Discussion) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Discussion) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes DiscussionStatus as json.
+func (s DiscussionStatus) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes DiscussionStatus from json.
+func (s *DiscussionStatus) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode DiscussionStatus to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch DiscussionStatus(v) {
+	case DiscussionStatusPrivate:
+		*s = DiscussionStatusPrivate
+	case DiscussionStatusPublic:
+		*s = DiscussionStatusPublic
+	default:
+		*s = DiscussionStatus(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s DiscussionStatus) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *DiscussionStatus) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -1069,10 +1124,15 @@ func (s *LearningDiscussionsDiscussionIdPutReq) encodeFields(e *jx.Encoder) {
 		e.FieldStart("theme")
 		s.Theme.Encode(e)
 	}
+	{
+		e.FieldStart("status")
+		s.Status.Encode(e)
+	}
 }
 
-var jsonFieldsNameOfLearningDiscussionsDiscussionIdPutReq = [1]string{
+var jsonFieldsNameOfLearningDiscussionsDiscussionIdPutReq = [2]string{
 	0: "theme",
+	1: "status",
 }
 
 // Decode decodes LearningDiscussionsDiscussionIdPutReq from json.
@@ -1094,6 +1154,16 @@ func (s *LearningDiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
+		case "status":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.Status.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"status\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1104,7 +1174,7 @@ func (s *LearningDiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1163,10 +1233,15 @@ func (s *LearningDiscussionsPostReq) encodeFields(e *jx.Encoder) {
 		e.FieldStart("theme")
 		s.Theme.Encode(e)
 	}
+	{
+		e.FieldStart("status")
+		s.Status.Encode(e)
+	}
 }
 
-var jsonFieldsNameOfLearningDiscussionsPostReq = [1]string{
+var jsonFieldsNameOfLearningDiscussionsPostReq = [2]string{
 	0: "theme",
+	1: "status",
 }
 
 // Decode decodes LearningDiscussionsPostReq from json.
@@ -1188,6 +1263,16 @@ func (s *LearningDiscussionsPostReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
+		case "status":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.Status.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"status\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1198,7 +1283,7 @@ func (s *LearningDiscussionsPostReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

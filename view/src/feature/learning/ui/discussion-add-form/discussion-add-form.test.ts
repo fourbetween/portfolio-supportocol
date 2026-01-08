@@ -1,7 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import type { CreateDiscussionEvent } from "../../event/discussion";
+import type { DiscussionCreateEvent } from "../../event/discussion";
 import "./discussion-add-form";
 
 describe("learning-discussion-add-form", () => {
@@ -21,7 +21,7 @@ describe("learning-discussion-add-form", () => {
     render(
       html`
         <learning-discussion-add-form
-          @discussion-create=${(e: CreateDiscussionEvent) => onCreate(e.theme)}
+          @discussion-create=${(e: DiscussionCreateEvent) => onCreate(e.theme)}
         ></learning-discussion-add-form>
       `,
       container
