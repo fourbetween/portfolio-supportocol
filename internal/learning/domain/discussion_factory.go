@@ -43,13 +43,9 @@ type ReconstructDiscussionParams struct {
 }
 
 func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Discussion, error) {
-	theme, err := NewDiscussionTheme(params.Theme)
-	if err != nil {
-		return nil, err
-	}
 	return &Discussion{
 		id:        params.ID,
-		theme:     theme,
+		theme:     params.Theme,
 		createdBy: params.CreatedBy,
 		createdAt: params.CreatedAt,
 	}, nil

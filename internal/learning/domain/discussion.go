@@ -6,7 +6,7 @@ import (
 
 type Discussion struct {
 	id        string
-	theme     DiscussionTheme
+	theme     string
 	createdBy string
 	createdAt time.Time
 }
@@ -16,7 +16,7 @@ func (d *Discussion) ID() string {
 }
 
 func (d *Discussion) Theme() string {
-	return d.theme.String()
+	return d.theme
 }
 
 func (d *Discussion) CreatedBy() string {
@@ -32,10 +32,6 @@ type UpdateParams struct {
 }
 
 func (d *Discussion) Update(params UpdateParams) error {
-	theme, err := NewDiscussionTheme(params.Theme)
-	if err != nil {
-		return err
-	}
-	d.theme = theme
+	d.theme = params.Theme
 	return nil
 }

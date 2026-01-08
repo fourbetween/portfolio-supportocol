@@ -51,16 +51,12 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 	if !params.Status.IsValid() {
 		return nil, fmt.Errorf("invalid comment status")
 	}
-	content, err := NewCommentContent(params.Content)
-	if err != nil {
-		return nil, err
-	}
 	return &Comment{
 		id:              params.ID,
 		discussionID:    params.DiscussionID,
 		parentCommentID: params.ParentCommentID,
 		commentType:     params.CommentTypeID,
-		content:         content,
+		content:         params.Content,
 		status:          params.Status,
 		createdBy:       params.CreatedBy,
 		createdAt:       params.CreatedAt,

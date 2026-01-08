@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
@@ -62,19 +61,9 @@ func TestComment_Update(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name:    fmt.Sprintf("%d文字以内の場合は更新できること", MaxContentLength),
+			name:    "更新できること",
 			content: "a",
 			wantErr: nil,
-		},
-		{
-			name:    fmt.Sprintf("%d文字ちょうどの場合は更新できること", MaxContentLength),
-			content: string(make([]rune, MaxContentLength)),
-			wantErr: nil,
-		},
-		{
-			name:    fmt.Sprintf("%d文字以上の場合はエラーを返すこと", MaxContentLength+1),
-			content: string(make([]rune, MaxContentLength+1)),
-			wantErr: apperr.ErrInvalidArgument,
 		},
 	}
 

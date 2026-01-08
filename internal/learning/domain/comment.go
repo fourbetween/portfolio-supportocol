@@ -11,7 +11,7 @@ type Comment struct {
 	discussionID    string
 	parentCommentID *string
 	commentType     string
-	content         CommentContent
+	content         string
 	status          CommentStatus
 	createdBy       string
 	createdAt       time.Time
@@ -34,7 +34,7 @@ func (c *Comment) CommentType() string {
 }
 
 func (c *Comment) Content() string {
-	return c.content.String()
+	return c.content
 }
 
 func (c *Comment) Status() CommentStatus {
@@ -55,12 +55,8 @@ type UpdateCommentParams struct {
 }
 
 func (c *Comment) Update(params UpdateCommentParams) error {
-	content, err := NewCommentContent(params.Content)
-	if err != nil {
-		return err
-	}
 	c.commentType = params.CommentType
-	c.content = content
+	c.content = params.Content
 	return nil
 }
 
