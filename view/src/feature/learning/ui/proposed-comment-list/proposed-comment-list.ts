@@ -2,13 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../../shared/style/base";
-import { hoverButtonStyle } from "../../../../shared/style/hover-button";
-import { iconStyle } from "../../../../shared/style/icon";
-import {
-  ProposedCommentAcceptEvent,
-  ProposedCommentRejectEvent,
-  ProposedCommentSelectEvent,
-} from "../../event/comment";
+import { CommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-type-badge/comment-type-badge";
@@ -19,15 +13,7 @@ export class LearningProposedCommentList extends LitElement {
   comments: Comment[] = [];
 
   private onSelect(comment: Comment) {
-    this.dispatchEvent(new ProposedCommentSelectEvent(comment));
-  }
-
-  private onAccept(comment: Comment) {
-    this.dispatchEvent(new ProposedCommentAcceptEvent(comment));
-  }
-
-  private onReject(comment: Comment) {
-    this.dispatchEvent(new ProposedCommentRejectEvent(comment));
+    this.dispatchEvent(new CommentSelectEvent(comment.id));
   }
 
   render() {
@@ -49,7 +35,7 @@ export class LearningProposedCommentList extends LitElement {
 
   private renderComment(comment: Comment) {
     return html`
-      <div class="item hover-container">
+      <div class="item">
         <div class="comment-container">
           <learning-comment-type-badge
             .type=${comment.commentType}
@@ -60,28 +46,12 @@ export class LearningProposedCommentList extends LitElement {
             @click=${() => this.onSelect(comment)}
           ></learning-comment-card>
         </div>
-        <button
-          class="btn-hover success accept-button"
-          aria-label="check"
-          @click=${() => this.onAccept(comment)}
-        >
-          <span class="material-symbols-outlined">check</span>
-        </button>
-        <button
-          class="btn-hover danger reject-button"
-          aria-label="close"
-          @click=${() => this.onReject(comment)}
-        >
-          <span class="material-symbols-outlined">close</span>
-        </button>
       </div>
     `;
   }
 
   static styles = [
     baseStyle,
-    iconStyle,
-    hoverButtonStyle,
     css`
       .empty {
         padding: 16px;
@@ -97,7 +67,6 @@ export class LearningProposedCommentList extends LitElement {
         gap: 16px;
       }
       .item {
-        position: relative;
         display: flex;
         flex-direction: column;
         background-color: var(--color-canvas-default);
@@ -112,14 +81,6 @@ export class LearningProposedCommentList extends LitElement {
       }
       .clickable:hover {
         opacity: 0.8;
-      }
-      .accept-button {
-        bottom: -16px;
-        left: 8px;
-      }
-      .reject-button {
-        bottom: -16px;
-        left: 48px;
       }
     `,
   ];

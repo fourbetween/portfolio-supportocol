@@ -172,10 +172,6 @@ export class LearningDashboardPage extends LitElement {
     return this._discussions.find((d) => d.id === this._selectedDiscussionId);
   }
 
-  private get _activeComments() {
-    return this._comments.filter((c) => c.status === "active");
-  }
-
   private get _hasProposedComments() {
     return this._comments.some((c) => c.status === "proposed");
   }
@@ -285,13 +281,13 @@ export class LearningDashboardPage extends LitElement {
         </div>
         <div class="comment-frame">
           <learning-comment-frame-widget
-            .comments=${this._activeComments}
+            .comments=${this._comments}
           ></learning-comment-frame-widget>
         </div>
         <div class="comment-explorer">
           <learning-comment-explorer-widget
             .discussionId=${this._selectedDiscussionId}
-            .comments=${this._activeComments}
+            .comments=${this._comments}
             .selectedCommentId=${this._selectedCommentId}
             @comment-created=${this._handleCommentCreated}
             @comment-updated=${this._handleCommentUpdated}

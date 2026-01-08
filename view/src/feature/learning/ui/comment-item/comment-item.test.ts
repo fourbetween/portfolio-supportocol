@@ -84,6 +84,59 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     expect(deletedCommentId).toBe("1");
   });
 
+  it("status が proposed の場合、承諾ボタンと拒否ボタンを表示する", async () => {
+    let acceptedComment: Comment | undefined;
+    let rejectedComment: Comment | undefined;
+    const handleAccept = (e: any) => {
+      acceptedComment = e.comment;
+    };
+    const handleReject = (e: any) => {
+      rejectedComment = e.comment;
+    };
+    const proposedComment: Comment = {
+      ...mockComment,
+      status: "proposed",
+    };
+
+    render(
+      html`
+        <learning-comment-item
+          .comment=${proposedComment}
+          .availableTypes=${availableTypes}
+          @proposed-comment-accept=${handleAccept}
+          @proposed-comment-reject=${handleReject}
+        ></learning-comment-item>
+      `,
+      container
+    );
+
+    // active 状態のボタンが表示されていないことを確認
+    await expect
+      .element(page.getByRole("button", { name: "reply" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "edit" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "generate" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "delete" }))
+      .not.toBeInTheDocument();
+
+    // 承諾ボタンのテスト
+    const acceptButton = page.getByRole("button", { name: "accept" });
+    await expect.element(acceptButton).toBeVisible();
+    await acceptButton.click();
+    expect(acceptedComment?.id).toBe("1");
+
+    // 拒否ボタンのテスト
+    const rejectButton = page.getByRole("button", { name: "reject" });
+    await expect.element(rejectButton).toBeVisible();
+    await rejectButton.click();
+    expect(rejectedComment?.id).toBe("1");
+  });
+
   it("AI生成ボタンをクリックすると、コメントタイプポップアップが表示され、タイプを選択すると comment-generate イベントが発火される", async () => {
     let generatedParentId = "";
     let generatedType = "";

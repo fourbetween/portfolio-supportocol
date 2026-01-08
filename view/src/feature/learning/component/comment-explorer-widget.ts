@@ -14,6 +14,8 @@ import {
   CommentSelectEvent,
   CommentUpdateEvent,
   CommentUpdatedEvent,
+  ProposedCommentAcceptEvent,
+  ProposedCommentRejectEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
@@ -144,6 +146,37 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
+  private async handleAccept(e: ProposedCommentAcceptEvent) {
+    if (!this.discussionId) return;
+    const comment = e.comment;
+
+    try {
+      const data = await commentRepository.updateStatus(
+        this.discussionId,
+        comment.id,
+        "active"
+      );
+
+      showToast(this, "Comment activated.", "success", 2000);
+      this.dispatchEvent(new CommentUpdatedEvent(data));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
+  private async handleReject(e: ProposedCommentRejectEvent) {
+    if (!this.discussionId) return;
+    const comment = e.comment;
+    try {
+      await commentRepository.delete(this.discussionId, comment.id);
+
+      showToast(this, "Comment deleted.", "success", 2000);
+      this.dispatchEvent(new CommentDeletedEvent(comment.id));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
   private handleClearSelection() {
     this.dispatchEvent(new CommentSelectEvent(undefined));
   }
@@ -219,6 +252,8 @@ export class LearningCommentExplorerWidget extends LitElement {
             @comment-update=${this.handleCommentUpdate}
             @comment-delete=${this.handleCommentDelete}
             @comment-generate=${this.handleCommentGenerate}
+            @proposed-comment-accept=${this.handleAccept}
+            @proposed-comment-reject=${this.handleReject}
           ></learning-comment-tree>
         </div>
       </div>
@@ -246,6 +281,8 @@ export class LearningCommentExplorerWidget extends LitElement {
           @comment-update=${this.handleCommentUpdate}
           @comment-delete=${this.handleCommentDelete}
           @comment-generate=${this.handleCommentGenerate}
+          @proposed-comment-accept=${this.handleAccept}
+          @proposed-comment-reject=${this.handleReject}
         ></learning-comment-context>
       </div>
     `;
