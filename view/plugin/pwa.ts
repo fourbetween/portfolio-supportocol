@@ -14,7 +14,6 @@ export const pwaPlugin = (mode: string) => {
     workbox: {
       globPatterns: globPatterns,
       importScripts: [],
-      maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
     },
     manifest: {
       icons: [
@@ -39,7 +38,7 @@ export const pwaPlugin = (mode: string) => {
       short_name: "Supportocol",
       description: "論理的な議論を支援するプラットフォームです。",
       lang: "ja",
-      start_url: "/",
+      start_url: "/dashboard",
       theme_color: "#000000",
     },
   });
