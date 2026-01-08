@@ -42,15 +42,17 @@ export class LearningDiscussionDetail extends LitElement {
   private _renderDisplay() {
     return html`
       <div class="display">
-        <div class="theme-info">
-          <h1 class="theme">${this.discussion?.theme}</h1>
+        <div class="badge-row">
           <learning-discussion-status-badge
             .status=${this.discussion?.status}
           ></learning-discussion-status-badge>
         </div>
-        <button class="btn" @click=${this._handleEditClick}>
-          <span class="material-symbols-outlined">edit</span>
-        </button>
+        <div class="content-row">
+          <h1 class="theme">${this.discussion?.theme}</h1>
+          <button class="btn" @click=${this._handleEditClick}>
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+        </div>
       </div>
     `;
   }
@@ -81,6 +83,11 @@ export class LearningDiscussionDetail extends LitElement {
 
       .display {
         display: flex;
+        flex-direction: column;
+      }
+
+      .content-row {
+        display: flex;
         align-items: center;
         justify-content: space-between;
       }
@@ -89,12 +96,6 @@ export class LearningDiscussionDetail extends LitElement {
         font-size: 16px;
         font-weight: 400;
         margin: 0;
-      }
-
-      .theme-info {
-        display: flex;
-        align-items: center;
-        gap: 8px;
       }
 
       .material-symbols-outlined {

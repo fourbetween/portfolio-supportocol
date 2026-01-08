@@ -39,16 +39,6 @@ export class LearningDiscussionEditForm extends LitElement {
   render() {
     return html`
       <div class="edit-form">
-        <div class="field">
-          <label for="theme" class="sr-only">Theme</label>
-          <input
-            id="theme"
-            type="text"
-            class="theme-input"
-            .value=${this.theme}
-            placeholder="Enter discussion theme"
-          />
-        </div>
         <div class="field status-field">
           <label for="status">Status</label>
           <select id="status" class="status-select">
@@ -59,6 +49,15 @@ export class LearningDiscussionEditForm extends LitElement {
               Public
             </option>
           </select>
+        </div>
+        <div class="field">
+          <input
+            id="theme"
+            type="text"
+            class="theme-input"
+            .value=${this.theme}
+            placeholder="Enter discussion theme"
+          />
         </div>
         <div class="actions">
           <button
@@ -101,13 +100,13 @@ export class LearningDiscussionEditForm extends LitElement {
         gap: 4px;
       }
 
-      .status-field {
+      .field {
         flex-direction: row;
         align-items: center;
         gap: 8px;
       }
 
-      .status-field label {
+      .field label {
         font-size: 14px;
         color: var(--color-fg-muted);
       }
@@ -136,18 +135,6 @@ export class LearningDiscussionEditForm extends LitElement {
         justify-content: flex-end;
         gap: 8px;
         margin-top: 4px;
-      }
-
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border-width: 0;
       }
     `,
   ];

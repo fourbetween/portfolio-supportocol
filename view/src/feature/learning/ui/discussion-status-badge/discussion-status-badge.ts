@@ -17,7 +17,6 @@ export class LearningDiscussionStatusBadge extends LitElement {
     return html`
       <div class="status-badge ${this.status}">
         <span class="material-symbols-outlined">${icon}</span>
-        <span class="label">${this.status}</span>
       </div>
     `;
   }

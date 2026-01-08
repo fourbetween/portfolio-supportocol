@@ -29,8 +29,6 @@ describe("learning-discussion-status-badge", () => {
     await expect
       .element(page.getByText("public").nth(0))
       .toHaveClass(/material-symbols-outlined/);
-    await expect.element(page.getByText("public").nth(1)).toBeVisible();
-    await expect.element(page.getByText("public").nth(1)).toHaveClass("label");
   });
 
   it("private ステータスが表示されること", async () => {
@@ -47,7 +45,5 @@ describe("learning-discussion-status-badge", () => {
     await expect
       .element(page.getByText("lock"))
       .toHaveClass(/material-symbols-outlined/);
-    await expect.element(page.getByText("private")).toBeVisible();
-    await expect.element(page.getByText("private")).toHaveClass("label");
   });
 });

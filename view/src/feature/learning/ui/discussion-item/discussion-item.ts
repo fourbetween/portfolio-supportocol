@@ -25,14 +25,16 @@ export class LearningDiscussionItem extends LitElement {
   }
 
   render() {
+    const { theme, status } = this.discussion;
     return html`
       <div class="item hover-container" @click=${this.handleSelect}>
         <div class="info">
-          <span class="theme">${this.discussion.theme}</span>
-          <learning-discussion-status-badge
-            .status=${this.discussion?.status}
-          ></learning-discussion-status-badge>
+          <span class="theme">${theme}</span>
         </div>
+        <learning-discussion-status-badge
+          class="status-badge"
+          .status=${status}
+        ></learning-discussion-status-badge>
         <button
           class="btn-hover danger delete-button"
           aria-label="delete"
@@ -57,23 +59,29 @@ export class LearningDiscussionItem extends LitElement {
         padding: 16px;
         background-color: var(--color-canvas-default);
         cursor: pointer;
-        border-top-left-radius: var(--item-border-top-left-radius, 0);
-        border-top-right-radius: var(--item-border-top-right-radius, 0);
-        border-bottom-left-radius: var(--item-border-bottom-left-radius, 0);
-        border-bottom-right-radius: var(--item-border-bottom-right-radius, 0);
+        border-radius: var(--item-border-top-left-radius, 0)
+          var(--item-border-top-right-radius, 0)
+          var(--item-border-bottom-right-radius, 0)
+          var(--item-border-bottom-left-radius, 0);
       }
       .item:hover {
         background-color: var(--color-canvas-subtle);
       }
       .info {
         display: flex;
-        align-items: center;
-        gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
         flex: 1;
       }
       .theme {
         font-size: 0.9rem;
         color: var(--color-accent-fg);
+      }
+      .status-badge {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
       }
       .delete-button {
         right: 0;
