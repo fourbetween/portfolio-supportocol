@@ -17,6 +17,7 @@ export const hoverButtonStyle = css`
     transition: all 0.2s;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     z-index: 1;
+    overflow: hidden;
   }
 
   .btn-hover:hover {
