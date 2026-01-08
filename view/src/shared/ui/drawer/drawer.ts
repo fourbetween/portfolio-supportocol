@@ -85,7 +85,7 @@ export class Drawer extends LitElement {
       .drawer-content {
         position: fixed;
         top: 0;
-        width: 300px;
+        width: 340px;
         height: 100%;
         background-color: var(--color-canvas-default);
         transition: transform 0.3s ease, visibility 0.3s ease;
