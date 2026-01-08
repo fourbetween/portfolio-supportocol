@@ -1,10 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
-import type {
-  ProposedCommentAcceptEvent,
-  ProposedCommentRejectEvent,
-  ProposedCommentSelectEvent,
-} from "../../event/comment";
+import { CommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "./proposed-comment-list";
 
@@ -46,12 +42,8 @@ export const Default: Story = {
   render: (args) => html`
     <learning-proposed-comment-list
       .comments=${args.comments}
-      @proposed-comment-accept=${(e: ProposedCommentAcceptEvent) =>
-        console.log("Accepted", e.comment)}
-      @proposed-comment-reject=${(e: ProposedCommentRejectEvent) =>
-        console.log("Rejected", e.comment)}
-      @proposed-comment-select=${(e: ProposedCommentSelectEvent) =>
-        console.log("Clicked", e.comment)}
+      @comment-select=${(e: CommentSelectEvent) =>
+        console.log("Selected", e.commentId)}
     ></learning-proposed-comment-list>
   `,
 };

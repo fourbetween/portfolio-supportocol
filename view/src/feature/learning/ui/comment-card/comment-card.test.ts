@@ -102,4 +102,25 @@ describe("learning-comment-card", async () => {
     // ここでは 2026-01-04 12:34:56 が含まれていることを確認する
     await expect.element(page.getByText("2026-01-04 12:34:56")).toBeVisible();
   });
+  it("statusがproposedの場合、proposedクラスが付与されること", async () => {
+    const comment = {
+      id: "1",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "content",
+      commentType: "idea",
+      status: "proposed" as const,
+      createdAt: "2026-01-04T12:34:56Z",
+    };
+    render(
+      html`
+        <learning-comment-card .comment=${comment}></learning-comment-card>
+      `,
+      container
+    );
+    const el = container.querySelector("learning-comment-card") as any;
+    await el.updateComplete;
+    const cardBody = el.shadowRoot?.querySelector(".card-body");
+    expect(cardBody?.classList.contains("proposed")).toBe(true);
+  });
 });

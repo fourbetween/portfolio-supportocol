@@ -7,6 +7,7 @@ export const baseStyle: CSSResultGroup = [
       --color-fg-muted: #57606a;
       --color-canvas-default: #ffffff;
       --color-canvas-subtle: #f6f8fa;
+      --color-canvas-inset: #eff3f6;
       --color-border-default: #d0d7de;
       --color-border-muted: #d8dee4;
       --color-accent-fg: #0969da;

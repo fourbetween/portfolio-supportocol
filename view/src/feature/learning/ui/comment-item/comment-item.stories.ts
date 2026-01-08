@@ -12,6 +12,8 @@ const meta: Meta = {
     onCommentGenerate: { action: "comment-generate" },
     onCommentUpdate: { action: "comment-update" },
     onCommentCreate: { action: "comment-create" },
+    onProposedCommentAccept: { action: "proposed-comment-accept" },
+    onProposedCommentReject: { action: "proposed-comment-reject" },
   },
 };
 
@@ -29,6 +31,11 @@ const mockComment: Comment = {
   createdAt: "2026-01-04T00:00:00Z",
 };
 
+const mockProposedComment: Comment = {
+  ...mockComment,
+  status: "proposed" as const,
+};
+
 const availableTypes = ["idea", "question", "answer", "agreement"];
 
 export const Default: Story = {
@@ -42,11 +49,24 @@ export const Default: Story = {
       @comment-generate=${args.onCommentGenerate}
       @comment-update=${args.onCommentUpdate}
       @comment-create=${args.onCommentCreate}
+      @proposed-comment-accept=${args.onProposedCommentAccept}
+      @proposed-comment-reject=${args.onProposedCommentReject}
     ></learning-comment-item>
   `,
   args: {
     activeChildrenCount: 3,
   },
+};
+
+export const Proposed: Story = {
+  render: (args) => html`
+    <learning-comment-item
+      .comment=${mockProposedComment}
+      .availableTypes=${availableTypes}
+      @proposed-comment-accept=${args.onProposedCommentAccept}
+      @proposed-comment-reject=${args.onProposedCommentReject}
+    ></learning-comment-item>
+  `,
 };
 
 export const LongContent: Story = {

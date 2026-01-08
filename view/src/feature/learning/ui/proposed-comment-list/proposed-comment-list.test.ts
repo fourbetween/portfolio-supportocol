@@ -1,11 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import {
-  ProposedCommentAcceptEvent,
-  ProposedCommentRejectEvent,
-  ProposedCommentSelectEvent,
-} from "../../event/comment";
+import { CommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "./proposed-comment-list";
 
@@ -71,13 +67,13 @@ describe("learning-proposed-comment-list", () => {
       .toBeVisible();
   });
 
-  it("採用ボタンをクリックすると proposed-comment-accept イベントが発火されること", async () => {
-    const onAccept = vi.fn();
+  it("コメントをクリックすると comment-select イベントが発火されること", async () => {
+    const onSelect = vi.fn();
     const comments: Comment[] = [
       {
         id: "1",
         discussionId: "d1",
-        parentCommentId: null,
+        parentCommentId: "parent1",
         content: "提案1",
         commentType: "idea",
         status: "proposed",
@@ -89,68 +85,7 @@ describe("learning-proposed-comment-list", () => {
       html`
         <learning-proposed-comment-list
           .comments=${comments}
-          @proposed-comment-accept=${(e: ProposedCommentAcceptEvent) =>
-            onAccept(e.comment)}
-        ></learning-proposed-comment-list>
-      `,
-      container
-    );
-
-    await page.getByRole("button", { name: "check" }).click();
-
-    expect(onAccept).toHaveBeenCalledWith(comments[0]);
-  });
-
-  it("却下ボタンをクリックすると proposed-comment-reject イベントが発火されること", async () => {
-    const onReject = vi.fn();
-    const comments: Comment[] = [
-      {
-        id: "1",
-        discussionId: "d1",
-        parentCommentId: null,
-        content: "提案1",
-        commentType: "idea",
-        status: "proposed",
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-    ];
-
-    render(
-      html`
-        <learning-proposed-comment-list
-          .comments=${comments}
-          @proposed-comment-reject=${(e: ProposedCommentRejectEvent) =>
-            onReject(e.comment)}
-        ></learning-proposed-comment-list>
-      `,
-      container
-    );
-
-    await page.getByRole("button", { name: "close" }).click();
-
-    expect(onReject).toHaveBeenCalledWith(comments[0]);
-  });
-
-  it("コメントをクリックすると proposed-comment-select イベントが発火されること", async () => {
-    const onClick = vi.fn();
-    const comments: Comment[] = [
-      {
-        id: "1",
-        discussionId: "d1",
-        parentCommentId: null,
-        content: "提案1",
-        commentType: "idea",
-        status: "proposed",
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-    ];
-
-    render(
-      html`
-        <learning-proposed-comment-list
-          .comments=${comments}
-          @proposed-comment-select=${(e: ProposedCommentSelectEvent) =>
-            onClick(e.comment)}
+          @comment-select=${(e: CommentSelectEvent) => onSelect(e.commentId)}
         ></learning-proposed-comment-list>
       `,
       container
@@ -158,39 +93,10 @@ describe("learning-proposed-comment-list", () => {
 
     await page.getByText("提案1").click();
 
-    expect(onClick).toHaveBeenCalledWith(comments[0]);
+    expect(onSelect).toHaveBeenCalledWith("1");
   });
 
-  it("コメントをクリックすると onClick が呼ばれること", async () => {
-    const onClick = vi.fn();
-    const comments: Comment[] = [
-      {
-        id: "1",
-        discussionId: "d1",
-        parentCommentId: "p1",
-        content: "提案1",
-        commentType: "idea",
-        status: "proposed",
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-    ];
-
-    render(
-      html`
-        <learning-proposed-comment-list
-          .comments=${comments}
-          @proposed-comment-select=${(e: any) => onClick(e.comment)}
-        ></learning-proposed-comment-list>
-      `,
-      container
-    );
-
-    await page.getByText("提案1").click();
-
-    expect(onClick).toHaveBeenCalledWith(comments[0]);
-  });
-
-  it("ボタンがホバーコンテナ内にあり、btn-hoverクラスを持っていること", async () => {
+  it("採用ボタンと却下ボタンが表示されないこと", async () => {
     const comments: Comment[] = [
       {
         id: "1",
@@ -212,17 +118,11 @@ describe("learning-proposed-comment-list", () => {
       container
     );
 
-    const checkButton = page.getByRole("button", { name: "check" });
-    const closeButton = page.getByRole("button", { name: "close" });
-
-    await expect.element(checkButton).toHaveClass(/btn-hover/);
-    await expect.element(closeButton).toHaveClass(/btn-hover/);
-
-    // 親要素が hover-container クラスを持っていることを確認
-    // page.getByRole("button", { name: "check" }).parent() のようなものがあればいいが、
-    // ここでは selector で確認する
-    const el = container.querySelector("learning-proposed-comment-list")!;
-    const hoverContainer = el.shadowRoot!.querySelector(".hover-container");
-    expect(hoverContainer).not.toBeNull();
+    await expect
+      .element(page.getByRole("button", { name: "check" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "close" }))
+      .not.toBeInTheDocument();
   });
 });

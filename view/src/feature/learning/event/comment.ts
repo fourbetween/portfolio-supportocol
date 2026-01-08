@@ -3,7 +3,6 @@ import type { Comment } from "../model/comment";
 const COMMENT_SELECT_EVENT_NAME = "comment-select";
 const PROPOSED_COMMENT_ACCEPT_EVENT_NAME = "proposed-comment-accept";
 const PROPOSED_COMMENT_REJECT_EVENT_NAME = "proposed-comment-reject";
-const PROPOSED_COMMENT_SELECT_EVENT_NAME = "proposed-comment-select";
 const COMMENT_CREATE_EVENT_NAME = "comment-create";
 const COMMENT_CREATED_EVENT_NAME = "comment-created";
 const COMMENT_UPDATE_EVENT_NAME = "comment-update";
@@ -41,18 +40,6 @@ export class ProposedCommentRejectEvent extends Event {
 
   constructor(comment: Comment) {
     super(PROPOSED_COMMENT_REJECT_EVENT_NAME, {
-      bubbles: true,
-      composed: true,
-    });
-    this.comment = comment;
-  }
-}
-
-export class ProposedCommentSelectEvent extends Event {
-  public readonly comment: Comment;
-
-  constructor(comment: Comment) {
-    super(PROPOSED_COMMENT_SELECT_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
@@ -168,7 +155,6 @@ declare global {
     [COMMENT_SELECT_EVENT_NAME]: CommentSelectEvent;
     [PROPOSED_COMMENT_ACCEPT_EVENT_NAME]: ProposedCommentAcceptEvent;
     [PROPOSED_COMMENT_REJECT_EVENT_NAME]: ProposedCommentRejectEvent;
-    [PROPOSED_COMMENT_SELECT_EVENT_NAME]: ProposedCommentSelectEvent;
     [COMMENT_CREATE_EVENT_NAME]: CommentCreateEvent;
     [COMMENT_CREATED_EVENT_NAME]: CommentCreatedEvent;
     [COMMENT_UPDATE_EVENT_NAME]: CommentUpdateEvent;

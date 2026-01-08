@@ -60,3 +60,17 @@ export const Question: Story = {
     },
   },
 };
+
+export const Proposed: Story = {
+  args: {
+    comment: {
+      id: "4",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "これは提案中のコメントです。背景色が少し暗くなります。",
+      commentType: "idea",
+      status: "proposed" as const,
+      createdAt: "2026-01-04T00:00:00Z",
+    },
+  },
+};
