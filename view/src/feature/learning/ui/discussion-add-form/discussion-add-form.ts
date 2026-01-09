@@ -57,6 +57,10 @@ export class LearningDiscussionAddForm extends LitElement {
     iconStyle,
     inputStyle,
     css`
+      :host {
+        display: block;
+        width: 100%;
+      }
       form {
         display: flex;
         gap: 8px;
