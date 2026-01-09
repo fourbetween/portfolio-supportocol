@@ -27,7 +27,7 @@ describe("identity-auth-popup", () => {
       "identity-auth-popup"
     ) as IdentityAuthPopup;
     await el.updateComplete;
-    el.open();
+    el.open = true;
     await el.updateComplete;
 
     await expect
@@ -53,7 +53,7 @@ describe("identity-auth-popup", () => {
       "identity-auth-popup"
     ) as IdentityAuthPopup;
     await el.updateComplete;
-    el.open();
+    el.open = true;
     await el.updateComplete;
 
     const switchLink = page.getByText("Sign up");
@@ -89,7 +89,7 @@ describe("identity-auth-popup", () => {
       "identity-auth-popup"
     ) as IdentityAuthPopup;
     await el.updateComplete;
-    el.open();
+    el.open = true;
     await el.updateComplete;
 
     const emailInput = page.getByPlaceholder("Enter email address");

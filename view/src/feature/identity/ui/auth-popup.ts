@@ -1,10 +1,9 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { inputStyle } from "../../../shared/style/input";
 import "../../../shared/ui/popup/popup";
-import type { Popup } from "../../../shared/ui/popup/popup";
 import {
   AuthLoginEvent,
   AuthModeSwitchEvent,
@@ -14,6 +13,9 @@ import {
 
 @customElement("identity-auth-popup")
 export class IdentityAuthPopup extends LitElement {
+  @property({ type: Boolean })
+  open = false;
+
   @property({ type: String })
   mode: AuthMode = "login";
 
@@ -29,25 +31,19 @@ export class IdentityAuthPopup extends LitElement {
   @state()
   private validationErrorMessage = "";
 
-  @query("ui-popup")
-  private popup!: Popup;
-
   get googleButtonContainer(): HTMLElement | null {
     return this.renderRoot.querySelector(".google-button-container");
   }
 
-  open() {
-    this.popup.open = true;
-  }
-
-  close() {
-    this.popup.open = false;
-  }
-
-  private handleSwitchClick(e: Event) {
+  private _handleSwitchClick(e: Event) {
     e.preventDefault();
     const newMode = this.mode === "login" ? "signup" : "login";
     this.dispatchEvent(new AuthModeSwitchEvent(newMode));
+  }
+
+  private _handlePopupClose() {
+    this.open = false;
+    this.dispatchEvent(new Event("close"));
   }
 
   private renderSwitchPrompt() {
@@ -55,14 +51,14 @@ export class IdentityAuthPopup extends LitElement {
       if (!this.selfSignupEnabled) return "";
       return html`
         Don't have an account?
-        <a href="#" class="switch-link" @click=${this.handleSwitchClick}>
+        <a href="#" class="switch-link" @click=${this._handleSwitchClick}>
           Sign up
         </a>
       `;
     } else {
       return html`
         Already have an account?
-        <a href="#" class="switch-link" @click=${this.handleSwitchClick}>
+        <a href="#" class="switch-link" @click=${this._handleSwitchClick}>
           Log in
         </a>
       `;
@@ -170,7 +166,7 @@ export class IdentityAuthPopup extends LitElement {
 
   render() {
     return html`
-      <ui-popup>
+      <ui-popup .open=${this.open} @close=${this._handlePopupClose}>
         <span slot="header" class="popup-title">
           ${this.mode === "login" ? "Log in" : "Sign up"}
         </span>

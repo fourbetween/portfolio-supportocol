@@ -5,6 +5,7 @@ export interface GoogleAuthOptions {
   onSuccess: () => void;
   onError: (message: string) => void;
   onLoading: (isLoading: boolean) => void;
+  onInitialized?: () => void;
 }
 
 export class GoogleAuthService {
@@ -29,6 +30,7 @@ export class GoogleAuthService {
       callback: (response) => this.handleCallback(response),
     });
     this.initialized = true;
+    this.options.onInitialized?.();
   }
 
   renderButton(container: HTMLElement, mode: "login" | "signup") {

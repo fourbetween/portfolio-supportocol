@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { LitElement, html, type PropertyValues } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { GoogleAuthService } from "../api/google-auth";
@@ -22,6 +22,9 @@ export class IdentityAuthWidget extends LitElement {
   @state()
   private errorMessage = "";
 
+  @state()
+  private isOpen = false;
+
   private googleAuth?: GoogleAuthService;
 
   @query("identity-auth-popup")
@@ -38,14 +41,26 @@ export class IdentityAuthWidget extends LitElement {
     document.removeEventListener("auth-popup-open", this.handleOpenAuthPopup);
   }
 
+  protected async updated(changedProperties: PropertyValues) {
+    if (
+      changedProperties.has("isOpen") ||
+      changedProperties.has("currentMode")
+    ) {
+      if (this.isOpen && this.popup) {
+        await this.popup.updateComplete;
+        this.renderGoogleButton();
+      }
+    }
+  }
+
   open() {
     this.errorMessage = "";
-    this.popup.open();
+    this.isOpen = true;
   }
 
   close() {
     this.errorMessage = "";
-    this.popup.close();
+    this.isOpen = false;
   }
 
   private handleOpenAuthPopup = () => {
@@ -71,6 +86,10 @@ export class IdentityAuthWidget extends LitElement {
       onLoading: (isLoading) => {
         this.isLoading = isLoading;
       },
+      onInitialized: () => {
+        // Trigger re-render to show Google button
+        this.requestUpdate();
+      },
     });
     this.googleAuth.initialize();
   }
@@ -90,11 +109,6 @@ export class IdentityAuthWidget extends LitElement {
     // TODO: Implement email/password signup
   }
 
-  protected async updated() {
-    await this.updateComplete;
-    this.renderGoogleButton();
-  }
-
   private renderGoogleButton() {
     if (!this.googleAuth?.isInitialized()) {
       return;
@@ -109,9 +123,11 @@ export class IdentityAuthWidget extends LitElement {
   render() {
     return html`
       <identity-auth-popup
+        .open=${this.isOpen}
         .mode=${this.currentMode}
         .errorMessage=${this.errorMessage}
         .loading=${this.isLoading}
+        @close=${() => (this.isOpen = false)}
         @auth-mode-switch=${(e: AuthModeSwitchEvent) =>
           this.handleSwitchMode(e.mode)}
         @auth-login=${(e: AuthLoginEvent) =>
