@@ -8,8 +8,8 @@ import { userContext } from "./app/context/user";
 import "./app/layout/layout";
 import { routes } from "./app/routes";
 import "./feature/identity/component/auth-widget";
+import { authService } from "./feature/identity/model/auth";
 import type { User } from "./feature/identity/model/user";
-import { auth } from "./feature/identity/util/auth";
 import "./shared/ui/loading/loading-manager";
 import "./shared/ui/toast/toast-manager";
 
@@ -33,7 +33,7 @@ export class AppRoot extends LitElement {
       path: routes.dashboard,
       enter: async () => {
         await import("./feature/learning/page/dashboard-page");
-        return true;
+        return this.requireAuth();
       },
       render: () => html`
         <learning-dashboard-page></learning-dashboard-page>
@@ -45,13 +45,7 @@ export class AppRoot extends LitElement {
   @state()
   private user: User | null = null;
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.fetchCurrentUser();
-  }
-
   render() {
-    void this.user;
     return html`
       <app-layout>${this.router.outlet()}</app-layout>
       <toast-manager></toast-manager>
@@ -60,8 +54,12 @@ export class AppRoot extends LitElement {
     `;
   }
 
-  private async fetchCurrentUser() {
-    this.user = await auth.getCurrentUser();
+  private async requireAuth() {
+    if (this.user) {
+      return true;
+    }
+    this.user = await authService.getCurrentUser();
+    return true;
   }
 
   static styles = [

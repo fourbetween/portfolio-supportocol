@@ -1,5 +1,5 @@
 import createClient, { type Middleware } from "openapi-fetch";
-import { auth } from "../../identity/util/auth";
+import { authService } from "../../identity/model/auth";
 import type { paths } from "./schema";
 
 export const client = createClient<paths>({
@@ -9,7 +9,7 @@ export const client = createClient<paths>({
 const middleware: Middleware = {
   async onResponse({ response }) {
     if (response.status === 401) {
-      auth.login();
+      authService.login();
       return;
     }
   },

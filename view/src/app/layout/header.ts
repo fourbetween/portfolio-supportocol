@@ -1,8 +1,8 @@
 import { consume } from "@lit/context";
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { authService } from "../../feature/identity/model/auth";
 import type { User } from "../../feature/identity/model/user";
-import { auth } from "../../feature/identity/util/auth";
 import { baseStyle } from "../../shared/style/base";
 import { iconStyle } from "../../shared/style/icon";
 import { userContext } from "../context/user";
@@ -15,7 +15,7 @@ export class AppHeader extends LitElement {
   private user: User | null = null;
 
   private handleLogout() {
-    auth.logout();
+    authService.logout();
   }
 
   render() {
