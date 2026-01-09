@@ -229,6 +229,22 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
       .toHaveAttribute("aria-label", "delete");
   });
 
+  it("アクションボタンが flex コンテナ内に配置されている", async () => {
+    render(
+      html`
+        <learning-comment-item
+          .comment=${mockComment}
+          .availableTypes=${availableTypes}
+        ></learning-comment-item>
+      `,
+      container
+    );
+
+    const actionContainer = page.getByRole("group", { name: "Actions" });
+    await expect.element(actionContainer).toBeVisible();
+    await expect.element(actionContainer).toHaveStyle({ display: "flex" });
+  });
+
   describe("touch device", () => {
     const originalMatchMedia = window.matchMedia;
     const originalMaxTouchPoints = navigator.maxTouchPoints;

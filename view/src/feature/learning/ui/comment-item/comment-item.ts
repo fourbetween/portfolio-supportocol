@@ -128,49 +128,51 @@ export class LearningCommentItem extends LitElement {
         @click=${this.handleCommentClick}
         style="cursor: pointer;"
       ></learning-comment-card>
-      ${isProposed
-        ? html`
-            ${this.renderIconButton(
-              "check",
-              "accept",
-              this.handleAcceptClick,
-              "success accept-button"
-            )}
-            ${this.renderIconButton(
-              "close",
-              "reject",
-              this.handleRejectClick,
-              "danger reject-button"
-            )}
-          `
-        : html`
-            ${this.renderIconButton("reply", "reply", (e) =>
-              this.handleOpenTypePopup(e, "reply")
-            )}
-            ${this.renderIconButton(
-              "edit",
-              "edit",
-              this.handleEditClick,
-              "edit-button"
-            )}
-            ${this.renderIconButton(
-              "psychology",
-              "generate",
-              (e) => this.handleOpenTypePopup(e, "generate"),
-              "primary generate-button"
-            )}
-            ${this.renderIconButton(
-              "delete",
-              "delete",
-              this.handleDeleteClick,
-              "danger delete-button"
-            )}
-          `}
-      ${this.touch.isTouchDevice
-        ? this.renderIconButton("ads_click", "focus", (e) =>
-            this.handleFocusClick(e)
-          )
-        : nothing}
+      <div class="actions" role="group" aria-label="Actions">
+        ${isProposed
+          ? html`
+              ${this.renderIconButton(
+                "check",
+                "accept",
+                this.handleAcceptClick,
+                "success accept-button"
+              )}
+              ${this.renderIconButton(
+                "close",
+                "reject",
+                this.handleRejectClick,
+                "danger reject-button"
+              )}
+            `
+          : html`
+              ${this.renderIconButton("reply", "reply", (e) =>
+                this.handleOpenTypePopup(e, "reply")
+              )}
+              ${this.renderIconButton(
+                "edit",
+                "edit",
+                this.handleEditClick,
+                "edit-button"
+              )}
+              ${this.renderIconButton(
+                "psychology",
+                "generate",
+                (e) => this.handleOpenTypePopup(e, "generate"),
+                "primary generate-button"
+              )}
+              ${this.renderIconButton(
+                "delete",
+                "delete",
+                this.handleDeleteClick,
+                "danger delete-button"
+              )}
+            `}
+        ${this.touch.isTouchDevice
+          ? this.renderIconButton("ads_click", "focus", (e) =>
+              this.handleFocusClick(e)
+            )
+          : nothing}
+      </div>
     `;
   }
 
@@ -240,27 +242,19 @@ export class LearningCommentItem extends LitElement {
       .hover-container {
         position: relative;
       }
-      .reply-button,
-      .accept-button {
+      .actions {
+        display: flex;
+        gap: 8px;
+        position: absolute;
         bottom: -16px;
         left: 8px;
       }
-      .edit-button,
-      .reject-button {
-        bottom: -16px;
-        left: 48px;
+      .actions .btn-hover {
+        position: static;
+        opacity: 0;
       }
-      .generate-button {
-        bottom: -16px;
-        left: 88px;
-      }
-      .delete-button {
-        bottom: -16px;
-        left: 128px;
-      }
-      .focus-button {
-        bottom: -16px;
-        left: 168px;
+      .hover-container:hover .btn-hover {
+        opacity: 1;
       }
       .reply-form {
         margin-left: 8px;
