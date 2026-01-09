@@ -66,7 +66,7 @@ export class LearningDiscussionAddForm extends LitElement {
         gap: 8px;
       }
       input {
-        flex: 1;
+        flex: 1 1 auto;
       }
     `,
   ];
