@@ -3,6 +3,8 @@ import { type CSSResultGroup, css } from "lit";
 export const baseStyle: CSSResultGroup = [
   css`
     :host {
+      display: block;
+
       --color-fg-default: #24292f;
       --color-fg-muted: #57606a;
       --color-canvas-default: #ffffff;
