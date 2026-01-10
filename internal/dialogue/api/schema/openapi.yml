@@ -1,0 +1,184 @@
+openapi: 3.1.0
+info:
+  title: app-supportocol dialogue api
+  version: 1.0.0
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+      required:
+        - code
+        - message
+    Id:
+      type: string
+      format: uuid
+    CommentStatus:
+      type: string
+      enum:
+        - active
+        - proposed
+    DiscussionTheme:
+      type: string
+      maxLength: 255
+    CommentType:
+      type: string
+      maxLength: 20
+    CommentContent:
+      type: string
+      maxLength: 400
+    Discussion:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        theme:
+          $ref: "#/components/schemas/DiscussionTheme"
+      required:
+        - id
+        - theme
+    Comment:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        discussionId:
+          $ref: "#/components/schemas/Id"
+        parentCommentId:
+          oneOf:
+            - $ref: "#/components/schemas/Id"
+            - type: "null"
+        commentType:
+          $ref: "#/components/schemas/CommentType"
+        content:
+          $ref: "#/components/schemas/CommentContent"
+        status:
+          $ref: "#/components/schemas/CommentStatus"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - discussionId
+        - parentCommentId
+        - commentType
+        - content
+        - status
+        - createdAt
+paths:
+  /dialogue/discussions:
+    get:
+      description: get discussions
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /dialogue/discussions/{discussionId}:
+    get:
+      description: get discussion
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: discussionId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /dialogue/discussions/{discussionId}/comments:
+    get:
+      description: get comments for a discussion
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            type: string
+            format: date-time
+          required: false
+          name: since
+          in: query
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: create comment
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: discussionId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parentCommentId:
+                  oneOf:
+                    - $ref: "#/components/schemas/Id"
+                    - type: "null"
+                commentType:
+                  $ref: "#/components/schemas/CommentType"
+                content:
+                  $ref: "#/components/schemas/CommentContent"
+              required:
+                - parentCommentId
+                - commentType
+                - content
+      responses:
+        "201":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

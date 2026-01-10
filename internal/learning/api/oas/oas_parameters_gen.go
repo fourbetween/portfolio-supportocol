@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
+	"github.com/google/uuid"
 	"github.com/ogen-go/ogen/conv"
 	"github.com/ogen-go/ogen/middleware"
 	"github.com/ogen-go/ogen/ogenerrors"
@@ -59,14 +60,14 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
+				var paramsDotDiscussionIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -77,14 +78,6 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]
 					return err
 				}
 				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -119,14 +112,14 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]
 			})
 
 			if err := func() error {
-				var paramsDotCommentIdVal string
+				var paramsDotCommentIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -137,14 +130,6 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]
 					return err
 				}
 				params.CommentId = ID(paramsDotCommentIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.CommentId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -207,14 +192,14 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]str
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
+				var paramsDotDiscussionIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -225,14 +210,6 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]str
 					return err
 				}
 				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -267,14 +244,14 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]str
 			})
 
 			if err := func() error {
-				var paramsDotCommentIdVal string
+				var paramsDotCommentIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -285,14 +262,6 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]str
 					return err
 				}
 				params.CommentId = ID(paramsDotCommentIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.CommentId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -355,14 +324,14 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args 
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
+				var paramsDotDiscussionIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -373,14 +342,6 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args 
 					return err
 				}
 				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -415,14 +376,14 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args 
 			})
 
 			if err := func() error {
-				var paramsDotCommentIdVal string
+				var paramsDotCommentIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -433,14 +394,6 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args 
 					return err
 				}
 				params.CommentId = ID(paramsDotCommentIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.CommentId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -495,14 +448,14 @@ func decodeLearningDiscussionsDiscussionIdCommentsGeneratePostParams(args [1]str
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
+				var paramsDotDiscussionIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -513,14 +466,6 @@ func decodeLearningDiscussionsDiscussionIdCommentsGeneratePostParams(args [1]str
 					return err
 				}
 				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -586,14 +531,14 @@ func decodeLearningDiscussionsDiscussionIdCommentsGetParams(args [1]string, args
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
+				var paramsDotDiscussionIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -604,14 +549,6 @@ func decodeLearningDiscussionsDiscussionIdCommentsGetParams(args [1]string, args
 					return err
 				}
 				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -707,14 +644,14 @@ func decodeLearningDiscussionsDiscussionIdCommentsPostParams(args [1]string, arg
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
+				var paramsDotDiscussionIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -725,14 +662,6 @@ func decodeLearningDiscussionsDiscussionIdCommentsPostParams(args [1]string, arg
 					return err
 				}
 				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -787,14 +716,14 @@ func decodeLearningDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscap
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
+				var paramsDotDiscussionIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -805,14 +734,6 @@ func decodeLearningDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscap
 					return err
 				}
 				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -867,14 +788,14 @@ func decodeLearningDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped 
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
+				var paramsDotDiscussionIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -885,14 +806,6 @@ func decodeLearningDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped 
 					return err
 				}
 				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err
@@ -947,14 +860,14 @@ func decodeLearningDiscussionsDiscussionIdPutParams(args [1]string, argsEscaped 
 			})
 
 			if err := func() error {
-				var paramsDotDiscussionIdVal string
+				var paramsDotDiscussionIdVal uuid.UUID
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
 						return err
 					}
 
-					c, err := conv.ToString(val)
+					c, err := conv.ToUUID(val)
 					if err != nil {
 						return err
 					}
@@ -965,14 +878,6 @@ func decodeLearningDiscussionsDiscussionIdPutParams(args [1]string, argsEscaped 
 					return err
 				}
 				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := params.DiscussionId.Validate(); err != nil {
-					return err
-				}
 				return nil
 			}(); err != nil {
 				return err

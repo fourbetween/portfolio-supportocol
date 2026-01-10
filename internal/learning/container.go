@@ -34,7 +34,6 @@ type APIContainer struct {
 func NewAPIContainer(
 	dbCon *sql.DB,
 	appConf conf.Service,
-	shareConf conf.Service,
 	jwtSrv jwt.Service,
 	awscfg aws.Config,
 ) (*APIContainer, error) {

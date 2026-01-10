@@ -39,6 +39,28 @@ export class AppRoot extends LitElement {
         <learning-dashboard-page></learning-dashboard-page>
       `,
     },
+    {
+      name: "search",
+      path: routes.search,
+      enter: async () => {
+        await import("./feature/dialogue/page/search-page");
+        return this.requireAuth();
+      },
+      render: () => html`
+        <dialogue-search-page></dialogue-search-page>
+      `,
+    },
+    {
+      name: "item",
+      path: routes.item,
+      enter: async () => {
+        await import("./feature/dialogue/page/item-page");
+        return this.requireAuth();
+      },
+      render: ({ id }) => html`
+        <dialogue-item-page .discussionId=${id as string}></dialogue-item-page>
+      `,
+    },
   ]);
 
   @provide({ context: userContext })
