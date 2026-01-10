@@ -40,7 +40,7 @@ export class LearningCommentCard extends LitElement {
   }
 
   private _formatDate(dateStr: string) {
-    return new Date(dateStr).toISOString().replace("T", " ").substring(0, 19);
+    return new Date(dateStr).toLocaleString();
   }
 
   static styles = [
