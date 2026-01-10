@@ -98,9 +98,7 @@ describe("learning-comment-card", async () => {
       `,
       container
     );
-    // ロケールに依存しない形式でチェックするか、特定の文字列が含まれているかを確認
-    // ここでは 2026-01-04 12:34:56 が含まれていることを確認する
-    await expect.element(page.getByText("2026-01-04 12:34:56")).toBeVisible();
+    await expect.element(page.getByText("1/4/2026, 12:34:56 PM")).toBeVisible();
   });
   it("statusがproposedの場合、proposedクラスが付与されること", async () => {
     const comment = {
