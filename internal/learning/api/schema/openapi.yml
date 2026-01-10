@@ -23,8 +23,7 @@ components:
         - message
     Id:
       type: string
-      minLength: 36
-      maxLength: 36
+      format: uuid
     CommentStatus:
       type: string
       enum:
@@ -65,7 +64,7 @@ components:
         discussionId:
           $ref: "#/components/schemas/Id"
         parentCommentId:
-          oneOf:
+          anyOf:
             - $ref: "#/components/schemas/Id"
             - type: "null"
         commentType:
@@ -85,12 +84,12 @@ components:
         - content
         - status
         - createdAt
+security:
+  - cookie_auth: []
 paths:
   /learning/discussions:
     get:
       description: get discussions
-      security:
-        - cookie_auth: []
       responses:
         "200":
           description: success response
@@ -108,8 +107,6 @@ paths:
                 $ref: "#/components/schemas/Error"
     post:
       description: create discussion
-      security:
-        - cookie_auth: []
       requestBody:
         required: true
         content:
@@ -125,7 +122,7 @@ paths:
                 - theme
                 - status
       responses:
-        "200":
+        "201":
           description: success response
           content:
             application/json:
@@ -140,8 +137,6 @@ paths:
   /learning/discussions/{discussionId}:
     get:
       description: get discussion
-      security:
-        - cookie_auth: []
       parameters:
         - schema:
             $ref: "#/components/schemas/Id"
@@ -163,8 +158,6 @@ paths:
                 $ref: "#/components/schemas/Error"
     put:
       description: update discussion
-      security:
-        - cookie_auth: []
       parameters:
         - schema:
             $ref: "#/components/schemas/Id"
@@ -200,8 +193,6 @@ paths:
                 $ref: "#/components/schemas/Error"
     delete:
       description: delete discussion
-      security:
-        - cookie_auth: []
       parameters:
         - schema:
             $ref: "#/components/schemas/Id"
@@ -220,8 +211,6 @@ paths:
   /learning/discussions/{discussionId}/comments:
     get:
       description: get comments for a discussion
-      security:
-        - cookie_auth: []
       parameters:
         - schema:
             $ref: "#/components/schemas/Id"
@@ -251,8 +240,6 @@ paths:
                 $ref: "#/components/schemas/Error"
     post:
       description: create comment
-      security:
-        - cookie_auth: []
       parameters:
         - schema:
             $ref: "#/components/schemas/Id"
@@ -267,7 +254,7 @@ paths:
               type: object
               properties:
                 parentCommentId:
-                  oneOf:
+                  anyOf:
                     - $ref: "#/components/schemas/Id"
                     - type: "null"
                 commentType:
@@ -279,7 +266,7 @@ paths:
                 - commentType
                 - content
       responses:
-        "200":
+        "201":
           description: success response
           content:
             application/json:
@@ -294,8 +281,6 @@ paths:
   /learning/discussions/{discussionId}/comments/{commentId}:
     put:
       description: update comment
-      security:
-        - cookie_auth: []
       parameters:
         - schema:
             $ref: "#/components/schemas/Id"
@@ -336,8 +321,6 @@ paths:
                 $ref: "#/components/schemas/Error"
     delete:
       description: delete comment
-      security:
-        - cookie_auth: []
       parameters:
         - schema:
             $ref: "#/components/schemas/Id"
@@ -361,8 +344,6 @@ paths:
   /learning/discussions/{discussionId}/comments/{commentId}/status:
     put:
       description: update comment status
-      security:
-        - cookie_auth: []
       parameters:
         - schema:
             $ref: "#/components/schemas/Id"
@@ -401,8 +382,6 @@ paths:
   /learning/discussions/{discussionId}/comments/generate:
     post:
       description: generate comments using AI
-      security:
-        - cookie_auth: []
       parameters:
         - schema:
             $ref: "#/components/schemas/Id"
@@ -417,7 +396,7 @@ paths:
               type: object
               properties:
                 parentCommentId:
-                  oneOf:
+                  anyOf:
                     - $ref: "#/components/schemas/Id"
                     - type: "null"
                 commentType:
@@ -426,7 +405,7 @@ paths:
                 - parentCommentId
                 - commentType
       responses:
-        "200":
+        "202":
           description: success response
         default:
           description: default error

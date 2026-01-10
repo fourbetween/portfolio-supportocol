@@ -16,6 +16,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
 	"github.com/fourbetween/pkg-auth/auth"
+	"github.com/google/uuid"
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
@@ -76,7 +77,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdGet(
 	params oas.LearningDiscussionsDiscussionIdGetParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.GetDiscussion.Execute(ctx, usecase.GetDiscussionInput{
-		ID:        string(params.DiscussionId),
+		ID:        uuid.UUID(params.DiscussionId).String(),
 		CreatedBy: httpctx.GetUserID(ctx),
 	})
 	if err != nil {
@@ -93,7 +94,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdPut(
 	params oas.LearningDiscussionsDiscussionIdPutParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.UpdateDiscussion.Execute(ctx, usecase.UpdateDiscussionInput{
-		ID:        string(params.DiscussionId),
+		ID:        uuid.UUID(params.DiscussionId).String(),
 		CreatedBy: httpctx.GetUserID(ctx),
 		Theme:     string(req.Theme),
 		Status:    domain.DiscussionStatus(req.Status),
@@ -111,7 +112,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdDelete(
 	params oas.LearningDiscussionsDiscussionIdDeleteParams,
 ) error {
 	return h.con.DeleteDiscussion.Execute(ctx, usecase.DeleteDiscussionInput{
-		ID:        string(params.DiscussionId),
+		ID:        uuid.UUID(params.DiscussionId).String(),
 		CreatedBy: httpctx.GetUserID(ctx),
 	})
 }
@@ -126,7 +127,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(
 	}
 
 	items, err := h.con.ListComments.Execute(ctx, usecase.ListCommentsInput{
-		DiscussionID: string(params.DiscussionId),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
 		UserID:       httpctx.GetUserID(ctx),
 		Since:        since,
 	})
@@ -148,12 +149,12 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsPost(
 ) (*oas.Comment, error) {
 	var parentCommentID *string
 	if !req.ParentCommentId.Null {
-		s := string(req.ParentCommentId.Value)
+		s := uuid.UUID(req.ParentCommentId.Value).String()
 		parentCommentID = &s
 	}
 
 	item, err := h.con.CreateComment.Execute(ctx, usecase.CreateCommentInput{
-		DiscussionID:    string(params.DiscussionId),
+		DiscussionID:    uuid.UUID(params.DiscussionId).String(),
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
 		Content:         string(req.Content),
@@ -173,8 +174,8 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdPut(
 	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdPutParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.UpdateComment.Execute(ctx, usecase.UpdateCommentInput{
-		ID:           string(params.CommentId),
-		DiscussionID: string(params.DiscussionId),
+		ID:           uuid.UUID(params.CommentId).String(),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
 		UserID:       httpctx.GetUserID(ctx),
 		CommentType:  string(req.CommentType),
 		Content:      string(req.Content),
@@ -192,8 +193,8 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdDelete(
 	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams,
 ) error {
 	return h.con.DeleteComment.Execute(ctx, usecase.DeleteCommentInput{
-		ID:           string(params.CommentId),
-		DiscussionID: string(params.DiscussionId),
+		ID:           uuid.UUID(params.CommentId).String(),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
 		UserID:       httpctx.GetUserID(ctx),
 	})
 }
@@ -204,8 +205,8 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(
 	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.UpdateCommentStatus.Execute(ctx, usecase.UpdateCommentStatusInput{
-		ID:           string(params.CommentId),
-		DiscussionID: string(params.DiscussionId),
+		ID:           uuid.UUID(params.CommentId).String(),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
 		UserID:       httpctx.GetUserID(ctx),
 		Status:       string(req.Status),
 	})
@@ -224,12 +225,12 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(
 ) error {
 	var parentCommentID *string
 	if !req.ParentCommentId.Null {
-		s := string(req.ParentCommentId.Value)
+		s := uuid.UUID(req.ParentCommentId.Value).String()
 		parentCommentID = &s
 	}
 
 	return h.con.EnqueueCommentGeneration.Execute(ctx, usecase.GenerateCommentInput{
-		DiscussionID:    string(params.DiscussionId),
+		DiscussionID:    uuid.UUID(params.DiscussionId).String(),
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
 		UserID:          httpctx.GetUserID(ctx),
@@ -263,7 +264,7 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	return oas.Discussion{
-		ID:     oas.ID(item.ID()),
+		ID:     oas.ID(uuid.MustParse(item.ID())),
 		Theme:  oas.DiscussionTheme(item.Theme()),
 		Status: oas.DiscussionStatus(item.Status()),
 	}
@@ -272,14 +273,14 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 	var parentCommentID oas.NilID
 	if item.ParentCommentID() != nil {
-		parentCommentID.SetTo(oas.ID(*item.ParentCommentID()))
+		parentCommentID.SetTo(oas.ID(uuid.MustParse(*item.ParentCommentID())))
 	} else {
 		parentCommentID.Null = true
 	}
 
 	return oas.Comment{
-		ID:              oas.ID(item.ID()),
-		DiscussionId:    oas.ID(item.DiscussionID()),
+		ID:              oas.ID(uuid.MustParse(item.ID())),
+		DiscussionId:    oas.ID(uuid.MustParse(item.DiscussionID())),
 		ParentCommentId: parentCommentID,
 		CommentType:     oas.CommentType(item.CommentType()),
 		Content:         oas.CommentContent(item.Content()),

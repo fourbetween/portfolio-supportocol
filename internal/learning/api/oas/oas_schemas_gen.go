@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
+	"github.com/google/uuid"
 )
 
 func (s *ErrorStatusCode) Error() string {
@@ -298,7 +299,7 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
-type ID string
+type ID uuid.UUID
 
 // LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for LearningDiscussionsDiscussionIdCommentsCommentIdDelete operation.
 type LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
@@ -342,8 +343,8 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) SetStatus
 	s.Status = val
 }
 
-// LearningDiscussionsDiscussionIdCommentsGeneratePostOK is response for LearningDiscussionsDiscussionIdCommentsGeneratePost operation.
-type LearningDiscussionsDiscussionIdCommentsGeneratePostOK struct{}
+// LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted is response for LearningDiscussionsDiscussionIdCommentsGeneratePost operation.
+type LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted struct{}
 
 type LearningDiscussionsDiscussionIdCommentsGeneratePostReq struct {
 	ParentCommentId NilID       `json:"parentCommentId"`

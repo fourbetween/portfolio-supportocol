@@ -42,8 +42,8 @@ func encodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutResponse(res
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdCommentsGeneratePostResponse(response *LearningDiscussionsDiscussionIdCommentsGeneratePostOK, w http.ResponseWriter) error {
-	w.WriteHeader(200)
+func encodeLearningDiscussionsDiscussionIdCommentsGeneratePostResponse(response *LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted, w http.ResponseWriter) error {
+	w.WriteHeader(202)
 
 	return nil
 }
@@ -67,7 +67,7 @@ func encodeLearningDiscussionsDiscussionIdCommentsGetResponse(response []Comment
 
 func encodeLearningDiscussionsDiscussionIdCommentsPostResponse(response *Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
+	w.WriteHeader(201)
 
 	e := new(jx.Encoder)
 	response.Encode(e)
@@ -129,7 +129,7 @@ func encodeLearningDiscussionsGetResponse(response []Discussion, w http.Response
 
 func encodeLearningDiscussionsPostResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
+	w.WriteHeader(201)
 
 	e := new(jx.Encoder)
 	response.Encode(e)

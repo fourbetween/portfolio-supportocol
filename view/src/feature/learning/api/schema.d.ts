@@ -60,7 +60,7 @@ export interface paths {
             };
             responses: {
                 /** @description success response */
-                200: {
+                201: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -262,7 +262,7 @@ export interface paths {
             };
             responses: {
                 /** @description success response */
-                200: {
+                201: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -455,7 +455,7 @@ export interface paths {
             };
             responses: {
                 /** @description success response */
-                200: {
+                202: {
                     headers: {
                         [name: string]: unknown;
                     };
@@ -486,6 +486,7 @@ export interface components {
             code: number;
             message: string;
         };
+        /** Format: uuid */
         Id: string;
         /** @enum {string} */
         CommentStatus: "active" | "proposed";

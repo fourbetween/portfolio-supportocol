@@ -14,46 +14,6 @@ func (s *Comment) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.ID.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "id",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if err := s.DiscussionId.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "discussionId",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if value, ok := s.ParentCommentId.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "parentCommentId",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if err := s.CommentType.Validate(); err != nil {
 			return err
 		}
@@ -149,17 +109,6 @@ func (s *Discussion) Validate() error {
 	}
 
 	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.ID.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "id",
-			Error: err,
-		})
-	}
 	if err := func() error {
 		if err := s.Theme.Validate(); err != nil {
 			return err
@@ -275,26 +224,6 @@ func (s *ErrorStatusCode) Validate() error {
 	return nil
 }
 
-func (s ID) Validate() error {
-	alias := (string)(s)
-	if err := (validate.String{
-		MinLength:     36,
-		MinLengthSet:  true,
-		MaxLength:     36,
-		MaxLengthSet:  true,
-		Email:         false,
-		Hostname:      false,
-		Regex:         nil,
-		MinNumeric:    0,
-		MinNumericSet: false,
-		MaxNumeric:    0,
-		MaxNumericSet: false,
-	}).Validate(string(alias)); err != nil {
-		return errors.Wrap(err, "string")
-	}
-	return nil
-}
-
 func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -359,24 +288,6 @@ func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Validate() erro
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if value, ok := s.ParentCommentId.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "parentCommentId",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if err := s.CommentType.Validate(); err != nil {
 			return err
 		}
@@ -399,24 +310,6 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) Validate() error {
 	}
 
 	var failures []validate.FieldError
-	if err := func() error {
-		if value, ok := s.ParentCommentId.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "parentCommentId",
-			Error: err,
-		})
-	}
 	if err := func() error {
 		if err := s.CommentType.Validate(); err != nil {
 			return err

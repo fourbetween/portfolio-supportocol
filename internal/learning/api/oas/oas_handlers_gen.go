@@ -584,7 +584,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 		}
 	}()
 
-	var response *LearningDiscussionsDiscussionIdCommentsGeneratePostOK
+	var response *LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -605,7 +605,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 		type (
 			Request  = *LearningDiscussionsDiscussionIdCommentsGeneratePostReq
 			Params   = LearningDiscussionsDiscussionIdCommentsGeneratePostParams
-			Response = *LearningDiscussionsDiscussionIdCommentsGeneratePostOK
+			Response = *LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
