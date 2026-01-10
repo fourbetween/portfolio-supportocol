@@ -5,8 +5,8 @@ import { baseStyle } from "../../../../shared/style/base";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-item/discussion-item";
 
-@customElement("learning-discussion-list")
-export class LearningDiscussionList extends LitElement {
+@customElement("dialogue-discussion-list")
+export class DialogueDiscussionList extends LitElement {
   @property({ type: Array })
   discussions: Discussion[] = [];
 

@@ -50,6 +50,17 @@ export class AppRoot extends LitElement {
         <dialogue-search-page></dialogue-search-page>
       `,
     },
+    {
+      name: "item",
+      path: routes.item,
+      enter: async () => {
+        await import("./feature/dialogue/page/item-page");
+        return this.requireAuth();
+      },
+      render: ({ id }) => html`
+        <dialogue-item-page .discussionId=${id as string}></dialogue-item-page>
+      `,
+    },
   ]);
 
   @provide({ context: userContext })
