@@ -30,7 +30,16 @@ func main() {
 		con,
 		env.AppName(),
 		"../../../internal/learning/infra/db/schema",
-		makeTmpl([]string{"users", "discussions", "comments"}),
+		makeTmpl([]string{"discussions", "comments"}),
+	); err != nil {
+		panic(err)
+	}
+
+	if err := mysql.GenerateDB(
+		con,
+		env.AppName(),
+		"../../../internal/dialogue/infra/db/schema",
+		makeTmpl([]string{"discussions", "comments"}),
 	); err != nil {
 		panic(err)
 	}
