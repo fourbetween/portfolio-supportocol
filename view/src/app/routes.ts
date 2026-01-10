@@ -3,6 +3,7 @@ import type { Router } from "@lit-labs/router";
 export const routes = {
   home: "/",
   dashboard: "/dashboard",
+  search: "/search",
 } as const;
 
 export type RouteName = keyof typeof routes;
@@ -10,6 +11,7 @@ export type RouteName = keyof typeof routes;
 export type RouteParams = {
   home: Record<string, never>;
   dashboard: Record<string, never>;
+  search: Record<string, never>;
 };
 
 export const buildPath = (
