@@ -1,42 +1,48 @@
 export type AuthMode = "login" | "signup";
 
-const AUTH_POPUP_OPEN_EVENT_NAME = "auth-popup-open";
-const AUTH_MODE_SWITCH_EVENT_NAME = "auth-mode-switch";
-const AUTH_LOGIN_EVENT_NAME = "auth-login";
-const AUTH_SIGNUP_EVENT_NAME = "auth-signup";
+const IDENTITY_AUTH_POPUP_OPEN_EVENT_NAME = "identity-auth-popup-open";
+const IDENTITY_AUTH_MODE_SWITCH_EVENT_NAME = "identity-auth-mode-switch";
+const IDENTITY_AUTH_LOGIN_EVENT_NAME = "identity-auth-login";
+const IDENTITY_AUTH_SIGNUP_EVENT_NAME = "identity-auth-signup";
 
-export class AuthPopupOpenEvent extends Event {
+export class IdentityAuthPopupOpenEvent extends Event {
   constructor() {
-    super(AUTH_POPUP_OPEN_EVENT_NAME, { bubbles: true, composed: true });
+    super(IDENTITY_AUTH_POPUP_OPEN_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
   }
 }
 
-export class AuthModeSwitchEvent extends Event {
+export class IdentityAuthModeSwitchEvent extends Event {
   public readonly mode: AuthMode;
 
   constructor(mode: AuthMode) {
-    super(AUTH_MODE_SWITCH_EVENT_NAME, { bubbles: true, composed: true });
+    super(IDENTITY_AUTH_MODE_SWITCH_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
     this.mode = mode;
   }
 }
 
-export class AuthLoginEvent extends Event {
+export class IdentityAuthLoginEvent extends Event {
   public readonly email: string;
   public readonly password: string;
 
   constructor(email: string, password: string) {
-    super(AUTH_LOGIN_EVENT_NAME, { bubbles: true, composed: true });
+    super(IDENTITY_AUTH_LOGIN_EVENT_NAME, { bubbles: true, composed: true });
     this.email = email;
     this.password = password;
   }
 }
 
-export class AuthSignupEvent extends Event {
+export class IdentityAuthSignupEvent extends Event {
   public readonly email: string;
   public readonly password: string;
 
   constructor(email: string, password: string) {
-    super(AUTH_SIGNUP_EVENT_NAME, { bubbles: true, composed: true });
+    super(IDENTITY_AUTH_SIGNUP_EVENT_NAME, { bubbles: true, composed: true });
     this.email = email;
     this.password = password;
   }
@@ -44,9 +50,9 @@ export class AuthSignupEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [AUTH_POPUP_OPEN_EVENT_NAME]: AuthPopupOpenEvent;
-    [AUTH_MODE_SWITCH_EVENT_NAME]: AuthModeSwitchEvent;
-    [AUTH_LOGIN_EVENT_NAME]: AuthLoginEvent;
-    [AUTH_SIGNUP_EVENT_NAME]: AuthSignupEvent;
+    [IDENTITY_AUTH_POPUP_OPEN_EVENT_NAME]: IdentityAuthPopupOpenEvent;
+    [IDENTITY_AUTH_MODE_SWITCH_EVENT_NAME]: IdentityAuthModeSwitchEvent;
+    [IDENTITY_AUTH_LOGIN_EVENT_NAME]: IdentityAuthLoginEvent;
+    [IDENTITY_AUTH_SIGNUP_EVENT_NAME]: IdentityAuthSignupEvent;
   }
 }

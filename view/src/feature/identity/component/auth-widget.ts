@@ -3,9 +3,9 @@ import { customElement, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { GoogleAuthService } from "../api/google-auth";
 import {
-  AuthLoginEvent,
-  AuthModeSwitchEvent,
-  AuthSignupEvent,
+  IdentityAuthLoginEvent,
+  IdentityAuthModeSwitchEvent,
+  IdentityAuthSignupEvent,
   type AuthMode,
 } from "../event/auth";
 import "../ui/auth-popup";
@@ -33,12 +33,18 @@ export class IdentityAuthWidget extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.initializeGoogleAuth();
-    document.addEventListener("auth-popup-open", this.handleOpenAuthPopup);
+    document.addEventListener(
+      "identity-auth-popup-open",
+      this.handleOpenAuthPopup
+    );
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    document.removeEventListener("auth-popup-open", this.handleOpenAuthPopup);
+    document.removeEventListener(
+      "identity-auth-popup-open",
+      this.handleOpenAuthPopup
+    );
   }
 
   protected async updated(changedProperties: PropertyValues) {
@@ -128,11 +134,11 @@ export class IdentityAuthWidget extends LitElement {
         .errorMessage=${this.errorMessage}
         .loading=${this.isLoading}
         @close=${() => (this.isOpen = false)}
-        @auth-mode-switch=${(e: AuthModeSwitchEvent) =>
+        @identity-auth-mode-switch=${(e: IdentityAuthModeSwitchEvent) =>
           this.handleSwitchMode(e.mode)}
-        @auth-login=${(e: AuthLoginEvent) =>
+        @identity-auth-login=${(e: IdentityAuthLoginEvent) =>
           this.handleLogin(e.email, e.password)}
-        @auth-signup=${(e: AuthSignupEvent) =>
+        @identity-auth-signup=${(e: IdentityAuthSignupEvent) =>
           this.handleSignup(e.email, e.password)}
       ></identity-auth-popup>
     `;

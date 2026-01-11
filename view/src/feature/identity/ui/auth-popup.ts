@@ -5,9 +5,9 @@ import { buttonStyle } from "../../../shared/style/button";
 import { inputStyle } from "../../../shared/style/input";
 import "../../../shared/ui/popup/popup";
 import {
-  AuthLoginEvent,
-  AuthModeSwitchEvent,
-  AuthSignupEvent,
+  IdentityAuthLoginEvent,
+  IdentityAuthModeSwitchEvent,
+  IdentityAuthSignupEvent,
   type AuthMode,
 } from "../event/auth";
 
@@ -38,7 +38,7 @@ export class IdentityAuthPopup extends LitElement {
   private _handleSwitchClick(e: Event) {
     e.preventDefault();
     const newMode = this.mode === "login" ? "signup" : "login";
-    this.dispatchEvent(new AuthModeSwitchEvent(newMode));
+    this.dispatchEvent(new IdentityAuthModeSwitchEvent(newMode));
   }
 
   private _handlePopupClose() {
@@ -75,7 +75,7 @@ export class IdentityAuthPopup extends LitElement {
     const password = formData.get("password") as string;
 
     if (this.mode === "login") {
-      this.dispatchEvent(new AuthLoginEvent(email, password));
+      this.dispatchEvent(new IdentityAuthLoginEvent(email, password));
       return;
     }
 
@@ -86,7 +86,7 @@ export class IdentityAuthPopup extends LitElement {
       return;
     }
 
-    this.dispatchEvent(new AuthSignupEvent(email, password));
+    this.dispatchEvent(new IdentityAuthSignupEvent(email, password));
   }
 
   private validateSignup(

@@ -1,5 +1,5 @@
 import { client } from "../api/client";
-import { AuthPopupOpenEvent } from "../event/auth";
+import { IdentityAuthPopupOpenEvent } from "../event/auth";
 import type { User } from "./user";
 
 class AuthService {
@@ -21,7 +21,7 @@ class AuthService {
   }
 
   login() {
-    document.body.dispatchEvent(new AuthPopupOpenEvent());
+    document.body.dispatchEvent(new IdentityAuthPopupOpenEvent());
   }
 
   async logout() {
