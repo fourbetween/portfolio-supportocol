@@ -28,7 +28,7 @@ type envConfig struct {
 
 const (
 	siteName    = "Supportocol"
-	siteDesc    = "論理的な議論を支援するプラットフォームです。"
+	siteDesc    = "A platform for logical discussion."
 	viewEnvPath = "view/.env"
 )
 
