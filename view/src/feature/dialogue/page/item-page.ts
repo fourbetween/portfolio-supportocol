@@ -10,7 +10,9 @@ export class DialogueItemPage extends LitElement {
 
   render() {
     return html`
-      <div>item page</div>
+      <div>
+        <div>${this.discussionId}</div>
+      </div>
     `;
   }
 

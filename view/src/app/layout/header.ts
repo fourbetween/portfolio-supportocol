@@ -6,7 +6,7 @@ import type { User } from "../../feature/identity/model/user";
 import { baseStyle } from "../../shared/style/base";
 import { iconStyle } from "../../shared/style/icon";
 import { userContext } from "../context/user";
-import { routes } from "../routes";
+import { paths } from "../paths";
 
 @customElement("app-header")
 export class AppHeader extends LitElement {
@@ -21,7 +21,7 @@ export class AppHeader extends LitElement {
   render() {
     return html`
       <header class="header">
-        <a href=${routes.dashboard} class="header-logo">Supportocol</a>
+        <a href=${paths.learning.dashboard} class="header-logo">Supportocol</a>
         ${this.user
           ? html`
               <div class="header-actions">

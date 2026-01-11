@@ -1,4 +1,5 @@
 import { VitePWA } from "vite-plugin-pwa";
+import { paths } from "../src/app/paths";
 
 export const pwaPlugin = (mode: string) => {
   const globPatterns = ["*.js"];
@@ -36,9 +37,8 @@ export const pwaPlugin = (mode: string) => {
       ],
       name: "Supportocol",
       short_name: "Supportocol",
-      description: "論理的な議論を支援するプラットフォームです。",
-      lang: "ja",
-      start_url: "/dashboard",
+      description: "A platform for logical discussion",
+      start_url: paths.learning.dashboard,
       theme_color: "#000000",
     },
   });

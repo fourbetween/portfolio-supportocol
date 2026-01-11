@@ -27,6 +27,7 @@ class AuthService {
   async logout() {
     await client.POST("/identity/logout", {});
     this._user = null;
+    this._initialized = false;
     window.location.href = "/";
   }
 }
