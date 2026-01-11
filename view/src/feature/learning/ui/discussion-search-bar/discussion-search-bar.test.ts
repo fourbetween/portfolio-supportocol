@@ -1,7 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import type { DiscussionSearchEvent } from "../../event/discussion";
+import type { LearningDiscussionSearchEvent } from "../../event/discussion";
 import "./discussion-search-bar";
 
 describe("learning-discussion-search-bar", async () => {
@@ -21,7 +21,7 @@ describe("learning-discussion-search-bar", async () => {
     render(
       html`
         <learning-discussion-search-bar
-          @discussion-search=${(e: DiscussionSearchEvent) => onSearch(e.query)}
+          @learning-discussion-search=${(e: LearningDiscussionSearchEvent) => onSearch(e.query)}
         ></learning-discussion-search-bar>
       `,
       container

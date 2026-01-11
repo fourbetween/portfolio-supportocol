@@ -340,7 +340,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${[comment]}
-          @comment-select=${onSelect}
+          @learning-comment-select=${onSelect}
         ></learning-comment-tree>
       `,
       container
@@ -486,7 +486,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${comments}
-          @comment-delete=${onCommentDelete}
+          @learning-comment-delete=${onCommentDelete}
         ></learning-comment-tree>
       `,
       container
@@ -523,7 +523,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree
           .comments=${comments}
-          @comment-generate=${onCommentGenerate}
+          @learning-comment-generate=${onCommentGenerate}
         ></learning-comment-tree>
       `,
       container

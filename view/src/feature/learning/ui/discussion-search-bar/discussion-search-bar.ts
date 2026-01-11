@@ -2,7 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { inputStyle } from "../../../../shared/style/input";
-import { DiscussionSearchEvent } from "../../event/discussion";
+import { LearningDiscussionSearchEvent } from "../../event/discussion";
 
 @customElement("learning-discussion-search-bar")
 export class LearningDiscussionSearchBar extends LitElement {
@@ -13,7 +13,7 @@ export class LearningDiscussionSearchBar extends LitElement {
   private _inputElement!: HTMLInputElement;
 
   private _handleInput() {
-    this.dispatchEvent(new DiscussionSearchEvent(this._inputElement.value));
+    this.dispatchEvent(new LearningDiscussionSearchEvent(this._inputElement.value));
   }
 
   render() {

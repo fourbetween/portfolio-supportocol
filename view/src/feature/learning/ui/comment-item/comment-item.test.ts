@@ -72,7 +72,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          @comment-delete=${handleDelete}
+          @learning-comment-delete=${handleDelete}
         ></learning-comment-item>
       `,
       container
@@ -103,8 +103,8 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         <learning-comment-item
           .comment=${proposedComment}
           .availableTypes=${availableTypes}
-          @proposed-comment-accept=${handleAccept}
-          @proposed-comment-reject=${handleReject}
+          @learning-proposed-comment-accept=${handleAccept}
+          @learning-proposed-comment-reject=${handleReject}
         ></learning-comment-item>
       `,
       container
@@ -149,7 +149,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          @comment-generate=${handleGenerate}
+          @learning-comment-generate=${handleGenerate}
         ></learning-comment-item>
       `,
       container
@@ -181,7 +181,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         <learning-comment-item
           .comment=${mockComment}
           .availableTypes=${availableTypes}
-          @comment-create=${handleCreate}
+          @learning-comment-create=${handleCreate}
         ></learning-comment-item>
       `,
       container
@@ -301,7 +301,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           <learning-comment-item
             .comment=${mockComment}
             .availableTypes=${availableTypes}
-            @comment-select=${handleSelect}
+            @learning-comment-select=${handleSelect}
           ></learning-comment-item>
         `,
         container
@@ -323,7 +323,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           <learning-comment-item
             .comment=${mockComment}
             .availableTypes=${availableTypes}
-            @comment-select=${handleSelect}
+            @learning-comment-select=${handleSelect}
           ></learning-comment-item>
         `,
         container
@@ -425,7 +425,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           <learning-comment-item
             .comment=${mockComment}
             .availableTypes=${availableTypes}
-            @comment-select=${handleSelect}
+            @learning-comment-select=${handleSelect}
           ></learning-comment-item>
         `,
         container

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
-import type { DiscussionUpdateEvent } from "../../event/discussion";
+import type { LearningDiscussionUpdateEvent } from "../../event/discussion";
 import "./discussion-edit-form";
 import type { LearningDiscussionEditForm } from "./discussion-edit-form";
 
@@ -20,9 +20,9 @@ export const Default: Story = {
   render: (args) => html`
     <learning-discussion-edit-form
       .theme=${args.theme}
-      @discussion-update=${(e: DiscussionUpdateEvent) =>
+      @learning-discussion-update=${(e: LearningDiscussionUpdateEvent) =>
         console.log("save clicked", e.theme)}
-      @discussion-form-close=${() => console.log("cancel clicked")}
+      @learning-discussion-form-close=${() => console.log("cancel clicked")}
     ></learning-discussion-edit-form>
   `,
 };

@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { join } from "lit/directives/join.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { iconStyle } from "../../../../shared/style/icon";
-import { CommentSelectEvent } from "../../event/comment";
+import { LearningCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-item/comment-item";
@@ -21,7 +21,7 @@ export class LearningCommentContext extends LitElement {
   availableTypes: string[] = [];
 
   private handleCommentClick(comment: Comment) {
-    this.dispatchEvent(new CommentSelectEvent(comment.id));
+    this.dispatchEvent(new LearningCommentSelectEvent(comment.id));
   }
 
   private renderItem(comment: Comment, isLast: boolean) {

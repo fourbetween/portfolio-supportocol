@@ -5,10 +5,10 @@ import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 import {
-  CommentCreateEvent,
-  CommentFormCloseEvent,
-  CommentTypeSelectEvent,
-  CommentUpdateEvent,
+  LearningCommentCreateEvent,
+  LearningCommentFormCloseEvent,
+  LearningCommentTypeSelectEvent,
+  LearningCommentUpdateEvent,
 } from "../../event/comment";
 import "../comment-type-badge/comment-type-badge";
 import "../comment-type-popup/comment-type-popup";
@@ -55,7 +55,7 @@ export class LearningCommentEditForm extends LitElement {
     this.popup.open();
   }
 
-  private handleTypeSelect(e: CommentTypeSelectEvent) {
+  private handleTypeSelect(e: LearningCommentTypeSelectEvent) {
     this._commentType = e.commentType;
   }
 
@@ -67,16 +67,16 @@ export class LearningCommentEditForm extends LitElement {
   private handleSave() {
     const { _commentType: type, _content: content } = this;
     if (this.commentId) {
-      this.dispatchEvent(new CommentUpdateEvent(this.commentId, type, content));
+      this.dispatchEvent(new LearningCommentUpdateEvent(this.commentId, type, content));
     } else {
       this.dispatchEvent(
-        new CommentCreateEvent(this.parentCommentId ?? null, type, content)
+        new LearningCommentCreateEvent(this.parentCommentId ?? null, type, content)
       );
     }
   }
 
   private handleCancel() {
-    this.dispatchEvent(new CommentFormCloseEvent());
+    this.dispatchEvent(new LearningCommentFormCloseEvent());
   }
 
   private get _isContentOverLimit() {
@@ -93,7 +93,7 @@ export class LearningCommentEditForm extends LitElement {
         ></learning-comment-type-badge>
         <learning-comment-type-popup
           .types=${this.availableTypes}
-          @comment-type-select=${this.handleTypeSelect}
+          @learning-comment-type-select=${this.handleTypeSelect}
         ></learning-comment-type-popup>
       </div>
     `;

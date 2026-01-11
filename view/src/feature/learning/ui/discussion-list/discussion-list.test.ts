@@ -2,8 +2,8 @@ import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import type {
-  DiscussionDeleteEvent,
-  DiscussionSelectEvent,
+  LearningDiscussionDeleteEvent,
+  LearningDiscussionSelectEvent,
 } from "../../event/discussion";
 import "./discussion-list";
 
@@ -57,7 +57,7 @@ describe("learning-discussion-list", () => {
       html`
         <learning-discussion-list
           .discussions=${discussions}
-          @discussion-select=${(e: DiscussionSelectEvent) =>
+          @learning-discussion-select=${(e: LearningDiscussionSelectEvent) =>
             onSelect(e.discussion)}
         ></learning-discussion-list>
       `,
@@ -78,7 +78,7 @@ describe("learning-discussion-list", () => {
       html`
         <learning-discussion-list
           .discussions=${discussions}
-          @discussion-delete=${(e: DiscussionDeleteEvent) =>
+          @learning-discussion-delete=${(e: LearningDiscussionDeleteEvent) =>
             onDelete(e.discussion)}
         ></learning-discussion-list>
       `,

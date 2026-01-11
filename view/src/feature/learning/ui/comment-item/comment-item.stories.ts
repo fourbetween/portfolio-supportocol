@@ -18,13 +18,13 @@ const meta: Meta<
   title: "learning/ui/comment-item",
   component: "learning-comment-item",
   argTypes: {
-    onSelectComment: { action: "comment-select" },
-    onCommentDeleted: { action: "comment-deleted" },
-    onCommentGenerate: { action: "comment-generate" },
-    onCommentUpdate: { action: "comment-update" },
-    onCommentCreate: { action: "comment-create" },
-    onProposedCommentAccept: { action: "proposed-comment-accept" },
-    onProposedCommentReject: { action: "proposed-comment-reject" },
+    onSelectComment: { action: "learning-comment-select" },
+    onCommentDeleted: { action: "learning-comment-deleted" },
+    onCommentGenerate: { action: "learning-comment-generate" },
+    onCommentUpdate: { action: "learning-comment-update" },
+    onCommentCreate: { action: "learning-comment-create" },
+    onProposedCommentAccept: { action: "learning-proposed-comment-accept" },
+    onProposedCommentReject: { action: "learning-proposed-comment-reject" },
   },
 };
 
@@ -65,13 +65,13 @@ export const Default: Story = {
       .comment=${mockComment}
       .activeChildrenCount=${args.activeChildrenCount}
       .availableTypes=${availableTypes}
-      @comment-select=${args.onSelectComment}
-      @comment-deleted=${args.onCommentDeleted}
-      @comment-generate=${args.onCommentGenerate}
-      @comment-update=${args.onCommentUpdate}
-      @comment-create=${args.onCommentCreate}
-      @proposed-comment-accept=${args.onProposedCommentAccept}
-      @proposed-comment-reject=${args.onProposedCommentReject}
+      @learning-comment-select=${args.onSelectComment}
+      @learning-comment-deleted=${args.onCommentDeleted}
+      @learning-comment-generate=${args.onCommentGenerate}
+      @learning-comment-update=${args.onCommentUpdate}
+      @learning-comment-create=${args.onCommentCreate}
+      @learning-proposed-comment-accept=${args.onProposedCommentAccept}
+      @learning-proposed-comment-reject=${args.onProposedCommentReject}
     ></learning-comment-item>
   `,
   args: {
@@ -84,8 +84,8 @@ export const Proposed: Story = {
     <learning-comment-item
       .comment=${mockProposedComment}
       .availableTypes=${availableTypes}
-      @proposed-comment-accept=${args.onProposedCommentAccept}
-      @proposed-comment-reject=${args.onProposedCommentReject}
+      @learning-proposed-comment-accept=${args.onProposedCommentAccept}
+      @learning-proposed-comment-reject=${args.onProposedCommentReject}
     ></learning-comment-item>
   `,
 };

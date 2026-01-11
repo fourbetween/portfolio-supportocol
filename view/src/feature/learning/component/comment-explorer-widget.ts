@@ -5,17 +5,17 @@ import { baseStyle } from "../../../shared/style/base";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import {
-  CommentCreateEvent,
-  CommentCreatedEvent,
-  CommentDeleteEvent,
-  CommentDeletedEvent,
-  CommentGenerateEvent,
-  CommentGeneratedEvent,
-  CommentSelectEvent,
-  CommentUpdateEvent,
-  CommentUpdatedEvent,
-  ProposedCommentAcceptEvent,
-  ProposedCommentRejectEvent,
+  LearningCommentCreateEvent,
+  LearningCommentCreatedEvent,
+  LearningCommentDeleteEvent,
+  LearningCommentDeletedEvent,
+  LearningCommentGenerateEvent,
+  LearningCommentGeneratedEvent,
+  LearningCommentSelectEvent,
+  LearningCommentUpdateEvent,
+  LearningCommentUpdatedEvent,
+  LearningProposedCommentAcceptEvent,
+  LearningProposedCommentRejectEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
@@ -76,12 +76,12 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private handleSelectComment(e: CommentSelectEvent) {
+  private handleSelectComment(e: LearningCommentSelectEvent) {
     const id = this.selectedCommentId === e.commentId ? undefined : e.commentId;
-    this.dispatchEvent(new CommentSelectEvent(id));
+    this.dispatchEvent(new LearningCommentSelectEvent(id));
   }
 
-  private async handleCommentUpdate(e: CommentUpdateEvent) {
+  private async handleCommentUpdate(e: LearningCommentUpdateEvent) {
     if (!this.discussionId) return;
     try {
       const data = await commentRepository.update(
@@ -91,13 +91,13 @@ export class LearningCommentExplorerWidget extends LitElement {
       );
 
       showToast(this, "Comment updated.", "success", 2000);
-      this.dispatchEvent(new CommentUpdatedEvent(data));
+      this.dispatchEvent(new LearningCommentUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private async handleCommentDelete(e: CommentDeleteEvent) {
+  private async handleCommentDelete(e: LearningCommentDeleteEvent) {
     if (!this.discussionId) return;
     if (!confirm("Are you sure you want to delete this comment?")) return;
 
@@ -105,13 +105,13 @@ export class LearningCommentExplorerWidget extends LitElement {
       await commentRepository.delete(this.discussionId, e.commentId);
 
       showToast(this, "Comment deleted.", "success", 2000);
-      this.dispatchEvent(new CommentDeletedEvent(e.commentId));
+      this.dispatchEvent(new LearningCommentDeletedEvent(e.commentId));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private async handleCommentGenerate(e: CommentGenerateEvent) {
+  private async handleCommentGenerate(e: LearningCommentGenerateEvent) {
     if (!this.discussionId || !e.parentCommentId || !e.commentType) return;
     try {
       await commentRepository.generate(this.discussionId, {
@@ -121,14 +121,14 @@ export class LearningCommentExplorerWidget extends LitElement {
 
       showToast(this, "Comments generated.", "success", 2000);
       this.dispatchEvent(
-        new CommentGeneratedEvent(e.parentCommentId, e.commentType)
+        new LearningCommentGeneratedEvent(e.parentCommentId, e.commentType)
       );
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private async handleCommentCreate(e: CommentCreateEvent) {
+  private async handleCommentCreate(e: LearningCommentCreateEvent) {
     if (!this.discussionId) return;
     try {
       const data = await commentRepository.create(this.discussionId, {
@@ -139,14 +139,14 @@ export class LearningCommentExplorerWidget extends LitElement {
 
       showToast(this, "Comment created.", "success", 2000);
       if (data) {
-        this.dispatchEvent(new CommentCreatedEvent(data));
+        this.dispatchEvent(new LearningCommentCreatedEvent(data));
       }
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private async handleAccept(e: ProposedCommentAcceptEvent) {
+  private async handleAccept(e: LearningProposedCommentAcceptEvent) {
     if (!this.discussionId) return;
     const comment = e.comment;
 
@@ -158,27 +158,27 @@ export class LearningCommentExplorerWidget extends LitElement {
       );
 
       showToast(this, "Comment activated.", "success", 2000);
-      this.dispatchEvent(new CommentUpdatedEvent(data));
+      this.dispatchEvent(new LearningCommentUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private async handleReject(e: ProposedCommentRejectEvent) {
+  private async handleReject(e: LearningProposedCommentRejectEvent) {
     if (!this.discussionId) return;
     const comment = e.comment;
     try {
       await commentRepository.delete(this.discussionId, comment.id);
 
       showToast(this, "Comment deleted.", "success", 2000);
-      this.dispatchEvent(new CommentDeletedEvent(comment.id));
+      this.dispatchEvent(new LearningCommentDeletedEvent(comment.id));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
   private handleClearSelection() {
-    this.dispatchEvent(new CommentSelectEvent(undefined));
+    this.dispatchEvent(new LearningCommentSelectEvent(undefined));
   }
 
   private get _path(): Comment[] {
@@ -247,13 +247,13 @@ export class LearningCommentExplorerWidget extends LitElement {
           </div>
           <learning-comment-tree
             .comments=${descendants}
-            @comment-select=${this.handleSelectComment}
-            @comment-create=${this.handleCommentCreate}
-            @comment-update=${this.handleCommentUpdate}
-            @comment-delete=${this.handleCommentDelete}
-            @comment-generate=${this.handleCommentGenerate}
-            @proposed-comment-accept=${this.handleAccept}
-            @proposed-comment-reject=${this.handleReject}
+            @learning-comment-select=${this.handleSelectComment}
+            @learning-comment-create=${this.handleCommentCreate}
+            @learning-comment-update=${this.handleCommentUpdate}
+            @learning-comment-delete=${this.handleCommentDelete}
+            @learning-comment-generate=${this.handleCommentGenerate}
+            @learning-proposed-comment-accept=${this.handleAccept}
+            @learning-proposed-comment-reject=${this.handleReject}
           ></learning-comment-tree>
         </div>
       </div>
@@ -276,13 +276,13 @@ export class LearningCommentExplorerWidget extends LitElement {
           .path=${path}
           .childCounts=${this.childCounts}
           .availableTypes=${this.availableTypes}
-          @comment-select=${this.handleSelectComment}
-          @comment-create=${this.handleCommentCreate}
-          @comment-update=${this.handleCommentUpdate}
-          @comment-delete=${this.handleCommentDelete}
-          @comment-generate=${this.handleCommentGenerate}
-          @proposed-comment-accept=${this.handleAccept}
-          @proposed-comment-reject=${this.handleReject}
+          @learning-comment-select=${this.handleSelectComment}
+          @learning-comment-create=${this.handleCommentCreate}
+          @learning-comment-update=${this.handleCommentUpdate}
+          @learning-comment-delete=${this.handleCommentDelete}
+          @learning-comment-generate=${this.handleCommentGenerate}
+          @learning-proposed-comment-accept=${this.handleAccept}
+          @learning-proposed-comment-reject=${this.handleReject}
         ></learning-comment-context>
       </div>
     `;

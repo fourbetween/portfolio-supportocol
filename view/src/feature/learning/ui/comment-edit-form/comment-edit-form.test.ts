@@ -67,7 +67,7 @@ describe("learning-comment-edit-form", async () => {
       html`
         <learning-comment-edit-form
           .parentCommentId=${"p1"}
-          @comment-create=${onSave}
+          @learning-comment-create=${onSave}
         ></learning-comment-edit-form>
       `,
       container
@@ -95,7 +95,7 @@ describe("learning-comment-edit-form", async () => {
       html`
         <learning-comment-edit-form
           .commentId=${"c1"}
-          @comment-update=${onUpdate}
+          @learning-comment-update=${onUpdate}
         ></learning-comment-edit-form>
       `,
       container
@@ -120,7 +120,7 @@ describe("learning-comment-edit-form", async () => {
     render(
       html`
         <learning-comment-edit-form
-          @comment-form-close=${onCancel}
+          @learning-comment-form-close=${onCancel}
         ></learning-comment-edit-form>
       `,
       container

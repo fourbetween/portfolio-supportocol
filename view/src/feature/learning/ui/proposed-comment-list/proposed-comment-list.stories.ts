@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
-import { CommentSelectEvent } from "../../event/comment";
+import { LearningCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "./proposed-comment-list";
 import type { LearningProposedCommentList } from "./proposed-comment-list";
@@ -43,7 +43,7 @@ export const Default: Story = {
   render: (args) => html`
     <learning-proposed-comment-list
       .comments=${args.comments}
-      @comment-select=${(e: CommentSelectEvent) =>
+      @learning-comment-select=${(e: LearningCommentSelectEvent) =>
         console.log("Selected", e.commentId)}
     ></learning-proposed-comment-list>
   `,
