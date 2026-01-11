@@ -113,7 +113,7 @@ describe("learning-comment-context", async () => {
       html`
         <learning-comment-context
           .path=${path}
-          @comment-select=${handleSelectComment}
+          @learning-comment-select=${handleSelectComment}
         ></learning-comment-context>
       `,
       container

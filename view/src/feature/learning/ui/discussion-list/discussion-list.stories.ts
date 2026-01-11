@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/web-components";
 import { html } from "lit";
 import type {
-  DiscussionDeleteEvent,
-  DiscussionSelectEvent,
+  LearningDiscussionDeleteEvent,
+  LearningDiscussionSelectEvent,
 } from "../../event/discussion";
 import "./discussion-list";
 import type { LearningDiscussionList } from "./discussion-list";
@@ -27,9 +27,9 @@ export const Default: Story = {
   render: (args) => html`
     <learning-discussion-list
       .discussions=${args.discussions}
-      @discussion-select=${(e: DiscussionSelectEvent) =>
+      @learning-discussion-select=${(e: LearningDiscussionSelectEvent) =>
         console.log("selected", e.discussion)}
-      @discussion-delete=${(e: DiscussionDeleteEvent) =>
+      @learning-discussion-delete=${(e: LearningDiscussionDeleteEvent) =>
         console.log("deleted", e.discussion)}
     ></learning-discussion-list>
   `,

@@ -1,7 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import { CommentSelectEvent } from "../../event/comment";
+import { LearningCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "./proposed-comment-list";
 
@@ -85,7 +85,7 @@ describe("learning-proposed-comment-list", () => {
       html`
         <learning-proposed-comment-list
           .comments=${comments}
-          @comment-select=${(e: CommentSelectEvent) => onSelect(e.commentId)}
+          @learning-comment-select=${(e: LearningCommentSelectEvent) => onSelect(e.commentId)}
         ></learning-proposed-comment-list>
       `,
       container

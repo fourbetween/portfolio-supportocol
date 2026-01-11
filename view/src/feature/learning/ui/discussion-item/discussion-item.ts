@@ -4,8 +4,8 @@ import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
-  DiscussionDeleteEvent,
-  DiscussionSelectEvent,
+  LearningDiscussionDeleteEvent,
+  LearningDiscussionSelectEvent,
 } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-status-badge/discussion-status-badge";
@@ -16,12 +16,12 @@ export class LearningDiscussionItem extends LitElement {
   discussion!: Discussion;
 
   private handleSelect() {
-    this.dispatchEvent(new DiscussionSelectEvent(this.discussion));
+    this.dispatchEvent(new LearningDiscussionSelectEvent(this.discussion));
   }
 
   private handleDelete(e: Event) {
     e.stopPropagation();
-    this.dispatchEvent(new DiscussionDeleteEvent(this.discussion));
+    this.dispatchEvent(new LearningDiscussionDeleteEvent(this.discussion));
   }
 
   render() {

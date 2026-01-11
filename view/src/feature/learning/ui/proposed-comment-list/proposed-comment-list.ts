@@ -2,7 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../../shared/style/base";
-import { CommentSelectEvent } from "../../event/comment";
+import { LearningCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-type-badge/comment-type-badge";
@@ -13,7 +13,7 @@ export class LearningProposedCommentList extends LitElement {
   comments: Comment[] = [];
 
   private onSelect(comment: Comment) {
-    this.dispatchEvent(new CommentSelectEvent(comment.id));
+    this.dispatchEvent(new LearningCommentSelectEvent(comment.id));
   }
 
   render() {

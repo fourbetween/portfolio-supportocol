@@ -14,15 +14,15 @@ import "../component/comment-proposed-widget";
 import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
 import {
-  type CommentCreatedEvent,
-  type CommentDeletedEvent,
-  type CommentSelectEvent,
-  type CommentUpdatedEvent,
+  type LearningCommentCreatedEvent,
+  type LearningCommentDeletedEvent,
+  type LearningCommentSelectEvent,
+  type LearningCommentUpdatedEvent,
 } from "../event/comment";
 import {
-  type DiscussionDeletedEvent,
-  type DiscussionSelectEvent,
-  type DiscussionUpdatedEvent,
+  type LearningDiscussionDeletedEvent,
+  type LearningDiscussionSelectEvent,
+  type LearningDiscussionUpdatedEvent,
 } from "../event/discussion";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
@@ -104,7 +104,7 @@ export class LearningDashboardPage extends LitElement {
     }
   };
 
-  private _handleDiscussionSelect(e: DiscussionSelectEvent) {
+  private _handleDiscussionSelect(e: LearningDiscussionSelectEvent) {
     if (this._selectedDiscussionId === e.discussion.id) return;
     this._selectedDiscussionId = e.discussion.id;
     const url = new URL(window.location.href);
@@ -113,7 +113,7 @@ export class LearningDashboardPage extends LitElement {
     this._activeDrawer = undefined;
   }
 
-  private _handleDiscussionUpdated(e: DiscussionUpdatedEvent) {
+  private _handleDiscussionUpdated(e: LearningDiscussionUpdatedEvent) {
     this._selectedDiscussionId = e.discussion.id;
     const exists = this._discussions.some((d) => d.id === e.discussion.id);
     if (exists) {
@@ -126,7 +126,7 @@ export class LearningDashboardPage extends LitElement {
     this._activeDrawer = undefined;
   }
 
-  private _handleDiscussionDeleted(e: DiscussionDeletedEvent) {
+  private _handleDiscussionDeleted(e: LearningDiscussionDeletedEvent) {
     if (this._selectedDiscussionId === e.discussion.id) {
       this._selectedDiscussionId = undefined;
       const url = new URL(window.location.href);
@@ -142,11 +142,11 @@ export class LearningDashboardPage extends LitElement {
     );
   }
 
-  private _handleCommentCreated(e: CommentCreatedEvent) {
+  private _handleCommentCreated(e: LearningCommentCreatedEvent) {
     this._comments = [...this._comments, e.comment];
   }
 
-  private _handleCommentUpdated(e: CommentUpdatedEvent) {
+  private _handleCommentUpdated(e: LearningCommentUpdatedEvent) {
     const oldComment = this._comments.find((c) => c.id === e.comment.id);
     this._comments = this._comments.map((c) =>
       c.id === e.comment.id ? e.comment : c
@@ -157,14 +157,14 @@ export class LearningDashboardPage extends LitElement {
     }
   }
 
-  private _handleCommentDeleted(e: CommentDeletedEvent) {
+  private _handleCommentDeleted(e: LearningCommentDeletedEvent) {
     this._comments = this._comments.filter((c) => c.id !== e.commentId);
     if (this._selectedCommentId === e.commentId) {
       this._selectedCommentId = undefined;
     }
   }
 
-  private _handleCommentSelect(e: CommentSelectEvent) {
+  private _handleCommentSelect(e: LearningCommentSelectEvent) {
     this._selectedCommentId = e.commentId;
   }
 
@@ -211,9 +211,9 @@ export class LearningDashboardPage extends LitElement {
     return html`
       <learning-discussion-list-widget
         .discussions=${this._discussions}
-        @discussion-select=${this._handleDiscussionSelect}
-        @discussion-created=${this._handleDiscussionUpdated}
-        @discussion-deleted=${this._handleDiscussionDeleted}
+        @learning-discussion-select=${this._handleDiscussionSelect}
+        @learning-discussion-created=${this._handleDiscussionUpdated}
+        @learning-discussion-deleted=${this._handleDiscussionDeleted}
       ></learning-discussion-list-widget>
     `;
   }
@@ -223,9 +223,9 @@ export class LearningDashboardPage extends LitElement {
       <learning-comment-proposed-widget
         .discussionId=${this._selectedDiscussionId}
         .comments=${this._comments}
-        @comment-updated=${this._handleCommentUpdated}
-        @comment-deleted=${this._handleCommentDeleted}
-        @comment-select=${this._handleCommentSelect}
+        @learning-comment-updated=${this._handleCommentUpdated}
+        @learning-comment-deleted=${this._handleCommentDeleted}
+        @learning-comment-select=${this._handleCommentSelect}
       ></learning-comment-proposed-widget>
     `;
   }
@@ -276,7 +276,7 @@ export class LearningDashboardPage extends LitElement {
         <div class="detail">
           <learning-discussion-detail-widget
             .discussion=${this._selectedDiscussion}
-            @discussion-updated=${this._handleDiscussionUpdated}
+            @learning-discussion-updated=${this._handleDiscussionUpdated}
           ></learning-discussion-detail-widget>
         </div>
         <div class="comment-frame">
@@ -289,11 +289,11 @@ export class LearningDashboardPage extends LitElement {
             .discussionId=${this._selectedDiscussionId}
             .comments=${this._comments}
             .selectedCommentId=${this._selectedCommentId}
-            @comment-created=${this._handleCommentCreated}
-            @comment-updated=${this._handleCommentUpdated}
-            @comment-deleted=${this._handleCommentDeleted}
-            @comment-generated=${this._handleCommentGenerated}
-            @comment-select=${this._handleCommentSelect}
+            @learning-comment-created=${this._handleCommentCreated}
+            @learning-comment-updated=${this._handleCommentUpdated}
+            @learning-comment-deleted=${this._handleCommentDeleted}
+            @learning-comment-generated=${this._handleCommentGenerated}
+            @learning-comment-select=${this._handleCommentSelect}
           ></learning-comment-explorer-widget>
         </div>
       </main>

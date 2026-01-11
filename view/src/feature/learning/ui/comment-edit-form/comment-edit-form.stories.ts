@@ -12,9 +12,9 @@ const meta: Meta<LearningCommentEditForm> = {
         .initialType=${args.initialType}
         .initialContent=${args.initialContent}
         .availableTypes=${args.availableTypes}
-        @comment-create=${(e: any) => console.log("create", e)}
-        @comment-update=${(e: any) => console.log("update", e)}
-        @comment-form-close=${() => console.log("form-close")}
+        @learning-comment-create=${(e: any) => console.log("create", e)}
+        @learning-comment-update=${(e: any) => console.log("update", e)}
+        @learning-comment-form-close=${() => console.log("form-close")}
       ></learning-comment-edit-form>
     `,
 };

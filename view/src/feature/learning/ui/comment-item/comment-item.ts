@@ -5,12 +5,12 @@ import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
-  CommentDeleteEvent,
-  CommentGenerateEvent,
-  CommentSelectEvent,
-  CommentTypeSelectEvent,
-  ProposedCommentAcceptEvent,
-  ProposedCommentRejectEvent,
+  LearningCommentDeleteEvent,
+  LearningCommentGenerateEvent,
+  LearningCommentSelectEvent,
+  LearningCommentTypeSelectEvent,
+  LearningProposedCommentAcceptEvent,
+  LearningProposedCommentRejectEvent,
 } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
@@ -42,14 +42,14 @@ export class LearningCommentItem extends LitElement {
 
   private handleCommentClick() {
     if (this.comment && !this.touch.isTouchDevice) {
-      this.dispatchEvent(new CommentSelectEvent(this.comment.id));
+      this.dispatchEvent(new LearningCommentSelectEvent(this.comment.id));
     }
   }
 
   private handleFocusClick(e: Event) {
     e.stopPropagation();
     if (this.comment) {
-      this.dispatchEvent(new CommentSelectEvent(this.comment.id));
+      this.dispatchEvent(new LearningCommentSelectEvent(this.comment.id));
     }
   }
 
@@ -68,32 +68,32 @@ export class LearningCommentItem extends LitElement {
   private handleDeleteClick(e: Event) {
     e.stopPropagation();
     if (this.comment) {
-      this.dispatchEvent(new CommentDeleteEvent(this.comment.id));
+      this.dispatchEvent(new LearningCommentDeleteEvent(this.comment.id));
     }
   }
 
   private handleAcceptClick(e: Event) {
     e.stopPropagation();
     if (this.comment) {
-      this.dispatchEvent(new ProposedCommentAcceptEvent(this.comment));
+      this.dispatchEvent(new LearningProposedCommentAcceptEvent(this.comment));
     }
   }
 
   private handleRejectClick(e: Event) {
     e.stopPropagation();
     if (this.comment) {
-      this.dispatchEvent(new ProposedCommentRejectEvent(this.comment));
+      this.dispatchEvent(new LearningProposedCommentRejectEvent(this.comment));
     }
   }
 
-  private handleTypeSelected(e: CommentTypeSelectEvent) {
+  private handleTypeSelected(e: LearningCommentTypeSelectEvent) {
     const commentType = e.commentType;
     if (this.mode === "reply") {
       this.selectedReplyType = commentType;
     } else if (this.mode === "generate") {
       if (this.comment) {
         this.dispatchEvent(
-          new CommentGenerateEvent(this.comment.id, commentType)
+          new LearningCommentGenerateEvent(this.comment.id, commentType)
         );
       }
       this.mode = "view";
@@ -204,8 +204,8 @@ export class LearningCommentItem extends LitElement {
           .parentCommentId=${this.comment?.id}
           .initialType=${this.selectedReplyType}
           .availableTypes=${this.availableTypes}
-          @comment-form-close=${() => (this.mode = "view")}
-          @comment-create=${this.handleFormSave}
+          @learning-comment-form-close=${() => (this.mode = "view")}
+          @learning-comment-create=${this.handleFormSave}
         ></learning-comment-edit-form>
       `;
     }
@@ -213,7 +213,7 @@ export class LearningCommentItem extends LitElement {
     return html`
       <learning-comment-type-popup
         .types=${this.availableTypes}
-        @comment-type-select=${this.handleTypeSelected}
+        @learning-comment-type-select=${this.handleTypeSelected}
       ></learning-comment-type-popup>
     `;
   }
@@ -225,8 +225,8 @@ export class LearningCommentItem extends LitElement {
         .initialType=${this.comment!.commentType}
         .initialContent=${this.comment!.content}
         .availableTypes=${this.availableTypes}
-        @comment-form-close=${() => (this.mode = "view")}
-        @comment-update=${this.handleFormSave}
+        @learning-comment-form-close=${() => (this.mode = "view")}
+        @learning-comment-update=${this.handleFormSave}
       ></learning-comment-edit-form>
     `;
   }

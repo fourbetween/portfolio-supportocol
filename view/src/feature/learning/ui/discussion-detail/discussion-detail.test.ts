@@ -1,7 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import type { DiscussionUpdateEvent } from "../../event/discussion";
+import type { LearningDiscussionUpdateEvent } from "../../event/discussion";
 import "./discussion-detail";
 
 describe("learning-discussion-detail", async () => {
@@ -44,7 +44,7 @@ describe("learning-discussion-detail", async () => {
       html`
         <learning-discussion-detail
           .discussion=${discussion}
-          @discussion-form-open=${() => onEdit()}
+          @learning-discussion-form-open=${() => onEdit()}
         ></learning-discussion-detail>
       `,
       container
@@ -86,7 +86,7 @@ describe("learning-discussion-detail", async () => {
         <learning-discussion-detail
           .discussion=${discussion}
           .isEditing=${true}
-          @discussion-update=${(e: DiscussionUpdateEvent) => onSave(e.theme)}
+          @learning-discussion-update=${(e: LearningDiscussionUpdateEvent) => onSave(e.theme)}
         ></learning-discussion-detail>
       `,
       container
@@ -105,7 +105,7 @@ describe("learning-discussion-detail", async () => {
       html`
         <learning-discussion-detail
           .isEditing=${true}
-          @discussion-form-close=${() => onCancel()}
+          @learning-discussion-form-close=${() => onCancel()}
         ></learning-discussion-detail>
       `,
       container

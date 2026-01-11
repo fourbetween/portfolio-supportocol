@@ -2,8 +2,8 @@ import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
 import {
-  DiscussionDeleteEvent,
-  DiscussionSelectEvent,
+  LearningDiscussionDeleteEvent,
+  LearningDiscussionSelectEvent,
 } from "../../event/discussion";
 import "./discussion-item";
 
@@ -44,7 +44,7 @@ describe("learning-discussion-item", () => {
       html`
         <learning-discussion-item
           .discussion=${discussion}
-          @discussion-select=${(e: Event) => selectHandler(e)}
+          @learning-discussion-select=${(e: Event) => selectHandler(e)}
         ></learning-discussion-item>
       `,
       container
@@ -52,8 +52,8 @@ describe("learning-discussion-item", () => {
 
     await page.getByText("Test Theme").click();
     expect(selectHandler).toHaveBeenCalled();
-    const event = selectHandler.mock.calls[0][0] as DiscussionSelectEvent;
-    expect(event.type).toBe("discussion-select");
+    const event = selectHandler.mock.calls[0][0] as LearningDiscussionSelectEvent;
+    expect(event.type).toBe("learning-discussion-select");
     expect(event.discussion).toEqual(discussion);
   });
 
@@ -63,7 +63,7 @@ describe("learning-discussion-item", () => {
       html`
         <learning-discussion-item
           .discussion=${discussion}
-          @discussion-delete=${(e: Event) => deleteHandler(e)}
+          @learning-discussion-delete=${(e: Event) => deleteHandler(e)}
         ></learning-discussion-item>
       `,
       container
@@ -71,8 +71,8 @@ describe("learning-discussion-item", () => {
 
     await page.getByRole("button", { name: "delete" }).click();
     expect(deleteHandler).toHaveBeenCalled();
-    const event = deleteHandler.mock.calls[0][0] as DiscussionDeleteEvent;
-    expect(event.type).toBe("discussion-delete");
+    const event = deleteHandler.mock.calls[0][0] as LearningDiscussionDeleteEvent;
+    expect(event.type).toBe("learning-discussion-delete");
     expect(event.discussion).toEqual(discussion);
   });
 

@@ -3,7 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
-import { DiscussionFormOpenEvent } from "../../event/discussion";
+import { LearningDiscussionFormOpenEvent } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-edit-form/discussion-edit-form";
 import "../discussion-status-badge/discussion-status-badge";
@@ -58,7 +58,7 @@ export class LearningDiscussionDetail extends LitElement {
   }
 
   private _handleEditClick() {
-    this.dispatchEvent(new DiscussionFormOpenEvent());
+    this.dispatchEvent(new LearningDiscussionFormOpenEvent());
   }
 
   static styles = [

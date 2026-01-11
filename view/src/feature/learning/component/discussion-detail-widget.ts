@@ -3,8 +3,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import {
-  DiscussionUpdatedEvent,
-  DiscussionUpdateEvent,
+  LearningDiscussionUpdatedEvent,
+  LearningDiscussionUpdateEvent,
 } from "../event/discussion";
 import type { Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
@@ -18,7 +18,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
   @state()
   private _isEditing = false;
 
-  private async _handleUpdateDiscussion(e: DiscussionUpdateEvent) {
+  private async _handleUpdateDiscussion(e: LearningDiscussionUpdateEvent) {
     if (!this.discussion) return;
     try {
       const data = await discussionRepository.update(
@@ -30,7 +30,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
       this._isEditing = false;
       showToast(this, "Theme updated.", "success", 2000);
 
-      this.dispatchEvent(new DiscussionUpdatedEvent(data));
+      this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
@@ -43,9 +43,9 @@ export class LearningDiscussionDetailWidget extends LitElement {
       <learning-discussion-detail
         .discussion=${this.discussion}
         .isEditing=${this._isEditing}
-        @discussion-form-open=${() => (this._isEditing = true)}
-        @discussion-update=${this._handleUpdateDiscussion}
-        @discussion-form-close=${() => (this._isEditing = false)}
+        @learning-discussion-form-open=${() => (this._isEditing = true)}
+        @learning-discussion-update=${this._handleUpdateDiscussion}
+        @learning-discussion-form-close=${() => (this._isEditing = false)}
       ></learning-discussion-detail>
     `;
   }

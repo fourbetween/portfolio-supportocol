@@ -3,11 +3,11 @@ import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import {
-  DiscussionCreatedEvent,
-  DiscussionCreateEvent,
-  DiscussionDeletedEvent,
-  DiscussionDeleteEvent,
-  DiscussionSearchEvent,
+  LearningDiscussionCreatedEvent,
+  LearningDiscussionCreateEvent,
+  LearningDiscussionDeletedEvent,
+  LearningDiscussionDeleteEvent,
+  LearningDiscussionSearchEvent,
 } from "../event/discussion";
 import type { Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
@@ -23,27 +23,27 @@ export class LearningDiscussionListWidget extends LitElement {
   @state()
   private _searchQuery = "";
 
-  private async _handleAddDiscussion(e: DiscussionCreateEvent) {
+  private async _handleAddDiscussion(e: LearningDiscussionCreateEvent) {
     try {
       const data = await discussionRepository.create(e.theme, e.status);
-      this.dispatchEvent(new DiscussionCreatedEvent(data));
+      this.dispatchEvent(new LearningDiscussionCreatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private _handleSearch(e: DiscussionSearchEvent) {
+  private _handleSearch(e: LearningDiscussionSearchEvent) {
     this._searchQuery = e.query;
   }
 
-  private async _handleDeleteDiscussion(e: DiscussionDeleteEvent) {
+  private async _handleDeleteDiscussion(e: LearningDiscussionDeleteEvent) {
     const { discussion } = e;
     if (!confirm(`Are you sure you want to delete "${discussion.theme}"?`)) {
       return;
     }
     try {
       await discussionRepository.delete(discussion.id);
-      this.dispatchEvent(new DiscussionDeletedEvent(discussion));
+      this.dispatchEvent(new LearningDiscussionDeletedEvent(discussion));
       showToast(this, "Succeeded.", "success", 2000);
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -62,18 +62,18 @@ export class LearningDiscussionListWidget extends LitElement {
         <div class="header">
           <learning-discussion-search-bar
             .value=${this._searchQuery}
-            @discussion-search=${this._handleSearch}
+            @learning-discussion-search=${this._handleSearch}
           ></learning-discussion-search-bar>
         </div>
         <div class="add-form">
           <learning-discussion-add-form
-            @discussion-create=${this._handleAddDiscussion}
+            @learning-discussion-create=${this._handleAddDiscussion}
           ></learning-discussion-add-form>
         </div>
         <div class="content">
           <learning-discussion-list
             .discussions=${this._filteredDiscussions}
-            @discussion-delete=${this._handleDeleteDiscussion}
+            @learning-discussion-delete=${this._handleDeleteDiscussion}
           ></learning-discussion-list>
         </div>
       </div>

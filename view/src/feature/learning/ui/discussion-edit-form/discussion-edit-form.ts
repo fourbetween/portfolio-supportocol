@@ -5,8 +5,8 @@ import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 import {
-  DiscussionFormCloseEvent,
-  DiscussionUpdateEvent,
+  LearningDiscussionFormCloseEvent,
+  LearningDiscussionUpdateEvent,
 } from "../../event/discussion";
 
 @customElement("learning-discussion-edit-form")
@@ -25,7 +25,7 @@ export class LearningDiscussionEditForm extends LitElement {
 
   private handleSave() {
     this.dispatchEvent(
-      new DiscussionUpdateEvent(
+      new LearningDiscussionUpdateEvent(
         this.inputElement?.value ?? "",
         (this.selectElement?.value as "private" | "public") ?? "private"
       )
@@ -33,7 +33,7 @@ export class LearningDiscussionEditForm extends LitElement {
   }
 
   private handleCancel() {
-    this.dispatchEvent(new DiscussionFormCloseEvent());
+    this.dispatchEvent(new LearningDiscussionFormCloseEvent());
   }
 
   render() {

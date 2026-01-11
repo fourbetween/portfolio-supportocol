@@ -15,20 +15,20 @@ const meta: Meta<
   title: "learning/ui/comment-tree",
   component: "learning-comment-tree",
   argTypes: {
-    onSelectComment: { action: "comment-select" },
-    onCommentDeleted: { action: "comment-deleted" },
-    onCommentGenerate: { action: "comment-generate" },
-    onCommentUpdate: { action: "comment-update" },
-    onCommentCreate: { action: "comment-create" },
+    onSelectComment: { action: "learning-comment-select" },
+    onCommentDeleted: { action: "learning-comment-deleted" },
+    onCommentGenerate: { action: "learning-comment-generate" },
+    onCommentUpdate: { action: "learning-comment-update" },
+    onCommentCreate: { action: "learning-comment-create" },
   },
   render: (args) => html`
     <learning-comment-tree
       .comments=${args.comments}
-      @comment-select=${args.onSelectComment}
-      @comment-deleted=${args.onCommentDeleted}
-      @comment-generate=${args.onCommentGenerate}
-      @comment-update=${args.onCommentUpdate}
-      @comment-create=${args.onCommentCreate}
+      @learning-comment-select=${args.onSelectComment}
+      @learning-comment-deleted=${args.onCommentDeleted}
+      @learning-comment-generate=${args.onCommentGenerate}
+      @learning-comment-update=${args.onCommentUpdate}
+      @learning-comment-create=${args.onCommentCreate}
     ></learning-comment-tree>
   `,
 };

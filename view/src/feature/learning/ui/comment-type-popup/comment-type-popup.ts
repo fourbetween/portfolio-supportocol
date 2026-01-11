@@ -4,7 +4,7 @@ import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import "../../../../shared/ui/popup/popup";
 import type { Popup } from "../../../../shared/ui/popup/popup";
-import { CommentTypeSelectEvent } from "../../event/comment";
+import { LearningCommentTypeSelectEvent } from "../../event/comment";
 
 @customElement("learning-comment-type-popup")
 export class LearningCommentTypePopup extends LitElement {
@@ -31,7 +31,7 @@ export class LearningCommentTypePopup extends LitElement {
   }
 
   private handleSelect(type: string) {
-    this.dispatchEvent(new CommentTypeSelectEvent(type));
+    this.dispatchEvent(new LearningCommentTypeSelectEvent(type));
     this.close();
   }
 
@@ -41,7 +41,7 @@ export class LearningCommentTypePopup extends LitElement {
 
   private handleOtherSubmit() {
     if (this.otherValue.trim()) {
-      this.dispatchEvent(new CommentTypeSelectEvent(this.otherValue.trim()));
+      this.dispatchEvent(new LearningCommentTypeSelectEvent(this.otherValue.trim()));
       this.close();
     }
   }
