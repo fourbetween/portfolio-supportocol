@@ -9,7 +9,9 @@ export const paths = {
   },
   dialogue: {
     search: "/dialogue/search",
-    item: "/dialogue/:id",
+    // /dialogue/:id にすると /learning/dashboard への遷移時に、
+    // :id として dashboard が解釈されてしまう問題があるため、 /dialogue/item/:id としている
+    item: "/dialogue/item/:id",
   },
 };
 
