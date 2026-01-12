@@ -9,6 +9,7 @@ import {
   DialogueCommentSelectEvent,
 } from "../../event/comment";
 import type { Comment } from "../../model/comment";
+import type { CommentFrame } from "../../model/comment-frame";
 import "../comment-card/comment-card";
 
 @customElement("dialogue-comment-item")
@@ -19,8 +20,8 @@ export class DialogueCommentItem extends LitElement {
   @property({ type: Number })
   activeChildrenCount = 0;
 
-  @property({ type: Array })
-  availableTypes: string[] = [];
+  @property({ type: Object })
+  frame?: CommentFrame;
 
   @state()
   private mode: "view" | "reply" = "view";
@@ -49,7 +50,7 @@ export class DialogueCommentItem extends LitElement {
   private handleReplyClick(e: Event) {
     e.stopPropagation();
     this.mode = "reply";
-    this.selectedType = this.availableTypes[0] || "";
+    this.selectedType = this.frame?.types[0] || "";
   }
 
   private handleTypeChange(e: Event) {
@@ -129,7 +130,7 @@ export class DialogueCommentItem extends LitElement {
     return html`
       <div class="reply-form">
         <select .value=${this.selectedType} @change=${this.handleTypeChange}>
-          ${this.availableTypes.map(
+          ${this.frame?.types.map(
             (type) =>
               html`
                 <option value=${type}>${type}</option>

@@ -13,3 +13,9 @@ export class DialogueDiscussionSelectEvent extends Event {
     this.discussion = discussion;
   }
 }
+
+declare global {
+  interface HTMLElementEventMap {
+    [DIALOGUE_DISCUSSION_SELECT_EVENT_NAME]: DialogueDiscussionSelectEvent;
+  }
+}

@@ -29,7 +29,9 @@
         "rules": {
           "no-missing-import": "error",
           "no-unknown-tag-name": "error",
-          "no-unknown-property": "error"
+          "no-unknown-property": "error",
+          "no-noncallable-event-binding": "error",
+          "no-unknown-event": "error"
         }
       }
     ]

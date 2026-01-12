@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing, type PropertyValues } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
@@ -7,8 +7,6 @@ import {
   LearningCommentCreatedEvent,
   LearningCommentTypeSelectEvent,
 } from "../event/comment";
-import type { Comment } from "../model/comment";
-import { deriveCommentFrame } from "../model/comment-frame";
 import { commentRepository } from "../repository/comment-repository";
 import "../ui/comment-add-button/comment-add-button";
 import "../ui/comment-edit-form/comment-edit-form";
@@ -24,7 +22,7 @@ export class LearningCommentCreateWidget extends LitElement {
   parentCommentId?: string;
 
   @property({ type: Array })
-  comments?: Comment[] = [];
+  availableTypes: string[] = [];
 
   @state()
   private isCreating = false;
@@ -32,17 +30,8 @@ export class LearningCommentCreateWidget extends LitElement {
   @state()
   private selectedType?: string;
 
-  @state()
-  private availableTypes: string[] = [];
-
   @query("learning-comment-type-popup")
   private popup!: LearningCommentTypePopup;
-
-  willUpdate(changedProperties: PropertyValues<this>) {
-    if (changedProperties.has("comments")) {
-      this.availableTypes = deriveCommentFrame(this.comments || []).types;
-    }
-  }
 
   private handleStartCreate() {
     this.popup.open();
