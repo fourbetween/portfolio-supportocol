@@ -65,7 +65,7 @@ export class LearningProposedCommentList extends LitElement {
       .comment-container {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 4px;
       }
     `,
   ];
