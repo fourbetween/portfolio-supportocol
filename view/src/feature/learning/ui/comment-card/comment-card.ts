@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { commentCardStyle } from "../../../../shared/style/comment-card";
+import { LearningCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 
 @customElement("learning-comment-card")
@@ -13,11 +14,15 @@ export class LearningCommentCard extends LitElement {
   @property({ type: Number })
   activeChildrenCount = 0;
 
+  private _handleClick() {
+    this.dispatchEvent(new LearningCommentSelectEvent(this.comment?.id));
+  }
+
   render() {
     if (!this.comment) return html``;
 
     return html`
-      <div class=${classMap(this._cardClasses)}>
+      <div class=${classMap(this._cardClasses)} @click=${this._handleClick}>
         <div class="content">${this.comment.content}</div>
         <div class="footer">
           ${this.activeChildrenCount > 0
@@ -44,5 +49,13 @@ export class LearningCommentCard extends LitElement {
     return new Date(dateStr).toLocaleString();
   }
 
-  static styles = [baseStyle, commentCardStyle, css``];
+  static styles = [
+    baseStyle,
+    commentCardStyle,
+    css`
+      :host {
+        cursor: pointer;
+      }
+    `,
+  ];
 }

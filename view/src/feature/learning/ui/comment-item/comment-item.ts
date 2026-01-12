@@ -40,7 +40,8 @@ export class LearningCommentItem extends LitElement {
 
   private touch = new TouchController(this);
 
-  private handleCommentClick() {
+  private handleCommentSelect(e: LearningCommentSelectEvent) {
+    e.stopPropagation();
     if (this.comment && !this.touch.isTouchDevice) {
       this.dispatchEvent(new LearningCommentSelectEvent(this.comment.id));
     }
@@ -125,7 +126,7 @@ export class LearningCommentItem extends LitElement {
       <learning-comment-card
         .comment=${this.comment}
         .activeChildrenCount=${this.activeChildrenCount}
-        @click=${this.handleCommentClick}
+        @learning-comment-select=${this.handleCommentSelect}
         style="cursor: pointer;"
       ></learning-comment-card>
       <div class="actions" role="group" aria-label="Actions">
