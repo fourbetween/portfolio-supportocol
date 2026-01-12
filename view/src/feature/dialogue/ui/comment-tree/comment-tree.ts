@@ -27,9 +27,6 @@ export class DialogueCommentTree extends LitElement {
   private childrenMap = new Map<string, Comment[]>();
 
   @state()
-  private availableTypes: string[] = [];
-
-  @state()
   private focusedGroupId?: string;
 
   private toggleFocus(groupId: string) {
@@ -44,10 +41,8 @@ export class DialogueCommentTree extends LitElement {
 
   private updateTreeData() {
     this.childrenMap.clear();
-    this.availableTypes = [];
 
     if (this.comments) {
-      this.availableTypes = this.frame?.types || [];
       const commentIds = new Set(this.comments.map((c) => c.id));
       for (const comment of this.comments) {
         const parentId =
@@ -84,7 +79,7 @@ export class DialogueCommentTree extends LitElement {
         <dialogue-comment-item
           .comment=${comment}
           .activeChildrenCount=${activeChildrenCount}
-          .availableTypes=${this.availableTypes}
+          .frame=${this.frame}
         ></dialogue-comment-item>
         ${!hideChildren ? this.renderChildren(comment.id) : nothing}
       </div>

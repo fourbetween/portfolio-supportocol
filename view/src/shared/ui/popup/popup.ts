@@ -29,6 +29,7 @@ export class Popup extends LitElement {
   }
 
   private _handleClose() {
+    console.log("oko");
     this.open = false;
   }
 
@@ -39,7 +40,7 @@ export class Popup extends LitElement {
 
   render() {
     return html`
-      <dialog @close=${this._handleClose} @cancel=${this._handleClose}>
+      <dialog @close=${this._handleClose}>
         <div class="header">
           <slot name="header"></slot>
           <button

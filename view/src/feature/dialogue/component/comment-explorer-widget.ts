@@ -10,7 +10,7 @@ import {
   type DialogueCommentCreateEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
-import { deriveCommentFrame, type CommentFrame } from "../model/comment-frame";
+import { type CommentFrame } from "../model/comment-frame";
 import type { Discussion } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import "../ui/comment-context/comment-context";
@@ -24,12 +24,11 @@ export class DialogueCommentExplorerWidget extends LitElement {
   @property({ type: Array })
   comments?: Comment[];
 
+  @property({ type: Object })
+  frame?: CommentFrame;
+
   @property({ type: String })
   selectedCommentId?: string;
-
-  // TODO: comment frame を discussion から直接取得するようにして、削除する
-  @state()
-  private frame?: CommentFrame;
 
   @state()
   private childCounts = new Map<string, number>();
@@ -47,10 +46,8 @@ export class DialogueCommentExplorerWidget extends LitElement {
     this.commentMap.clear();
     this.childrenMap.clear();
     this.childCounts = new Map();
-    this.frame = undefined;
 
     if (this.comments) {
-      this.frame = deriveCommentFrame(this.comments);
       for (const comment of this.comments) {
         this.commentMap.set(comment.id, comment);
         if (comment.parentCommentId) {
