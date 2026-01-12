@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { DialogueDiscussionSelectEvent } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 
 @customElement("dialogue-discussion-item")
@@ -8,9 +9,13 @@ export class DialogueDiscussionItem extends LitElement {
   @property({ type: Object })
   discussion!: Discussion;
 
+  private handleClick() {
+    this.dispatchEvent(new DialogueDiscussionSelectEvent(this.discussion));
+  }
+
   render() {
     return html`
-      <div class="item hover-container">
+      <div class="item hover-container" @click=${this.handleClick}>
         <span class="theme">${this.discussion.theme}</span>
       </div>
     `;
