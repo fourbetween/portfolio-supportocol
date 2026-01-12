@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import "./comment-type-badge";
 
-describe("learning-comment-type-badge", () => {
+describe("ui-comment-type-badge", () => {
   let container: HTMLElement;
 
   beforeEach(() => {
@@ -19,9 +19,7 @@ describe("learning-comment-type-badge", () => {
     const type = "idea";
     render(
       html`
-        <learning-comment-type-badge
-          .type=${type}
-        ></learning-comment-type-badge>
+        <ui-comment-type-badge .type=${type}></ui-comment-type-badge>
       `,
       container
     );
@@ -33,9 +31,7 @@ describe("learning-comment-type-badge", () => {
     const type = "idea";
     render(
       html`
-        <learning-comment-type-badge
-          .type=${type}
-        ></learning-comment-type-badge>
+        <ui-comment-type-badge .type=${type}></ui-comment-type-badge>
       `,
       container
     );

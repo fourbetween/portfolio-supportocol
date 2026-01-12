@@ -6,8 +6,8 @@ import { titleStyle } from "../../../../shared/style/title";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { CommentFrame } from "../../model/comment-frame";
 
-@customElement("learning-comment-frame-detail")
-export class LearningCommentFrameDetail extends LitElement {
+@customElement("dialogue-comment-frame-detail")
+export class DialogueCommentFrameDetail extends LitElement {
   @property({ type: Object })
   frame?: CommentFrame;
 

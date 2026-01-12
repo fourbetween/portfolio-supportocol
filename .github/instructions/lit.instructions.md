@@ -19,6 +19,7 @@ applyTo: "view/src/**/*.ts"
 - `event/`: イベント定義
 - `page/`: ページコンポーネント
 - `ui/`: **Presenter**（純粋な UI 部品）
+- **原則として、他の機能（別 `[context]`）のコンポーネント、イベント、モデルを参照してはいけない。** 共通で利用する場合は `shared/` に配置する。
 
 ### 1.3 共有リソース (`shared/`)
 
@@ -61,6 +62,7 @@ applyTo: "view/src/**/*.ts"
 - Tailwind CSS は使用せず、標準 CSS を使用する。
 - すべての Presenter は `shared/style/base.ts` を `static styles` に含める。
 - アイコンは `shared/style/icon` の `iconStyle` を使用し、`material-symbols-outlined` クラスを適用する。
+- 複数の feature で共通のスタイルがある場合は、積極的に `shared/style/` に共通スタイルファイルを作成する。
 
 ### 3.3 メッセージ表示
 

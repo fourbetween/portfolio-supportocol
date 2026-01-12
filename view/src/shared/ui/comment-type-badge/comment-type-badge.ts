@@ -1,10 +1,10 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { baseStyle } from "../../../../shared/style/base";
+import { baseStyle } from "../../style/base";
 
-@customElement("learning-comment-type-badge")
-export class LearningCommentTypeBadge extends LitElement {
+@customElement("ui-comment-type-badge")
+export class CommentTypeBadge extends LitElement {
   @property({ type: String })
   type = "";
 
