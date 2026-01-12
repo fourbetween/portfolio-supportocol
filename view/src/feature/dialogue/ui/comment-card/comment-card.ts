@@ -2,11 +2,11 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../../shared/style/base";
-import { commentCardStyle } from "../../../../shared/style/comment-card";
 import type { Comment } from "../../model/comment";
+import { commentCardStyle } from "../../../../shared/style/comment-card";
 
-@customElement("learning-comment-card")
-export class LearningCommentCard extends LitElement {
+@customElement("dialogue-comment-card")
+export class DialogueCommentCard extends LitElement {
   @property({ type: Object })
   comment?: Comment;
 

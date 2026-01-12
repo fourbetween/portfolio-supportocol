@@ -9,11 +9,7 @@ export class DialogueItemPage extends LitElement {
   discussionId!: string;
 
   render() {
-    return html`
-      <div>
-        <div>${this.discussionId}</div>
-      </div>
-    `;
+    return html``;
   }
 
   static styles = [baseStyle, buttonStyle, css``];
