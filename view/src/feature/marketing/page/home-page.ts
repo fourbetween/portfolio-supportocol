@@ -18,11 +18,6 @@ export class MarketingHomePage extends LitElement {
     baseStyle,
     buttonStyle,
     css`
-      :host {
-        display: block;
-        height: 100%;
-        overflow-y: auto;
-      }
       .hero {
         padding: 80px 24px;
         text-align: center;

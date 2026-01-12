@@ -1,35 +1,55 @@
-import type { Router } from "@lit-labs/router";
-import { consume } from "@lit/context";
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
-import { routerContext } from "../../../app/context/router";
-import { buildPath, navigate, paths } from "../../../app/paths";
 import { baseStyle } from "../../../shared/style/base";
-import { buttonStyle } from "../../../shared/style/button";
+import "../component/discussion-list-widget";
 
 @customElement("dialogue-search-page")
 export class DialogueSearchPage extends LitElement {
-  @consume({ context: routerContext, subscribe: true })
-  private router!: Router;
-
   render() {
     return html`
-      <div>search page</div>
-      <div>
-        <a href=${buildPath(paths.marketing.home)}>to home page</a>
-        <a href=${buildPath(paths.learning.dashboard)}>to learning page</a>
-        <a href=${buildPath(paths.dialogue.item, { id: "example-id" })}>
-          to item page
-        </a>
-        <button
-          @click=${() =>
-            navigate(this.router, paths.dialogue.item, { id: "example-id" })}
-        >
-          to item page
-        </button>
-      </div>
+      <main class="container">
+        <header class="header">
+          <h1>Public Discussions</h1>
+          <p class="description">
+            Explore and join structured dialogues with others.
+          </p>
+        </header>
+        <section class="content">
+          <dialogue-discussion-list-widget></dialogue-discussion-list-widget>
+        </section>
+      </main>
     `;
   }
 
-  static styles = [baseStyle, buttonStyle, css``];
+  static styles = [
+    baseStyle,
+    css`
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 32px 24px;
+      }
+
+      .header {
+        margin-bottom: 24px;
+      }
+
+      h1 {
+        font-size: 28px;
+        font-weight: 600;
+        color: var(--color-fg-default);
+        margin: 0 0 8px 0;
+      }
+
+      .description {
+        font-size: 16px;
+        color: var(--color-fg-muted);
+        line-height: 1.5;
+      }
+
+      .content {
+        margin-top: 16px;
+      }
+    `,
+  ];
 }
