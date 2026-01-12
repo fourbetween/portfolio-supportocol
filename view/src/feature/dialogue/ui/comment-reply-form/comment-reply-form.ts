@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
   DialogueCommentCreateCancelEvent,
@@ -73,20 +74,20 @@ export class DialogueCommentReplyForm extends LitElement {
           .value=${this.replyContent}
           @input=${this.handleContentInput}
         ></textarea>
-        <div class="form-actions">
+        <div class="actions">
           <button
-            class="btn-save material-symbols-outlined"
-            @click=${this.handleSave}
-            title="Save"
-          >
-            check
-          </button>
-          <button
-            class="btn-cancel material-symbols-outlined"
+            class="btn cancel-button"
             @click=${this.handleCancel}
             title="Cancel"
           >
-            close
+            <span class="material-symbols-outlined">close</span>
+          </button>
+          <button
+            class="btn btn-primary save-button"
+            @click=${this.handleSave}
+            title="Save"
+          >
+            <span class="material-symbols-outlined">save</span>
           </button>
         </div>
       </div>
@@ -95,6 +96,7 @@ export class DialogueCommentReplyForm extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
     iconStyle,
     css`
       :host {
@@ -120,19 +122,10 @@ export class DialogueCommentReplyForm extends LitElement {
         resize: vertical;
         font-size: 14px;
       }
-      .form-actions {
+      .actions {
         display: flex;
+        justify-content: flex-end;
         gap: 8px;
-      }
-      .form-actions button {
-        padding: 8px;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        background-color: var(--color-canvas-default);
-        cursor: pointer;
-      }
-      .form-actions button:hover {
-        background-color: var(--color-canvas-subtle);
       }
     `,
   ];

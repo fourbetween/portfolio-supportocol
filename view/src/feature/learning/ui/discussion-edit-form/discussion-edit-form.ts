@@ -60,15 +60,15 @@ export class LearningDiscussionEditForm extends LitElement {
           />
         </div>
         <div class="actions">
+          <button class="btn" @click=${this.handleCancel} title="Cancel">
+            <span class="material-symbols-outlined">close</span>
+          </button>
           <button
             class="btn btn-primary"
             @click=${this.handleSave}
             title="Save"
           >
             <span class="material-symbols-outlined">save</span>
-          </button>
-          <button class="btn" @click=${this.handleCancel} title="Cancel">
-            <span class="material-symbols-outlined">close</span>
           </button>
         </div>
       </div>

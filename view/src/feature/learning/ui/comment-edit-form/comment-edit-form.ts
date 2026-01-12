@@ -127,18 +127,18 @@ export class LearningCommentEditForm extends LitElement {
     return html`
       <div class="actions">
         <button
-          class="btn btn-primary save-button"
-          @click=${this.handleSave}
-          title="Save"
-        >
-          <span class="material-symbols-outlined">save</span>
-        </button>
-        <button
           class="btn cancel-button"
           @click=${this.handleCancel}
           title="Cancel"
         >
           <span class="material-symbols-outlined">close</span>
+        </button>
+        <button
+          class="btn btn-primary save-button"
+          @click=${this.handleSave}
+          title="Save"
+        >
+          <span class="material-symbols-outlined">save</span>
         </button>
       </div>
     `;
