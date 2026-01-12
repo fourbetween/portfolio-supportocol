@@ -26,7 +26,7 @@ export class DialogueDiscussionListWidget extends LitElement {
 
     new Task(this, {
       task: async () => {
-        return await discussionRepository.list();
+        return discussionRepository.list();
       },
       onComplete: (discussions) => {
         this.discussions = discussions;

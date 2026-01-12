@@ -1,11 +1,8 @@
 import { Routes } from "@lit-labs/router";
-import { provide } from "@lit/context";
 import { LitElement, html, nothing } from "lit";
-import { customElement, state } from "lit/decorators.js";
-import { userContext } from "../../app/context/user";
+import { customElement } from "lit/decorators.js";
 import { pathInFeature, paths } from "../../app/paths";
 import { authService } from "../identity/model/auth";
-import type { User } from "../identity/model/user";
 
 @customElement("learning-root")
 export class LearningRoot extends LitElement {
@@ -16,7 +13,7 @@ export class LearningRoot extends LitElement {
         path: pathInFeature(paths.learning.dashboard),
         enter: async () => {
           await import("./page/dashboard-page");
-          return this.requireAuth();
+          return authService.requireAuth();
         },
         render: () => html`
           <learning-dashboard-page></learning-dashboard-page>
@@ -29,18 +26,6 @@ export class LearningRoot extends LitElement {
       },
     }
   );
-
-  @provide({ context: userContext })
-  @state()
-  private user: User | null = null;
-
-  private async requireAuth() {
-    if (this.user) {
-      return true;
-    }
-    this.user = await authService.getCurrentUser();
-    return true;
-  }
 
   render() {
     return html`

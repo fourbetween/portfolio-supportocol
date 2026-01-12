@@ -29,7 +29,6 @@ export class Popup extends LitElement {
   }
 
   private _handleClose() {
-    console.log("oko");
     this.open = false;
   }
 
