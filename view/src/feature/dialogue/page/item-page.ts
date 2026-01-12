@@ -7,6 +7,7 @@ import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
 import { iconStyle } from "../../../shared/style/icon";
+import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/drawer/drawer";
 import "../component/comment-explorer-widget";
 import {
@@ -108,14 +109,19 @@ export class DialogueItemPage extends LitElement {
           .open=${this._isRightDrawerOpen}
           @drawer-close=${() => (this._isRightDrawerOpen = false)}
         >
-          <span slot="header">Comments</span>
+          <span slot="header">Latest first</span>
           ${list}
         </ui-drawer>
       `;
     }
 
     return html`
-      <aside class="sidebar sidebar-right">${list}</aside>
+      <aside class="sidebar sidebar-right">
+        <section>
+          <div class="section-title">Latest first</div>
+          ${list}
+        </section>
+      </aside>
     `;
   }
 
@@ -174,6 +180,7 @@ export class DialogueItemPage extends LitElement {
 
   static styles = [
     baseStyle,
+    titleStyle,
     buttonStyle,
     iconStyle,
     hoverButtonStyle,
@@ -221,6 +228,13 @@ export class DialogueItemPage extends LitElement {
       .btn-right {
         right: 16px;
         bottom: 16px;
+      }
+      section {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+        border-radius: 6px;
       }
       @media (hover: none) {
         .btn-hover {

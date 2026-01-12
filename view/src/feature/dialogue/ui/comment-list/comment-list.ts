@@ -1,6 +1,8 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../../shared/style/base";
+import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 
@@ -16,9 +18,18 @@ export class DialogueCommentList extends LitElement {
 
     return html`
       <div class="list-container">
-        ${sortedComments.map(
+        ${repeat(
+          sortedComments,
+          (comment) => comment.id,
           (comment) => html`
-            <dialogue-comment-card .comment=${comment}></dialogue-comment-card>
+            <div class="comment-item">
+              <ui-comment-type-badge
+                .type=${comment.commentType}
+              ></ui-comment-type-badge>
+              <dialogue-comment-card
+                .comment=${comment}
+              ></dialogue-comment-card>
+            </div>
           `
         )}
       </div>
@@ -31,8 +42,12 @@ export class DialogueCommentList extends LitElement {
       .list-container {
         display: flex;
         flex-direction: column;
+        gap: 16px;
+      }
+      .comment-item {
+        display: flex;
+        flex-direction: column;
         gap: 8px;
-        padding: 8px;
       }
     `,
   ];

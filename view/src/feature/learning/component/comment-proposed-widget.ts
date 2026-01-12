@@ -43,9 +43,6 @@ export class LearningCommentProposedWidget extends LitElement {
     baseStyle,
     titleStyle,
     css`
-      :host {
-        display: block;
-      }
       section {
         display: flex;
         flex-direction: column;
