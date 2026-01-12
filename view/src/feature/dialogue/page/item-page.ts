@@ -95,7 +95,10 @@ export class DialogueItemPage extends LitElement {
 
   private _renderRightSidebar(isTouch: boolean) {
     const list = html`
-      <dialogue-comment-list .comments=${this.comments}></dialogue-comment-list>
+      <dialogue-comment-list
+        .comments=${this.comments}
+        @dialogue-comment-select=${this._handleCommentSelect}
+      ></dialogue-comment-list>
     `;
 
     if (isTouch) {

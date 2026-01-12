@@ -5,7 +5,6 @@ import { baseStyle } from "../../../../shared/style/base";
 import { commentContextStyle } from "../../../../shared/style/comment-context";
 import { iconStyle } from "../../../../shared/style/icon";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
-import { DialogueCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import type { CommentFrame } from "../../model/comment-frame";
 import "../comment-card/comment-card";
@@ -21,10 +20,6 @@ export class DialogueCommentContext extends LitElement {
 
   @property({ type: Object })
   frame?: CommentFrame;
-
-  private handleCommentClick(comment: Comment) {
-    this.dispatchEvent(new DialogueCommentSelectEvent(comment.id));
-  }
 
   private renderItem(comment: Comment, isLast: boolean) {
     const childCount = this.childCounts.get(comment.id) || 0;
@@ -44,7 +39,6 @@ export class DialogueCommentContext extends LitElement {
             <dialogue-comment-card
               .comment=${comment}
               .activeChildrenCount=${childCount}
-              @click=${() => this.handleCommentClick(comment)}
             ></dialogue-comment-card>
           `}
     `;

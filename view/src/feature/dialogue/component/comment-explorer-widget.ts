@@ -66,11 +66,6 @@ export class DialogueCommentExplorerWidget extends LitElement {
     }
   }
 
-  private handleSelectComment(e: DialogueCommentSelectEvent) {
-    const id = this.selectedCommentId === e.commentId ? undefined : e.commentId;
-    this.dispatchEvent(new DialogueCommentSelectEvent(id));
-  }
-
   private async handleCommentCreate(e: DialogueCommentCreateEvent) {
     if (!this.discussion) return;
     try {
@@ -151,7 +146,6 @@ export class DialogueCommentExplorerWidget extends LitElement {
           <dialogue-comment-tree
             .comments=${descendants}
             .frame=${this.frame}
-            @dialogue-comment-select=${this.handleSelectComment}
             @dialogue-comment-create=${this.handleCommentCreate}
           ></dialogue-comment-tree>
         </div>
@@ -175,7 +169,6 @@ export class DialogueCommentExplorerWidget extends LitElement {
           .path=${path}
           .childCounts=${this.childCounts}
           .frame=${this.frame}
-          @dialogue-comment-select=${this.handleSelectComment}
           @dialogue-comment-create=${this.handleCommentCreate}
         ></dialogue-comment-context>
       </div>
