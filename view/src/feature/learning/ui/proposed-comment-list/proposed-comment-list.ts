@@ -3,7 +3,6 @@ import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../../shared/style/base";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
-import { LearningCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 
@@ -11,10 +10,6 @@ import "../comment-card/comment-card";
 export class LearningProposedCommentList extends LitElement {
   @property({ type: Array })
   comments: Comment[] = [];
-
-  private onSelect(comment: Comment) {
-    this.dispatchEvent(new LearningCommentSelectEvent(comment.id));
-  }
 
   render() {
     if (this.comments.length === 0) {
@@ -40,11 +35,7 @@ export class LearningProposedCommentList extends LitElement {
           <ui-comment-type-badge
             .type=${comment.commentType}
           ></ui-comment-type-badge>
-          <learning-comment-card
-            class="clickable"
-            .comment=${comment}
-            @click=${() => this.onSelect(comment)}
-          ></learning-comment-card>
+          <learning-comment-card .comment=${comment}></learning-comment-card>
         </div>
       </div>
     `;
@@ -74,13 +65,7 @@ export class LearningProposedCommentList extends LitElement {
       .comment-container {
         display: flex;
         flex-direction: column;
-        gap: 8px;
-      }
-      .clickable {
-        cursor: pointer;
-      }
-      .clickable:hover {
-        opacity: 0.8;
+        gap: 4px;
       }
     `,
   ];

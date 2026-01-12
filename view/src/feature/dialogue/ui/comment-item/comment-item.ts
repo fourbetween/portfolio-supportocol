@@ -26,7 +26,7 @@ export class DialogueCommentItem extends LitElement {
 
   private touch = new TouchController(this);
 
-  private handleCommentClick(e: DialogueCommentSelectEvent) {
+  private handleCommentSelect(e: DialogueCommentSelectEvent) {
     e.stopPropagation();
     if (this.comment && !this.touch.isTouchDevice) {
       this.dispatchEvent(new DialogueCommentSelectEvent(this.comment.id));
@@ -70,7 +70,7 @@ export class DialogueCommentItem extends LitElement {
       <dialogue-comment-card
         .comment=${this.comment}
         .activeChildrenCount=${this.activeChildrenCount}
-        @dialogue-comment-select=${this.handleCommentClick}
+        @dialogue-comment-select=${this.handleCommentSelect}
       ></dialogue-comment-card>
       <div class="actions" role="group" aria-label="Actions">
         <button

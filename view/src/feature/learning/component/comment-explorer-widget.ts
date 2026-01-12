@@ -76,11 +76,6 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  private handleSelectComment(e: LearningCommentSelectEvent) {
-    const id = this.selectedCommentId === e.commentId ? undefined : e.commentId;
-    this.dispatchEvent(new LearningCommentSelectEvent(id));
-  }
-
   private async handleCommentUpdate(e: LearningCommentUpdateEvent) {
     if (!this.discussionId) return;
     try {
@@ -247,7 +242,6 @@ export class LearningCommentExplorerWidget extends LitElement {
           </div>
           <learning-comment-tree
             .comments=${descendants}
-            @learning-comment-select=${this.handleSelectComment}
             @learning-comment-create=${this.handleCommentCreate}
             @learning-comment-update=${this.handleCommentUpdate}
             @learning-comment-delete=${this.handleCommentDelete}
@@ -276,7 +270,6 @@ export class LearningCommentExplorerWidget extends LitElement {
           .path=${path}
           .childCounts=${this.childCounts}
           .availableTypes=${this.availableTypes}
-          @learning-comment-select=${this.handleSelectComment}
           @learning-comment-create=${this.handleCommentCreate}
           @learning-comment-update=${this.handleCommentUpdate}
           @learning-comment-delete=${this.handleCommentDelete}
