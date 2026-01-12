@@ -2,10 +2,10 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../../shared/style/base";
+import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import { LearningCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
-import "../comment-type-badge/comment-type-badge";
 
 @customElement("learning-proposed-comment-list")
 export class LearningProposedCommentList extends LitElement {
@@ -37,9 +37,9 @@ export class LearningProposedCommentList extends LitElement {
     return html`
       <div class="item">
         <div class="comment-container">
-          <learning-comment-type-badge
+          <ui-comment-type-badge
             .type=${comment.commentType}
-          ></learning-comment-type-badge>
+          ></ui-comment-type-badge>
           <learning-comment-card
             class="clickable"
             .comment=${comment}

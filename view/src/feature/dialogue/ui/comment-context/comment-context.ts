@@ -5,13 +5,13 @@ import { baseStyle } from "../../../../shared/style/base";
 import { commentContextStyle } from "../../../../shared/style/comment-context";
 import { iconStyle } from "../../../../shared/style/icon";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
-import { LearningCommentSelectEvent } from "../../event/comment";
+import { DialogueCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
 import "../comment-item/comment-item";
 
-@customElement("learning-comment-context")
-export class LearningCommentContext extends LitElement {
+@customElement("dialogue-comment-context")
+export class DialogueCommentContext extends LitElement {
   @property({ type: Array })
   path: Comment[] = [];
 
@@ -22,7 +22,7 @@ export class LearningCommentContext extends LitElement {
   availableTypes: string[] = [];
 
   private handleCommentClick(comment: Comment) {
-    this.dispatchEvent(new LearningCommentSelectEvent(comment.id));
+    this.dispatchEvent(new DialogueCommentSelectEvent(comment.id));
   }
 
   private renderItem(comment: Comment, isLast: boolean) {
@@ -33,18 +33,18 @@ export class LearningCommentContext extends LitElement {
       ></ui-comment-type-badge>
       ${isLast
         ? html`
-            <learning-comment-item
+            <dialogue-comment-item
               .comment=${comment}
               .activeChildrenCount=${childCount}
               .availableTypes=${this.availableTypes}
-            ></learning-comment-item>
+            ></dialogue-comment-item>
           `
         : html`
-            <learning-comment-card
+            <dialogue-comment-card
               .comment=${comment}
               .activeChildrenCount=${childCount}
               @click=${() => this.handleCommentClick(comment)}
-            ></learning-comment-card>
+            ></dialogue-comment-card>
           `}
     `;
   }

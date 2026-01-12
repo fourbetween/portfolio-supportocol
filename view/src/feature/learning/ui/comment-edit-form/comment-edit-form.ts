@@ -4,13 +4,13 @@ import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
+import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import {
   LearningCommentCreateEvent,
   LearningCommentFormCloseEvent,
   LearningCommentTypeSelectEvent,
   LearningCommentUpdateEvent,
 } from "../../event/comment";
-import "../comment-type-badge/comment-type-badge";
 import "../comment-type-popup/comment-type-popup";
 import type { LearningCommentTypePopup } from "../comment-type-popup/comment-type-popup";
 
@@ -67,10 +67,16 @@ export class LearningCommentEditForm extends LitElement {
   private handleSave() {
     const { _commentType: type, _content: content } = this;
     if (this.commentId) {
-      this.dispatchEvent(new LearningCommentUpdateEvent(this.commentId, type, content));
+      this.dispatchEvent(
+        new LearningCommentUpdateEvent(this.commentId, type, content)
+      );
     } else {
       this.dispatchEvent(
-        new LearningCommentCreateEvent(this.parentCommentId ?? null, type, content)
+        new LearningCommentCreateEvent(
+          this.parentCommentId ?? null,
+          type,
+          content
+        )
       );
     }
   }
@@ -86,11 +92,11 @@ export class LearningCommentEditForm extends LitElement {
   private renderHeader() {
     return html`
       <div class="header">
-        <learning-comment-type-badge
+        <ui-comment-type-badge
           .type=${this._commentType}
           @click=${this.handleBadgeClick}
           class="type-badge"
-        ></learning-comment-type-badge>
+        ></ui-comment-type-badge>
         <learning-comment-type-popup
           .types=${this.availableTypes}
           @learning-comment-type-select=${this.handleTypeSelect}
