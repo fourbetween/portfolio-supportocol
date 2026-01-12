@@ -53,7 +53,7 @@ export class LearningDashboardPage extends LitElement {
 
     new Task(this, {
       task: async () => {
-        return await discussionRepository.list();
+        return discussionRepository.list();
       },
       onComplete: (discussions) => {
         this._discussions = discussions;
@@ -67,7 +67,7 @@ export class LearningDashboardPage extends LitElement {
     new Task(this, {
       task: async ([id]) => {
         if (!id) return [] as Comment[];
-        return await commentRepository.list(id);
+        return commentRepository.list(id);
       },
       onComplete: (comments) => {
         this._comments = comments;

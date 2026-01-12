@@ -59,7 +59,7 @@ export class DialogueItemPage extends LitElement {
 
     new Task(this, {
       task: async ([discussionId]) => {
-        return await discussionRepository.load(discussionId);
+        return discussionRepository.load(discussionId);
       },
       onComplete: (discussion) => {
         this._discussion = discussion;
@@ -73,7 +73,7 @@ export class DialogueItemPage extends LitElement {
     new Task(this, {
       task: async ([discussionId]) => {
         if (!discussionId) return [] as Comment[];
-        return await commentRepository.list(discussionId);
+        return commentRepository.list(discussionId);
       },
       onComplete: (comments) => {
         this.comments = comments;
