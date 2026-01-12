@@ -2,6 +2,8 @@ import type { Comment } from "../model/comment";
 
 const DIALOGUE_COMMENT_SELECT_EVENT_NAME = "dialogue-comment-select";
 const DIALOGUE_COMMENT_CREATE_EVENT_NAME = "dialogue-comment-create";
+const DIALOGUE_COMMENT_CREATE_CANCEL_EVENT_NAME =
+  "dialogue-comment-create-cancel";
 const DIALOGUE_COMMENT_CREATED_EVENT_NAME = "dialogue-comment-created";
 
 export class DialogueCommentSelectEvent extends Event {
@@ -36,6 +38,15 @@ export class DialogueCommentCreateEvent extends Event {
   }
 }
 
+export class DialogueCommentCreateCancelEvent extends Event {
+  constructor() {
+    super(DIALOGUE_COMMENT_CREATE_CANCEL_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
+
 export class DialogueCommentCreatedEvent extends Event {
   public readonly comment: Comment;
 
@@ -52,6 +63,7 @@ declare global {
   interface HTMLElementEventMap {
     [DIALOGUE_COMMENT_SELECT_EVENT_NAME]: DialogueCommentSelectEvent;
     [DIALOGUE_COMMENT_CREATE_EVENT_NAME]: DialogueCommentCreateEvent;
+    [DIALOGUE_COMMENT_CREATE_CANCEL_EVENT_NAME]: DialogueCommentCreateCancelEvent;
     [DIALOGUE_COMMENT_CREATED_EVENT_NAME]: DialogueCommentCreatedEvent;
   }
 }
