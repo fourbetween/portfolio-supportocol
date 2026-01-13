@@ -18,7 +18,7 @@ type Comments struct {
 	CommentType     string
 	Content         string
 	Status          string
-	CreatedBy       string
+	CreatedBy       *string
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 }

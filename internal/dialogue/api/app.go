@@ -14,7 +14,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/dialogue/domain"
 	"github.com/fourbetween/app-supportocol/internal/dialogue/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
-	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
 	"github.com/fourbetween/pkg-auth/auth"
 	"github.com/google/uuid"
 	"github.com/ogen-go/ogen/ogenerrors"
@@ -96,7 +95,6 @@ func (h *appHandler) DialogueDiscussionsDiscussionIdCommentsPost(
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
 		Content:         string(req.Content),
-		CreatedBy:       httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err
