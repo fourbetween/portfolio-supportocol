@@ -43,8 +43,8 @@ func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentI
 		return err
 	}
 
-	if comment.CreatedBy() != input.UserID {
-		return apperr.ErrPermissionDenied
+	if comment.DiscussionID() != input.DiscussionID {
+		return apperr.ErrInvalidArgument
 	}
 
 	return u.commentRepo.Delete(ctx, comment)

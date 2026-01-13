@@ -29,7 +29,7 @@ type CreateCommentParams struct {
 	CommentTypeID   string
 	Content         string
 	Status          CommentStatus
-	CreatedBy       string
+	CreatedBy       *string
 }
 
 func (f *CommentFactory) Create(params CreateCommentParams) (*Comment, error) {

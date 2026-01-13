@@ -29,7 +29,6 @@ type CreateCommentInput struct {
 	ParentCommentID *string
 	CommentType     string
 	Content         string
-	CreatedBy       string
 }
 
 func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentInput) (*domain.Comment, error) {
@@ -47,7 +46,6 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		CommentTypeID:   input.CommentType,
 		Content:         input.Content,
 		Status:          domain.CommentStatusActive,
-		CreatedBy:       input.CreatedBy,
 	})
 	if err != nil {
 		return nil, err

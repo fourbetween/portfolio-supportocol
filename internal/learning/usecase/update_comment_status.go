@@ -44,8 +44,8 @@ func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCo
 		return nil, err
 	}
 
-	if comment.CreatedBy() != input.UserID {
-		return nil, apperr.ErrPermissionDenied
+	if comment.DiscussionID() != input.DiscussionID {
+		return nil, apperr.ErrInvalidArgument
 	}
 
 	status := domain.CommentStatus(input.Status)

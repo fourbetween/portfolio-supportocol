@@ -45,8 +45,8 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 		return nil, err
 	}
 
-	if comment.CreatedBy() != input.UserID {
-		return nil, apperr.ErrPermissionDenied
+	if comment.DiscussionID() != input.DiscussionID {
+		return nil, apperr.ErrInvalidArgument
 	}
 
 	if err := comment.Update(domain.UpdateCommentParams{
