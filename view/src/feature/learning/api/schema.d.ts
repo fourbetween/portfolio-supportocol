@@ -138,7 +138,6 @@ export interface paths {
                 content: {
                     "application/json": {
                         theme: components["schemas"]["DiscussionTheme"];
-                        status: components["schemas"]["DiscussionStatus"];
                     };
                 };
             };

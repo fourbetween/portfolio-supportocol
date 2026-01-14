@@ -209,11 +209,8 @@ paths:
               properties:
                 theme:
                   $ref: "#/components/schemas/DiscussionTheme"
-                status:
-                  $ref: "#/components/schemas/DiscussionStatus"
               required:
                 - theme
-                - status
       responses:
         "200":
           description: success response

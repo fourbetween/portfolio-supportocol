@@ -1587,15 +1587,10 @@ func (s *LearningDiscussionsDiscussionIdPutReq) encodeFields(e *jx.Encoder) {
 		e.FieldStart("theme")
 		s.Theme.Encode(e)
 	}
-	{
-		e.FieldStart("status")
-		s.Status.Encode(e)
-	}
 }
 
-var jsonFieldsNameOfLearningDiscussionsDiscussionIdPutReq = [2]string{
+var jsonFieldsNameOfLearningDiscussionsDiscussionIdPutReq = [1]string{
 	0: "theme",
-	1: "status",
 }
 
 // Decode decodes LearningDiscussionsDiscussionIdPutReq from json.
@@ -1617,16 +1612,6 @@ func (s *LearningDiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
-		case "status":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				if err := s.Status.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"status\"")
-			}
 		default:
 			return d.Skip()
 		}
@@ -1637,7 +1622,7 @@ func (s *LearningDiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

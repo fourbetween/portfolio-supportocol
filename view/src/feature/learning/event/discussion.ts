@@ -53,15 +53,13 @@ export class LearningDiscussionCreatedEvent extends Event {
 
 export class LearningDiscussionUpdateEvent extends Event {
   public readonly theme: string;
-  public readonly status: Discussion["status"];
 
-  constructor(theme: string, status: Discussion["status"]) {
+  constructor(theme: string) {
     super(LEARNING_DISCUSSION_UPDATE_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
     this.theme = theme;
-    this.status = status;
   }
 }
 

@@ -34,7 +34,6 @@ export class LearningDiscussionDetail extends LitElement {
     return html`
       <learning-discussion-edit-form
         .theme=${this.discussion?.theme ?? ""}
-        .status=${this.discussion?.status ?? "private"}
       ></learning-discussion-edit-form>
     `;
   }

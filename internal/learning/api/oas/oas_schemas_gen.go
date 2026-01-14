@@ -514,8 +514,7 @@ func (s *LearningDiscussionsDiscussionIdPublishPostReq) SetCommentFrame(val Comm
 }
 
 type LearningDiscussionsDiscussionIdPutReq struct {
-	Theme  DiscussionTheme  `json:"theme"`
-	Status DiscussionStatus `json:"status"`
+	Theme DiscussionTheme `json:"theme"`
 }
 
 // GetTheme returns the value of Theme.
@@ -523,19 +522,9 @@ func (s *LearningDiscussionsDiscussionIdPutReq) GetTheme() DiscussionTheme {
 	return s.Theme
 }
 
-// GetStatus returns the value of Status.
-func (s *LearningDiscussionsDiscussionIdPutReq) GetStatus() DiscussionStatus {
-	return s.Status
-}
-
 // SetTheme sets the value of Theme.
 func (s *LearningDiscussionsDiscussionIdPutReq) SetTheme(val DiscussionTheme) {
 	s.Theme = val
-}
-
-// SetStatus sets the value of Status.
-func (s *LearningDiscussionsDiscussionIdPutReq) SetStatus(val DiscussionStatus) {
-	s.Status = val
 }
 
 type LearningDiscussionsPostReq struct {
