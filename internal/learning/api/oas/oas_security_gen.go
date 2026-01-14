@@ -41,6 +41,7 @@ var operationRolesCookieAuth = map[string][]string{
 	LearningDiscussionsDiscussionIdCommentsPostOperation:               []string{},
 	LearningDiscussionsDiscussionIdDeleteOperation:                     []string{},
 	LearningDiscussionsDiscussionIdGetOperation:                        []string{},
+	LearningDiscussionsDiscussionIdPublishPostOperation:                []string{},
 	LearningDiscussionsDiscussionIdPutOperation:                        []string{},
 	LearningDiscussionsGetOperation:                                    []string{},
 	LearningDiscussionsPostOperation:                                   []string{},

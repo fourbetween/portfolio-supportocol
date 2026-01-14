@@ -15,3 +15,11 @@ func (s DiscussionStatus) IsValid() bool {
 		return false
 	}
 }
+
+func (s DiscussionStatus) IsPrivate() bool {
+	return s == DiscussionStatusPrivate
+}
+
+func (s DiscussionStatus) IsPublic() bool {
+	return s == DiscussionStatusPublic
+}

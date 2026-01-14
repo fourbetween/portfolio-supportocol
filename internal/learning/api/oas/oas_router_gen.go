@@ -108,118 +108,154 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/comments"
+				case '/': // Prefix: "/"
 
-					if l := len("/comments"); len(elem) >= l && elem[0:l] == "/comments" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						switch r.Method {
-						case "GET":
-							s.handleLearningDiscussionsDiscussionIdCommentsGetRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
-						case "POST":
-							s.handleLearningDiscussionsDiscussionIdCommentsPostRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET,POST")
-						}
-
-						return
+						break
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/"
+					case 'c': // Prefix: "comments"
 
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						if l := len("comments"); len(elem) >= l && elem[0:l] == "comments" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'g': // Prefix: "generate"
-							origElem := elem
-							if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleLearningDiscussionsDiscussionIdCommentsGeneratePostRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						}
-						// Param: "commentId"
-						// Match until "/"
-						idx := strings.IndexByte(elem, '/')
-						if idx < 0 {
-							idx = len(elem)
-						}
-						args[1] = elem[:idx]
-						elem = elem[idx:]
-
-						if len(elem) == 0 {
 							switch r.Method {
-							case "DELETE":
-								s.handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteRequest([2]string{
+							case "GET":
+								s.handleLearningDiscussionsDiscussionIdCommentsGetRequest([1]string{
 									args[0],
-									args[1],
 								}, elemIsEscaped, w, r)
-							case "PUT":
-								s.handleLearningDiscussionsDiscussionIdCommentsCommentIdPutRequest([2]string{
+							case "POST":
+								s.handleLearningDiscussionsDiscussionIdCommentsPostRequest([1]string{
 									args[0],
-									args[1],
 								}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "DELETE,PUT")
+								s.notAllowed(w, r, "GET,POST")
 							}
 
 							return
 						}
 						switch elem[0] {
-						case '/': // Prefix: "/status"
+						case '/': // Prefix: "/"
 
-							if l := len("/status"); len(elem) >= l && elem[0:l] == "/status" {
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								// Leaf node.
+								break
+							}
+							switch elem[0] {
+							case 'g': // Prefix: "generate"
+								origElem := elem
+								if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleLearningDiscussionsDiscussionIdCommentsGeneratePostRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+							// Param: "commentId"
+							// Match until "/"
+							idx := strings.IndexByte(elem, '/')
+							if idx < 0 {
+								idx = len(elem)
+							}
+							args[1] = elem[:idx]
+							elem = elem[idx:]
+
+							if len(elem) == 0 {
 								switch r.Method {
+								case "DELETE":
+									s.handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteRequest([2]string{
+										args[0],
+										args[1],
+									}, elemIsEscaped, w, r)
 								case "PUT":
-									s.handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest([2]string{
+									s.handleLearningDiscussionsDiscussionIdCommentsCommentIdPutRequest([2]string{
 										args[0],
 										args[1],
 									}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "PUT")
+									s.notAllowed(w, r, "DELETE,PUT")
 								}
 
 								return
 							}
+							switch elem[0] {
+							case '/': // Prefix: "/status"
 
+								if l := len("/status"); len(elem) >= l && elem[0:l] == "/status" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "PUT":
+										s.handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest([2]string{
+											args[0],
+											args[1],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "PUT")
+									}
+
+									return
+								}
+
+							}
+
+						}
+
+					case 'p': // Prefix: "publish"
+
+						if l := len("publish"); len(elem) >= l && elem[0:l] == "publish" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleLearningDiscussionsDiscussionIdPublishPostRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
 						}
 
 					}
@@ -398,129 +434,116 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/comments"
+				case '/': // Prefix: "/"
 
-					if l := len("/comments"); len(elem) >= l && elem[0:l] == "/comments" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						switch method {
-						case "GET":
-							r.name = LearningDiscussionsDiscussionIdCommentsGetOperation
-							r.summary = ""
-							r.operationID = ""
-							r.operationGroup = ""
-							r.pathPattern = "/learning/discussions/{discussionId}/comments"
-							r.args = args
-							r.count = 1
-							return r, true
-						case "POST":
-							r.name = LearningDiscussionsDiscussionIdCommentsPostOperation
-							r.summary = ""
-							r.operationID = ""
-							r.operationGroup = ""
-							r.pathPattern = "/learning/discussions/{discussionId}/comments"
-							r.args = args
-							r.count = 1
-							return r, true
-						default:
-							return
-						}
+						break
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/"
+					case 'c': // Prefix: "comments"
 
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						if l := len("comments"); len(elem) >= l && elem[0:l] == "comments" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'g': // Prefix: "generate"
-							origElem := elem
-							if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = LearningDiscussionsDiscussionIdCommentsGeneratePostOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/learning/discussions/{discussionId}/comments/generate"
-									r.args = args
-									r.count = 1
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						}
-						// Param: "commentId"
-						// Match until "/"
-						idx := strings.IndexByte(elem, '/')
-						if idx < 0 {
-							idx = len(elem)
-						}
-						args[1] = elem[:idx]
-						elem = elem[idx:]
-
-						if len(elem) == 0 {
 							switch method {
-							case "DELETE":
-								r.name = LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation
+							case "GET":
+								r.name = LearningDiscussionsDiscussionIdCommentsGetOperation
 								r.summary = ""
 								r.operationID = ""
 								r.operationGroup = ""
-								r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}"
+								r.pathPattern = "/learning/discussions/{discussionId}/comments"
 								r.args = args
-								r.count = 2
+								r.count = 1
 								return r, true
-							case "PUT":
-								r.name = LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation
+							case "POST":
+								r.name = LearningDiscussionsDiscussionIdCommentsPostOperation
 								r.summary = ""
 								r.operationID = ""
 								r.operationGroup = ""
-								r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}"
+								r.pathPattern = "/learning/discussions/{discussionId}/comments"
 								r.args = args
-								r.count = 2
+								r.count = 1
 								return r, true
 							default:
 								return
 							}
 						}
 						switch elem[0] {
-						case '/': // Prefix: "/status"
+						case '/': // Prefix: "/"
 
-							if l := len("/status"); len(elem) >= l && elem[0:l] == "/status" {
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								// Leaf node.
+								break
+							}
+							switch elem[0] {
+							case 'g': // Prefix: "generate"
+								origElem := elem
+								if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "POST":
+										r.name = LearningDiscussionsDiscussionIdCommentsGeneratePostOperation
+										r.summary = ""
+										r.operationID = ""
+										r.operationGroup = ""
+										r.pathPattern = "/learning/discussions/{discussionId}/comments/generate"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							}
+							// Param: "commentId"
+							// Match until "/"
+							idx := strings.IndexByte(elem, '/')
+							if idx < 0 {
+								idx = len(elem)
+							}
+							args[1] = elem[:idx]
+							elem = elem[idx:]
+
+							if len(elem) == 0 {
 								switch method {
-								case "PUT":
-									r.name = LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation
+								case "DELETE":
+									r.name = LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation
 									r.summary = ""
 									r.operationID = ""
 									r.operationGroup = ""
-									r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}/status"
+									r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}"
+									r.args = args
+									r.count = 2
+									return r, true
+								case "PUT":
+									r.name = LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation
+									r.summary = ""
+									r.operationID = ""
+									r.operationGroup = ""
+									r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}"
 									r.args = args
 									r.count = 2
 									return r, true
@@ -528,7 +551,59 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									return
 								}
 							}
+							switch elem[0] {
+							case '/': // Prefix: "/status"
 
+								if l := len("/status"); len(elem) >= l && elem[0:l] == "/status" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "PUT":
+										r.name = LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation
+										r.summary = ""
+										r.operationID = ""
+										r.operationGroup = ""
+										r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}/status"
+										r.args = args
+										r.count = 2
+										return r, true
+									default:
+										return
+									}
+								}
+
+							}
+
+						}
+
+					case 'p': // Prefix: "publish"
+
+						if l := len("publish"); len(elem) >= l && elem[0:l] == "publish" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = LearningDiscussionsDiscussionIdPublishPostOperation
+								r.summary = ""
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/learning/discussions/{discussionId}/publish"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
 						}
 
 					}

@@ -40,15 +40,23 @@ func (f *DiscussionFactory) Create(params CreateDiscussionParams) (*Discussion, 
 type ReconstructDiscussionParams struct {
 	ID string
 	CreateDiscussionParams
-	CreatedAt time.Time
+	CreatedAt        time.Time
+	DialogueSettings *DialogueSettings
 }
 
 func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Discussion, error) {
-	return &Discussion{
-		id:        params.ID,
-		theme:     params.Theme,
-		status:    params.Status,
-		createdBy: params.CreatedBy,
-		createdAt: params.CreatedAt,
-	}, nil
+	d := &Discussion{
+		id:               params.ID,
+		theme:            params.Theme,
+		status:           params.Status,
+		createdBy:        params.CreatedBy,
+		createdAt:        params.CreatedAt,
+		dialogueSettings: params.DialogueSettings,
+	}
+
+	if err := d.validate(); err != nil {
+		return nil, err
+	}
+
+	return d, nil
 }

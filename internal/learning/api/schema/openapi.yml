@@ -29,6 +29,40 @@ components:
       enum:
         - active
         - proposed
+    DialogueSettings:
+      type: object
+      properties:
+        discussionId:
+          $ref: "#/components/schemas/Id"
+        commentFrame:
+          $ref: "#/components/schemas/CommentFrame"
+      required:
+        - discussionId
+        - commentFrame
+    CommentFrame:
+      type: object
+      properties:
+        types:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommentType"
+        paths:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommentPath"
+      required:
+        - types
+        - paths
+    CommentPath:
+      type: object
+      properties:
+        child:
+          $ref: "#/components/schemas/CommentType"
+        parent:
+          $ref: "#/components/schemas/CommentType"
+      required:
+        - child
+        - parent
     DiscussionStatus:
       type: string
       enum:
@@ -52,6 +86,8 @@ components:
           $ref: "#/components/schemas/DiscussionTheme"
         status:
           $ref: "#/components/schemas/DiscussionStatus"
+        dialogueSettings:
+          $ref: "#/components/schemas/DialogueSettings"
       required:
         - id
         - theme
@@ -202,6 +238,39 @@ paths:
       responses:
         "204":
           description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /learning/discussions/{discussionId}/publish:
+    post:
+      description: publish discussion
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: discussionId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                commentFrame:
+                  $ref: "#/components/schemas/CommentFrame"
+              required:
+                - commentFrame
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Discussion"
         default:
           description: default error
           content:

@@ -56,6 +56,12 @@ type Handler interface {
 	//
 	// GET /learning/discussions/{discussionId}
 	LearningDiscussionsDiscussionIdGet(ctx context.Context, params LearningDiscussionsDiscussionIdGetParams) (*Discussion, error)
+	// LearningDiscussionsDiscussionIdPublishPost implements POST /learning/discussions/{discussionId}/publish operation.
+	//
+	// Publish discussion.
+	//
+	// POST /learning/discussions/{discussionId}/publish
+	LearningDiscussionsDiscussionIdPublishPost(ctx context.Context, req *LearningDiscussionsDiscussionIdPublishPostReq, params LearningDiscussionsDiscussionIdPublishPostParams) (*Discussion, error)
 	// LearningDiscussionsDiscussionIdPut implements PUT /learning/discussions/{discussionId} operation.
 	//
 	// Update discussion.

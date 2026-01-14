@@ -20,7 +20,6 @@ type UpdateDiscussionInput struct {
 	ID        string
 	CreatedBy string
 	Theme     string
-	Status    domain.DiscussionStatus
 }
 
 func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscussionInput) (*domain.Discussion, error) {
@@ -33,8 +32,7 @@ func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscu
 	}
 
 	if err := discussion.Update(domain.UpdateParams{
-		Theme:  input.Theme,
-		Status: input.Status,
+		Theme: input.Theme,
 	}); err != nil {
 		return nil, err
 	}

@@ -14,6 +14,7 @@ const (
 	LearningDiscussionsDiscussionIdCommentsPostOperation               OperationName = "LearningDiscussionsDiscussionIdCommentsPost"
 	LearningDiscussionsDiscussionIdDeleteOperation                     OperationName = "LearningDiscussionsDiscussionIdDelete"
 	LearningDiscussionsDiscussionIdGetOperation                        OperationName = "LearningDiscussionsDiscussionIdGet"
+	LearningDiscussionsDiscussionIdPublishPostOperation                OperationName = "LearningDiscussionsDiscussionIdPublishPost"
 	LearningDiscussionsDiscussionIdPutOperation                        OperationName = "LearningDiscussionsDiscussionIdPut"
 	LearningDiscussionsGetOperation                                    OperationName = "LearningDiscussionsGet"
 	LearningDiscussionsPostOperation                                   OperationName = "LearningDiscussionsPost"
