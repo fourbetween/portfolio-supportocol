@@ -95,7 +95,10 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 	discussionModel := r.toDiscussionModel(d)
 
 	stmt := table.Discussions.
-		INSERT(table.Discussions.AllColumns.Except(table.Discussions.UpdatedAt)).
+		INSERT(table.Discussions.AllColumns.Except(
+			table.Discussions.LastCommentedAt,
+			table.Discussions.UpdatedAt,
+		)).
 		MODEL(discussionModel).
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(
