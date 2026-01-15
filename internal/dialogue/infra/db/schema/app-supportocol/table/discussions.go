@@ -17,12 +17,13 @@ type discussionsTable struct {
 	mysql.Table
 
 	// Columns
-	ID        mysql.ColumnString
-	Theme     mysql.ColumnString
-	Status    mysql.ColumnString
-	CreatedBy mysql.ColumnString
-	CreatedAt mysql.ColumnTimestamp
-	UpdatedAt mysql.ColumnTimestamp
+	ID              mysql.ColumnString
+	Theme           mysql.ColumnString
+	Status          mysql.ColumnString
+	LastCommentedAt mysql.ColumnTimestamp
+	CreatedBy       mysql.ColumnString
+	CreatedAt       mysql.ColumnTimestamp
+	UpdatedAt       mysql.ColumnTimestamp
 
 	AllColumns     mysql.ColumnList
 	MutableColumns mysql.ColumnList
@@ -64,27 +65,29 @@ func newDiscussionsTable(schemaName, tableName, alias string) *DiscussionsTable 
 
 func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTable {
 	var (
-		IDColumn        = mysql.StringColumn("id")
-		ThemeColumn     = mysql.StringColumn("theme")
-		StatusColumn    = mysql.StringColumn("status")
-		CreatedByColumn = mysql.StringColumn("created_by")
-		CreatedAtColumn = mysql.TimestampColumn("created_at")
-		UpdatedAtColumn = mysql.TimestampColumn("updated_at")
-		allColumns      = mysql.ColumnList{IDColumn, ThemeColumn, StatusColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns  = mysql.ColumnList{ThemeColumn, StatusColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		defaultColumns  = mysql.ColumnList{StatusColumn, CreatedAtColumn, UpdatedAtColumn}
+		IDColumn              = mysql.StringColumn("id")
+		ThemeColumn           = mysql.StringColumn("theme")
+		StatusColumn          = mysql.StringColumn("status")
+		LastCommentedAtColumn = mysql.TimestampColumn("last_commented_at")
+		CreatedByColumn       = mysql.StringColumn("created_by")
+		CreatedAtColumn       = mysql.TimestampColumn("created_at")
+		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
+		allColumns            = mysql.ColumnList{IDColumn, ThemeColumn, StatusColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns        = mysql.ColumnList{ThemeColumn, StatusColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns        = mysql.ColumnList{StatusColumn, LastCommentedAtColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return discussionsTable{
 		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
-		ID:        IDColumn,
-		Theme:     ThemeColumn,
-		Status:    StatusColumn,
-		CreatedBy: CreatedByColumn,
-		CreatedAt: CreatedAtColumn,
-		UpdatedAt: UpdatedAtColumn,
+		ID:              IDColumn,
+		Theme:           ThemeColumn,
+		Status:          StatusColumn,
+		LastCommentedAt: LastCommentedAtColumn,
+		CreatedBy:       CreatedByColumn,
+		CreatedAt:       CreatedAtColumn,
+		UpdatedAt:       UpdatedAtColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

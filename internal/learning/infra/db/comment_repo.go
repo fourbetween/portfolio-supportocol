@@ -65,22 +65,7 @@ func (r *CommentRepository) Search(ctx context.Context, params domain.SearchComm
 }
 
 func (r *CommentRepository) Save(ctx context.Context, c *domain.Comment) error {
-	model := r.toCommentModel(c)
-
-	stmt := table.Comments.
-		INSERT(table.Comments.AllColumns.Except(table.Comments.UpdatedAt)).
-		MODEL(model).
-		AS_NEW().
-		ON_DUPLICATE_KEY_UPDATE(
-			table.Comments.CommentType.SET(table.Comments.NEW.CommentType),
-			table.Comments.Content.SET(table.Comments.NEW.Content),
-			table.Comments.Status.SET(table.Comments.NEW.Status),
-		)
-
-	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
-		return fmt.Errorf("failed to save comment: %w", err)
-	}
-	return nil
+	return r.BatchSave(ctx, []*domain.Comment{c})
 }
 
 func (r *CommentRepository) BatchSave(ctx context.Context, comments []*domain.Comment) error {
@@ -106,6 +91,20 @@ func (r *CommentRepository) BatchSave(ctx context.Context, comments []*domain.Co
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
 		return fmt.Errorf("failed to batch save comments: %w", err)
 	}
+
+	discussionIDSet := make(map[string]struct{})
+	for _, c := range comments {
+		discussionIDSet[c.DiscussionID()] = struct{}{}
+	}
+	ids := make([]string, 0, len(discussionIDSet))
+	for id := range discussionIDSet {
+		ids = append(ids, id)
+	}
+
+	if err := r.updateDiscussionsLastCommentedAt(ctx, ids...); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -116,6 +115,27 @@ func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
 		return fmt.Errorf("failed to delete comment: %w", err)
+	}
+	return nil
+}
+
+func (r *CommentRepository) updateDiscussionsLastCommentedAt(ctx context.Context, discussionIDs ...string) error {
+	if len(discussionIDs) == 0 {
+		return nil
+	}
+
+	ids := make([]mysql.Expression, len(discussionIDs))
+	for i, id := range discussionIDs {
+		ids[i] = mysql.String(id)
+	}
+
+	stmt := table.Discussions.
+		UPDATE(table.Discussions.LastCommentedAt).
+		SET(mysql.NOW()).
+		WHERE(table.Discussions.ID.IN(ids...))
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to update discussions last_commented_at: %w", err)
 	}
 	return nil
 }
