@@ -32,25 +32,25 @@ type DeleteCommentInput struct {
 }
 
 func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentInput) error {
-	// Verify discussion exists and user has access
-	_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-		ID:        input.DiscussionID,
-		CreatedBy: input.UserID,
-	})
-	if err != nil {
-		return err
-	}
-
-	comment, err := u.commentRepo.Load(ctx, input.ID)
-	if err != nil {
-		return err
-	}
-
-	if err := comment.CheckBelongsTo(input.DiscussionID); err != nil {
-		return err
-	}
-
 	return u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		// Verify discussion exists and user has access
+		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+			ID:        input.DiscussionID,
+			CreatedBy: input.UserID,
+		})
+		if err != nil {
+			return err
+		}
+
+		comment, err := u.commentRepo.Load(ctx, input.ID)
+		if err != nil {
+			return err
+		}
+
+		if err := comment.CheckBelongsTo(input.DiscussionID); err != nil {
+			return err
+		}
+
 		return u.commentRepo.Delete(ctx, comment)
 	})
 }

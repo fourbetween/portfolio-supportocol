@@ -33,30 +33,32 @@ type UpdateCommentStatusInput struct {
 }
 
 func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCommentStatusInput) (*domain.Comment, error) {
-	// Verify discussion exists and user has access
-	_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-		ID:        input.DiscussionID,
-		CreatedBy: input.UserID,
-	})
-	if err != nil {
-		return nil, err
-	}
+	var comment *domain.Comment
+	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		// Verify discussion exists and user has access
+		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+			ID:        input.DiscussionID,
+			CreatedBy: input.UserID,
+		})
+		if err != nil {
+			return err
+		}
 
-	comment, err := u.commentRepo.Load(ctx, input.ID)
-	if err != nil {
-		return nil, err
-	}
+		var loadErr error
+		comment, loadErr = u.commentRepo.Load(ctx, input.ID)
+		if loadErr != nil {
+			return loadErr
+		}
 
-	if err := comment.CheckBelongsTo(input.DiscussionID); err != nil {
-		return nil, err
-	}
+		if err := comment.CheckBelongsTo(input.DiscussionID); err != nil {
+			return err
+		}
 
-	status := domain.CommentStatus(input.Status)
-	if err := comment.UpdateStatus(status); err != nil {
-		return nil, err
-	}
+		status := domain.CommentStatus(input.Status)
+		if err := comment.UpdateStatus(status); err != nil {
+			return err
+		}
 
-	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		if err := u.commentRepo.Save(ctx, comment); err != nil {
 			return err
 		}

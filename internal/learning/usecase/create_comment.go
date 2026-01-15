@@ -37,28 +37,30 @@ type CreateCommentInput struct {
 }
 
 func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentInput) (*domain.Comment, error) {
-	// Verify discussion exists and user has access
-	_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-		ID:        input.DiscussionID,
-		CreatedBy: input.CreatedBy,
-	})
-	if err != nil {
-		return nil, err
-	}
+	var comment *domain.Comment
+	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		// Verify discussion exists and user has access
+		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+			ID:        input.DiscussionID,
+			CreatedBy: input.CreatedBy,
+		})
+		if err != nil {
+			return err
+		}
 
-	comment, err := u.fac.Create(domain.CreateCommentParams{
-		DiscussionID:    input.DiscussionID,
-		ParentCommentID: input.ParentCommentID,
-		CommentTypeID:   input.CommentType,
-		Content:         input.Content,
-		Status:          domain.CommentStatusActive,
-		CreatedBy:       &input.CreatedBy,
-	})
-	if err != nil {
-		return nil, err
-	}
+		var createErr error
+		comment, createErr = u.fac.Create(domain.CreateCommentParams{
+			DiscussionID:    input.DiscussionID,
+			ParentCommentID: input.ParentCommentID,
+			CommentTypeID:   input.CommentType,
+			Content:         input.Content,
+			Status:          domain.CommentStatusActive,
+			CreatedBy:       &input.CreatedBy,
+		})
+		if createErr != nil {
+			return createErr
+		}
 
-	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		if err := u.commentRepo.Save(ctx, comment); err != nil {
 			return err
 		}

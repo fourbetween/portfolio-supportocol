@@ -32,16 +32,18 @@ type CreateDiscussionInput struct {
 }
 
 func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscussionInput) (*domain.Discussion, error) {
-	discussion, err := u.fac.Create(domain.CreateDiscussionParams{
-		Theme:     input.Theme,
-		Status:    input.Status,
-		CreatedBy: input.CreatedBy,
-	})
-	if err != nil {
-		return nil, err
-	}
+	var discussion *domain.Discussion
+	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		var err error
+		discussion, err = u.fac.Create(domain.CreateDiscussionParams{
+			Theme:     input.Theme,
+			Status:    input.Status,
+			CreatedBy: input.CreatedBy,
+		})
+		if err != nil {
+			return err
+		}
 
-	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		if err := u.repo.Save(ctx, discussion); err != nil {
 			return err
 		}

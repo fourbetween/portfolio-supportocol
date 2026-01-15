@@ -26,21 +26,23 @@ type UpdateDiscussionInput struct {
 }
 
 func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscussionInput) (*domain.Discussion, error) {
-	discussion, err := u.repo.Load(ctx, domain.LoadDiscussionParams{
-		ID:        input.ID,
-		CreatedBy: input.CreatedBy,
-	})
-	if err != nil {
-		return nil, err
-	}
+	var discussion *domain.Discussion
+	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		var err error
+		discussion, err = u.repo.Load(ctx, domain.LoadDiscussionParams{
+			ID:        input.ID,
+			CreatedBy: input.CreatedBy,
+		})
+		if err != nil {
+			return err
+		}
 
-	if err := discussion.Update(domain.UpdateParams{
-		Theme: input.Theme,
-	}); err != nil {
-		return nil, err
-	}
+		if err := discussion.Update(domain.UpdateParams{
+			Theme: input.Theme,
+		}); err != nil {
+			return err
+		}
 
-	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		if err := u.repo.Save(ctx, discussion); err != nil {
 			return err
 		}

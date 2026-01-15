@@ -36,26 +36,28 @@ type GenerateCommentInput struct {
 }
 
 func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateCommentInput) ([]*domain.Comment, error) {
-	// Verify discussion exists and user has access
-	_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-		ID:        input.DiscussionID,
-		CreatedBy: input.UserID,
-	})
-	if err != nil {
-		return nil, err
-	}
+	var comments []*domain.Comment
+	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		// Verify discussion exists and user has access
+		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+			ID:        input.DiscussionID,
+			CreatedBy: input.UserID,
+		})
+		if err != nil {
+			return err
+		}
 
-	comments, err := u.generator.Generate(ctx, domain.GenerateCommentParams{
-		DiscussionID:    input.DiscussionID,
-		ParentCommentID: input.ParentCommentID,
-		CommentType:     input.CommentType,
-		UserID:          input.UserID,
-	})
-	if err != nil {
-		return nil, err
-	}
+		var genErr error
+		comments, genErr = u.generator.Generate(ctx, domain.GenerateCommentParams{
+			DiscussionID:    input.DiscussionID,
+			ParentCommentID: input.ParentCommentID,
+			CommentType:     input.CommentType,
+			UserID:          input.UserID,
+		})
+		if genErr != nil {
+			return genErr
+		}
 
-	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		return u.commentRepo.BatchSave(ctx, comments)
 	})
 	if err != nil {

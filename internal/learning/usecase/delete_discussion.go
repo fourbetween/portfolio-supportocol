@@ -25,15 +25,15 @@ type DeleteDiscussionInput struct {
 }
 
 func (u *DeleteDiscussionUsecase) Execute(ctx context.Context, input DeleteDiscussionInput) error {
-	discussion, err := u.repo.Load(ctx, domain.LoadDiscussionParams{
-		ID:        input.ID,
-		CreatedBy: input.CreatedBy,
-	})
-	if err != nil {
-		return err
-	}
-
 	return u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		discussion, err := u.repo.Load(ctx, domain.LoadDiscussionParams{
+			ID:        input.ID,
+			CreatedBy: input.CreatedBy,
+		})
+		if err != nil {
+			return err
+		}
+
 		return u.repo.Delete(ctx, discussion)
 	})
 }
