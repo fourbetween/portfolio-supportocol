@@ -20,6 +20,7 @@ type discussionsTable struct {
 	ID              mysql.ColumnString
 	Theme           mysql.ColumnString
 	Status          mysql.ColumnString
+	CommentsCount   mysql.ColumnInteger
 	LastCommentedAt mysql.ColumnTimestamp
 	CreatedBy       mysql.ColumnString
 	CreatedAt       mysql.ColumnTimestamp
@@ -68,13 +69,14 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		IDColumn              = mysql.StringColumn("id")
 		ThemeColumn           = mysql.StringColumn("theme")
 		StatusColumn          = mysql.StringColumn("status")
+		CommentsCountColumn   = mysql.IntegerColumn("comments_count")
 		LastCommentedAtColumn = mysql.TimestampColumn("last_commented_at")
 		CreatedByColumn       = mysql.StringColumn("created_by")
 		CreatedAtColumn       = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
-		allColumns            = mysql.ColumnList{IDColumn, ThemeColumn, StatusColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns        = mysql.ColumnList{ThemeColumn, StatusColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		defaultColumns        = mysql.ColumnList{StatusColumn, LastCommentedAtColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns            = mysql.ColumnList{IDColumn, ThemeColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns        = mysql.ColumnList{ThemeColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns        = mysql.ColumnList{StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return discussionsTable{
@@ -84,6 +86,7 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		ID:              IDColumn,
 		Theme:           ThemeColumn,
 		Status:          StatusColumn,
+		CommentsCount:   CommentsCountColumn,
 		LastCommentedAt: LastCommentedAtColumn,
 		CreatedBy:       CreatedByColumn,
 		CreatedAt:       CreatedAtColumn,

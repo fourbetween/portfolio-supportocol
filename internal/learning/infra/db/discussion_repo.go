@@ -96,6 +96,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 
 	stmt := table.Discussions.
 		INSERT(table.Discussions.AllColumns.Except(
+			table.Discussions.CommentsCount,
 			table.Discussions.LastCommentedAt,
 			table.Discussions.UpdatedAt,
 		)).
