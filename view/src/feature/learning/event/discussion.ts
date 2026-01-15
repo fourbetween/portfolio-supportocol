@@ -8,6 +8,7 @@ const LEARNING_DISCUSSION_UPDATED_EVENT_NAME = "learning-discussion-updated";
 const LEARNING_DISCUSSION_DELETE_EVENT_NAME = "learning-discussion-delete";
 const LEARNING_DISCUSSION_DELETED_EVENT_NAME = "learning-discussion-deleted";
 const LEARNING_DISCUSSION_SEARCH_EVENT_NAME = "learning-discussion-search";
+const LEARNING_DISCUSSION_PUBLISH_EVENT_NAME = "learning-discussion-publish";
 const LEARNING_DISCUSSION_FORM_OPEN_EVENT_NAME =
   "learning-discussion-form-open";
 const LEARNING_DISCUSSION_FORM_CLOSE_EVENT_NAME =
@@ -53,15 +54,13 @@ export class LearningDiscussionCreatedEvent extends Event {
 
 export class LearningDiscussionUpdateEvent extends Event {
   public readonly theme: string;
-  public readonly status: Discussion["status"];
 
-  constructor(theme: string, status: Discussion["status"]) {
+  constructor(theme: string) {
     super(LEARNING_DISCUSSION_UPDATE_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
     this.theme = theme;
-    this.status = status;
   }
 }
 
@@ -131,6 +130,15 @@ export class LearningDiscussionFormCloseEvent extends Event {
   }
 }
 
+export class LearningDiscussionPublishEvent extends Event {
+  constructor() {
+    super(LEARNING_DISCUSSION_PUBLISH_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+  }
+}
+
 declare global {
   interface HTMLElementEventMap {
     [LEARNING_DISCUSSION_SELECT_EVENT_NAME]: LearningDiscussionSelectEvent;
@@ -141,6 +149,7 @@ declare global {
     [LEARNING_DISCUSSION_DELETE_EVENT_NAME]: LearningDiscussionDeleteEvent;
     [LEARNING_DISCUSSION_DELETED_EVENT_NAME]: LearningDiscussionDeletedEvent;
     [LEARNING_DISCUSSION_SEARCH_EVENT_NAME]: LearningDiscussionSearchEvent;
+    [LEARNING_DISCUSSION_PUBLISH_EVENT_NAME]: LearningDiscussionPublishEvent;
     [LEARNING_DISCUSSION_FORM_OPEN_EVENT_NAME]: LearningDiscussionFormOpenEvent;
     [LEARNING_DISCUSSION_FORM_CLOSE_EVENT_NAME]: LearningDiscussionFormCloseEvent;
   }

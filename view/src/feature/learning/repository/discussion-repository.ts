@@ -1,4 +1,5 @@
 import { client } from "../api/client";
+import type { CommentFrame } from "../model/comment-frame";
 import type { Discussion } from "../model/discussion";
 
 export class DiscussionRepository {
@@ -19,18 +20,31 @@ export class DiscussionRepository {
     return data;
   }
 
-  async update(
-    discussionId: string,
-    theme: string,
-    status: Discussion["status"]
-  ): Promise<Discussion> {
+  async update(discussionId: string, theme: string): Promise<Discussion> {
     const { data, error } = await client.PUT(
       "/learning/discussions/{discussionId}",
       {
         params: {
           path: { discussionId },
         },
-        body: { theme, status },
+        body: { theme },
+      }
+    );
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
+  async publish(
+    discussionId: string,
+    commentFrame: CommentFrame
+  ): Promise<Discussion> {
+    const { data, error } = await client.POST(
+      "/learning/discussions/{discussionId}/publish",
+      {
+        params: {
+          path: { discussionId },
+        },
+        body: { commentFrame },
       }
     );
     if (error) throw new Error(error.message);

@@ -1,5 +1,6 @@
 import { LitElement, type PropertyValues, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
+import { PopupClosedEvent } from "../../event/popup";
 import { baseStyle } from "../../style/base";
 import { buttonStyle } from "../../style/button";
 
@@ -30,6 +31,7 @@ export class Popup extends LitElement {
 
   private _handleClose() {
     this.open = false;
+    this.dispatchEvent(new PopupClosedEvent());
   }
 
   private _handleFooterSlotChange(e: Event) {

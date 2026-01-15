@@ -1,9 +1,7 @@
+import type { components } from "../api/schema";
 import type { Comment } from "./comment";
 
-export type CommentFrame = {
-  types: string[];
-  paths: Array<{ child: string; parent: string }>;
-};
+export type CommentFrame = components["schemas"]["CommentFrame"];
 
 export function deriveCommentFrame(comments: Comment[]): CommentFrame {
   const types = new Set<string>();

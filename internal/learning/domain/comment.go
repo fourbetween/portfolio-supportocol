@@ -70,3 +70,10 @@ func (c *Comment) UpdateStatus(status CommentStatus) error {
 	c.status = status
 	return nil
 }
+
+func (c *Comment) validate() error {
+	if !c.status.IsValid() {
+		return apperr.ErrInvalidArgument
+	}
+	return nil
+}

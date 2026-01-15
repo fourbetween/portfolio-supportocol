@@ -14,21 +14,12 @@ export class LearningDiscussionEditForm extends LitElement {
   @property({ type: String })
   theme = "";
 
-  @property({ type: String })
-  status: "private" | "public" = "private";
-
   @query(".theme-input")
   private inputElement?: HTMLInputElement;
 
-  @query(".status-select")
-  private selectElement?: HTMLSelectElement;
-
   private handleSave() {
     this.dispatchEvent(
-      new LearningDiscussionUpdateEvent(
-        this.inputElement?.value ?? "",
-        (this.selectElement?.value as "private" | "public") ?? "private"
-      )
+      new LearningDiscussionUpdateEvent(this.inputElement?.value ?? "")
     );
   }
 
@@ -39,17 +30,6 @@ export class LearningDiscussionEditForm extends LitElement {
   render() {
     return html`
       <div class="edit-form">
-        <div class="field status-field">
-          <label for="status">Status</label>
-          <select id="status" class="status-select">
-            <option value="private" ?selected=${this.status === "private"}>
-              Private
-            </option>
-            <option value="public" ?selected=${this.status === "public"}>
-              Public
-            </option>
-          </select>
-        </div>
         <div class="field">
           <input
             id="theme"
@@ -113,21 +93,6 @@ export class LearningDiscussionEditForm extends LitElement {
 
       .theme-input {
         width: 100%;
-      }
-
-      .status-select {
-        padding: 4px 12px;
-        font-size: 14px;
-        color: var(--color-fg-default);
-        background-color: var(--color-canvas-default);
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        outline: none;
-      }
-
-      .status-select:focus {
-        border-color: var(--color-accent-fg);
-        box-shadow: inset 0 0 0 1px var(--color-accent-fg);
       }
 
       .actions {

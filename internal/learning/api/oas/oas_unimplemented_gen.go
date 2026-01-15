@@ -85,6 +85,15 @@ func (UnimplementedHandler) LearningDiscussionsDiscussionIdGet(ctx context.Conte
 	return r, ht.ErrNotImplemented
 }
 
+// LearningDiscussionsDiscussionIdPublishPost implements POST /learning/discussions/{discussionId}/publish operation.
+//
+// Publish discussion.
+//
+// POST /learning/discussions/{discussionId}/publish
+func (UnimplementedHandler) LearningDiscussionsDiscussionIdPublishPost(ctx context.Context, req *LearningDiscussionsDiscussionIdPublishPostReq, params LearningDiscussionsDiscussionIdPublishPostParams) (r *Discussion, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // LearningDiscussionsDiscussionIdPut implements PUT /learning/discussions/{discussionId} operation.
 //
 // Update discussion.

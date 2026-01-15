@@ -1,3 +1,4 @@
+-- ユーザー
 CREATE TABLE users (
 	id CHAR(36) NOT NULL,
 	name VARCHAR(255) NOT NULL,
@@ -43,4 +44,14 @@ CREATE TABLE comments (
 	CONSTRAINT comments_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE,
 	CONSTRAINT comments_parent_fk FOREIGN KEY (parent_comment_id) REFERENCES comments(id) ON DELETE CASCADE,
 	CONSTRAINT comments_users_fk FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 対話設定
+CREATE TABLE dialogue_settings (
+	discussion_id CHAR(36) NOT NULL,
+	comment_frame JSON NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (discussion_id),
+	CONSTRAINT dialogue_settings_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -97,6 +97,58 @@ func (s *Comment) SetCreatedAt(val time.Time) {
 
 type CommentContent string
 
+// Ref: #/components/schemas/CommentFrame
+type CommentFrame struct {
+	Types []CommentType `json:"types"`
+	Paths []CommentPath `json:"paths"`
+}
+
+// GetTypes returns the value of Types.
+func (s *CommentFrame) GetTypes() []CommentType {
+	return s.Types
+}
+
+// GetPaths returns the value of Paths.
+func (s *CommentFrame) GetPaths() []CommentPath {
+	return s.Paths
+}
+
+// SetTypes sets the value of Types.
+func (s *CommentFrame) SetTypes(val []CommentType) {
+	s.Types = val
+}
+
+// SetPaths sets the value of Paths.
+func (s *CommentFrame) SetPaths(val []CommentPath) {
+	s.Paths = val
+}
+
+// Ref: #/components/schemas/CommentPath
+type CommentPath struct {
+	Child  CommentType `json:"child"`
+	Parent CommentType `json:"parent"`
+}
+
+// GetChild returns the value of Child.
+func (s *CommentPath) GetChild() CommentType {
+	return s.Child
+}
+
+// GetParent returns the value of Parent.
+func (s *CommentPath) GetParent() CommentType {
+	return s.Parent
+}
+
+// SetChild sets the value of Child.
+func (s *CommentPath) SetChild(val CommentType) {
+	s.Child = val
+}
+
+// SetParent sets the value of Parent.
+func (s *CommentPath) SetParent(val CommentType) {
+	s.Parent = val
+}
+
 // Ref: #/components/schemas/CommentStatus
 type CommentStatus string
 
@@ -166,11 +218,38 @@ func (s *CookieAuth) SetRoles(val []string) {
 	s.Roles = val
 }
 
+// Ref: #/components/schemas/DialogueSettings
+type DialogueSettings struct {
+	DiscussionId ID           `json:"discussionId"`
+	CommentFrame CommentFrame `json:"commentFrame"`
+}
+
+// GetDiscussionId returns the value of DiscussionId.
+func (s *DialogueSettings) GetDiscussionId() ID {
+	return s.DiscussionId
+}
+
+// GetCommentFrame returns the value of CommentFrame.
+func (s *DialogueSettings) GetCommentFrame() CommentFrame {
+	return s.CommentFrame
+}
+
+// SetDiscussionId sets the value of DiscussionId.
+func (s *DialogueSettings) SetDiscussionId(val ID) {
+	s.DiscussionId = val
+}
+
+// SetCommentFrame sets the value of CommentFrame.
+func (s *DialogueSettings) SetCommentFrame(val CommentFrame) {
+	s.CommentFrame = val
+}
+
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID     ID               `json:"id"`
-	Theme  DiscussionTheme  `json:"theme"`
-	Status DiscussionStatus `json:"status"`
+	ID               ID                  `json:"id"`
+	Theme            DiscussionTheme     `json:"theme"`
+	Status           DiscussionStatus    `json:"status"`
+	DialogueSettings OptDialogueSettings `json:"dialogueSettings"`
 }
 
 // GetID returns the value of ID.
@@ -188,6 +267,11 @@ func (s *Discussion) GetStatus() DiscussionStatus {
 	return s.Status
 }
 
+// GetDialogueSettings returns the value of DialogueSettings.
+func (s *Discussion) GetDialogueSettings() OptDialogueSettings {
+	return s.DialogueSettings
+}
+
 // SetID sets the value of ID.
 func (s *Discussion) SetID(val ID) {
 	s.ID = val
@@ -201,6 +285,11 @@ func (s *Discussion) SetTheme(val DiscussionTheme) {
 // SetStatus sets the value of Status.
 func (s *Discussion) SetStatus(val DiscussionStatus) {
 	s.Status = val
+}
+
+// SetDialogueSettings sets the value of DialogueSettings.
+func (s *Discussion) SetDialogueSettings(val OptDialogueSettings) {
+	s.DialogueSettings = val
 }
 
 // Ref: #/components/schemas/DiscussionStatus
@@ -410,9 +499,22 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentC
 // LearningDiscussionsDiscussionIdDeleteNoContent is response for LearningDiscussionsDiscussionIdDelete operation.
 type LearningDiscussionsDiscussionIdDeleteNoContent struct{}
 
+type LearningDiscussionsDiscussionIdPublishPostReq struct {
+	CommentFrame CommentFrame `json:"commentFrame"`
+}
+
+// GetCommentFrame returns the value of CommentFrame.
+func (s *LearningDiscussionsDiscussionIdPublishPostReq) GetCommentFrame() CommentFrame {
+	return s.CommentFrame
+}
+
+// SetCommentFrame sets the value of CommentFrame.
+func (s *LearningDiscussionsDiscussionIdPublishPostReq) SetCommentFrame(val CommentFrame) {
+	s.CommentFrame = val
+}
+
 type LearningDiscussionsDiscussionIdPutReq struct {
-	Theme  DiscussionTheme  `json:"theme"`
-	Status DiscussionStatus `json:"status"`
+	Theme DiscussionTheme `json:"theme"`
 }
 
 // GetTheme returns the value of Theme.
@@ -420,19 +522,9 @@ func (s *LearningDiscussionsDiscussionIdPutReq) GetTheme() DiscussionTheme {
 	return s.Theme
 }
 
-// GetStatus returns the value of Status.
-func (s *LearningDiscussionsDiscussionIdPutReq) GetStatus() DiscussionStatus {
-	return s.Status
-}
-
 // SetTheme sets the value of Theme.
 func (s *LearningDiscussionsDiscussionIdPutReq) SetTheme(val DiscussionTheme) {
 	s.Theme = val
-}
-
-// SetStatus sets the value of Status.
-func (s *LearningDiscussionsDiscussionIdPutReq) SetStatus(val DiscussionStatus) {
-	s.Status = val
 }
 
 type LearningDiscussionsPostReq struct {
@@ -545,6 +637,52 @@ func (o OptDateTime) Get() (v time.Time, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptDateTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDialogueSettings returns new OptDialogueSettings with value set to v.
+func NewOptDialogueSettings(v DialogueSettings) OptDialogueSettings {
+	return OptDialogueSettings{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDialogueSettings is optional DialogueSettings.
+type OptDialogueSettings struct {
+	Value DialogueSettings
+	Set   bool
+}
+
+// IsSet returns true if OptDialogueSettings was set.
+func (o OptDialogueSettings) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDialogueSettings) Reset() {
+	var v DialogueSettings
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDialogueSettings) SetTo(v DialogueSettings) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDialogueSettings) Get() (v DialogueSettings, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDialogueSettings) Or(d DialogueSettings) DialogueSettings {
 	if v, ok := o.Get(); ok {
 		return v
 	}

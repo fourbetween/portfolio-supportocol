@@ -138,7 +138,6 @@ export interface paths {
                 content: {
                     "application/json": {
                         theme: components["schemas"]["DiscussionTheme"];
-                        status: components["schemas"]["DiscussionStatus"];
                     };
                 };
             };
@@ -194,6 +193,59 @@ export interface paths {
                 };
             };
         };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/learning/discussions/{discussionId}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description publish discussion */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    discussionId: components["schemas"]["Id"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        commentFrame: components["schemas"]["CommentFrame"];
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Discussion"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -490,6 +542,18 @@ export interface components {
         Id: string;
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
+        DialogueSettings: {
+            discussionId: components["schemas"]["Id"];
+            commentFrame: components["schemas"]["CommentFrame"];
+        };
+        CommentFrame: {
+            types: components["schemas"]["CommentType"][];
+            paths: components["schemas"]["CommentPath"][];
+        };
+        CommentPath: {
+            child: components["schemas"]["CommentType"];
+            parent: components["schemas"]["CommentType"];
+        };
         /** @enum {string} */
         DiscussionStatus: "private" | "public";
         DiscussionTheme: string;
@@ -499,6 +563,7 @@ export interface components {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             status: components["schemas"]["DiscussionStatus"];
+            dialogueSettings?: components["schemas"]["DialogueSettings"];
         };
         Comment: {
             id: components["schemas"]["Id"];

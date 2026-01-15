@@ -1,6 +1,7 @@
 import { html, render } from "lit";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
+import { POPUP_CLOSED_EVENT_NAME } from "../../event/popup";
 import "./popup";
 
 describe("ui-popup", () => {
@@ -82,5 +83,22 @@ describe("ui-popup", () => {
     await expect
       .element(page.getByRole("dialog", { includeHidden: true }))
       .not.toHaveAttribute("open");
+  });
+
+  it("ダイアログを閉じるとpopup-closedイベントが発火すること", async () => {
+    render(
+      html`
+        <ui-popup .open=${true}></ui-popup>
+      `,
+      container
+    );
+    const popup = container.querySelector("ui-popup")!;
+    const handler = vi.fn();
+    popup.addEventListener(POPUP_CLOSED_EVENT_NAME, handler);
+
+    const closeButton = page.getByRole("button", { name: "Close" });
+    await closeButton.click();
+
+    expect(handler).toHaveBeenCalled();
   });
 });

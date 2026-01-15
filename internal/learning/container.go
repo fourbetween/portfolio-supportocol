@@ -22,6 +22,7 @@ type APIContainer struct {
 	GetDiscussion            *usecase.GetDiscussionUsecase
 	ListDiscussions          *usecase.ListDiscussionsUsecase
 	UpdateDiscussion         *usecase.UpdateDiscussionUsecase
+	PublishDiscussion        *usecase.PublishDiscussionUsecase
 	DeleteDiscussion         *usecase.DeleteDiscussionUsecase
 	CreateComment            *usecase.CreateCommentUsecase
 	ListComments             *usecase.ListCommentsUsecase
@@ -66,6 +67,7 @@ func NewAPIContainer(
 		GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo),
 		ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionRepo),
 		UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo),
+		PublishDiscussion:        usecase.NewPublishDiscussionUsecase(discussionRepo),
 		DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo),
 		CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac),
 		ListComments:             usecase.NewListCommentsUsecase(discussionRepo, commentRepo),

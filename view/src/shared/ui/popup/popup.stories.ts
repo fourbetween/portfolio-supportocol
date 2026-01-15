@@ -6,6 +6,9 @@ import type { Popup } from "./popup";
 const meta: Meta = {
   title: "shared/ui/popup",
   component: "ui-popup",
+  argTypes: {
+    "popup-closed": { action: "popup-closed" },
+  },
   render: (args) => {
     const open = () => {
       const popup = document.querySelector("ui-popup") as Popup;

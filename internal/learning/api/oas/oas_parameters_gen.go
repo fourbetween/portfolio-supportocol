@@ -824,6 +824,78 @@ func decodeLearningDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped 
 	return params, nil
 }
 
+// LearningDiscussionsDiscussionIdPublishPostParams is parameters of POST /learning/discussions/{discussionId}/publish operation.
+type LearningDiscussionsDiscussionIdPublishPostParams struct {
+	DiscussionId ID
+}
+
+func unpackLearningDiscussionsDiscussionIdPublishPostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdPublishPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "discussionId",
+			In:   "path",
+		}
+		params.DiscussionId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeLearningDiscussionsDiscussionIdPublishPostParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdPublishPostParams, _ error) {
+	// Decode path: discussionId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "discussionId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotDiscussionIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "discussionId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // LearningDiscussionsDiscussionIdPutParams is parameters of PUT /learning/discussions/{discussionId} operation.
 type LearningDiscussionsDiscussionIdPutParams struct {
 	DiscussionId ID

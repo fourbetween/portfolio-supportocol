@@ -25,6 +25,7 @@ type HandlerParams struct {
 	GetDiscussion            *usecase.GetDiscussionUsecase
 	ListDiscussions          *usecase.ListDiscussionsUsecase
 	UpdateDiscussion         *usecase.UpdateDiscussionUsecase
+	PublishDiscussion        *usecase.PublishDiscussionUsecase
 	DeleteDiscussion         *usecase.DeleteDiscussionUsecase
 	CreateComment            *usecase.CreateCommentUsecase
 	ListComments             *usecase.ListCommentsUsecase
@@ -97,7 +98,6 @@ func (h *appHandler) LearningDiscussionsDiscussionIdPut(
 		ID:        uuid.UUID(params.DiscussionId).String(),
 		CreatedBy: httpctx.GetUserID(ctx),
 		Theme:     string(req.Theme),
-		Status:    domain.DiscussionStatus(req.Status),
 	})
 	if err != nil {
 		return nil, err
@@ -115,6 +115,40 @@ func (h *appHandler) LearningDiscussionsDiscussionIdDelete(
 		ID:        uuid.UUID(params.DiscussionId).String(),
 		CreatedBy: httpctx.GetUserID(ctx),
 	})
+}
+
+func (h *appHandler) LearningDiscussionsDiscussionIdPublishPost(
+	ctx context.Context,
+	req *oas.LearningDiscussionsDiscussionIdPublishPostReq,
+	params oas.LearningDiscussionsDiscussionIdPublishPostParams,
+) (*oas.Discussion, error) {
+	paths := make([]domain.CommentPath, len(req.CommentFrame.Paths))
+	for i, p := range req.CommentFrame.Paths {
+		paths[i] = domain.CommentPath{
+			Child:  string(p.Child),
+			Parent: string(p.Parent),
+		}
+	}
+
+	types := make([]string, len(req.CommentFrame.Types))
+	for i, t := range req.CommentFrame.Types {
+		types[i] = string(t)
+	}
+
+	item, err := h.con.PublishDiscussion.Execute(ctx, usecase.PublishDiscussionInput{
+		ID:        uuid.UUID(params.DiscussionId).String(),
+		CreatedBy: httpctx.GetUserID(ctx),
+		CommentFrame: domain.CommentFrame{
+			Types: types,
+			Paths: paths,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := h.toOasDiscussion(item)
+	return &res, nil
 }
 
 func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(
@@ -263,11 +297,32 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 }
 
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
-	return oas.Discussion{
+	res := oas.Discussion{
 		ID:     oas.ID(uuid.MustParse(item.ID())),
 		Theme:  oas.DiscussionTheme(item.Theme()),
 		Status: oas.DiscussionStatus(item.Status()),
 	}
+	if ds := item.DialogueSettings(); ds != nil {
+		paths := make([]oas.CommentPath, len(ds.CommentFrame.Paths))
+		for i, p := range ds.CommentFrame.Paths {
+			paths[i] = oas.CommentPath{
+				Child:  oas.CommentType(p.Child),
+				Parent: oas.CommentType(p.Parent),
+			}
+		}
+		oasTypes := make([]oas.CommentType, len(ds.CommentFrame.Types))
+		for i, t := range ds.CommentFrame.Types {
+			oasTypes[i] = oas.CommentType(t)
+		}
+		res.DialogueSettings.SetTo(oas.DialogueSettings{
+			DiscussionId: oas.ID(uuid.MustParse(ds.DiscussionID)),
+			CommentFrame: oas.CommentFrame{
+				Types: oasTypes,
+				Paths: paths,
+			},
+		})
+	}
+	return res
 }
 
 func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {

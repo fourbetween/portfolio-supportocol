@@ -22,9 +22,10 @@ $ARGUMENTS
 
 1. 新しく追加する機能の一部に対して「失敗するテスト」を 1 つだけ書いてください。
 2. 追加したテストをパスするための最低限のコードを実装してください。
-3. `make test-view`ですべてのテストを実行して、パスすることを確認してください。
-4. 追加の機能が Storybook の story として必要な場合は、その story を追加してください。
-5. `make storybook`を実行して Storybook サーバーを起動してください。
+3. 構文エラーがないことを確認してください。
+4. `make test-view`ですべてのテストを実行して、パスすることを確認してください。
+5. 追加の機能が Storybook の story として必要な場合は、その story を追加してください。
+6. `make storybook`を実行して Storybook サーバーを起動してください。
    - すでにポートが使用されている場合は、別のポートで起動してください。（例: `PORT=6007 make storybook`）
-6. chromedevtools/chrome-devtools-mcp を使って Storybook にアクセスし、UI の見た目と動作を確認してください。
-7. 上記のステップを繰り返すことで、必要な機能をすべて実装してください。
+7. chromedevtools/chrome-devtools-mcp を使って Storybook にアクセスし、UI の見た目と動作を確認してください。
+8. 上記のステップを繰り返すことで、必要な機能をすべて実装してください。

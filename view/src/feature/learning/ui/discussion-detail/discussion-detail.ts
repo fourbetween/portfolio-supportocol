@@ -1,11 +1,13 @@
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { LearningDiscussionFormOpenEvent } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-edit-form/discussion-edit-form";
+import "../discussion-publish-popup/discussion-publish-popup";
+import type { DiscussionPublishPopup } from "../discussion-publish-popup/discussion-publish-popup";
 import "../discussion-status-badge/discussion-status-badge";
 
 @customElement("learning-discussion-detail")
@@ -15,6 +17,9 @@ export class LearningDiscussionDetail extends LitElement {
 
   @property({ type: Boolean })
   isEditing = false;
+
+  @query("learning-discussion-publish-popup")
+  private popup!: DiscussionPublishPopup;
 
   render() {
     if (!this.discussion && !this.isEditing) {
@@ -27,6 +32,7 @@ export class LearningDiscussionDetail extends LitElement {
           ${this.isEditing ? this._renderEditForm() : this._renderDisplay()}
         </div>
       </div>
+      <learning-discussion-publish-popup></learning-discussion-publish-popup>
     `;
   }
 
@@ -34,7 +40,6 @@ export class LearningDiscussionDetail extends LitElement {
     return html`
       <learning-discussion-edit-form
         .theme=${this.discussion?.theme ?? ""}
-        .status=${this.discussion?.status ?? "private"}
       ></learning-discussion-edit-form>
     `;
   }
@@ -45,6 +50,8 @@ export class LearningDiscussionDetail extends LitElement {
         <div class="badge-row">
           <learning-discussion-status-badge
             .status=${this.discussion?.status}
+            class=${this.discussion?.status === "private" ? "clickable" : ""}
+            @click=${this._handleBadgeClick}
           ></learning-discussion-status-badge>
         </div>
         <div class="content-row">
@@ -55,6 +62,12 @@ export class LearningDiscussionDetail extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  private _handleBadgeClick() {
+    if (this.discussion?.status === "private") {
+      this.popup.open = true;
+    }
   }
 
   private _handleEditClick() {
@@ -84,6 +97,10 @@ export class LearningDiscussionDetail extends LitElement {
       .display {
         display: flex;
         flex-direction: column;
+      }
+
+      .clickable {
+        cursor: pointer;
       }
 
       .content-row {
