@@ -4,15 +4,18 @@ import (
 	"context"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
 type DeleteDiscussionUsecase struct {
 	repo domain.DiscussionRepository
+	tx   dbtx.Manager
 }
 
-func NewDeleteDiscussionUsecase(repo domain.DiscussionRepository) *DeleteDiscussionUsecase {
+func NewDeleteDiscussionUsecase(repo domain.DiscussionRepository, tx dbtx.Manager) *DeleteDiscussionUsecase {
 	return &DeleteDiscussionUsecase{
 		repo: repo,
+		tx:   tx,
 	}
 }
 
@@ -22,13 +25,15 @@ type DeleteDiscussionInput struct {
 }
 
 func (u *DeleteDiscussionUsecase) Execute(ctx context.Context, input DeleteDiscussionInput) error {
-	discussion, err := u.repo.Load(ctx, domain.LoadDiscussionParams{
-		ID:        input.ID,
-		CreatedBy: input.CreatedBy,
-	})
-	if err != nil {
-		return err
-	}
+	return u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		discussion, err := u.repo.Load(ctx, domain.LoadDiscussionParams{
+			ID:        input.ID,
+			CreatedBy: input.CreatedBy,
+		})
+		if err != nil {
+			return err
+		}
 
-	return u.repo.Delete(ctx, discussion)
+		return u.repo.Delete(ctx, discussion)
+	})
 }

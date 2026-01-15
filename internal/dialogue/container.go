@@ -7,6 +7,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/dialogue/infra/db"
 	"github.com/fourbetween/app-supportocol/internal/dialogue/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
+	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 )
 
@@ -22,6 +23,7 @@ func NewAPIContainer(
 ) (*APIContainer, error) {
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
+	txManager := dbtx.NewManager(dbCon)
 
 	discussionRepo := db.NewDiscussionRepository(dbCon)
 	commentRepo := db.NewCommentRepository(dbCon)
@@ -37,6 +39,6 @@ func NewAPIContainer(
 		GetDiscussion:   usecase.NewGetDiscussionUsecase(discussionRepo),
 		ListDiscussions: usecase.NewListDiscussionsUsecase(discussionRepo),
 		ListComments:    usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
-		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac),
+		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, txManager),
 	}, nil
 }
