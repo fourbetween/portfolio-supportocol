@@ -25,7 +25,7 @@ type HandlerParams struct {
 	GetDiscussion            *usecase.GetDiscussionUsecase
 	ListDiscussions          *usecase.ListDiscussionsUsecase
 	UpdateDiscussion         *usecase.UpdateDiscussionUsecase
-	PublishDiscussion        *usecase.PublishDiscussionUsecase
+	UpdateDiscussionStatus   *usecase.UpdateDiscussionStatusUsecase
 	DeleteDiscussion         *usecase.DeleteDiscussionUsecase
 	CreateComment            *usecase.CreateCommentUsecase
 	ListComments             *usecase.ListCommentsUsecase
@@ -117,31 +117,36 @@ func (h *appHandler) LearningDiscussionsDiscussionIdDelete(
 	})
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdPublishPost(
+func (h *appHandler) LearningDiscussionsDiscussionIdStatusPut(
 	ctx context.Context,
-	req *oas.LearningDiscussionsDiscussionIdPublishPostReq,
-	params oas.LearningDiscussionsDiscussionIdPublishPostParams,
+	req *oas.LearningDiscussionsDiscussionIdStatusPutReq,
+	params oas.LearningDiscussionsDiscussionIdStatusPutParams,
 ) (*oas.Discussion, error) {
-	paths := make([]domain.CommentPath, len(req.CommentFrame.Paths))
-	for i, p := range req.CommentFrame.Paths {
-		paths[i] = domain.CommentPath{
-			Child:  string(p.Child),
-			Parent: string(p.Parent),
+	var commentFrame *domain.CommentFrame
+	if cf, ok := req.CommentFrame.Get(); ok {
+		paths := make([]domain.CommentPath, len(cf.Paths))
+		for i, p := range cf.Paths {
+			paths[i] = domain.CommentPath{
+				Child:  string(p.Child),
+				Parent: string(p.Parent),
+			}
+		}
+
+		types := make([]string, len(cf.Types))
+		for i, t := range cf.Types {
+			types[i] = string(t)
+		}
+		commentFrame = &domain.CommentFrame{
+			Types: types,
+			Paths: paths,
 		}
 	}
 
-	types := make([]string, len(req.CommentFrame.Types))
-	for i, t := range req.CommentFrame.Types {
-		types[i] = string(t)
-	}
-
-	item, err := h.con.PublishDiscussion.Execute(ctx, usecase.PublishDiscussionInput{
-		ID:        uuid.UUID(params.DiscussionId).String(),
-		CreatedBy: httpctx.GetUserID(ctx),
-		CommentFrame: domain.CommentFrame{
-			Types: types,
-			Paths: paths,
-		},
+	item, err := h.con.UpdateDiscussionStatus.Execute(ctx, usecase.UpdateDiscussionStatusInput{
+		ID:           uuid.UUID(params.DiscussionId).String(),
+		CreatedBy:    httpctx.GetUserID(ctx),
+		Status:       string(req.Status),
+		CommentFrame: commentFrame,
 	})
 	if err != nil {
 		return nil, err

@@ -9,6 +9,20 @@ export class DiscussionRepository {
     return data || [];
   }
 
+  async get(discussionId: string): Promise<Discussion> {
+    const { data, error } = await client.GET(
+      "/learning/discussions/{discussionId}",
+      {
+        params: {
+          path: { discussionId },
+        },
+      }
+    );
+    if (error) throw new Error(error.message);
+    if (!data) throw new Error("Discussion not found");
+    return data;
+  }
+
   async create(
     theme: string,
     status: Discussion["status"]
@@ -34,17 +48,18 @@ export class DiscussionRepository {
     return data;
   }
 
-  async publish(
+  async updateStatus(
     discussionId: string,
-    commentFrame: CommentFrame
+    status: Discussion["status"],
+    commentFrame?: CommentFrame
   ): Promise<Discussion> {
-    const { data, error } = await client.POST(
-      "/learning/discussions/{discussionId}/publish",
+    const { data, error } = await client.PUT(
+      "/learning/discussions/{discussionId}/status",
       {
         params: {
           path: { discussionId },
         },
-        body: { commentFrame },
+        body: { status, commentFrame },
       }
     );
     if (error) throw new Error(error.message);

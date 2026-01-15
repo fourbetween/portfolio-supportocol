@@ -97,7 +97,7 @@ func encodeLearningDiscussionsDiscussionIdGetResponse(response *Discussion, w ht
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdPublishPostResponse(response *Discussion, w http.ResponseWriter) error {
+func encodeLearningDiscussionsDiscussionIdPutResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -110,7 +110,7 @@ func encodeLearningDiscussionsDiscussionIdPublishPostResponse(response *Discussi
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdPutResponse(response *Discussion, w http.ResponseWriter) error {
+func encodeLearningDiscussionsDiscussionIdStatusPutResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 

@@ -241,9 +241,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/publish:
-    post:
-      description: publish discussion
+  /learning/discussions/{discussionId}/status:
+    put:
+      description: update discussion status
       parameters:
         - schema:
             $ref: "#/components/schemas/Id"
@@ -257,10 +257,12 @@ paths:
             schema:
               type: object
               properties:
+                status:
+                  $ref: "#/components/schemas/DiscussionStatus"
                 commentFrame:
                   $ref: "#/components/schemas/CommentFrame"
               required:
-                - commentFrame
+                - status
       responses:
         "200":
           description: success response

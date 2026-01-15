@@ -5,6 +5,7 @@ import { baseStyle } from "../../../shared/style/base";
 import {
   LearningDiscussionUpdatedEvent,
   LearningDiscussionUpdateEvent,
+  LearningDiscussionUpdateStatusEvent,
 } from "../event/discussion";
 import { deriveCommentFrame } from "../model/comment-frame";
 import type { Discussion } from "../model/discussion";
@@ -37,17 +38,27 @@ export class LearningDiscussionDetailWidget extends LitElement {
     }
   }
 
-  private async _handlePublishDiscussion() {
+  private async _handleUpdateDiscussionStatus(
+    e: LearningDiscussionUpdateStatusEvent
+  ) {
     if (!this.discussion) return;
     try {
-      const comments = await commentRepository.list(this.discussion.id);
-      const commentFrame = deriveCommentFrame(comments);
-      const data = await discussionRepository.publish(
+      let commentFrame;
+      if (e.status === "public") {
+        const comments = await commentRepository.list(this.discussion.id);
+        commentFrame = deriveCommentFrame(comments);
+      }
+      const data = await discussionRepository.updateStatus(
         this.discussion.id,
+        e.status,
         commentFrame
       );
       this.discussion = data;
-      showToast(this, "Discussion published.", "success", 2000);
+      const message =
+        e.status === "public"
+          ? "Discussion published."
+          : "Discussion unpublished.";
+      showToast(this, message, "success", 2000);
 
       this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
     } catch (error: any) {
@@ -65,7 +76,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
         @learning-discussion-form-open=${() => (this._isEditing = true)}
         @learning-discussion-update=${this._handleUpdateDiscussion}
         @learning-discussion-form-close=${() => (this._isEditing = false)}
-        @learning-discussion-publish=${this._handlePublishDiscussion}
+        @learning-discussion-update-status=${this._handleUpdateDiscussionStatus}
       ></learning-discussion-detail>
     `;
   }

@@ -6,9 +6,9 @@ import { iconStyle } from "../../../../shared/style/icon";
 import { LearningDiscussionFormOpenEvent } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-edit-form/discussion-edit-form";
-import "../discussion-publish-popup/discussion-publish-popup";
-import type { DiscussionPublishPopup } from "../discussion-publish-popup/discussion-publish-popup";
 import "../discussion-status-badge/discussion-status-badge";
+import "../discussion-status-popup/discussion-status-popup";
+import type { DiscussionStatusPopup } from "../discussion-status-popup/discussion-status-popup";
 
 @customElement("learning-discussion-detail")
 export class LearningDiscussionDetail extends LitElement {
@@ -18,8 +18,8 @@ export class LearningDiscussionDetail extends LitElement {
   @property({ type: Boolean })
   isEditing = false;
 
-  @query("learning-discussion-publish-popup")
-  private popup!: DiscussionPublishPopup;
+  @query("learning-discussion-status-popup")
+  private popup!: DiscussionStatusPopup;
 
   render() {
     if (!this.discussion && !this.isEditing) {
@@ -32,7 +32,9 @@ export class LearningDiscussionDetail extends LitElement {
           ${this.isEditing ? this._renderEditForm() : this._renderDisplay()}
         </div>
       </div>
-      <learning-discussion-publish-popup></learning-discussion-publish-popup>
+      <learning-discussion-status-popup
+        .status=${this.discussion?.status ?? "private"}
+      ></learning-discussion-status-popup>
     `;
   }
 
@@ -50,7 +52,7 @@ export class LearningDiscussionDetail extends LitElement {
         <div class="badge-row">
           <learning-discussion-status-badge
             .status=${this.discussion?.status}
-            class=${this.discussion?.status === "private" ? "clickable" : ""}
+            class="clickable"
             @click=${this._handleBadgeClick}
           ></learning-discussion-status-badge>
         </div>
@@ -65,9 +67,7 @@ export class LearningDiscussionDetail extends LitElement {
   }
 
   private _handleBadgeClick() {
-    if (this.discussion?.status === "private") {
-      this.popup.open = true;
-    }
+    this.popup.open = true;
   }
 
   private _handleEditClick() {

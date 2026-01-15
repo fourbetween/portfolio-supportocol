@@ -6,23 +6,24 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 )
 
-type PublishDiscussionUsecase struct {
+type UpdateDiscussionStatusUsecase struct {
 	repo domain.DiscussionRepository
 }
 
-func NewPublishDiscussionUsecase(repo domain.DiscussionRepository) *PublishDiscussionUsecase {
-	return &PublishDiscussionUsecase{
+func NewUpdateDiscussionStatusUsecase(repo domain.DiscussionRepository) *UpdateDiscussionStatusUsecase {
+	return &UpdateDiscussionStatusUsecase{
 		repo: repo,
 	}
 }
 
-type PublishDiscussionInput struct {
+type UpdateDiscussionStatusInput struct {
 	ID           string
 	CreatedBy    string
-	CommentFrame domain.CommentFrame
+	Status       string
+	CommentFrame *domain.CommentFrame
 }
 
-func (u *PublishDiscussionUsecase) Execute(ctx context.Context, input PublishDiscussionInput) (*domain.Discussion, error) {
+func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input UpdateDiscussionStatusInput) (*domain.Discussion, error) {
 	discussion, err := u.repo.Load(ctx, domain.LoadDiscussionParams{
 		ID:        input.ID,
 		CreatedBy: input.CreatedBy,
@@ -31,7 +32,8 @@ func (u *PublishDiscussionUsecase) Execute(ctx context.Context, input PublishDis
 		return nil, err
 	}
 
-	if err := discussion.Publish(domain.PublishParams{
+	if err := discussion.UpdateStatus(domain.UpdateStatusParams{
+		Status:       domain.DiscussionStatus(input.Status),
 		CommentFrame: input.CommentFrame,
 	}); err != nil {
 		return nil, err

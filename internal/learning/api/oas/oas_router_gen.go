@@ -236,9 +236,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						}
 
-					case 'p': // Prefix: "publish"
+					case 's': // Prefix: "status"
 
-						if l := len("publish"); len(elem) >= l && elem[0:l] == "publish" {
+						if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
 							elem = elem[l:]
 						} else {
 							break
@@ -247,12 +247,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						if len(elem) == 0 {
 							// Leaf node.
 							switch r.Method {
-							case "POST":
-								s.handleLearningDiscussionsDiscussionIdPublishPostRequest([1]string{
+							case "PUT":
+								s.handleLearningDiscussionsDiscussionIdStatusPutRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "POST")
+								s.notAllowed(w, r, "PUT")
 							}
 
 							return
@@ -581,9 +581,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 						}
 
-					case 'p': // Prefix: "publish"
+					case 's': // Prefix: "status"
 
-						if l := len("publish"); len(elem) >= l && elem[0:l] == "publish" {
+						if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
 							elem = elem[l:]
 						} else {
 							break
@@ -592,12 +592,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							// Leaf node.
 							switch method {
-							case "POST":
-								r.name = LearningDiscussionsDiscussionIdPublishPostOperation
+							case "PUT":
+								r.name = LearningDiscussionsDiscussionIdStatusPutOperation
 								r.summary = ""
 								r.operationID = ""
 								r.operationGroup = ""
-								r.pathPattern = "/learning/discussions/{discussionId}/publish"
+								r.pathPattern = "/learning/discussions/{discussionId}/status"
 								r.args = args
 								r.count = 1
 								return r, true

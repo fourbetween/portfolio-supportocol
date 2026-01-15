@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
@@ -48,30 +49,38 @@ func (d *Discussion) Update(params UpdateParams) error {
 	return nil
 }
 
-type PublishParams struct {
-	CommentFrame CommentFrame
+type UpdateStatusParams struct {
+	Status       DiscussionStatus
+	CommentFrame *CommentFrame
 }
 
-func (d *Discussion) Publish(params PublishParams) error {
-	if d.status.IsPublic() {
-		return apperr.ErrInvalidArgument
+func (d *Discussion) UpdateStatus(params UpdateStatusParams) error {
+	if !params.Status.IsValid() {
+		return fmt.Errorf("invalid discussion status: %s: %w", params.Status, apperr.ErrInvalidArgument)
 	}
 
-	d.status = DiscussionStatusPublic
-	d.dialogueSettings = &DialogueSettings{
-		DiscussionID: d.id,
-		CommentFrame: params.CommentFrame,
+	if params.Status.IsPublic() {
+		if params.CommentFrame == nil {
+			return fmt.Errorf("comment frame is required for public status: %w", apperr.ErrInvalidArgument)
+		}
+		d.dialogueSettings = &DialogueSettings{
+			DiscussionID: d.id,
+			CommentFrame: *params.CommentFrame,
+		}
+	} else {
+		d.dialogueSettings = nil
 	}
 
+	d.status = params.Status
 	return d.validate()
 }
 
 func (d *Discussion) validate() error {
 	if d.status.IsPublic() && d.dialogueSettings == nil {
-		return apperr.ErrInvalidArgument
+		return fmt.Errorf("dialogue settings is required for public status: %w", apperr.ErrInvalidArgument)
 	}
 	if d.status.IsPrivate() && d.dialogueSettings != nil {
-		return apperr.ErrInvalidArgument
+		return fmt.Errorf("dialogue settings must be nil for private status: %w", apperr.ErrInvalidArgument)
 	}
 	return nil
 }
