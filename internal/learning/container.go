@@ -43,8 +43,6 @@ func NewAPIContainer(
 	clockSrv := clock.NewRealService()
 	txManager := dbtx.NewManager(dbCon)
 
-	discussionRepo := db.NewDiscussionRepository(dbCon)
-	commentRepo := db.NewCommentRepository(dbCon)
 	discussionFac := domain.NewDiscussionFactory(
 		idSrv,
 		clockSrv,
@@ -53,8 +51,8 @@ func NewAPIContainer(
 		idSrv,
 		clockSrv,
 	)
-	discussionRepo.SetFactory(discussionFac)
-	commentRepo.SetFactory(commentFac)
+	discussionRepo := db.NewDiscussionRepository(dbCon, discussionFac)
+	commentRepo := db.NewCommentRepository(dbCon, commentFac)
 
 	queueURL, err := appConf.Get("sqs/comment-generation/url")
 	if err != nil {
@@ -100,8 +98,6 @@ func NewCommentGenerationContainer(
 	clockSrv := clock.NewRealService()
 	txManager := dbtx.NewManager(dbCon)
 
-	discussionRepo := db.NewDiscussionRepository(dbCon)
-	commentRepo := db.NewCommentRepository(dbCon)
 	discussionFac := domain.NewDiscussionFactory(
 		idSrv,
 		clockSrv,
@@ -110,8 +106,8 @@ func NewCommentGenerationContainer(
 		idSrv,
 		clockSrv,
 	)
-	discussionRepo.SetFactory(discussionFac)
-	commentRepo.SetFactory(commentFac)
+	discussionRepo := db.NewDiscussionRepository(dbCon, discussionFac)
+	commentRepo := db.NewCommentRepository(dbCon, commentFac)
 
 	generator, err := ai.NewCommentGenerator(
 		discussionRepo,

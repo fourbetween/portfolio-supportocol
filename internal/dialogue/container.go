@@ -25,15 +25,13 @@ func NewAPIContainer(
 	clockSrv := clock.NewRealService()
 	txManager := dbtx.NewManager(dbCon)
 
-	discussionRepo := db.NewDiscussionRepository(dbCon)
-	commentRepo := db.NewCommentRepository(dbCon)
 	discussionFac := domain.NewDiscussionFactory()
 	commentFac := domain.NewCommentFactory(
 		idSrv,
 		clockSrv,
 	)
-	discussionRepo.SetFactory(discussionFac)
-	commentRepo.SetFactory(commentFac)
+	discussionRepo := db.NewDiscussionRepository(dbCon, discussionFac)
+	commentRepo := db.NewCommentRepository(dbCon, commentFac)
 
 	return &APIContainer{
 		GetDiscussion:   usecase.NewGetDiscussionUsecase(discussionRepo),

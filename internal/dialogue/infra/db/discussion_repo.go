@@ -20,12 +20,8 @@ type DiscussionRepository struct {
 	fac *domain.DiscussionFactory
 }
 
-func NewDiscussionRepository(db *sql.DB) *DiscussionRepository {
-	return &DiscussionRepository{db: db}
-}
-
-func (r *DiscussionRepository) SetFactory(fac *domain.DiscussionFactory) {
-	r.fac = fac
+func NewDiscussionRepository(db *sql.DB, fac *domain.DiscussionFactory) *DiscussionRepository {
+	return &DiscussionRepository{db: db, fac: fac}
 }
 
 func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscussionParams) (*domain.Discussion, error) {

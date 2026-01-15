@@ -122,18 +122,32 @@ func (m *MockCommentRepository) EXPECT() *MockCommentRepositoryMockRecorder {
 	return m.recorder
 }
 
-// BatchSave mocks base method.
-func (m *MockCommentRepository) BatchSave(ctx context.Context, comments []*Comment) error {
+// BatchCreate mocks base method.
+func (m *MockCommentRepository) BatchCreate(ctx context.Context, comments []*Comment) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "BatchSave", ctx, comments)
+	ret := m.ctrl.Call(m, "BatchCreate", ctx, comments)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// BatchSave indicates an expected call of BatchSave.
-func (mr *MockCommentRepositoryMockRecorder) BatchSave(ctx, comments any) *gomock.Call {
+// BatchCreate indicates an expected call of BatchCreate.
+func (mr *MockCommentRepositoryMockRecorder) BatchCreate(ctx, comments any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchSave", reflect.TypeOf((*MockCommentRepository)(nil).BatchSave), ctx, comments)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchCreate", reflect.TypeOf((*MockCommentRepository)(nil).BatchCreate), ctx, comments)
+}
+
+// Create mocks base method.
+func (m *MockCommentRepository) Create(ctx context.Context, comment *Comment) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Create", ctx, comment)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Create indicates an expected call of Create.
+func (mr *MockCommentRepositoryMockRecorder) Create(ctx, comment any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockCommentRepository)(nil).Create), ctx, comment)
 }
 
 // Delete mocks base method.
@@ -195,20 +209,6 @@ func (mr *MockCommentRepositoryMockRecorder) Load(ctx, id any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Load", reflect.TypeOf((*MockCommentRepository)(nil).Load), ctx, id)
 }
 
-// Save mocks base method.
-func (m *MockCommentRepository) Save(ctx context.Context, comment *Comment) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", ctx, comment)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// Save indicates an expected call of Save.
-func (mr *MockCommentRepositoryMockRecorder) Save(ctx, comment any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockCommentRepository)(nil).Save), ctx, comment)
-}
-
 // Search mocks base method.
 func (m *MockCommentRepository) Search(ctx context.Context, params SearchCommentsParams) ([]*Comment, error) {
 	m.ctrl.T.Helper()
@@ -222,4 +222,18 @@ func (m *MockCommentRepository) Search(ctx context.Context, params SearchComment
 func (mr *MockCommentRepositoryMockRecorder) Search(ctx, params any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockCommentRepository)(nil).Search), ctx, params)
+}
+
+// Update mocks base method.
+func (m *MockCommentRepository) Update(ctx context.Context, comment *Comment) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, comment)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Update indicates an expected call of Update.
+func (mr *MockCommentRepositoryMockRecorder) Update(ctx, comment any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockCommentRepository)(nil).Update), ctx, comment)
 }

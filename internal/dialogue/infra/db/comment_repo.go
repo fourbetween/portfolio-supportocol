@@ -20,12 +20,8 @@ type CommentRepository struct {
 	fac *domain.CommentFactory
 }
 
-func NewCommentRepository(db *sql.DB) *CommentRepository {
-	return &CommentRepository{db: db}
-}
-
-func (r *CommentRepository) SetFactory(fac *domain.CommentFactory) {
-	r.fac = fac
+func NewCommentRepository(db *sql.DB, fac *domain.CommentFactory) *CommentRepository {
+	return &CommentRepository{db: db, fac: fac}
 }
 
 func (r *CommentRepository) Load(ctx context.Context, id string) (*domain.Comment, error) {
@@ -64,38 +60,31 @@ func (r *CommentRepository) Search(ctx context.Context, params domain.SearchComm
 	return r.toCommentDomains(dest)
 }
 
-func (r *CommentRepository) Save(ctx context.Context, c *domain.Comment) error {
+func (r *CommentRepository) Create(ctx context.Context, c *domain.Comment) error {
 	model := r.toCommentModel(c)
 
 	stmt := table.Comments.
 		INSERT(table.Comments.AllColumns.Except(table.Comments.UpdatedAt)).
-		MODEL(model).
-		AS_NEW().
-		ON_DUPLICATE_KEY_UPDATE(
-			table.Comments.CommentType.SET(table.Comments.NEW.CommentType),
-			table.Comments.Content.SET(table.Comments.NEW.Content),
-			table.Comments.Status.SET(table.Comments.NEW.Status),
-		)
+		MODEL(model)
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
-		return fmt.Errorf("failed to save comment: %w", err)
+		return fmt.Errorf("failed to create comment: %w", err)
 	}
 
-	if err := r.updateDiscussionLastCommentedAt(ctx, c.DiscussionID()); err != nil {
-		return err
-	}
-
-	return nil
+	return r.updateDiscussionStats(ctx, c.DiscussionID(), 1)
 }
 
-func (r *CommentRepository) updateDiscussionLastCommentedAt(ctx context.Context, discussionID string) error {
+func (r *CommentRepository) updateDiscussionStats(ctx context.Context, discussionID string, delta int) error {
 	stmt := table.Discussions.
-		UPDATE(table.Discussions.LastCommentedAt).
-		SET(mysql.NOW()).
+		UPDATE(table.Discussions.CommentsCount, table.Discussions.LastCommentedAt).
+		SET(
+			table.Discussions.CommentsCount.ADD(mysql.Int(int64(delta))),
+			mysql.NOW(),
+		).
 		WHERE(table.Discussions.ID.EQ(mysql.String(discussionID)))
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
-		return fmt.Errorf("failed to update discussion last_commented_at: %w", err)
+		return fmt.Errorf("failed to update discussion stats: %w", err)
 	}
 	return nil
 }

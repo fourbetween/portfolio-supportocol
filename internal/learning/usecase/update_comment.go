@@ -62,7 +62,7 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 			return err
 		}
 
-		if err := u.commentRepo.Save(ctx, comment); err != nil {
+		if err := u.commentRepo.Update(ctx, comment); err != nil {
 			return err
 		}
 		return nil

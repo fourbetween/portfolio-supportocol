@@ -20,12 +20,8 @@ type CommentRepository struct {
 	fac *domain.CommentFactory
 }
 
-func NewCommentRepository(db *sql.DB) *CommentRepository {
-	return &CommentRepository{db: db}
-}
-
-func (r *CommentRepository) SetFactory(fac *domain.CommentFactory) {
-	r.fac = fac
+func NewCommentRepository(db *sql.DB, fac *domain.CommentFactory) *CommentRepository {
+	return &CommentRepository{db: db, fac: fac}
 }
 
 func (r *CommentRepository) Load(ctx context.Context, id string) (*domain.Comment, error) {
@@ -64,11 +60,37 @@ func (r *CommentRepository) Search(ctx context.Context, params domain.SearchComm
 	return r.toCommentDomains(dest)
 }
 
-func (r *CommentRepository) Save(ctx context.Context, c *domain.Comment) error {
-	return r.BatchSave(ctx, []*domain.Comment{c})
+func (r *CommentRepository) Create(ctx context.Context, c *domain.Comment) error {
+	m := r.toCommentModel(c)
+	stmt := table.Comments.
+		INSERT(table.Comments.AllColumns.Except(table.Comments.UpdatedAt)).
+		MODEL(m)
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to create comment: %w", err)
+	}
+
+	if err := r.incrementCommentsCount(ctx, c.DiscussionID(), 1); err != nil {
+		return err
+	}
+
+	return r.updateDiscussionsLastCommentedAt(ctx, c.DiscussionID())
 }
 
-func (r *CommentRepository) BatchSave(ctx context.Context, comments []*domain.Comment) error {
+func (r *CommentRepository) Update(ctx context.Context, c *domain.Comment) error {
+	m := r.toCommentModel(c)
+	stmt := table.Comments.
+		UPDATE(table.Comments.CommentType, table.Comments.Content, table.Comments.Status).
+		MODEL(m).
+		WHERE(table.Comments.ID.EQ(mysql.String(c.ID())))
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to update comment: %w", err)
+	}
+	return r.updateDiscussionsLastCommentedAt(ctx, c.DiscussionID())
+}
+
+func (r *CommentRepository) BatchCreate(ctx context.Context, comments []*domain.Comment) error {
 	if len(comments) == 0 {
 		return nil
 	}
@@ -80,32 +102,26 @@ func (r *CommentRepository) BatchSave(ctx context.Context, comments []*domain.Co
 
 	stmt := table.Comments.
 		INSERT(table.Comments.AllColumns.Except(table.Comments.UpdatedAt)).
-		MODELS(models).
-		AS_NEW().
-		ON_DUPLICATE_KEY_UPDATE(
-			table.Comments.CommentType.SET(table.Comments.NEW.CommentType),
-			table.Comments.Content.SET(table.Comments.NEW.Content),
-			table.Comments.Status.SET(table.Comments.NEW.Status),
-		)
+		MODELS(models)
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
-		return fmt.Errorf("failed to batch save comments: %w", err)
+		return fmt.Errorf("failed to batch create comments: %w", err)
 	}
 
-	discussionIDSet := make(map[string]struct{})
+	discussionIDSet := make(map[string]int)
 	for _, c := range comments {
-		discussionIDSet[c.DiscussionID()] = struct{}{}
-	}
-	ids := make([]string, 0, len(discussionIDSet))
-	for id := range discussionIDSet {
-		ids = append(ids, id)
+		discussionIDSet[c.DiscussionID()]++
 	}
 
-	if err := r.updateDiscussionsLastCommentedAt(ctx, ids...); err != nil {
-		return err
+	discussionIDs := make([]string, 0, len(discussionIDSet))
+	for id, count := range discussionIDSet {
+		if err := r.incrementCommentsCount(ctx, id, count); err != nil {
+			return err
+		}
+		discussionIDs = append(discussionIDs, id)
 	}
 
-	return nil
+	return r.updateDiscussionsLastCommentedAt(ctx, discussionIDs...)
 }
 
 func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error {
@@ -116,28 +132,8 @@ func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
 		return fmt.Errorf("failed to delete comment: %w", err)
 	}
-	return nil
-}
 
-func (r *CommentRepository) updateDiscussionsLastCommentedAt(ctx context.Context, discussionIDs ...string) error {
-	if len(discussionIDs) == 0 {
-		return nil
-	}
-
-	ids := make([]mysql.Expression, len(discussionIDs))
-	for i, id := range discussionIDs {
-		ids[i] = mysql.String(id)
-	}
-
-	stmt := table.Discussions.
-		UPDATE(table.Discussions.LastCommentedAt).
-		SET(mysql.NOW()).
-		WHERE(table.Discussions.ID.IN(ids...))
-
-	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
-		return fmt.Errorf("failed to update discussions last_commented_at: %w", err)
-	}
-	return nil
+	return r.syncCommentsCount(ctx, c.DiscussionID())
 }
 
 func (r *CommentRepository) GetPathToRoot(ctx context.Context, commentID string) ([]*domain.Comment, error) {
@@ -195,6 +191,55 @@ func (r *CommentRepository) ListChildren(ctx context.Context, params domain.List
 	}
 
 	return r.toCommentDomains(dest)
+}
+
+func (r *CommentRepository) incrementCommentsCount(ctx context.Context, discussionID string, delta int) error {
+	stmt := table.Discussions.
+		UPDATE(table.Discussions.CommentsCount).
+		SET(table.Discussions.CommentsCount.ADD(mysql.Int(int64(delta)))).
+		WHERE(table.Discussions.ID.EQ(mysql.String(discussionID)))
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to increment comments count: %w", err)
+	}
+	return nil
+}
+
+func (r *CommentRepository) syncCommentsCount(ctx context.Context, discussionID string) error {
+	countSubquery := mysql.SELECT(mysql.COUNT(mysql.STAR)).
+		FROM(table.Comments).
+		WHERE(table.Comments.DiscussionID.EQ(mysql.String(discussionID)))
+
+	stmt := table.Discussions.
+		UPDATE(table.Discussions.CommentsCount).
+		SET(countSubquery).
+		WHERE(table.Discussions.ID.EQ(mysql.String(discussionID)))
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to sync comments count: %w", err)
+	}
+	return nil
+}
+
+func (r *CommentRepository) updateDiscussionsLastCommentedAt(ctx context.Context, discussionIDs ...string) error {
+	if len(discussionIDs) == 0 {
+		return nil
+	}
+
+	ids := make([]mysql.Expression, len(discussionIDs))
+	for i, id := range discussionIDs {
+		ids[i] = mysql.String(id)
+	}
+
+	stmt := table.Discussions.
+		UPDATE(table.Discussions.LastCommentedAt).
+		SET(mysql.NOW()).
+		WHERE(table.Discussions.ID.IN(ids...))
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to update discussions last_commented_at: %w", err)
+	}
+	return nil
 }
 
 func (r *CommentRepository) toCommentDomains(rows []model.Comments) ([]*domain.Comment, error) {
