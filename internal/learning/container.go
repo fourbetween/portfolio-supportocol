@@ -11,6 +11,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/queue"
 	"github.com/fourbetween/app-supportocol/internal/learning/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
+	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 	"github.com/fourbetween/pkg-auth/jwt"
 	"github.com/fourbetween/pkg-conf/conf"
@@ -40,6 +41,7 @@ func NewAPIContainer(
 ) (*APIContainer, error) {
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
+	txManager := dbtx.NewManager(dbCon)
 
 	discussionRepo := db.NewDiscussionRepository(dbCon)
 	commentRepo := db.NewCommentRepository(dbCon)
@@ -63,17 +65,17 @@ func NewAPIContainer(
 	)
 
 	return &APIContainer{
-		CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac),
+		CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac, txManager),
 		GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo),
 		ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionRepo),
-		UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo),
-		UpdateDiscussionStatus:   usecase.NewUpdateDiscussionStatusUsecase(discussionRepo),
-		DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo),
-		CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac),
+		UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo, txManager),
+		UpdateDiscussionStatus:   usecase.NewUpdateDiscussionStatusUsecase(discussionRepo, txManager),
+		DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo, txManager),
+		CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, txManager),
 		ListComments:             usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
-		UpdateComment:            usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo),
-		DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo),
-		UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo),
+		UpdateComment:            usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo, txManager),
+		DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo, txManager),
+		UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo, txManager),
 		EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, commentGenerationQueue),
 	}, nil
 }
@@ -96,6 +98,7 @@ func NewCommentGenerationContainer(
 
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
+	txManager := dbtx.NewManager(dbCon)
 
 	discussionRepo := db.NewDiscussionRepository(dbCon)
 	commentRepo := db.NewCommentRepository(dbCon)
@@ -126,7 +129,7 @@ func NewCommentGenerationContainer(
 	}
 
 	return &CommentGenerationContainer{
-		GenerateComment: usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator),
+		GenerateComment: usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator, txManager),
 		Queue:           sqs.NewDefaultQueue[domain.GenerateCommentParams](queueURL, awscfg),
 	}, nil
 }

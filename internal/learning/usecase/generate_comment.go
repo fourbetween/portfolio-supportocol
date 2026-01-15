@@ -4,23 +4,27 @@ import (
 	"context"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
 type GenerateCommentUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
 	generator      domain.CommentGenerator
+	tx             dbtx.Manager
 }
 
 func NewGenerateCommentUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
 	generator domain.CommentGenerator,
+	tx dbtx.Manager,
 ) *GenerateCommentUsecase {
 	return &GenerateCommentUsecase{
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
 		generator:      generator,
+		tx:             tx,
 	}
 }
 
@@ -51,8 +55,12 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 		return nil, err
 	}
 
-	if err := u.commentRepo.BatchSave(ctx, comments); err != nil {
+	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		return u.commentRepo.BatchSave(ctx, comments)
+	})
+	if err != nil {
 		return nil, err
 	}
+
 	return comments, nil
 }

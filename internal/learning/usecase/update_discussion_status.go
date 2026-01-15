@@ -4,15 +4,18 @@ import (
 	"context"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
 type UpdateDiscussionStatusUsecase struct {
 	repo domain.DiscussionRepository
+	tx   dbtx.Manager
 }
 
-func NewUpdateDiscussionStatusUsecase(repo domain.DiscussionRepository) *UpdateDiscussionStatusUsecase {
+func NewUpdateDiscussionStatusUsecase(repo domain.DiscussionRepository, tx dbtx.Manager) *UpdateDiscussionStatusUsecase {
 	return &UpdateDiscussionStatusUsecase{
 		repo: repo,
+		tx:   tx,
 	}
 }
 
@@ -39,7 +42,13 @@ func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input Updat
 		return nil, err
 	}
 
-	if err := u.repo.Save(ctx, discussion); err != nil {
+	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		if err := u.repo.Save(ctx, discussion); err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
 		return nil, err
 	}
 

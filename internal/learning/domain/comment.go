@@ -71,6 +71,13 @@ func (c *Comment) UpdateStatus(status CommentStatus) error {
 	return nil
 }
 
+func (c *Comment) CheckBelongsTo(discussionID string) error {
+	if c.discussionID != discussionID {
+		return apperr.ErrInvalidArgument
+	}
+	return nil
+}
+
 func (c *Comment) validate() error {
 	if !c.status.IsValid() {
 		return apperr.ErrInvalidArgument

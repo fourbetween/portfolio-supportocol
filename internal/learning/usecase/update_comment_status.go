@@ -4,21 +4,24 @@ import (
 	"context"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
-	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
 type UpdateCommentStatusUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
+	tx             dbtx.Manager
 }
 
 func NewUpdateCommentStatusUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
+	tx dbtx.Manager,
 ) *UpdateCommentStatusUsecase {
 	return &UpdateCommentStatusUsecase{
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
+		tx:             tx,
 	}
 }
 
@@ -44,8 +47,8 @@ func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCo
 		return nil, err
 	}
 
-	if comment.DiscussionID() != input.DiscussionID {
-		return nil, apperr.ErrInvalidArgument
+	if err := comment.CheckBelongsTo(input.DiscussionID); err != nil {
+		return nil, err
 	}
 
 	status := domain.CommentStatus(input.Status)
@@ -53,7 +56,13 @@ func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCo
 		return nil, err
 	}
 
-	if err := u.commentRepo.Save(ctx, comment); err != nil {
+	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		if err := u.commentRepo.Save(ctx, comment); err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
 		return nil, err
 	}
 
