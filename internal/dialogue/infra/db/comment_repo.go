@@ -80,6 +80,23 @@ func (r *CommentRepository) Save(ctx context.Context, c *domain.Comment) error {
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
 		return fmt.Errorf("failed to save comment: %w", err)
 	}
+
+	if err := r.updateDiscussionLastCommentedAt(ctx, c.DiscussionID()); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *CommentRepository) updateDiscussionLastCommentedAt(ctx context.Context, discussionID string) error {
+	stmt := table.Discussions.
+		UPDATE(table.Discussions.LastCommentedAt).
+		SET(mysql.NOW()).
+		WHERE(table.Discussions.ID.EQ(mysql.String(discussionID)))
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to update discussion last_commented_at: %w", err)
+	}
 	return nil
 }
 
