@@ -25,12 +25,9 @@ type (
 
 func NewUserRepository(
 	db *sql.DB,
+	fac *domain.Factory,
 ) *UserRepository {
-	return &UserRepository{db: db}
-}
-
-func (r *UserRepository) SetFactory(fac *domain.Factory) {
-	r.fac = fac
+	return &UserRepository{db: db, fac: fac}
 }
 
 func (r *UserRepository) Save(ctx context.Context, u *domain.User) error {

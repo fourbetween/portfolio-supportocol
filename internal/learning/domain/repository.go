@@ -23,8 +23,9 @@ type (
 	CommentRepository interface {
 		Load(ctx context.Context, id string) (*Comment, error)
 		Search(ctx context.Context, params SearchCommentsParams) ([]*Comment, error)
-		Save(ctx context.Context, comment *Comment) error
-		BatchSave(ctx context.Context, comments []*Comment) error
+		Create(ctx context.Context, comment *Comment) error
+		Update(ctx context.Context, comment *Comment) error
+		BatchCreate(ctx context.Context, comments []*Comment) error
 		Delete(ctx context.Context, comment *Comment) error
 		GetPathToRoot(ctx context.Context, commentID string) ([]*Comment, error)
 		ListChildren(ctx context.Context, params ListCommentChildrenParams) ([]*Comment, error)

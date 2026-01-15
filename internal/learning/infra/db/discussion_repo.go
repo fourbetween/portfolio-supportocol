@@ -21,12 +21,8 @@ type DiscussionRepository struct {
 	fac *domain.DiscussionFactory
 }
 
-func NewDiscussionRepository(db *sql.DB) *DiscussionRepository {
-	return &DiscussionRepository{db: db}
-}
-
-func (r *DiscussionRepository) SetFactory(fac *domain.DiscussionFactory) {
-	r.fac = fac
+func NewDiscussionRepository(db *sql.DB, fac *domain.DiscussionFactory) *DiscussionRepository {
+	return &DiscussionRepository{db: db, fac: fac}
 }
 
 type discussionWithSettings struct {
@@ -96,6 +92,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 
 	stmt := table.Discussions.
 		INSERT(table.Discussions.AllColumns.Except(
+			table.Discussions.CommentsCount,
 			table.Discussions.LastCommentedAt,
 			table.Discussions.UpdatedAt,
 		)).

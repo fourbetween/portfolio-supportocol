@@ -20,7 +20,7 @@ type (
 	CommentRepository interface {
 		Load(ctx context.Context, id string) (*Comment, error)
 		Search(ctx context.Context, params SearchCommentsParams) ([]*Comment, error)
-		Save(ctx context.Context, comment *Comment) error
+		Create(ctx context.Context, comment *Comment) error
 	}
 
 	SearchCommentsParams struct {

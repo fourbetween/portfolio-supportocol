@@ -25,8 +25,7 @@ func NewAPIContainer(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (*
 	}
 
 	userFac := domain.NewFactory()
-	userRepo := db.NewUserRepository(dbCon)
-	userRepo.SetFactory(userFac)
+	userRepo := db.NewUserRepository(dbCon, userFac)
 
 	buildUser := func(p auth.BuildParams) *domain.User {
 		return userFac.Reconstruct(domain.ReconstructParams{

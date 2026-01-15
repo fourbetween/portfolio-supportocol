@@ -58,7 +58,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			return createErr
 		}
 
-		if err := u.commentRepo.Save(ctx, comment); err != nil {
+		if err := u.commentRepo.Create(ctx, comment); err != nil {
 			return err
 		}
 		return nil
