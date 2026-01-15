@@ -107,7 +107,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 		return fmt.Errorf("failed to save discussion: %w", err)
 	}
 
-	if d.DialogueSettings() != nil {
+	if d.Status() == domain.DiscussionStatusPublic {
 		settingsModel, err := r.toDialogueSettingsModel(d.DialogueSettings())
 		if err != nil {
 			return fmt.Errorf("failed to convert dialogue settings to model: %w", err)
@@ -123,6 +123,14 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 
 		if _, err := settingsStmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
 			return fmt.Errorf("failed to save dialogue settings: %w", err)
+		}
+	} else {
+		deleteStmt := table.DialogueSettings.
+			DELETE().
+			WHERE(table.DialogueSettings.DiscussionID.EQ(mysql.String(d.ID())))
+
+		if _, err := deleteStmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+			return fmt.Errorf("failed to delete dialogue settings: %w", err)
 		}
 	}
 

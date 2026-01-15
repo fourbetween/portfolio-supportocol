@@ -499,20 +499,6 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentC
 // LearningDiscussionsDiscussionIdDeleteNoContent is response for LearningDiscussionsDiscussionIdDelete operation.
 type LearningDiscussionsDiscussionIdDeleteNoContent struct{}
 
-type LearningDiscussionsDiscussionIdPublishPostReq struct {
-	CommentFrame CommentFrame `json:"commentFrame"`
-}
-
-// GetCommentFrame returns the value of CommentFrame.
-func (s *LearningDiscussionsDiscussionIdPublishPostReq) GetCommentFrame() CommentFrame {
-	return s.CommentFrame
-}
-
-// SetCommentFrame sets the value of CommentFrame.
-func (s *LearningDiscussionsDiscussionIdPublishPostReq) SetCommentFrame(val CommentFrame) {
-	s.CommentFrame = val
-}
-
 type LearningDiscussionsDiscussionIdPutReq struct {
 	Theme DiscussionTheme `json:"theme"`
 }
@@ -525,6 +511,31 @@ func (s *LearningDiscussionsDiscussionIdPutReq) GetTheme() DiscussionTheme {
 // SetTheme sets the value of Theme.
 func (s *LearningDiscussionsDiscussionIdPutReq) SetTheme(val DiscussionTheme) {
 	s.Theme = val
+}
+
+type LearningDiscussionsDiscussionIdStatusPutReq struct {
+	Status       DiscussionStatus `json:"status"`
+	CommentFrame OptCommentFrame  `json:"commentFrame"`
+}
+
+// GetStatus returns the value of Status.
+func (s *LearningDiscussionsDiscussionIdStatusPutReq) GetStatus() DiscussionStatus {
+	return s.Status
+}
+
+// GetCommentFrame returns the value of CommentFrame.
+func (s *LearningDiscussionsDiscussionIdStatusPutReq) GetCommentFrame() OptCommentFrame {
+	return s.CommentFrame
+}
+
+// SetStatus sets the value of Status.
+func (s *LearningDiscussionsDiscussionIdStatusPutReq) SetStatus(val DiscussionStatus) {
+	s.Status = val
+}
+
+// SetCommentFrame sets the value of CommentFrame.
+func (s *LearningDiscussionsDiscussionIdStatusPutReq) SetCommentFrame(val OptCommentFrame) {
+	s.CommentFrame = val
 }
 
 type LearningDiscussionsPostReq struct {
@@ -591,6 +602,52 @@ func (o NilID) Get() (v ID, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o NilID) Or(d ID) ID {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCommentFrame returns new OptCommentFrame with value set to v.
+func NewOptCommentFrame(v CommentFrame) OptCommentFrame {
+	return OptCommentFrame{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCommentFrame is optional CommentFrame.
+type OptCommentFrame struct {
+	Value CommentFrame
+	Set   bool
+}
+
+// IsSet returns true if OptCommentFrame was set.
+func (o OptCommentFrame) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCommentFrame) Reset() {
+	var v CommentFrame
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCommentFrame) SetTo(v CommentFrame) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCommentFrame) Get() (v CommentFrame, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCommentFrame) Or(d CommentFrame) CommentFrame {
 	if v, ok := o.Get(); ok {
 		return v
 	}

@@ -198,7 +198,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/learning/discussions/{discussionId}/publish": {
+    "/learning/discussions/{discussionId}/status": {
         parameters: {
             query?: never;
             header?: never;
@@ -206,9 +206,8 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put?: never;
-        /** @description publish discussion */
-        post: {
+        /** @description update discussion status */
+        put: {
             parameters: {
                 query?: never;
                 header?: never;
@@ -220,7 +219,8 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        commentFrame: components["schemas"]["CommentFrame"];
+                        status: components["schemas"]["DiscussionStatus"];
+                        commentFrame?: components["schemas"]["CommentFrame"];
                     };
                 };
             };
@@ -245,6 +245,7 @@ export interface paths {
                 };
             };
         };
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
