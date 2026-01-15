@@ -6,7 +6,9 @@ import {
   LearningDiscussionUpdatedEvent,
   LearningDiscussionUpdateEvent,
 } from "../event/discussion";
+import { deriveCommentFrame } from "../model/comment-frame";
 import type { Discussion } from "../model/discussion";
+import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-detail/discussion-detail";
 
@@ -35,6 +37,24 @@ export class LearningDiscussionDetailWidget extends LitElement {
     }
   }
 
+  private async _handlePublishDiscussion() {
+    if (!this.discussion) return;
+    try {
+      const comments = await commentRepository.list(this.discussion.id);
+      const commentFrame = deriveCommentFrame(comments);
+      const data = await discussionRepository.publish(
+        this.discussion.id,
+        commentFrame
+      );
+      this.discussion = data;
+      showToast(this, "Discussion published.", "success", 2000);
+
+      this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
   render() {
     if (!this.discussion) return nothing;
 
@@ -45,6 +65,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
         @learning-discussion-form-open=${() => (this._isEditing = true)}
         @learning-discussion-update=${this._handleUpdateDiscussion}
         @learning-discussion-form-close=${() => (this._isEditing = false)}
+        @learning-discussion-publish=${this._handlePublishDiscussion}
       ></learning-discussion-detail>
     `;
   }
