@@ -22,9 +22,6 @@ export class IdentityAuthWidget extends LitElement {
   @state()
   private errorMessage = "";
 
-  @state()
-  private isOpen = false;
-
   private googleAuth?: GoogleAuthService;
 
   @query("identity-auth-popup")
@@ -48,25 +45,28 @@ export class IdentityAuthWidget extends LitElement {
   }
 
   protected async updated(changedProperties: PropertyValues) {
-    if (
-      changedProperties.has("isOpen") ||
-      changedProperties.has("currentMode")
-    ) {
-      if (this.isOpen && this.popup) {
+    if (changedProperties.has("currentMode")) {
+      if (this.popup?.open) {
         await this.popup.updateComplete;
         this.renderGoogleButton();
       }
     }
   }
 
-  open() {
+  async open() {
     this.errorMessage = "";
-    this.isOpen = true;
+    if (this.popup) {
+      this.popup.open = true;
+      await this.popup.updateComplete;
+      this.renderGoogleButton();
+    }
   }
 
   close() {
     this.errorMessage = "";
-    this.isOpen = false;
+    if (this.popup) {
+      this.popup.open = false;
+    }
   }
 
   private handleOpenAuthPopup = () => {
@@ -129,11 +129,10 @@ export class IdentityAuthWidget extends LitElement {
   render() {
     return html`
       <identity-auth-popup
-        .open=${this.isOpen}
         .mode=${this.currentMode}
         .errorMessage=${this.errorMessage}
         .loading=${this.isLoading}
-        @close=${() => (this.isOpen = false)}
+        @close=${() => this.close()}
         @identity-auth-mode-switch=${(e: IdentityAuthModeSwitchEvent) =>
           this.handleSwitchMode(e.mode)}
         @identity-auth-login=${(e: IdentityAuthLoginEvent) =>

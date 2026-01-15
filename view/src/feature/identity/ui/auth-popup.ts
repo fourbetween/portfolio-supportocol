@@ -166,7 +166,7 @@ export class IdentityAuthPopup extends LitElement {
 
   render() {
     return html`
-      <ui-popup .open=${this.open} @close=${this._handlePopupClose}>
+      <ui-popup .open=${this.open} @popup-closed=${this._handlePopupClose}>
         <span slot="header" class="popup-title">
           ${this.mode === "login" ? "Log in" : "Sign up"}
         </span>

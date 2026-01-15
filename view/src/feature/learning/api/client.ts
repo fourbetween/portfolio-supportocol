@@ -1,5 +1,5 @@
 import createClient, { type Middleware } from "openapi-fetch";
-import { authService } from "../../identity/model/auth";
+import { authService } from "../../identity/model/auth-service";
 import type { paths } from "./schema";
 
 export const client = createClient<paths>({

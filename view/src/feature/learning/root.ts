@@ -2,7 +2,7 @@ import { Routes } from "@lit-labs/router";
 import { LitElement, html, nothing } from "lit";
 import { customElement } from "lit/decorators.js";
 import { pathInFeature, paths } from "../../app/paths";
-import { authService } from "../identity/model/auth";
+import { authService } from "../identity/model/auth-service";
 
 @customElement("learning-root")
 export class LearningRoot extends LitElement {
