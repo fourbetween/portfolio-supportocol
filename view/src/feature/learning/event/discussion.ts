@@ -16,14 +16,14 @@ const LEARNING_DISCUSSION_FORM_CLOSE_EVENT_NAME =
   "learning-discussion-form-close";
 
 export class LearningDiscussionSelectEvent extends Event {
-  public readonly discussion: Discussion;
+  public readonly discussionId: string;
 
-  constructor(discussion: Discussion) {
+  constructor(discussionId: string) {
     super(LEARNING_DISCUSSION_SELECT_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
-    this.discussion = discussion;
+    this.discussionId = discussionId;
   }
 }
 
@@ -78,26 +78,26 @@ export class LearningDiscussionUpdatedEvent extends Event {
 }
 
 export class LearningDiscussionDeleteEvent extends Event {
-  public readonly discussion: Discussion;
+  public readonly discussionId: string;
 
-  constructor(discussion: Discussion) {
+  constructor(discussionId: string) {
     super(LEARNING_DISCUSSION_DELETE_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
-    this.discussion = discussion;
+    this.discussionId = discussionId;
   }
 }
 
 export class LearningDiscussionDeletedEvent extends Event {
-  public readonly discussion: Discussion;
+  public readonly discussionId: string;
 
-  constructor(discussion: Discussion) {
+  constructor(discussionId: string) {
     super(LEARNING_DISCUSSION_DELETED_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
-    this.discussion = discussion;
+    this.discussionId = discussionId;
   }
 }
 

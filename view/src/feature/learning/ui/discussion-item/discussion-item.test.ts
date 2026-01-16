@@ -23,13 +23,14 @@ describe("learning-discussion-item", () => {
     id: "1",
     theme: "Test Theme",
     status: "public" as const,
+    lastCommentedAt: "2023-01-01T00:00:00Z",
   };
 
   it("テーマが表示されること", async () => {
     render(
       html`
         <learning-discussion-item
-          .discussion=${discussion}
+          .summary=${discussion}
         ></learning-discussion-item>
       `,
       container
@@ -43,7 +44,7 @@ describe("learning-discussion-item", () => {
     render(
       html`
         <learning-discussion-item
-          .discussion=${discussion}
+          .summary=${discussion}
           @learning-discussion-select=${(e: Event) => selectHandler(e)}
         ></learning-discussion-item>
       `,
@@ -52,9 +53,10 @@ describe("learning-discussion-item", () => {
 
     await page.getByText("Test Theme").click();
     expect(selectHandler).toHaveBeenCalled();
-    const event = selectHandler.mock.calls[0][0] as LearningDiscussionSelectEvent;
+    const event = selectHandler.mock
+      .calls[0][0] as LearningDiscussionSelectEvent;
     expect(event.type).toBe("learning-discussion-select");
-    expect(event.discussion).toEqual(discussion);
+    expect(event.discussionId).toBe(discussion.id);
   });
 
   it("削除ボタンをクリックすると削除リクエストイベントが発火すること", async () => {
@@ -62,7 +64,7 @@ describe("learning-discussion-item", () => {
     render(
       html`
         <learning-discussion-item
-          .discussion=${discussion}
+          .summary=${discussion}
           @learning-discussion-delete=${(e: Event) => deleteHandler(e)}
         ></learning-discussion-item>
       `,
@@ -71,16 +73,17 @@ describe("learning-discussion-item", () => {
 
     await page.getByRole("button", { name: "delete" }).click();
     expect(deleteHandler).toHaveBeenCalled();
-    const event = deleteHandler.mock.calls[0][0] as LearningDiscussionDeleteEvent;
+    const event = deleteHandler.mock
+      .calls[0][0] as LearningDiscussionDeleteEvent;
     expect(event.type).toBe("learning-discussion-delete");
-    expect(event.discussion).toEqual(discussion);
+    expect(event.discussionId).toBe(discussion.id);
   });
 
   it("ステータスとテーマが表示されること", async () => {
     render(
       html`
         <learning-discussion-item
-          .discussion=${discussion}
+          .summary=${discussion}
         ></learning-discussion-item>
       `,
       container
@@ -94,7 +97,7 @@ describe("learning-discussion-item", () => {
     render(
       html`
         <learning-discussion-item
-          .discussion=${discussion}
+          .summary=${discussion}
         ></learning-discussion-item>
       `,
       container

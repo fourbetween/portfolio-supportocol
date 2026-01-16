@@ -334,6 +334,54 @@ func (s *DiscussionStatus) UnmarshalText(data []byte) error {
 	}
 }
 
+// Ref: #/components/schemas/DiscussionSummary
+type DiscussionSummary struct {
+	ID              ID               `json:"id"`
+	Theme           DiscussionTheme  `json:"theme"`
+	Status          DiscussionStatus `json:"status"`
+	LastCommentedAt time.Time        `json:"lastCommentedAt"`
+}
+
+// GetID returns the value of ID.
+func (s *DiscussionSummary) GetID() ID {
+	return s.ID
+}
+
+// GetTheme returns the value of Theme.
+func (s *DiscussionSummary) GetTheme() DiscussionTheme {
+	return s.Theme
+}
+
+// GetStatus returns the value of Status.
+func (s *DiscussionSummary) GetStatus() DiscussionStatus {
+	return s.Status
+}
+
+// GetLastCommentedAt returns the value of LastCommentedAt.
+func (s *DiscussionSummary) GetLastCommentedAt() time.Time {
+	return s.LastCommentedAt
+}
+
+// SetID sets the value of ID.
+func (s *DiscussionSummary) SetID(val ID) {
+	s.ID = val
+}
+
+// SetTheme sets the value of Theme.
+func (s *DiscussionSummary) SetTheme(val DiscussionTheme) {
+	s.Theme = val
+}
+
+// SetStatus sets the value of Status.
+func (s *DiscussionSummary) SetStatus(val DiscussionStatus) {
+	s.Status = val
+}
+
+// SetLastCommentedAt sets the value of LastCommentedAt.
+func (s *DiscussionSummary) SetLastCommentedAt(val time.Time) {
+	s.LastCommentedAt = val
+}
+
 type DiscussionTheme string
 
 // Ref: #/components/schemas/Error

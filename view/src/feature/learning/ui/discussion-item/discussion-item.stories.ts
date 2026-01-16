@@ -9,7 +9,7 @@ const meta: Meta<LearningDiscussionItem> = {
   render: (args) =>
     html`
       <learning-discussion-item
-        .discussion=${args.discussion}
+        .summary=${args.summary}
       ></learning-discussion-item>
     `,
 };
@@ -19,10 +19,11 @@ type Story = StoryObj<LearningDiscussionItem>;
 
 export const Default: Story = {
   args: {
-    discussion: {
+    summary: {
       id: "1",
       theme: "Sample Discussion Theme",
       status: "public",
+      lastCommentedAt: "2023-01-01T00:00:00Z",
     },
   },
 };

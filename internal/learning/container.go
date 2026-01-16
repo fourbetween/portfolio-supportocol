@@ -53,6 +53,7 @@ func NewAPIContainer(
 	)
 	discussionRepo := db.NewDiscussionRepository(dbCon, discussionFac)
 	commentRepo := db.NewCommentRepository(dbCon, commentFac)
+	discussionQS := db.NewDiscussionQueryService(dbCon)
 
 	queueURL, err := appConf.Get("sqs/comment-generation/url")
 	if err != nil {
@@ -65,7 +66,7 @@ func NewAPIContainer(
 	return &APIContainer{
 		CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac, txManager),
 		GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo),
-		ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionRepo),
+		ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionQS),
 		UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo, txManager),
 		UpdateDiscussionStatus:   usecase.NewUpdateDiscussionStatusUsecase(discussionRepo, txManager),
 		DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo, txManager),

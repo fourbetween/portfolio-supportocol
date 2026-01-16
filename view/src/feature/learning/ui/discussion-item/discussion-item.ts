@@ -7,25 +7,25 @@ import {
   LearningDiscussionDeleteEvent,
   LearningDiscussionSelectEvent,
 } from "../../event/discussion";
-import type { Discussion } from "../../model/discussion";
+import type { DiscussionSummary } from "../../model/discussion";
 import "../discussion-status-badge/discussion-status-badge";
 
 @customElement("learning-discussion-item")
 export class LearningDiscussionItem extends LitElement {
   @property({ type: Object })
-  discussion!: Discussion;
+  summary!: DiscussionSummary;
 
   private handleSelect() {
-    this.dispatchEvent(new LearningDiscussionSelectEvent(this.discussion));
+    this.dispatchEvent(new LearningDiscussionSelectEvent(this.summary.id));
   }
 
   private handleDelete(e: Event) {
     e.stopPropagation();
-    this.dispatchEvent(new LearningDiscussionDeleteEvent(this.discussion));
+    this.dispatchEvent(new LearningDiscussionDeleteEvent(this.summary.id));
   }
 
   render() {
-    const { theme, status } = this.discussion;
+    const { theme, status } = this.summary;
     return html`
       <div class="item hover-container" @click=${this.handleSelect}>
         <div class="info">

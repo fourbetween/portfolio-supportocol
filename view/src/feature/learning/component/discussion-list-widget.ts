@@ -9,7 +9,7 @@ import {
   LearningDiscussionDeleteEvent,
   LearningDiscussionSearchEvent,
 } from "../event/discussion";
-import type { Discussion } from "../model/discussion";
+import type { DiscussionSummary } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-add-form/discussion-add-form";
 import "../ui/discussion-list/discussion-list";
@@ -18,7 +18,7 @@ import "../ui/discussion-search-bar/discussion-search-bar";
 @customElement("learning-discussion-list-widget")
 export class LearningDiscussionListWidget extends LitElement {
   @property({ type: Array })
-  discussions: Discussion[] = [];
+  summaries: DiscussionSummary[] = [];
 
   @state()
   private _searchQuery = "";
@@ -37,21 +37,25 @@ export class LearningDiscussionListWidget extends LitElement {
   }
 
   private async _handleDeleteDiscussion(e: LearningDiscussionDeleteEvent) {
-    const { discussion } = e;
+    const { discussionId } = e;
+    const discussion = this.summaries.find((d) => d.id === discussionId);
+    if (!discussion) {
+      return;
+    }
     if (!confirm(`Are you sure you want to delete "${discussion.theme}"?`)) {
       return;
     }
     try {
-      await discussionRepository.delete(discussion.id);
-      this.dispatchEvent(new LearningDiscussionDeletedEvent(discussion));
+      await discussionRepository.delete(discussionId);
+      this.dispatchEvent(new LearningDiscussionDeletedEvent(discussionId));
       showToast(this, "Succeeded.", "success", 2000);
     } catch (error: any) {
       showToast(this, error.message, "error");
     }
   }
 
-  private get _filteredDiscussions() {
-    return this.discussions.filter((d) =>
+  private get _filteredSummaries() {
+    return this.summaries.filter((d) =>
       d.theme.toLowerCase().includes(this._searchQuery.toLowerCase())
     );
   }
@@ -72,7 +76,7 @@ export class LearningDiscussionListWidget extends LitElement {
         </div>
         <div class="content">
           <learning-discussion-list
-            .discussions=${this._filteredDiscussions}
+            .summaries=${this._filteredSummaries}
             @learning-discussion-delete=${this._handleDeleteDiscussion}
           ></learning-discussion-list>
         </div>
