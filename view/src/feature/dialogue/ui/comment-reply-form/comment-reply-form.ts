@@ -17,16 +17,28 @@ export class DialogueCommentReplyForm extends LitElement {
   @property({ type: Object })
   frame?: CommentFrame;
 
+  @property({ type: String })
+  parentCommentType?: string;
+
   @state()
   private selectedType = "";
 
   @state()
   private replyContent = "";
 
+  private get allowedTypes() {
+    if (!this.frame) return [];
+    if (!this.parentCommentType) return this.frame.types;
+    return this.frame.paths
+      .filter((p) => p.parent === this.parentCommentType)
+      .map((p) => p.child);
+  }
+
   connectedCallback() {
     super.connectedCallback();
-    if (this.frame?.types.length) {
-      this.selectedType = this.frame.types[0];
+    const types = this.allowedTypes;
+    if (types.length) {
+      this.selectedType = types[0];
     }
   }
 
@@ -60,7 +72,7 @@ export class DialogueCommentReplyForm extends LitElement {
     return html`
       <div class="reply-form">
         <select .value=${this.selectedType} @change=${this.handleTypeChange}>
-          ${this.frame?.types.map(
+          ${this.allowedTypes.map(
             (type) =>
               html`
                 <option value=${type} ?selected=${this.selectedType === type}>

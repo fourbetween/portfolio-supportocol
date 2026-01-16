@@ -76,8 +76,16 @@ func (d *Discussion) UpdateStatus(params UpdateStatusParams) error {
 }
 
 func (d *Discussion) validate() error {
-	if d.status.IsPublic() && d.dialogueSettings == nil {
-		return fmt.Errorf("dialogue settings is required for public status: %w", apperr.ErrInvalidArgument)
+	if d.status.IsPublic() {
+		if d.dialogueSettings == nil {
+			return fmt.Errorf("dialogue settings is required for public status: %w", apperr.ErrInvalidArgument)
+		}
+		if err := d.dialogueSettings.Validate(); err != nil {
+			return err
+		}
+		if d.dialogueSettings.DiscussionID != d.id {
+			return fmt.Errorf("discussion id mismatch: %w", apperr.ErrInvalidArgument)
+		}
 	}
 	if d.status.IsPrivate() && d.dialogueSettings != nil {
 		return fmt.Errorf("dialogue settings must be nil for private status: %w", apperr.ErrInvalidArgument)

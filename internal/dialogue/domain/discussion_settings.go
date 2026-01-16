@@ -1,5 +1,12 @@
 package domain
 
+import (
+	"fmt"
+	"slices"
+
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+)
+
 type DiscussionSettings struct {
 	CommentFrame CommentFrame
 }
@@ -12,4 +19,24 @@ type CommentFrame struct {
 type CommentPath struct {
 	Child  string
 	Parent string
+}
+
+func (cf CommentFrame) ValidateComment(commentType string, parentType *string) error {
+	if !slices.Contains(cf.Types, commentType) {
+		return fmt.Errorf("invalid comment type: %s: %w", commentType, apperr.ErrInvalidArgument)
+	}
+
+	if parentType != nil {
+		pathAllowed := false
+		for _, p := range cf.Paths {
+			if p.Child == commentType && p.Parent == *parentType {
+				pathAllowed = true
+				break
+			}
+		}
+		if !pathAllowed {
+			return fmt.Errorf("invalid comment path: %s <- %s: %w", commentType, *parentType, apperr.ErrInvalidArgument)
+		}
+	}
+	return nil
 }

@@ -2,6 +2,8 @@ package domain
 
 import (
 	"time"
+
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
 type Discussion struct {
@@ -30,4 +32,16 @@ func (d *Discussion) CreatedBy() string {
 
 func (d *Discussion) CreatedAt() time.Time {
 	return d.createdAt
+}
+
+func (d *Discussion) ValidateComment(commentType string, parent *Comment) error {
+	var parentType *string
+	if parent != nil {
+		if parent.DiscussionID() != d.id {
+			return apperr.ErrInvalidArgument
+		}
+		pt := parent.CommentType()
+		parentType = &pt
+	}
+	return d.settings.CommentFrame.ValidateComment(commentType, parentType)
 }
