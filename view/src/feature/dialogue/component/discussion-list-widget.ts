@@ -8,7 +8,7 @@ import { navigate, paths } from "../../../app/paths";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import type { DialogueDiscussionSelectEvent } from "../event/discussion";
-import type { Discussion } from "../model/discussion";
+import type { DiscussionSummary } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-list/discussion-list";
 
@@ -19,7 +19,7 @@ export class DialogueDiscussionListWidget extends LitElement {
   private router?: Router;
 
   @property({ type: Array })
-  discussions: Discussion[] = [];
+  summaries: DiscussionSummary[] = [];
 
   constructor() {
     super();
@@ -28,8 +28,8 @@ export class DialogueDiscussionListWidget extends LitElement {
       task: async () => {
         return discussionRepository.list();
       },
-      onComplete: (discussions) => {
-        this.discussions = discussions;
+      onComplete: (summaries) => {
+        this.summaries = summaries;
       },
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
@@ -40,13 +40,13 @@ export class DialogueDiscussionListWidget extends LitElement {
 
   private handleDiscussionSelect(event: DialogueDiscussionSelectEvent) {
     if (!this.router) return;
-    navigate(this.router, paths.dialogue.item, { id: event.discussion.id });
+    navigate(this.router, paths.dialogue.item, { id: event.discussionId });
   }
 
   render() {
     return html`
       <dialogue-discussion-list
-        .discussions=${this.discussions}
+        .summaries=${this.summaries}
         @dialogue-discussion-select=${this.handleDiscussionSelect}
       ></dialogue-discussion-list>
     `;

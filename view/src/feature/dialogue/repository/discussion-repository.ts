@@ -1,8 +1,8 @@
 import { client } from "../api/client";
-import type { Discussion } from "../model/discussion";
+import type { Discussion, DiscussionSummary } from "../model/discussion";
 
 export class DiscussionRepository {
-  async list(): Promise<Discussion[]> {
+  async list(): Promise<DiscussionSummary[]> {
     const { data, error } = await client.GET("/dialogue/discussions");
     if (error) throw new Error(error.message);
     return data || [];
