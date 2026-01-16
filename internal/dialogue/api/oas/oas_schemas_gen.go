@@ -97,6 +97,58 @@ func (s *Comment) SetCreatedAt(val time.Time) {
 
 type CommentContent string
 
+// Ref: #/components/schemas/CommentFrame
+type CommentFrame struct {
+	Types []CommentType `json:"types"`
+	Paths []CommentPath `json:"paths"`
+}
+
+// GetTypes returns the value of Types.
+func (s *CommentFrame) GetTypes() []CommentType {
+	return s.Types
+}
+
+// GetPaths returns the value of Paths.
+func (s *CommentFrame) GetPaths() []CommentPath {
+	return s.Paths
+}
+
+// SetTypes sets the value of Types.
+func (s *CommentFrame) SetTypes(val []CommentType) {
+	s.Types = val
+}
+
+// SetPaths sets the value of Paths.
+func (s *CommentFrame) SetPaths(val []CommentPath) {
+	s.Paths = val
+}
+
+// Ref: #/components/schemas/CommentPath
+type CommentPath struct {
+	Child  CommentType `json:"child"`
+	Parent CommentType `json:"parent"`
+}
+
+// GetChild returns the value of Child.
+func (s *CommentPath) GetChild() CommentType {
+	return s.Child
+}
+
+// GetParent returns the value of Parent.
+func (s *CommentPath) GetParent() CommentType {
+	return s.Parent
+}
+
+// SetChild sets the value of Child.
+func (s *CommentPath) SetChild(val CommentType) {
+	s.Child = val
+}
+
+// SetParent sets the value of Parent.
+func (s *CommentPath) SetParent(val CommentType) {
+	s.Parent = val
+}
+
 // Ref: #/components/schemas/CommentStatus
 type CommentStatus string
 
@@ -177,10 +229,37 @@ func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentC
 	s.Content = val
 }
 
+// Ref: #/components/schemas/DialogueSettings
+type DialogueSettings struct {
+	DiscussionId ID           `json:"discussionId"`
+	CommentFrame CommentFrame `json:"commentFrame"`
+}
+
+// GetDiscussionId returns the value of DiscussionId.
+func (s *DialogueSettings) GetDiscussionId() ID {
+	return s.DiscussionId
+}
+
+// GetCommentFrame returns the value of CommentFrame.
+func (s *DialogueSettings) GetCommentFrame() CommentFrame {
+	return s.CommentFrame
+}
+
+// SetDiscussionId sets the value of DiscussionId.
+func (s *DialogueSettings) SetDiscussionId(val ID) {
+	s.DiscussionId = val
+}
+
+// SetCommentFrame sets the value of CommentFrame.
+func (s *DialogueSettings) SetCommentFrame(val CommentFrame) {
+	s.CommentFrame = val
+}
+
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID    ID              `json:"id"`
-	Theme DiscussionTheme `json:"theme"`
+	ID               ID               `json:"id"`
+	Theme            DiscussionTheme  `json:"theme"`
+	DialogueSettings DialogueSettings `json:"dialogueSettings"`
 }
 
 // GetID returns the value of ID.
@@ -193,6 +272,11 @@ func (s *Discussion) GetTheme() DiscussionTheme {
 	return s.Theme
 }
 
+// GetDialogueSettings returns the value of DialogueSettings.
+func (s *Discussion) GetDialogueSettings() DialogueSettings {
+	return s.DialogueSettings
+}
+
 // SetID sets the value of ID.
 func (s *Discussion) SetID(val ID) {
 	s.ID = val
@@ -201,6 +285,11 @@ func (s *Discussion) SetID(val ID) {
 // SetTheme sets the value of Theme.
 func (s *Discussion) SetTheme(val DiscussionTheme) {
 	s.Theme = val
+}
+
+// SetDialogueSettings sets the value of DialogueSettings.
+func (s *Discussion) SetDialogueSettings(val DialogueSettings) {
+	s.DialogueSettings = val
 }
 
 type DiscussionTheme string

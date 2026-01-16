@@ -130,9 +130,32 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 }
 
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
+	settings := item.Settings()
+	commentFrame := settings.CommentFrame
+
+	types := make([]oas.CommentType, len(commentFrame.Types))
+	for i, t := range commentFrame.Types {
+		types[i] = oas.CommentType(t)
+	}
+
+	paths := make([]oas.CommentPath, len(commentFrame.Paths))
+	for i, p := range commentFrame.Paths {
+		paths[i] = oas.CommentPath{
+			Child:  oas.CommentType(p.Child),
+			Parent: oas.CommentType(p.Parent),
+		}
+	}
+
 	return oas.Discussion{
 		ID:    oas.ID(uuid.MustParse(item.ID())),
 		Theme: oas.DiscussionTheme(item.Theme()),
+		DialogueSettings: oas.DialogueSettings{
+			DiscussionId: oas.ID(uuid.MustParse(item.ID())),
+			CommentFrame: oas.CommentFrame{
+				Types: types,
+				Paths: paths,
+			},
+		},
 	}
 }
 

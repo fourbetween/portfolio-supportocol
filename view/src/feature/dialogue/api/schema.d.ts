@@ -196,12 +196,25 @@ export interface components {
         Id: string;
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
+        DialogueSettings: {
+            discussionId: components["schemas"]["Id"];
+            commentFrame: components["schemas"]["CommentFrame"];
+        };
+        CommentFrame: {
+            types: components["schemas"]["CommentType"][];
+            paths: components["schemas"]["CommentPath"][];
+        };
+        CommentPath: {
+            child: components["schemas"]["CommentType"];
+            parent: components["schemas"]["CommentType"];
+        };
         DiscussionTheme: string;
         CommentType: string;
         CommentContent: string;
         Discussion: {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
+            dialogueSettings: components["schemas"]["DialogueSettings"];
         };
         Comment: {
             id: components["schemas"]["Id"];

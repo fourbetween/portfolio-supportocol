@@ -7,6 +7,7 @@ import (
 type Discussion struct {
 	id        string
 	theme     string
+	settings  DiscussionSettings
 	createdBy string
 	createdAt time.Time
 }
@@ -17,6 +18,10 @@ func (d *Discussion) ID() string {
 
 func (d *Discussion) Theme() string {
 	return d.theme
+}
+
+func (d *Discussion) Settings() DiscussionSettings {
+	return d.settings
 }
 
 func (d *Discussion) CreatedBy() string {
