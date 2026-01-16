@@ -298,6 +298,29 @@ func (s *Discussion) Validate() error {
 	return nil
 }
 
+func (s *DiscussionSummary) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Theme.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "theme",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
 func (s DiscussionTheme) Validate() error {
 	alias := (string)(s)
 	if err := (validate.String{

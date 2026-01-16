@@ -31,11 +31,12 @@ func NewAPIContainer(
 		clockSrv,
 	)
 	discussionRepo := db.NewDiscussionRepository(dbCon, discussionFac)
+	discussionQS := db.NewDiscussionQueryService(dbCon)
 	commentRepo := db.NewCommentRepository(dbCon, commentFac)
 
 	return &APIContainer{
 		GetDiscussion:   usecase.NewGetDiscussionUsecase(discussionRepo),
-		ListDiscussions: usecase.NewListDiscussionsUsecase(discussionRepo),
+		ListDiscussions: usecase.NewListDiscussionsUsecase(discussionQS),
 		ListComments:    usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
 		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, txManager),
 	}, nil

@@ -31,7 +31,7 @@ type Handler interface {
 	// Get discussions.
 	//
 	// GET /dialogue/discussions
-	DialogueDiscussionsGet(ctx context.Context) ([]Discussion, error)
+	DialogueDiscussionsGet(ctx context.Context) ([]DiscussionSummary, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

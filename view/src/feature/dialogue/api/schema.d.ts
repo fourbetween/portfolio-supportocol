@@ -27,7 +27,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["Discussion"][];
+                        "application/json": components["schemas"]["DiscussionSummary"][];
                     };
                 };
                 /** @description default error */
@@ -211,6 +211,12 @@ export interface components {
         DiscussionTheme: string;
         CommentType: string;
         CommentContent: string;
+        DiscussionSummary: {
+            id: components["schemas"]["Id"];
+            theme: components["schemas"]["DiscussionTheme"];
+            /** Format: date-time */
+            lastCommentedAt: string;
+        };
         Discussion: {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
