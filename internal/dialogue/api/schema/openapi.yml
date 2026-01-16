@@ -67,6 +67,20 @@ components:
     CommentContent:
       type: string
       maxLength: 400
+    DiscussionSummary:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        theme:
+          $ref: "#/components/schemas/DiscussionTheme"
+        lastCommentedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - theme
+        - lastCommentedAt
     Discussion:
       type: object
       properties:
@@ -120,7 +134,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Discussion"
+                  $ref: "#/components/schemas/DiscussionSummary"
         default:
           description: default error
           content:

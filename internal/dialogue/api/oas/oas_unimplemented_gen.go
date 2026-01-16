@@ -45,7 +45,7 @@ func (UnimplementedHandler) DialogueDiscussionsDiscussionIdGet(ctx context.Conte
 // Get discussions.
 //
 // GET /dialogue/discussions
-func (UnimplementedHandler) DialogueDiscussionsGet(ctx context.Context) (r []Discussion, _ error) {
+func (UnimplementedHandler) DialogueDiscussionsGet(ctx context.Context) (r []DiscussionSummary, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

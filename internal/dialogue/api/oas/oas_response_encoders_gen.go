@@ -53,7 +53,7 @@ func encodeDialogueDiscussionsDiscussionIdGetResponse(response *Discussion, w ht
 	return nil
 }
 
-func encodeDialogueDiscussionsGetResponse(response []Discussion, w http.ResponseWriter) error {
+func encodeDialogueDiscussionsGetResponse(response []DiscussionSummary, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 

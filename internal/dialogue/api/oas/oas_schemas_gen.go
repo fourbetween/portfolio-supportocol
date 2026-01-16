@@ -292,6 +292,43 @@ func (s *Discussion) SetDialogueSettings(val DialogueSettings) {
 	s.DialogueSettings = val
 }
 
+// Ref: #/components/schemas/DiscussionSummary
+type DiscussionSummary struct {
+	ID              ID              `json:"id"`
+	Theme           DiscussionTheme `json:"theme"`
+	LastCommentedAt time.Time       `json:"lastCommentedAt"`
+}
+
+// GetID returns the value of ID.
+func (s *DiscussionSummary) GetID() ID {
+	return s.ID
+}
+
+// GetTheme returns the value of Theme.
+func (s *DiscussionSummary) GetTheme() DiscussionTheme {
+	return s.Theme
+}
+
+// GetLastCommentedAt returns the value of LastCommentedAt.
+func (s *DiscussionSummary) GetLastCommentedAt() time.Time {
+	return s.LastCommentedAt
+}
+
+// SetID sets the value of ID.
+func (s *DiscussionSummary) SetID(val ID) {
+	s.ID = val
+}
+
+// SetTheme sets the value of Theme.
+func (s *DiscussionSummary) SetTheme(val DiscussionTheme) {
+	s.Theme = val
+}
+
+// SetLastCommentedAt sets the value of LastCommentedAt.
+func (s *DiscussionSummary) SetLastCommentedAt(val time.Time) {
+	s.LastCommentedAt = val
+}
+
 type DiscussionTheme string
 
 // Ref: #/components/schemas/Error

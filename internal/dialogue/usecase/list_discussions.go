@@ -2,20 +2,18 @@ package usecase
 
 import (
 	"context"
-
-	"github.com/fourbetween/app-supportocol/internal/dialogue/domain"
 )
 
 type ListDiscussionsUsecase struct {
-	repo domain.DiscussionRepository
+	qs DiscussionQueryService
 }
 
-func NewListDiscussionsUsecase(repo domain.DiscussionRepository) *ListDiscussionsUsecase {
+func NewListDiscussionsUsecase(qs DiscussionQueryService) *ListDiscussionsUsecase {
 	return &ListDiscussionsUsecase{
-		repo: repo,
+		qs: qs,
 	}
 }
 
-func (u *ListDiscussionsUsecase) Execute(ctx context.Context) ([]*domain.Discussion, error) {
-	return u.repo.Search(ctx)
+func (u *ListDiscussionsUsecase) Execute(ctx context.Context) ([]*DiscussionSummary, error) {
+	return u.qs.ListDiscussions(ctx)
 }
