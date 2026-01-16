@@ -1610,7 +1610,7 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 
 	var rawBody []byte
 
-	var response []Discussion
+	var response []DiscussionSummary
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -1626,7 +1626,7 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 		type (
 			Request  = struct{}
 			Params   = struct{}
-			Response = []Discussion
+			Response = []DiscussionSummary
 		)
 		response, err = middleware.HookMiddleware[
 			Request,

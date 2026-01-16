@@ -73,7 +73,7 @@ type Handler interface {
 	// Get discussions.
 	//
 	// GET /learning/discussions
-	LearningDiscussionsGet(ctx context.Context) ([]Discussion, error)
+	LearningDiscussionsGet(ctx context.Context) ([]DiscussionSummary, error)
 	// LearningDiscussionsPost implements POST /learning/discussions operation.
 	//
 	// Create discussion.

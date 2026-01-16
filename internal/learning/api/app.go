@@ -43,15 +43,15 @@ func NewHandler(con *learning.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
-func (h *appHandler) LearningDiscussionsGet(ctx context.Context) ([]oas.Discussion, error) {
+func (h *appHandler) LearningDiscussionsGet(ctx context.Context) ([]oas.DiscussionSummary, error) {
 	items, err := h.con.ListDiscussions.Execute(ctx, httpctx.GetUserID(ctx))
 	if err != nil {
 		return nil, err
 	}
 
-	res := make([]oas.Discussion, len(items))
+	res := make([]oas.DiscussionSummary, len(items))
 	for i, item := range items {
-		res[i] = h.toOasDiscussion(item)
+		res[i] = h.toOasDiscussionSummary(item)
 	}
 	return res, nil
 }
@@ -298,6 +298,15 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 			Code:    code,
 			Message: msg,
 		},
+	}
+}
+
+func (h *appHandler) toOasDiscussionSummary(item *usecase.DiscussionSummary) oas.DiscussionSummary {
+	return oas.DiscussionSummary{
+		ID:              oas.ID(uuid.MustParse(item.ID)),
+		Theme:           oas.DiscussionTheme(item.Theme),
+		Status:          oas.DiscussionStatus(item.Status),
+		LastCommentedAt: item.LastCommentedAt,
 	}
 }
 
