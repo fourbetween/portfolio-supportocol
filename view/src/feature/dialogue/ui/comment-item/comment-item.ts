@@ -26,6 +26,11 @@ export class DialogueCommentItem extends LitElement {
 
   private touch = new TouchController(this);
 
+  private get canReply() {
+    if (!this.comment || !this.frame) return false;
+    return this.frame.paths.some((p) => p.parent === this.comment?.commentType);
+  }
+
   private handleCommentSelect(e: DialogueCommentSelectEvent) {
     e.stopPropagation();
     if (this.comment && !this.touch.isTouchDevice) {
@@ -55,6 +60,7 @@ export class DialogueCommentItem extends LitElement {
             <div class="reply-form-wrapper">
               <dialogue-comment-reply-form
                 .parentCommentId=${this.comment.id}
+                .parentCommentType=${this.comment.commentType}
                 .frame=${this.frame}
                 @dialogue-comment-create=${() => (this.mode = "view")}
                 @dialogue-comment-create-cancel=${() => (this.mode = "view")}
@@ -73,13 +79,17 @@ export class DialogueCommentItem extends LitElement {
         @dialogue-comment-select=${this.handleCommentSelect}
       ></dialogue-comment-card>
       <div class="actions" role="group" aria-label="Actions">
-        <button
-          class="btn-hover reply-button material-symbols-outlined"
-          @click=${this.handleReplyClick}
-          aria-label="reply"
-        >
-          reply
-        </button>
+        ${this.canReply
+          ? html`
+              <button
+                class="btn-hover reply-button material-symbols-outlined"
+                @click=${this.handleReplyClick}
+                aria-label="reply"
+              >
+                reply
+              </button>
+            `
+          : nothing}
         ${this.touch.isTouchDevice
           ? html`
               <button

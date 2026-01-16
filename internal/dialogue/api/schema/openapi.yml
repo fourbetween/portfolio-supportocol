@@ -24,6 +24,40 @@ components:
       enum:
         - active
         - proposed
+    DialogueSettings:
+      type: object
+      properties:
+        discussionId:
+          $ref: "#/components/schemas/Id"
+        commentFrame:
+          $ref: "#/components/schemas/CommentFrame"
+      required:
+        - discussionId
+        - commentFrame
+    CommentFrame:
+      type: object
+      properties:
+        types:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommentType"
+        paths:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommentPath"
+      required:
+        - types
+        - paths
+    CommentPath:
+      type: object
+      properties:
+        child:
+          $ref: "#/components/schemas/CommentType"
+        parent:
+          $ref: "#/components/schemas/CommentType"
+      required:
+        - child
+        - parent
     DiscussionTheme:
       type: string
       maxLength: 255
@@ -40,9 +74,12 @@ components:
           $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
+        dialogueSettings:
+          $ref: "#/components/schemas/DialogueSettings"
       required:
         - id
         - theme
+        - dialogueSettings
     Comment:
       type: object
       properties:

@@ -39,10 +39,22 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 	var comment *domain.Comment
 	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// Verify discussion exists
-		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+		discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 			ID: input.DiscussionID,
 		})
 		if err != nil {
+			return err
+		}
+
+		var parent *domain.Comment
+		if input.ParentCommentID != nil {
+			parent, err = u.commentRepo.Load(ctx, *input.ParentCommentID)
+			if err != nil {
+				return err
+			}
+		}
+
+		if err := discussion.ValidateComment(input.CommentType, parent); err != nil {
 			return err
 		}
 

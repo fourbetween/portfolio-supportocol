@@ -1,5 +1,5 @@
 import { Task } from "@lit/task";
-import { LitElement, css, html, nothing, type PropertyValues } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { TouchController } from "../../../app/controller/touch";
 import { showToast } from "../../../shared/event/toast";
@@ -15,7 +15,6 @@ import {
   type DialogueCommentSelectEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
-import { deriveCommentFrame, type CommentFrame } from "../model/comment-frame";
 import type { Discussion } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
@@ -34,26 +33,13 @@ export class DialogueItemPage extends LitElement {
   private _discussion?: Discussion;
 
   @state()
-  comments: Comment[] = [];
+  private _comments: Comment[] = [];
 
   @state()
   private _selectedCommentId?: string;
 
   @state()
   private _isRightDrawerOpen = false;
-
-  // TODO: comment frame を discussion から直接取得するようにして、削除する
-  @state()
-  private frame?: CommentFrame;
-
-  willUpdate(changedProperties: PropertyValues<this>) {
-    if (changedProperties.has("comments")) {
-      this.frame = undefined;
-      if (this.comments) {
-        this.frame = deriveCommentFrame(this.comments);
-      }
-    }
-  }
 
   constructor() {
     super();
@@ -77,7 +63,7 @@ export class DialogueItemPage extends LitElement {
         return commentRepository.list(discussionId);
       },
       onComplete: (comments) => {
-        this.comments = comments;
+        this._comments = comments;
       },
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
@@ -91,13 +77,13 @@ export class DialogueItemPage extends LitElement {
   }
 
   private _handleCommentCreated(e: DialogueCommentCreatedEvent) {
-    this.comments = [...this.comments, e.comment];
+    this._comments = [...this._comments, e.comment];
   }
 
   private _renderRightSidebar(isTouch: boolean) {
     const list = html`
       <dialogue-comment-list
-        .comments=${this.comments}
+        .comments=${this._comments}
         @dialogue-comment-select=${this._handleCommentSelect}
       ></dialogue-comment-list>
     `;
@@ -135,14 +121,13 @@ export class DialogueItemPage extends LitElement {
         </div>
         <div class="comment-frame">
           <dialogue-comment-frame-detail
-            .frame=${this.frame}
+            .frame=${this._discussion?.dialogueSettings.commentFrame}
           ></dialogue-comment-frame-detail>
         </div>
         <div class="comment-explorer">
           <dialogue-comment-explorer-widget
             .discussion=${this._discussion}
-            .comments=${this.comments}
-            .frame=${this.frame}
+            .comments=${this._comments}
             .selectedCommentId=${this._selectedCommentId}
             @dialogue-comment-select=${this._handleCommentSelect}
             @dialogue-comment-created=${this._handleCommentCreated}

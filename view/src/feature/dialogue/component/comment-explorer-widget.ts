@@ -10,7 +10,6 @@ import {
   type DialogueCommentCreateEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
-import { type CommentFrame } from "../model/comment-frame";
 import type { Discussion } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import "../ui/comment-context/comment-context";
@@ -23,9 +22,6 @@ export class DialogueCommentExplorerWidget extends LitElement {
 
   @property({ type: Array })
   comments?: Comment[];
-
-  @property({ type: Object })
-  frame?: CommentFrame;
 
   @property({ type: String })
   selectedCommentId?: string;
@@ -145,7 +141,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
           </div>
           <dialogue-comment-tree
             .comments=${descendants}
-            .frame=${this.frame}
+            .frame=${this.discussion?.dialogueSettings.commentFrame}
             @dialogue-comment-create=${this.handleCommentCreate}
           ></dialogue-comment-tree>
         </div>
@@ -168,7 +164,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
         <dialogue-comment-context
           .path=${path}
           .childCounts=${this.childCounts}
-          .frame=${this.frame}
+          .frame=${this.discussion?.dialogueSettings.commentFrame}
           @dialogue-comment-create=${this.handleCommentCreate}
         ></dialogue-comment-context>
       </div>
