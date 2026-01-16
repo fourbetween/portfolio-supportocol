@@ -21,13 +21,23 @@ describe("learning-discussion-list", () => {
 
   it("議論のテーマが表示されること", async () => {
     const discussions = [
-      { id: "1", theme: "テーマ1", status: "public" as const },
-      { id: "2", theme: "テーマ2", status: "public" as const },
+      {
+        id: "1",
+        theme: "テーマ1",
+        status: "public" as const,
+        lastCommentedAt: "2023-01-01T00:00:00Z",
+      },
+      {
+        id: "2",
+        theme: "テーマ2",
+        status: "public" as const,
+        lastCommentedAt: "2023-01-02T00:00:00Z",
+      },
     ];
     render(
       html`
         <learning-discussion-list
-          .discussions=${discussions}
+          .summaries=${discussions}
         ></learning-discussion-list>
       `,
       container
@@ -40,7 +50,7 @@ describe("learning-discussion-list", () => {
   it("議論がない場合にメッセージが表示されること", async () => {
     render(
       html`
-        <learning-discussion-list .discussions=${[]}></learning-discussion-list>
+        <learning-discussion-list .summaries=${[]}></learning-discussion-list>
       `,
       container
     );
@@ -51,14 +61,19 @@ describe("learning-discussion-list", () => {
   it("アイテムをクリックすると discussion-select イベントが発火されること", async () => {
     const onSelect = vi.fn();
     const discussions = [
-      { id: "1", theme: "テーマ1", status: "public" as const },
+      {
+        id: "1",
+        theme: "テーマ1",
+        status: "public" as const,
+        lastCommentedAt: "2023-01-01T00:00:00Z",
+      },
     ];
     render(
       html`
         <learning-discussion-list
-          .discussions=${discussions}
+          .summaries=${discussions}
           @learning-discussion-select=${(e: LearningDiscussionSelectEvent) =>
-            onSelect(e.discussion)}
+            onSelect(e.discussionId)}
         ></learning-discussion-list>
       `,
       container
@@ -66,20 +81,25 @@ describe("learning-discussion-list", () => {
 
     await page.getByText("テーマ1").click();
 
-    expect(onSelect).toHaveBeenCalledWith(discussions[0]);
+    expect(onSelect).toHaveBeenCalledWith(discussions[0].id);
   });
 
   it("削除ボタンをクリックすると discussion-delete イベントが発火されること", async () => {
     const onDelete = vi.fn();
     const discussions = [
-      { id: "1", theme: "テーマ1", status: "public" as const },
+      {
+        id: "1",
+        theme: "テーマ1",
+        status: "public" as const,
+        lastCommentedAt: "2023-01-01T00:00:00Z",
+      },
     ];
     render(
       html`
         <learning-discussion-list
-          .discussions=${discussions}
+          .summaries=${discussions}
           @learning-discussion-delete=${(e: LearningDiscussionDeleteEvent) =>
-            onDelete(e.discussion)}
+            onDelete(e.discussionId)}
         ></learning-discussion-list>
       `,
       container
@@ -89,17 +109,22 @@ describe("learning-discussion-list", () => {
     await item.hover();
     await page.getByRole("button", { name: "delete" }).click();
 
-    expect(onDelete).toHaveBeenCalledWith(discussions[0]);
+    expect(onDelete).toHaveBeenCalledWith(discussions[0].id);
   });
 
   it("削除ボタンが絶対配置されていること", async () => {
     const discussions = [
-      { id: "1", theme: "テーマ1", status: "public" as const },
+      {
+        id: "1",
+        theme: "テーマ1",
+        status: "public" as const,
+        lastCommentedAt: "2023-01-01T00:00:00Z",
+      },
     ];
     render(
       html`
         <learning-discussion-list
-          .discussions=${discussions}
+          .summaries=${discussions}
         ></learning-discussion-list>
       `,
       container
@@ -115,12 +140,17 @@ describe("learning-discussion-list", () => {
 
   it("アイテムコンテナが相対配置されていること", async () => {
     const discussions = [
-      { id: "1", theme: "テーマ1", status: "public" as const },
+      {
+        id: "1",
+        theme: "テーマ1",
+        status: "public" as const,
+        lastCommentedAt: "2023-01-01T00:00:00Z",
+      },
     ];
     render(
       html`
         <learning-discussion-list
-          .discussions=${discussions}
+          .summaries=${discussions}
         ></learning-discussion-list>
       `,
       container

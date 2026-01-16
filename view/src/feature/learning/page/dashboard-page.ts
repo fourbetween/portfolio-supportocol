@@ -25,7 +25,7 @@ import {
   type LearningDiscussionUpdatedEvent,
 } from "../event/discussion";
 import type { Comment } from "../model/comment";
-import type { Discussion } from "../model/discussion";
+import type { DiscussionSummary } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
 
@@ -34,7 +34,7 @@ export class LearningDashboardPage extends LitElement {
   private _touch = new TouchController(this);
 
   @state()
-  private _discussions: Discussion[] = [];
+  private _summaries: DiscussionSummary[] = [];
 
   @state()
   private _comments: Comment[] = [];
@@ -48,21 +48,21 @@ export class LearningDashboardPage extends LitElement {
   @state()
   private _activeDrawer?: "left" | "right";
 
+  private summariesTask = new Task(this, {
+    task: async () => {
+      return discussionRepository.list();
+    },
+    onComplete: (summaries) => {
+      this._summaries = summaries;
+    },
+    onError: (e: unknown) => {
+      showToast(this, String(e), "error");
+    },
+    args: () => [],
+  });
+
   constructor() {
     super();
-
-    new Task(this, {
-      task: async () => {
-        return discussionRepository.list();
-      },
-      onComplete: (discussions) => {
-        this._discussions = discussions;
-      },
-      onError: (e: unknown) => {
-        showToast(this, String(e), "error");
-      },
-      args: () => [],
-    });
 
     new Task(this, {
       task: async ([id]) => {
@@ -105,29 +105,24 @@ export class LearningDashboardPage extends LitElement {
   };
 
   private _handleDiscussionSelect(e: LearningDiscussionSelectEvent) {
-    if (this._selectedDiscussionId === e.discussion.id) return;
-    this._selectedDiscussionId = e.discussion.id;
+    if (this._selectedDiscussionId === e.discussionId) {
+      return;
+    }
+    this._selectedDiscussionId = e.discussionId;
     const url = new URL(window.location.href);
-    url.searchParams.set("id", e.discussion.id);
+    url.searchParams.set("id", e.discussionId);
     window.history.pushState({}, "", url);
     this._activeDrawer = undefined;
   }
 
   private _handleDiscussionUpdated(e: LearningDiscussionUpdatedEvent) {
     this._selectedDiscussionId = e.discussion.id;
-    const exists = this._discussions.some((d) => d.id === e.discussion.id);
-    if (exists) {
-      this._discussions = this._discussions.map((d) =>
-        d.id === e.discussion.id ? e.discussion : d
-      );
-    } else {
-      this._discussions = [...this._discussions, e.discussion];
-    }
     this._activeDrawer = undefined;
+    this.summariesTask.run();
   }
 
   private _handleDiscussionDeleted(e: LearningDiscussionDeletedEvent) {
-    if (this._selectedDiscussionId === e.discussion.id) {
+    if (this._selectedDiscussionId === e.discussionId) {
       this._selectedDiscussionId = undefined;
       const url = new URL(window.location.href);
       url.searchParams.delete("id");
@@ -137,9 +132,7 @@ export class LearningDashboardPage extends LitElement {
         this._activeDrawer = "left";
       }
     }
-    this._discussions = this._discussions.filter(
-      (d) => d.id !== e.discussion.id
-    );
+    this._summaries = this._summaries.filter((d) => d.id !== e.discussionId);
   }
 
   private _handleCommentCreated(e: LearningCommentCreatedEvent) {
@@ -169,7 +162,7 @@ export class LearningDashboardPage extends LitElement {
   }
 
   private get _selectedDiscussion() {
-    return this._discussions.find((d) => d.id === this._selectedDiscussionId);
+    return this._summaries.find((d) => d.id === this._selectedDiscussionId);
   }
 
   private get _hasProposedComments() {
@@ -210,7 +203,7 @@ export class LearningDashboardPage extends LitElement {
   private _renderDiscussionList() {
     return html`
       <learning-discussion-list-widget
-        .discussions=${this._discussions}
+        .summaries=${this._summaries}
         @learning-discussion-select=${this._handleDiscussionSelect}
         @learning-discussion-created=${this._handleDiscussionUpdated}
         @learning-discussion-deleted=${this._handleDiscussionDeleted}
