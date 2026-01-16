@@ -34,10 +34,10 @@ export function deriveCommentFrame(comments: Comment[]): CommentFrame {
     paths: Array.from(paths)
       .map((p) => JSON.parse(p))
       .sort((a, b) => {
-        if (a.child !== b.child) {
-          return a.child.localeCompare(b.child);
+        if (a.parent !== b.parent) {
+          return a.parent.localeCompare(b.parent);
         }
-        return a.parent.localeCompare(b.parent);
+        return a.child.localeCompare(b.child);
       }),
   };
 }
