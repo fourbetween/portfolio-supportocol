@@ -10,4 +10,5 @@ var (
 	ErrAlreadyExists    = errors.New("already exists error")
 	ErrUnauthenticated  = errors.New("unauthenticated error")
 	ErrInvalidArgument  = errors.New("invalid argument error")
+	ErrLimitExceeded    = errors.New("limit exceeded error")
 )

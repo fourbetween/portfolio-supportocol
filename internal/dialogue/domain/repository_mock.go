@@ -55,6 +55,20 @@ func (mr *MockDiscussionRepositoryMockRecorder) Load(ctx, params any) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Load", reflect.TypeOf((*MockDiscussionRepository)(nil).Load), ctx, params)
 }
 
+// Save mocks base method.
+func (m *MockDiscussionRepository) Save(ctx context.Context, discussion *Discussion) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Save", ctx, discussion)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Save indicates an expected call of Save.
+func (mr *MockDiscussionRepositoryMockRecorder) Save(ctx, discussion any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockDiscussionRepository)(nil).Save), ctx, discussion)
+}
+
 // Search mocks base method.
 func (m *MockDiscussionRepository) Search(ctx context.Context) ([]*Discussion, error) {
 	m.ctrl.T.Helper()

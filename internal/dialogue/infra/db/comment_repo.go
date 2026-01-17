@@ -71,21 +71,6 @@ func (r *CommentRepository) Create(ctx context.Context, c *domain.Comment) error
 		return fmt.Errorf("failed to create comment: %w", err)
 	}
 
-	return r.updateDiscussionStats(ctx, c.DiscussionID(), 1)
-}
-
-func (r *CommentRepository) updateDiscussionStats(ctx context.Context, discussionID string, delta int) error {
-	stmt := table.Discussions.
-		UPDATE(table.Discussions.CommentsCount, table.Discussions.LastCommentedAt).
-		SET(
-			table.Discussions.CommentsCount.ADD(mysql.Int(int64(delta))),
-			mysql.NOW(),
-		).
-		WHERE(table.Discussions.ID.EQ(mysql.String(discussionID)))
-
-	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
-		return fmt.Errorf("failed to update discussion stats: %w", err)
-	}
 	return nil
 }
 

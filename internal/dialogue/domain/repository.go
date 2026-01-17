@@ -11,6 +11,7 @@ type (
 	DiscussionRepository interface {
 		Load(ctx context.Context, params LoadDiscussionParams) (*Discussion, error)
 		Search(ctx context.Context) ([]*Discussion, error)
+		Save(ctx context.Context, discussion *Discussion) error
 	}
 
 	LoadDiscussionParams struct {

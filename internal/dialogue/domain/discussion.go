@@ -1,17 +1,24 @@
 package domain
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
+const (
+	MaxCommentsPerDiscussion = 200
+)
+
 type Discussion struct {
-	id        string
-	theme     string
-	settings  DiscussionSettings
-	createdBy string
-	createdAt time.Time
+	id              string
+	theme           string
+	settings        DiscussionSettings
+	commentsCount   int
+	lastCommentedAt *time.Time
+	createdBy       string
+	createdAt       time.Time
 }
 
 func (d *Discussion) ID() string {
@@ -26,6 +33,14 @@ func (d *Discussion) Settings() DiscussionSettings {
 	return d.settings
 }
 
+func (d *Discussion) CommentsCount() int {
+	return d.commentsCount
+}
+
+func (d *Discussion) LastCommentedAt() *time.Time {
+	return d.lastCommentedAt
+}
+
 func (d *Discussion) CreatedBy() string {
 	return d.createdBy
 }
@@ -34,7 +49,22 @@ func (d *Discussion) CreatedAt() time.Time {
 	return d.createdAt
 }
 
+func (d *Discussion) CanAddComment() error {
+	if d.commentsCount >= MaxCommentsPerDiscussion {
+		return fmt.Errorf("discussion has reached the limit of %d comments: %w", MaxCommentsPerDiscussion, apperr.ErrLimitExceeded)
+	}
+	return nil
+}
+
+func (d *Discussion) AddComment(now time.Time) {
+	d.commentsCount++
+	d.lastCommentedAt = &now
+}
+
 func (d *Discussion) ValidateComment(commentType string, parent *Comment) error {
+	if err := d.CanAddComment(); err != nil {
+		return err
+	}
 	var parentType *string
 	if parent != nil {
 		if parent.DiscussionID() != d.id {

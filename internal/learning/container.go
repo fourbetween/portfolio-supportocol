@@ -70,7 +70,7 @@ func NewAPIContainer(
 		UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo, txManager),
 		UpdateDiscussionStatus:   usecase.NewUpdateDiscussionStatusUsecase(discussionRepo, txManager),
 		DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo, txManager),
-		CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, txManager),
+		CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, clockSrv, txManager),
 		ListComments:             usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
 		UpdateComment:            usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo, txManager),
 		DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo, txManager),
@@ -126,7 +126,7 @@ func NewCommentGenerationContainer(
 	}
 
 	return &CommentGenerationContainer{
-		GenerateComment: usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator, txManager),
+		GenerateComment: usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator, clockSrv, txManager),
 		Queue:           sqs.NewDefaultQueue[domain.GenerateCommentParams](queueURL, awscfg),
 	}, nil
 }

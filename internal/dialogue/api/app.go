@@ -115,7 +115,8 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 		code = 403
 	} else if errors.Is(err, apperr.ErrNotFound) {
 		code = 404
-	} else if errors.Is(err, apperr.ErrAlreadyExists) {
+	} else if errors.Is(err, apperr.ErrAlreadyExists) ||
+		errors.Is(err, apperr.ErrLimitExceeded) {
 		code = 409
 	} else if code == 500 {
 		slog.Error(err.Error())

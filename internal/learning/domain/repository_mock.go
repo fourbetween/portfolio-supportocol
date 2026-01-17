@@ -136,6 +136,21 @@ func (mr *MockCommentRepositoryMockRecorder) BatchCreate(ctx, comments any) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BatchCreate", reflect.TypeOf((*MockCommentRepository)(nil).BatchCreate), ctx, comments)
 }
 
+// CountByDiscussionID mocks base method.
+func (m *MockCommentRepository) CountByDiscussionID(ctx context.Context, discussionID string) (int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountByDiscussionID", ctx, discussionID)
+	ret0, _ := ret[0].(int)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountByDiscussionID indicates an expected call of CountByDiscussionID.
+func (mr *MockCommentRepositoryMockRecorder) CountByDiscussionID(ctx, discussionID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountByDiscussionID", reflect.TypeOf((*MockCommentRepository)(nil).CountByDiscussionID), ctx, discussionID)
+}
+
 // Create mocks base method.
 func (m *MockCommentRepository) Create(ctx context.Context, comment *Comment) error {
 	m.ctrl.T.Helper()

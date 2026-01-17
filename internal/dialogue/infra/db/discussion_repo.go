@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/dialogue/domain"
 	"github.com/fourbetween/app-supportocol/internal/dialogue/infra/db/schema/app-supportocol/model"
@@ -92,13 +93,35 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 		return nil, err
 	}
 
+	var lastCommentedAt *time.Time
+	if !row.LastCommentedAt.IsZero() {
+		lastCommentedAt = &row.LastCommentedAt
+	}
+
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
-		ID:        row.ID,
-		Theme:     row.Theme,
-		Settings:  settings,
-		CreatedBy: row.CreatedBy,
-		CreatedAt: row.CreatedAt,
+		ID:              row.ID,
+		Theme:           row.Theme,
+		Settings:        settings,
+		CommentsCount:   int(row.CommentsCount),
+		LastCommentedAt: lastCommentedAt,
+		CreatedBy:       row.CreatedBy,
+		CreatedAt:       row.CreatedAt,
 	})
+}
+
+func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) error {
+	stmt := table.Discussions.
+		UPDATE(table.Discussions.CommentsCount, table.Discussions.LastCommentedAt).
+		SET(
+			mysql.Int(int64(d.CommentsCount())),
+			d.LastCommentedAt(),
+		).
+		WHERE(table.Discussions.ID.EQ(mysql.String(d.ID())))
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to save discussion: %w", err)
+	}
+	return nil
 }
 
 func (r *DiscussionRepository) toDialogueSettingsDomain(row *model.DialogueSettings) (domain.DiscussionSettings, error) {
