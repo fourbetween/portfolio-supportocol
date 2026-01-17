@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// LearningDiscussionsDiscussionIdArchiveDelete implements DELETE /learning/discussions/{discussionId}/archive operation.
+	//
+	// Unarchive discussion.
+	//
+	// DELETE /learning/discussions/{discussionId}/archive
+	LearningDiscussionsDiscussionIdArchiveDelete(ctx context.Context, params LearningDiscussionsDiscussionIdArchiveDeleteParams) (*Discussion, error)
 	// LearningDiscussionsDiscussionIdArchivePost implements POST /learning/discussions/{discussionId}/archive operation.
 	//
 	// Archive discussion.

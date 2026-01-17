@@ -173,6 +173,22 @@ func (h *appHandler) LearningDiscussionsDiscussionIdArchivePost(
 	return &res, nil
 }
 
+func (h *appHandler) LearningDiscussionsDiscussionIdArchiveDelete(
+	ctx context.Context,
+	params oas.LearningDiscussionsDiscussionIdArchiveDeleteParams,
+) (*oas.Discussion, error) {
+	item, err := h.con.UnarchiveDiscussion.Execute(ctx, usecase.UnarchiveDiscussionInput{
+		ID:        uuid.UUID(params.DiscussionId).String(),
+		CreatedBy: httpctx.GetUserID(ctx),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := h.toOasDiscussion(item)
+	return &res, nil
+}
+
 func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(
 	ctx context.Context,
 	params oas.LearningDiscussionsDiscussionIdCommentsGetParams,

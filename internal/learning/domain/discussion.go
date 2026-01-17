@@ -153,3 +153,11 @@ func (d *Discussion) Archive(now time.Time) error {
 	d.archivedAt = &now
 	return nil
 }
+
+func (d *Discussion) Unarchive() error {
+	if !d.IsArchived() {
+		return fmt.Errorf("discussion is not archived: %w", apperr.ErrInvalidArgument)
+	}
+	d.archivedAt = nil
+	return nil
+}

@@ -327,6 +327,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    delete:
+      description: unarchive discussion
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: discussionId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Discussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /learning/discussions/{discussionId}/comments:
     get:
       description: get comments for a discussion
