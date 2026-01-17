@@ -5,6 +5,7 @@ package oas
 import (
 	"math/bits"
 	"strconv"
+	"time"
 
 	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
@@ -681,6 +682,12 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 		s.Status.Encode(e)
 	}
 	{
+		if s.ArchivedAt.Set {
+			e.FieldStart("archivedAt")
+			s.ArchivedAt.Encode(e, json.EncodeDateTime)
+		}
+	}
+	{
 		if s.DialogueSettings.Set {
 			e.FieldStart("dialogueSettings")
 			s.DialogueSettings.Encode(e)
@@ -688,12 +695,13 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfDiscussion = [5]string{
+var jsonFieldsNameOfDiscussion = [6]string{
 	0: "id",
 	1: "theme",
 	2: "conclusion",
 	3: "status",
-	4: "dialogueSettings",
+	4: "archivedAt",
+	5: "dialogueSettings",
 }
 
 // Decode decodes Discussion from json.
@@ -744,6 +752,16 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
+			}
+		case "archivedAt":
+			if err := func() error {
+				s.ArchivedAt.Reset()
+				if err := s.ArchivedAt.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"archivedAt\"")
 			}
 		case "dialogueSettings":
 			if err := func() error {
@@ -913,16 +931,23 @@ func (s *DiscussionSummary) encodeFields(e *jx.Encoder) {
 		s.Status.Encode(e)
 	}
 	{
+		if s.ArchivedAt.Set {
+			e.FieldStart("archivedAt")
+			s.ArchivedAt.Encode(e, json.EncodeDateTime)
+		}
+	}
+	{
 		e.FieldStart("lastCommentedAt")
 		json.EncodeDateTime(e, s.LastCommentedAt)
 	}
 }
 
-var jsonFieldsNameOfDiscussionSummary = [4]string{
+var jsonFieldsNameOfDiscussionSummary = [5]string{
 	0: "id",
 	1: "theme",
 	2: "status",
-	3: "lastCommentedAt",
+	3: "archivedAt",
+	4: "lastCommentedAt",
 }
 
 // Decode decodes DiscussionSummary from json.
@@ -964,8 +989,18 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"status\"")
 			}
+		case "archivedAt":
+			if err := func() error {
+				s.ArchivedAt.Reset()
+				if err := s.ArchivedAt.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"archivedAt\"")
+			}
 		case "lastCommentedAt":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.LastCommentedAt = v
@@ -986,7 +1021,7 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00010111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2065,6 +2100,41 @@ func (s OptCommentFrame) MarshalJSON() ([]byte, error) {
 func (s *OptCommentFrame) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
+}
+
+// Encode encodes time.Time as json.
+func (o OptDateTime) Encode(e *jx.Encoder, format func(*jx.Encoder, time.Time)) {
+	if !o.Set {
+		return
+	}
+	format(e, o.Value)
+}
+
+// Decode decodes time.Time from json.
+func (o *OptDateTime) Decode(d *jx.Decoder, format func(*jx.Decoder) (time.Time, error)) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptDateTime to nil")
+	}
+	o.Set = true
+	v, err := format(d)
+	if err != nil {
+		return err
+	}
+	o.Value = v
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptDateTime) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e, json.EncodeDateTime)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptDateTime) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d, json.DecodeDateTime)
 }
 
 // Encode encodes DialogueSettings as json.

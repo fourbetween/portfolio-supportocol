@@ -11,6 +11,7 @@ type DiscussionSummary struct {
 	ID              string
 	Theme           string
 	Status          domain.DiscussionStatus
+	ArchivedAt      *time.Time
 	LastCommentedAt time.Time
 }
 

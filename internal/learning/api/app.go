@@ -157,6 +157,22 @@ func (h *appHandler) LearningDiscussionsDiscussionIdStatusPut(
 	return &res, nil
 }
 
+func (h *appHandler) LearningDiscussionsDiscussionIdArchivePost(
+	ctx context.Context,
+	params oas.LearningDiscussionsDiscussionIdArchivePostParams,
+) (*oas.Discussion, error) {
+	item, err := h.con.ArchiveDiscussion.Execute(ctx, usecase.ArchiveDiscussionInput{
+		ID:        uuid.UUID(params.DiscussionId).String(),
+		CreatedBy: httpctx.GetUserID(ctx),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := h.toOasDiscussion(item)
+	return &res, nil
+}
+
 func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(
 	ctx context.Context,
 	params oas.LearningDiscussionsDiscussionIdCommentsGetParams,
@@ -304,12 +320,16 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 }
 
 func (h *appHandler) toOasDiscussionSummary(item *usecase.DiscussionSummary) oas.DiscussionSummary {
-	return oas.DiscussionSummary{
+	res := oas.DiscussionSummary{
 		ID:              oas.ID(uuid.MustParse(item.ID)),
 		Theme:           oas.DiscussionTheme(item.Theme),
 		Status:          oas.DiscussionStatus(item.Status),
 		LastCommentedAt: item.LastCommentedAt,
 	}
+	if item.ArchivedAt != nil {
+		res.ArchivedAt.SetTo(*item.ArchivedAt)
+	}
+	return res
 }
 
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
@@ -318,6 +338,9 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 		Theme:      oas.DiscussionTheme(item.Theme()),
 		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
 		Status:     oas.DiscussionStatus(item.Status()),
+	}
+	if item.ArchivedAt() != nil {
+		res.ArchivedAt.SetTo(*item.ArchivedAt())
 	}
 	if ds := item.DialogueSettings(); ds != nil {
 		paths := make([]oas.CommentPath, len(ds.CommentFrame.Paths))

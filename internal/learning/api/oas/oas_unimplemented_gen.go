@@ -13,6 +13,15 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// LearningDiscussionsDiscussionIdArchivePost implements POST /learning/discussions/{discussionId}/archive operation.
+//
+// Archive discussion.
+//
+// POST /learning/discussions/{discussionId}/archive
+func (UnimplementedHandler) LearningDiscussionsDiscussionIdArchivePost(ctx context.Context, params LearningDiscussionsDiscussionIdArchivePostParams) (r *Discussion, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // LearningDiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /learning/discussions/{discussionId}/comments/{commentId} operation.
 //
 // Delete comment.

@@ -145,3 +145,11 @@ func (d *Discussion) Validate() error {
 	}
 	return nil
 }
+
+func (d *Discussion) Archive(now time.Time) error {
+	if d.IsArchived() {
+		return fmt.Errorf("discussion is already archived: %w", apperr.ErrInvalidArgument)
+	}
+	d.archivedAt = &now
+	return nil
+}

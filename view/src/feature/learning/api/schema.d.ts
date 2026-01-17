@@ -253,6 +253,53 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/learning/discussions/{discussionId}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description archive discussion */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    discussionId: components["schemas"]["Id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Discussion"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/learning/discussions/{discussionId}/comments": {
         parameters: {
             query?: never;
@@ -566,6 +613,8 @@ export interface components {
             theme: components["schemas"]["DiscussionTheme"];
             status: components["schemas"]["DiscussionStatus"];
             /** Format: date-time */
+            archivedAt?: string;
+            /** Format: date-time */
             lastCommentedAt: string;
         };
         Discussion: {
@@ -573,6 +622,8 @@ export interface components {
             theme: components["schemas"]["DiscussionTheme"];
             conclusion: components["schemas"]["DiscussionConclusion"];
             status: components["schemas"]["DiscussionStatus"];
+            /** Format: date-time */
+            archivedAt?: string;
             dialogueSettings?: components["schemas"]["DialogueSettings"];
         };
         Comment: {
