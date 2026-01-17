@@ -282,6 +282,17 @@ func (s *Discussion) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.Conclusion.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "conclusion",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.DialogueSettings.Validate(); err != nil {
 			return err
 		}
@@ -294,6 +305,26 @@ func (s *Discussion) Validate() error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s DiscussionConclusion) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:     0,
+		MinLengthSet:  false,
+		MaxLength:     1000,
+		MaxLengthSet:  true,
+		Email:         false,
+		Hostname:      false,
+		Regex:         nil,
+		MinNumeric:    0,
+		MinNumericSet: false,
+		MaxNumeric:    0,
+		MaxNumericSet: false,
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
 	}
 	return nil
 }

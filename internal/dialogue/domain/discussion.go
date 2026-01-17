@@ -14,9 +14,10 @@ const (
 type Discussion struct {
 	id              string
 	theme           string
+	conclusion      string
 	settings        DiscussionSettings
 	commentsCount   int
-	lastCommentedAt *time.Time
+	lastCommentedAt time.Time
 	createdBy       string
 	createdAt       time.Time
 }
@@ -29,6 +30,10 @@ func (d *Discussion) Theme() string {
 	return d.theme
 }
 
+func (d *Discussion) Conclusion() string {
+	return d.conclusion
+}
+
 func (d *Discussion) Settings() DiscussionSettings {
 	return d.settings
 }
@@ -37,7 +42,7 @@ func (d *Discussion) CommentsCount() int {
 	return d.commentsCount
 }
 
-func (d *Discussion) LastCommentedAt() *time.Time {
+func (d *Discussion) LastCommentedAt() time.Time {
 	return d.lastCommentedAt
 }
 
@@ -58,7 +63,7 @@ func (d *Discussion) CanAddComment() error {
 
 func (d *Discussion) AddComment(now time.Time) {
 	d.commentsCount++
-	d.lastCommentedAt = &now
+	d.lastCommentedAt = now
 }
 
 func (d *Discussion) ValidateComment(commentType string, parent *Comment) error {

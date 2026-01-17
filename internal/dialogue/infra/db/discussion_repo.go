@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/dialogue/domain"
 	"github.com/fourbetween/app-supportocol/internal/dialogue/infra/db/schema/app-supportocol/model"
@@ -93,17 +92,13 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 		return nil, err
 	}
 
-	var lastCommentedAt *time.Time
-	if !row.LastCommentedAt.IsZero() {
-		lastCommentedAt = &row.LastCommentedAt
-	}
-
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
 		ID:              row.ID,
 		Theme:           row.Theme,
+		Conclusion:      row.Conclusion,
 		Settings:        settings,
 		CommentsCount:   int(row.CommentsCount),
-		LastCommentedAt: lastCommentedAt,
+		LastCommentedAt: row.LastCommentedAt,
 		CreatedBy:       row.CreatedBy,
 		CreatedAt:       row.CreatedAt,
 	})

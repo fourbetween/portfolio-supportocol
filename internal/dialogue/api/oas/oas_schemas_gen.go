@@ -257,9 +257,10 @@ func (s *DialogueSettings) SetCommentFrame(val CommentFrame) {
 
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID               ID               `json:"id"`
-	Theme            DiscussionTheme  `json:"theme"`
-	DialogueSettings DialogueSettings `json:"dialogueSettings"`
+	ID               ID                   `json:"id"`
+	Theme            DiscussionTheme      `json:"theme"`
+	Conclusion       DiscussionConclusion `json:"conclusion"`
+	DialogueSettings DialogueSettings     `json:"dialogueSettings"`
 }
 
 // GetID returns the value of ID.
@@ -270,6 +271,11 @@ func (s *Discussion) GetID() ID {
 // GetTheme returns the value of Theme.
 func (s *Discussion) GetTheme() DiscussionTheme {
 	return s.Theme
+}
+
+// GetConclusion returns the value of Conclusion.
+func (s *Discussion) GetConclusion() DiscussionConclusion {
+	return s.Conclusion
 }
 
 // GetDialogueSettings returns the value of DialogueSettings.
@@ -287,10 +293,17 @@ func (s *Discussion) SetTheme(val DiscussionTheme) {
 	s.Theme = val
 }
 
+// SetConclusion sets the value of Conclusion.
+func (s *Discussion) SetConclusion(val DiscussionConclusion) {
+	s.Conclusion = val
+}
+
 // SetDialogueSettings sets the value of DialogueSettings.
 func (s *Discussion) SetDialogueSettings(val DialogueSettings) {
 	s.DialogueSettings = val
 }
+
+type DiscussionConclusion string
 
 // Ref: #/components/schemas/DiscussionSummary
 type DiscussionSummary struct {

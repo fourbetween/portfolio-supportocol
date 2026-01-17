@@ -16,19 +16,22 @@ describe("learning-discussion-edit-form", () => {
     container.remove();
   });
 
-  it("初期値としてテーマが表示されること", async () => {
+  it("初期値としてテーマと結論が表示されること", async () => {
     const theme = "テストテーマ";
+    const conclusion = "テスト結論";
     render(
       html`
         <learning-discussion-edit-form
           .theme=${theme}
+          .conclusion=${conclusion}
         ></learning-discussion-edit-form>
       `,
       container
     );
 
-    const input = page.getByRole("textbox");
-    await expect.element(input).toHaveValue("テストテーマ");
+    const textboxes = page.getByRole("textbox");
+    await expect.element(textboxes.first()).toHaveValue("テストテーマ");
+    await expect.element(textboxes.last()).toHaveValue("テスト結論");
   });
 
   it("保存ボタンに save アイコンが表示されていること", async () => {
@@ -68,22 +71,26 @@ describe("learning-discussion-edit-form", () => {
   it("保存ボタンをクリックすると discussion-update イベントが入力値とともに発火されること", async () => {
     const onSave = vi.fn();
     const theme = "元のテーマ";
+    const conclusion = "元の結論";
     render(
       html`
         <learning-discussion-edit-form
           .theme=${theme}
-          @learning-discussion-update=${(e: LearningDiscussionUpdateEvent) => onSave(e.theme)}
+          .conclusion=${conclusion}
+          @learning-discussion-update=${(e: LearningDiscussionUpdateEvent) =>
+            onSave(e.theme, e.conclusion)}
         ></learning-discussion-edit-form>
       `,
       container
     );
 
-    const input = page.getByRole("textbox");
-    await input.fill("新しいテーマ");
+    const textboxes = page.getByRole("textbox");
+    await textboxes.first().fill("新しいテーマ");
+    await textboxes.last().fill("新しい結論");
 
     await page.getByRole("button", { name: "save" }).click();
 
-    expect(onSave).toHaveBeenCalledWith("新しいテーマ");
+    expect(onSave).toHaveBeenCalledWith("新しいテーマ", "新しい結論");
   });
 
   it("キャンセルボタンをクリックすると discussion-form-close イベントが発火されること", async () => {

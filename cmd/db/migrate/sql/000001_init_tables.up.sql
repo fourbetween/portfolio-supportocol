@@ -21,6 +21,7 @@ CREATE TABLE users (
 CREATE TABLE discussions (
 	id CHAR(36) NOT NULL,
 	theme VARCHAR(255) NOT NULL,
+	conclusion TEXT NOT NULL,
 	status VARCHAR(20) NOT NULL DEFAULT 'private',
 	comments_count INT NOT NULL DEFAULT 0,
 	last_commented_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

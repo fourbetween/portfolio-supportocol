@@ -209,6 +209,7 @@ export interface components {
             parent: components["schemas"]["CommentType"];
         };
         DiscussionTheme: string;
+        DiscussionConclusion: string;
         CommentType: string;
         CommentContent: string;
         DiscussionSummary: {
@@ -220,6 +221,7 @@ export interface components {
         Discussion: {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
+            conclusion: components["schemas"]["DiscussionConclusion"];
             dialogueSettings: components["schemas"]["DialogueSettings"];
         };
         Comment: {

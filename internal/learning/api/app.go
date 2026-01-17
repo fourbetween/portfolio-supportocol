@@ -95,9 +95,10 @@ func (h *appHandler) LearningDiscussionsDiscussionIdPut(
 	params oas.LearningDiscussionsDiscussionIdPutParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.UpdateDiscussion.Execute(ctx, usecase.UpdateDiscussionInput{
-		ID:        uuid.UUID(params.DiscussionId).String(),
-		CreatedBy: httpctx.GetUserID(ctx),
-		Theme:     string(req.Theme),
+		ID:         uuid.UUID(params.DiscussionId).String(),
+		CreatedBy:  httpctx.GetUserID(ctx),
+		Theme:      string(req.Theme),
+		Conclusion: string(req.Conclusion),
 	})
 	if err != nil {
 		return nil, err
@@ -313,9 +314,10 @@ func (h *appHandler) toOasDiscussionSummary(item *usecase.DiscussionSummary) oas
 
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	res := oas.Discussion{
-		ID:     oas.ID(uuid.MustParse(item.ID())),
-		Theme:  oas.DiscussionTheme(item.Theme()),
-		Status: oas.DiscussionStatus(item.Status()),
+		ID:         oas.ID(uuid.MustParse(item.ID())),
+		Theme:      oas.DiscussionTheme(item.Theme()),
+		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
+		Status:     oas.DiscussionStatus(item.Status()),
 	}
 	if ds := item.DialogueSettings(); ds != nil {
 		paths := make([]oas.CommentPath, len(ds.CommentFrame.Paths))

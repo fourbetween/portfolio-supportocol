@@ -26,11 +26,12 @@ export class LearningDiscussionDetailWidget extends LitElement {
     try {
       const data = await discussionRepository.update(
         this.discussion.id,
-        e.theme
+        e.theme,
+        e.conclusion
       );
       this.discussion = data;
       this._isEditing = false;
-      showToast(this, "Theme updated.", "success", 2000);
+      showToast(this, "Discussion updated.", "success", 2000);
 
       this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
     } catch (error: any) {

@@ -14,12 +14,21 @@ export class LearningDiscussionEditForm extends LitElement {
   @property({ type: String })
   theme = "";
 
+  @property({ type: String })
+  conclusion = "";
+
   @query(".theme-input")
   private inputElement?: HTMLInputElement;
 
+  @query(".conclusion-input")
+  private conclusionElement?: HTMLInputElement;
+
   private handleSave() {
     this.dispatchEvent(
-      new LearningDiscussionUpdateEvent(this.inputElement?.value ?? "")
+      new LearningDiscussionUpdateEvent(
+        this.inputElement?.value ?? "",
+        this.conclusionElement?.value ?? ""
+      )
     );
   }
 
@@ -38,6 +47,15 @@ export class LearningDiscussionEditForm extends LitElement {
             .value=${this.theme}
             placeholder="Enter discussion theme"
           />
+        </div>
+        <div class="field">
+          <textarea
+            id="conclusion"
+            class="conclusion-input"
+            .value=${this.conclusion}
+            placeholder="Enter discussion conclusion"
+            rows="3"
+          ></textarea>
         </div>
         <div class="actions">
           <button class="btn" @click=${this.handleCancel} title="Cancel">
@@ -82,7 +100,7 @@ export class LearningDiscussionEditForm extends LitElement {
 
       .field {
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start;
         gap: 8px;
       }
 
@@ -91,7 +109,8 @@ export class LearningDiscussionEditForm extends LitElement {
         color: var(--color-fg-muted);
       }
 
-      .theme-input {
+      .theme-input,
+      .conclusion-input {
         width: 100%;
       }
 
