@@ -58,7 +58,7 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 		createdAt:       params.CreatedAt,
 	}
 
-	if err := c.validate(); err != nil {
+	if err := c.Validate(); err != nil {
 		return nil, err
 	}
 

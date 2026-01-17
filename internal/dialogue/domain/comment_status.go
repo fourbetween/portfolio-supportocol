@@ -1,5 +1,7 @@
 package domain
 
+import "github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+
 type CommentStatus string
 
 const (
@@ -7,11 +9,11 @@ const (
 	CommentStatusProposed CommentStatus = "proposed"
 )
 
-func (s CommentStatus) IsValid() bool {
+func (s CommentStatus) Validate() error {
 	switch s {
 	case CommentStatusActive, CommentStatusProposed:
-		return true
+		return nil
 	default:
-		return false
+		return apperr.ErrInvalidArgument
 	}
 }

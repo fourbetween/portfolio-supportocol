@@ -61,8 +61,8 @@ func (c *Comment) Update(params UpdateCommentParams) error {
 }
 
 func (c *Comment) UpdateStatus(status CommentStatus) error {
-	if !status.IsValid() {
-		return apperr.ErrInvalidArgument
+	if err := status.Validate(); err != nil {
+		return err
 	}
 	if c.status == CommentStatusActive && status == CommentStatusProposed {
 		return apperr.ErrInvalidArgument
@@ -78,9 +78,9 @@ func (c *Comment) CheckBelongsTo(discussionID string) error {
 	return nil
 }
 
-func (c *Comment) validate() error {
-	if !c.status.IsValid() {
-		return apperr.ErrInvalidArgument
+func (c *Comment) Validate() error {
+	if err := c.status.Validate(); err != nil {
+		return err
 	}
 	return nil
 }
