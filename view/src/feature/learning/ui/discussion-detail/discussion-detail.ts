@@ -3,6 +3,7 @@ import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
+import { titleStyle } from "../../../../shared/style/title";
 import { LearningDiscussionFormOpenEvent } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-edit-form/discussion-edit-form";
@@ -56,16 +57,18 @@ export class LearningDiscussionDetail extends LitElement {
             class="clickable"
             @click=${this._handleBadgeClick}
           ></learning-discussion-status-badge>
-        </div>
-        <div class="content-row">
-          <h1 class="theme">${this.discussion?.theme}</h1>
           <button class="btn" @click=${this._handleEditClick}>
             <span class="material-symbols-outlined">edit</span>
           </button>
         </div>
+        <div class="theme-row">
+          <div class="section-title">Theme</div>
+          <h1 class="theme">${this.discussion?.theme}</h1>
+        </div>
         ${this.discussion?.conclusion
           ? html`
               <div class="conclusion-row">
+                <div class="section-title">Conclusion</div>
                 <p class="conclusion">${this.discussion.conclusion}</p>
               </div>
             `
@@ -86,6 +89,7 @@ export class LearningDiscussionDetail extends LitElement {
     baseStyle,
     buttonStyle,
     iconStyle,
+    titleStyle,
     css`
       .container {
         padding: 8px 0;
@@ -111,7 +115,11 @@ export class LearningDiscussionDetail extends LitElement {
         cursor: pointer;
       }
 
-      .content-row {
+      .theme-row {
+        padding-top: 8px;
+      }
+
+      .badge-row {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -126,14 +134,13 @@ export class LearningDiscussionDetail extends LitElement {
       .conclusion-row {
         margin-top: 8px;
         padding-top: 8px;
-        border-top: 1px solid var(--color-border-muted);
       }
 
       .conclusion {
         font-size: 14px;
-        color: var(--color-fg-muted);
         margin: 0;
         white-space: pre-wrap;
+        padding-bottom: 8px;
       }
 
       .material-symbols-outlined {

@@ -35,6 +35,25 @@ describe("learning-discussion-detail", async () => {
     await expect.element(page.getByText("テスト結論")).toBeVisible();
   });
 
+  it("セクションタイトル 'Theme' と 'Conclusion' が表示されること", async () => {
+    const discussion = {
+      id: "1",
+      theme: "テストテーマ",
+      conclusion: "テスト結論",
+      status: "public" as const,
+    };
+    render(
+      html`
+        <learning-discussion-detail
+          .discussion=${discussion}
+        ></learning-discussion-detail>
+      `,
+      container
+    );
+    await expect.element(page.getByText("Theme")).toBeVisible();
+    await expect.element(page.getByText("Conclusion")).toBeVisible();
+  });
+
   it("編集ボタンをクリックすると discussion-form-open イベントが発火されること", async () => {
     const onEdit = vi.fn();
     const discussion = {

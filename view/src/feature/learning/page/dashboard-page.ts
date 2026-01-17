@@ -25,7 +25,7 @@ import {
   type LearningDiscussionUpdatedEvent,
 } from "../event/discussion";
 import type { Comment } from "../model/comment";
-import type { DiscussionSummary } from "../model/discussion";
+import type { Discussion, DiscussionSummary } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
 
@@ -41,6 +41,9 @@ export class LearningDashboardPage extends LitElement {
 
   @state()
   private _selectedDiscussionId?: string;
+
+  @state()
+  private _selectedDiscussion?: Discussion;
 
   @state()
   private _selectedCommentId?: string;
@@ -63,6 +66,20 @@ export class LearningDashboardPage extends LitElement {
 
   constructor() {
     super();
+
+    new Task(this, {
+      task: async ([id]) => {
+        if (!id) return;
+        return discussionRepository.get(id);
+      },
+      onComplete: (discussion) => {
+        this._selectedDiscussion = discussion;
+      },
+      onError: (e: unknown) => {
+        showToast(this, String(e), "error");
+      },
+      args: () => [this._selectedDiscussionId],
+    });
 
     new Task(this, {
       task: async ([id]) => {
@@ -117,6 +134,7 @@ export class LearningDashboardPage extends LitElement {
 
   private _handleDiscussionUpdated(e: LearningDiscussionUpdatedEvent) {
     this._selectedDiscussionId = e.discussion.id;
+    this._selectedDiscussion = e.discussion;
     this._activeDrawer = undefined;
     this.summariesTask.run();
   }
@@ -159,10 +177,6 @@ export class LearningDashboardPage extends LitElement {
 
   private _handleCommentSelect(e: LearningCommentSelectEvent) {
     this._selectedCommentId = e.commentId;
-  }
-
-  private get _selectedDiscussion() {
-    return this._summaries.find((d) => d.id === this._selectedDiscussionId);
   }
 
   private get _hasProposedComments() {

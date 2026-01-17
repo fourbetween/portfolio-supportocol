@@ -19,7 +19,6 @@ export class DiscussionRepository {
       }
     );
     if (error) throw new Error(error.message);
-    if (!data) throw new Error("Discussion not found");
     return data;
   }
 
