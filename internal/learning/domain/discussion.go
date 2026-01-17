@@ -16,6 +16,7 @@ type Discussion struct {
 	theme            string
 	status           DiscussionStatus
 	commentsCount    int
+	lastCommentedAt  *time.Time
 	createdBy        string
 	createdAt        time.Time
 	dialogueSettings *DialogueSettings
@@ -37,6 +38,10 @@ func (d *Discussion) CommentsCount() int {
 	return d.commentsCount
 }
 
+func (d *Discussion) LastCommentedAt() *time.Time {
+	return d.lastCommentedAt
+}
+
 func (d *Discussion) CreatedBy() string {
 	return d.createdBy
 }
@@ -54,6 +59,20 @@ func (d *Discussion) CanAddComment() error {
 		return fmt.Errorf("discussion has reached the limit of %d comments: %w", MaxCommentsPerDiscussion, apperr.ErrLimitExceeded)
 	}
 	return nil
+}
+
+func (d *Discussion) AddComment(now time.Time) {
+	d.commentsCount++
+	d.lastCommentedAt = &now
+}
+
+func (d *Discussion) AddComments(count int, now time.Time) {
+	d.commentsCount += count
+	d.lastCommentedAt = &now
+}
+
+func (d *Discussion) SyncCommentsCount(count int) {
+	d.commentsCount = count
 }
 
 type UpdateParams struct {

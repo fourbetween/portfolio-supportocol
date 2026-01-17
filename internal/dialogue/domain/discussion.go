@@ -12,12 +12,13 @@ const (
 )
 
 type Discussion struct {
-	id            string
-	theme         string
-	settings      DiscussionSettings
-	commentsCount int
-	createdBy     string
-	createdAt     time.Time
+	id              string
+	theme           string
+	settings        DiscussionSettings
+	commentsCount   int
+	lastCommentedAt *time.Time
+	createdBy       string
+	createdAt       time.Time
 }
 
 func (d *Discussion) ID() string {
@@ -36,6 +37,10 @@ func (d *Discussion) CommentsCount() int {
 	return d.commentsCount
 }
 
+func (d *Discussion) LastCommentedAt() *time.Time {
+	return d.lastCommentedAt
+}
+
 func (d *Discussion) CreatedBy() string {
 	return d.createdBy
 }
@@ -49,6 +54,11 @@ func (d *Discussion) CanAddComment() error {
 		return fmt.Errorf("discussion has reached the limit of %d comments: %w", MaxCommentsPerDiscussion, apperr.ErrLimitExceeded)
 	}
 	return nil
+}
+
+func (d *Discussion) AddComment(now time.Time) {
+	d.commentsCount++
+	d.lastCommentedAt = &now
 }
 
 func (d *Discussion) ValidateComment(commentType string, parent *Comment) error {

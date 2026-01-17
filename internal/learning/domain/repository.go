@@ -29,6 +29,7 @@ type (
 		Delete(ctx context.Context, comment *Comment) error
 		GetPathToRoot(ctx context.Context, commentID string) ([]*Comment, error)
 		ListChildren(ctx context.Context, params ListCommentChildrenParams) ([]*Comment, error)
+		CountByDiscussionID(ctx context.Context, discussionID string) (int, error)
 	}
 
 	SearchCommentsParams struct {

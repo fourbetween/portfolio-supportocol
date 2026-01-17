@@ -38,6 +38,6 @@ func NewAPIContainer(
 		GetDiscussion:   usecase.NewGetDiscussionUsecase(discussionRepo),
 		ListDiscussions: usecase.NewListDiscussionsUsecase(discussionQS),
 		ListComments:    usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
-		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, txManager),
+		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, clockSrv, txManager),
 	}, nil
 }

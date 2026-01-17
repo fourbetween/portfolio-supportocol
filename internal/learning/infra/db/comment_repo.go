@@ -70,11 +70,7 @@ func (r *CommentRepository) Create(ctx context.Context, c *domain.Comment) error
 		return fmt.Errorf("failed to create comment: %w", err)
 	}
 
-	if err := r.incrementCommentsCount(ctx, c.DiscussionID(), 1); err != nil {
-		return err
-	}
-
-	return r.updateDiscussionsLastCommentedAt(ctx, c.DiscussionID())
+	return nil
 }
 
 func (r *CommentRepository) Update(ctx context.Context, c *domain.Comment) error {
@@ -87,7 +83,7 @@ func (r *CommentRepository) Update(ctx context.Context, c *domain.Comment) error
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
 		return fmt.Errorf("failed to update comment: %w", err)
 	}
-	return r.updateDiscussionsLastCommentedAt(ctx, c.DiscussionID())
+	return nil
 }
 
 func (r *CommentRepository) BatchCreate(ctx context.Context, comments []*domain.Comment) error {
@@ -108,20 +104,7 @@ func (r *CommentRepository) BatchCreate(ctx context.Context, comments []*domain.
 		return fmt.Errorf("failed to batch create comments: %w", err)
 	}
 
-	discussionIDSet := make(map[string]int)
-	for _, c := range comments {
-		discussionIDSet[c.DiscussionID()]++
-	}
-
-	discussionIDs := make([]string, 0, len(discussionIDSet))
-	for id, count := range discussionIDSet {
-		if err := r.incrementCommentsCount(ctx, id, count); err != nil {
-			return err
-		}
-		discussionIDs = append(discussionIDs, id)
-	}
-
-	return r.updateDiscussionsLastCommentedAt(ctx, discussionIDs...)
+	return nil
 }
 
 func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error {
@@ -133,7 +116,7 @@ func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error
 		return fmt.Errorf("failed to delete comment: %w", err)
 	}
 
-	return r.syncCommentsCount(ctx, c.DiscussionID())
+	return nil
 }
 
 func (r *CommentRepository) GetPathToRoot(ctx context.Context, commentID string) ([]*domain.Comment, error) {
@@ -193,53 +176,18 @@ func (r *CommentRepository) ListChildren(ctx context.Context, params domain.List
 	return r.toCommentDomains(dest)
 }
 
-func (r *CommentRepository) incrementCommentsCount(ctx context.Context, discussionID string, delta int) error {
-	stmt := table.Discussions.
-		UPDATE(table.Discussions.CommentsCount).
-		SET(table.Discussions.CommentsCount.ADD(mysql.Int(int64(delta)))).
-		WHERE(table.Discussions.ID.EQ(mysql.String(discussionID)))
-
-	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
-		return fmt.Errorf("failed to increment comments count: %w", err)
-	}
-	return nil
-}
-
-func (r *CommentRepository) syncCommentsCount(ctx context.Context, discussionID string) error {
-	countSubquery := mysql.SELECT(mysql.COUNT(mysql.STAR)).
+func (r *CommentRepository) CountByDiscussionID(ctx context.Context, discussionID string) (int, error) {
+	stmt := mysql.
+		SELECT(mysql.COUNT(mysql.STAR)).
 		FROM(table.Comments).
 		WHERE(table.Comments.DiscussionID.EQ(mysql.String(discussionID)))
 
-	stmt := table.Discussions.
-		UPDATE(table.Discussions.CommentsCount).
-		SET(countSubquery).
-		WHERE(table.Discussions.ID.EQ(mysql.String(discussionID)))
-
-	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
-		return fmt.Errorf("failed to sync comments count: %w", err)
-	}
-	return nil
-}
-
-func (r *CommentRepository) updateDiscussionsLastCommentedAt(ctx context.Context, discussionIDs ...string) error {
-	if len(discussionIDs) == 0 {
-		return nil
+	var count int64
+	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &count); err != nil {
+		return 0, fmt.Errorf("failed to count comments: %w", err)
 	}
 
-	ids := make([]mysql.Expression, len(discussionIDs))
-	for i, id := range discussionIDs {
-		ids[i] = mysql.String(id)
-	}
-
-	stmt := table.Discussions.
-		UPDATE(table.Discussions.LastCommentedAt).
-		SET(mysql.NOW()).
-		WHERE(table.Discussions.ID.IN(ids...))
-
-	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
-		return fmt.Errorf("failed to update discussions last_commented_at: %w", err)
-	}
-	return nil
+	return int(count), nil
 }
 
 func (r *CommentRepository) toCommentDomains(rows []model.Comments) ([]*domain.Comment, error) {

@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
@@ -11,6 +12,7 @@ type CreateCommentUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
 	fac            *domain.CommentFactory
+	clock          clock.Service
 	tx             dbtx.Manager
 }
 
@@ -18,12 +20,14 @@ func NewCreateCommentUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
 	fac *domain.CommentFactory,
+	clock clock.Service,
 	tx dbtx.Manager,
 ) *CreateCommentUsecase {
 	return &CreateCommentUsecase{
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
 		fac:            fac,
+		clock:          clock,
 		tx:             tx,
 	}
 }
@@ -68,7 +72,9 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		if err := u.commentRepo.Create(ctx, comment); err != nil {
 			return err
 		}
-		return nil
+
+		discussion.AddComment(u.clock.Now())
+		return u.discussionRepo.Save(ctx, discussion)
 	})
 	if err != nil {
 		return nil, err
