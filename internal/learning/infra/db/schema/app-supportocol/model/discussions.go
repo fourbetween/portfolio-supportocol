@@ -14,6 +14,7 @@ import (
 type Discussions struct {
 	ID              string `sql:"primary_key"`
 	Theme           string
+	Conclusion      string
 	Status          string
 	CommentsCount   int32
 	LastCommentedAt time.Time

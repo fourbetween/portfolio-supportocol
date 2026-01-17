@@ -19,6 +19,7 @@ type discussionsTable struct {
 	// Columns
 	ID              mysql.ColumnString
 	Theme           mysql.ColumnString
+	Conclusion      mysql.ColumnString
 	Status          mysql.ColumnString
 	CommentsCount   mysql.ColumnInteger
 	LastCommentedAt mysql.ColumnTimestamp
@@ -68,14 +69,15 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 	var (
 		IDColumn              = mysql.StringColumn("id")
 		ThemeColumn           = mysql.StringColumn("theme")
+		ConclusionColumn      = mysql.StringColumn("conclusion")
 		StatusColumn          = mysql.StringColumn("status")
 		CommentsCountColumn   = mysql.IntegerColumn("comments_count")
 		LastCommentedAtColumn = mysql.TimestampColumn("last_commented_at")
 		CreatedByColumn       = mysql.StringColumn("created_by")
 		CreatedAtColumn       = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
-		allColumns            = mysql.ColumnList{IDColumn, ThemeColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns        = mysql.ColumnList{ThemeColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns            = mysql.ColumnList{IDColumn, ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns        = mysql.ColumnList{ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
 		defaultColumns        = mysql.ColumnList{StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
@@ -85,6 +87,7 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		//Columns
 		ID:              IDColumn,
 		Theme:           ThemeColumn,
+		Conclusion:      ConclusionColumn,
 		Status:          StatusColumn,
 		CommentsCount:   CommentsCountColumn,
 		LastCommentedAt: LastCommentedAtColumn,
