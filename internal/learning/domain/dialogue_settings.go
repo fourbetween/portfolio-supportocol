@@ -7,14 +7,10 @@ import (
 )
 
 type DialogueSettings struct {
-	DiscussionID string
 	CommentFrame CommentFrame
 }
 
 func (s DialogueSettings) Validate() error {
-	if s.DiscussionID == "" {
-		return fmt.Errorf("discussion id must not be empty: %w", apperr.ErrInvalidArgument)
-	}
 	if err := s.CommentFrame.Validate(); err != nil {
 		return err
 	}

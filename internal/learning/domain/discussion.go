@@ -64,7 +64,6 @@ func (d *Discussion) UpdateStatus(params UpdateStatusParams) error {
 			return fmt.Errorf("comment frame is required for public status: %w", apperr.ErrInvalidArgument)
 		}
 		d.dialogueSettings = &DialogueSettings{
-			DiscussionID: d.id,
 			CommentFrame: *params.CommentFrame,
 		}
 	} else {
@@ -82,9 +81,6 @@ func (d *Discussion) validate() error {
 		}
 		if err := d.dialogueSettings.Validate(); err != nil {
 			return err
-		}
-		if d.dialogueSettings.DiscussionID != d.id {
-			return fmt.Errorf("discussion id mismatch: %w", apperr.ErrInvalidArgument)
 		}
 	}
 	if d.status.IsPrivate() && d.dialogueSettings != nil {
