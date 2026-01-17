@@ -34,14 +34,18 @@ export class DiscussionRepository {
     return data;
   }
 
-  async update(discussionId: string, theme: string): Promise<Discussion> {
+  async update(
+    discussionId: string,
+    theme: string,
+    conclusion: string
+  ): Promise<Discussion> {
     const { data, error } = await client.PUT(
       "/learning/discussions/{discussionId}",
       {
         params: {
           path: { discussionId },
         },
-        body: { theme },
+        body: { theme, conclusion },
       }
     );
     if (error) throw new Error(error.message);

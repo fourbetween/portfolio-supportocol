@@ -16,6 +16,13 @@ export class DialogueDiscussionDetail extends LitElement {
     return html`
       <div class="container">
         <h1 class="theme">${this.discussion?.theme}</h1>
+        ${this.discussion?.conclusion
+          ? html`
+              <div class="conclusion-row">
+                <p class="conclusion">${this.discussion.conclusion}</p>
+              </div>
+            `
+          : html``}
       </div>
     `;
   }
@@ -32,6 +39,19 @@ export class DialogueDiscussionDetail extends LitElement {
         font-size: 16px;
         font-weight: 400;
         margin: 0;
+      }
+
+      .conclusion-row {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--color-border-muted);
+      }
+
+      .conclusion {
+        font-size: 14px;
+        color: var(--color-fg-muted);
+        margin: 0;
+        white-space: pre-wrap;
       }
     `,
   ];

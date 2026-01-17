@@ -18,6 +18,7 @@ export const Default: Story = {
     discussion: {
       id: "1",
       theme: "論理的な議論とは何か",
+      conclusion: "前提を共有し、推論を積み重ねること。",
       status: "public",
     },
     isEditing: false,
@@ -28,7 +29,7 @@ export const Default: Story = {
       .isEditing=${args.isEditing}
       @learning-discussion-form-open=${() => console.log("edit clicked")}
       @learning-discussion-update=${(e: LearningDiscussionUpdateEvent) =>
-        console.log("save clicked", e.theme)}
+        console.log("save clicked", e.theme, e.conclusion)}
       @learning-discussion-form-close=${() => console.log("cancel clicked")}
     ></learning-discussion-detail>
   `,

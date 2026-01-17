@@ -42,6 +42,7 @@ export class LearningDiscussionDetail extends LitElement {
     return html`
       <learning-discussion-edit-form
         .theme=${this.discussion?.theme ?? ""}
+        .conclusion=${this.discussion?.conclusion ?? ""}
       ></learning-discussion-edit-form>
     `;
   }
@@ -62,6 +63,13 @@ export class LearningDiscussionDetail extends LitElement {
             <span class="material-symbols-outlined">edit</span>
           </button>
         </div>
+        ${this.discussion?.conclusion
+          ? html`
+              <div class="conclusion-row">
+                <p class="conclusion">${this.discussion.conclusion}</p>
+              </div>
+            `
+          : html``}
       </div>
     `;
   }
@@ -113,6 +121,19 @@ export class LearningDiscussionDetail extends LitElement {
         font-size: 16px;
         font-weight: 400;
         margin: 0;
+      }
+
+      .conclusion-row {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--color-border-muted);
+      }
+
+      .conclusion {
+        font-size: 14px;
+        color: var(--color-fg-muted);
+        margin: 0;
+        white-space: pre-wrap;
       }
 
       .material-symbols-outlined {
