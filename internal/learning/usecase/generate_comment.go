@@ -36,11 +36,15 @@ type GenerateCommentInput struct {
 }
 
 func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateCommentInput) ([]*domain.Comment, error) {
-	_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+	discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:        input.DiscussionID,
 		CreatedBy: input.UserID,
 	})
 	if err != nil {
+		return nil, err
+	}
+
+	if err := discussion.CanAddComment(); err != nil {
 		return nil, err
 	}
 

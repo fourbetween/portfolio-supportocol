@@ -40,6 +40,7 @@ func (f *DiscussionFactory) Create(params CreateDiscussionParams) (*Discussion, 
 type ReconstructDiscussionParams struct {
 	ID string
 	CreateDiscussionParams
+	CommentsCount    int
 	CreatedAt        time.Time
 	DialogueSettings *DialogueSettings
 }
@@ -49,6 +50,7 @@ func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Di
 		id:               params.ID,
 		theme:            params.Theme,
 		status:           params.Status,
+		commentsCount:    params.CommentsCount,
 		createdBy:        params.CreatedBy,
 		createdAt:        params.CreatedAt,
 		dialogueSettings: params.DialogueSettings,

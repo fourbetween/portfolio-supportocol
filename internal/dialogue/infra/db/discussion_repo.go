@@ -93,11 +93,12 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 	}
 
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
-		ID:        row.ID,
-		Theme:     row.Theme,
-		Settings:  settings,
-		CreatedBy: row.CreatedBy,
-		CreatedAt: row.CreatedAt,
+		ID:            row.ID,
+		Theme:         row.Theme,
+		Settings:      settings,
+		CommentsCount: int(row.CommentsCount),
+		CreatedBy:     row.CreatedBy,
+		CreatedAt:     row.CreatedAt,
 	})
 }
 

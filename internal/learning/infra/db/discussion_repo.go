@@ -165,6 +165,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 			Status:    domain.DiscussionStatus(row.Status),
 			CreatedBy: row.CreatedBy,
 		},
+		CommentsCount:    int(row.CommentsCount),
 		CreatedAt:        row.CreatedAt,
 		DialogueSettings: dialogueSettings,
 	})
