@@ -129,6 +129,7 @@ export class DialogueItemPage extends LitElement {
             .discussion=${this._discussion}
             .comments=${this._comments}
             .selectedCommentId=${this._selectedCommentId}
+            .readonly=${!!this._discussion?.archivedAt}
             @dialogue-comment-select=${this._handleCommentSelect}
             @dialogue-comment-created=${this._handleCommentCreated}
           ></dialogue-comment-explorer-widget>

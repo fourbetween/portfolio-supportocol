@@ -21,6 +21,9 @@ export class DialogueCommentContext extends LitElement {
   @property({ type: Object })
   frame?: CommentFrame;
 
+  @property({ type: Boolean })
+  readonly = false;
+
   private renderItem(comment: Comment, isLast: boolean) {
     const childCount = this.childCounts.get(comment.id) || 0;
     return html`
@@ -33,6 +36,7 @@ export class DialogueCommentContext extends LitElement {
               .comment=${comment}
               .activeChildrenCount=${childCount}
               .frame=${this.frame}
+              .readonly=${this.readonly}
             ></dialogue-comment-item>
           `
         : html`
