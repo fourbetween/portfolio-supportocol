@@ -30,10 +30,12 @@ type CreateDiscussionParams struct {
 
 func (f *DiscussionFactory) Create(params CreateDiscussionParams) (*Discussion, error) {
 	id := f.idSrv.Generate()
+	now := f.clockSrv.Now()
 	return f.Reconstruct(ReconstructDiscussionParams{
 		ID:                     id,
 		CreateDiscussionParams: params,
-		CreatedAt:              f.clockSrv.Now(),
+		LastCommentedAt:        now,
+		CreatedAt:              now,
 	})
 }
 
@@ -42,7 +44,7 @@ type ReconstructDiscussionParams struct {
 	CreateDiscussionParams
 	Conclusion       string
 	CommentsCount    int
-	LastCommentedAt  *time.Time
+	LastCommentedAt  time.Time
 	CreatedAt        time.Time
 	DialogueSettings *DialogueSettings
 }

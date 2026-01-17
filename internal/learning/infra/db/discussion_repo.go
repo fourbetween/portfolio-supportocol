@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/db/schema/app-supportocol/model"
@@ -160,11 +159,6 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 		dialogueSettings = settings
 	}
 
-	var lastCommentedAt *time.Time
-	if !row.LastCommentedAt.IsZero() {
-		lastCommentedAt = &row.LastCommentedAt
-	}
-
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
 		ID: row.ID,
 		CreateDiscussionParams: domain.CreateDiscussionParams{
@@ -174,7 +168,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 		},
 		Conclusion:       row.Conclusion,
 		CommentsCount:    int(row.CommentsCount),
-		LastCommentedAt:  lastCommentedAt,
+		LastCommentedAt:  row.LastCommentedAt,
 		CreatedAt:        row.CreatedAt,
 		DialogueSettings: dialogueSettings,
 	})
@@ -192,18 +186,13 @@ func (r *DiscussionRepository) toDialogueSettingsDomain(row *model.DialogueSetti
 }
 
 func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Discussions {
-	var lastCommentedAt time.Time
-	if d.LastCommentedAt() != nil {
-		lastCommentedAt = *d.LastCommentedAt()
-	}
-
 	return model.Discussions{
 		ID:              d.ID(),
 		Theme:           d.Theme(),
 		Conclusion:      d.Conclusion(),
 		Status:          string(d.Status()),
 		CommentsCount:   int32(d.CommentsCount()),
-		LastCommentedAt: lastCommentedAt,
+		LastCommentedAt: d.LastCommentedAt(),
 		CreatedBy:       d.CreatedBy(),
 		CreatedAt:       d.CreatedAt(),
 	}

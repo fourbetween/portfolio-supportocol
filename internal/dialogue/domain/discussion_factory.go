@@ -16,7 +16,7 @@ type ReconstructDiscussionParams struct {
 	Conclusion      string
 	Settings        DiscussionSettings
 	CommentsCount   int
-	LastCommentedAt *time.Time
+	LastCommentedAt time.Time
 	CreatedBy       string
 	CreatedAt       time.Time
 }

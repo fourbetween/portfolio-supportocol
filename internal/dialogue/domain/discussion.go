@@ -17,7 +17,7 @@ type Discussion struct {
 	conclusion      string
 	settings        DiscussionSettings
 	commentsCount   int
-	lastCommentedAt *time.Time
+	lastCommentedAt time.Time
 	createdBy       string
 	createdAt       time.Time
 }
@@ -42,7 +42,7 @@ func (d *Discussion) CommentsCount() int {
 	return d.commentsCount
 }
 
-func (d *Discussion) LastCommentedAt() *time.Time {
+func (d *Discussion) LastCommentedAt() time.Time {
 	return d.lastCommentedAt
 }
 
@@ -63,7 +63,7 @@ func (d *Discussion) CanAddComment() error {
 
 func (d *Discussion) AddComment(now time.Time) {
 	d.commentsCount++
-	d.lastCommentedAt = &now
+	d.lastCommentedAt = now
 }
 
 func (d *Discussion) ValidateComment(commentType string, parent *Comment) error {
