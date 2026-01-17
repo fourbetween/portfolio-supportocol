@@ -18,6 +18,7 @@ type Discussions struct {
 	Status          string
 	CommentsCount   int32
 	LastCommentedAt time.Time
+	ArchivedAt      *time.Time
 	CreatedBy       string
 	CreatedAt       time.Time
 	UpdatedAt       time.Time

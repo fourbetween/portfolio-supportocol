@@ -23,6 +23,7 @@ type discussionsTable struct {
 	Status          mysql.ColumnString
 	CommentsCount   mysql.ColumnInteger
 	LastCommentedAt mysql.ColumnTimestamp
+	ArchivedAt      mysql.ColumnTimestamp
 	CreatedBy       mysql.ColumnString
 	CreatedAt       mysql.ColumnTimestamp
 	UpdatedAt       mysql.ColumnTimestamp
@@ -73,11 +74,12 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		StatusColumn          = mysql.StringColumn("status")
 		CommentsCountColumn   = mysql.IntegerColumn("comments_count")
 		LastCommentedAtColumn = mysql.TimestampColumn("last_commented_at")
+		ArchivedAtColumn      = mysql.TimestampColumn("archived_at")
 		CreatedByColumn       = mysql.StringColumn("created_by")
 		CreatedAtColumn       = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
-		allColumns            = mysql.ColumnList{IDColumn, ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns        = mysql.ColumnList{ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns            = mysql.ColumnList{IDColumn, ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns        = mysql.ColumnList{ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
 		defaultColumns        = mysql.ColumnList{StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
@@ -91,6 +93,7 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		Status:          StatusColumn,
 		CommentsCount:   CommentsCountColumn,
 		LastCommentedAt: LastCommentedAtColumn,
+		ArchivedAt:      ArchivedAtColumn,
 		CreatedBy:       CreatedByColumn,
 		CreatedAt:       CreatedAtColumn,
 		UpdatedAt:       UpdatedAtColumn,

@@ -18,6 +18,7 @@ type Discussion struct {
 	status           DiscussionStatus
 	commentsCount    int
 	lastCommentedAt  time.Time
+	archivedAt       *time.Time
 	createdBy        string
 	createdAt        time.Time
 	dialogueSettings *DialogueSettings
