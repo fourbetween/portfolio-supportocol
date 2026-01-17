@@ -29,6 +29,9 @@ export class LearningCommentItem extends LitElement {
   @property({ type: Array })
   availableTypes: string[] = [];
 
+  @property({ type: Boolean })
+  readonly = false;
+
   @state()
   private mode: "view" | "edit" | "reply" | "generate" = "view";
 
@@ -130,44 +133,46 @@ export class LearningCommentItem extends LitElement {
         style="cursor: pointer;"
       ></learning-comment-card>
       <div class="actions" role="group" aria-label="Actions">
-        ${isProposed
-          ? html`
-              ${this.renderIconButton(
-                "check",
-                "accept",
-                this.handleAcceptClick,
-                "success accept-button"
-              )}
-              ${this.renderIconButton(
-                "close",
-                "reject",
-                this.handleRejectClick,
-                "danger reject-button"
-              )}
-            `
-          : html`
-              ${this.renderIconButton("reply", "reply", (e) =>
-                this.handleOpenTypePopup(e, "reply")
-              )}
-              ${this.renderIconButton(
-                "edit",
-                "edit",
-                this.handleEditClick,
-                "edit-button"
-              )}
-              ${this.renderIconButton(
-                "psychology",
-                "generate",
-                (e) => this.handleOpenTypePopup(e, "generate"),
-                "primary generate-button"
-              )}
-              ${this.renderIconButton(
-                "delete",
-                "delete",
-                this.handleDeleteClick,
-                "danger delete-button"
-              )}
-            `}
+        ${!this.readonly
+          ? isProposed
+            ? html`
+                ${this.renderIconButton(
+                  "check",
+                  "accept",
+                  this.handleAcceptClick,
+                  "success accept-button"
+                )}
+                ${this.renderIconButton(
+                  "close",
+                  "reject",
+                  this.handleRejectClick,
+                  "danger reject-button"
+                )}
+              `
+            : html`
+                ${this.renderIconButton("reply", "reply", (e) =>
+                  this.handleOpenTypePopup(e, "reply")
+                )}
+                ${this.renderIconButton(
+                  "edit",
+                  "edit",
+                  this.handleEditClick,
+                  "edit-button"
+                )}
+                ${this.renderIconButton(
+                  "psychology",
+                  "generate",
+                  (e) => this.handleOpenTypePopup(e, "generate"),
+                  "primary generate-button"
+                )}
+                ${this.renderIconButton(
+                  "delete",
+                  "delete",
+                  this.handleDeleteClick,
+                  "danger delete-button"
+                )}
+              `
+          : nothing}
         ${this.touch.isTouchDevice
           ? this.renderIconButton("ads_click", "focus", (e) =>
               this.handleFocusClick(e)

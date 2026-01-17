@@ -37,12 +37,43 @@ const meta: Meta<LearningCommentContextArgs> = {
       @learning-comment-created=${args.onCommentCreated}
       @learning-comment-update=${args.onCommentUpdate}
       @learning-comment-create=${args.onCommentCreate}
+      .readonly=${args.readonly}
     ></learning-comment-context>
   `,
 };
 
 export default meta;
 type Story = StoryObj<LearningCommentContextArgs>;
+
+const mockPath = [
+  {
+    id: "1",
+    discussionId: "1",
+    parentCommentId: null,
+    content: "論理的な議論を支援するためのプラットフォームについて",
+    commentType: "idea",
+    status: "active" as const,
+    createdAt: "2026-01-04T00:00:00Z",
+  },
+  {
+    id: "2",
+    discussionId: "1",
+    parentCommentId: "1",
+    content: "具体的にどのような機能がありますか？",
+    commentType: "question",
+    status: "active" as const,
+    createdAt: "2026-01-04T00:00:00Z",
+  },
+  {
+    id: "3",
+    discussionId: "1",
+    parentCommentId: "2",
+    content: "コメントフレームと木構造を用います。",
+    commentType: "answer",
+    status: "active" as const,
+    createdAt: "2026-01-04T00:00:00Z",
+  },
+];
 
 export const Default: Story = {
   args: {
@@ -52,34 +83,19 @@ export const Default: Story = {
       ["2", 3],
       ["3", 0],
     ]),
-    path: [
-      {
-        id: "1",
-        discussionId: "1",
-        parentCommentId: null,
-        content: "論理的な議論を支援するためのプラットフォームについて",
-        commentType: "idea",
-        status: "active" as const,
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-      {
-        id: "2",
-        discussionId: "1",
-        parentCommentId: "1",
-        content: "具体的にどのような機能がありますか？",
-        commentType: "question",
-        status: "active" as const,
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-      {
-        id: "3",
-        discussionId: "1",
-        parentCommentId: "2",
-        content: "コメントフレームと木構造を用います。",
-        commentType: "answer",
-        status: "active" as const,
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-    ],
+    path: mockPath,
+  },
+};
+
+export const Readonly: Story = {
+  args: {
+    availableTypes: ["idea", "question", "answer", "claim", "evidence"],
+    childCounts: new Map([
+      ["1", 5],
+      ["2", 3],
+      ["3", 0],
+    ]),
+    path: mockPath,
+    readonly: true,
   },
 };

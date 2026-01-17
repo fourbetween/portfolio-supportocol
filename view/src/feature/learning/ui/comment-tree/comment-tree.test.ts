@@ -97,6 +97,34 @@ describe("learning-comment-tree", async () => {
       .toBeInTheDocument();
   });
 
+  it("readonly プロパティが指定された場合、子要素に引き継がれること", async () => {
+    const comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "root comment",
+        commentType: "idea",
+        status: "active" as const,
+        createdAt: "2026-01-04T00:00:00Z",
+      },
+    ];
+    render(
+      html`
+        <learning-comment-tree
+          .comments=${comments}
+          .readonly=${true}
+        ></learning-comment-tree>
+      `,
+      container
+    );
+
+    // root comment のアクションボタン（例：reply）が表示されないことを確認
+    await expect
+      .element(page.getByRole("button", { name: "reply" }))
+      .not.toBeInTheDocument();
+  });
+
   it("タイプバッジをクリックすると、孫コメントが非表示になること", async () => {
     const comments = [
       {

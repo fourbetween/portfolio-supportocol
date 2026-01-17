@@ -84,6 +84,32 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     expect(deletedCommentId).toBe("1");
   });
 
+  it("readonly が true の場合、アクションボタンを表示しない", async () => {
+    render(
+      html`
+        <learning-comment-item
+          .comment=${mockComment}
+          .availableTypes=${availableTypes}
+          .readonly=${true}
+        ></learning-comment-item>
+      `,
+      container
+    );
+
+    await expect
+      .element(page.getByRole("button", { name: "reply" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "edit" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "generate" }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "delete" }))
+      .not.toBeInTheDocument();
+  });
+
   it("status が proposed の場合、承諾ボタンと拒否ボタンを表示する", async () => {
     let acceptedComment: Comment | undefined;
     let rejectedComment: Comment | undefined;

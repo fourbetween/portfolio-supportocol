@@ -20,6 +20,9 @@ export class LearningCommentContext extends LitElement {
   @property({ type: Array })
   availableTypes: string[] = [];
 
+  @property({ type: Boolean })
+  readonly = false;
+
   private renderItem(comment: Comment, isLast: boolean) {
     const childCount = this.childCounts.get(comment.id) || 0;
     return html`
@@ -32,6 +35,7 @@ export class LearningCommentContext extends LitElement {
               .comment=${comment}
               .activeChildrenCount=${childCount}
               .availableTypes=${this.availableTypes}
+              .readonly=${this.readonly}
             ></learning-comment-item>
           `
         : html`

@@ -35,6 +35,9 @@ export class LearningCommentExplorerWidget extends LitElement {
   @property({ type: String })
   selectedCommentId?: string;
 
+  @property({ type: Boolean })
+  readonly = false;
+
   @state()
   private availableTypes: string[] = [];
 
@@ -227,7 +230,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     return html`
       <div class="container">
         ${this.renderContextSection(path)}
-        ${this.selectedCommentId
+        ${this.selectedCommentId || this.readonly
           ? nothing
           : html`
               <learning-comment-create-widget
@@ -242,6 +245,7 @@ export class LearningCommentExplorerWidget extends LitElement {
           </div>
           <learning-comment-tree
             .comments=${descendants}
+            .readonly=${this.readonly}
             @learning-comment-create=${this.handleCommentCreate}
             @learning-comment-update=${this.handleCommentUpdate}
             @learning-comment-delete=${this.handleCommentDelete}
@@ -270,6 +274,7 @@ export class LearningCommentExplorerWidget extends LitElement {
           .path=${path}
           .childCounts=${this.childCounts}
           .availableTypes=${this.availableTypes}
+          .readonly=${this.readonly}
           @learning-comment-create=${this.handleCommentCreate}
           @learning-comment-update=${this.handleCommentUpdate}
           @learning-comment-delete=${this.handleCommentDelete}
@@ -326,6 +331,19 @@ export class LearningCommentExplorerWidget extends LitElement {
       }
       .clear-button .material-symbols-outlined {
         font-size: 16px;
+      }
+      .archived-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        background-color: var(--color-canvas-subtle);
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        color: var(--color-fg-muted);
+      }
+      .archived-info .material-symbols-outlined {
+        font-size: 20px;
       }
     `,
   ];

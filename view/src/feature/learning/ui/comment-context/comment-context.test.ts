@@ -91,6 +91,35 @@ describe("learning-comment-context", async () => {
       .toBeInTheDocument();
   });
 
+  it("readonly プロパティが指定された場合、末端の item に引き継がれること", async () => {
+    const path = [
+      {
+        id: "1",
+        discussionId: "d1",
+        parentCommentId: null,
+        commentType: "idea",
+        status: "active" as const,
+        content: "First comment",
+        createdAt: "2026-01-04T00:00:00Z",
+      },
+    ];
+
+    render(
+      html`
+        <learning-comment-context
+          .path=${path}
+          .readonly=${true}
+        ></learning-comment-context>
+      `,
+      container
+    );
+
+    // 末端のコメントのアクションボタン（例：edit）が表示されないことを確認
+    await expect
+      .element(page.getByRole("button", { name: "edit" }))
+      .not.toBeInTheDocument();
+  });
+
   it("コメントをクリックしたときに comment-select イベントが発火されること", async () => {
     const path = [
       {
