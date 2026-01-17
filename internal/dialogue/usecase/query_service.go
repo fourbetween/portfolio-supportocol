@@ -8,6 +8,7 @@ import (
 type DiscussionSummary struct {
 	ID              string
 	Theme           string
+	ArchivedAt      *time.Time
 	LastCommentedAt time.Time
 }
 

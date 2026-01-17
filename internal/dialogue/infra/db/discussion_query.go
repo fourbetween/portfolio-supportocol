@@ -25,10 +25,13 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context) ([]*usecas
 		SELECT(
 			table.Discussions.ID,
 			table.Discussions.Theme,
+			table.Discussions.ArchivedAt,
 			table.Discussions.LastCommentedAt,
 		).
 		FROM(table.Discussions).
-		WHERE(table.Discussions.Status.EQ(mysql.String("public"))).
+		WHERE(
+			table.Discussions.Status.EQ(mysql.String("public")),
+		).
 		ORDER_BY(table.Discussions.LastCommentedAt.DESC())
 
 	var dest []model.Discussions
@@ -41,6 +44,7 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context) ([]*usecas
 		res[i] = &usecase.DiscussionSummary{
 			ID:              d.ID,
 			Theme:           d.Theme,
+			ArchivedAt:      d.ArchivedAt,
 			LastCommentedAt: d.LastCommentedAt,
 		}
 	}

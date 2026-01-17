@@ -66,7 +66,9 @@ func (r *DiscussionRepository) Search(ctx context.Context) ([]*domain.Discussion
 			table.Discussions.
 				LEFT_JOIN(table.DialogueSettings, table.Discussions.ID.EQ(table.DialogueSettings.DiscussionID)),
 		).
-		WHERE(table.Discussions.Status.EQ(mysql.String("public"))).
+		WHERE(
+			table.Discussions.Status.EQ(mysql.String("public")),
+		).
 		ORDER_BY(table.Discussions.CreatedAt.DESC())
 
 	var dest []discussionWithSettings
@@ -99,6 +101,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 		Settings:        settings,
 		CommentsCount:   int(row.CommentsCount),
 		LastCommentedAt: row.LastCommentedAt,
+		ArchivedAt:      row.ArchivedAt,
 		CreatedBy:       row.CreatedBy,
 		CreatedAt:       row.CreatedAt,
 	})
