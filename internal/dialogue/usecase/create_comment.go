@@ -68,7 +68,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			ParentCommentID: input.ParentCommentID,
 			CommentTypeID:   input.CommentType,
 			Content:         input.Content,
-			Status:          domain.CommentStatusActive,
+			Status:          domain.CommentStatusProposed,
 		})
 		if createErr != nil {
 			return createErr
