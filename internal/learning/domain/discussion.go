@@ -60,7 +60,18 @@ func (d *Discussion) DialogueSettings() *DialogueSettings {
 	return d.dialogueSettings
 }
 
+func (d *Discussion) ArchivedAt() *time.Time {
+	return d.archivedAt
+}
+
+func (d *Discussion) IsArchived() bool {
+	return d.archivedAt != nil
+}
+
 func (d *Discussion) CanAddComment() error {
+	if d.IsArchived() {
+		return fmt.Errorf("discussion is archived: %w", apperr.ErrPermissionDenied)
+	}
 	if d.commentsCount >= MaxCommentsPerDiscussion {
 		return fmt.Errorf("discussion has reached the limit of %d comments: %w", MaxCommentsPerDiscussion, apperr.ErrLimitExceeded)
 	}

@@ -102,6 +102,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 			table.Discussions.Status.SET(table.Discussions.NEW.Status),
 			table.Discussions.CommentsCount.SET(table.Discussions.NEW.CommentsCount),
 			table.Discussions.LastCommentedAt.SET(table.Discussions.NEW.LastCommentedAt),
+			table.Discussions.ArchivedAt.SET(table.Discussions.NEW.ArchivedAt),
 		)
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
@@ -169,6 +170,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 		Conclusion:       row.Conclusion,
 		CommentsCount:    int(row.CommentsCount),
 		LastCommentedAt:  row.LastCommentedAt,
+		ArchivedAt:       row.ArchivedAt,
 		CreatedAt:        row.CreatedAt,
 		DialogueSettings: dialogueSettings,
 	})
@@ -193,6 +195,7 @@ func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Dis
 		Status:          string(d.Status()),
 		CommentsCount:   int32(d.CommentsCount()),
 		LastCommentedAt: d.LastCommentedAt(),
+		ArchivedAt:      d.ArchivedAt(),
 		CreatedBy:       d.CreatedBy(),
 		CreatedAt:       d.CreatedAt(),
 	}
