@@ -27,3 +27,15 @@ export const Default: Story = {
     },
   },
 };
+
+export const Archived: Story = {
+  args: {
+    summary: {
+      id: "2",
+      theme: "Archived Discussion Theme",
+      status: "public",
+      archivedAt: "2023-01-02T00:00:00Z",
+      lastCommentedAt: "2023-01-01T00:00:00Z",
+    },
+  },
+};

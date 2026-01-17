@@ -113,4 +113,24 @@ describe("learning-discussion-item", () => {
 
     expect(styles.position).toBe("absolute");
   });
+
+  it("アーカイブされた議論の場合、archivedクラスが付与されること", async () => {
+    const archivedDiscussion = {
+      ...discussion,
+      archivedAt: "2023-01-01T00:00:00Z",
+    };
+    render(
+      html`
+        <learning-discussion-item
+          .summary=${archivedDiscussion}
+        ></learning-discussion-item>
+      `,
+      container
+    );
+
+    const el = container.querySelector("learning-discussion-item")!;
+    await (el as any).updateComplete;
+    const item = el.shadowRoot!.querySelector(".item")!;
+    expect(item.classList.contains("archived")).toBe(true);
+  });
 });

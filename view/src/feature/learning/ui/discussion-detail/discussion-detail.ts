@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
@@ -10,6 +10,7 @@ import {
   LearningDiscussionUnarchiveEvent,
 } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
+import "../discussion-archive-badge/discussion-archive-badge";
 import "../discussion-edit-form/discussion-edit-form";
 import "../discussion-status-badge/discussion-status-badge";
 import "../discussion-status-popup/discussion-status-popup";
@@ -62,11 +63,9 @@ export class LearningDiscussionDetail extends LitElement {
               class="clickable"
               @click=${this._handleBadgeClick}
             ></learning-discussion-status-badge>
-            ${this.discussion?.archivedAt
-              ? html`
-                  <span class="archive-label">Archived</span>
-                `
-              : nothing}
+            <learning-discussion-archive-badge
+              .archived=${!!this.discussion?.archivedAt}
+            ></learning-discussion-archive-badge>
           </div>
           <div class="actions">
             ${this.discussion?.archivedAt
@@ -165,16 +164,6 @@ export class LearningDiscussionDetail extends LitElement {
         display: flex;
         align-items: center;
         gap: 8px;
-      }
-
-      .archive-label {
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--color-fg-muted);
-        background-color: var(--color-canvas-subtle);
-        padding: 2px 8px;
-        border-radius: 2em;
-        border: 1px solid var(--color-border-default);
       }
 
       .actions {
