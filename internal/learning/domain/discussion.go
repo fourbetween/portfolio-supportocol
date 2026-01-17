@@ -55,8 +55,8 @@ type UpdateStatusParams struct {
 }
 
 func (d *Discussion) UpdateStatus(params UpdateStatusParams) error {
-	if !params.Status.IsValid() {
-		return fmt.Errorf("invalid discussion status: %s: %w", params.Status, apperr.ErrInvalidArgument)
+	if err := params.Status.Validate(); err != nil {
+		return fmt.Errorf("invalid discussion status: %s: %w", params.Status, err)
 	}
 
 	if params.Status.IsPublic() {
@@ -71,10 +71,13 @@ func (d *Discussion) UpdateStatus(params UpdateStatusParams) error {
 	}
 
 	d.status = params.Status
-	return d.validate()
+	return d.Validate()
 }
 
-func (d *Discussion) validate() error {
+func (d *Discussion) Validate() error {
+	if err := d.status.Validate(); err != nil {
+		return err
+	}
 	if d.status.IsPublic() {
 		if d.dialogueSettings == nil {
 			return fmt.Errorf("dialogue settings is required for public status: %w", apperr.ErrInvalidArgument)

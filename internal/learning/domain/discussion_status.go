@@ -1,5 +1,7 @@
 package domain
 
+import "github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+
 type DiscussionStatus string
 
 const (
@@ -7,12 +9,12 @@ const (
 	DiscussionStatusPublic  DiscussionStatus = "public"
 )
 
-func (s DiscussionStatus) IsValid() bool {
+func (s DiscussionStatus) Validate() error {
 	switch s {
 	case DiscussionStatusPrivate, DiscussionStatusPublic:
-		return true
+		return nil
 	default:
-		return false
+		return apperr.ErrInvalidArgument
 	}
 }
 

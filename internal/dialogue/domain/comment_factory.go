@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
@@ -48,10 +47,7 @@ type ReconstructCommentParams struct {
 }
 
 func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment, error) {
-	if !params.Status.IsValid() {
-		return nil, fmt.Errorf("invalid comment status")
-	}
-	return &Comment{
+	c := &Comment{
 		id:              params.ID,
 		discussionID:    params.DiscussionID,
 		parentCommentID: params.ParentCommentID,
@@ -60,5 +56,11 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 		status:          params.Status,
 		createdBy:       params.CreatedBy,
 		createdAt:       params.CreatedAt,
-	}, nil
+	}
+
+	if err := c.Validate(); err != nil {
+		return nil, err
+	}
+
+	return c, nil
 }

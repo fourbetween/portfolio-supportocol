@@ -54,7 +54,7 @@ func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Di
 		dialogueSettings: params.DialogueSettings,
 	}
 
-	if err := d.validate(); err != nil {
+	if err := d.Validate(); err != nil {
 		return nil, err
 	}
 
