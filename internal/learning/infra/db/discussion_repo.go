@@ -108,7 +108,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 	}
 
 	if d.Status() == domain.DiscussionStatusPublic {
-		settingsModel, err := r.toDialogueSettingsModel(d.DialogueSettings())
+		settingsModel, err := r.toDialogueSettingsModel(d.ID(), d.DialogueSettings())
 		if err != nil {
 			return fmt.Errorf("failed to convert dialogue settings to model: %w", err)
 		}
@@ -177,7 +177,6 @@ func (r *DiscussionRepository) toDialogueSettingsDomain(row *model.DialogueSetti
 	}
 
 	return &domain.DialogueSettings{
-		DiscussionID: row.DiscussionID,
 		CommentFrame: commentFrame,
 	}, nil
 }
@@ -192,14 +191,14 @@ func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Dis
 	}
 }
 
-func (r *DiscussionRepository) toDialogueSettingsModel(settings *domain.DialogueSettings) (model.DialogueSettings, error) {
+func (r *DiscussionRepository) toDialogueSettingsModel(discussionID string, settings *domain.DialogueSettings) (model.DialogueSettings, error) {
 	commentFrameJSON, err := json.Marshal(settings.CommentFrame)
 	if err != nil {
 		return model.DialogueSettings{}, fmt.Errorf("failed to marshal comment frame: %w", err)
 	}
 
 	return model.DialogueSettings{
-		DiscussionID: settings.DiscussionID,
+		DiscussionID: discussionID,
 		CommentFrame: string(commentFrameJSON),
 	}, nil
 }

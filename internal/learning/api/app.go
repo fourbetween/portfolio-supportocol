@@ -329,7 +329,6 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 			oasTypes[i] = oas.CommentType(t)
 		}
 		res.DialogueSettings.SetTo(oas.DialogueSettings{
-			DiscussionId: oas.ID(uuid.MustParse(ds.DiscussionID)),
 			CommentFrame: oas.CommentFrame{
 				Types: oasTypes,
 				Paths: paths,

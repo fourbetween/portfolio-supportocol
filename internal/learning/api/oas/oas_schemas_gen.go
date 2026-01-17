@@ -220,23 +220,12 @@ func (s *CookieAuth) SetRoles(val []string) {
 
 // Ref: #/components/schemas/DialogueSettings
 type DialogueSettings struct {
-	DiscussionId ID           `json:"discussionId"`
 	CommentFrame CommentFrame `json:"commentFrame"`
-}
-
-// GetDiscussionId returns the value of DiscussionId.
-func (s *DialogueSettings) GetDiscussionId() ID {
-	return s.DiscussionId
 }
 
 // GetCommentFrame returns the value of CommentFrame.
 func (s *DialogueSettings) GetCommentFrame() CommentFrame {
 	return s.CommentFrame
-}
-
-// SetDiscussionId sets the value of DiscussionId.
-func (s *DialogueSettings) SetDiscussionId(val ID) {
-	s.DiscussionId = val
 }
 
 // SetCommentFrame sets the value of CommentFrame.

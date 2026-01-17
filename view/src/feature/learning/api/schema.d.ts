@@ -544,7 +544,6 @@ export interface components {
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
         DialogueSettings: {
-            discussionId: components["schemas"]["Id"];
             commentFrame: components["schemas"]["CommentFrame"];
         };
         CommentFrame: {

@@ -32,12 +32,9 @@ components:
     DialogueSettings:
       type: object
       properties:
-        discussionId:
-          $ref: "#/components/schemas/Id"
         commentFrame:
           $ref: "#/components/schemas/CommentFrame"
       required:
-        - discussionId
         - commentFrame
     CommentFrame:
       type: object
