@@ -1,10 +1,10 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { baseStyle } from "../../../../shared/style/base";
-import { iconStyle } from "../../../../shared/style/icon";
+import { baseStyle } from "../../style/base";
+import { iconStyle } from "../../style/icon";
 
-@customElement("learning-discussion-archive-badge")
-export class LearningDiscussionArchiveBadge extends LitElement {
+@customElement("ui-discussion-archive-badge")
+export class DiscussionArchiveBadge extends LitElement {
   @property({ type: Boolean })
   archived = false;
 

@@ -4,13 +4,13 @@ import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { titleStyle } from "../../../../shared/style/title";
+import "../../../../shared/ui/discussion-archive-badge/discussion-archive-badge";
 import {
   LearningDiscussionArchiveEvent,
   LearningDiscussionFormOpenEvent,
   LearningDiscussionUnarchiveEvent,
 } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
-import "../discussion-archive-badge/discussion-archive-badge";
 import "../discussion-edit-form/discussion-edit-form";
 import "../discussion-status-badge/discussion-status-badge";
 import "../discussion-status-popup/discussion-status-popup";
@@ -63,9 +63,9 @@ export class LearningDiscussionDetail extends LitElement {
               class="clickable"
               @click=${this._handleBadgeClick}
             ></learning-discussion-status-badge>
-            <learning-discussion-archive-badge
+            <ui-discussion-archive-badge
               .archived=${!!this.discussion?.archivedAt}
-            ></learning-discussion-archive-badge>
+            ></ui-discussion-archive-badge>
           </div>
           <div class="actions">
             ${this.discussion?.archivedAt
