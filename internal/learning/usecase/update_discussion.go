@@ -20,9 +20,10 @@ func NewUpdateDiscussionUsecase(repo domain.DiscussionRepository, tx dbtx.Manage
 }
 
 type UpdateDiscussionInput struct {
-	ID        string
-	CreatedBy string
-	Theme     string
+	ID         string
+	CreatedBy  string
+	Theme      string
+	Conclusion string
 }
 
 func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscussionInput) (*domain.Discussion, error) {
@@ -38,7 +39,8 @@ func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscu
 		}
 
 		if err := discussion.Update(domain.UpdateParams{
-			Theme: input.Theme,
+			Theme:      input.Theme,
+			Conclusion: input.Conclusion,
 		}); err != nil {
 			return err
 		}

@@ -14,6 +14,7 @@ const (
 type Discussion struct {
 	id              string
 	theme           string
+	conclusion      string
 	settings        DiscussionSettings
 	commentsCount   int
 	lastCommentedAt *time.Time
@@ -27,6 +28,10 @@ func (d *Discussion) ID() string {
 
 func (d *Discussion) Theme() string {
 	return d.theme
+}
+
+func (d *Discussion) Conclusion() string {
+	return d.conclusion
 }
 
 func (d *Discussion) Settings() DiscussionSettings {

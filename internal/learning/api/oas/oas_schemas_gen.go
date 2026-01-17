@@ -235,10 +235,11 @@ func (s *DialogueSettings) SetCommentFrame(val CommentFrame) {
 
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID               ID                  `json:"id"`
-	Theme            DiscussionTheme     `json:"theme"`
-	Status           DiscussionStatus    `json:"status"`
-	DialogueSettings OptDialogueSettings `json:"dialogueSettings"`
+	ID               ID                   `json:"id"`
+	Theme            DiscussionTheme      `json:"theme"`
+	Conclusion       DiscussionConclusion `json:"conclusion"`
+	Status           DiscussionStatus     `json:"status"`
+	DialogueSettings OptDialogueSettings  `json:"dialogueSettings"`
 }
 
 // GetID returns the value of ID.
@@ -249,6 +250,11 @@ func (s *Discussion) GetID() ID {
 // GetTheme returns the value of Theme.
 func (s *Discussion) GetTheme() DiscussionTheme {
 	return s.Theme
+}
+
+// GetConclusion returns the value of Conclusion.
+func (s *Discussion) GetConclusion() DiscussionConclusion {
+	return s.Conclusion
 }
 
 // GetStatus returns the value of Status.
@@ -271,6 +277,11 @@ func (s *Discussion) SetTheme(val DiscussionTheme) {
 	s.Theme = val
 }
 
+// SetConclusion sets the value of Conclusion.
+func (s *Discussion) SetConclusion(val DiscussionConclusion) {
+	s.Conclusion = val
+}
+
 // SetStatus sets the value of Status.
 func (s *Discussion) SetStatus(val DiscussionStatus) {
 	s.Status = val
@@ -280,6 +291,8 @@ func (s *Discussion) SetStatus(val DiscussionStatus) {
 func (s *Discussion) SetDialogueSettings(val OptDialogueSettings) {
 	s.DialogueSettings = val
 }
+
+type DiscussionConclusion string
 
 // Ref: #/components/schemas/DiscussionStatus
 type DiscussionStatus string
@@ -537,7 +550,8 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentC
 type LearningDiscussionsDiscussionIdDeleteNoContent struct{}
 
 type LearningDiscussionsDiscussionIdPutReq struct {
-	Theme DiscussionTheme `json:"theme"`
+	Theme      DiscussionTheme      `json:"theme"`
+	Conclusion DiscussionConclusion `json:"conclusion"`
 }
 
 // GetTheme returns the value of Theme.
@@ -545,9 +559,19 @@ func (s *LearningDiscussionsDiscussionIdPutReq) GetTheme() DiscussionTheme {
 	return s.Theme
 }
 
+// GetConclusion returns the value of Conclusion.
+func (s *LearningDiscussionsDiscussionIdPutReq) GetConclusion() DiscussionConclusion {
+	return s.Conclusion
+}
+
 // SetTheme sets the value of Theme.
 func (s *LearningDiscussionsDiscussionIdPutReq) SetTheme(val DiscussionTheme) {
 	s.Theme = val
+}
+
+// SetConclusion sets the value of Conclusion.
+func (s *LearningDiscussionsDiscussionIdPutReq) SetConclusion(val DiscussionConclusion) {
+	s.Conclusion = val
 }
 
 type LearningDiscussionsDiscussionIdStatusPutReq struct {

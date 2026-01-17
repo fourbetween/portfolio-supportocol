@@ -14,6 +14,7 @@ const (
 type Discussion struct {
 	id               string
 	theme            string
+	conclusion       string
 	status           DiscussionStatus
 	commentsCount    int
 	lastCommentedAt  *time.Time
@@ -28,6 +29,10 @@ func (d *Discussion) ID() string {
 
 func (d *Discussion) Theme() string {
 	return d.theme
+}
+
+func (d *Discussion) Conclusion() string {
+	return d.conclusion
 }
 
 func (d *Discussion) Status() DiscussionStatus {
@@ -76,11 +81,13 @@ func (d *Discussion) SyncCommentsCount(count int) {
 }
 
 type UpdateParams struct {
-	Theme string
+	Theme      string
+	Conclusion string
 }
 
 func (d *Discussion) Update(params UpdateParams) error {
 	d.theme = params.Theme
+	d.conclusion = params.Conclusion
 	return nil
 }
 

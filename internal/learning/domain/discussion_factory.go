@@ -40,6 +40,7 @@ func (f *DiscussionFactory) Create(params CreateDiscussionParams) (*Discussion, 
 type ReconstructDiscussionParams struct {
 	ID string
 	CreateDiscussionParams
+	Conclusion       string
 	CommentsCount    int
 	LastCommentedAt  *time.Time
 	CreatedAt        time.Time
@@ -50,6 +51,7 @@ func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Di
 	d := &Discussion{
 		id:               params.ID,
 		theme:            params.Theme,
+		conclusion:       params.Conclusion,
 		status:           params.Status,
 		commentsCount:    params.CommentsCount,
 		lastCommentedAt:  params.LastCommentedAt,

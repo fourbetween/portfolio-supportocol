@@ -68,6 +68,9 @@ components:
     DiscussionTheme:
       type: string
       maxLength: 255
+    DiscussionConclusion:
+      type: string
+      maxLength: 1000
     CommentType:
       type: string
       maxLength: 20
@@ -98,6 +101,8 @@ components:
           $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
+        conclusion:
+          $ref: "#/components/schemas/DiscussionConclusion"
         status:
           $ref: "#/components/schemas/DiscussionStatus"
         dialogueSettings:
@@ -105,6 +110,7 @@ components:
       required:
         - id
         - theme
+        - conclusion
         - status
     Comment:
       type: object
@@ -223,8 +229,11 @@ paths:
               properties:
                 theme:
                   $ref: "#/components/schemas/DiscussionTheme"
+                conclusion:
+                  $ref: "#/components/schemas/DiscussionConclusion"
               required:
                 - theme
+                - conclusion
       responses:
         "200":
           description: success response

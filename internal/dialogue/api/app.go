@@ -156,8 +156,9 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	}
 
 	return oas.Discussion{
-		ID:    oas.ID(uuid.MustParse(item.ID())),
-		Theme: oas.DiscussionTheme(item.Theme()),
+		ID:         oas.ID(uuid.MustParse(item.ID())),
+		Theme:      oas.DiscussionTheme(item.Theme()),
+		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
 		DialogueSettings: oas.DialogueSettings{
 			DiscussionId: oas.ID(uuid.MustParse(item.ID())),
 			CommentFrame: oas.CommentFrame{

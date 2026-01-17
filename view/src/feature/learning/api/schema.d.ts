@@ -138,6 +138,7 @@ export interface paths {
                 content: {
                     "application/json": {
                         theme: components["schemas"]["DiscussionTheme"];
+                        conclusion: components["schemas"]["DiscussionConclusion"];
                     };
                 };
             };
@@ -557,6 +558,7 @@ export interface components {
         /** @enum {string} */
         DiscussionStatus: "private" | "public";
         DiscussionTheme: string;
+        DiscussionConclusion: string;
         CommentType: string;
         CommentContent: string;
         DiscussionSummary: {
@@ -569,6 +571,7 @@ export interface components {
         Discussion: {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
+            conclusion: components["schemas"]["DiscussionConclusion"];
             status: components["schemas"]["DiscussionStatus"];
             dialogueSettings?: components["schemas"]["DialogueSettings"];
         };

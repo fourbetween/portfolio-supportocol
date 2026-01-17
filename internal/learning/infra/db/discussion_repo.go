@@ -99,6 +99,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(
 			table.Discussions.Theme.SET(table.Discussions.NEW.Theme),
+			table.Discussions.Conclusion.SET(table.Discussions.NEW.Conclusion),
 			table.Discussions.Status.SET(table.Discussions.NEW.Status),
 			table.Discussions.CommentsCount.SET(table.Discussions.NEW.CommentsCount),
 			table.Discussions.LastCommentedAt.SET(table.Discussions.NEW.LastCommentedAt),
@@ -171,6 +172,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 			Status:    domain.DiscussionStatus(row.Status),
 			CreatedBy: row.CreatedBy,
 		},
+		Conclusion:       row.Conclusion,
 		CommentsCount:    int(row.CommentsCount),
 		LastCommentedAt:  lastCommentedAt,
 		CreatedAt:        row.CreatedAt,
@@ -198,6 +200,7 @@ func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Dis
 	return model.Discussions{
 		ID:              d.ID(),
 		Theme:           d.Theme(),
+		Conclusion:      d.Conclusion(),
 		Status:          string(d.Status()),
 		CommentsCount:   int32(d.CommentsCount()),
 		LastCommentedAt: lastCommentedAt,

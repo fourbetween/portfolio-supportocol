@@ -101,6 +101,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
 		ID:              row.ID,
 		Theme:           row.Theme,
+		Conclusion:      row.Conclusion,
 		Settings:        settings,
 		CommentsCount:   int(row.CommentsCount),
 		LastCommentedAt: lastCommentedAt,
