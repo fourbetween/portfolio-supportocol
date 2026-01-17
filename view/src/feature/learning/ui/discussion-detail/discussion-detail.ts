@@ -1,10 +1,14 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
 import { titleStyle } from "../../../../shared/style/title";
-import { LearningDiscussionFormOpenEvent } from "../../event/discussion";
+import {
+  LearningDiscussionArchiveEvent,
+  LearningDiscussionFormOpenEvent,
+  LearningDiscussionUnarchiveEvent,
+} from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
 import "../discussion-edit-form/discussion-edit-form";
 import "../discussion-status-badge/discussion-status-badge";
@@ -52,14 +56,34 @@ export class LearningDiscussionDetail extends LitElement {
     return html`
       <div class="display">
         <div class="badge-row">
-          <learning-discussion-status-badge
-            .status=${this.discussion?.status}
-            class="clickable"
-            @click=${this._handleBadgeClick}
-          ></learning-discussion-status-badge>
-          <button class="btn" @click=${this._handleEditClick}>
-            <span class="material-symbols-outlined">edit</span>
-          </button>
+          <div class="status-group">
+            <learning-discussion-status-badge
+              .status=${this.discussion?.status}
+              class="clickable"
+              @click=${this._handleBadgeClick}
+            ></learning-discussion-status-badge>
+            ${this.discussion?.archivedAt
+              ? html`
+                  <span class="archive-label">Archived</span>
+                `
+              : nothing}
+          </div>
+          <div class="actions">
+            ${this.discussion?.archivedAt
+              ? html`
+                  <button class="btn" @click=${this._handleUnarchiveClick}>
+                    <span class="material-symbols-outlined">unarchive</span>
+                  </button>
+                `
+              : html`
+                  <button class="btn" @click=${this._handleArchiveClick}>
+                    <span class="material-symbols-outlined">archive</span>
+                  </button>
+                `}
+            <button class="btn" @click=${this._handleEditClick}>
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+          </div>
         </div>
         <div class="theme-row">
           <div class="section-title">Theme</div>
@@ -79,6 +103,18 @@ export class LearningDiscussionDetail extends LitElement {
 
   private _handleBadgeClick() {
     this.popup.open = true;
+  }
+
+  private _handleArchiveClick() {
+    if (!this.discussion) return;
+    this.dispatchEvent(new LearningDiscussionArchiveEvent(this.discussion.id));
+  }
+
+  private _handleUnarchiveClick() {
+    if (!this.discussion) return;
+    this.dispatchEvent(
+      new LearningDiscussionUnarchiveEvent(this.discussion.id)
+    );
   }
 
   private _handleEditClick() {
@@ -123,6 +159,27 @@ export class LearningDiscussionDetail extends LitElement {
         display: flex;
         align-items: center;
         justify-content: space-between;
+      }
+
+      .status-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .archive-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--color-fg-muted);
+        background-color: var(--color-canvas-subtle);
+        padding: 2px 8px;
+        border-radius: 2em;
+        border: 1px solid var(--color-border-default);
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
       }
 
       .theme {
