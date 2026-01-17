@@ -79,6 +79,20 @@ export const Default: Story = {
   },
 };
 
+export const Readonly: Story = {
+  render: (args) => html`
+    <learning-comment-item
+      .comment=${mockComment}
+      .activeChildrenCount=${args.activeChildrenCount}
+      .availableTypes=${availableTypes}
+      .readonly=${true}
+    ></learning-comment-item>
+  `,
+  args: {
+    activeChildrenCount: 3,
+  },
+};
+
 export const Proposed: Story = {
   render: (args) => html`
     <learning-comment-item

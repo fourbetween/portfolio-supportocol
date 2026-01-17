@@ -23,6 +23,9 @@ export class DialogueCommentTree extends LitElement {
   @property({ type: Object })
   frame?: CommentFrame;
 
+  @property({ type: Boolean })
+  readonly = false;
+
   @state()
   private childrenMap = new Map<string, Comment[]>();
 
@@ -80,6 +83,7 @@ export class DialogueCommentTree extends LitElement {
           .comment=${comment}
           .activeChildrenCount=${activeChildrenCount}
           .frame=${this.frame}
+          .readonly=${this.readonly}
         ></dialogue-comment-item>
         ${!hideChildren ? this.renderChildren(comment.id) : nothing}
       </div>

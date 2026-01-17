@@ -29,6 +29,7 @@ const meta: Meta<
       @learning-comment-generate=${args.onCommentGenerate}
       @learning-comment-update=${args.onCommentUpdate}
       @learning-comment-create=${args.onCommentCreate}
+      .readonly=${args.readonly}
     ></learning-comment-tree>
   `,
 };
@@ -44,64 +45,73 @@ type Story = StoryObj<
   }
 >;
 
+const mockComments = [
+  {
+    id: "1",
+    discussionId: "1",
+    parentCommentId: null,
+    content: "論理的な議論を支援するためのプラットフォームについて",
+    commentType: "idea",
+    status: "active" as const,
+    createdAt: "2026-01-04T00:00:00Z",
+  },
+  {
+    id: "2",
+    discussionId: "1",
+    parentCommentId: "1",
+    content: "具体的にどのような機能がありますか？",
+    commentType: "question",
+    status: "active" as const,
+    createdAt: "2026-01-04T00:00:00Z",
+  },
+  {
+    id: "3",
+    discussionId: "1",
+    parentCommentId: "1",
+    content: "コメントフレームと木構造を用います。",
+    commentType: "answer",
+    status: "active" as const,
+    createdAt: "2026-01-04T00:00:00Z",
+  },
+  {
+    id: "4",
+    discussionId: "1",
+    parentCommentId: "3",
+    content: "それは使いやすそうですね。",
+    commentType: "agree",
+    status: "active" as const,
+    createdAt: "2026-01-04T00:00:00Z",
+  },
+  {
+    id: "5",
+    discussionId: "1",
+    parentCommentId: "3",
+    content: "モバイルでの表示はどうなりますか？",
+    commentType: "question",
+    status: "active" as const,
+    createdAt: "2026-01-04T00:00:00Z",
+  },
+  {
+    id: "6",
+    discussionId: "1",
+    parentCommentId: "1",
+    content: "AIサポート機能も検討しています。",
+    commentType: "idea",
+    status: "active" as const,
+    createdAt: "2026-01-04T00:00:00Z",
+  },
+];
+
 export const Default: Story = {
   args: {
-    comments: [
-      {
-        id: "1",
-        discussionId: "1",
-        parentCommentId: null,
-        content: "論理的な議論を支援するためのプラットフォームについて",
-        commentType: "idea",
-        status: "active" as const,
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-      {
-        id: "2",
-        discussionId: "1",
-        parentCommentId: "1",
-        content: "具体的にどのような機能がありますか？",
-        commentType: "question",
-        status: "active" as const,
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-      {
-        id: "3",
-        discussionId: "1",
-        parentCommentId: "1",
-        content: "コメントフレームと木構造を用います。",
-        commentType: "answer",
-        status: "active" as const,
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-      {
-        id: "4",
-        discussionId: "1",
-        parentCommentId: "3",
-        content: "それは使いやすそうですね。",
-        commentType: "agree",
-        status: "active" as const,
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-      {
-        id: "5",
-        discussionId: "1",
-        parentCommentId: "3",
-        content: "モバイルでの表示はどうなりますか？",
-        commentType: "question",
-        status: "active" as const,
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-      {
-        id: "6",
-        discussionId: "1",
-        parentCommentId: "1",
-        content: "AIサポート機能も検討しています。",
-        commentType: "idea",
-        status: "active" as const,
-        createdAt: "2026-01-04T00:00:00Z",
-      },
-    ],
+    comments: mockComments,
+  },
+};
+
+export const Readonly: Story = {
+  args: {
+    comments: mockComments,
+    readonly: true,
   },
 };
 

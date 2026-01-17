@@ -21,12 +21,16 @@ export class DialogueCommentItem extends LitElement {
   @property({ type: Object })
   frame?: CommentFrame;
 
+  @property({ type: Boolean })
+  readonly = false;
+
   @state()
   private mode: "view" | "reply" = "view";
 
   private touch = new TouchController(this);
 
   private get canReply() {
+    if (this.readonly) return false;
     if (!this.comment || !this.frame) return false;
     return this.frame.paths.some((p) => p.parent === this.comment?.commentType);
   }

@@ -18,6 +18,7 @@ type Discussion struct {
 	settings        DiscussionSettings
 	commentsCount   int
 	lastCommentedAt time.Time
+	archivedAt      *time.Time
 	createdBy       string
 	createdAt       time.Time
 }
@@ -46,6 +47,14 @@ func (d *Discussion) LastCommentedAt() time.Time {
 	return d.lastCommentedAt
 }
 
+func (d *Discussion) ArchivedAt() *time.Time {
+	return d.archivedAt
+}
+
+func (d *Discussion) IsArchived() bool {
+	return d.archivedAt != nil
+}
+
 func (d *Discussion) CreatedBy() string {
 	return d.createdBy
 }
@@ -55,6 +64,9 @@ func (d *Discussion) CreatedAt() time.Time {
 }
 
 func (d *Discussion) CanAddComment() error {
+	if d.IsArchived() {
+		return fmt.Errorf("discussion is archived: %w", apperr.ErrPermissionDenied)
+	}
 	if d.commentsCount >= MaxCommentsPerDiscussion {
 		return fmt.Errorf("discussion has reached the limit of %d comments: %w", MaxCommentsPerDiscussion, apperr.ErrLimitExceeded)
 	}

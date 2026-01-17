@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { titleStyle } from "../../../../shared/style/title";
+import "../../../../shared/ui/discussion-archive-badge/discussion-archive-badge";
 import type { Discussion } from "../../model/discussion";
 
 @customElement("dialogue-discussion-detail")
@@ -16,6 +17,11 @@ export class DialogueDiscussionDetail extends LitElement {
 
     return html`
       <div class="container">
+        <div class="badge-row">
+          <ui-discussion-archive-badge
+            .archived=${!!this.discussion?.archivedAt}
+          ></ui-discussion-archive-badge>
+        </div>
         <div class="theme-row">
           <div class="section-title">Theme</div>
           <h1 class="theme">${this.discussion?.theme}</h1>
@@ -39,6 +45,16 @@ export class DialogueDiscussionDetail extends LitElement {
       .container {
         padding: 8px 0;
         background-color: var(--color-canvas-default);
+      }
+
+      .badge-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .theme-row {
+        padding-top: 8px;
       }
 
       .theme {

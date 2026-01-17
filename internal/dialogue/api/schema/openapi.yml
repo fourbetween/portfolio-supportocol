@@ -77,6 +77,9 @@ components:
           $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
+        archivedAt:
+          type: string
+          format: date-time
         lastCommentedAt:
           type: string
           format: date-time
@@ -93,6 +96,9 @@ components:
           $ref: "#/components/schemas/DiscussionTheme"
         conclusion:
           $ref: "#/components/schemas/DiscussionConclusion"
+        archivedAt:
+          type: string
+          format: date-time
         dialogueSettings:
           $ref: "#/components/schemas/DialogueSettings"
       required:

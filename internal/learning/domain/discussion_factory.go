@@ -45,6 +45,7 @@ type ReconstructDiscussionParams struct {
 	Conclusion       string
 	CommentsCount    int
 	LastCommentedAt  time.Time
+	ArchivedAt       *time.Time
 	CreatedAt        time.Time
 	DialogueSettings *DialogueSettings
 }
@@ -57,6 +58,7 @@ func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Di
 		status:           params.Status,
 		commentsCount:    params.CommentsCount,
 		lastCommentedAt:  params.LastCommentedAt,
+		archivedAt:       params.ArchivedAt,
 		createdBy:        params.CreatedBy,
 		createdAt:        params.CreatedAt,
 		dialogueSettings: params.DialogueSettings,

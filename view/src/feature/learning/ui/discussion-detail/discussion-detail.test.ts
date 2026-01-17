@@ -72,7 +72,7 @@ describe("learning-discussion-detail", async () => {
       container
     );
 
-    await page.getByRole("button").click();
+    await page.getByRole("button", { name: "edit" }).click();
     expect(onEdit).toHaveBeenCalled();
   });
 

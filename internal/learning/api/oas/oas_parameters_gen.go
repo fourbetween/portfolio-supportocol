@@ -16,6 +16,150 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+// LearningDiscussionsDiscussionIdArchiveDeleteParams is parameters of DELETE /learning/discussions/{discussionId}/archive operation.
+type LearningDiscussionsDiscussionIdArchiveDeleteParams struct {
+	DiscussionId ID
+}
+
+func unpackLearningDiscussionsDiscussionIdArchiveDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdArchiveDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "discussionId",
+			In:   "path",
+		}
+		params.DiscussionId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeLearningDiscussionsDiscussionIdArchiveDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdArchiveDeleteParams, _ error) {
+	// Decode path: discussionId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "discussionId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotDiscussionIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "discussionId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// LearningDiscussionsDiscussionIdArchivePostParams is parameters of POST /learning/discussions/{discussionId}/archive operation.
+type LearningDiscussionsDiscussionIdArchivePostParams struct {
+	DiscussionId ID
+}
+
+func unpackLearningDiscussionsDiscussionIdArchivePostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdArchivePostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "discussionId",
+			In:   "path",
+		}
+		params.DiscussionId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeLearningDiscussionsDiscussionIdArchivePostParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdArchivePostParams, _ error) {
+	// Decode path: discussionId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "discussionId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotDiscussionIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "discussionId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams is parameters of DELETE /learning/discussions/{discussionId}/comments/{commentId} operation.
 type LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams struct {
 	DiscussionId ID

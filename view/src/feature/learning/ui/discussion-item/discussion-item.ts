@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
@@ -25,9 +26,14 @@ export class LearningDiscussionItem extends LitElement {
   }
 
   render() {
-    const { theme, status } = this.summary;
+    const { theme, status, archivedAt } = this.summary;
+    const classes = {
+      item: true,
+      "hover-container": true,
+      archived: !!archivedAt,
+    };
     return html`
-      <div class="item hover-container" @click=${this.handleSelect}>
+      <div class=${classMap(classes)} @click=${this.handleSelect}>
         <div class="info">
           <span class="theme">${theme}</span>
         </div>
@@ -66,6 +72,12 @@ export class LearningDiscussionItem extends LitElement {
       }
       .item:hover {
         background-color: var(--color-canvas-subtle);
+      }
+      .item.archived {
+        background-color: var(--color-canvas-subtle);
+      }
+      .item.archived:hover {
+        background-color: var(--color-canvas-inset);
       }
       .info {
         display: flex;

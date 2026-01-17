@@ -16,6 +16,9 @@ export class LearningCommentProposedWidget extends LitElement {
   @property({ type: Array })
   comments?: Comment[];
 
+  @property({ type: Boolean })
+  readonly = false;
+
   private get proposedComments(): Comment[] {
     return this.comments?.filter((c) => c.status === "proposed") ?? [];
   }

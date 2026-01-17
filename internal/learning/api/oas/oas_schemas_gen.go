@@ -239,6 +239,7 @@ type Discussion struct {
 	Theme            DiscussionTheme      `json:"theme"`
 	Conclusion       DiscussionConclusion `json:"conclusion"`
 	Status           DiscussionStatus     `json:"status"`
+	ArchivedAt       OptDateTime          `json:"archivedAt"`
 	DialogueSettings OptDialogueSettings  `json:"dialogueSettings"`
 }
 
@@ -260,6 +261,11 @@ func (s *Discussion) GetConclusion() DiscussionConclusion {
 // GetStatus returns the value of Status.
 func (s *Discussion) GetStatus() DiscussionStatus {
 	return s.Status
+}
+
+// GetArchivedAt returns the value of ArchivedAt.
+func (s *Discussion) GetArchivedAt() OptDateTime {
+	return s.ArchivedAt
 }
 
 // GetDialogueSettings returns the value of DialogueSettings.
@@ -285,6 +291,11 @@ func (s *Discussion) SetConclusion(val DiscussionConclusion) {
 // SetStatus sets the value of Status.
 func (s *Discussion) SetStatus(val DiscussionStatus) {
 	s.Status = val
+}
+
+// SetArchivedAt sets the value of ArchivedAt.
+func (s *Discussion) SetArchivedAt(val OptDateTime) {
+	s.ArchivedAt = val
 }
 
 // SetDialogueSettings sets the value of DialogueSettings.
@@ -341,6 +352,7 @@ type DiscussionSummary struct {
 	ID              ID               `json:"id"`
 	Theme           DiscussionTheme  `json:"theme"`
 	Status          DiscussionStatus `json:"status"`
+	ArchivedAt      OptDateTime      `json:"archivedAt"`
 	LastCommentedAt time.Time        `json:"lastCommentedAt"`
 }
 
@@ -357,6 +369,11 @@ func (s *DiscussionSummary) GetTheme() DiscussionTheme {
 // GetStatus returns the value of Status.
 func (s *DiscussionSummary) GetStatus() DiscussionStatus {
 	return s.Status
+}
+
+// GetArchivedAt returns the value of ArchivedAt.
+func (s *DiscussionSummary) GetArchivedAt() OptDateTime {
+	return s.ArchivedAt
 }
 
 // GetLastCommentedAt returns the value of LastCommentedAt.
@@ -377,6 +394,11 @@ func (s *DiscussionSummary) SetTheme(val DiscussionTheme) {
 // SetStatus sets the value of Status.
 func (s *DiscussionSummary) SetStatus(val DiscussionStatus) {
 	s.Status = val
+}
+
+// SetArchivedAt sets the value of ArchivedAt.
+func (s *DiscussionSummary) SetArchivedAt(val OptDateTime) {
+	s.ArchivedAt = val
 }
 
 // SetLastCommentedAt sets the value of LastCommentedAt.

@@ -8,17 +8,20 @@ import {
 } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { commentTreeStyle } from "../../../../shared/style/comment-tree";
 import { iconStyle } from "../../../../shared/style/icon";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { Comment } from "../../model/comment";
 import { deriveCommentFrame } from "../../model/comment-frame";
 import "../comment-item/comment-item";
-import { commentTreeStyle } from "../../../../shared/style/comment-tree";
 
 @customElement("learning-comment-tree")
 export class LearningCommentTree extends LitElement {
   @property({ type: Array })
   comments?: Comment[];
+
+  @property({ type: Boolean })
+  readonly = false;
 
   @state()
   private childrenMap = new Map<string, Comment[]>();
@@ -82,6 +85,7 @@ export class LearningCommentTree extends LitElement {
           .comment=${comment}
           .activeChildrenCount=${activeChildrenCount}
           .availableTypes=${this.availableTypes}
+          .readonly=${this.readonly}
         ></learning-comment-item>
         ${!hideChildren ? this.renderChildren(comment.id) : nothing}
       </div>

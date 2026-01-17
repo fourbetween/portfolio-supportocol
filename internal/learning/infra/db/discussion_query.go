@@ -27,6 +27,7 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context, createdBy 
 			table.Discussions.ID,
 			table.Discussions.Theme,
 			table.Discussions.Status,
+			table.Discussions.ArchivedAt,
 			table.Discussions.LastCommentedAt,
 		).
 		FROM(table.Discussions).
@@ -44,6 +45,7 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context, createdBy 
 			ID:              d.ID,
 			Theme:           d.Theme,
 			Status:          domain.DiscussionStatus(d.Status),
+			ArchivedAt:      d.ArchivedAt,
 			LastCommentedAt: d.LastCommentedAt,
 		}
 	}

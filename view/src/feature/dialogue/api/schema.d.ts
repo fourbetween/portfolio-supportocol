@@ -216,12 +216,16 @@ export interface components {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             /** Format: date-time */
+            archivedAt?: string;
+            /** Format: date-time */
             lastCommentedAt: string;
         };
         Discussion: {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             conclusion: components["schemas"]["DiscussionConclusion"];
+            /** Format: date-time */
+            archivedAt?: string;
             dialogueSettings: components["schemas"]["DialogueSettings"];
         };
         Comment: {

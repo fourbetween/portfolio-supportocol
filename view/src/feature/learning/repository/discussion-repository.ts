@@ -69,6 +69,32 @@ export class DiscussionRepository {
     return data;
   }
 
+  async archive(discussionId: string): Promise<Discussion> {
+    const { data, error } = await client.POST(
+      "/learning/discussions/{discussionId}/archive",
+      {
+        params: {
+          path: { discussionId },
+        },
+      }
+    );
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
+  async unarchive(discussionId: string): Promise<Discussion> {
+    const { data, error } = await client.DELETE(
+      "/learning/discussions/{discussionId}/archive",
+      {
+        params: {
+          path: { discussionId },
+        },
+      }
+    );
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
   async delete(discussionId: string): Promise<void> {
     const { error } = await client.DELETE(
       "/learning/discussions/{discussionId}",

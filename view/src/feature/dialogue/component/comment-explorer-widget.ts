@@ -26,6 +26,9 @@ export class DialogueCommentExplorerWidget extends LitElement {
   @property({ type: String })
   selectedCommentId?: string;
 
+  @property({ type: Boolean })
+  readonly = false;
+
   @state()
   private childCounts = new Map<string, number>();
 
@@ -63,7 +66,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
   }
 
   private async handleCommentCreate(e: DialogueCommentCreateEvent) {
-    if (!this.discussion) return;
+    if (!this.discussion || this.readonly) return;
     try {
       const data = await commentRepository.create(this.discussion.id, {
         parentCommentId: e.parentCommentId,
@@ -142,6 +145,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
           <dialogue-comment-tree
             .comments=${descendants}
             .frame=${this.discussion?.dialogueSettings.commentFrame}
+            .readonly=${this.readonly}
             @dialogue-comment-create=${this.handleCommentCreate}
           ></dialogue-comment-tree>
         </div>
@@ -165,6 +169,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
           .path=${path}
           .childCounts=${this.childCounts}
           .frame=${this.discussion?.dialogueSettings.commentFrame}
+          .readonly=${this.readonly}
           @dialogue-comment-create=${this.handleCommentCreate}
         ></dialogue-comment-context>
       </div>

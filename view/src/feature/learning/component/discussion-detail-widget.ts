@@ -3,6 +3,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import {
+  LearningDiscussionArchiveEvent,
+  LearningDiscussionUnarchiveEvent,
   LearningDiscussionUpdatedEvent,
   LearningDiscussionUpdateEvent,
   LearningDiscussionUpdateStatusEvent,
@@ -67,6 +69,32 @@ export class LearningDiscussionDetailWidget extends LitElement {
     }
   }
 
+  private async _handleArchiveDiscussion(e: LearningDiscussionArchiveEvent) {
+    if (!this.discussion) return;
+    try {
+      const data = await discussionRepository.archive(e.discussionId);
+      this.discussion = data;
+      showToast(this, "Discussion archived.", "success", 2000);
+      this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
+  private async _handleUnarchiveDiscussion(
+    e: LearningDiscussionUnarchiveEvent
+  ) {
+    if (!this.discussion) return;
+    try {
+      const data = await discussionRepository.unarchive(e.discussionId);
+      this.discussion = data;
+      showToast(this, "Discussion unarchived.", "success", 2000);
+      this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
   render() {
     if (!this.discussion) return nothing;
 
@@ -78,6 +106,8 @@ export class LearningDiscussionDetailWidget extends LitElement {
         @learning-discussion-update=${this._handleUpdateDiscussion}
         @learning-discussion-form-close=${() => (this._isEditing = false)}
         @learning-discussion-update-status=${this._handleUpdateDiscussionStatus}
+        @learning-discussion-archive=${this._handleArchiveDiscussion}
+        @learning-discussion-unarchive=${this._handleUnarchiveDiscussion}
       ></learning-discussion-detail>
     `;
   }

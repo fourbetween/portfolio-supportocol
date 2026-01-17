@@ -18,6 +18,7 @@ type Discussion struct {
 	status           DiscussionStatus
 	commentsCount    int
 	lastCommentedAt  time.Time
+	archivedAt       *time.Time
 	createdBy        string
 	createdAt        time.Time
 	dialogueSettings *DialogueSettings
@@ -59,7 +60,18 @@ func (d *Discussion) DialogueSettings() *DialogueSettings {
 	return d.dialogueSettings
 }
 
+func (d *Discussion) ArchivedAt() *time.Time {
+	return d.archivedAt
+}
+
+func (d *Discussion) IsArchived() bool {
+	return d.archivedAt != nil
+}
+
 func (d *Discussion) CanAddComment() error {
+	if d.IsArchived() {
+		return fmt.Errorf("discussion is archived: %w", apperr.ErrPermissionDenied)
+	}
 	if d.commentsCount >= MaxCommentsPerDiscussion {
 		return fmt.Errorf("discussion has reached the limit of %d comments: %w", MaxCommentsPerDiscussion, apperr.ErrLimitExceeded)
 	}
@@ -131,5 +143,21 @@ func (d *Discussion) Validate() error {
 	if d.status.IsPrivate() && d.dialogueSettings != nil {
 		return fmt.Errorf("dialogue settings must be nil for private status: %w", apperr.ErrInvalidArgument)
 	}
+	return nil
+}
+
+func (d *Discussion) Archive(now time.Time) error {
+	if d.IsArchived() {
+		return fmt.Errorf("discussion is already archived: %w", apperr.ErrInvalidArgument)
+	}
+	d.archivedAt = &now
+	return nil
+}
+
+func (d *Discussion) Unarchive() error {
+	if !d.IsArchived() {
+		return fmt.Errorf("discussion is not archived: %w", apperr.ErrInvalidArgument)
+	}
+	d.archivedAt = nil
 	return nil
 }
