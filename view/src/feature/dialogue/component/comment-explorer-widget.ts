@@ -15,6 +15,7 @@ import type { Discussion } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import "../ui/comment-context/comment-context";
 import "../ui/comment-tree/comment-tree";
+import "./comment-create-widget";
 
 @customElement("dialogue-comment-explorer-widget")
 export class DialogueCommentExplorerWidget extends LitElement {
@@ -139,6 +140,14 @@ export class DialogueCommentExplorerWidget extends LitElement {
     return html`
       <div class="container">
         ${this.renderContextSection(path)}
+        ${this.selectedCommentId || this.readonly
+          ? nothing
+          : html`
+              <dialogue-comment-create-widget
+                .frame=${this.discussion?.dialogueSettings.commentFrame}
+                @dialogue-comment-create=${this.handleCommentCreate}
+              ></dialogue-comment-create-widget>
+            `}
         <div class="section">
           <div class="section-title">
             ${this.selectedCommentId ? "Replies" : "All Comments"}

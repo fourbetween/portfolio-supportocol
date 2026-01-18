@@ -29,7 +29,7 @@ describe("learning-discussion-detail", async () => {
           .discussion=${discussion}
         ></learning-discussion-detail>
       `,
-      container
+      container,
     );
     await expect.element(page.getByText("テストテーマ")).toBeVisible();
     await expect.element(page.getByText("テスト結論")).toBeVisible();
@@ -48,7 +48,7 @@ describe("learning-discussion-detail", async () => {
           .discussion=${discussion}
         ></learning-discussion-detail>
       `,
-      container
+      container,
     );
     await expect.element(page.getByText("Theme")).toBeVisible();
     await expect.element(page.getByText("Conclusion")).toBeVisible();
@@ -69,7 +69,7 @@ describe("learning-discussion-detail", async () => {
           @learning-discussion-form-open=${() => onEdit()}
         ></learning-discussion-detail>
       `,
-      container
+      container,
     );
 
     await page.getByRole("button", { name: "edit" }).click();
@@ -90,7 +90,7 @@ describe("learning-discussion-detail", async () => {
           .isEditing=${true}
         ></learning-discussion-detail>
       `,
-      container
+      container,
     );
 
     const textboxes = page.getByRole("textbox");
@@ -115,7 +115,7 @@ describe("learning-discussion-detail", async () => {
             onSave(e.theme, e.conclusion)}
         ></learning-discussion-detail>
       `,
-      container
+      container,
     );
 
     const textboxes = page.getByRole("textbox");
@@ -135,7 +135,7 @@ describe("learning-discussion-detail", async () => {
           @learning-discussion-form-close=${() => onCancel()}
         ></learning-discussion-detail>
       `,
-      container
+      container,
     );
 
     await page.getByRole("button", { name: "close" }).click();
@@ -156,10 +156,10 @@ describe("learning-discussion-detail", async () => {
           .discussion=${discussion}
         ></learning-discussion-detail>
       `,
-      container
+      container,
     );
 
-    const icon = page.getByText("edit");
+    const icon = page.getByText("edit", { exact: true });
     await expect.element(icon).toBeVisible();
     await expect.element(icon).toHaveClass("material-symbols-outlined");
   });

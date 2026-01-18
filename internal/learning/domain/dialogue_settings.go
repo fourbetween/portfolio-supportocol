@@ -39,8 +39,10 @@ func (cf CommentFrame) Validate() error {
 		if _, ok := typeMap[p.Child]; !ok {
 			return fmt.Errorf("comment path child %q is not in types: %w", p.Child, apperr.ErrInvalidArgument)
 		}
-		if _, ok := typeMap[p.Parent]; !ok {
-			return fmt.Errorf("comment path parent %q is not in types: %w", p.Parent, apperr.ErrInvalidArgument)
+		if p.Parent != "" {
+			if _, ok := typeMap[p.Parent]; !ok {
+				return fmt.Errorf("comment path parent %q is not in types: %w", p.Parent, apperr.ErrInvalidArgument)
+			}
 		}
 	}
 	return nil

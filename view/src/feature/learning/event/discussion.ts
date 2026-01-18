@@ -1,3 +1,4 @@
+import type { CommentFrame } from "../model/comment-frame";
 import type { Discussion } from "../model/discussion";
 
 const LEARNING_DISCUSSION_SELECT_EVENT_NAME = "learning-discussion-select";
@@ -10,6 +11,8 @@ const LEARNING_DISCUSSION_DELETED_EVENT_NAME = "learning-discussion-deleted";
 const LEARNING_DISCUSSION_SEARCH_EVENT_NAME = "learning-discussion-search";
 const LEARNING_DISCUSSION_UPDATE_STATUS_EVENT_NAME =
   "learning-discussion-update-status";
+const LEARNING_DISCUSSION_UPDATE_COMMENT_FRAME_EVENT_NAME =
+  "learning-discussion-update-comment-frame";
 const LEARNING_DISCUSSION_ARCHIVE_EVENT_NAME = "learning-discussion-archive";
 const LEARNING_DISCUSSION_UNARCHIVE_EVENT_NAME =
   "learning-discussion-unarchive";
@@ -148,6 +151,18 @@ export class LearningDiscussionUpdateStatusEvent extends Event {
   }
 }
 
+export class LearningDiscussionUpdateCommentFrameEvent extends Event {
+  public readonly commentFrame: CommentFrame;
+
+  constructor(commentFrame: CommentFrame) {
+    super(LEARNING_DISCUSSION_UPDATE_COMMENT_FRAME_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+    this.commentFrame = commentFrame;
+  }
+}
+
 export class LearningDiscussionArchiveEvent extends Event {
   public readonly discussionId: string;
 
@@ -183,6 +198,7 @@ declare global {
     [LEARNING_DISCUSSION_DELETED_EVENT_NAME]: LearningDiscussionDeletedEvent;
     [LEARNING_DISCUSSION_SEARCH_EVENT_NAME]: LearningDiscussionSearchEvent;
     [LEARNING_DISCUSSION_UPDATE_STATUS_EVENT_NAME]: LearningDiscussionUpdateStatusEvent;
+    [LEARNING_DISCUSSION_UPDATE_COMMENT_FRAME_EVENT_NAME]: LearningDiscussionUpdateCommentFrameEvent;
     [LEARNING_DISCUSSION_ARCHIVE_EVENT_NAME]: LearningDiscussionArchiveEvent;
     [LEARNING_DISCUSSION_UNARCHIVE_EVENT_NAME]: LearningDiscussionUnarchiveEvent;
     [LEARNING_DISCUSSION_FORM_OPEN_EVENT_NAME]: LearningDiscussionFormOpenEvent;

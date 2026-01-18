@@ -26,17 +26,20 @@ func (cf CommentFrame) ValidateComment(commentType string, parentType *string) e
 		return fmt.Errorf("invalid comment type: %s: %w", commentType, apperr.ErrInvalidArgument)
 	}
 
+	parent := ""
 	if parentType != nil {
-		pathAllowed := false
-		for _, p := range cf.Paths {
-			if p.Child == commentType && p.Parent == *parentType {
-				pathAllowed = true
-				break
-			}
+		parent = *parentType
+	}
+
+	pathAllowed := false
+	for _, p := range cf.Paths {
+		if p.Child == commentType && p.Parent == parent {
+			pathAllowed = true
+			break
 		}
-		if !pathAllowed {
-			return fmt.Errorf("invalid comment path: %s <- %s: %w", commentType, *parentType, apperr.ErrInvalidArgument)
-		}
+	}
+	if !pathAllowed {
+		return fmt.Errorf("invalid comment path: %s <- %s: %w", commentType, parent, apperr.ErrInvalidArgument)
 	}
 	return nil
 }

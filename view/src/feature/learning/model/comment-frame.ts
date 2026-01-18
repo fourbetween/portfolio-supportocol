@@ -14,17 +14,19 @@ export function deriveCommentFrame(comments: Comment[]): CommentFrame {
   }
 
   for (const comment of comments) {
+    let parentType = "";
     if (comment.parentCommentId) {
       const parent = commentMap.get(comment.parentCommentId);
       if (parent) {
-        paths.add(
-          JSON.stringify({
-            child: comment.commentType,
-            parent: parent.commentType,
-          })
-        );
+        parentType = parent.commentType;
       }
     }
+    paths.add(
+      JSON.stringify({
+        child: comment.commentType,
+        parent: parentType,
+      }),
+    );
   }
 
   return {
