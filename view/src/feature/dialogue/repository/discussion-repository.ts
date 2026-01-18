@@ -5,7 +5,7 @@ export class DiscussionRepository {
   async list(): Promise<DiscussionSummary[]> {
     const { data, error } = await client.GET("/dialogue/discussions");
     if (error) throw new Error(error.message);
-    return data || [];
+    return data;
   }
 
   async load(id: string): Promise<Discussion> {

@@ -13,7 +13,7 @@ export class CommentRepository {
       }
     );
     if (error) throw new Error(error.message);
-    return data || [];
+    return data;
   }
 
   async create(

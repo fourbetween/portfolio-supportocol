@@ -3,6 +3,8 @@ import type { CommentFrame } from "../model/comment-frame";
 import type { Discussion, DiscussionSummary } from "../model/discussion";
 
 export class DiscussionRepository {
+  private _cache = new Map<string, Discussion>();
+
   async list(archived?: boolean): Promise<DiscussionSummary[]> {
     const { data, error } = await client.GET("/learning/discussions", {
       params: {
@@ -14,6 +16,9 @@ export class DiscussionRepository {
   }
 
   async get(discussionId: string): Promise<Discussion> {
+    const cached = this._cache.get(discussionId);
+    if (cached) return cached;
+
     const { data, error } = await client.GET(
       "/learning/discussions/{discussionId}",
       {
@@ -23,6 +28,7 @@ export class DiscussionRepository {
       }
     );
     if (error) throw new Error(error.message);
+    this._cache.set(discussionId, data);
     return data;
   }
 
@@ -34,6 +40,7 @@ export class DiscussionRepository {
       body: { theme, status },
     });
     if (error) throw new Error(error.message);
+    this._cache.set(data.id, data);
     return data;
   }
 
@@ -52,6 +59,7 @@ export class DiscussionRepository {
       }
     );
     if (error) throw new Error(error.message);
+    this._cache.set(data.id, data);
     return data;
   }
 
@@ -70,6 +78,7 @@ export class DiscussionRepository {
       }
     );
     if (error) throw new Error(error.message);
+    this._cache.set(data.id, data);
     return data;
   }
 
@@ -83,6 +92,7 @@ export class DiscussionRepository {
       }
     );
     if (error) throw new Error(error.message);
+    this._cache.set(data.id, data);
     return data;
   }
 
@@ -96,6 +106,7 @@ export class DiscussionRepository {
       }
     );
     if (error) throw new Error(error.message);
+    this._cache.set(data.id, data);
     return data;
   }
 
@@ -109,6 +120,7 @@ export class DiscussionRepository {
       }
     );
     if (error) throw new Error(error.message);
+    this._cache.delete(discussionId);
   }
 }
 
