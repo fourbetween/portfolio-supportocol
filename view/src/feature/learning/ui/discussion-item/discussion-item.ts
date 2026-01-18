@@ -4,6 +4,7 @@ import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
+import { listStyles } from "../../../../shared/style/list";
 import {
   LearningDiscussionDeleteEvent,
   LearningDiscussionSelectEvent,
@@ -56,23 +57,8 @@ export class LearningDiscussionItem extends LitElement {
     baseStyle,
     iconStyle,
     hoverButtonStyle,
+    listStyles,
     css`
-      .item {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px;
-        background-color: var(--color-canvas-default);
-        cursor: pointer;
-        border-radius: var(--item-border-top-left-radius, 0)
-          var(--item-border-top-right-radius, 0)
-          var(--item-border-bottom-right-radius, 0)
-          var(--item-border-bottom-left-radius, 0);
-      }
-      .item:hover {
-        background-color: var(--color-canvas-subtle);
-      }
       .item.archived {
         background-color: var(--color-canvas-subtle);
       }

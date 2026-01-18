@@ -2,6 +2,7 @@ import { LitElement, type PropertyValues, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
+import { formStyle } from "../../../../shared/style/form";
 import { iconStyle } from "../../../../shared/style/icon";
 import { inputStyle } from "../../../../shared/style/input";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
@@ -68,15 +69,15 @@ export class LearningCommentEditForm extends LitElement {
     const { _commentType: type, _content: content } = this;
     if (this.commentId) {
       this.dispatchEvent(
-        new LearningCommentUpdateEvent(this.commentId, type, content)
+        new LearningCommentUpdateEvent(this.commentId, type, content),
       );
     } else {
       this.dispatchEvent(
         new LearningCommentCreateEvent(
           this.parentCommentId ?? null,
           type,
-          content
-        )
+          content,
+        ),
       );
     }
   }
@@ -156,6 +157,7 @@ export class LearningCommentEditForm extends LitElement {
     buttonStyle,
     inputStyle,
     iconStyle,
+    formStyle,
     css`
       :host {
         display: flex;
@@ -179,11 +181,6 @@ export class LearningCommentEditForm extends LitElement {
         width: 100%;
         min-height: 120px;
         resize: vertical;
-      }
-      .actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
       }
       .sr-only {
         position: absolute;

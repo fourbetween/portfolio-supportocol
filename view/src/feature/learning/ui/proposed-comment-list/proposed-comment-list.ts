@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { emptyStyle } from "../../../../shared/style/list";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { Comment } from "../../model/comment";
 import "../comment-card/comment-card";
@@ -22,7 +23,7 @@ export class LearningProposedCommentList extends LitElement {
         ${repeat(
           this.comments,
           (comment) => comment.id,
-          (comment) => this.renderComment(comment)
+          (comment) => this.renderComment(comment),
         )}
       </div>
     `;
@@ -43,15 +44,8 @@ export class LearningProposedCommentList extends LitElement {
 
   static styles = [
     baseStyle,
+    emptyStyle,
     css`
-      .empty {
-        padding: 16px;
-        text-align: center;
-        color: var(--color-fg-muted);
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        background-color: var(--color-canvas-subtle);
-      }
       .list {
         display: flex;
         flex-direction: column;

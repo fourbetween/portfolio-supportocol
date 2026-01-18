@@ -1,6 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { TouchController } from "../../../../app/controller/touch";
+import { actionStyle } from "../../../../shared/style/action";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
@@ -118,26 +119,10 @@ export class DialogueCommentItem extends LitElement {
     baseStyle,
     iconStyle,
     hoverButtonStyle,
+    actionStyle,
     css`
       :host {
         display: block;
-      }
-      .hover-container {
-        position: relative;
-      }
-      .actions {
-        display: flex;
-        gap: 8px;
-        position: absolute;
-        bottom: -16px;
-        left: 8px;
-      }
-      .actions .btn-hover {
-        position: static;
-        opacity: 0;
-      }
-      .hover-container:hover .btn-hover {
-        opacity: 1;
       }
       .reply-form-wrapper {
         margin-left: 8px;
