@@ -22,6 +22,7 @@ type (
 		Load(ctx context.Context, id string) (*Comment, error)
 		Search(ctx context.Context, params SearchCommentsParams) ([]*Comment, error)
 		Create(ctx context.Context, comment *Comment) error
+		GetPathToRoot(ctx context.Context, id string) ([]*Comment, error)
 	}
 
 	SearchCommentsParams struct {

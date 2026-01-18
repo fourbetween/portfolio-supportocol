@@ -122,6 +122,21 @@ func (mr *MockCommentRepositoryMockRecorder) Create(ctx, comment any) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockCommentRepository)(nil).Create), ctx, comment)
 }
 
+// GetPathToRoot mocks base method.
+func (m *MockCommentRepository) GetPathToRoot(ctx context.Context, id string) ([]*Comment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPathToRoot", ctx, id)
+	ret0, _ := ret[0].([]*Comment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPathToRoot indicates an expected call of GetPathToRoot.
+func (mr *MockCommentRepositoryMockRecorder) GetPathToRoot(ctx, id any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPathToRoot", reflect.TypeOf((*MockCommentRepository)(nil).GetPathToRoot), ctx, id)
+}
+
 // Load mocks base method.
 func (m *MockCommentRepository) Load(ctx context.Context, id string) (*Comment, error) {
 	m.ctrl.T.Helper()

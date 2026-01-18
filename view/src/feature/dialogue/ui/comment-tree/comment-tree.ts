@@ -64,17 +64,19 @@ export class DialogueCommentTree extends LitElement {
     if (!this.comments) return nothing;
 
     return html`
-      <div class="tree">${this.renderChildren("root")}</div>
+      <div class="tree">${this.renderChildren("root", false)}</div>
     `;
   }
 
   private renderComment(
     comment: Comment,
-    hideChildren: boolean = false
+    hideChildren: boolean = false,
+    isParentArchived: boolean = false,
   ): HTMLTemplateResult {
+    const isArchived = isParentArchived || !!comment.archivedAt;
     const children = this.childrenMap.get(comment.id) || [];
     const activeChildrenCount = children.filter(
-      (c) => c.status === "active"
+      (c) => c.status === "active",
     ).length;
 
     return html`
@@ -83,14 +85,15 @@ export class DialogueCommentTree extends LitElement {
           .comment=${comment}
           .activeChildrenCount=${activeChildrenCount}
           .frame=${this.frame}
+          .archived=${isArchived}
           .readonly=${this.readonly}
         ></dialogue-comment-item>
-        ${!hideChildren ? this.renderChildren(comment.id) : nothing}
+        ${!hideChildren ? this.renderChildren(comment.id, isArchived) : nothing}
       </div>
     `;
   }
 
-  private renderChildren(parentId: string) {
+  private renderChildren(parentId: string, isParentArchived: boolean) {
     const children = this.childrenMap.get(parentId) || [];
     if (children.length === 0) return nothing;
 
@@ -99,7 +102,7 @@ export class DialogueCommentTree extends LitElement {
     return html`
       <div class="children">
         ${Object.entries(groupedChildren).map(([type, typeChildren]) =>
-          this.renderGroup(type, typeChildren, parentId)
+          this.renderGroup(type, typeChildren, isParentArchived, parentId),
         )}
       </div>
     `;
@@ -108,7 +111,8 @@ export class DialogueCommentTree extends LitElement {
   private renderGroup(
     type: string,
     comments: Comment[],
-    parentCommentId?: string
+    isParentArchived: boolean,
+    parentCommentId?: string,
   ): HTMLTemplateResult {
     const groupId = this.getGroupId(type, parentCommentId);
     const isFocused = this.focusedGroupId === groupId;
@@ -125,7 +129,9 @@ export class DialogueCommentTree extends LitElement {
           ></ui-comment-type-badge>
         </div>
         <div class="group-content">
-          ${comments.map((comment) => this.renderComment(comment, isFocused))}
+          ${comments.map((comment) =>
+            this.renderComment(comment, isFocused, isParentArchived),
+          )}
         </div>
       </div>
     `;
@@ -136,13 +142,16 @@ export class DialogueCommentTree extends LitElement {
   }
 
   private groupCommentsByType(comments: Comment[]): Record<string, Comment[]> {
-    return comments.reduce((acc, comment) => {
-      if (!acc[comment.commentType]) {
-        acc[comment.commentType] = [];
-      }
-      acc[comment.commentType].push(comment);
-      return acc;
-    }, {} as Record<string, Comment[]>);
+    return comments.reduce(
+      (acc, comment) => {
+        if (!acc[comment.commentType]) {
+          acc[comment.commentType] = [];
+        }
+        acc[comment.commentType].push(comment);
+        return acc;
+      },
+      {} as Record<string, Comment[]>,
+    );
   }
 
   static styles = [baseStyle, iconStyle, commentTreeStyle, css``];

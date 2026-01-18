@@ -13,6 +13,7 @@ type Comment struct {
 	commentType     string
 	content         string
 	status          CommentStatus
+	archivedAt      *time.Time
 	createdBy       *string
 	createdAt       time.Time
 }
@@ -49,6 +50,14 @@ func (c *Comment) CreatedAt() time.Time {
 	return c.createdAt
 }
 
+func (c *Comment) ArchivedAt() *time.Time {
+	return c.archivedAt
+}
+
+func (c *Comment) IsArchived() bool {
+	return c.archivedAt != nil
+}
+
 type UpdateCommentParams struct {
 	CommentType string
 	Content     string
@@ -82,5 +91,21 @@ func (c *Comment) Validate() error {
 	if err := c.status.Validate(); err != nil {
 		return err
 	}
+	return nil
+}
+
+func (c *Comment) Archive(now time.Time) error {
+	if c.IsArchived() {
+		return apperr.ErrInvalidArgument
+	}
+	c.archivedAt = &now
+	return nil
+}
+
+func (c *Comment) Unarchive() error {
+	if !c.IsArchived() {
+		return apperr.ErrInvalidArgument
+	}
+	c.archivedAt = nil
 	return nil
 }

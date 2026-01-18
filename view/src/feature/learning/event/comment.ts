@@ -13,6 +13,8 @@ const LEARNING_COMMENT_DELETE_EVENT_NAME = "learning-comment-delete";
 const LEARNING_COMMENT_DELETED_EVENT_NAME = "learning-comment-deleted";
 const LEARNING_COMMENT_GENERATE_EVENT_NAME = "learning-comment-generate";
 const LEARNING_COMMENT_GENERATED_EVENT_NAME = "learning-comment-generated";
+const LEARNING_COMMENT_ARCHIVE_EVENT_NAME = "learning-comment-archive";
+const LEARNING_COMMENT_UNARCHIVE_EVENT_NAME = "learning-comment-unarchive";
 const LEARNING_COMMENT_FORM_CLOSE_EVENT_NAME = "learning-comment-form-close";
 const LEARNING_COMMENT_TYPE_SELECT_EVENT_NAME = "learning-comment-type-select";
 
@@ -60,7 +62,7 @@ export class LearningCommentCreateEvent extends Event {
   constructor(
     parentCommentId: string | null,
     commentType: string,
-    content: string
+    content: string,
   ) {
     super(LEARNING_COMMENT_CREATE_EVENT_NAME, {
       bubbles: true,
@@ -185,6 +187,30 @@ export class LearningCommentTypeSelectEvent extends Event {
   }
 }
 
+export class LearningCommentArchiveEvent extends Event {
+  public readonly commentId: string;
+
+  constructor(commentId: string) {
+    super(LEARNING_COMMENT_ARCHIVE_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+    this.commentId = commentId;
+  }
+}
+
+export class LearningCommentUnarchiveEvent extends Event {
+  public readonly commentId: string;
+
+  constructor(commentId: string) {
+    super(LEARNING_COMMENT_UNARCHIVE_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+    this.commentId = commentId;
+  }
+}
+
 declare global {
   interface HTMLElementEventMap {
     [LEARNING_COMMENT_SELECT_EVENT_NAME]: LearningCommentSelectEvent;
@@ -198,6 +224,8 @@ declare global {
     [LEARNING_COMMENT_DELETED_EVENT_NAME]: LearningCommentDeletedEvent;
     [LEARNING_COMMENT_GENERATE_EVENT_NAME]: LearningCommentGenerateEvent;
     [LEARNING_COMMENT_GENERATED_EVENT_NAME]: LearningCommentGeneratedEvent;
+    [LEARNING_COMMENT_ARCHIVE_EVENT_NAME]: LearningCommentArchiveEvent;
+    [LEARNING_COMMENT_UNARCHIVE_EVENT_NAME]: LearningCommentUnarchiveEvent;
     [LEARNING_COMMENT_FORM_CLOSE_EVENT_NAME]: LearningCommentFormCloseEvent;
     [LEARNING_COMMENT_TYPE_SELECT_EVENT_NAME]: LearningCommentTypeSelectEvent;
   }

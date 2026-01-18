@@ -20,6 +20,18 @@ type Handler interface {
 	//
 	// POST /learning/discussions/{discussionId}/archive
 	LearningDiscussionsDiscussionIdArchivePost(ctx context.Context, params LearningDiscussionsDiscussionIdArchivePostParams) (*Discussion, error)
+	// LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete implements DELETE /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+	//
+	// Unarchive comment.
+	//
+	// DELETE /learning/discussions/{discussionId}/comments/{commentId}/archive
+	LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(ctx context.Context, params LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams) (*Comment, error)
+	// LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost implements POST /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+	//
+	// Archive comment.
+	//
+	// POST /learning/discussions/{discussionId}/comments/{commentId}/archive
+	LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(ctx context.Context, params LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams) (*Comment, error)
 	// LearningDiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /learning/discussions/{discussionId}/comments/{commentId} operation.
 	//
 	// Delete comment.

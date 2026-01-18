@@ -52,6 +52,16 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 
 		var parent *domain.Comment
 		if input.ParentCommentID != nil {
+			path, err := u.commentRepo.GetPathToRoot(ctx, *input.ParentCommentID)
+			if err != nil {
+				return err
+			}
+			for _, c := range path {
+				if err := c.CanAddChild(); err != nil {
+					return err
+				}
+			}
+
 			parent, err = u.commentRepo.Load(ctx, *input.ParentCommentID)
 			if err != nil {
 				return err

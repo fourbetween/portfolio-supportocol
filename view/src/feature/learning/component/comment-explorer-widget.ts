@@ -5,6 +5,7 @@ import { baseStyle } from "../../../shared/style/base";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import {
+  LearningCommentArchiveEvent,
   LearningCommentCreateEvent,
   LearningCommentCreatedEvent,
   LearningCommentDeleteEvent,
@@ -12,6 +13,7 @@ import {
   LearningCommentGenerateEvent,
   LearningCommentGeneratedEvent,
   LearningCommentSelectEvent,
+  LearningCommentUnarchiveEvent,
   LearningCommentUpdateEvent,
   LearningCommentUpdatedEvent,
   LearningProposedCommentAcceptEvent,
@@ -73,7 +75,7 @@ export class LearningCommentExplorerWidget extends LitElement {
       for (const [parentId, children] of this.childrenMap) {
         this.childCounts.set(
           parentId,
-          children.filter((c) => c.status === "active").length
+          children.filter((c) => c.status === "active" && !c.archivedAt).length,
         );
       }
     }
@@ -85,7 +87,7 @@ export class LearningCommentExplorerWidget extends LitElement {
       const data = await commentRepository.update(
         this.discussionId,
         e.commentId,
-        { commentType: e.commentType, content: e.content }
+        { commentType: e.commentType, content: e.content },
       );
 
       showToast(this, "Comment updated.", "success", 2000);
@@ -109,6 +111,36 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
+  private async handleCommentArchive(e: LearningCommentArchiveEvent) {
+    if (!this.discussionId) return;
+    try {
+      const data = await commentRepository.archive(
+        this.discussionId,
+        e.commentId,
+      );
+
+      showToast(this, "Comment archived.", "success", 2000);
+      this.dispatchEvent(new LearningCommentUpdatedEvent(data));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
+  private async handleCommentUnarchive(e: LearningCommentUnarchiveEvent) {
+    if (!this.discussionId) return;
+    try {
+      const data = await commentRepository.unarchive(
+        this.discussionId,
+        e.commentId,
+      );
+
+      showToast(this, "Comment unarchived.", "success", 2000);
+      this.dispatchEvent(new LearningCommentUpdatedEvent(data));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
   private async handleCommentGenerate(e: LearningCommentGenerateEvent) {
     if (!this.discussionId || !e.parentCommentId || !e.commentType) return;
     try {
@@ -119,7 +151,7 @@ export class LearningCommentExplorerWidget extends LitElement {
 
       showToast(this, "Comments generated.", "success", 2000);
       this.dispatchEvent(
-        new LearningCommentGeneratedEvent(e.parentCommentId, e.commentType)
+        new LearningCommentGeneratedEvent(e.parentCommentId, e.commentType),
       );
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -152,7 +184,7 @@ export class LearningCommentExplorerWidget extends LitElement {
       const data = await commentRepository.updateStatus(
         this.discussionId,
         comment.id,
-        "active"
+        "active",
       );
 
       showToast(this, "Comment activated.", "success", 2000);
@@ -249,6 +281,8 @@ export class LearningCommentExplorerWidget extends LitElement {
             @learning-comment-create=${this.handleCommentCreate}
             @learning-comment-update=${this.handleCommentUpdate}
             @learning-comment-delete=${this.handleCommentDelete}
+            @learning-comment-archive=${this.handleCommentArchive}
+            @learning-comment-unarchive=${this.handleCommentUnarchive}
             @learning-comment-generate=${this.handleCommentGenerate}
             @learning-proposed-comment-accept=${this.handleAccept}
             @learning-proposed-comment-reject=${this.handleReject}
@@ -278,6 +312,8 @@ export class LearningCommentExplorerWidget extends LitElement {
           @learning-comment-create=${this.handleCommentCreate}
           @learning-comment-update=${this.handleCommentUpdate}
           @learning-comment-delete=${this.handleCommentDelete}
+          @learning-comment-archive=${this.handleCommentArchive}
+          @learning-comment-unarchive=${this.handleCommentUnarchive}
           @learning-comment-generate=${this.handleCommentGenerate}
           @learning-proposed-comment-accept=${this.handleAccept}
           @learning-proposed-comment-reject=${this.handleReject}

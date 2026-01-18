@@ -236,6 +236,8 @@ export interface components {
             content: components["schemas"]["CommentContent"];
             status: components["schemas"]["CommentStatus"];
             /** Format: date-time */
+            archivedAt?: string;
+            /** Format: date-time */
             createdAt: string;
         };
     };

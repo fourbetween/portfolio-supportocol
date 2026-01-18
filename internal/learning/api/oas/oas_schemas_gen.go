@@ -23,6 +23,7 @@ type Comment struct {
 	Content         CommentContent `json:"content"`
 	Status          CommentStatus  `json:"status"`
 	CreatedAt       time.Time      `json:"createdAt"`
+	ArchivedAt      OptDateTime    `json:"archivedAt"`
 }
 
 // GetID returns the value of ID.
@@ -60,6 +61,11 @@ func (s *Comment) GetCreatedAt() time.Time {
 	return s.CreatedAt
 }
 
+// GetArchivedAt returns the value of ArchivedAt.
+func (s *Comment) GetArchivedAt() OptDateTime {
+	return s.ArchivedAt
+}
+
 // SetID sets the value of ID.
 func (s *Comment) SetID(val ID) {
 	s.ID = val
@@ -93,6 +99,11 @@ func (s *Comment) SetStatus(val CommentStatus) {
 // SetCreatedAt sets the value of CreatedAt.
 func (s *Comment) SetCreatedAt(val time.Time) {
 	s.CreatedAt = val
+}
+
+// SetArchivedAt sets the value of ArchivedAt.
+func (s *Comment) SetArchivedAt(val OptDateTime) {
+	s.ArchivedAt = val
 }
 
 type CommentContent string

@@ -74,6 +74,37 @@ func (r *CommentRepository) Create(ctx context.Context, c *domain.Comment) error
 	return nil
 }
 
+func (r *CommentRepository) GetPathToRoot(ctx context.Context, commentID string) ([]*domain.Comment, error) {
+	ancestors := mysql.CTE("ancestors")
+
+	parentCommentID := table.Comments.ParentCommentID.From(ancestors)
+
+	initialSelect := mysql.
+		SELECT(table.Comments.AllColumns).
+		FROM(table.Comments).
+		WHERE(table.Comments.ID.EQ(mysql.String(commentID)))
+
+	recursiveSelect := mysql.
+		SELECT(table.Comments.AllColumns).
+		FROM(
+			table.Comments.
+				INNER_JOIN(ancestors, table.Comments.ID.EQ(parentCommentID)),
+		)
+
+	stmt := mysql.
+		WITH_RECURSIVE(ancestors.AS(initialSelect.UNION_ALL(recursiveSelect)))(
+		mysql.SELECT(ancestors.AllColumns()).
+			FROM(ancestors),
+	)
+
+	var dest []model.Comments
+	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
+		return nil, fmt.Errorf("failed to fetch path to root: %w", err)
+	}
+
+	return r.toCommentDomains(dest)
+}
+
 func (r *CommentRepository) toCommentDomains(rows []model.Comments) ([]*domain.Comment, error) {
 	comments := make([]*domain.Comment, len(rows))
 	for i, row := range rows {
@@ -97,7 +128,8 @@ func (r *CommentRepository) toCommentDomain(row model.Comments) (*domain.Comment
 			Status:          domain.CommentStatus(row.Status),
 			CreatedBy:       row.CreatedBy,
 		},
-		CreatedAt: row.CreatedAt,
+		CreatedAt:  row.CreatedAt,
+		ArchivedAt: row.ArchivedAt,
 	})
 }
 
@@ -109,6 +141,7 @@ func (r *CommentRepository) toCommentModel(c *domain.Comment) model.Comments {
 		CommentType:     c.CommentType(),
 		Content:         c.Content(),
 		Status:          string(c.Status()),
+		ArchivedAt:      c.ArchivedAt(),
 		CreatedBy:       c.CreatedBy(),
 		CreatedAt:       c.CreatedAt(),
 	}

@@ -230,7 +230,6 @@ export class LearningDashboardPage extends LitElement {
       <learning-comment-proposed-widget
         .discussionId=${this._selectedDiscussionId}
         .comments=${this._comments}
-        .readonly=${!!this._selectedDiscussion?.archivedAt}
         @learning-comment-updated=${this._handleCommentUpdated}
         @learning-comment-deleted=${this._handleCommentDeleted}
         @learning-comment-select=${this._handleCommentSelect}
@@ -297,7 +296,6 @@ export class LearningDashboardPage extends LitElement {
             .discussionId=${this._selectedDiscussionId}
             .comments=${this._comments}
             .selectedCommentId=${this._selectedCommentId}
-            .readonly=${!!this._selectedDiscussion?.archivedAt}
             @learning-comment-created=${this._handleCommentCreated}
             @learning-comment-updated=${this._handleCommentUpdated}
             @learning-comment-deleted=${this._handleCommentDeleted}

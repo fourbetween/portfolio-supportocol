@@ -36,7 +36,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           .availableTypes=${availableTypes}
         ></learning-comment-item>
       `,
-      container
+      container,
     );
     await expect
       .element(page.getByText("This is a test comment"))
@@ -51,7 +51,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           .availableTypes=${availableTypes}
         ></learning-comment-item>
       `,
-      container
+      container,
     );
     const editButton = page.getByRole("button", { name: "edit" });
     await editButton.click();
@@ -75,7 +75,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           @learning-comment-delete=${handleDelete}
         ></learning-comment-item>
       `,
-      container
+      container,
     );
 
     const deleteButton = page.getByRole("button", { name: "delete" });
@@ -93,7 +93,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           .readonly=${true}
         ></learning-comment-item>
       `,
-      container
+      container,
     );
 
     await expect
@@ -108,6 +108,66 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     await expect
       .element(page.getByRole("button", { name: "delete" }))
       .not.toBeInTheDocument();
+  });
+
+  it("アーカイブ済みコメントでも、アーカイブがアンアーカイブボタンになり、他のアクションも表示される", async () => {
+    const archivedComment: Comment = {
+      ...mockComment,
+      archivedAt: "2026-01-05T00:00:00Z",
+    };
+    render(
+      html`
+        <learning-comment-item
+          .comment=${archivedComment}
+          .availableTypes=${availableTypes}
+        ></learning-comment-item>
+      `,
+      container,
+    );
+
+    // 通常のアクションが表示されること
+    await expect
+      .element(page.getByRole("button", { name: "reply" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByRole("button", { name: "edit" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByRole("button", { name: "generate" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByRole("button", { name: "delete" }))
+      .toBeVisible();
+
+    // アーカイブボタンではなく、アンアーカイブボタンが表示されること
+    await expect
+      .element(page.getByRole("button", { name: "archive", exact: true }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "unarchive", exact: true }))
+      .toBeVisible();
+  });
+
+  it("自身がアーカイブされていないのに archived=true が渡された場合、アンアーカイブボタンを表示しない", async () => {
+    // mockComment は archivedAt が null
+    render(
+      html`
+        <learning-comment-item
+          .comment=${mockComment}
+          .availableTypes=${availableTypes}
+          .archived=${true}
+        ></learning-comment-item>
+      `,
+      container,
+    );
+
+    await expect
+      .element(page.getByRole("button", { name: "unarchive", exact: true }))
+      .not.toBeInTheDocument();
+    // 代わりにアーカイブボタンが表示されているはず
+    await expect
+      .element(page.getByRole("button", { name: "archive", exact: true }))
+      .toBeVisible();
   });
 
   it("status が proposed の場合、承諾ボタンと拒否ボタンを表示する", async () => {
@@ -133,7 +193,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           @learning-proposed-comment-reject=${handleReject}
         ></learning-comment-item>
       `,
-      container
+      container,
     );
 
     // active 状態のボタンが表示されていないことを確認
@@ -178,7 +238,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           @learning-comment-generate=${handleGenerate}
         ></learning-comment-item>
       `,
-      container
+      container,
     );
 
     const generateButton = page.getByRole("button", { name: "generate" });
@@ -210,7 +270,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           @learning-comment-create=${handleCreate}
         ></learning-comment-item>
       `,
-      container
+      container,
     );
 
     const replyButton = page.getByRole("button", { name: "reply" });
@@ -233,7 +293,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     expect(replyContent).toBe("This is a reply");
   });
 
-  it("アクションボタンが正しい順序（reply, edit, generate, delete）で並んでいる", async () => {
+  it("アクションボタンが正しい順序（reply, edit, generate, archive, delete）で並んでいる", async () => {
     render(
       html`
         <learning-comment-item
@@ -241,7 +301,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           .availableTypes=${availableTypes}
         ></learning-comment-item>
       `,
-      container
+      container,
     );
 
     const buttons = page.getByRole("button");
@@ -252,6 +312,9 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
       .toHaveAttribute("aria-label", "generate");
     await expect
       .element(buttons.nth(3))
+      .toHaveAttribute("aria-label", "archive");
+    await expect
+      .element(buttons.nth(4))
       .toHaveAttribute("aria-label", "delete");
   });
 
@@ -263,7 +326,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           .availableTypes=${availableTypes}
         ></learning-comment-item>
       `,
-      container
+      container,
     );
 
     const actionContainer = page.getByRole("group", { name: "Actions" });
@@ -287,7 +350,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           addEventListener: () => {},
           removeEventListener: () => {},
           dispatchEvent: () => false,
-        } as any);
+        }) as any;
       Object.defineProperty(navigator, "maxTouchPoints", {
         value: 1,
         configurable: true,
@@ -310,7 +373,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
             .availableTypes=${availableTypes}
           ></learning-comment-item>
         `,
-        container
+        container,
       );
       await expect
         .element(page.getByRole("button", { name: "focus" }))
@@ -330,7 +393,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
             @learning-comment-select=${handleSelect}
           ></learning-comment-item>
         `,
-        container
+        container,
       );
 
       const card = page.getByText("This is a test comment");
@@ -352,7 +415,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
             @learning-comment-select=${handleSelect}
           ></learning-comment-item>
         `,
-        container
+        container,
       );
 
       const focusButton = page.getByRole("button", { name: "focus" });
@@ -361,7 +424,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
       expect(selectedId).toBe("1");
     });
 
-    it("タッチデバイスではアクションボタンが正しい順序（reply, edit, generate, delete, focus）で並んでいる", async () => {
+    it("タッチデバイスではアクションボタンが正しい順序（reply, edit, generate, archive, delete, focus）で並んでいる", async () => {
       render(
         html`
           <learning-comment-item
@@ -369,7 +432,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
             .availableTypes=${availableTypes}
           ></learning-comment-item>
         `,
-        container
+        container,
       );
 
       const buttons = page.getByRole("button");
@@ -384,9 +447,12 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
         .toHaveAttribute("aria-label", "generate");
       await expect
         .element(buttons.nth(3))
-        .toHaveAttribute("aria-label", "delete");
+        .toHaveAttribute("aria-label", "archive");
       await expect
         .element(buttons.nth(4))
+        .toHaveAttribute("aria-label", "delete");
+      await expect
+        .element(buttons.nth(5))
         .toHaveAttribute("aria-label", "focus");
     });
   });
@@ -407,7 +473,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
           addEventListener: () => {},
           removeEventListener: () => {},
           dispatchEvent: () => false,
-        } as any);
+        }) as any;
       Object.defineProperty(navigator, "maxTouchPoints", {
         value: 0,
         configurable: true,
@@ -434,7 +500,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
             .availableTypes=${availableTypes}
           ></learning-comment-item>
         `,
-        container
+        container,
       );
       await expect
         .element(page.getByRole("button", { name: "focus" }))
@@ -454,7 +520,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
             @learning-comment-select=${handleSelect}
           ></learning-comment-item>
         `,
-        container
+        container,
       );
 
       const card = page.getByText("This is a test comment");

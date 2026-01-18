@@ -560,6 +560,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/learning/discussions/{discussionId}/comments/{commentId}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description archive comment */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    discussionId: components["schemas"]["Id"];
+                    commentId: components["schemas"]["Id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        /** @description unarchive comment */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    discussionId: components["schemas"]["Id"];
+                    commentId: components["schemas"]["Id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/learning/discussions/{discussionId}/comments/generate": {
         parameters: {
             query?: never;
@@ -668,6 +748,8 @@ export interface components {
             status: components["schemas"]["CommentStatus"];
             /** Format: date-time */
             createdAt: string;
+            /** Format: date-time */
+            archivedAt?: string;
         };
     };
     responses: never;

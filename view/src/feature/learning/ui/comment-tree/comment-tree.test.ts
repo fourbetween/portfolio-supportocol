@@ -31,7 +31,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree .comments=${comments}></learning-comment-tree>
       `,
-      container
+      container,
     );
     await expect.element(page.getByText("root comment")).toBeInTheDocument();
   });
@@ -79,7 +79,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree .comments=${comments}></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("root comment")).toBeInTheDocument();
@@ -116,7 +116,7 @@ describe("learning-comment-tree", async () => {
           .readonly=${true}
         ></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     // root comment のアクションボタン（例：reply）が表示されないことを確認
@@ -159,7 +159,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree .comments=${comments}></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     // 最初はすべて表示されている
@@ -211,7 +211,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree .comments=${comments}></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     const card = page.getByText("root comment");
@@ -270,7 +270,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree .comments=${comments}></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     // .child-group が存在し、その中にバッジと .group-content が含まれていることを確認
@@ -306,7 +306,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree .comments=${comments}></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("root 1")).toBeInTheDocument();
@@ -338,7 +338,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree .comments=${comments}></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("root 1")).toBeInTheDocument();
@@ -371,7 +371,7 @@ describe("learning-comment-tree", async () => {
           @learning-comment-select=${onSelect}
         ></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     await page.getByText("root comment").click();
@@ -413,7 +413,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree .comments=${comments}></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("root")).toBeInTheDocument();
@@ -437,7 +437,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree .comments=${comments}></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     await expect
@@ -479,7 +479,7 @@ describe("learning-comment-tree", async () => {
       html`
         <learning-comment-tree .comments=${comments}></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("child 1")).toBeInTheDocument();
@@ -517,7 +517,7 @@ describe("learning-comment-tree", async () => {
           @learning-comment-delete=${onCommentDelete}
         ></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     const card = page.getByText("root comment");
@@ -554,7 +554,7 @@ describe("learning-comment-tree", async () => {
           @learning-comment-generate=${onCommentGenerate}
         ></learning-comment-tree>
       `,
-      container
+      container,
     );
 
     const card = page.getByText("root comment");
@@ -570,5 +570,47 @@ describe("learning-comment-tree", async () => {
 
     expect(generatedId).toBe("1");
     expect(generatedType).toBe("idea");
+  });
+
+  it("親コメントがアーカイブされている場合、子コメントもアーカイブ状態で表示されること", async () => {
+    const comments = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "archived root",
+        commentType: "idea",
+        status: "active" as const,
+        createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: "2026-01-05T00:00:00Z",
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: "1",
+        content: "child",
+        commentType: "question",
+        status: "active" as const,
+        createdAt: "2026-01-04T00:00:00Z",
+      },
+    ];
+    render(
+      html`
+        <learning-comment-tree .comments=${comments}></learning-comment-tree>
+      `,
+      container,
+    );
+
+    const tree = container.querySelector("learning-comment-tree")! as any;
+    await tree.updateComplete;
+
+    // child (id: 2) がアーカイブとして表示されているか確認
+    const items = Array.from(
+      tree.shadowRoot!.querySelectorAll("learning-comment-item"),
+    ) as any[];
+    const childItem = items.find((item) => item.comment.id === "2");
+    await childItem.updateComplete;
+
+    expect(childItem.archived).toBe(true);
   });
 });

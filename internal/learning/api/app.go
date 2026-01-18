@@ -20,21 +20,6 @@ import (
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
-type HandlerParams struct {
-	CreateDiscussion         *usecase.CreateDiscussionUsecase
-	GetDiscussion            *usecase.GetDiscussionUsecase
-	ListDiscussions          *usecase.ListDiscussionsUsecase
-	UpdateDiscussion         *usecase.UpdateDiscussionUsecase
-	UpdateDiscussionStatus   *usecase.UpdateDiscussionStatusUsecase
-	DeleteDiscussion         *usecase.DeleteDiscussionUsecase
-	CreateComment            *usecase.CreateCommentUsecase
-	ListComments             *usecase.ListCommentsUsecase
-	UpdateComment            *usecase.UpdateCommentUsecase
-	DeleteComment            *usecase.DeleteCommentUsecase
-	UpdateCommentStatus      *usecase.UpdateCommentStatusUsecase
-	EnqueueCommentGeneration *usecase.EnqueueCommentGenerationUsecase
-}
-
 type appHandler struct {
 	con *learning.APIContainer
 }
@@ -290,6 +275,40 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(
 	return &res, nil
 }
 
+func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(
+	ctx context.Context,
+	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams,
+) (*oas.Comment, error) {
+	item, err := h.con.ArchiveComment.Execute(ctx, usecase.ArchiveCommentInput{
+		ID:           uuid.UUID(params.CommentId).String(),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		UserID:       httpctx.GetUserID(ctx),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := h.toOasComment(item)
+	return &res, nil
+}
+
+func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(
+	ctx context.Context,
+	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams,
+) (*oas.Comment, error) {
+	item, err := h.con.UnarchiveComment.Execute(ctx, usecase.UnarchiveCommentInput{
+		ID:           uuid.UUID(params.CommentId).String(),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		UserID:       httpctx.GetUserID(ctx),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := h.toOasComment(item)
+	return &res, nil
+}
+
 func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(
 	ctx context.Context,
 	req *oas.LearningDiscussionsDiscussionIdCommentsGeneratePostReq,
@@ -388,7 +407,7 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		parentCommentID.Null = true
 	}
 
-	return oas.Comment{
+	res := oas.Comment{
 		ID:              oas.ID(uuid.MustParse(item.ID())),
 		DiscussionId:    oas.ID(uuid.MustParse(item.DiscussionID())),
 		ParentCommentId: parentCommentID,
@@ -397,4 +416,8 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		Status:          oas.CommentStatus(item.Status()),
 		CreatedAt:       item.CreatedAt(),
 	}
+	if item.ArchivedAt() != nil {
+		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	}
+	return res
 }

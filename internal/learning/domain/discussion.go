@@ -69,11 +69,12 @@ func (d *Discussion) IsArchived() bool {
 }
 
 func (d *Discussion) CanAddComment() error {
-	if d.IsArchived() {
-		return fmt.Errorf("discussion is archived: %w", apperr.ErrPermissionDenied)
-	}
 	if d.commentsCount >= MaxCommentsPerDiscussion {
-		return fmt.Errorf("discussion has reached the limit of %d comments: %w", MaxCommentsPerDiscussion, apperr.ErrLimitExceeded)
+		return fmt.Errorf(
+			"discussion has reached the limit of %d comments: %w",
+			MaxCommentsPerDiscussion,
+			apperr.ErrLimitExceeded,
+		)
 	}
 	return nil
 }

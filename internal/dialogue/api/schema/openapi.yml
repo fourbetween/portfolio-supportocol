@@ -123,6 +123,9 @@ components:
           $ref: "#/components/schemas/CommentContent"
         status:
           $ref: "#/components/schemas/CommentStatus"
+        archivedAt:
+          type: string
+          format: date-time
         createdAt:
           type: string
           format: date-time

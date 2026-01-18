@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { commentCardStyle } from "../../../../shared/style/comment-card";
+import { iconStyle } from "../../../../shared/style/icon";
 import { LearningCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 
@@ -14,6 +15,9 @@ export class LearningCommentCard extends LitElement {
   @property({ type: Number })
   activeChildrenCount = 0;
 
+  @property({ type: Boolean })
+  archived = false;
+
   private _handleClick() {
     this.dispatchEvent(new LearningCommentSelectEvent(this.comment?.id));
   }
@@ -21,10 +25,22 @@ export class LearningCommentCard extends LitElement {
   render() {
     if (!this.comment) return html``;
 
+    const isArchived = this.archived || !!this.comment.archivedAt;
+
     return html`
-      <div class=${classMap(this._cardClasses)} @click=${this._handleClick}>
+      <div
+        class=${classMap(this._cardClasses(isArchived))}
+        @click=${this._handleClick}
+      >
         <div class="content">${this.comment.content}</div>
         <div class="footer">
+          ${isArchived
+            ? html`
+                <span class="material-symbols-outlined archived-icon">
+                  archive
+                </span>
+              `
+            : nothing}
           ${this.activeChildrenCount > 0
             ? html`
                 <div class="child-count">${this.activeChildrenCount}</div>
@@ -38,10 +54,11 @@ export class LearningCommentCard extends LitElement {
     `;
   }
 
-  private get _cardClasses() {
+  private _cardClasses(isArchived: boolean) {
     return {
       "card-body": true,
       proposed: this.comment?.status === "proposed",
+      archived: isArchived,
     };
   }
 
@@ -52,6 +69,7 @@ export class LearningCommentCard extends LitElement {
   static styles = [
     baseStyle,
     commentCardStyle,
+    iconStyle,
     css`
       :host {
         cursor: pointer;
