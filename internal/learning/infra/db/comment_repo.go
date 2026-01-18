@@ -76,7 +76,12 @@ func (r *CommentRepository) Create(ctx context.Context, c *domain.Comment) error
 func (r *CommentRepository) Update(ctx context.Context, c *domain.Comment) error {
 	m := r.toCommentModel(c)
 	stmt := table.Comments.
-		UPDATE(table.Comments.CommentType, table.Comments.Content, table.Comments.Status).
+		UPDATE(
+			table.Comments.CommentType,
+			table.Comments.Content,
+			table.Comments.Status,
+			table.Comments.ArchivedAt,
+		).
 		MODEL(m).
 		WHERE(table.Comments.ID.EQ(mysql.String(c.ID())))
 
@@ -213,7 +218,8 @@ func (r *CommentRepository) toCommentDomain(row model.Comments) (*domain.Comment
 			Status:          domain.CommentStatus(row.Status),
 			CreatedBy:       row.CreatedBy,
 		},
-		CreatedAt: row.CreatedAt,
+		CreatedAt:  row.CreatedAt,
+		ArchivedAt: row.ArchivedAt,
 	})
 }
 
@@ -225,6 +231,7 @@ func (r *CommentRepository) toCommentModel(c *domain.Comment) model.Comments {
 		CommentType:     c.CommentType(),
 		Content:         c.Content(),
 		Status:          string(c.Status()),
+		ArchivedAt:      c.ArchivedAt(),
 		CreatedBy:       c.CreatedBy(),
 		CreatedAt:       c.CreatedAt(),
 	}

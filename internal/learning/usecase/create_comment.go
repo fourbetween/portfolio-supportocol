@@ -56,6 +56,18 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			return err
 		}
 
+		if input.ParentCommentID != nil {
+			path, err := u.commentRepo.GetPathToRoot(ctx, *input.ParentCommentID)
+			if err != nil {
+				return err
+			}
+			for _, c := range path {
+				if err := c.CanAddChild(); err != nil {
+					return err
+				}
+			}
+		}
+
 		var createErr error
 		comment, createErr = u.fac.Create(domain.CreateCommentParams{
 			DiscussionID:    input.DiscussionID,

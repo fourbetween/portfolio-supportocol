@@ -51,9 +51,15 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 		e.FieldStart("createdAt")
 		json.EncodeDateTime(e, s.CreatedAt)
 	}
+	{
+		if s.ArchivedAt.Set {
+			e.FieldStart("archivedAt")
+			s.ArchivedAt.Encode(e, json.EncodeDateTime)
+		}
+	}
 }
 
-var jsonFieldsNameOfComment = [7]string{
+var jsonFieldsNameOfComment = [8]string{
 	0: "id",
 	1: "discussionId",
 	2: "parentCommentId",
@@ -61,6 +67,7 @@ var jsonFieldsNameOfComment = [7]string{
 	4: "content",
 	5: "status",
 	6: "createdAt",
+	7: "archivedAt",
 }
 
 // Decode decodes Comment from json.
@@ -143,6 +150,16 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"createdAt\"")
+			}
+		case "archivedAt":
+			if err := func() error {
+				s.ArchivedAt.Reset()
+				if err := s.ArchivedAt.Decode(d, json.DecodeDateTime); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"archivedAt\"")
 			}
 		default:
 			return d.Skip()

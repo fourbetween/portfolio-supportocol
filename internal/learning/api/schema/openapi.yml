@@ -138,6 +138,9 @@ components:
         createdAt:
           type: string
           format: date-time
+        archivedAt:
+          type: string
+          format: date-time
       required:
         - id
         - discussionId
@@ -513,6 +516,59 @@ paths:
                   $ref: "#/components/schemas/CommentStatus"
               required:
                 - status
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /learning/discussions/{discussionId}/comments/{commentId}/archive:
+    post:
+      description: archive comment
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: commentId
+          in: path
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      description: unarchive comment
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: commentId
+          in: path
       responses:
         "200":
           description: success response

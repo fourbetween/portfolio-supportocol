@@ -43,7 +43,8 @@ func (f *CommentFactory) Create(params CreateCommentParams) (*Comment, error) {
 type ReconstructCommentParams struct {
 	ID string
 	CreateCommentParams
-	CreatedAt time.Time
+	CreatedAt  time.Time
+	ArchivedAt *time.Time
 }
 
 func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment, error) {
@@ -56,6 +57,7 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 		status:          params.Status,
 		createdBy:       params.CreatedBy,
 		createdAt:       params.CreatedAt,
+		archivedAt:      params.ArchivedAt,
 	}
 
 	if err := c.Validate(); err != nil {

@@ -31,6 +31,24 @@ func (UnimplementedHandler) LearningDiscussionsDiscussionIdArchivePost(ctx conte
 	return r, ht.ErrNotImplemented
 }
 
+// LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete implements DELETE /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+//
+// Unarchive comment.
+//
+// DELETE /learning/discussions/{discussionId}/comments/{commentId}/archive
+func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(ctx context.Context, params LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams) (r *Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost implements POST /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+//
+// Archive comment.
+//
+// POST /learning/discussions/{discussionId}/comments/{commentId}/archive
+func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(ctx context.Context, params LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams) (r *Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // LearningDiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /learning/discussions/{discussionId}/comments/{commentId} operation.
 //
 // Delete comment.
