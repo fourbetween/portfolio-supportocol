@@ -182,7 +182,7 @@ export class LearningCommentFrameForm extends LitElement {
             `,
           )}
         </select>
-        <span class="material-symbols-outlined">arrow_forward</span>
+        <span class="material-symbols-outlined">arrow_back</span>
         <select
           name="child"
           aria-label="Child Type Select"
