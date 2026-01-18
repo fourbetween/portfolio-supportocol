@@ -48,3 +48,9 @@ applyTo: "internal/**/*.go"
 - テストケースは struct のスライスで定義する。
 - **命名規則**: テストケースの `name` プロパティは必ず**「〜こと」**で終わる日本語にする。
 - 外部依存（ID 生成、時刻取得等）はモックを使用する。
+- **結果の比較**: 構造体やスライスの比較には `github.com/google/go-cmp/cmp` パッケージを使用する。
+  ```go
+  if diff := cmp.Diff(tt.want, got); diff != "" {
+      t.Errorf("FunctionName() mismatch (-want +got):\n%s", diff)
+  }
+  ```
