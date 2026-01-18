@@ -172,26 +172,6 @@ export class LearningCommentItem extends LitElement {
     const isProposed = this.comment?.status === "proposed";
     const isExplicitlyArchived = !!this.comment?.archivedAt;
 
-    if (this.archived || isExplicitlyArchived) {
-      return html`
-        ${isExplicitlyArchived
-          ? this.renderIconButton(
-              "unarchive",
-              "unarchive",
-              this.handleUnarchiveClick,
-              "unarchive-button",
-            )
-          : nothing}
-        ${this.renderIconButton(
-          "delete",
-          "delete",
-          this.handleDeleteClick,
-          "danger delete-button",
-        )}
-        ${focusButton}
-      `;
-    }
-
     if (isProposed) {
       return html`
         ${this.renderIconButton(
@@ -210,12 +190,19 @@ export class LearningCommentItem extends LitElement {
       `;
     }
 
-    const archiveButton = this.renderIconButton(
-      "archive",
-      "archive",
-      this.handleArchiveClick,
-      "archive-button",
-    );
+    const archiveUnarchiveButton = isExplicitlyArchived
+      ? this.renderIconButton(
+          "unarchive",
+          "unarchive",
+          this.handleUnarchiveClick,
+          "unarchive-button",
+        )
+      : this.renderIconButton(
+          "archive",
+          "archive",
+          this.handleArchiveClick,
+          "archive-button",
+        );
 
     return html`
       ${this.renderIconButton("reply", "reply", (e) =>
@@ -233,7 +220,7 @@ export class LearningCommentItem extends LitElement {
         (e) => this.handleOpenTypePopup(e, "generate"),
         "primary generate-button",
       )}
-      ${archiveButton}
+      ${archiveUnarchiveButton}
       ${this.renderIconButton(
         "delete",
         "delete",
