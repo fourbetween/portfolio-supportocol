@@ -110,6 +110,66 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
       .not.toBeInTheDocument();
   });
 
+  it("アーカイブ済みコメントでも、アーカイブがアンアーカイブボタンになり、他のアクションも表示される", async () => {
+    const archivedComment: Comment = {
+      ...mockComment,
+      archivedAt: "2026-01-05T00:00:00Z",
+    };
+    render(
+      html`
+        <learning-comment-item
+          .comment=${archivedComment}
+          .availableTypes=${availableTypes}
+        ></learning-comment-item>
+      `,
+      container,
+    );
+
+    // 通常のアクションが表示されること
+    await expect
+      .element(page.getByRole("button", { name: "reply" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByRole("button", { name: "edit" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByRole("button", { name: "generate" }))
+      .toBeVisible();
+    await expect
+      .element(page.getByRole("button", { name: "delete" }))
+      .toBeVisible();
+
+    // アーカイブボタンではなく、アンアーカイブボタンが表示されること
+    await expect
+      .element(page.getByRole("button", { name: "archive", exact: true }))
+      .not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole("button", { name: "unarchive", exact: true }))
+      .toBeVisible();
+  });
+
+  it("自身がアーカイブされていないのに archived=true が渡された場合、アンアーカイブボタンを表示しない", async () => {
+    // mockComment は archivedAt が null
+    render(
+      html`
+        <learning-comment-item
+          .comment=${mockComment}
+          .availableTypes=${availableTypes}
+          .archived=${true}
+        ></learning-comment-item>
+      `,
+      container,
+    );
+
+    await expect
+      .element(page.getByRole("button", { name: "unarchive", exact: true }))
+      .not.toBeInTheDocument();
+    // 代わりにアーカイブボタンが表示されているはず
+    await expect
+      .element(page.getByRole("button", { name: "archive", exact: true }))
+      .toBeVisible();
+  });
+
   it("status が proposed の場合、承諾ボタンと拒否ボタンを表示する", async () => {
     let acceptedComment: Comment | undefined;
     let rejectedComment: Comment | undefined;

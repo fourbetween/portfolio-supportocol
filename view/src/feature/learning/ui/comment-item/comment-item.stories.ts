@@ -104,6 +104,30 @@ export const Proposed: Story = {
   `,
 };
 
+export const Archived: Story = {
+  render: (args) => html`
+    <learning-comment-item
+      .comment=${{ ...mockComment, archivedAt: "2026-01-05T00:00:00Z" }}
+      .availableTypes=${availableTypes}
+      @learning-comment-select=${args.onSelectComment}
+      @learning-comment-deleted=${args.onCommentDeleted}
+      @learning-comment-generate=${args.onCommentGenerate}
+      @learning-comment-update=${args.onCommentUpdate}
+      @learning-comment-create=${args.onCommentCreate}
+    ></learning-comment-item>
+  `,
+};
+
+export const InheritedArchived: Story = {
+  render: () => html`
+    <learning-comment-item
+      .comment=${mockComment}
+      .availableTypes=${availableTypes}
+      .archived=${true}
+    ></learning-comment-item>
+  `,
+};
+
 export const LongContent: Story = {
   render: () => html`
     <learning-comment-item
@@ -111,7 +135,7 @@ export const LongContent: Story = {
         ...mockComment,
         content:
           "This is a very long comment content to test how it looks when it wraps to multiple lines. ".repeat(
-            5
+            5,
           ),
       }}
       .availableTypes=${availableTypes}
