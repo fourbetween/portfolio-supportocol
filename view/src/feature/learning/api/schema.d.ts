@@ -14,7 +14,9 @@ export interface paths {
         /** @description get discussions */
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    archived?: boolean;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;

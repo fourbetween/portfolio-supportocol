@@ -126,7 +126,7 @@ func (UnimplementedHandler) LearningDiscussionsDiscussionIdStatusPut(ctx context
 // Get discussions.
 //
 // GET /learning/discussions
-func (UnimplementedHandler) LearningDiscussionsGet(ctx context.Context) (r []DiscussionSummary, _ error) {
+func (UnimplementedHandler) LearningDiscussionsGet(ctx context.Context, params LearningDiscussionsGetParams) (r []DiscussionSummary, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

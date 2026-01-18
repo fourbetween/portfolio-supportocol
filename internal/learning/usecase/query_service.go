@@ -16,5 +16,5 @@ type DiscussionSummary struct {
 }
 
 type DiscussionQueryService interface {
-	ListDiscussions(ctx context.Context, createdBy string) ([]*DiscussionSummary, error)
+	ListDiscussions(ctx context.Context, createdBy string, archived bool) ([]*DiscussionSummary, error)
 }

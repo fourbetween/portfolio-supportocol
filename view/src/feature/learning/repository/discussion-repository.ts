@@ -3,8 +3,12 @@ import type { CommentFrame } from "../model/comment-frame";
 import type { Discussion, DiscussionSummary } from "../model/discussion";
 
 export class DiscussionRepository {
-  async list(): Promise<DiscussionSummary[]> {
-    const { data, error } = await client.GET("/learning/discussions");
+  async list(archived?: boolean): Promise<DiscussionSummary[]> {
+    const { data, error } = await client.GET("/learning/discussions", {
+      params: {
+        query: { archived },
+      },
+    });
     if (error) throw new Error(error.message);
     return data || [];
   }

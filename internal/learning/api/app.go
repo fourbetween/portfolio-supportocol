@@ -43,8 +43,8 @@ func NewHandler(con *learning.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
-func (h *appHandler) LearningDiscussionsGet(ctx context.Context) ([]oas.DiscussionSummary, error) {
-	items, err := h.con.ListDiscussions.Execute(ctx, httpctx.GetUserID(ctx))
+func (h *appHandler) LearningDiscussionsGet(ctx context.Context, params oas.LearningDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
+	items, err := h.con.ListDiscussions.Execute(ctx, httpctx.GetUserID(ctx), params.Archived.Or(false))
 	if err != nil {
 		return nil, err
 	}
