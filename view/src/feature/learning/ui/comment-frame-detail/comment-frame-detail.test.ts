@@ -28,7 +28,7 @@ describe("learning-comment-frame-detail", () => {
           .frame=${frame}
         ></learning-comment-frame-detail>
       `,
-      container
+      container,
     );
     const element = container.querySelector("learning-comment-frame-detail")!;
     await (element as any).updateComplete;
@@ -54,7 +54,7 @@ describe("learning-comment-frame-detail", () => {
           .frame=${frame}
         ></learning-comment-frame-detail>
       `,
-      container
+      container,
     );
     const element = container.querySelector("learning-comment-frame-detail")!;
     await (element as any).updateComplete;
@@ -65,10 +65,33 @@ describe("learning-comment-frame-detail", () => {
 
     // 子要素のコンテナにボーダーがあることを確認
     const childrenNodes = element.shadowRoot?.querySelector(
-      ".children-nodes"
+      ".children-nodes",
     ) as HTMLElement;
     expect(childrenNodes).not.toBeNull();
     const style = window.getComputedStyle(childrenNodes!);
     expect(style.borderLeft).toContain("dashed");
+  });
+
+  it("parent が空文字の時に Root と表示されること", async () => {
+    const frame: CommentFrame = {
+      types: ["質問", ""],
+      paths: [{ child: "質問", parent: "" }],
+    };
+
+    render(
+      html`
+        <learning-comment-frame-detail
+          .frame=${frame}
+        ></learning-comment-frame-detail>
+      `,
+      container,
+    );
+    const element = container.querySelector("learning-comment-frame-detail")!;
+    await (element as any).updateComplete;
+
+    // Root が表示されていることを確認（Types と Paths の両方にあるはず）
+    const roots = page.getByText("Root").all();
+    expect(roots.length).toBeGreaterThanOrEqual(1);
+    await expect.element(page.getByText("Root").first()).toBeVisible();
   });
 });

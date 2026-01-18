@@ -13,13 +13,16 @@ export class LearningCommentFrameDetail extends LitElement {
 
   private get _groupedPaths() {
     if (!this.frame) return {};
-    return this.frame.paths.reduce((acc, p) => {
-      if (!acc[p.parent]) {
-        acc[p.parent] = [];
-      }
-      acc[p.parent].push(p.child);
-      return acc;
-    }, {} as Record<string, string[]>);
+    return this.frame.paths.reduce(
+      (acc, p) => {
+        if (!acc[p.parent]) {
+          acc[p.parent] = [];
+        }
+        acc[p.parent].push(p.child);
+        return acc;
+      },
+      {} as Record<string, string[]>,
+    );
   }
 
   render() {
@@ -42,14 +45,14 @@ export class LearningCommentFrameDetail extends LitElement {
   private _renderTypes() {
     return this.frame!.types.map(
       (t) => html`
-        <ui-comment-type-badge .type=${t}></ui-comment-type-badge>
-      `
+        <ui-comment-type-badge .type=${t || "Root"}></ui-comment-type-badge>
+      `,
     );
   }
 
   private _renderPaths() {
     return Object.entries(this._groupedPaths).map(([parent, children]) =>
-      this._renderPathGroup(parent, children)
+      this._renderPathGroup(parent, children),
     );
   }
 
@@ -57,15 +60,19 @@ export class LearningCommentFrameDetail extends LitElement {
     return html`
       <div class="path-group">
         <div class="parent-node">
-          <ui-comment-type-badge .type=${parent}></ui-comment-type-badge>
+          <ui-comment-type-badge
+            .type=${parent || "Root"}
+          ></ui-comment-type-badge>
         </div>
         <div class="children-nodes">
           ${children.map(
             (child) => html`
               <div class="child-node">
-                <ui-comment-type-badge .type=${child}></ui-comment-type-badge>
+                <ui-comment-type-badge
+                  .type=${child || "Root"}
+                ></ui-comment-type-badge>
               </div>
-            `
+            `,
           )}
         </div>
       </div>

@@ -44,3 +44,14 @@ export const Grouped: Story = {
     ></learning-comment-frame-detail>
   `,
 };
+
+export const WithRoot: Story = {
+  render: () => html`
+    <learning-comment-frame-detail
+      .frame=${{
+        types: ["質問", ""],
+        paths: [{ child: "質問", parent: "" }],
+      }}
+    ></learning-comment-frame-detail>
+  `,
+};
