@@ -18,6 +18,7 @@ type Comments struct {
 	CommentType     string
 	Content         string
 	Status          string
+	ArchivedAt      *time.Time
 	CreatedBy       *string
 	CreatedAt       time.Time
 	UpdatedAt       time.Time

@@ -23,6 +23,7 @@ type commentsTable struct {
 	CommentType     mysql.ColumnString
 	Content         mysql.ColumnString
 	Status          mysql.ColumnString
+	ArchivedAt      mysql.ColumnTimestamp
 	CreatedBy       mysql.ColumnString
 	CreatedAt       mysql.ColumnTimestamp
 	UpdatedAt       mysql.ColumnTimestamp
@@ -73,11 +74,12 @@ func newCommentsTableImpl(schemaName, tableName, alias string) commentsTable {
 		CommentTypeColumn     = mysql.StringColumn("comment_type")
 		ContentColumn         = mysql.StringColumn("content")
 		StatusColumn          = mysql.StringColumn("status")
+		ArchivedAtColumn      = mysql.TimestampColumn("archived_at")
 		CreatedByColumn       = mysql.StringColumn("created_by")
 		CreatedAtColumn       = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
-		allColumns            = mysql.ColumnList{IDColumn, DiscussionIDColumn, ParentCommentIDColumn, CommentTypeColumn, ContentColumn, StatusColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns        = mysql.ColumnList{DiscussionIDColumn, ParentCommentIDColumn, CommentTypeColumn, ContentColumn, StatusColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns            = mysql.ColumnList{IDColumn, DiscussionIDColumn, ParentCommentIDColumn, CommentTypeColumn, ContentColumn, StatusColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns        = mysql.ColumnList{DiscussionIDColumn, ParentCommentIDColumn, CommentTypeColumn, ContentColumn, StatusColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
 		defaultColumns        = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
@@ -91,6 +93,7 @@ func newCommentsTableImpl(schemaName, tableName, alias string) commentsTable {
 		CommentType:     CommentTypeColumn,
 		Content:         ContentColumn,
 		Status:          StatusColumn,
+		ArchivedAt:      ArchivedAtColumn,
 		CreatedBy:       CreatedByColumn,
 		CreatedAt:       CreatedAtColumn,
 		UpdatedAt:       UpdatedAtColumn,
