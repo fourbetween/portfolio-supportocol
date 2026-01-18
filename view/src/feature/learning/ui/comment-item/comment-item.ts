@@ -5,10 +5,12 @@ import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
 import {
+  LearningCommentArchiveEvent,
   LearningCommentDeleteEvent,
   LearningCommentGenerateEvent,
   LearningCommentSelectEvent,
   LearningCommentTypeSelectEvent,
+  LearningCommentUnarchiveEvent,
   LearningProposedCommentAcceptEvent,
   LearningProposedCommentRejectEvent,
 } from "../../event/comment";
@@ -76,6 +78,20 @@ export class LearningCommentItem extends LitElement {
     }
   }
 
+  private handleArchiveClick(e: Event) {
+    e.stopPropagation();
+    if (this.comment) {
+      this.dispatchEvent(new LearningCommentArchiveEvent(this.comment.id));
+    }
+  }
+
+  private handleUnarchiveClick(e: Event) {
+    e.stopPropagation();
+    if (this.comment) {
+      this.dispatchEvent(new LearningCommentUnarchiveEvent(this.comment.id));
+    }
+  }
+
   private handleAcceptClick(e: Event) {
     e.stopPropagation();
     if (this.comment) {
@@ -97,7 +113,7 @@ export class LearningCommentItem extends LitElement {
     } else if (this.mode === "generate") {
       if (this.comment) {
         this.dispatchEvent(
-          new LearningCommentGenerateEvent(this.comment.id, commentType)
+          new LearningCommentGenerateEvent(this.comment.id, commentType),
         );
       }
       this.mode = "view";
@@ -123,8 +139,6 @@ export class LearningCommentItem extends LitElement {
   }
 
   private renderCommentContent() {
-    const isProposed = this.comment?.status === "proposed";
-
     return html`
       <learning-comment-card
         .comment=${this.comment}
@@ -133,52 +147,91 @@ export class LearningCommentItem extends LitElement {
         style="cursor: pointer;"
       ></learning-comment-card>
       <div class="actions" role="group" aria-label="Actions">
-        ${!this.readonly
-          ? isProposed
-            ? html`
-                ${this.renderIconButton(
-                  "check",
-                  "accept",
-                  this.handleAcceptClick,
-                  "success accept-button"
-                )}
-                ${this.renderIconButton(
-                  "close",
-                  "reject",
-                  this.handleRejectClick,
-                  "danger reject-button"
-                )}
-              `
-            : html`
-                ${this.renderIconButton("reply", "reply", (e) =>
-                  this.handleOpenTypePopup(e, "reply")
-                )}
-                ${this.renderIconButton(
-                  "edit",
-                  "edit",
-                  this.handleEditClick,
-                  "edit-button"
-                )}
-                ${this.renderIconButton(
-                  "psychology",
-                  "generate",
-                  (e) => this.handleOpenTypePopup(e, "generate"),
-                  "primary generate-button"
-                )}
-                ${this.renderIconButton(
-                  "delete",
-                  "delete",
-                  this.handleDeleteClick,
-                  "danger delete-button"
-                )}
-              `
-          : nothing}
-        ${this.touch.isTouchDevice
-          ? this.renderIconButton("ads_click", "focus", (e) =>
-              this.handleFocusClick(e)
-            )
-          : nothing}
+        ${this.renderActions()}
       </div>
+    `;
+  }
+
+  private renderActions() {
+    const isTouch = this.touch.isTouchDevice;
+    const focusButton = isTouch
+      ? this.renderIconButton("ads_click", "focus", (e) =>
+          this.handleFocusClick(e),
+        )
+      : nothing;
+
+    if (this.readonly) {
+      return focusButton;
+    }
+
+    const isProposed = this.comment?.status === "proposed";
+    const isArchived = !!this.comment?.archivedAt;
+
+    if (isProposed) {
+      return html`
+        ${this.renderIconButton(
+          "check",
+          "accept",
+          this.handleAcceptClick,
+          "success accept-button",
+        )}
+        ${this.renderIconButton(
+          "close",
+          "reject",
+          this.handleRejectClick,
+          "danger reject-button",
+        )}
+        ${focusButton}
+      `;
+    }
+
+    if (isArchived) {
+      return html`
+        ${this.renderIconButton(
+          "unarchive",
+          "unarchive",
+          this.handleUnarchiveClick,
+          "unarchive-button",
+        )}
+        ${this.renderIconButton(
+          "delete",
+          "delete",
+          this.handleDeleteClick,
+          "danger delete-button",
+        )}
+        ${focusButton}
+      `;
+    }
+
+    return html`
+      ${this.renderIconButton("reply", "reply", (e) =>
+        this.handleOpenTypePopup(e, "reply"),
+      )}
+      ${this.renderIconButton(
+        "edit",
+        "edit",
+        this.handleEditClick,
+        "edit-button",
+      )}
+      ${this.renderIconButton(
+        "psychology",
+        "generate",
+        (e) => this.handleOpenTypePopup(e, "generate"),
+        "primary generate-button",
+      )}
+      ${this.renderIconButton(
+        "archive",
+        "archive",
+        this.handleArchiveClick,
+        "archive-button",
+      )}
+      ${this.renderIconButton(
+        "delete",
+        "delete",
+        this.handleDeleteClick,
+        "danger delete-button",
+      )}
+      ${focusButton}
     `;
   }
 
@@ -186,7 +239,7 @@ export class LearningCommentItem extends LitElement {
     icon: string,
     label: string,
     handler: (e: Event) => void,
-    extraClass = ""
+    extraClass = "",
   ) {
     const className = extraClass.includes("-button")
       ? extraClass

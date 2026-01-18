@@ -16,7 +16,7 @@ export class CommentRepository {
           path: { discussionId },
           query: { since },
         },
-      }
+      },
     );
     if (error) throw new Error(error.message);
     const comments = data || [];
@@ -41,7 +41,7 @@ export class CommentRepository {
       parentCommentId: string | null;
       commentType: string;
       content: string;
-    }
+    },
   ): Promise<Comment> {
     const { data, error } = await client.POST(
       "/learning/discussions/{discussionId}/comments",
@@ -50,7 +50,7 @@ export class CommentRepository {
           path: { discussionId },
         },
         body,
-      }
+      },
     );
     if (error) throw new Error(error.message);
 
@@ -68,7 +68,7 @@ export class CommentRepository {
     body: {
       commentType: string;
       content: string;
-    }
+    },
   ): Promise<Comment> {
     const { data, error } = await client.PUT(
       "/learning/discussions/{discussionId}/comments/{commentId}",
@@ -77,7 +77,7 @@ export class CommentRepository {
           path: { discussionId, commentId },
         },
         body,
-      }
+      },
     );
     if (error) throw new Error(error.message);
 
@@ -85,7 +85,7 @@ export class CommentRepository {
     if (cached) {
       this._cache.set(
         discussionId,
-        cached.map((c) => (c.id === data.id ? data : c))
+        cached.map((c) => (c.id === data.id ? data : c)),
       );
     }
 
@@ -99,7 +99,7 @@ export class CommentRepository {
         params: {
           path: { discussionId, commentId },
         },
-      }
+      },
     );
     if (error) throw new Error(error.message);
 
@@ -107,7 +107,7 @@ export class CommentRepository {
     if (cached) {
       this._cache.set(
         discussionId,
-        cached.filter((c) => c.id !== commentId)
+        cached.filter((c) => c.id !== commentId),
       );
     }
   }
@@ -117,7 +117,7 @@ export class CommentRepository {
     body: {
       parentCommentId: string | null;
       commentType: string;
-    }
+    },
   ): Promise<void> {
     const { error } = await client.POST(
       "/learning/discussions/{discussionId}/comments/generate",
@@ -126,15 +126,59 @@ export class CommentRepository {
           path: { discussionId },
         },
         body,
-      }
+      },
     );
     if (error) throw new Error(error.message);
+  }
+
+  async archive(discussionId: string, commentId: string): Promise<Comment> {
+    const { data, error } = await client.POST(
+      "/learning/discussions/{discussionId}/comments/{commentId}/archive",
+      {
+        params: {
+          path: { discussionId, commentId },
+        },
+      },
+    );
+    if (error) throw new Error(error.message);
+
+    const cached = this._cache.get(discussionId);
+    if (cached) {
+      this._cache.set(
+        discussionId,
+        cached.map((c) => (c.id === data.id ? data : c)),
+      );
+    }
+
+    return data;
+  }
+
+  async unarchive(discussionId: string, commentId: string): Promise<Comment> {
+    const { data, error } = await client.DELETE(
+      "/learning/discussions/{discussionId}/comments/{commentId}/archive",
+      {
+        params: {
+          path: { discussionId, commentId },
+        },
+      },
+    );
+    if (error) throw new Error(error.message);
+
+    const cached = this._cache.get(discussionId);
+    if (cached) {
+      this._cache.set(
+        discussionId,
+        cached.map((c) => (c.id === data.id ? data : c)),
+      );
+    }
+
+    return data;
   }
 
   async updateStatus(
     discussionId: string,
     commentId: string,
-    status: "active" | "proposed"
+    status: "active" | "proposed",
   ): Promise<Comment> {
     const { data, error } = await client.PUT(
       "/learning/discussions/{discussionId}/comments/{commentId}/status",
@@ -143,7 +187,7 @@ export class CommentRepository {
           path: { discussionId, commentId },
         },
         body: { status },
-      }
+      },
     );
     if (error) throw new Error(error.message);
 
@@ -151,7 +195,7 @@ export class CommentRepository {
     if (cached) {
       this._cache.set(
         discussionId,
-        cached.map((c) => (c.id === data.id ? data : c))
+        cached.map((c) => (c.id === data.id ? data : c)),
       );
     }
 

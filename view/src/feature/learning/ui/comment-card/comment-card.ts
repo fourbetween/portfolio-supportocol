@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { commentCardStyle } from "../../../../shared/style/comment-card";
+import { iconStyle } from "../../../../shared/style/icon";
 import { LearningCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
 
@@ -25,6 +26,13 @@ export class LearningCommentCard extends LitElement {
       <div class=${classMap(this._cardClasses)} @click=${this._handleClick}>
         <div class="content">${this.comment.content}</div>
         <div class="footer">
+          ${this.comment.archivedAt
+            ? html`
+                <span class="material-symbols-outlined archived-icon">
+                  archive
+                </span>
+              `
+            : nothing}
           ${this.activeChildrenCount > 0
             ? html`
                 <div class="child-count">${this.activeChildrenCount}</div>
@@ -42,6 +50,7 @@ export class LearningCommentCard extends LitElement {
     return {
       "card-body": true,
       proposed: this.comment?.status === "proposed",
+      archived: !!this.comment?.archivedAt,
     };
   }
 
@@ -52,9 +61,18 @@ export class LearningCommentCard extends LitElement {
   static styles = [
     baseStyle,
     commentCardStyle,
+    iconStyle,
     css`
       :host {
         cursor: pointer;
+      }
+      .archived-icon {
+        font-size: 16px;
+        color: var(--color-fg-muted);
+      }
+      .card-body.archived {
+        opacity: 0.6;
+        background-color: var(--color-canvas-subtle);
       }
     `,
   ];
