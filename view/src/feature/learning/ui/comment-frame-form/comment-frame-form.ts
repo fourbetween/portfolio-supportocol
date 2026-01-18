@@ -1,8 +1,10 @@
 import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { buttonStyle } from "../../../../shared/style/button";
 import { commentFrameDetail } from "../../../../shared/style/comment-frame-detail";
 import { iconStyle } from "../../../../shared/style/icon";
+import { inputStyle } from "../../../../shared/style/input";
 import { titleStyle } from "../../../../shared/style/title";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { CommentFrame } from "../../model/comment-frame";
@@ -94,7 +96,7 @@ export class LearningCommentFrameForm extends LitElement {
               @input=${this._handleTypeNameInput}
             />
             <button
-              class="add-type-button primary"
+              class="btn btn-primary"
               aria-label="Add Type"
               @click=${this._handleAddType}
             >
@@ -196,7 +198,7 @@ export class LearningCommentFrameForm extends LitElement {
           )}
         </select>
         <button
-          class="add-path-button primary"
+          class="btn btn-primary"
           aria-label="Add Path"
           ?disabled=${!this._selectedChild}
           @click=${this._handleAddPath}
@@ -253,6 +255,8 @@ export class LearningCommentFrameForm extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
+    inputStyle,
     titleStyle,
     commentFrameDetail,
     iconStyle,
@@ -271,24 +275,11 @@ export class LearningCommentFrameForm extends LitElement {
       input,
       select {
         flex: 1;
-        padding: 8px;
+        padding: 5px 12px;
         border: 1px solid var(--border-color, #ccc);
         border-radius: 4px;
         background: var(--surface-color, #fff);
         color: var(--text-color, #000);
-      }
-      button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 8px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      button.primary {
-        background: var(--primary-color, #007bff);
-        color: white;
       }
       .types,
       .paths {
@@ -303,7 +294,12 @@ export class LearningCommentFrameForm extends LitElement {
         gap: 4px;
       }
       .delete-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: transparent;
+        border: none;
+        cursor: pointer;
         color: var(--error-color, #dc3545);
         padding: 4px;
         opacity: 0.6;
