@@ -21,7 +21,14 @@ func NewDiscussionQueryService(db *sql.DB) *DiscussionQueryService {
 	return &DiscussionQueryService{db: db}
 }
 
-func (s *DiscussionQueryService) ListDiscussions(ctx context.Context, createdBy string) ([]*usecase.DiscussionSummary, error) {
+func (s *DiscussionQueryService) ListDiscussions(ctx context.Context, createdBy string, archived bool) ([]*usecase.DiscussionSummary, error) {
+	condition := table.Discussions.CreatedBy.EQ(mysql.String(createdBy))
+	if archived {
+		condition = condition.AND(table.Discussions.ArchivedAt.IS_NOT_NULL())
+	} else {
+		condition = condition.AND(table.Discussions.ArchivedAt.IS_NULL())
+	}
+
 	stmt := mysql.
 		SELECT(
 			table.Discussions.ID,
@@ -31,7 +38,7 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context, createdBy 
 			table.Discussions.LastCommentedAt,
 		).
 		FROM(table.Discussions).
-		WHERE(table.Discussions.CreatedBy.EQ(mysql.String(createdBy))).
+		WHERE(condition).
 		ORDER_BY(table.Discussions.LastCommentedAt.DESC())
 
 	var dest []model.Discussions

@@ -152,6 +152,13 @@ paths:
   /learning/discussions:
     get:
       description: get discussions
+      parameters:
+        - name: archived
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
       responses:
         "200":
           description: success response

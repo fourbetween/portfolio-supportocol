@@ -1889,6 +1889,16 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 			return
 		}
 	}
+	params, err := decodeLearningDiscussionsGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
 
 	var rawBody []byte
 
@@ -1901,13 +1911,18 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 			OperationID:      "",
 			Body:             nil,
 			RawBody:          rawBody,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Params: middleware.Parameters{
+				{
+					Name: "archived",
+					In:   "query",
+				}: params.Archived,
+			},
+			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = struct{}
+			Params   = LearningDiscussionsGetParams
 			Response = []DiscussionSummary
 		)
 		response, err = middleware.HookMiddleware[
@@ -1917,14 +1932,14 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 		](
 			m,
 			mreq,
-			nil,
+			unpackLearningDiscussionsGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsGet(ctx)
+				response, err = s.h.LearningDiscussionsGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsGet(ctx)
+		response, err = s.h.LearningDiscussionsGet(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {

@@ -1111,3 +1111,72 @@ func decodeLearningDiscussionsDiscussionIdStatusPutParams(args [1]string, argsEs
 	}
 	return params, nil
 }
+
+// LearningDiscussionsGetParams is parameters of GET /learning/discussions operation.
+type LearningDiscussionsGetParams struct {
+	Archived OptBool `json:",omitempty,omitzero"`
+}
+
+func unpackLearningDiscussionsGetParams(packed middleware.Parameters) (params LearningDiscussionsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "archived",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Archived = v.(OptBool)
+		}
+	}
+	return params
+}
+
+func decodeLearningDiscussionsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Set default value for query: archived.
+	{
+		val := bool(false)
+		params.Archived.SetTo(val)
+	}
+	// Decode query: archived.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "archived",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotArchivedVal bool
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToBool(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotArchivedVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Archived.SetTo(paramsDotArchivedVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "archived",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}

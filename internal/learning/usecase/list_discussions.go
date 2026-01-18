@@ -14,6 +14,6 @@ func NewListDiscussionsUsecase(qs DiscussionQueryService) *ListDiscussionsUsecas
 	}
 }
 
-func (u *ListDiscussionsUsecase) Execute(ctx context.Context, createdBy string) ([]*DiscussionSummary, error) {
-	return u.qs.ListDiscussions(ctx, createdBy)
+func (u *ListDiscussionsUsecase) Execute(ctx context.Context, createdBy string, archived bool) ([]*DiscussionSummary, error) {
+	return u.qs.ListDiscussions(ctx, createdBy, archived)
 }
