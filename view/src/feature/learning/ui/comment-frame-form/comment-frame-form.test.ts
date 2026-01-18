@@ -32,8 +32,6 @@ describe("learning-comment-frame-form", () => {
     const element = container.querySelector("learning-comment-frame-form")!;
     await (element as any).updateComplete;
 
-    // Types の表示確認
-    // Badge の要素を特定したいので class を使うか、textContent を直接見る
     const badges = element.shadowRoot?.querySelectorAll(
       "ui-comment-type-badge",
     );
@@ -42,7 +40,7 @@ describe("learning-comment-frame-form", () => {
     expect(badgeTexts).toContain("回答");
   });
 
-  it("新しいタイプを追加できること", async () => {
+  it("新しいタイプを追加し、削除できること", async () => {
     render(
       html`
         <learning-comment-frame-form></learning-comment-frame-form>
@@ -64,95 +62,23 @@ describe("learning-comment-frame-form", () => {
     addButton.click();
     await (element as any).updateComplete;
 
-    // アイデアが表示されていること
-    const badges = element.shadowRoot?.querySelectorAll(
-      "ui-comment-type-badge",
-    );
-    const badgeTexts = Array.from(badges || []).map((b) => (b as any).type);
+    let badges = element.shadowRoot?.querySelectorAll("ui-comment-type-badge");
+    let badgeTexts = Array.from(badges || []).map((b) => (b as any).type);
     expect(badgeTexts).toContain("アイデア");
-  });
 
-  it("タイプを削除すると、関連するパスも削除されること", async () => {
-    const frame: CommentFrame = {
-      types: ["質問", "回答", "独り言"],
-      paths: [
-        { child: "回答", parent: "質問" },
-        { child: "独り言", parent: "" },
-      ],
-    };
-
-    render(
-      html`
-        <learning-comment-frame-form
-          .initialFrame=${frame}
-        ></learning-comment-frame-form>
-      `,
-      container,
-    );
-    const element = container.querySelector("learning-comment-frame-form")!;
-    await (element as any).updateComplete;
-
-    // "質問" の削除ボタンをクリック
+    // 削除
     const deleteButton = element.shadowRoot?.querySelector(
-      'button[aria-label="Delete Type: 質問"]',
+      'button[aria-label="Delete Type: アイデア"]',
     ) as HTMLButtonElement;
     deleteButton.click();
     await (element as any).updateComplete;
 
-    // "質問" が Types から消えていること
-    const badges = element.shadowRoot?.querySelectorAll(
-      "ui-comment-type-badge",
-    );
-    const badgeTexts = Array.from(badges || []).map((b) => (b as any).type);
-    expect(badgeTexts).not.toContain("質問");
+    badges = element.shadowRoot?.querySelectorAll("ui-comment-type-badge");
+    badgeTexts = Array.from(badges || []).map((b) => (b as any).type);
+    expect(badgeTexts).not.toContain("アイデア");
   });
 
-  it("新しいパスを追加できること", async () => {
-    const frame: CommentFrame = {
-      types: ["質問", "回答"],
-      paths: [],
-    };
-
-    render(
-      html`
-        <learning-comment-frame-form
-          .initialFrame=${frame}
-        ></learning-comment-frame-form>
-      `,
-      container,
-    );
-    const element = container.querySelector("learning-comment-frame-form")!;
-    await (element as any).updateComplete;
-
-    const addPathButton = element.shadowRoot?.querySelector(
-      'button[aria-label="Add Path"]',
-    ) as HTMLButtonElement;
-
-    // { child: "回答", parent: "" } (ROOT) を追加
-    // select の値を直接変更して change イベントを発火
-    (element as any)._selectedParent = "";
-    (element as any)._selectedChild = "回答";
-    (element as any).requestUpdate();
-    await (element as any).updateComplete;
-
-    addPathButton.click();
-    await (element as any).updateComplete;
-
-    // パスが表示されていることを確認
-    // Badge の内容を Shadow DOM を通じて詳細に確認
-    const pathGroup = element.shadowRoot?.querySelector(".path-group");
-    expect(pathGroup).not.toBeNull();
-    const parentBadge = pathGroup!.querySelector(
-      ".parent-node ui-comment-type-badge",
-    );
-    const childBadge = pathGroup!.querySelector(
-      ".child-node ui-comment-type-badge",
-    );
-    expect((parentBadge as any).type).toBe("ROOT");
-    expect((childBadge as any).type).toBe("回答");
-  });
-
-  it("パスを削除できること", async () => {
+  it("初期値のタイプやパスは削除できないこと", async () => {
     const frame: CommentFrame = {
       types: ["質問", "回答"],
       paths: [{ child: "回答", parent: "質問" }],
@@ -169,18 +95,77 @@ describe("learning-comment-frame-form", () => {
     const element = container.querySelector("learning-comment-frame-form")!;
     await (element as any).updateComplete;
 
-    const deleteButton = element.shadowRoot?.querySelector(
-      'button[aria-label="Delete Path: 質問 -> 回答"]',
-    ) as HTMLButtonElement;
-    expect(deleteButton).not.toBeNull();
+    // 初期タイプの削除ボタンが存在しないこと
+    const typeDeleteButton = element.shadowRoot?.querySelector(
+      'button[aria-label="Delete Type: 質問"]',
+    );
+    expect(typeDeleteButton).toBeNull();
 
-    deleteButton.click();
+    // 初期パスの削除ボタンが存在しないこと
+    const pathDeleteButton = element.shadowRoot?.querySelector(
+      'button[aria-label="Delete Path: 質問 -> 回答"]',
+    );
+    expect(pathDeleteButton).toBeNull();
+  });
+
+  it("追加したタイプを削除すると、それを使った追加済みのパスも削除されること", async () => {
+    const frame: CommentFrame = {
+      types: ["質問"],
+      paths: [],
+    };
+
+    render(
+      html`
+        <learning-comment-frame-form
+          .initialFrame=${frame}
+        ></learning-comment-frame-form>
+      `,
+      container,
+    );
+    const element = container.querySelector("learning-comment-frame-form")!;
     await (element as any).updateComplete;
 
-    // パスが消えていることを確認
+    // タイプ "アイデア" を追加
+    const input = element.shadowRoot?.querySelector(
+      'input[placeholder="New type..."]',
+    ) as HTMLInputElement;
+    const addTypeButton = element.shadowRoot?.querySelector(
+      'button[aria-label="Add Type"]',
+    ) as HTMLButtonElement;
+    input.value = "アイデア";
+    input.dispatchEvent(new Event("input"));
+    addTypeButton.click();
+    await (element as any).updateComplete;
+
+    // パス "質問" -> "アイデア" を追加
+    (element as any)._selectedParent = "質問";
+    (element as any)._selectedChild = "アイデア";
+    (element as any).requestUpdate();
+    await (element as any).updateComplete;
+    const addPathButton = element.shadowRoot?.querySelector(
+      'button[aria-label="Add Path"]',
+    ) as HTMLButtonElement;
+    addPathButton.click();
+    await (element as any).updateComplete;
+
+    // パスがあることを確認
     expect(
       element.shadowRoot?.querySelector(
-        'button[aria-label="Delete Path: 質問 -> 回答"]',
+        'button[aria-label="Delete Path: 質問 -> アイデア"]',
+      ),
+    ).not.toBeNull();
+
+    // タイプ "アイデア" を削除
+    const deleteTypeButton = element.shadowRoot?.querySelector(
+      'button[aria-label="Delete Type: アイデア"]',
+    ) as HTMLButtonElement;
+    deleteTypeButton.click();
+    await (element as any).updateComplete;
+
+    // パスも消えていること
+    expect(
+      element.shadowRoot?.querySelector(
+        'button[aria-label="Delete Path: 質問 -> アイデア"]',
       ),
     ).toBeNull();
   });

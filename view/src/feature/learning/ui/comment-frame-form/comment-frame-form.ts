@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { commentFrameDetail } from "../../../../shared/style/comment-frame-detail";
@@ -27,11 +27,28 @@ export class LearningCommentFrameForm extends LitElement {
   @state()
   private _selectedChild: string = "";
 
-  connectedCallback() {
-    super.connectedCallback();
-    if (this.initialFrame) {
-      this._types = [...this.initialFrame.types];
-      this._paths = [...this.initialFrame.paths];
+  private _initialTypes: Set<string> = new Set();
+
+  private _initialPaths: Set<string> = new Set();
+
+  protected override willUpdate(changedProperties: PropertyValues<this>) {
+    if (changedProperties.has("initialFrame")) {
+      if (this.initialFrame) {
+        this._types = [...this.initialFrame.types];
+        this._paths = [...this.initialFrame.paths];
+        this._initialTypes = new Set(this.initialFrame.types);
+        this._initialPaths = new Set(
+          this.initialFrame.paths.map((p) => `${p.parent}->${p.child}`),
+        );
+      } else {
+        this._types = [];
+        this._paths = [];
+        this._initialTypes = new Set();
+        this._initialPaths = new Set();
+      }
+      this._newTypeName = "";
+      this._selectedParent = "";
+      this._selectedChild = "";
     }
   }
 
@@ -89,13 +106,17 @@ export class LearningCommentFrameForm extends LitElement {
               (t) => html`
                 <div class="type-item">
                   <ui-comment-type-badge .type=${t}></ui-comment-type-badge>
-                  <button
-                    class="delete-button"
-                    aria-label=${`Delete Type: ${t}`}
-                    @click=${() => this._handleRemoveType(t)}
-                  >
-                    <span class="material-symbols-outlined">delete</span>
-                  </button>
+                  ${this._initialTypes.has(t)
+                    ? ""
+                    : html`
+                        <button
+                          class="delete-button"
+                          aria-label=${`Delete Type: ${t}`}
+                          @click=${() => this._handleRemoveType(t)}
+                        >
+                          <span class="material-symbols-outlined">delete</span>
+                        </button>
+                      `}
                 </div>
               `,
             )}
@@ -209,14 +230,18 @@ export class LearningCommentFrameForm extends LitElement {
               (child) => html`
                 <div class="child-node">
                   <ui-comment-type-badge .type=${child}></ui-comment-type-badge>
-                  <button
-                    class="delete-button"
-                    title=${`Delete Path: ${parent} -> ${child}`}
-                    aria-label=${`Delete Path: ${parent} -> ${child}`}
-                    @click=${() => this._handleRemovePath(child, parent)}
-                  >
-                    <span class="material-symbols-outlined">delete</span>
-                  </button>
+                  ${this._initialPaths.has(`${parent}->${child}`)
+                    ? ""
+                    : html`
+                        <button
+                          class="delete-button"
+                          title=${`Delete Path: ${parent} -> ${child}`}
+                          aria-label=${`Delete Path: ${parent} -> ${child}`}
+                          @click=${() => this._handleRemovePath(child, parent)}
+                        >
+                          <span class="material-symbols-outlined">delete</span>
+                        </button>
+                      `}
                 </div>
               `,
             )}
