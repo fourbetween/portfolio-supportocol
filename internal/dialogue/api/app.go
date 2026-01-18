@@ -185,7 +185,7 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		parentCommentID.Null = true
 	}
 
-	return oas.Comment{
+	res := oas.Comment{
 		ID:              oas.ID(uuid.MustParse(item.ID())),
 		DiscussionId:    oas.ID(uuid.MustParse(item.DiscussionID())),
 		ParentCommentId: parentCommentID,
@@ -194,4 +194,8 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		Status:          oas.CommentStatus(item.Status()),
 		CreatedAt:       item.CreatedAt(),
 	}
+	if item.ArchivedAt() != nil {
+		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	}
+	return res
 }
