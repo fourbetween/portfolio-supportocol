@@ -3,7 +3,7 @@ BASE_DIR := ${CURDIR}
 VIEW_DIR := ${BASE_DIR}/view
 CDK_DIR  := ${BASE_DIR}/cdk
 
-.PHONY: dev-api dev-view dev watch-view build-lambda build-view build build-deploy deploy destroy gen test-api test-view test setup-view storybook upgrade-tools upgrade-go upgrade-view %
+.PHONY: dev-api dev-view dev watch-view build-lambda build-view build build-deploy deploy destroy gen test-api test-view test setup-view storybook deadcode vulncheck upgrade-tools upgrade-go upgrade-view %
 
 # ===== 開発サーバー =====
 dev-api:
@@ -29,7 +29,7 @@ build-lambda:
 build-view: view/env setup-view
 	cd ${VIEW_DIR} && npm run build --mode=${STAGE}
 
-build: test-api build-lambda test-view build-view
+build: deadcode vulncheck test-api build-lambda test-view build-view
 
 # ===== デプロイ =====
 build-deploy: build deploy
@@ -62,6 +62,12 @@ setup-view:
 
 storybook:
 	cd ${VIEW_DIR} && npm run storybook -- -p $${PORT:-6006}
+
+deadcode:
+	go tool deadcode ./...
+
+vulncheck:
+	go tool govulncheck ./...
 
 # ===== アップグレード =====
 upgrade-tools:

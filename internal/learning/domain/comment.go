@@ -109,10 +109,3 @@ func (c *Comment) Unarchive() error {
 	c.archivedAt = nil
 	return nil
 }
-
-func (c *Comment) CanAddChild() error {
-	if c.IsArchived() {
-		return apperr.ErrPermissionDenied
-	}
-	return nil
-}
