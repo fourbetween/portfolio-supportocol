@@ -29,6 +29,13 @@ export class LearningCommentFrameForm extends LitElement {
   @state()
   private _selectedChild: string = "";
 
+  get value(): CommentFrame {
+    return {
+      types: [...this._types],
+      paths: [...this._paths],
+    };
+  }
+
   private _initialTypes: Set<string> = new Set();
 
   private _initialPaths: Set<string> = new Set();
@@ -65,7 +72,6 @@ export class LearningCommentFrameForm extends LitElement {
 
     this._types = [...this._types, type].sort();
     this._newTypeName = "";
-    this._dispatchChangeEvent();
   }
 
   private _handleRemoveType(type: string) {
@@ -73,13 +79,6 @@ export class LearningCommentFrameForm extends LitElement {
     // 関連するパスを削除
     this._paths = this._paths.filter(
       (p) => p.child !== type && p.parent !== type,
-    );
-    this._dispatchChangeEvent();
-  }
-
-  private _dispatchChangeEvent() {
-    this.dispatchEvent(
-      new Event("comment-frame-change", { bubbles: true, composed: true }),
     );
   }
 
@@ -137,7 +136,6 @@ export class LearningCommentFrameForm extends LitElement {
     this._paths = this._paths.filter(
       (p) => !(p.child === child && p.parent === parent),
     );
-    this._dispatchChangeEvent();
   }
 
   private _handleAddPath() {
@@ -162,7 +160,6 @@ export class LearningCommentFrameForm extends LitElement {
       return a.child.localeCompare(b.child);
     });
     this._selectedChild = ""; // 追加後にリセット
-    this._dispatchChangeEvent();
   }
 
   private _renderPathsForm() {

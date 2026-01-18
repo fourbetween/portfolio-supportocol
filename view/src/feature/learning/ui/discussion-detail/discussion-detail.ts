@@ -11,6 +11,9 @@ import {
   LearningDiscussionUnarchiveEvent,
 } from "../../event/discussion";
 import type { Discussion } from "../../model/discussion";
+import "../comment-frame-badge/comment-frame-badge";
+import "../comment-frame-popup/comment-frame-popup";
+import type { LearningCommentFramePopup } from "../comment-frame-popup/comment-frame-popup";
 import "../discussion-edit-form/discussion-edit-form";
 import "../discussion-status-badge/discussion-status-badge";
 import "../discussion-status-popup/discussion-status-popup";
@@ -25,7 +28,10 @@ export class LearningDiscussionDetail extends LitElement {
   isEditing = false;
 
   @query("learning-discussion-status-popup")
-  private popup!: DiscussionStatusPopup;
+  private statusPopup!: DiscussionStatusPopup;
+
+  @query("learning-comment-frame-popup")
+  private commentFramePopup!: LearningCommentFramePopup;
 
   render() {
     if (!this.discussion && !this.isEditing) {
@@ -41,6 +47,9 @@ export class LearningDiscussionDetail extends LitElement {
       <learning-discussion-status-popup
         .status=${this.discussion?.status ?? "private"}
       ></learning-discussion-status-popup>
+      <learning-comment-frame-popup
+        .initialFrame=${this.discussion?.dialogueSettings?.commentFrame}
+      ></learning-comment-frame-popup>
     `;
   }
 
@@ -63,6 +72,13 @@ export class LearningDiscussionDetail extends LitElement {
               class="clickable"
               @click=${this._handleBadgeClick}
             ></learning-discussion-status-badge>
+            ${this.discussion?.status === "public"
+              ? html`
+                  <learning-comment-frame-badge
+                    @click=${this._handleCommentFrameBadgeClick}
+                  ></learning-comment-frame-badge>
+                `
+              : html``}
             <ui-discussion-archive-badge
               .archived=${!!this.discussion?.archivedAt}
             ></ui-discussion-archive-badge>
@@ -101,7 +117,11 @@ export class LearningDiscussionDetail extends LitElement {
   }
 
   private _handleBadgeClick() {
-    this.popup.open = true;
+    this.statusPopup.open = true;
+  }
+
+  private _handleCommentFrameBadgeClick() {
+    this.commentFramePopup.open = true;
   }
 
   private _handleArchiveClick() {
@@ -112,7 +132,7 @@ export class LearningDiscussionDetail extends LitElement {
   private _handleUnarchiveClick() {
     if (!this.discussion) return;
     this.dispatchEvent(
-      new LearningDiscussionUnarchiveEvent(this.discussion.id)
+      new LearningDiscussionUnarchiveEvent(this.discussion.id),
     );
   }
 

@@ -5,6 +5,7 @@ import { baseStyle } from "../../../shared/style/base";
 import {
   LearningDiscussionArchiveEvent,
   LearningDiscussionUnarchiveEvent,
+  LearningDiscussionUpdateCommentFrameEvent,
   LearningDiscussionUpdatedEvent,
   LearningDiscussionUpdateEvent,
   LearningDiscussionUpdateStatusEvent,
@@ -29,7 +30,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
       const data = await discussionRepository.update(
         this.discussion.id,
         e.theme,
-        e.conclusion
+        e.conclusion,
       );
       this.discussion = data;
       this._isEditing = false;
@@ -42,7 +43,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
   }
 
   private async _handleUpdateDiscussionStatus(
-    e: LearningDiscussionUpdateStatusEvent
+    e: LearningDiscussionUpdateStatusEvent,
   ) {
     if (!this.discussion) return;
     try {
@@ -54,7 +55,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
       const data = await discussionRepository.updateStatus(
         this.discussion.id,
         e.status,
-        commentFrame
+        commentFrame,
       );
       this.discussion = data;
       const message =
@@ -63,6 +64,24 @@ export class LearningDiscussionDetailWidget extends LitElement {
           : "Discussion unpublished.";
       showToast(this, message, "success", 2000);
 
+      this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
+  private async _handleUpdateCommentFrame(
+    e: LearningDiscussionUpdateCommentFrameEvent,
+  ) {
+    if (!this.discussion) return;
+    try {
+      const data = await discussionRepository.updateStatus(
+        this.discussion.id,
+        this.discussion.status,
+        e.commentFrame,
+      );
+      this.discussion = data;
+      showToast(this, "Comment frame updated.", "success", 2000);
       this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -82,7 +101,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
   }
 
   private async _handleUnarchiveDiscussion(
-    e: LearningDiscussionUnarchiveEvent
+    e: LearningDiscussionUnarchiveEvent,
   ) {
     if (!this.discussion) return;
     try {
@@ -106,6 +125,8 @@ export class LearningDiscussionDetailWidget extends LitElement {
         @learning-discussion-update=${this._handleUpdateDiscussion}
         @learning-discussion-form-close=${() => (this._isEditing = false)}
         @learning-discussion-update-status=${this._handleUpdateDiscussionStatus}
+        @learning-discussion-update-comment-frame=${this
+          ._handleUpdateCommentFrame}
         @learning-discussion-archive=${this._handleArchiveDiscussion}
         @learning-discussion-unarchive=${this._handleUnarchiveDiscussion}
       ></learning-discussion-detail>
