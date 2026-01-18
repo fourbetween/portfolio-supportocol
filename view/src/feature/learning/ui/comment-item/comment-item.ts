@@ -34,6 +34,9 @@ export class LearningCommentItem extends LitElement {
   @property({ type: Boolean })
   readonly = false;
 
+  @property({ type: Boolean })
+  archived = false;
+
   @state()
   private mode: "view" | "edit" | "reply" | "generate" = "view";
 
@@ -143,6 +146,7 @@ export class LearningCommentItem extends LitElement {
       <learning-comment-card
         .comment=${this.comment}
         .activeChildrenCount=${this.activeChildrenCount}
+        .archived=${this.archived}
         @learning-comment-select=${this.handleCommentSelect}
         style="cursor: pointer;"
       ></learning-comment-card>
@@ -165,7 +169,7 @@ export class LearningCommentItem extends LitElement {
     }
 
     const isProposed = this.comment?.status === "proposed";
-    const isArchived = !!this.comment?.archivedAt;
+    const isArchived = this.archived || !!this.comment?.archivedAt;
 
     if (isProposed) {
       return html`

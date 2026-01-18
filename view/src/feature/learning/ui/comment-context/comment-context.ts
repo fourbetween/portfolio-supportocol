@@ -23,7 +23,7 @@ export class LearningCommentContext extends LitElement {
   @property({ type: Boolean })
   readonly = false;
 
-  private renderItem(comment: Comment, isLast: boolean) {
+  private renderItem(comment: Comment, isLast: boolean, isArchived: boolean) {
     const childCount = this.childCounts.get(comment.id) || 0;
     return html`
       <ui-comment-type-badge
@@ -36,12 +36,14 @@ export class LearningCommentContext extends LitElement {
               .activeChildrenCount=${childCount}
               .availableTypes=${this.availableTypes}
               .readonly=${this.readonly}
+              .archived=${isArchived}
             ></learning-comment-item>
           `
         : html`
             <learning-comment-card
               .comment=${comment}
               .activeChildrenCount=${childCount}
+              .archived=${isArchived}
             ></learning-comment-card>
           `}
     `;
@@ -56,13 +58,19 @@ export class LearningCommentContext extends LitElement {
   }
 
   render() {
+    let archived = false;
     return html`
       <div class="container">
         ${join(
-          this.path.map((comment, index) =>
-            this.renderItem(comment, index === this.path.length - 1)
-          ),
-          this.renderSeparator()
+          this.path.map((comment, index) => {
+            archived = archived || !!comment.archivedAt;
+            return this.renderItem(
+              comment,
+              index === this.path.length - 1,
+              archived,
+            );
+          }),
+          this.renderSeparator(),
         )}
       </div>
     `;

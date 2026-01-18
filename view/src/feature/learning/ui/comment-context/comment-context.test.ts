@@ -41,7 +41,7 @@ describe("learning-comment-context", async () => {
       html`
         <learning-comment-context .path=${path}></learning-comment-context>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("First comment")).toBeInTheDocument();
@@ -76,7 +76,7 @@ describe("learning-comment-context", async () => {
       html`
         <learning-comment-context .path=${path}></learning-comment-context>
       `,
-      container
+      container,
     );
 
     // 最初のコメントは card なので edit ボタンがないはず
@@ -111,7 +111,7 @@ describe("learning-comment-context", async () => {
           .readonly=${true}
         ></learning-comment-context>
       `,
-      container
+      container,
     );
 
     // 末端のコメントのアクションボタン（例：edit）が表示されないことを確認
@@ -145,7 +145,7 @@ describe("learning-comment-context", async () => {
           @learning-comment-select=${handleSelectComment}
         ></learning-comment-context>
       `,
-      container
+      container,
     );
 
     await page.getByText("First comment").click();
@@ -173,9 +173,50 @@ describe("learning-comment-context", async () => {
           .childCounts=${childCounts}
         ></learning-comment-context>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("5")).toBeInTheDocument();
+  });
+
+  it("親コメントがアーカイブされている場合、子コメントもアーカイブ状態で表示されること", async () => {
+    const path = [
+      {
+        id: "1",
+        discussionId: "d1",
+        parentCommentId: null,
+        commentType: "idea",
+        status: "active" as const,
+        content: "Archived parent",
+        createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: "2026-01-05T00:00:00Z",
+      },
+      {
+        id: "2",
+        discussionId: "d1",
+        parentCommentId: "1",
+        commentType: "question",
+        status: "active" as const,
+        content: "Child comment",
+        createdAt: "2026-01-04T00:00:00Z",
+      },
+    ];
+
+    render(
+      html`
+        <learning-comment-context .path=${path}></learning-comment-context>
+      `,
+      container,
+    );
+
+    const context = container.querySelector("learning-comment-context")! as any;
+    await context.updateComplete;
+
+    // 子コメント (item) がアーカイブとして表示されているか確認
+    const item = context.shadowRoot!.querySelector("learning-comment-item")!;
+    const card = item.shadowRoot!.querySelector("learning-comment-card")!;
+    await (card as any).updateComplete;
+    const cardBody = card.shadowRoot!.querySelector(".card-body");
+    expect(cardBody?.classList.contains("archived")).toBe(true);
   });
 });

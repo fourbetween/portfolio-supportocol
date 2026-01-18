@@ -234,3 +234,15 @@ export const SameTypeRoots: Story = {
     ],
   },
 };
+
+export const Archived: Story = {
+  args: {
+    comments: [
+      {
+        ...mockComments[0],
+        archivedAt: "2026-01-05T00:00:00Z",
+      },
+      ...mockComments.slice(1),
+    ],
+  },
+};

@@ -15,6 +15,9 @@ export class LearningCommentCard extends LitElement {
   @property({ type: Number })
   activeChildrenCount = 0;
 
+  @property({ type: Boolean })
+  archived = false;
+
   private _handleClick() {
     this.dispatchEvent(new LearningCommentSelectEvent(this.comment?.id));
   }
@@ -22,11 +25,16 @@ export class LearningCommentCard extends LitElement {
   render() {
     if (!this.comment) return html``;
 
+    const isArchived = this.archived || !!this.comment.archivedAt;
+
     return html`
-      <div class=${classMap(this._cardClasses)} @click=${this._handleClick}>
+      <div
+        class=${classMap(this._cardClasses(isArchived))}
+        @click=${this._handleClick}
+      >
         <div class="content">${this.comment.content}</div>
         <div class="footer">
-          ${this.comment.archivedAt
+          ${isArchived
             ? html`
                 <span class="material-symbols-outlined archived-icon">
                   archive
@@ -46,11 +54,11 @@ export class LearningCommentCard extends LitElement {
     `;
   }
 
-  private get _cardClasses() {
+  private _cardClasses(isArchived: boolean) {
     return {
       "card-body": true,
       proposed: this.comment?.status === "proposed",
-      archived: !!this.comment?.archivedAt,
+      archived: isArchived,
     };
   }
 

@@ -99,3 +99,21 @@ export const Readonly: Story = {
     readonly: true,
   },
 };
+
+export const Archived: Story = {
+  args: {
+    availableTypes: ["idea", "question", "answer", "claim", "evidence"],
+    childCounts: new Map([
+      ["1", 5],
+      ["2", 3],
+      ["3", 0],
+    ]),
+    path: [
+      {
+        ...mockPath[0],
+        archivedAt: "2026-01-05T00:00:00Z",
+      },
+      ...mockPath.slice(1),
+    ],
+  },
+};
