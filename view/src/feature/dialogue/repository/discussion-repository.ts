@@ -2,6 +2,8 @@ import { client } from "../api/client";
 import type { Discussion, DiscussionSummary } from "../model/discussion";
 
 export class DiscussionRepository {
+  private _cache = new Map<string, Discussion>();
+
   async list(): Promise<DiscussionSummary[]> {
     const { data, error } = await client.GET("/dialogue/discussions");
     if (error) throw new Error(error.message);
@@ -9,6 +11,9 @@ export class DiscussionRepository {
   }
 
   async load(id: string): Promise<Discussion> {
+    const cached = this._cache.get(id);
+    if (cached) return cached;
+
     const { data, error } = await client.GET(
       "/dialogue/discussions/{discussionId}",
       {
@@ -16,6 +21,7 @@ export class DiscussionRepository {
       }
     );
     if (error) throw new Error(error.message);
+    this._cache.set(id, data);
     return data;
   }
 }
