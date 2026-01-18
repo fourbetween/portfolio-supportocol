@@ -1,6 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { TouchController } from "../../../../app/controller/touch";
+import { actionStyle } from "../../../../shared/style/action";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
@@ -171,26 +172,6 @@ export class LearningCommentItem extends LitElement {
     const isProposed = this.comment?.status === "proposed";
     const isExplicitlyArchived = !!this.comment?.archivedAt;
 
-    if (this.archived || isExplicitlyArchived) {
-      return html`
-        ${isExplicitlyArchived
-          ? this.renderIconButton(
-              "unarchive",
-              "unarchive",
-              this.handleUnarchiveClick,
-              "unarchive-button",
-            )
-          : nothing}
-        ${this.renderIconButton(
-          "delete",
-          "delete",
-          this.handleDeleteClick,
-          "danger delete-button",
-        )}
-        ${focusButton}
-      `;
-    }
-
     if (isProposed) {
       return html`
         ${this.renderIconButton(
@@ -209,12 +190,19 @@ export class LearningCommentItem extends LitElement {
       `;
     }
 
-    const archiveButton = this.renderIconButton(
-      "archive",
-      "archive",
-      this.handleArchiveClick,
-      "archive-button",
-    );
+    const archiveUnarchiveButton = isExplicitlyArchived
+      ? this.renderIconButton(
+          "unarchive",
+          "unarchive",
+          this.handleUnarchiveClick,
+          "unarchive-button",
+        )
+      : this.renderIconButton(
+          "archive",
+          "archive",
+          this.handleArchiveClick,
+          "archive-button",
+        );
 
     return html`
       ${this.renderIconButton("reply", "reply", (e) =>
@@ -232,7 +220,7 @@ export class LearningCommentItem extends LitElement {
         (e) => this.handleOpenTypePopup(e, "generate"),
         "primary generate-button",
       )}
-      ${archiveButton}
+      ${archiveUnarchiveButton}
       ${this.renderIconButton(
         "delete",
         "delete",
@@ -302,26 +290,10 @@ export class LearningCommentItem extends LitElement {
     baseStyle,
     iconStyle,
     hoverButtonStyle,
+    actionStyle,
     css`
       :host {
         display: block;
-      }
-      .hover-container {
-        position: relative;
-      }
-      .actions {
-        display: flex;
-        gap: 8px;
-        position: absolute;
-        bottom: -16px;
-        left: 8px;
-      }
-      .actions .btn-hover {
-        position: static;
-        opacity: 0;
-      }
-      .hover-container:hover .btn-hover {
-        opacity: 1;
       }
       .reply-form {
         margin-left: 8px;

@@ -4,6 +4,7 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
+import { widgetStyle } from "../../../shared/style/widget";
 import {
   DialogueCommentCreatedEvent,
   DialogueCommentSelectEvent,
@@ -59,7 +60,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
       for (const [parentId, children] of this.childrenMap) {
         this.childCounts.set(
           parentId,
-          children.filter((c) => c.status === "active").length
+          children.filter((c) => c.status === "active").length,
         );
       }
     }
@@ -180,47 +181,13 @@ export class DialogueCommentExplorerWidget extends LitElement {
     baseStyle,
     iconStyle,
     titleStyle,
+    widgetStyle,
     css`
       :host {
         display: block;
       }
-      .container {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-      .section {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
-      }
       .section-header .section-title {
         margin-bottom: 0;
-      }
-      .clear-button {
-        background: none;
-        border: none;
-        padding: 4px 8px;
-        cursor: pointer;
-        color: var(--color-fg-muted);
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        border-radius: 4px;
-        font-size: 12px;
-      }
-      .clear-button:hover {
-        background-color: var(--color-canvas-subtle);
-        color: var(--color-fg-default);
-      }
-      .clear-button .material-symbols-outlined {
-        font-size: 16px;
       }
     `,
   ];
