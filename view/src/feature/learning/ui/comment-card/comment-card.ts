@@ -74,14 +74,6 @@ export class LearningCommentCard extends LitElement {
       :host {
         cursor: pointer;
       }
-      .archived-icon {
-        font-size: 16px;
-        color: var(--color-fg-muted);
-      }
-      .card-body.archived {
-        opacity: 0.6;
-        background-color: var(--color-canvas-subtle);
-      }
     `,
   ];
 }

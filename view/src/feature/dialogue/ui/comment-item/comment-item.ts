@@ -24,6 +24,9 @@ export class DialogueCommentItem extends LitElement {
   @property({ type: Boolean })
   readonly = false;
 
+  @property({ type: Boolean })
+  archived = false;
+
   @state()
   private mode: "view" | "reply" = "view";
 
@@ -31,6 +34,7 @@ export class DialogueCommentItem extends LitElement {
 
   private get canReply() {
     if (this.readonly) return false;
+    if (this.archived || this.comment?.archivedAt) return false;
     if (!this.comment || !this.frame) return false;
     return this.frame.paths.some((p) => p.parent === this.comment?.commentType);
   }
@@ -80,6 +84,7 @@ export class DialogueCommentItem extends LitElement {
       <dialogue-comment-card
         .comment=${this.comment}
         .activeChildrenCount=${this.activeChildrenCount}
+        .archived=${this.archived || !!this.comment?.archivedAt}
         @dialogue-comment-select=${this.handleCommentSelect}
       ></dialogue-comment-card>
       <div class="actions" role="group" aria-label="Actions">

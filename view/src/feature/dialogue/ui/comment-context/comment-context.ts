@@ -24,7 +24,7 @@ export class DialogueCommentContext extends LitElement {
   @property({ type: Boolean })
   readonly = false;
 
-  private renderItem(comment: Comment, isLast: boolean) {
+  private renderItem(comment: Comment, isLast: boolean, isArchived: boolean) {
     const childCount = this.childCounts.get(comment.id) || 0;
     return html`
       <ui-comment-type-badge
@@ -36,6 +36,7 @@ export class DialogueCommentContext extends LitElement {
               .comment=${comment}
               .activeChildrenCount=${childCount}
               .frame=${this.frame}
+              .archived=${isArchived}
               .readonly=${this.readonly}
             ></dialogue-comment-item>
           `
@@ -43,6 +44,7 @@ export class DialogueCommentContext extends LitElement {
             <dialogue-comment-card
               .comment=${comment}
               .activeChildrenCount=${childCount}
+              .archived=${isArchived}
             ></dialogue-comment-card>
           `}
     `;
@@ -57,13 +59,21 @@ export class DialogueCommentContext extends LitElement {
   }
 
   render() {
+    let subtreeArchived = false;
     return html`
       <div class="container">
         ${join(
-          this.path.map((comment, index) =>
-            this.renderItem(comment, index === this.path.length - 1)
-          ),
-          this.renderSeparator()
+          this.path.map((comment, index) => {
+            if (comment.archivedAt) {
+              subtreeArchived = true;
+            }
+            return this.renderItem(
+              comment,
+              index === this.path.length - 1,
+              subtreeArchived,
+            );
+          }),
+          this.renderSeparator(),
         )}
       </div>
     `;
