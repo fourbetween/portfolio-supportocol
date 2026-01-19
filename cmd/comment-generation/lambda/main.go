@@ -9,6 +9,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/fourbetween/app-supportocol/internal/learning"
 	"github.com/fourbetween/app-supportocol/internal/learning/usecase"
@@ -61,7 +62,10 @@ func newContainer() (*learning.CommentGenerationContainer, error) {
 	dbCon.SetMaxIdleConns(1)
 	dbCon.SetConnMaxLifetime(3 * time.Minute)
 
-	awscfg, err := config.LoadDefaultConfig(context.TODO())
+	awscfg, err := config.LoadDefaultConfig(
+		context.TODO(),
+		config.WithUseDualStackEndpoint(aws.DualStackEndpointStateEnabled),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load aws config for ses: %w", err)
 	}

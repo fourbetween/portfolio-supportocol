@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/fourbetween/app-supportocol/cmd/api"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbcon"
 )
@@ -14,7 +16,14 @@ func main() {
 		panic(fmt.Errorf("failed to connect to db: %w", err))
 	}
 
-	handler, err := api.NewHTTPHandler(dbCon)
+	awscfg, err := config.LoadDefaultConfig(
+		context.TODO(),
+	)
+	if err != nil {
+		panic(fmt.Errorf("failed to load AWS config: %w", err))
+	}
+
+	handler, err := api.NewHTTPHandler(dbCon, awscfg)
 	if err != nil {
 		panic(err)
 	}

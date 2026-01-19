@@ -17,7 +17,6 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsroute53"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsroute53targets"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awss3assets"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3deployment"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awssecretsmanager"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
@@ -39,12 +38,10 @@ type (
 		logGroup        awslogs.ILogGroup
 		viewBucket      awss3.Bucket
 		commentGenQueue awssqs.IQueue
-		commentGenFunc  awslambda.Function
 		apiFunc         awslambda.Function
 		mainApi         awsapigatewayv2.HttpApi
 		cdn             awscloudfront.Distribution
 		dns             awsroute53.IHostedZone
-		mainRecord      awsroute53.ARecord
 	}
 
 	AppContainerProps struct {
@@ -134,13 +131,14 @@ func (c *AppContainer) buildCommentGenFunction() {
 			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
 			Code: awslambda.AssetCode_FromAsset(
 				jsii.String("../cmd/comment-generation/lambda/build"),
-				&awss3assets.AssetOptions{},
+				nil,
 			),
 			Environment: &map[string]*string{
 				"APP_NAME": jsii.String(c.appName),
 				"STAGE":    jsii.String(c.stage),
 			},
-			Vpc: c.vpc,
+			Vpc:                     c.vpc,
+			Ipv6AllowedForDualStack: jsii.Bool(true),
 		})
 	f.AddEventSource(awslambdaeventsources.NewSqsEventSource(
 		c.commentGenQueue,
@@ -152,7 +150,6 @@ func (c *AppContainer) buildCommentGenFunction() {
 	))
 	c.commentGenQueue.GrantConsumeMessages(f)
 	c.setLambdaBasePermissions(f)
-	c.commentGenFunc = f
 }
 
 func (c *AppContainer) buildVPC() {
@@ -160,7 +157,7 @@ func (c *AppContainer) buildVPC() {
 	publicIDs := []*string{}
 	privateIDs := []*string{}
 	isolatedIDs := []*string{}
-	for i := range []int{0, 1} {
+	for i := range 2 {
 		publicID, _ := c.shareConf.Get(fmt.Sprintf("vpc/subnet/public/%d/id", i))
 		privateID, _ := c.shareConf.Get(fmt.Sprintf("vpc/subnet/private/%d/id", i))
 		isolatedID, _ := c.shareConf.Get(fmt.Sprintf("vpc/subnet/isolated/%d/id", i))
@@ -204,13 +201,14 @@ func (c *AppContainer) buildCDN() {
 		c.stack,
 		jsii.String("Cdn"),
 		&awscloudfront.DistributionProps{
+			EnableIpv6:        jsii.Bool(true),
 			PriceClass:        awscloudfront.PriceClass_PRICE_CLASS_200,
 			Certificate:       c.certContainer.Cert,
 			DefaultRootObject: jsii.String("index.html"),
 			DefaultBehavior: &awscloudfront.BehaviorOptions{
 				Origin: awscloudfrontorigins.S3BucketOrigin_WithOriginAccessControl(
 					c.viewBucket,
-					&awscloudfrontorigins.S3BucketOriginWithOACProps{},
+					nil,
 				),
 				ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
 				FunctionAssociations: &[]*awscloudfront.FunctionAssociation{
@@ -248,7 +246,7 @@ func (c *AppContainer) buildMainAPI() {
 	api := awsapigatewayv2.NewHttpApi(
 		c.stack,
 		jsii.Sprintf("%s-main-api", c.appName),
-		&awsapigatewayv2.HttpApiProps{},
+		nil,
 	)
 	integration := awsapigatewayv2integrations.NewHttpLambdaIntegration(
 		jsii.String("MainLambdaIntegration"),
@@ -281,13 +279,14 @@ func (c *AppContainer) buildApiFunction() {
 			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
 			Code: awslambda.AssetCode_FromAsset(
 				jsii.String("../cmd/api/lambda/build"),
-				&awss3assets.AssetOptions{},
+				nil,
 			),
 			Environment: &map[string]*string{
 				"APP_NAME": jsii.String(c.appName),
 				"STAGE":    jsii.String(c.stage),
 			},
-			Vpc: c.vpc,
+			Vpc:                     c.vpc,
+			Ipv6AllowedForDualStack: jsii.Bool(true),
 		})
 	c.commentGenQueue.GrantSendMessages(f)
 	c.setLambdaBasePermissions(f)
@@ -307,7 +306,7 @@ func (c *AppContainer) buildViewBucket() {
 			Sources: &[]awss3deployment.ISource{
 				awss3deployment.Source_Asset(
 					jsii.String("../view/dist"),
-					&awss3assets.AssetOptions{},
+					nil,
 				),
 			},
 		})
@@ -327,7 +326,7 @@ func (c *AppContainer) buildViewCacheClearFunction() {
 			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
 			Code: awslambda.AssetCode_FromAsset(
 				jsii.String("/sources/cdk-share/lambda/cloudfront_create_invalidation/build"),
-				&awss3assets.AssetOptions{},
+				nil,
 			),
 			Environment: &map[string]*string{
 				"CLOUDFRONT_DISTRIBUTION_ID": jsii.String(*c.cdn.DistributionId()),
@@ -383,7 +382,7 @@ func (c *AppContainer) buildMainRecord() {
 	target := awsroute53.RecordTarget_FromAlias(
 		awsroute53targets.NewCloudFrontTarget(c.cdn),
 	)
-	record := awsroute53.NewARecord(
+	awsroute53.NewARecord(
 		c.stack,
 		jsii.String("MainDnsRecord"),
 		&awsroute53.ARecordProps{
@@ -392,7 +391,16 @@ func (c *AppContainer) buildMainRecord() {
 			RecordName: jsii.String(c.domain()),
 		},
 	)
-	c.mainRecord = record
+
+	awsroute53.NewAaaaRecord(
+		c.stack,
+		jsii.String("MainDnsRecordV6"),
+		&awsroute53.AaaaRecordProps{
+			Zone:       c.dns,
+			Target:     target,
+			RecordName: jsii.String(c.domain()),
+		},
+	)
 }
 
 func (c *AppContainer) domain() string {

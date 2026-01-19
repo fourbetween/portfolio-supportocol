@@ -9,3 +9,7 @@ func AppName() string {
 func IsDev() bool {
 	return os.Getenv("STAGE") == "dev"
 }
+
+func IsLambda() bool {
+	return os.Getenv("AWS_LAMBDA_FUNCTION_NAME") != ""
+}

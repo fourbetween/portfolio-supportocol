@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"os"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/fourbetween/app-supportocol/internal/pkg/env"
 	secret "github.com/fourbetween/pkg-secret"
@@ -18,7 +18,7 @@ func NewConnection() (*sql.DB, error) {
 	if env.IsDev() {
 		dsn, err = getLocalDSN()
 	} else {
-		if os.Getenv("AWS_LAMBDA_FUNCTION_NAME") != "" {
+		if env.IsLambda() {
 			dsn, err = getRDSDSN()
 			if err != nil {
 				return nil, err
@@ -50,7 +50,10 @@ func getLocalDSN() (string, error) {
 }
 
 func getRDSDSN() (string, error) {
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	cfg, err := config.LoadDefaultConfig(
+		context.TODO(),
+		config.WithUseDualStackEndpoint(aws.DualStackEndpointStateEnabled),
+	)
 	if err != nil {
 		return "", fmt.Errorf("failed to load aws config for rds: %w", err)
 	}

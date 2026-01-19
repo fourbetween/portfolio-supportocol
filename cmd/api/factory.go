@@ -1,13 +1,11 @@
 package api
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
 	"net/http"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/fourbetween/app-supportocol/cmd/api/middleware"
 	"github.com/fourbetween/app-supportocol/internal/dialogue"
 	dialogueapi "github.com/fourbetween/app-supportocol/internal/dialogue/api"
@@ -26,12 +24,7 @@ import (
 	"github.com/fourbetween/pkg-conf/conf"
 )
 
-func NewHTTPHandler(dbCon *sql.DB) (http.Handler, error) {
-	awscfg, err := config.LoadDefaultConfig(context.TODO())
-	if err != nil {
-		return nil, fmt.Errorf("failed to load aws config for ses: %w", err)
-	}
-
+func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 	appConf, err := conf.NewSSMService(env.AppName(), awscfg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to load app config: %w", err)
