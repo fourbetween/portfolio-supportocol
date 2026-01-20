@@ -59,7 +59,7 @@ export const commentCardStyle = css`
   }
 
   .card-body.archived {
-    opacity: 0.6;
+    opacity: 0.7;
     background-color: var(--color-canvas-subtle);
   }
 `;
