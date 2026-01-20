@@ -1,6 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { page } from "vitest/browser";
+import type { Comment } from "../../model/comment";
 import "./comment-tree";
 
 describe("learning-comment-tree", async () => {
@@ -596,7 +597,10 @@ describe("learning-comment-tree", async () => {
     ];
     render(
       html`
-        <learning-comment-tree .comments=${comments}></learning-comment-tree>
+        <learning-comment-tree
+          .comments=${comments}
+          .showArchived=${true}
+        ></learning-comment-tree>
       `,
       container,
     );
@@ -612,5 +616,58 @@ describe("learning-comment-tree", async () => {
     await childItem.updateComplete;
 
     expect(childItem.archived).toBe(true);
+  });
+
+  it("アーカイブコメントの表示・非表示を切り替えられること", async () => {
+    const comments: Comment[] = [
+      {
+        id: "1",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "active comment",
+        commentType: "idea",
+        status: "active",
+        createdAt: "2026-01-04T00:00:00Z",
+      },
+      {
+        id: "2",
+        discussionId: "1",
+        parentCommentId: null,
+        content: "archived comment",
+        commentType: "idea",
+        status: "active",
+        createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: "2026-01-05T00:00:00Z",
+      },
+    ];
+
+    render(
+      html`
+        <learning-comment-tree .comments=${comments}></learning-comment-tree>
+      `,
+      container,
+    );
+
+    // デフォルトでは表示されない
+    await expect.element(page.getByText("active comment")).toBeInTheDocument();
+    await expect
+      .element(page.getByText("archived comment"))
+      .not.toBeInTheDocument();
+
+    // スイッチをクリックして表示する
+    const switchEl = page.getByRole("checkbox", { name: /Show archived/i });
+    await expect.element(switchEl).toBeInTheDocument();
+    await switchEl.click();
+
+    // アーカイブコメントが表示される
+    await expect
+      .element(page.getByText("archived comment"))
+      .toBeInTheDocument();
+
+    // もう一度クリックして非表示にする
+    await switchEl.click();
+    await expect
+      .element(page.getByText("archived comment"))
+      .not.toBeInTheDocument();
   });
 });

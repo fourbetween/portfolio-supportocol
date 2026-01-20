@@ -30,6 +30,7 @@ const meta: Meta<
       @learning-comment-update=${args.onCommentUpdate}
       @learning-comment-create=${args.onCommentCreate}
       .readonly=${args.readonly}
+      .showArchived=${args.showArchived}
     ></learning-comment-tree>
   `,
 };

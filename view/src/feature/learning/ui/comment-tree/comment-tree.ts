@@ -23,6 +23,9 @@ export class LearningCommentTree extends LitElement {
   @property({ type: Boolean })
   readonly = false;
 
+  @property({ type: Boolean })
+  showArchived = false;
+
   @state()
   private childrenMap = new Map<string, Comment[]>();
 
@@ -34,6 +37,10 @@ export class LearningCommentTree extends LitElement {
 
   private toggleFocus(groupId: string) {
     this.focusedGroupId = this.focusedGroupId === groupId ? undefined : groupId;
+  }
+
+  private toggleShowArchived() {
+    this.showArchived = !this.showArchived;
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {
@@ -66,6 +73,16 @@ export class LearningCommentTree extends LitElement {
     if (!this.comments) return nothing;
 
     return html`
+      <div class="controls">
+        <label class="show-archived">
+          <input
+            type="checkbox"
+            .checked=${this.showArchived}
+            @change=${this.toggleShowArchived}
+          />
+          Show archived
+        </label>
+      </div>
       <div class="tree">${this.renderChildren("root", false)}</div>
     `;
   }
@@ -102,7 +119,13 @@ export class LearningCommentTree extends LitElement {
     const children = this.childrenMap.get(parentId) || [];
     if (children.length === 0) return nothing;
 
-    const groupedChildren = this.groupCommentsByType(children);
+    const filteredChildren = this.showArchived
+      ? children
+      : children.filter((c) => !c.archivedAt);
+
+    if (filteredChildren.length === 0) return nothing;
+
+    const groupedChildren = this.groupCommentsByType(filteredChildren);
 
     return html`
       <div class="children">
