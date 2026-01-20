@@ -42,17 +42,13 @@ func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input Updat
 
 		commentFrame := input.CommentFrame
 		if input.CommentFrame != nil {
-			cf := *input.CommentFrame
-			cf.Types = append([]string{}, cf.Types...)
-			cf.Paths = append([]domain.CommentPath{}, cf.Paths...)
-
 			comments, err := u.commentRepo.Search(ctx, domain.SearchCommentsParams{
 				DiscussionID: input.ID,
 			})
 			if err != nil {
 				return err
 			}
-			cf.Supplement(comments)
+			cf := input.CommentFrame.Supplement(comments)
 			commentFrame = &cf
 		}
 

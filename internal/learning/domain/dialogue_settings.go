@@ -2,6 +2,7 @@ package domain
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
@@ -20,6 +21,16 @@ func (s DialogueSettings) Validate() error {
 type CommentFrame struct {
 	Types []string
 	Paths []CommentPath
+}
+
+func (cf *CommentFrame) Sort() {
+	sort.Strings(cf.Types)
+	sort.Slice(cf.Paths, func(i, j int) bool {
+		if cf.Paths[i].Parent != cf.Paths[j].Parent {
+			return cf.Paths[i].Parent < cf.Paths[j].Parent
+		}
+		return cf.Paths[i].Child < cf.Paths[j].Child
+	})
 }
 
 func (cf CommentFrame) Validate() error {
@@ -53,14 +64,19 @@ type CommentPath struct {
 	Parent string
 }
 
-func (cf *CommentFrame) Supplement(comments []*Comment) {
-	typeMap := make(map[string]struct{}, len(cf.Types))
-	for _, t := range cf.Types {
+func (cf CommentFrame) Supplement(comments []*Comment) CommentFrame {
+	newCF := CommentFrame{
+		Types: append([]string{}, cf.Types...),
+		Paths: append([]CommentPath{}, cf.Paths...),
+	}
+
+	typeMap := make(map[string]struct{}, len(newCF.Types))
+	for _, t := range newCF.Types {
 		typeMap[t] = struct{}{}
 	}
 
-	pathMap := make(map[CommentPath]struct{}, len(cf.Paths))
-	for _, p := range cf.Paths {
+	pathMap := make(map[CommentPath]struct{}, len(newCF.Paths))
+	for _, p := range newCF.Paths {
 		pathMap[p] = struct{}{}
 	}
 
@@ -71,7 +87,7 @@ func (cf *CommentFrame) Supplement(comments []*Comment) {
 
 	for _, c := range comments {
 		if _, ok := typeMap[c.CommentType()]; !ok {
-			cf.Types = append(cf.Types, c.CommentType())
+			newCF.Types = append(newCF.Types, c.CommentType())
 			typeMap[c.CommentType()] = struct{}{}
 		}
 
@@ -87,8 +103,11 @@ func (cf *CommentFrame) Supplement(comments []*Comment) {
 			Parent: parentType,
 		}
 		if _, ok := pathMap[path]; !ok {
-			cf.Paths = append(cf.Paths, path)
+			newCF.Paths = append(newCF.Paths, path)
 			pathMap[path] = struct{}{}
 		}
 	}
+
+	newCF.Sort()
+	return newCF
 }
