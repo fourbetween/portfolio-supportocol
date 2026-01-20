@@ -22,4 +22,17 @@ export const commentTreeStyle = css`
     padding-left: 8px;
     border-left: 1px dashed var(--color-border-muted);
   }
+  .controls {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .show-archived {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    user-select: none;
+  }
 `;
