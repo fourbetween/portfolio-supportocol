@@ -8,14 +8,16 @@ import (
 )
 
 type UpdateDiscussionStatusUsecase struct {
-	repo domain.DiscussionRepository
-	tx   dbtx.Manager
+	repo        domain.DiscussionRepository
+	commentRepo domain.CommentRepository
+	tx          dbtx.Manager
 }
 
-func NewUpdateDiscussionStatusUsecase(repo domain.DiscussionRepository, tx dbtx.Manager) *UpdateDiscussionStatusUsecase {
+func NewUpdateDiscussionStatusUsecase(repo domain.DiscussionRepository, commentRepo domain.CommentRepository, tx dbtx.Manager) *UpdateDiscussionStatusUsecase {
 	return &UpdateDiscussionStatusUsecase{
-		repo: repo,
-		tx:   tx,
+		repo:        repo,
+		commentRepo: commentRepo,
+		tx:          tx,
 	}
 }
 
@@ -38,9 +40,25 @@ func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input Updat
 			return err
 		}
 
+		commentFrame := input.CommentFrame
+		if input.CommentFrame != nil {
+			cf := *input.CommentFrame
+			cf.Types = append([]string{}, cf.Types...)
+			cf.Paths = append([]domain.CommentPath{}, cf.Paths...)
+
+			comments, err := u.commentRepo.Search(ctx, domain.SearchCommentsParams{
+				DiscussionID: input.ID,
+			})
+			if err != nil {
+				return err
+			}
+			cf.Supplement(comments)
+			commentFrame = &cf
+		}
+
 		if err := discussion.UpdateStatus(domain.UpdateStatusParams{
 			Status:       domain.DiscussionStatus(input.Status),
-			CommentFrame: input.CommentFrame,
+			CommentFrame: commentFrame,
 		}); err != nil {
 			return err
 		}

@@ -72,7 +72,7 @@ func NewAPIContainer(
 		GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo),
 		ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionQS),
 		UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo, txManager),
-		UpdateDiscussionStatus:   usecase.NewUpdateDiscussionStatusUsecase(discussionRepo, txManager),
+		UpdateDiscussionStatus:   usecase.NewUpdateDiscussionStatusUsecase(discussionRepo, commentRepo, txManager),
 		ArchiveDiscussion:        usecase.NewArchiveDiscussionUsecase(discussionRepo, txManager, clockSrv),
 		UnarchiveDiscussion:      usecase.NewUnarchiveDiscussionUsecase(discussionRepo, txManager),
 		DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo, txManager),

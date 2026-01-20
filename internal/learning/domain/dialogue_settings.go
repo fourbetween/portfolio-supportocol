@@ -52,3 +52,43 @@ type CommentPath struct {
 	Child  string
 	Parent string
 }
+
+func (cf *CommentFrame) Supplement(comments []*Comment) {
+	typeMap := make(map[string]struct{}, len(cf.Types))
+	for _, t := range cf.Types {
+		typeMap[t] = struct{}{}
+	}
+
+	pathMap := make(map[CommentPath]struct{}, len(cf.Paths))
+	for _, p := range cf.Paths {
+		pathMap[p] = struct{}{}
+	}
+
+	commentMap := make(map[string]*Comment, len(comments))
+	for _, c := range comments {
+		commentMap[c.ID()] = c
+	}
+
+	for _, c := range comments {
+		if _, ok := typeMap[c.CommentType()]; !ok {
+			cf.Types = append(cf.Types, c.CommentType())
+			typeMap[c.CommentType()] = struct{}{}
+		}
+
+		var parentType string
+		if c.ParentCommentID() != nil {
+			if parent, ok := commentMap[*c.ParentCommentID()]; ok {
+				parentType = parent.CommentType()
+			}
+		}
+
+		path := CommentPath{
+			Child:  c.CommentType(),
+			Parent: parentType,
+		}
+		if _, ok := pathMap[path]; !ok {
+			cf.Paths = append(cf.Paths, path)
+			pathMap[path] = struct{}{}
+		}
+	}
+}
