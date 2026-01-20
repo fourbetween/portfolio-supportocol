@@ -38,7 +38,7 @@ type (
 		logGroup        awslogs.ILogGroup
 		viewBucket      awss3.Bucket
 		commentGenQueue awssqs.IQueue
-		apiFunc         awslambda.Function
+		apiFunc         awslambda.Alias
 		mainApi         awsapigatewayv2.HttpApi
 		cdn             awscloudfront.Distribution
 		dns             awsroute53.IHostedZone
@@ -288,9 +288,18 @@ func (c *AppContainer) buildApiFunction() {
 			Vpc:                     c.vpc,
 			Ipv6AllowedForDualStack: jsii.Bool(true),
 		})
+	alias := awslambda.NewAlias(
+		c.stack,
+		jsii.String("ApiFuncAlias"),
+		&awslambda.AliasProps{
+			AliasName:                       jsii.String("prod"),
+			Version:                         f.CurrentVersion(),
+			ProvisionedConcurrentExecutions: jsii.Number(1),
+		},
+	)
 	c.commentGenQueue.GrantSendMessages(f)
 	c.setLambdaBasePermissions(f)
-	c.apiFunc = f
+	c.apiFunc = alias
 }
 
 func (c *AppContainer) buildViewBucket() {

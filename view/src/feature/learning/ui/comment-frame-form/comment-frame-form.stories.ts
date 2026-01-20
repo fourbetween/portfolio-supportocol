@@ -34,3 +34,15 @@ export const Empty: Story = {
     <learning-comment-frame-form></learning-comment-frame-form>
   `,
 };
+
+export const WithUsedFrame: Story = {
+  render: () => html`
+    <learning-comment-frame-form
+      .initialFrame=${initialFrame}
+      .usedFrame=${{
+        types: ["質問", "回答"],
+        paths: [{ child: "回答", parent: "質問" }],
+      }}
+    ></learning-comment-frame-form>
+  `,
+};
