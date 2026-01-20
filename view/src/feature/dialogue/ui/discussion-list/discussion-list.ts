@@ -30,13 +30,5 @@ export class DialogueDiscussionList extends LitElement {
     `;
   }
 
-  static styles = [
-    baseStyle,
-    listStyles,
-    css`
-      .list > *:not(:last-child) {
-        border-bottom: 1px solid var(--color-border-muted);
-      }
-    `,
-  ];
+  static styles = [baseStyle, listStyles, css``];
 }

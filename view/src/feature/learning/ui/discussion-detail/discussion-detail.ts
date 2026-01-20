@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
+import { discussionDetailStyle } from "../../../../shared/style/discussion-detail";
 import { iconStyle } from "../../../../shared/style/icon";
 import { titleStyle } from "../../../../shared/style/title";
 import "../../../../shared/ui/discussion-archive-badge/discussion-archive-badge";
@@ -145,12 +146,8 @@ export class LearningDiscussionDetail extends LitElement {
     buttonStyle,
     iconStyle,
     titleStyle,
+    discussionDetailStyle,
     css`
-      .container {
-        padding: 8px 0;
-        background-color: var(--color-canvas-default);
-      }
-
       .header {
         display: flex;
         align-items: center;
@@ -170,16 +167,6 @@ export class LearningDiscussionDetail extends LitElement {
         cursor: pointer;
       }
 
-      .theme-row {
-        padding-top: 8px;
-      }
-
-      .badge-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
       .status-group {
         display: flex;
         align-items: center;
@@ -189,24 +176,6 @@ export class LearningDiscussionDetail extends LitElement {
       .actions {
         display: flex;
         gap: 8px;
-      }
-
-      .theme {
-        font-size: 16px;
-        font-weight: 400;
-        margin: 0;
-      }
-
-      .conclusion-row {
-        margin-top: 8px;
-        padding-top: 8px;
-      }
-
-      .conclusion {
-        font-size: 14px;
-        margin: 0;
-        white-space: pre-wrap;
-        padding-bottom: 8px;
       }
 
       .material-symbols-outlined {
