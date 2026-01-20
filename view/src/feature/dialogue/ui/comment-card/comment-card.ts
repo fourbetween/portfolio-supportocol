@@ -27,16 +27,17 @@ export class DialogueCommentCard extends LitElement {
   render() {
     if (!this.comment) return html``;
 
-    const isArchived = this.archived || !!this.comment.archivedAt;
+    const isArchivedForStyle = this.archived || !!this.comment.archivedAt;
+    const isSelfArchived = !!this.comment.archivedAt;
 
     return html`
       <div
-        class=${classMap(this._cardClasses(isArchived))}
+        class=${classMap(this._cardClasses(isArchivedForStyle))}
         @click=${this._handleClick}
       >
         <div class="content">${this.comment.content}</div>
         <div class="footer">
-          ${isArchived
+          ${isSelfArchived
             ? html`
                 <span class="material-symbols-outlined archived-icon">
                   archive

@@ -78,8 +78,16 @@ describe("learning-comment-frame-form", () => {
     expect(badgeTexts).not.toContain("アイデア");
   });
 
-  it("初期値のタイプやパスは削除できないこと", async () => {
-    const frame: CommentFrame = {
+  it("usedFrame に含まれるタイプやパスは削除できないが、それ以外は削除できること", async () => {
+    const initialFrame: CommentFrame = {
+      types: ["質問", "回答", "未利用"],
+      paths: [
+        { child: "回答", parent: "質問" },
+        { child: "未利用", parent: "質問" },
+      ],
+    };
+
+    const usedFrame: CommentFrame = {
       types: ["質問", "回答"],
       paths: [{ child: "回答", parent: "質問" }],
     };
@@ -87,7 +95,8 @@ describe("learning-comment-frame-form", () => {
     render(
       html`
         <learning-comment-frame-form
-          .initialFrame=${frame}
+          .initialFrame=${initialFrame}
+          .usedFrame=${usedFrame}
         ></learning-comment-frame-form>
       `,
       container,
@@ -95,17 +104,33 @@ describe("learning-comment-frame-form", () => {
     const element = container.querySelector("learning-comment-frame-form")!;
     await (element as any).updateComplete;
 
-    // 初期タイプの削除ボタンが存在しないこと
-    const typeDeleteButton = element.shadowRoot?.querySelector(
-      'button[aria-label="Delete Type: 質問"]',
-    );
-    expect(typeDeleteButton).toBeNull();
+    // usedFrame にあるタイプ "質問" の削除ボタンは存在しない
+    expect(
+      element.shadowRoot?.querySelector(
+        'button[aria-label="Delete Type: 質問"]',
+      ),
+    ).toBeNull();
 
-    // 初期パスの削除ボタンが存在しないこと
-    const pathDeleteButton = element.shadowRoot?.querySelector(
-      'button[aria-label="Delete Path: 質問 -> 回答"]',
-    );
-    expect(pathDeleteButton).toBeNull();
+    // usedFrame にないタイプ "未利用" の削除ボタンは存在すること
+    expect(
+      element.shadowRoot?.querySelector(
+        'button[aria-label="Delete Type: 未利用"]',
+      ),
+    ).not.toBeNull();
+
+    // usedFrame にあるパス "質問 -> 回答" の削除ボタンは存在しない
+    expect(
+      element.shadowRoot?.querySelector(
+        'button[aria-label="Delete Path: 質問 -> 回答"]',
+      ),
+    ).toBeNull();
+
+    // usedFrame にないパス "質問 -> 未利用" の削除ボタンは存在すること
+    expect(
+      element.shadowRoot?.querySelector(
+        'button[aria-label="Delete Path: 質問 -> 未利用"]',
+      ),
+    ).not.toBeNull();
   });
 
   it("追加したタイプを削除すると、それを使った追加済みのパスも削除されること", async () => {

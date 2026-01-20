@@ -14,6 +14,9 @@ export class LearningCommentFrameForm extends LitElement {
   @property({ type: Object })
   initialFrame?: CommentFrame;
 
+  @property({ type: Object })
+  usedFrame?: CommentFrame;
+
   @state()
   private _types: string[] = [];
 
@@ -36,28 +39,34 @@ export class LearningCommentFrameForm extends LitElement {
     };
   }
 
-  private _initialTypes: Set<string> = new Set();
+  private _usedTypes: Set<string> = new Set();
 
-  private _initialPaths: Set<string> = new Set();
+  private _usedPaths: Set<string> = new Set();
 
   protected override willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("initialFrame")) {
       if (this.initialFrame) {
         this._types = [...this.initialFrame.types];
         this._paths = [...this.initialFrame.paths];
-        this._initialTypes = new Set(this.initialFrame.types);
-        this._initialPaths = new Set(
-          this.initialFrame.paths.map((p) => `${p.parent}->${p.child}`),
-        );
       } else {
         this._types = [];
         this._paths = [];
-        this._initialTypes = new Set();
-        this._initialPaths = new Set();
       }
       this._newTypeName = "";
       this._selectedParent = "";
       this._selectedChild = "";
+    }
+
+    if (changedProperties.has("usedFrame")) {
+      if (this.usedFrame) {
+        this._usedTypes = new Set(this.usedFrame.types);
+        this._usedPaths = new Set(
+          this.usedFrame.paths.map((p) => `${p.parent}->${p.child}`),
+        );
+      } else {
+        this._usedTypes = new Set();
+        this._usedPaths = new Set();
+      }
     }
   }
 
@@ -107,7 +116,7 @@ export class LearningCommentFrameForm extends LitElement {
               (t) => html`
                 <div class="type-item">
                   <ui-comment-type-badge .type=${t}></ui-comment-type-badge>
-                  ${this._initialTypes.has(t)
+                  ${this._usedTypes.has(t)
                     ? ""
                     : html`
                         <button
@@ -229,7 +238,7 @@ export class LearningCommentFrameForm extends LitElement {
               (child) => html`
                 <div class="child-node">
                   <ui-comment-type-badge .type=${child}></ui-comment-type-badge>
-                  ${this._initialPaths.has(`${parent}->${child}`)
+                  ${this._usedPaths.has(`${parent}->${child}`)
                     ? ""
                     : html`
                         <button

@@ -29,7 +29,7 @@ describe("learning-comment-card", async () => {
       html`
         <learning-comment-card .comment=${comment}></learning-comment-card>
       `,
-      container
+      container,
     );
     await expect.element(page.getByText("content")).toBeInTheDocument();
   });
@@ -51,7 +51,7 @@ describe("learning-comment-card", async () => {
           .activeChildrenCount=${5}
         ></learning-comment-card>
       `,
-      container
+      container,
     );
     await expect.element(page.getByText("5")).toBeInTheDocument();
   });
@@ -73,7 +73,7 @@ describe("learning-comment-card", async () => {
           .activeChildrenCount=${0}
         ></learning-comment-card>
       `,
-      container
+      container,
     );
     // 5などの数字が表示されていないことを確認（より正確には .child-count が存在しないこと）
     const childCount = container
@@ -96,7 +96,7 @@ describe("learning-comment-card", async () => {
       html`
         <learning-comment-card .comment=${comment}></learning-comment-card>
       `,
-      container
+      container,
     );
     await expect.element(page.getByText("1/4/2026, 12:34:56 PM")).toBeVisible();
   });
@@ -114,11 +114,62 @@ describe("learning-comment-card", async () => {
       html`
         <learning-comment-card .comment=${comment}></learning-comment-card>
       `,
-      container
+      container,
     );
     const el = container.querySelector("learning-comment-card") as any;
     await el.updateComplete;
     const cardBody = el.shadowRoot?.querySelector(".card-body");
     expect(cardBody?.classList.contains("proposed")).toBe(true);
+  });
+
+  it("自身がアーカイブされていない場合、archivedプロパティがtrueでもアーカイブアイコンが表示されないこと", async () => {
+    const comment = {
+      id: "1",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "content",
+      commentType: "idea",
+      status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
+      archivedAt: undefined,
+    };
+    render(
+      html`
+        <learning-comment-card
+          .comment=${comment}
+          .archived=${true}
+        ></learning-comment-card>
+      `,
+      container,
+    );
+
+    const el = container.querySelector("learning-comment-card") as any;
+    await el.updateComplete;
+    const icon = el.shadowRoot?.querySelector(".archived-icon");
+    expect(icon).toBeNull();
+  });
+
+  it("自身がアーカイブされている場合、アーカイブアイコンが表示されること", async () => {
+    const comment = {
+      id: "1",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "content",
+      commentType: "idea",
+      status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
+      archivedAt: "2026-01-05T00:00:00Z",
+    };
+    render(
+      html`
+        <learning-comment-card .comment=${comment}></learning-comment-card>
+      `,
+      container,
+    );
+
+    const el = container.querySelector("learning-comment-card") as any;
+    await el.updateComplete;
+    const icon = el.shadowRoot?.querySelector(".archived-icon");
+    expect(icon).not.toBeNull();
   });
 });

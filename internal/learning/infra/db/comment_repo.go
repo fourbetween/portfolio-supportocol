@@ -183,16 +183,18 @@ func (r *CommentRepository) ListChildren(ctx context.Context, params domain.List
 
 func (r *CommentRepository) CountByDiscussionID(ctx context.Context, discussionID string) (int, error) {
 	stmt := mysql.
-		SELECT(mysql.COUNT(mysql.STAR)).
+		SELECT(mysql.COUNT(mysql.STAR).AS("Count")).
 		FROM(table.Comments).
 		WHERE(table.Comments.DiscussionID.EQ(mysql.String(discussionID)))
 
-	var count int64
-	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &count); err != nil {
+	var dest struct {
+		Count int64
+	}
+	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
 		return 0, fmt.Errorf("failed to count comments: %w", err)
 	}
 
-	return int(count), nil
+	return int(dest.Count), nil
 }
 
 func (r *CommentRepository) toCommentDomains(rows []model.Comments) ([]*domain.Comment, error) {

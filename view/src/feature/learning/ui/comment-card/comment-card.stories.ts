@@ -10,6 +10,7 @@ const meta: Meta<LearningCommentCard> = {
     <learning-comment-card
       .comment=${args.comment}
       .activeChildrenCount=${args.activeChildrenCount}
+      .archived=${args.archived}
     ></learning-comment-card>
   `,
 };
@@ -30,6 +31,7 @@ export const Default: Story = {
       createdAt: "2026-01-04T00:00:00Z",
     },
     activeChildrenCount: 0,
+    archived: false,
   },
 };
 
@@ -73,5 +75,36 @@ export const Proposed: Story = {
       status: "proposed" as const,
       createdAt: "2026-01-04T00:00:00Z",
     },
+  },
+};
+
+export const SelfArchived: Story = {
+  args: {
+    comment: {
+      id: "5",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "このコメント自身がアーカイブされています。",
+      commentType: "idea",
+      status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
+      archivedAt: "2026-01-05T00:00:00Z",
+    },
+  },
+};
+
+export const AncestorArchived: Story = {
+  args: {
+    comment: {
+      id: "6",
+      discussionId: "1",
+      parentCommentId: "1",
+      content:
+        "自身はアーカイブされていませんが、祖先がアーカイブされています。アイコンは出ないはずです。",
+      commentType: "idea",
+      status: "active" as const,
+      createdAt: "2026-01-04T00:00:00Z",
+    },
+    archived: true,
   },
 };
