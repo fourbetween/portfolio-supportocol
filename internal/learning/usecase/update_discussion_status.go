@@ -8,14 +8,16 @@ import (
 )
 
 type UpdateDiscussionStatusUsecase struct {
-	repo domain.DiscussionRepository
-	tx   dbtx.Manager
+	repo        domain.DiscussionRepository
+	commentRepo domain.CommentRepository
+	tx          dbtx.Manager
 }
 
-func NewUpdateDiscussionStatusUsecase(repo domain.DiscussionRepository, tx dbtx.Manager) *UpdateDiscussionStatusUsecase {
+func NewUpdateDiscussionStatusUsecase(repo domain.DiscussionRepository, commentRepo domain.CommentRepository, tx dbtx.Manager) *UpdateDiscussionStatusUsecase {
 	return &UpdateDiscussionStatusUsecase{
-		repo: repo,
-		tx:   tx,
+		repo:        repo,
+		commentRepo: commentRepo,
+		tx:          tx,
 	}
 }
 
@@ -38,9 +40,19 @@ func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input Updat
 			return err
 		}
 
+		var commentFrame *domain.CommentFrame
+		status := domain.DiscussionStatus(input.Status)
+		if status.IsPublic() {
+			var err error
+			commentFrame, err = u.resolveCommentFrame(ctx, input.ID, input.CommentFrame)
+			if err != nil {
+				return err
+			}
+		}
+
 		if err := discussion.UpdateStatus(domain.UpdateStatusParams{
-			Status:       domain.DiscussionStatus(input.Status),
-			CommentFrame: input.CommentFrame,
+			Status:       status,
+			CommentFrame: commentFrame,
 		}); err != nil {
 			return err
 		}
@@ -55,4 +67,20 @@ func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input Updat
 	}
 
 	return discussion, nil
+}
+
+func (u *UpdateDiscussionStatusUsecase) resolveCommentFrame(ctx context.Context, discussionID string, baseFrame *domain.CommentFrame) (*domain.CommentFrame, error) {
+	if baseFrame == nil {
+		return nil, nil
+	}
+
+	comments, err := u.commentRepo.Search(ctx, domain.SearchCommentsParams{
+		DiscussionID: discussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	cf := baseFrame.Supplement(comments)
+	return &cf, nil
 }

@@ -4,6 +4,8 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
+
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
@@ -77,6 +79,56 @@ func TestCommentFrame_Validate(t *testing.T) {
 			err := tt.cf.Validate()
 			if !errors.Is(err, tt.wantErr) {
 				t.Errorf("CommentFrame.Validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestCommentFrame_Sorted(t *testing.T) {
+	tests := []struct {
+		name string
+		cf   CommentFrame
+		want CommentFrame
+	}{
+		{
+			name: "種類と経路がソートされること",
+			cf: CommentFrame{
+				Types: []string{"B", "A", "C"},
+				Paths: []CommentPath{
+					{Child: "B", Parent: "A"}, // Parent: A
+					{Child: "A", Parent: ""},  // Parent: "" (一番最初)
+					{Child: "C", Parent: "B"}, // Parent: B
+				},
+			},
+			want: CommentFrame{
+				Types: []string{"A", "B", "C"},
+				Paths: []CommentPath{
+					{Child: "A", Parent: ""},
+					{Child: "B", Parent: "A"},
+					{Child: "C", Parent: "B"},
+				},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// コピーを取っておく
+			origTypes := append([]string{}, tt.cf.Types...)
+			origPaths := append([]CommentPath{}, tt.cf.Paths...)
+
+			got := tt.cf.Sorted()
+
+			if diff := cmp.Diff(tt.want, got); diff != "" {
+				t.Errorf("Sorted() mismatch (-want +got):\n%s", diff)
+			}
+
+			// 元のオブジェクトが変更されていないことの確認
+			if diff := cmp.Diff(origTypes, tt.cf.Types); diff != "" {
+				t.Errorf("Sorted() modified original Types (-want +got):\n%s", diff)
+			}
+			if diff := cmp.Diff(origPaths, tt.cf.Paths); diff != "" {
+				t.Errorf("Sorted() modified original Paths (-want +got):\n%s", diff)
 			}
 		})
 	}

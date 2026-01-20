@@ -2,6 +2,7 @@ package domain
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
@@ -20,6 +21,24 @@ func (s DialogueSettings) Validate() error {
 type CommentFrame struct {
 	Types []string
 	Paths []CommentPath
+}
+
+func (cf CommentFrame) Sorted() CommentFrame {
+	sortedTypes := append([]string{}, cf.Types...)
+	sort.Strings(sortedTypes)
+
+	sortedPaths := append([]CommentPath{}, cf.Paths...)
+	sort.Slice(sortedPaths, func(i, j int) bool {
+		if sortedPaths[i].Parent != sortedPaths[j].Parent {
+			return sortedPaths[i].Parent < sortedPaths[j].Parent
+		}
+		return sortedPaths[i].Child < sortedPaths[j].Child
+	})
+
+	return CommentFrame{
+		Types: sortedTypes,
+		Paths: sortedPaths,
+	}
 }
 
 func (cf CommentFrame) Validate() error {
@@ -51,4 +70,51 @@ func (cf CommentFrame) Validate() error {
 type CommentPath struct {
 	Child  string
 	Parent string
+}
+
+func (cf CommentFrame) Supplement(comments []*Comment) CommentFrame {
+	newCF := CommentFrame{
+		Types: append([]string{}, cf.Types...),
+		Paths: append([]CommentPath{}, cf.Paths...),
+	}
+
+	typeMap := make(map[string]struct{}, len(newCF.Types))
+	for _, t := range newCF.Types {
+		typeMap[t] = struct{}{}
+	}
+
+	pathMap := make(map[CommentPath]struct{}, len(newCF.Paths))
+	for _, p := range newCF.Paths {
+		pathMap[p] = struct{}{}
+	}
+
+	commentMap := make(map[string]*Comment, len(comments))
+	for _, c := range comments {
+		commentMap[c.ID()] = c
+	}
+
+	for _, c := range comments {
+		if _, ok := typeMap[c.CommentType()]; !ok {
+			newCF.Types = append(newCF.Types, c.CommentType())
+			typeMap[c.CommentType()] = struct{}{}
+		}
+
+		var parentType string
+		if c.ParentCommentID() != nil {
+			if parent, ok := commentMap[*c.ParentCommentID()]; ok {
+				parentType = parent.CommentType()
+			}
+		}
+
+		path := CommentPath{
+			Child:  c.CommentType(),
+			Parent: parentType,
+		}
+		if _, ok := pathMap[path]; !ok {
+			newCF.Paths = append(newCF.Paths, path)
+			pathMap[path] = struct{}{}
+		}
+	}
+
+	return newCF.Sorted()
 }
