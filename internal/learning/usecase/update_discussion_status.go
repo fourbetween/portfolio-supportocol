@@ -40,20 +40,18 @@ func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input Updat
 			return err
 		}
 
-		commentFrame := input.CommentFrame
-		if input.CommentFrame != nil {
-			comments, err := u.commentRepo.Search(ctx, domain.SearchCommentsParams{
-				DiscussionID: input.ID,
-			})
+		var commentFrame *domain.CommentFrame
+		status := domain.DiscussionStatus(input.Status)
+		if status.IsPublic() {
+			var err error
+			commentFrame, err = u.resolveCommentFrame(ctx, input.ID, input.CommentFrame)
 			if err != nil {
 				return err
 			}
-			cf := input.CommentFrame.Supplement(comments)
-			commentFrame = &cf
 		}
 
 		if err := discussion.UpdateStatus(domain.UpdateStatusParams{
-			Status:       domain.DiscussionStatus(input.Status),
+			Status:       status,
 			CommentFrame: commentFrame,
 		}); err != nil {
 			return err
@@ -69,4 +67,20 @@ func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input Updat
 	}
 
 	return discussion, nil
+}
+
+func (u *UpdateDiscussionStatusUsecase) resolveCommentFrame(ctx context.Context, discussionID string, baseFrame *domain.CommentFrame) (*domain.CommentFrame, error) {
+	if baseFrame == nil {
+		return nil, nil
+	}
+
+	comments, err := u.commentRepo.Search(ctx, domain.SearchCommentsParams{
+		DiscussionID: discussionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	cf := baseFrame.Supplement(comments)
+	return &cf, nil
 }

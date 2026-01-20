@@ -118,9 +118,8 @@ func (d *Discussion) UpdateStatus(params UpdateStatusParams) error {
 		if params.CommentFrame == nil {
 			return fmt.Errorf("comment frame is required for public status: %w", apperr.ErrInvalidArgument)
 		}
-		params.CommentFrame.Sort()
 		d.dialogueSettings = &DialogueSettings{
-			CommentFrame: *params.CommentFrame,
+			CommentFrame: params.CommentFrame.Sorted(),
 		}
 	} else {
 		d.dialogueSettings = nil

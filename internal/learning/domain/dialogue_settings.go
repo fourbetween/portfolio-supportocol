@@ -23,14 +23,22 @@ type CommentFrame struct {
 	Paths []CommentPath
 }
 
-func (cf *CommentFrame) Sort() {
-	sort.Strings(cf.Types)
-	sort.Slice(cf.Paths, func(i, j int) bool {
-		if cf.Paths[i].Parent != cf.Paths[j].Parent {
-			return cf.Paths[i].Parent < cf.Paths[j].Parent
+func (cf CommentFrame) Sorted() CommentFrame {
+	sortedTypes := append([]string{}, cf.Types...)
+	sort.Strings(sortedTypes)
+
+	sortedPaths := append([]CommentPath{}, cf.Paths...)
+	sort.Slice(sortedPaths, func(i, j int) bool {
+		if sortedPaths[i].Parent != sortedPaths[j].Parent {
+			return sortedPaths[i].Parent < sortedPaths[j].Parent
 		}
-		return cf.Paths[i].Child < cf.Paths[j].Child
+		return sortedPaths[i].Child < sortedPaths[j].Child
 	})
+
+	return CommentFrame{
+		Types: sortedTypes,
+		Paths: sortedPaths,
+	}
 }
 
 func (cf CommentFrame) Validate() error {
@@ -108,6 +116,5 @@ func (cf CommentFrame) Supplement(comments []*Comment) CommentFrame {
 		}
 	}
 
-	newCF.Sort()
-	return newCF
+	return newCF.Sorted()
 }
