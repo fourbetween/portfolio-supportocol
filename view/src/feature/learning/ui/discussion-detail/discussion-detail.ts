@@ -11,6 +11,7 @@ import {
   LearningDiscussionFormOpenEvent,
   LearningDiscussionUnarchiveEvent,
 } from "../../event/discussion";
+import type { CommentFrame } from "../../model/comment-frame";
 import type { Discussion } from "../../model/discussion";
 import "../comment-frame-badge/comment-frame-badge";
 import "../comment-frame-popup/comment-frame-popup";
@@ -24,6 +25,9 @@ import type { DiscussionStatusPopup } from "../discussion-status-popup/discussio
 export class LearningDiscussionDetail extends LitElement {
   @property({ type: Object })
   discussion?: Discussion;
+
+  @property({ type: Object })
+  usedFrame?: CommentFrame;
 
   @property({ type: Boolean })
   isEditing = false;
@@ -50,6 +54,7 @@ export class LearningDiscussionDetail extends LitElement {
       ></learning-discussion-status-popup>
       <learning-comment-frame-popup
         .initialFrame=${this.discussion?.dialogueSettings?.commentFrame}
+        .usedFrame=${this.usedFrame}
       ></learning-comment-frame-popup>
     `;
   }

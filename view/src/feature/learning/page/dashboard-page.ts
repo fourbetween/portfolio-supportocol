@@ -160,7 +160,7 @@ export class LearningDashboardPage extends LitElement {
   private _handleCommentUpdated(e: LearningCommentUpdatedEvent) {
     const oldComment = this._comments.find((c) => c.id === e.comment.id);
     this._comments = this._comments.map((c) =>
-      c.id === e.comment.id ? e.comment : c
+      c.id === e.comment.id ? e.comment : c,
     );
     if (oldComment?.status === "proposed" && e.comment.status === "active") {
       this._selectedCommentId = e.comment.id;
@@ -191,18 +191,18 @@ export class LearningDashboardPage extends LitElement {
         this._comments.length > 0
           ? this._comments.reduce(
               (max, c) => (c.createdAt > max ? c.createdAt : max),
-              this._comments[0].createdAt
+              this._comments[0].createdAt,
             )
           : undefined;
 
       try {
         const newComments = await commentRepository.list(
           this._selectedDiscussionId,
-          since
+          since,
         );
         const existingIds = new Set(this._comments.map((c) => c.id));
         const filteredNewComments = newComments.filter(
-          (c) => !existingIds.has(c.id)
+          (c) => !existingIds.has(c.id),
         );
 
         if (filteredNewComments.length > 0) {
@@ -283,6 +283,7 @@ export class LearningDashboardPage extends LitElement {
         <div class="detail">
           <learning-discussion-detail-widget
             .discussion=${this._selectedDiscussion}
+            .comments=${this._comments}
             @learning-discussion-updated=${this._handleDiscussionUpdated}
           ></learning-discussion-detail-widget>
         </div>

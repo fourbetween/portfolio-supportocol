@@ -10,9 +10,9 @@ import {
   LearningDiscussionUpdateEvent,
   LearningDiscussionUpdateStatusEvent,
 } from "../event/discussion";
+import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
 import type { Discussion } from "../model/discussion";
-import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-detail/discussion-detail";
 
@@ -20,6 +20,9 @@ import "../ui/discussion-detail/discussion-detail";
 export class LearningDiscussionDetailWidget extends LitElement {
   @property({ type: Object })
   discussion?: Discussion;
+
+  @property({ type: Array })
+  comments: Comment[] = [];
 
   @state()
   private _isEditing = false;
@@ -49,8 +52,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
     try {
       let commentFrame;
       if (e.status === "public") {
-        const comments = await commentRepository.list(this.discussion.id);
-        commentFrame = deriveCommentFrame(comments);
+        commentFrame = deriveCommentFrame(this.comments);
       }
       const data = await discussionRepository.updateStatus(
         this.discussion.id,
@@ -114,12 +116,17 @@ export class LearningDiscussionDetailWidget extends LitElement {
     }
   }
 
+  private get _usedFrame() {
+    return deriveCommentFrame(this.comments);
+  }
+
   render() {
     if (!this.discussion) return nothing;
 
     return html`
       <learning-discussion-detail
         .discussion=${this.discussion}
+        .usedFrame=${this._usedFrame}
         .isEditing=${this._isEditing}
         @learning-discussion-form-open=${() => (this._isEditing = true)}
         @learning-discussion-update=${this._handleUpdateDiscussion}

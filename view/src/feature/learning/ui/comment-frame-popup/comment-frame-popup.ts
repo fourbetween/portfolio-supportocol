@@ -16,6 +16,9 @@ export class LearningCommentFramePopup extends LitElement {
   @property({ type: Object })
   initialFrame?: CommentFrame;
 
+  @property({ type: Object })
+  usedFrame?: CommentFrame;
+
   @query("learning-comment-frame-form")
   private _form!: LearningCommentFrameForm;
 
@@ -36,6 +39,7 @@ export class LearningCommentFramePopup extends LitElement {
         <div slot="main">
           <learning-comment-frame-form
             .initialFrame=${this.initialFrame}
+            .usedFrame=${this.usedFrame}
           ></learning-comment-frame-form>
         </div>
         <div slot="footer">
