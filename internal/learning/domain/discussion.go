@@ -2,7 +2,6 @@ package domain
 
 import (
 	"fmt"
-	"slices"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
@@ -81,8 +80,7 @@ func (d *Discussion) CanAddComment() error {
 }
 
 func (d *Discussion) AddComment(now time.Time) {
-	d.commentsCount++
-	d.lastCommentedAt = now
+	d.AddComments(1, now)
 }
 
 func (d *Discussion) AddComments(count int, now time.Time) {
@@ -169,27 +167,5 @@ func (d *Discussion) EnsureCommentFrameRequirement(commentType string, parentTyp
 		return
 	}
 
-	cf := d.dialogueSettings.CommentFrame
-	typeExists := slices.Contains(cf.Types, commentType)
-	pathExists := false
-	for _, p := range cf.Paths {
-		if p.Child == commentType && p.Parent == parentType {
-			pathExists = true
-			break
-		}
-	}
-
-	if typeExists && pathExists {
-		return
-	}
-	if !typeExists {
-		cf.Types = append(cf.Types, commentType)
-	}
-	if !pathExists {
-		cf.Paths = append(cf.Paths, CommentPath{
-			Child:  commentType,
-			Parent: parentType,
-		})
-	}
-	d.dialogueSettings.CommentFrame = cf.Sorted()
+	d.dialogueSettings.CommentFrame = d.dialogueSettings.CommentFrame.Add(commentType, parentType)
 }

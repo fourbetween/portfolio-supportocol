@@ -2,6 +2,7 @@ package domain
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
@@ -28,6 +29,34 @@ func (cf CommentFrame) Sorted() CommentFrame {
 		Types: sortedTypes,
 		Paths: sortedPaths,
 	}
+}
+
+func (cf CommentFrame) Add(child, parent string) CommentFrame {
+	newCF := cf
+	typeExists := slices.Contains(newCF.Types, child)
+	if !typeExists {
+		newCF.Types = append(newCF.Types, child)
+	}
+
+	pathExists := false
+	for _, p := range newCF.Paths {
+		if p.Child == child && p.Parent == parent {
+			pathExists = true
+			break
+		}
+	}
+
+	if !pathExists {
+		newCF.Paths = append(newCF.Paths, CommentPath{
+			Child:  child,
+			Parent: parent,
+		})
+	}
+
+	if !typeExists || !pathExists {
+		return newCF.Sorted()
+	}
+	return cf
 }
 
 func (cf CommentFrame) Validate() error {
