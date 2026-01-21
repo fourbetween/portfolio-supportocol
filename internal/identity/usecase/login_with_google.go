@@ -24,7 +24,7 @@ func NewLoginWithGoogleUsecase(
 }
 
 func (u *LoginWithGoogleUsecase) Execute(ctx context.Context, idToken string) (string, error) {
-	user, err := u.authSrv.LoginWithGoogle(ctx, idToken)
+	user, _, err := u.authSrv.LoginWithGoogle(ctx, idToken)
 	if err != nil {
 		return "", err
 	}
