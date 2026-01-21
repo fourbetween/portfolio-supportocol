@@ -80,8 +80,7 @@ func (d *Discussion) CanAddComment() error {
 }
 
 func (d *Discussion) AddComment(now time.Time) {
-	d.commentsCount++
-	d.lastCommentedAt = now
+	d.AddComments(1, now)
 }
 
 func (d *Discussion) AddComments(count int, now time.Time) {
@@ -161,4 +160,12 @@ func (d *Discussion) Unarchive() error {
 	}
 	d.archivedAt = nil
 	return nil
+}
+
+func (d *Discussion) EnsureCommentFrameRequirement(commentType string, parentType string) {
+	if !d.status.IsPublic() || d.dialogueSettings == nil {
+		return
+	}
+
+	d.dialogueSettings.CommentFrame = d.dialogueSettings.CommentFrame.Add(commentType, parentType)
 }
