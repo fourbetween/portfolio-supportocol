@@ -37,7 +37,7 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 	var comment *domain.Comment
 	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// Verify discussion exists and user has access
-		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+		discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 			ID:        input.DiscussionID,
 			CreatedBy: input.UserID,
 		})
@@ -55,6 +55,15 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 			return err
 		}
 
+		var parentType string
+		if discussion.Status().IsPublic() && comment.ParentCommentID() != nil {
+			parent, err := u.commentRepo.Load(ctx, *comment.ParentCommentID())
+			if err != nil {
+				return err
+			}
+			parentType = parent.CommentType()
+		}
+
 		if err := comment.Update(domain.UpdateCommentParams{
 			CommentType: input.CommentType,
 			Content:     input.Content,
@@ -65,7 +74,9 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 		if err := u.commentRepo.Update(ctx, comment); err != nil {
 			return err
 		}
-		return nil
+
+		discussion.EnsureCommentFrameRequirement(comment.CommentType(), parentType)
+		return u.discussionRepo.Save(ctx, discussion)
 	})
 	if err != nil {
 		return nil, err

@@ -56,6 +56,15 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			return err
 		}
 
+		var parentType string
+		if discussion.Status().IsPublic() && input.ParentCommentID != nil {
+			parent, err := u.commentRepo.Load(ctx, *input.ParentCommentID)
+			if err != nil {
+				return err
+			}
+			parentType = parent.CommentType()
+		}
+
 		var createErr error
 		comment, createErr = u.fac.Create(domain.CreateCommentParams{
 			DiscussionID:    input.DiscussionID,
@@ -73,6 +82,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			return err
 		}
 
+		discussion.EnsureCommentFrameRequirement(comment.CommentType(), parentType)
 		discussion.AddComment(u.clock.Now())
 		return u.discussionRepo.Save(ctx, discussion)
 	})

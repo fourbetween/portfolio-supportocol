@@ -2,6 +2,7 @@ package domain
 
 import (
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
@@ -161,4 +162,34 @@ func (d *Discussion) Unarchive() error {
 	}
 	d.archivedAt = nil
 	return nil
+}
+
+func (d *Discussion) EnsureCommentFrameRequirement(commentType string, parentType string) {
+	if !d.status.IsPublic() || d.dialogueSettings == nil {
+		return
+	}
+
+	cf := d.dialogueSettings.CommentFrame
+	typeExists := slices.Contains(cf.Types, commentType)
+	pathExists := false
+	for _, p := range cf.Paths {
+		if p.Child == commentType && p.Parent == parentType {
+			pathExists = true
+			break
+		}
+	}
+
+	if typeExists && pathExists {
+		return
+	}
+	if !typeExists {
+		cf.Types = append(cf.Types, commentType)
+	}
+	if !pathExists {
+		cf.Paths = append(cf.Paths, CommentPath{
+			Child:  commentType,
+			Parent: parentType,
+		})
+	}
+	d.dialogueSettings.CommentFrame = cf.Sorted()
 }
