@@ -29,6 +29,15 @@ func main() {
 	if err := mysql.GenerateDB(
 		con,
 		env.AppName(),
+		"../../../internal/workspace/infra/db/schema",
+		makeTmpl([]string{"workspaces", "members", "projects"}),
+	); err != nil {
+		panic(err)
+	}
+
+	if err := mysql.GenerateDB(
+		con,
+		env.AppName(),
 		"../../../internal/learning/infra/db/schema",
 		makeTmpl([]string{"discussions", "comments", "dialogue_settings"}),
 	); err != nil {

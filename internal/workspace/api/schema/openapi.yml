@@ -1,0 +1,496 @@
+openapi: 3.1.0
+info:
+  title: app-supportocol workspace api
+  version: 1.0.0
+components:
+  securitySchemes:
+    cookie_auth:
+      type: apiKey
+      in: cookie
+      name: auth_token
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+      required:
+        - code
+        - message
+    Id:
+      type: string
+      format: uuid
+    WorkspaceSlug:
+      type: string
+      maxLength: 20
+      pattern: "^[a-z0-9-]+$"
+    WorkspaceName:
+      type: string
+      maxLength: 255
+    WorkspaceType:
+      type: string
+      enum:
+        - personal
+        - organization
+    MemberRole:
+      type: string
+      enum:
+        - owner
+        - admin
+        - member
+    ProjectName:
+      type: string
+      maxLength: 255
+    Workspace:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        slug:
+          $ref: "#/components/schemas/WorkspaceSlug"
+        name:
+          $ref: "#/components/schemas/WorkspaceName"
+        type:
+          $ref: "#/components/schemas/WorkspaceType"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - slug
+        - name
+        - type
+        - createdAt
+    WorkspaceWithMember:
+      type: object
+      properties:
+        workspace:
+          $ref: "#/components/schemas/Workspace"
+        member:
+          $ref: "#/components/schemas/Member"
+      required:
+        - workspace
+        - member
+    Member:
+      type: object
+      properties:
+        workspaceId:
+          $ref: "#/components/schemas/Id"
+        userId:
+          $ref: "#/components/schemas/Id"
+        role:
+          $ref: "#/components/schemas/MemberRole"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - workspaceId
+        - userId
+        - role
+        - createdAt
+    Project:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        workspaceId:
+          $ref: "#/components/schemas/Id"
+        name:
+          $ref: "#/components/schemas/ProjectName"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - workspaceId
+        - name
+        - createdAt
+security:
+  - cookie_auth: []
+paths:
+  /workspaces:
+    get:
+      description: get workspaces
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Workspace"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: create workspace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                slug:
+                  $ref: "#/components/schemas/WorkspaceSlug"
+                name:
+                  $ref: "#/components/schemas/WorkspaceName"
+                type:
+                  $ref: "#/components/schemas/WorkspaceType"
+              required:
+                - slug
+                - name
+                - type
+      responses:
+        "201":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workspace"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /workspaces/{workspaceId}:
+    get:
+      description: get workspace
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkspaceWithMember"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      description: update workspace
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/WorkspaceName"
+              required:
+                - name
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Workspace"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      description: delete workspace
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /workspaces/{workspaceId}/members:
+    get:
+      description: get members
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Member"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: add member
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  $ref: "#/components/schemas/Id"
+                role:
+                  $ref: "#/components/schemas/MemberRole"
+              required:
+                - userId
+                - role
+      responses:
+        "201":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /workspaces/{workspaceId}/members/{userId}:
+    put:
+      description: update member
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+        - name: userId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  $ref: "#/components/schemas/MemberRole"
+              required:
+                - role
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      description: remove member
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+        - name: userId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /workspaces/{workspaceId}/projects:
+    get:
+      description: get projects
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: create project
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/ProjectName"
+              required:
+                - name
+      responses:
+        "201":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /workspaces/{workspaceId}/projects/{projectId}:
+    get:
+      description: get project
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      description: update project
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  $ref: "#/components/schemas/ProjectName"
+              required:
+                - name
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      description: delete project
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

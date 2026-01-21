@@ -13,6 +13,7 @@ import (
 
 type Discussions struct {
 	ID              string `sql:"primary_key"`
+	ProjectID       string
 	Theme           string
 	Conclusion      string
 	Status          string
