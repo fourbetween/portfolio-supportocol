@@ -13,48 +13,48 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// WorkspacesWorkspaceIdProjectsGet implements GET /workspaces/{workspaceId}/projects operation.
+// WorkspaceWorkspaceIdProjectsGet implements GET /workspace/{workspaceId}/projects operation.
 //
 // Get projects.
 //
-// GET /workspaces/{workspaceId}/projects
-func (UnimplementedHandler) WorkspacesWorkspaceIdProjectsGet(ctx context.Context, params WorkspacesWorkspaceIdProjectsGetParams) (r []Project, _ error) {
+// GET /workspace/{workspaceId}/projects
+func (UnimplementedHandler) WorkspaceWorkspaceIdProjectsGet(ctx context.Context, params WorkspaceWorkspaceIdProjectsGetParams) (r []Project, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// WorkspacesWorkspaceIdProjectsPost implements POST /workspaces/{workspaceId}/projects operation.
+// WorkspaceWorkspaceIdProjectsPost implements POST /workspace/{workspaceId}/projects operation.
 //
 // Create project.
 //
-// POST /workspaces/{workspaceId}/projects
-func (UnimplementedHandler) WorkspacesWorkspaceIdProjectsPost(ctx context.Context, req *WorkspacesWorkspaceIdProjectsPostReq, params WorkspacesWorkspaceIdProjectsPostParams) (r *Project, _ error) {
+// POST /workspace/{workspaceId}/projects
+func (UnimplementedHandler) WorkspaceWorkspaceIdProjectsPost(ctx context.Context, req *WorkspaceWorkspaceIdProjectsPostReq, params WorkspaceWorkspaceIdProjectsPostParams) (r *Project, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// WorkspacesWorkspaceIdProjectsProjectIdDelete implements DELETE /workspaces/{workspaceId}/projects/{projectId} operation.
+// WorkspaceWorkspaceIdProjectsProjectIdDelete implements DELETE /workspace/{workspaceId}/projects/{projectId} operation.
 //
 // Delete project.
 //
-// DELETE /workspaces/{workspaceId}/projects/{projectId}
-func (UnimplementedHandler) WorkspacesWorkspaceIdProjectsProjectIdDelete(ctx context.Context, params WorkspacesWorkspaceIdProjectsProjectIdDeleteParams) error {
+// DELETE /workspace/{workspaceId}/projects/{projectId}
+func (UnimplementedHandler) WorkspaceWorkspaceIdProjectsProjectIdDelete(ctx context.Context, params WorkspaceWorkspaceIdProjectsProjectIdDeleteParams) error {
 	return ht.ErrNotImplemented
 }
 
-// WorkspacesWorkspaceIdProjectsProjectIdGet implements GET /workspaces/{workspaceId}/projects/{projectId} operation.
+// WorkspaceWorkspaceIdProjectsProjectIdGet implements GET /workspace/{workspaceId}/projects/{projectId} operation.
 //
 // Get project.
 //
-// GET /workspaces/{workspaceId}/projects/{projectId}
-func (UnimplementedHandler) WorkspacesWorkspaceIdProjectsProjectIdGet(ctx context.Context, params WorkspacesWorkspaceIdProjectsProjectIdGetParams) (r *Project, _ error) {
+// GET /workspace/{workspaceId}/projects/{projectId}
+func (UnimplementedHandler) WorkspaceWorkspaceIdProjectsProjectIdGet(ctx context.Context, params WorkspaceWorkspaceIdProjectsProjectIdGetParams) (r *Project, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// WorkspacesWorkspaceIdProjectsProjectIdPut implements PUT /workspaces/{workspaceId}/projects/{projectId} operation.
+// WorkspaceWorkspaceIdProjectsProjectIdPut implements PUT /workspace/{workspaceId}/projects/{projectId} operation.
 //
 // Update project.
 //
-// PUT /workspaces/{workspaceId}/projects/{projectId}
-func (UnimplementedHandler) WorkspacesWorkspaceIdProjectsProjectIdPut(ctx context.Context, req *WorkspacesWorkspaceIdProjectsProjectIdPutReq, params WorkspacesWorkspaceIdProjectsProjectIdPutParams) (r *Project, _ error) {
+// PUT /workspace/{workspaceId}/projects/{projectId}
+func (UnimplementedHandler) WorkspaceWorkspaceIdProjectsProjectIdPut(ctx context.Context, req *WorkspaceWorkspaceIdProjectsProjectIdPutReq, params WorkspaceWorkspaceIdProjectsProjectIdPutParams) (r *Project, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

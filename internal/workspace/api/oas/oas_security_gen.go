@@ -33,11 +33,11 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 }
 
 var operationRolesCookieAuth = map[string][]string{
-	WorkspacesWorkspaceIdProjectsGetOperation:             []string{},
-	WorkspacesWorkspaceIdProjectsPostOperation:            []string{},
-	WorkspacesWorkspaceIdProjectsProjectIdDeleteOperation: []string{},
-	WorkspacesWorkspaceIdProjectsProjectIdGetOperation:    []string{},
-	WorkspacesWorkspaceIdProjectsProjectIdPutOperation:    []string{},
+	WorkspaceWorkspaceIdProjectsGetOperation:             []string{},
+	WorkspaceWorkspaceIdProjectsPostOperation:            []string{},
+	WorkspaceWorkspaceIdProjectsProjectIdDeleteOperation: []string{},
+	WorkspaceWorkspaceIdProjectsProjectIdGetOperation:    []string{},
+	WorkspaceWorkspaceIdProjectsProjectIdPutOperation:    []string{},
 }
 
 func (s *Server) securityCookieAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {

@@ -348,28 +348,28 @@ func (s *ProjectName) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
-func (s *WorkspacesWorkspaceIdProjectsPostReq) Encode(e *jx.Encoder) {
+func (s *WorkspaceWorkspaceIdProjectsPostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *WorkspacesWorkspaceIdProjectsPostReq) encodeFields(e *jx.Encoder) {
+func (s *WorkspaceWorkspaceIdProjectsPostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("name")
 		s.Name.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfWorkspacesWorkspaceIdProjectsPostReq = [1]string{
+var jsonFieldsNameOfWorkspaceWorkspaceIdProjectsPostReq = [1]string{
 	0: "name",
 }
 
-// Decode decodes WorkspacesWorkspaceIdProjectsPostReq from json.
-func (s *WorkspacesWorkspaceIdProjectsPostReq) Decode(d *jx.Decoder) error {
+// Decode decodes WorkspaceWorkspaceIdProjectsPostReq from json.
+func (s *WorkspaceWorkspaceIdProjectsPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode WorkspacesWorkspaceIdProjectsPostReq to nil")
+		return errors.New("invalid: unable to decode WorkspaceWorkspaceIdProjectsPostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -390,7 +390,7 @@ func (s *WorkspacesWorkspaceIdProjectsPostReq) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode WorkspacesWorkspaceIdProjectsPostReq")
+		return errors.Wrap(err, "decode WorkspaceWorkspaceIdProjectsPostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -407,8 +407,8 @@ func (s *WorkspacesWorkspaceIdProjectsPostReq) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfWorkspacesWorkspaceIdProjectsPostReq) {
-					name = jsonFieldsNameOfWorkspacesWorkspaceIdProjectsPostReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfWorkspaceWorkspaceIdProjectsPostReq) {
+					name = jsonFieldsNameOfWorkspaceWorkspaceIdProjectsPostReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -429,41 +429,41 @@ func (s *WorkspacesWorkspaceIdProjectsPostReq) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *WorkspacesWorkspaceIdProjectsPostReq) MarshalJSON() ([]byte, error) {
+func (s *WorkspaceWorkspaceIdProjectsPostReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *WorkspacesWorkspaceIdProjectsPostReq) UnmarshalJSON(data []byte) error {
+func (s *WorkspaceWorkspaceIdProjectsPostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *WorkspacesWorkspaceIdProjectsProjectIdPutReq) Encode(e *jx.Encoder) {
+func (s *WorkspaceWorkspaceIdProjectsProjectIdPutReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *WorkspacesWorkspaceIdProjectsProjectIdPutReq) encodeFields(e *jx.Encoder) {
+func (s *WorkspaceWorkspaceIdProjectsProjectIdPutReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("name")
 		s.Name.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfWorkspacesWorkspaceIdProjectsProjectIdPutReq = [1]string{
+var jsonFieldsNameOfWorkspaceWorkspaceIdProjectsProjectIdPutReq = [1]string{
 	0: "name",
 }
 
-// Decode decodes WorkspacesWorkspaceIdProjectsProjectIdPutReq from json.
-func (s *WorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.Decoder) error {
+// Decode decodes WorkspaceWorkspaceIdProjectsProjectIdPutReq from json.
+func (s *WorkspaceWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode WorkspacesWorkspaceIdProjectsProjectIdPutReq to nil")
+		return errors.New("invalid: unable to decode WorkspaceWorkspaceIdProjectsProjectIdPutReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -484,7 +484,7 @@ func (s *WorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.Decoder) err
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode WorkspacesWorkspaceIdProjectsProjectIdPutReq")
+		return errors.Wrap(err, "decode WorkspaceWorkspaceIdProjectsProjectIdPutReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -501,8 +501,8 @@ func (s *WorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.Decoder) err
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfWorkspacesWorkspaceIdProjectsProjectIdPutReq) {
-					name = jsonFieldsNameOfWorkspacesWorkspaceIdProjectsProjectIdPutReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfWorkspaceWorkspaceIdProjectsProjectIdPutReq) {
+					name = jsonFieldsNameOfWorkspaceWorkspaceIdProjectsProjectIdPutReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -523,14 +523,14 @@ func (s *WorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.Decoder) err
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *WorkspacesWorkspaceIdProjectsProjectIdPutReq) MarshalJSON() ([]byte, error) {
+func (s *WorkspaceWorkspaceIdProjectsProjectIdPutReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *WorkspacesWorkspaceIdProjectsProjectIdPutReq) UnmarshalJSON(data []byte) error {
+func (s *WorkspaceWorkspaceIdProjectsProjectIdPutReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

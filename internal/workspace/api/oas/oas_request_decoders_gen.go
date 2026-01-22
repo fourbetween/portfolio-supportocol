@@ -14,8 +14,8 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeWorkspacesWorkspaceIdProjectsPostRequest(r *http.Request) (
-	req *WorkspacesWorkspaceIdProjectsPostReq,
+func (s *Server) decodeWorkspaceWorkspaceIdProjectsPostRequest(r *http.Request) (
+	req *WorkspaceWorkspaceIdProjectsPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -62,7 +62,7 @@ func (s *Server) decodeWorkspacesWorkspaceIdProjectsPostRequest(r *http.Request)
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request WorkspacesWorkspaceIdProjectsPostReq
+		var request WorkspaceWorkspaceIdProjectsPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -93,8 +93,8 @@ func (s *Server) decodeWorkspacesWorkspaceIdProjectsPostRequest(r *http.Request)
 	}
 }
 
-func (s *Server) decodeWorkspacesWorkspaceIdProjectsProjectIdPutRequest(r *http.Request) (
-	req *WorkspacesWorkspaceIdProjectsProjectIdPutReq,
+func (s *Server) decodeWorkspaceWorkspaceIdProjectsProjectIdPutRequest(r *http.Request) (
+	req *WorkspaceWorkspaceIdProjectsProjectIdPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -141,7 +141,7 @@ func (s *Server) decodeWorkspacesWorkspaceIdProjectsProjectIdPutRequest(r *http.
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request WorkspacesWorkspaceIdProjectsProjectIdPutReq
+		var request WorkspaceWorkspaceIdProjectsProjectIdPutReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

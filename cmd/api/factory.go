@@ -73,7 +73,7 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 
 	mux := http.NewServeMux()
 	mux.Handle("/identity/", identityHandler)
-	mux.Handle("/workspaces/", workspaceHandler)
+	mux.Handle("/workspace/", workspaceHandler)
 	mux.Handle("/learning/", learningHandler)
 	mux.Handle("/dialogue/", dialogueHandler)
 
