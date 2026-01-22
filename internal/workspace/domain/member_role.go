@@ -6,7 +6,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
-// MemberRole はメンバーの役割を表す値オブジェクト
 type MemberRole string
 
 const (
@@ -40,17 +39,14 @@ func (r MemberRole) IsMember() bool {
 	return r == MemberRoleMember
 }
 
-// CanManageWorkspace は、ワークスペースの設定を管理できるかどうかを返す
 func (r MemberRole) CanManageWorkspace() bool {
 	return r.IsOwner() || r.IsAdmin()
 }
 
-// CanManageMembers は、メンバーを管理できるかどうかを返す
 func (r MemberRole) CanManageMembers() bool {
 	return r.IsOwner() || r.IsAdmin()
 }
 
-// CanManageProjects は、プロジェクトを管理できるかどうかを返す
 func (r MemberRole) CanManageProjects() bool {
 	return r.IsOwner() || r.IsAdmin()
 }

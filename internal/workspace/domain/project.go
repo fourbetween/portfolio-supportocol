@@ -7,7 +7,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
-// Project はプロジェクトのエンティティ
 type Project struct {
 	id          string
 	workspaceID string

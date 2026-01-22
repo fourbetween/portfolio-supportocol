@@ -7,7 +7,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
-// Member はワークスペースメンバーのエンティティ
 type Member struct {
 	workspaceID string
 	userID      string

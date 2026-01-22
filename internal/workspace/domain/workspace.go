@@ -7,7 +7,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
-// Workspace はワークスペースのエンティティ
 type Workspace struct {
 	id        string
 	slug      string

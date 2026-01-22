@@ -6,7 +6,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
-// WorkspaceType はワークスペースの種類を表す値オブジェクト
 type WorkspaceType string
 
 const (
