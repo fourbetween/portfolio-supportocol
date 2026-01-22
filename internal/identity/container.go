@@ -18,7 +18,12 @@ type APIContainer struct {
 	GetUser         *usecase.GetUserUsecase
 }
 
-func NewAPIContainer(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (*APIContainer, error) {
+func NewAPIContainer(
+	dbCon *sql.DB,
+	appConf conf.Service,
+	jwtSrv jwt.Service,
+	userCreatedHandler usecase.UserCreatedHandler,
+) (*APIContainer, error) {
 	googleClientID, err := appConf.Get("google/client/id")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get Google client ID from config: %w", err)
@@ -51,7 +56,7 @@ func NewAPIContainer(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (*
 	)
 
 	return &APIContainer{
-		LoginWithGoogle: usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv),
+		LoginWithGoogle: usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv, userCreatedHandler),
 		GetUser:         usecase.NewGetUserUsecase(userRepo),
 	}, nil
 }

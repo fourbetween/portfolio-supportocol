@@ -18,6 +18,9 @@ type APIContainer struct {
 	ListProjects  *usecase.ListProjectsUsecase
 	UpdateProject *usecase.UpdateProjectUsecase
 	DeleteProject *usecase.DeleteProjectUsecase
+
+	// Hooks
+	UserCreatedHandler *usecase.UserCreatedHandler
 }
 
 func NewAPIContainer(
@@ -27,11 +30,11 @@ func NewAPIContainer(
 	clockSrv := clock.NewRealService()
 	txManager := dbtx.NewManager(dbCon)
 
-	// workspaceFac := domain.NewWorkspaceFactory(idSrv, clockSrv)
+	workspaceFac := domain.NewWorkspaceFactory(idSrv, clockSrv)
 	memberFac := domain.NewMemberFactory(clockSrv)
 	projectFac := domain.NewProjectFactory(idSrv, clockSrv)
 
-	// workspaceRepo := db.NewWorkspaceRepository(dbCon, workspaceFac)
+	workspaceRepo := db.NewWorkspaceRepository(dbCon, workspaceFac)
 	memberRepo := db.NewMemberRepository(dbCon, memberFac)
 	projectRepo := db.NewProjectRepository(dbCon, projectFac)
 
@@ -42,5 +45,8 @@ func NewAPIContainer(
 		ListProjects:  usecase.NewListProjectsUsecase(memberRepo, projectRepo),
 		UpdateProject: usecase.NewUpdateProjectUsecase(memberRepo, projectRepo, txManager),
 		DeleteProject: usecase.NewDeleteProjectUsecase(memberRepo, projectRepo, txManager),
+
+		// Hooks
+		UserCreatedHandler: usecase.NewUserCreatedHandler(workspaceRepo, memberRepo, projectRepo, workspaceFac, memberFac, projectFac, txManager),
 	}, nil
 }

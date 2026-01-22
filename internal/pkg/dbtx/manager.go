@@ -30,10 +30,21 @@ func NewManager(db *sql.DB) Manager {
 }
 
 func (m *sqlManager) RunInTx(ctx context.Context, fn func(ctx context.Context) error) error {
+	// トランザクションが既に存在する場合はそれを利用する
+	if tx, ok := ctx.Value(txKey{}).(*sql.Tx); ok && tx != nil {
+		return fn(ctx)
+	}
+
 	tx, err := m.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
+	defer func() {
+		if p := recover(); p != nil {
+			tx.Rollback()
+			panic(p) // panicを再開させる
+		}
+	}()
 
 	ctxWithTx := context.WithValue(ctx, txKey{}, tx)
 

@@ -13,6 +13,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/identity"
 	identityapi "github.com/fourbetween/app-supportocol/internal/identity/api"
 	identityoas "github.com/fourbetween/app-supportocol/internal/identity/api/oas"
+	identityusecase "github.com/fourbetween/app-supportocol/internal/identity/usecase"
 	"github.com/fourbetween/app-supportocol/internal/learning"
 	learningapi "github.com/fourbetween/app-supportocol/internal/learning/api"
 	learningoas "github.com/fourbetween/app-supportocol/internal/learning/api/oas"
@@ -45,12 +46,17 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 
 	jwtSrv := jwt.NewDefaultService(jwtSecret, httpcookie.CookieMaxAge)
 
-	identityHandler, err := newIdentityHandler(dbCon, appConf, jwtSrv)
+	workspaceCon, err := workspace.NewAPIContainer(dbCon)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create workspace api container: %w", err)
+	}
+
+	identityHandler, err := newIdentityHandler(dbCon, appConf, jwtSrv, workspaceCon.UserCreatedHandler)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create identity handler: %w", err)
 	}
 
-	workspaceHandler, err := newWorkspaceHandler(dbCon, jwtSrv)
+	workspaceHandler, err := newWorkspaceHandler(workspaceCon, jwtSrv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create workspace handler: %w", err)
 	}
@@ -78,8 +84,9 @@ func newIdentityHandler(
 	dbCon *sql.DB,
 	appConf conf.Service,
 	jwtSrv jwt.Service,
+	userCreatedHandler identityusecase.UserCreatedHandler,
 ) (http.Handler, error) {
-	con, err := identity.NewAPIContainer(dbCon, appConf, jwtSrv)
+	con, err := identity.NewAPIContainer(dbCon, appConf, jwtSrv, userCreatedHandler)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create identity api container: %w", err)
 	}
@@ -101,14 +108,9 @@ func newIdentityHandler(
 }
 
 func newWorkspaceHandler(
-	dbCon *sql.DB,
+	con *workspace.APIContainer,
 	jwtSrv jwt.Service,
 ) (http.Handler, error) {
-	con, err := workspace.NewAPIContainer(dbCon)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create workspace api container: %w", err)
-	}
-
 	server, err := workspaceoas.NewServer(
 		workspaceapi.NewHandler(con),
 		workspaceapi.NewSecurityHandler(jwtSrv),
