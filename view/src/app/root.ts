@@ -7,7 +7,6 @@ import "urlpattern-polyfill";
 import "../feature/dialogue/root";
 import "../feature/identity/component/auth-widget";
 import { authService } from "../feature/identity/model/auth-service";
-import type { User } from "../feature/identity/model/user";
 import "../feature/learning/root";
 import "../feature/marketing/root";
 import { showToast } from "../shared/event/toast";
@@ -16,6 +15,7 @@ import "../shared/ui/toast/toast-manager";
 import { routerContext } from "./context/router";
 import { userContext } from "./context/user";
 import "./layout/layout";
+import type { User } from "./model/user";
 
 @customElement("app-root")
 export class AppRoot extends LitElement {
