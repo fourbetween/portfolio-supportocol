@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 	"github.com/fourbetween/app-supportocol/internal/workspace/domain"
@@ -38,7 +39,7 @@ func NewUserCreatedHandler(
 }
 
 func (h *UserCreatedHandler) OnUserCreated(ctx context.Context, userID string) error {
-	return h.tx.RunInTx(ctx, func(ctx context.Context) error {
+	if err := h.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// 1. パーソナルワークスペースの作成
 		workspace, err := h.workspaceFac.Create(domain.CreateWorkspaceParams{
 			Slug: "personal-" + userID,
@@ -78,5 +79,9 @@ func (h *UserCreatedHandler) OnUserCreated(ctx context.Context, userID string) e
 		}
 
 		return nil
-	})
+	}); err != nil {
+		slog.Error("failed to handle user created", "error", err)
+		return err
+	}
+	return nil
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/identity/domain"
 	"github.com/fourbetween/app-supportocol/internal/identity/infra/db"
 	"github.com/fourbetween/app-supportocol/internal/identity/usecase"
+	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 	"github.com/fourbetween/pkg-auth/auth"
 	"github.com/fourbetween/pkg-auth/jwt"
 	"github.com/fourbetween/pkg-auth/password"
@@ -31,6 +32,7 @@ func NewAPIContainer(
 
 	userFac := domain.NewFactory()
 	userRepo := db.NewUserRepository(dbCon, userFac)
+	txManager := dbtx.NewManager(dbCon)
 
 	buildUser := func(p auth.BuildParams) *domain.User {
 		return userFac.Reconstruct(domain.ReconstructParams{
@@ -56,7 +58,7 @@ func NewAPIContainer(
 	)
 
 	return &APIContainer{
-		LoginWithGoogle: usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv, userCreatedHandler),
+		LoginWithGoogle: usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv, userCreatedHandler, txManager),
 		GetUser:         usecase.NewGetUserUsecase(userRepo),
 	}, nil
 }
