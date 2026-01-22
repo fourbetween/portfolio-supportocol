@@ -6,18 +6,9 @@ package oas
 type OperationName = string
 
 const (
-	WorkspacesGetOperation                                OperationName = "WorkspacesGet"
-	WorkspacesPostOperation                               OperationName = "WorkspacesPost"
-	WorkspacesWorkspaceIdDeleteOperation                  OperationName = "WorkspacesWorkspaceIdDelete"
-	WorkspacesWorkspaceIdGetOperation                     OperationName = "WorkspacesWorkspaceIdGet"
-	WorkspacesWorkspaceIdMembersGetOperation              OperationName = "WorkspacesWorkspaceIdMembersGet"
-	WorkspacesWorkspaceIdMembersPostOperation             OperationName = "WorkspacesWorkspaceIdMembersPost"
-	WorkspacesWorkspaceIdMembersUserIdDeleteOperation     OperationName = "WorkspacesWorkspaceIdMembersUserIdDelete"
-	WorkspacesWorkspaceIdMembersUserIdPutOperation        OperationName = "WorkspacesWorkspaceIdMembersUserIdPut"
 	WorkspacesWorkspaceIdProjectsGetOperation             OperationName = "WorkspacesWorkspaceIdProjectsGet"
 	WorkspacesWorkspaceIdProjectsPostOperation            OperationName = "WorkspacesWorkspaceIdProjectsPost"
 	WorkspacesWorkspaceIdProjectsProjectIdDeleteOperation OperationName = "WorkspacesWorkspaceIdProjectsProjectIdDelete"
 	WorkspacesWorkspaceIdProjectsProjectIdGetOperation    OperationName = "WorkspacesWorkspaceIdProjectsProjectIdGet"
 	WorkspacesWorkspaceIdProjectsProjectIdPutOperation    OperationName = "WorkspacesWorkspaceIdProjectsProjectIdPut"
-	WorkspacesWorkspaceIdPutOperation                     OperationName = "WorkspacesWorkspaceIdPut"
 )

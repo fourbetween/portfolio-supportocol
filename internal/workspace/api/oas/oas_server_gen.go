@@ -8,54 +8,6 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// WorkspacesGet implements GET /workspaces operation.
-	//
-	// Get workspaces.
-	//
-	// GET /workspaces
-	WorkspacesGet(ctx context.Context) ([]Workspace, error)
-	// WorkspacesPost implements POST /workspaces operation.
-	//
-	// Create workspace.
-	//
-	// POST /workspaces
-	WorkspacesPost(ctx context.Context, req *WorkspacesPostReq) (*Workspace, error)
-	// WorkspacesWorkspaceIdDelete implements DELETE /workspaces/{workspaceId} operation.
-	//
-	// Delete workspace.
-	//
-	// DELETE /workspaces/{workspaceId}
-	WorkspacesWorkspaceIdDelete(ctx context.Context, params WorkspacesWorkspaceIdDeleteParams) error
-	// WorkspacesWorkspaceIdGet implements GET /workspaces/{workspaceId} operation.
-	//
-	// Get workspace.
-	//
-	// GET /workspaces/{workspaceId}
-	WorkspacesWorkspaceIdGet(ctx context.Context, params WorkspacesWorkspaceIdGetParams) (*WorkspaceWithMember, error)
-	// WorkspacesWorkspaceIdMembersGet implements GET /workspaces/{workspaceId}/members operation.
-	//
-	// Get members.
-	//
-	// GET /workspaces/{workspaceId}/members
-	WorkspacesWorkspaceIdMembersGet(ctx context.Context, params WorkspacesWorkspaceIdMembersGetParams) ([]Member, error)
-	// WorkspacesWorkspaceIdMembersPost implements POST /workspaces/{workspaceId}/members operation.
-	//
-	// Add member.
-	//
-	// POST /workspaces/{workspaceId}/members
-	WorkspacesWorkspaceIdMembersPost(ctx context.Context, req *WorkspacesWorkspaceIdMembersPostReq, params WorkspacesWorkspaceIdMembersPostParams) (*Member, error)
-	// WorkspacesWorkspaceIdMembersUserIdDelete implements DELETE /workspaces/{workspaceId}/members/{userId} operation.
-	//
-	// Remove member.
-	//
-	// DELETE /workspaces/{workspaceId}/members/{userId}
-	WorkspacesWorkspaceIdMembersUserIdDelete(ctx context.Context, params WorkspacesWorkspaceIdMembersUserIdDeleteParams) error
-	// WorkspacesWorkspaceIdMembersUserIdPut implements PUT /workspaces/{workspaceId}/members/{userId} operation.
-	//
-	// Update member.
-	//
-	// PUT /workspaces/{workspaceId}/members/{userId}
-	WorkspacesWorkspaceIdMembersUserIdPut(ctx context.Context, req *WorkspacesWorkspaceIdMembersUserIdPutReq, params WorkspacesWorkspaceIdMembersUserIdPutParams) (*Member, error)
 	// WorkspacesWorkspaceIdProjectsGet implements GET /workspaces/{workspaceId}/projects operation.
 	//
 	// Get projects.
@@ -86,12 +38,6 @@ type Handler interface {
 	//
 	// PUT /workspaces/{workspaceId}/projects/{projectId}
 	WorkspacesWorkspaceIdProjectsProjectIdPut(ctx context.Context, req *WorkspacesWorkspaceIdProjectsProjectIdPutReq, params WorkspacesWorkspaceIdProjectsProjectIdPutParams) (*Project, error)
-	// WorkspacesWorkspaceIdPut implements PUT /workspaces/{workspaceId} operation.
-	//
-	// Update workspace.
-	//
-	// PUT /workspaces/{workspaceId}
-	WorkspacesWorkspaceIdPut(ctx context.Context, req *WorkspacesWorkspaceIdPutReq, params WorkspacesWorkspaceIdPutParams) (*Workspace, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

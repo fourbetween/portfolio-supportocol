@@ -49,60 +49,47 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/workspaces"
+		case '/': // Prefix: "/workspaces/"
 
-			if l := len("/workspaces"); len(elem) >= l && elem[0:l] == "/workspaces" {
+			if l := len("/workspaces/"); len(elem) >= l && elem[0:l] == "/workspaces/" {
 				elem = elem[l:]
 			} else {
 				break
 			}
 
-			if len(elem) == 0 {
-				switch r.Method {
-				case "GET":
-					s.handleWorkspacesGetRequest([0]string{}, elemIsEscaped, w, r)
-				case "POST":
-					s.handleWorkspacesPostRequest([0]string{}, elemIsEscaped, w, r)
-				default:
-					s.notAllowed(w, r, "GET,POST")
-				}
+			// Param: "workspaceId"
+			// Match until "/"
+			idx := strings.IndexByte(elem, '/')
+			if idx < 0 {
+				idx = len(elem)
+			}
+			args[0] = elem[:idx]
+			elem = elem[idx:]
 
-				return
+			if len(elem) == 0 {
+				break
 			}
 			switch elem[0] {
-			case '/': // Prefix: "/"
+			case '/': // Prefix: "/projects"
 
-				if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+				if l := len("/projects"); len(elem) >= l && elem[0:l] == "/projects" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				// Param: "workspaceId"
-				// Match until "/"
-				idx := strings.IndexByte(elem, '/')
-				if idx < 0 {
-					idx = len(elem)
-				}
-				args[0] = elem[:idx]
-				elem = elem[idx:]
-
 				if len(elem) == 0 {
 					switch r.Method {
-					case "DELETE":
-						s.handleWorkspacesWorkspaceIdDeleteRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
 					case "GET":
-						s.handleWorkspacesWorkspaceIdGetRequest([1]string{
+						s.handleWorkspacesWorkspaceIdProjectsGetRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
-					case "PUT":
-						s.handleWorkspacesWorkspaceIdPutRequest([1]string{
+					case "POST":
+						s.handleWorkspacesWorkspaceIdProjectsPostRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "DELETE,GET,PUT")
+						s.notAllowed(w, r, "GET,POST")
 					}
 
 					return
@@ -116,143 +103,38 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 
-					if len(elem) == 0 {
+					// Param: "projectId"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
 						break
 					}
-					switch elem[0] {
-					case 'm': // Prefix: "members"
+					args[1] = elem
+					elem = ""
 
-						if l := len("members"); len(elem) >= l && elem[0:l] == "members" {
-							elem = elem[l:]
-						} else {
-							break
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleWorkspacesWorkspaceIdProjectsProjectIdDeleteRequest([2]string{
+								args[0],
+								args[1],
+							}, elemIsEscaped, w, r)
+						case "GET":
+							s.handleWorkspacesWorkspaceIdProjectsProjectIdGetRequest([2]string{
+								args[0],
+								args[1],
+							}, elemIsEscaped, w, r)
+						case "PUT":
+							s.handleWorkspacesWorkspaceIdProjectsProjectIdPutRequest([2]string{
+								args[0],
+								args[1],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE,GET,PUT")
 						}
 
-						if len(elem) == 0 {
-							switch r.Method {
-							case "GET":
-								s.handleWorkspacesWorkspaceIdMembersGetRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							case "POST":
-								s.handleWorkspacesWorkspaceIdMembersPostRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET,POST")
-							}
-
-							return
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/"
-
-							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							// Param: "userId"
-							// Leaf parameter, slashes are prohibited
-							idx := strings.IndexByte(elem, '/')
-							if idx >= 0 {
-								break
-							}
-							args[1] = elem
-							elem = ""
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "DELETE":
-									s.handleWorkspacesWorkspaceIdMembersUserIdDeleteRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								case "PUT":
-									s.handleWorkspacesWorkspaceIdMembersUserIdPutRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "DELETE,PUT")
-								}
-
-								return
-							}
-
-						}
-
-					case 'p': // Prefix: "projects"
-
-						if l := len("projects"); len(elem) >= l && elem[0:l] == "projects" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							switch r.Method {
-							case "GET":
-								s.handleWorkspacesWorkspaceIdProjectsGetRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							case "POST":
-								s.handleWorkspacesWorkspaceIdProjectsPostRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET,POST")
-							}
-
-							return
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/"
-
-							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							// Param: "projectId"
-							// Leaf parameter, slashes are prohibited
-							idx := strings.IndexByte(elem, '/')
-							if idx >= 0 {
-								break
-							}
-							args[1] = elem
-							elem = ""
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "DELETE":
-									s.handleWorkspacesWorkspaceIdProjectsProjectIdDeleteRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								case "GET":
-									s.handleWorkspacesWorkspaceIdProjectsProjectIdGetRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								case "PUT":
-									s.handleWorkspacesWorkspaceIdProjectsProjectIdPutRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "DELETE,GET,PUT")
-								}
-
-								return
-							}
-
-						}
-
+						return
 					}
 
 				}
@@ -345,82 +227,52 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/workspaces"
+		case '/': // Prefix: "/workspaces/"
 
-			if l := len("/workspaces"); len(elem) >= l && elem[0:l] == "/workspaces" {
+			if l := len("/workspaces/"); len(elem) >= l && elem[0:l] == "/workspaces/" {
 				elem = elem[l:]
 			} else {
 				break
 			}
 
+			// Param: "workspaceId"
+			// Match until "/"
+			idx := strings.IndexByte(elem, '/')
+			if idx < 0 {
+				idx = len(elem)
+			}
+			args[0] = elem[:idx]
+			elem = elem[idx:]
+
 			if len(elem) == 0 {
-				switch method {
-				case "GET":
-					r.name = WorkspacesGetOperation
-					r.summary = ""
-					r.operationID = ""
-					r.operationGroup = ""
-					r.pathPattern = "/workspaces"
-					r.args = args
-					r.count = 0
-					return r, true
-				case "POST":
-					r.name = WorkspacesPostOperation
-					r.summary = ""
-					r.operationID = ""
-					r.operationGroup = ""
-					r.pathPattern = "/workspaces"
-					r.args = args
-					r.count = 0
-					return r, true
-				default:
-					return
-				}
+				break
 			}
 			switch elem[0] {
-			case '/': // Prefix: "/"
+			case '/': // Prefix: "/projects"
 
-				if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+				if l := len("/projects"); len(elem) >= l && elem[0:l] == "/projects" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				// Param: "workspaceId"
-				// Match until "/"
-				idx := strings.IndexByte(elem, '/')
-				if idx < 0 {
-					idx = len(elem)
-				}
-				args[0] = elem[:idx]
-				elem = elem[idx:]
-
 				if len(elem) == 0 {
 					switch method {
-					case "DELETE":
-						r.name = WorkspacesWorkspaceIdDeleteOperation
-						r.summary = ""
-						r.operationID = ""
-						r.operationGroup = ""
-						r.pathPattern = "/workspaces/{workspaceId}"
-						r.args = args
-						r.count = 1
-						return r, true
 					case "GET":
-						r.name = WorkspacesWorkspaceIdGetOperation
+						r.name = WorkspacesWorkspaceIdProjectsGetOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/workspaces/{workspaceId}"
+						r.pathPattern = "/workspaces/{workspaceId}/projects"
 						r.args = args
 						r.count = 1
 						return r, true
-					case "PUT":
-						r.name = WorkspacesWorkspaceIdPutOperation
+					case "POST":
+						r.name = WorkspacesWorkspaceIdProjectsPostOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/workspaces/{workspaceId}"
+						r.pathPattern = "/workspaces/{workspaceId}/projects"
 						r.args = args
 						r.count = 1
 						return r, true
@@ -437,175 +289,48 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 
-					if len(elem) == 0 {
+					// Param: "projectId"
+					// Leaf parameter, slashes are prohibited
+					idx := strings.IndexByte(elem, '/')
+					if idx >= 0 {
 						break
 					}
-					switch elem[0] {
-					case 'm': // Prefix: "members"
+					args[1] = elem
+					elem = ""
 
-						if l := len("members"); len(elem) >= l && elem[0:l] == "members" {
-							elem = elem[l:]
-						} else {
-							break
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "DELETE":
+							r.name = WorkspacesWorkspaceIdProjectsProjectIdDeleteOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/workspaces/{workspaceId}/projects/{projectId}"
+							r.args = args
+							r.count = 2
+							return r, true
+						case "GET":
+							r.name = WorkspacesWorkspaceIdProjectsProjectIdGetOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/workspaces/{workspaceId}/projects/{projectId}"
+							r.args = args
+							r.count = 2
+							return r, true
+						case "PUT":
+							r.name = WorkspacesWorkspaceIdProjectsProjectIdPutOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/workspaces/{workspaceId}/projects/{projectId}"
+							r.args = args
+							r.count = 2
+							return r, true
+						default:
+							return
 						}
-
-						if len(elem) == 0 {
-							switch method {
-							case "GET":
-								r.name = WorkspacesWorkspaceIdMembersGetOperation
-								r.summary = ""
-								r.operationID = ""
-								r.operationGroup = ""
-								r.pathPattern = "/workspaces/{workspaceId}/members"
-								r.args = args
-								r.count = 1
-								return r, true
-							case "POST":
-								r.name = WorkspacesWorkspaceIdMembersPostOperation
-								r.summary = ""
-								r.operationID = ""
-								r.operationGroup = ""
-								r.pathPattern = "/workspaces/{workspaceId}/members"
-								r.args = args
-								r.count = 1
-								return r, true
-							default:
-								return
-							}
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/"
-
-							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							// Param: "userId"
-							// Leaf parameter, slashes are prohibited
-							idx := strings.IndexByte(elem, '/')
-							if idx >= 0 {
-								break
-							}
-							args[1] = elem
-							elem = ""
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "DELETE":
-									r.name = WorkspacesWorkspaceIdMembersUserIdDeleteOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/workspaces/{workspaceId}/members/{userId}"
-									r.args = args
-									r.count = 2
-									return r, true
-								case "PUT":
-									r.name = WorkspacesWorkspaceIdMembersUserIdPutOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/workspaces/{workspaceId}/members/{userId}"
-									r.args = args
-									r.count = 2
-									return r, true
-								default:
-									return
-								}
-							}
-
-						}
-
-					case 'p': // Prefix: "projects"
-
-						if l := len("projects"); len(elem) >= l && elem[0:l] == "projects" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							switch method {
-							case "GET":
-								r.name = WorkspacesWorkspaceIdProjectsGetOperation
-								r.summary = ""
-								r.operationID = ""
-								r.operationGroup = ""
-								r.pathPattern = "/workspaces/{workspaceId}/projects"
-								r.args = args
-								r.count = 1
-								return r, true
-							case "POST":
-								r.name = WorkspacesWorkspaceIdProjectsPostOperation
-								r.summary = ""
-								r.operationID = ""
-								r.operationGroup = ""
-								r.pathPattern = "/workspaces/{workspaceId}/projects"
-								r.args = args
-								r.count = 1
-								return r, true
-							default:
-								return
-							}
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/"
-
-							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							// Param: "projectId"
-							// Leaf parameter, slashes are prohibited
-							idx := strings.IndexByte(elem, '/')
-							if idx >= 0 {
-								break
-							}
-							args[1] = elem
-							elem = ""
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "DELETE":
-									r.name = WorkspacesWorkspaceIdProjectsProjectIdDeleteOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/workspaces/{workspaceId}/projects/{projectId}"
-									r.args = args
-									r.count = 2
-									return r, true
-								case "GET":
-									r.name = WorkspacesWorkspaceIdProjectsProjectIdGetOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/workspaces/{workspaceId}/projects/{projectId}"
-									r.args = args
-									r.count = 2
-									return r, true
-								case "PUT":
-									r.name = WorkspacesWorkspaceIdProjectsProjectIdPutOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/workspaces/{workspaceId}/projects/{projectId}"
-									r.args = args
-									r.count = 2
-									return r, true
-								default:
-									return
-								}
-							}
-
-						}
-
 					}
 
 				}

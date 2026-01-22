@@ -13,78 +13,6 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// WorkspacesGet implements GET /workspaces operation.
-//
-// Get workspaces.
-//
-// GET /workspaces
-func (UnimplementedHandler) WorkspacesGet(ctx context.Context) (r []Workspace, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// WorkspacesPost implements POST /workspaces operation.
-//
-// Create workspace.
-//
-// POST /workspaces
-func (UnimplementedHandler) WorkspacesPost(ctx context.Context, req *WorkspacesPostReq) (r *Workspace, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// WorkspacesWorkspaceIdDelete implements DELETE /workspaces/{workspaceId} operation.
-//
-// Delete workspace.
-//
-// DELETE /workspaces/{workspaceId}
-func (UnimplementedHandler) WorkspacesWorkspaceIdDelete(ctx context.Context, params WorkspacesWorkspaceIdDeleteParams) error {
-	return ht.ErrNotImplemented
-}
-
-// WorkspacesWorkspaceIdGet implements GET /workspaces/{workspaceId} operation.
-//
-// Get workspace.
-//
-// GET /workspaces/{workspaceId}
-func (UnimplementedHandler) WorkspacesWorkspaceIdGet(ctx context.Context, params WorkspacesWorkspaceIdGetParams) (r *WorkspaceWithMember, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// WorkspacesWorkspaceIdMembersGet implements GET /workspaces/{workspaceId}/members operation.
-//
-// Get members.
-//
-// GET /workspaces/{workspaceId}/members
-func (UnimplementedHandler) WorkspacesWorkspaceIdMembersGet(ctx context.Context, params WorkspacesWorkspaceIdMembersGetParams) (r []Member, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// WorkspacesWorkspaceIdMembersPost implements POST /workspaces/{workspaceId}/members operation.
-//
-// Add member.
-//
-// POST /workspaces/{workspaceId}/members
-func (UnimplementedHandler) WorkspacesWorkspaceIdMembersPost(ctx context.Context, req *WorkspacesWorkspaceIdMembersPostReq, params WorkspacesWorkspaceIdMembersPostParams) (r *Member, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// WorkspacesWorkspaceIdMembersUserIdDelete implements DELETE /workspaces/{workspaceId}/members/{userId} operation.
-//
-// Remove member.
-//
-// DELETE /workspaces/{workspaceId}/members/{userId}
-func (UnimplementedHandler) WorkspacesWorkspaceIdMembersUserIdDelete(ctx context.Context, params WorkspacesWorkspaceIdMembersUserIdDeleteParams) error {
-	return ht.ErrNotImplemented
-}
-
-// WorkspacesWorkspaceIdMembersUserIdPut implements PUT /workspaces/{workspaceId}/members/{userId} operation.
-//
-// Update member.
-//
-// PUT /workspaces/{workspaceId}/members/{userId}
-func (UnimplementedHandler) WorkspacesWorkspaceIdMembersUserIdPut(ctx context.Context, req *WorkspacesWorkspaceIdMembersUserIdPutReq, params WorkspacesWorkspaceIdMembersUserIdPutParams) (r *Member, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // WorkspacesWorkspaceIdProjectsGet implements GET /workspaces/{workspaceId}/projects operation.
 //
 // Get projects.
@@ -127,15 +55,6 @@ func (UnimplementedHandler) WorkspacesWorkspaceIdProjectsProjectIdGet(ctx contex
 //
 // PUT /workspaces/{workspaceId}/projects/{projectId}
 func (UnimplementedHandler) WorkspacesWorkspaceIdProjectsProjectIdPut(ctx context.Context, req *WorkspacesWorkspaceIdProjectsProjectIdPutReq, params WorkspacesWorkspaceIdProjectsProjectIdPutParams) (r *Project, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// WorkspacesWorkspaceIdPut implements PUT /workspaces/{workspaceId} operation.
-//
-// Update workspace.
-//
-// PUT /workspaces/{workspaceId}
-func (UnimplementedHandler) WorkspacesWorkspaceIdPut(ctx context.Context, req *WorkspacesWorkspaceIdPutReq, params WorkspacesWorkspaceIdPutParams) (r *Workspace, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

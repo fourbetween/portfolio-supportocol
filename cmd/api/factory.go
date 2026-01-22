@@ -20,6 +20,9 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httperr"
+	"github.com/fourbetween/app-supportocol/internal/workspace"
+	workspaceapi "github.com/fourbetween/app-supportocol/internal/workspace/api"
+	workspaceoas "github.com/fourbetween/app-supportocol/internal/workspace/api/oas"
 	"github.com/fourbetween/pkg-auth/jwt"
 	"github.com/fourbetween/pkg-conf/conf"
 )
@@ -47,6 +50,11 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 		return nil, fmt.Errorf("failed to create identity handler: %w", err)
 	}
 
+	workspaceHandler, err := newWorkspaceHandler(dbCon, jwtSrv)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create workspace handler: %w", err)
+	}
+
 	learningHandler, err := newLearningHandler(dbCon, appConf, jwtSrv, awscfg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning handler: %w", err)
@@ -59,6 +67,7 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 
 	mux := http.NewServeMux()
 	mux.Handle("/identity/", identityHandler)
+	mux.Handle("/workspaces/", workspaceHandler)
 	mux.Handle("/learning/", learningHandler)
 	mux.Handle("/dialogue/", dialogueHandler)
 
@@ -88,7 +97,31 @@ func newIdentityHandler(
 		ctx := httpctx.WithResponseWriter(r.Context(), w)
 		server.ServeHTTP(w, r.WithContext(ctx))
 	})
+	return handler, nil
+}
 
+func newWorkspaceHandler(
+	dbCon *sql.DB,
+	jwtSrv jwt.Service,
+) (http.Handler, error) {
+	con, err := workspace.NewAPIContainer(dbCon)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create workspace api container: %w", err)
+	}
+
+	server, err := workspaceoas.NewServer(
+		workspaceapi.NewHandler(con),
+		workspaceapi.NewSecurityHandler(jwtSrv),
+		workspaceoas.WithErrorHandler(httperr.ErrorHandler),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := httpctx.WithResponseWriter(r.Context(), w)
+		server.ServeHTTP(w, r.WithContext(ctx))
+	})
 	return handler, nil
 }
 

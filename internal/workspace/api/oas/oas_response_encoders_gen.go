@@ -10,104 +10,6 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeWorkspacesGetResponse(response []Workspace, w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
-
-	e := new(jx.Encoder)
-	e.ArrStart()
-	for _, elem := range response {
-		elem.Encode(e)
-	}
-	e.ArrEnd()
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
-
-	return nil
-}
-
-func encodeWorkspacesPostResponse(response *Workspace, w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(201)
-
-	e := new(jx.Encoder)
-	response.Encode(e)
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
-
-	return nil
-}
-
-func encodeWorkspacesWorkspaceIdDeleteResponse(response *WorkspacesWorkspaceIdDeleteNoContent, w http.ResponseWriter) error {
-	w.WriteHeader(204)
-
-	return nil
-}
-
-func encodeWorkspacesWorkspaceIdGetResponse(response *WorkspaceWithMember, w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
-
-	e := new(jx.Encoder)
-	response.Encode(e)
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
-
-	return nil
-}
-
-func encodeWorkspacesWorkspaceIdMembersGetResponse(response []Member, w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
-
-	e := new(jx.Encoder)
-	e.ArrStart()
-	for _, elem := range response {
-		elem.Encode(e)
-	}
-	e.ArrEnd()
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
-
-	return nil
-}
-
-func encodeWorkspacesWorkspaceIdMembersPostResponse(response *Member, w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(201)
-
-	e := new(jx.Encoder)
-	response.Encode(e)
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
-
-	return nil
-}
-
-func encodeWorkspacesWorkspaceIdMembersUserIdDeleteResponse(response *WorkspacesWorkspaceIdMembersUserIdDeleteNoContent, w http.ResponseWriter) error {
-	w.WriteHeader(204)
-
-	return nil
-}
-
-func encodeWorkspacesWorkspaceIdMembersUserIdPutResponse(response *Member, w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
-
-	e := new(jx.Encoder)
-	response.Encode(e)
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
-
-	return nil
-}
-
 func encodeWorkspacesWorkspaceIdProjectsGetResponse(response []Project, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
@@ -158,19 +60,6 @@ func encodeWorkspacesWorkspaceIdProjectsProjectIdGetResponse(response *Project, 
 }
 
 func encodeWorkspacesWorkspaceIdProjectsProjectIdPutResponse(response *Project, w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
-
-	e := new(jx.Encoder)
-	response.Encode(e)
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
-
-	return nil
-}
-
-func encodeWorkspacesWorkspaceIdPutResponse(response *Workspace, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
