@@ -8,10 +8,11 @@
     "build": "tsc && vite build --mode=$npm_config_mode",
     "test": "vitest --run",
     "preview": "vite preview",
-    "gen": "npm run gen:identity && npm run gen:learning && npm run gen:dialogue",
+    "gen": "npm run gen:identity && npm run gen:learning && npm run gen:dialogue && npm run gen:workspace",
     "gen:identity": "npx openapi-typescript ../internal/identity/api/schema/openapi.yml -o ./src/feature/identity/api/schema.d.ts",
     "gen:learning": "npx openapi-typescript ../internal/learning/api/schema/openapi.yml -o ./src/feature/learning/api/schema.d.ts",
     "gen:dialogue": "npx openapi-typescript ../internal/dialogue/api/schema/openapi.yml -o ./src/feature/dialogue/api/schema.d.ts",
+    "gen:workspace": "npx openapi-typescript ../internal/workspace/api/schema/openapi.yml -o ./src/feature/workspace/api/schema.d.ts",
     "storybook": "storybook dev --no-open",
     "build-storybook": "storybook build",
     "check:lit": "lit-analyzer \"src/**/*.ts\""
