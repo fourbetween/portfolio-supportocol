@@ -42,7 +42,7 @@ func (h *UserCreatedHandler) OnUserCreated(ctx context.Context, userID string) e
 	if err := h.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// 1. パーソナルワークスペースの作成
 		workspace, err := h.workspaceFac.Create(domain.CreateWorkspaceParams{
-			Slug: "personal-" + userID,
+			Slug: domain.NewPersonalWorkspaceID(userID),
 			Name: "個人用ワークスペース",
 			Type: domain.WorkspaceTypePersonal,
 		})
