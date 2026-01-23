@@ -8,36 +8,30 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// WorkspaceWorkspaceIdProjectsGet implements GET /workspace/{workspaceId}/projects operation.
+	// WorkspaceWorkspacesWorkspaceIdProjectsGet implements GET /workspace/workspaces/{workspaceId}/projects operation.
 	//
 	// Get projects.
 	//
-	// GET /workspace/{workspaceId}/projects
-	WorkspaceWorkspaceIdProjectsGet(ctx context.Context, params WorkspaceWorkspaceIdProjectsGetParams) ([]Project, error)
-	// WorkspaceWorkspaceIdProjectsPost implements POST /workspace/{workspaceId}/projects operation.
+	// GET /workspace/workspaces/{workspaceId}/projects
+	WorkspaceWorkspacesWorkspaceIdProjectsGet(ctx context.Context, params WorkspaceWorkspacesWorkspaceIdProjectsGetParams) ([]Project, error)
+	// WorkspaceWorkspacesWorkspaceIdProjectsPost implements POST /workspace/workspaces/{workspaceId}/projects operation.
 	//
 	// Create project.
 	//
-	// POST /workspace/{workspaceId}/projects
-	WorkspaceWorkspaceIdProjectsPost(ctx context.Context, req *WorkspaceWorkspaceIdProjectsPostReq, params WorkspaceWorkspaceIdProjectsPostParams) (*Project, error)
-	// WorkspaceWorkspaceIdProjectsProjectIdDelete implements DELETE /workspace/{workspaceId}/projects/{projectId} operation.
+	// POST /workspace/workspaces/{workspaceId}/projects
+	WorkspaceWorkspacesWorkspaceIdProjectsPost(ctx context.Context, req *WorkspaceWorkspacesWorkspaceIdProjectsPostReq, params WorkspaceWorkspacesWorkspaceIdProjectsPostParams) (*Project, error)
+	// WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete implements DELETE /workspace/workspaces/{workspaceId}/projects/{projectId} operation.
 	//
 	// Delete project.
 	//
-	// DELETE /workspace/{workspaceId}/projects/{projectId}
-	WorkspaceWorkspaceIdProjectsProjectIdDelete(ctx context.Context, params WorkspaceWorkspaceIdProjectsProjectIdDeleteParams) error
-	// WorkspaceWorkspaceIdProjectsProjectIdGet implements GET /workspace/{workspaceId}/projects/{projectId} operation.
-	//
-	// Get project.
-	//
-	// GET /workspace/{workspaceId}/projects/{projectId}
-	WorkspaceWorkspaceIdProjectsProjectIdGet(ctx context.Context, params WorkspaceWorkspaceIdProjectsProjectIdGetParams) (*Project, error)
-	// WorkspaceWorkspaceIdProjectsProjectIdPut implements PUT /workspace/{workspaceId}/projects/{projectId} operation.
+	// DELETE /workspace/workspaces/{workspaceId}/projects/{projectId}
+	WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete(ctx context.Context, params WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams) error
+	// WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut implements PUT /workspace/workspaces/{workspaceId}/projects/{projectId} operation.
 	//
 	// Update project.
 	//
-	// PUT /workspace/{workspaceId}/projects/{projectId}
-	WorkspaceWorkspaceIdProjectsProjectIdPut(ctx context.Context, req *WorkspaceWorkspaceIdProjectsProjectIdPutReq, params WorkspaceWorkspaceIdProjectsProjectIdPutParams) (*Project, error)
+	// PUT /workspace/workspaces/{workspaceId}/projects/{projectId}
+	WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut(ctx context.Context, req *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq, params WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams) (*Project, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

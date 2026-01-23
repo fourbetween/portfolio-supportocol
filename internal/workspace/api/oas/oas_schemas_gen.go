@@ -142,33 +142,33 @@ func (s *Project) SetCreatedAt(val time.Time) {
 
 type ProjectName string
 
-type WorkspaceWorkspaceIdProjectsPostReq struct {
+type WorkspaceWorkspacesWorkspaceIdProjectsPostReq struct {
 	Name ProjectName `json:"name"`
 }
 
 // GetName returns the value of Name.
-func (s *WorkspaceWorkspaceIdProjectsPostReq) GetName() ProjectName {
+func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) GetName() ProjectName {
 	return s.Name
 }
 
 // SetName sets the value of Name.
-func (s *WorkspaceWorkspaceIdProjectsPostReq) SetName(val ProjectName) {
+func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) SetName(val ProjectName) {
 	s.Name = val
 }
 
-// WorkspaceWorkspaceIdProjectsProjectIdDeleteNoContent is response for WorkspaceWorkspaceIdProjectsProjectIdDelete operation.
-type WorkspaceWorkspaceIdProjectsProjectIdDeleteNoContent struct{}
+// WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteNoContent is response for WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete operation.
+type WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteNoContent struct{}
 
-type WorkspaceWorkspaceIdProjectsProjectIdPutReq struct {
+type WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq struct {
 	Name ProjectName `json:"name"`
 }
 
 // GetName returns the value of Name.
-func (s *WorkspaceWorkspaceIdProjectsProjectIdPutReq) GetName() ProjectName {
+func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) GetName() ProjectName {
 	return s.Name
 }
 
 // SetName sets the value of Name.
-func (s *WorkspaceWorkspaceIdProjectsProjectIdPutReq) SetName(val ProjectName) {
+func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) SetName(val ProjectName) {
 	s.Name = val
 }

@@ -5,19 +5,19 @@ export const paths = {
     home: "/",
   },
   learning: {
-    dashboard: "/learning/dashboard",
+    dashboard: "/learning/discussions",
   },
   dialogue: {
     search: "/dialogue/search",
-    // /dialogue/:id にすると /learning/dashboard への遷移時に、
-    // :id として dashboard が解釈されてしまう問題があるため、 /dialogue/item/:id としている
-    item: "/dialogue/item/:id",
+    // /dialogue/:id にすると /learning/discussions への遷移時に、
+    // :id として discussions が解釈されてしまう問題があるため、 /dialogue/discussions/:id としている
+    item: "/dialogue/discussions/:id",
   },
 };
 
 export const buildPath = (
   path: string,
-  params?: Record<string, string>
+  params?: Record<string, string>,
 ): string => {
   if (params) {
     for (const [key, value] of Object.entries(params)) {
@@ -30,7 +30,7 @@ export const buildPath = (
 export const navigate = async (
   router: Router,
   path: string,
-  params?: Record<string, string>
+  params?: Record<string, string>,
 ) => {
   const buildedPath = buildPath(path, params);
   await router.goto(buildedPath);

@@ -27,7 +27,10 @@ func NewHandler(con *workspace.APIContainer) oas.Handler {
 	}
 }
 
-func (h *appHandler) WorkspaceWorkspaceIdProjectsGet(ctx context.Context, params oas.WorkspaceWorkspaceIdProjectsGetParams) ([]oas.Project, error) {
+func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsGet(
+	ctx context.Context,
+	params oas.WorkspaceWorkspacesWorkspaceIdProjectsGetParams,
+) ([]oas.Project, error) {
 	uid := httpctx.GetUserID(ctx)
 
 	projects, err := h.con.ListProjects.Execute(ctx, usecase.ListProjectsInput{
@@ -46,7 +49,11 @@ func (h *appHandler) WorkspaceWorkspaceIdProjectsGet(ctx context.Context, params
 	return res, nil
 }
 
-func (h *appHandler) WorkspaceWorkspaceIdProjectsPost(ctx context.Context, req *oas.WorkspaceWorkspaceIdProjectsPostReq, params oas.WorkspaceWorkspaceIdProjectsPostParams) (*oas.Project, error) {
+func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsPost(
+	ctx context.Context,
+	req *oas.WorkspaceWorkspacesWorkspaceIdProjectsPostReq,
+	params oas.WorkspaceWorkspacesWorkspaceIdProjectsPostParams,
+) (*oas.Project, error) {
 	uid := httpctx.GetUserID(ctx)
 
 	project, err := h.con.CreateProject.Execute(ctx, usecase.CreateProjectInput{
@@ -62,23 +69,11 @@ func (h *appHandler) WorkspaceWorkspaceIdProjectsPost(ctx context.Context, req *
 	return &res, nil
 }
 
-func (h *appHandler) WorkspaceWorkspaceIdProjectsProjectIdGet(ctx context.Context, params oas.WorkspaceWorkspaceIdProjectsProjectIdGetParams) (*oas.Project, error) {
-	uid := httpctx.GetUserID(ctx)
-
-	project, err := h.con.GetProject.Execute(ctx, usecase.GetProjectInput{
-		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
-		ProjectID:   uuid.UUID(params.ProjectId).String(),
-		UserID:      uid,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	res := h.toOasProject(project)
-	return &res, nil
-}
-
-func (h *appHandler) WorkspaceWorkspaceIdProjectsProjectIdPut(ctx context.Context, req *oas.WorkspaceWorkspaceIdProjectsProjectIdPutReq, params oas.WorkspaceWorkspaceIdProjectsProjectIdPutParams) (*oas.Project, error) {
+func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut(
+	ctx context.Context,
+	req *oas.WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq,
+	params oas.WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams,
+) (*oas.Project, error) {
 	uid := httpctx.GetUserID(ctx)
 
 	project, err := h.con.UpdateProject.Execute(ctx, usecase.UpdateProjectInput{
@@ -95,7 +90,10 @@ func (h *appHandler) WorkspaceWorkspaceIdProjectsProjectIdPut(ctx context.Contex
 	return &res, nil
 }
 
-func (h *appHandler) WorkspaceWorkspaceIdProjectsProjectIdDelete(ctx context.Context, params oas.WorkspaceWorkspaceIdProjectsProjectIdDeleteParams) error {
+func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete(
+	ctx context.Context,
+	params oas.WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams,
+) error {
 	uid := httpctx.GetUserID(ctx)
 
 	return h.con.DeleteProject.Execute(ctx, usecase.DeleteProjectInput{

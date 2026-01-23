@@ -28,12 +28,12 @@ func (c *codeRecorder) Unwrap() http.ResponseWriter {
 
 func recordError(string, error) {}
 
-// handleWorkspaceWorkspaceIdProjectsGetRequest handles GET /workspace/{workspaceId}/projects operation.
+// handleWorkspaceWorkspacesWorkspaceIdProjectsGetRequest handles GET /workspace/workspaces/{workspaceId}/projects operation.
 //
 // Get projects.
 //
-// GET /workspace/{workspaceId}/projects
-func (s *Server) handleWorkspaceWorkspaceIdProjectsGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /workspace/workspaces/{workspaceId}/projects
+func (s *Server) handleWorkspaceWorkspacesWorkspaceIdProjectsGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -41,7 +41,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsGetRequest(args [1]string, ar
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: WorkspaceWorkspaceIdProjectsGetOperation,
+			Name: WorkspaceWorkspacesWorkspaceIdProjectsGetOperation,
 			ID:   "",
 		}
 	)
@@ -49,7 +49,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsGetRequest(args [1]string, ar
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, WorkspaceWorkspaceIdProjectsGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, WorkspaceWorkspacesWorkspaceIdProjectsGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -91,7 +91,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsGetRequest(args [1]string, ar
 			return
 		}
 	}
-	params, err := decodeWorkspaceWorkspaceIdProjectsGetParams(args, argsEscaped, r)
+	params, err := decodeWorkspaceWorkspacesWorkspaceIdProjectsGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -108,7 +108,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsGetRequest(args [1]string, ar
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    WorkspaceWorkspaceIdProjectsGetOperation,
+			OperationName:    WorkspaceWorkspacesWorkspaceIdProjectsGetOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -124,7 +124,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsGetRequest(args [1]string, ar
 
 		type (
 			Request  = struct{}
-			Params   = WorkspaceWorkspaceIdProjectsGetParams
+			Params   = WorkspaceWorkspacesWorkspaceIdProjectsGetParams
 			Response = []Project
 		)
 		response, err = middleware.HookMiddleware[
@@ -134,14 +134,14 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsGetRequest(args [1]string, ar
 		](
 			m,
 			mreq,
-			unpackWorkspaceWorkspaceIdProjectsGetParams,
+			unpackWorkspaceWorkspacesWorkspaceIdProjectsGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.WorkspaceWorkspaceIdProjectsGet(ctx, params)
+				response, err = s.h.WorkspaceWorkspacesWorkspaceIdProjectsGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.WorkspaceWorkspaceIdProjectsGet(ctx, params)
+		response, err = s.h.WorkspaceWorkspacesWorkspaceIdProjectsGet(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -160,7 +160,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsGetRequest(args [1]string, ar
 		return
 	}
 
-	if err := encodeWorkspaceWorkspaceIdProjectsGetResponse(response, w); err != nil {
+	if err := encodeWorkspaceWorkspacesWorkspaceIdProjectsGetResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -169,12 +169,12 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsGetRequest(args [1]string, ar
 	}
 }
 
-// handleWorkspaceWorkspaceIdProjectsPostRequest handles POST /workspace/{workspaceId}/projects operation.
+// handleWorkspaceWorkspacesWorkspaceIdProjectsPostRequest handles POST /workspace/workspaces/{workspaceId}/projects operation.
 //
 // Create project.
 //
-// POST /workspace/{workspaceId}/projects
-func (s *Server) handleWorkspaceWorkspaceIdProjectsPostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /workspace/workspaces/{workspaceId}/projects
+func (s *Server) handleWorkspaceWorkspacesWorkspaceIdProjectsPostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -182,7 +182,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsPostRequest(args [1]string, a
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: WorkspaceWorkspaceIdProjectsPostOperation,
+			Name: WorkspaceWorkspacesWorkspaceIdProjectsPostOperation,
 			ID:   "",
 		}
 	)
@@ -190,7 +190,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsPostRequest(args [1]string, a
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, WorkspaceWorkspaceIdProjectsPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, WorkspaceWorkspacesWorkspaceIdProjectsPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -232,7 +232,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsPostRequest(args [1]string, a
 			return
 		}
 	}
-	params, err := decodeWorkspaceWorkspaceIdProjectsPostParams(args, argsEscaped, r)
+	params, err := decodeWorkspaceWorkspacesWorkspaceIdProjectsPostParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -244,7 +244,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsPostRequest(args [1]string, a
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeWorkspaceWorkspaceIdProjectsPostRequest(r)
+	request, rawBody, close, err := s.decodeWorkspaceWorkspacesWorkspaceIdProjectsPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -264,7 +264,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsPostRequest(args [1]string, a
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    WorkspaceWorkspaceIdProjectsPostOperation,
+			OperationName:    WorkspaceWorkspacesWorkspaceIdProjectsPostOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -279,8 +279,8 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsPostRequest(args [1]string, a
 		}
 
 		type (
-			Request  = *WorkspaceWorkspaceIdProjectsPostReq
-			Params   = WorkspaceWorkspaceIdProjectsPostParams
+			Request  = *WorkspaceWorkspacesWorkspaceIdProjectsPostReq
+			Params   = WorkspaceWorkspacesWorkspaceIdProjectsPostParams
 			Response = *Project
 		)
 		response, err = middleware.HookMiddleware[
@@ -290,14 +290,14 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsPostRequest(args [1]string, a
 		](
 			m,
 			mreq,
-			unpackWorkspaceWorkspaceIdProjectsPostParams,
+			unpackWorkspaceWorkspacesWorkspaceIdProjectsPostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.WorkspaceWorkspaceIdProjectsPost(ctx, request, params)
+				response, err = s.h.WorkspaceWorkspacesWorkspaceIdProjectsPost(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.WorkspaceWorkspaceIdProjectsPost(ctx, request, params)
+		response, err = s.h.WorkspaceWorkspacesWorkspaceIdProjectsPost(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -316,7 +316,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsPostRequest(args [1]string, a
 		return
 	}
 
-	if err := encodeWorkspaceWorkspaceIdProjectsPostResponse(response, w); err != nil {
+	if err := encodeWorkspaceWorkspacesWorkspaceIdProjectsPostResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -325,12 +325,12 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsPostRequest(args [1]string, a
 	}
 }
 
-// handleWorkspaceWorkspaceIdProjectsProjectIdDeleteRequest handles DELETE /workspace/{workspaceId}/projects/{projectId} operation.
+// handleWorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteRequest handles DELETE /workspace/workspaces/{workspaceId}/projects/{projectId} operation.
 //
 // Delete project.
 //
-// DELETE /workspace/{workspaceId}/projects/{projectId}
-func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdDeleteRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// DELETE /workspace/workspaces/{workspaceId}/projects/{projectId}
+func (s *Server) handleWorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -338,7 +338,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdDeleteRequest(args [
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: WorkspaceWorkspaceIdProjectsProjectIdDeleteOperation,
+			Name: WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteOperation,
 			ID:   "",
 		}
 	)
@@ -346,7 +346,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdDeleteRequest(args [
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, WorkspaceWorkspaceIdProjectsProjectIdDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -388,7 +388,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdDeleteRequest(args [
 			return
 		}
 	}
-	params, err := decodeWorkspaceWorkspaceIdProjectsProjectIdDeleteParams(args, argsEscaped, r)
+	params, err := decodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -401,11 +401,11 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdDeleteRequest(args [
 
 	var rawBody []byte
 
-	var response *WorkspaceWorkspaceIdProjectsProjectIdDeleteNoContent
+	var response *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    WorkspaceWorkspaceIdProjectsProjectIdDeleteOperation,
+			OperationName:    WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -425,8 +425,8 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdDeleteRequest(args [
 
 		type (
 			Request  = struct{}
-			Params   = WorkspaceWorkspaceIdProjectsProjectIdDeleteParams
-			Response = *WorkspaceWorkspaceIdProjectsProjectIdDeleteNoContent
+			Params   = WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams
+			Response = *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -435,14 +435,14 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdDeleteRequest(args [
 		](
 			m,
 			mreq,
-			unpackWorkspaceWorkspaceIdProjectsProjectIdDeleteParams,
+			unpackWorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.WorkspaceWorkspaceIdProjectsProjectIdDelete(ctx, params)
+				err = s.h.WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.WorkspaceWorkspaceIdProjectsProjectIdDelete(ctx, params)
+		err = s.h.WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -461,7 +461,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdDeleteRequest(args [
 		return
 	}
 
-	if err := encodeWorkspaceWorkspaceIdProjectsProjectIdDeleteResponse(response, w); err != nil {
+	if err := encodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -470,157 +470,12 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdDeleteRequest(args [
 	}
 }
 
-// handleWorkspaceWorkspaceIdProjectsProjectIdGetRequest handles GET /workspace/{workspaceId}/projects/{projectId} operation.
-//
-// Get project.
-//
-// GET /workspace/{workspaceId}/projects/{projectId}
-func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdGetRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
-	statusWriter := &codeRecorder{ResponseWriter: w}
-	w = statusWriter
-	ctx := r.Context()
-
-	var (
-		err          error
-		opErrContext = ogenerrors.OperationContext{
-			Name: WorkspaceWorkspaceIdProjectsProjectIdGetOperation,
-			ID:   "",
-		}
-	)
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			sctx, ok, err := s.securityCookieAuth(ctx, WorkspaceWorkspaceIdProjectsProjectIdGetOperation, r)
-			if err != nil {
-				err = &ogenerrors.SecurityError{
-					OperationContext: opErrContext,
-					Security:         "CookieAuth",
-					Err:              err,
-				}
-				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-					defer recordError("Security:CookieAuth", err)
-				}
-				return
-			}
-			if ok {
-				satisfied[0] |= 1 << 0
-				ctx = sctx
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			err = &ogenerrors.SecurityError{
-				OperationContext: opErrContext,
-				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
-			}
-			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
-				defer recordError("Security", err)
-			}
-			return
-		}
-	}
-	params, err := decodeWorkspaceWorkspaceIdProjectsProjectIdGetParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-
-	var rawBody []byte
-
-	var response *Project
-	if m := s.cfg.Middleware; m != nil {
-		mreq := middleware.Request{
-			Context:          ctx,
-			OperationName:    WorkspaceWorkspaceIdProjectsProjectIdGetOperation,
-			OperationSummary: "",
-			OperationID:      "",
-			Body:             nil,
-			RawBody:          rawBody,
-			Params: middleware.Parameters{
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
-				{
-					Name: "projectId",
-					In:   "path",
-				}: params.ProjectId,
-			},
-			Raw: r,
-		}
-
-		type (
-			Request  = struct{}
-			Params   = WorkspaceWorkspaceIdProjectsProjectIdGetParams
-			Response = *Project
-		)
-		response, err = middleware.HookMiddleware[
-			Request,
-			Params,
-			Response,
-		](
-			m,
-			mreq,
-			unpackWorkspaceWorkspaceIdProjectsProjectIdGetParams,
-			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.WorkspaceWorkspaceIdProjectsProjectIdGet(ctx, params)
-				return response, err
-			},
-		)
-	} else {
-		response, err = s.h.WorkspaceWorkspaceIdProjectsProjectIdGet(ctx, params)
-	}
-	if err != nil {
-		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
-			if err := encodeErrorResponse(errRes, w); err != nil {
-				defer recordError("Internal", err)
-			}
-			return
-		}
-		if errors.Is(err, ht.ErrNotImplemented) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-			return
-		}
-		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
-			defer recordError("Internal", err)
-		}
-		return
-	}
-
-	if err := encodeWorkspaceWorkspaceIdProjectsProjectIdGetResponse(response, w); err != nil {
-		defer recordError("EncodeResponse", err)
-		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-		}
-		return
-	}
-}
-
-// handleWorkspaceWorkspaceIdProjectsProjectIdPutRequest handles PUT /workspace/{workspaceId}/projects/{projectId} operation.
+// handleWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutRequest handles PUT /workspace/workspaces/{workspaceId}/projects/{projectId} operation.
 //
 // Update project.
 //
-// PUT /workspace/{workspaceId}/projects/{projectId}
-func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdPutRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// PUT /workspace/workspaces/{workspaceId}/projects/{projectId}
+func (s *Server) handleWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -628,7 +483,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdPutRequest(args [2]s
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: WorkspaceWorkspaceIdProjectsProjectIdPutOperation,
+			Name: WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutOperation,
 			ID:   "",
 		}
 	)
@@ -636,7 +491,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdPutRequest(args [2]s
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, WorkspaceWorkspaceIdProjectsProjectIdPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -678,7 +533,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdPutRequest(args [2]s
 			return
 		}
 	}
-	params, err := decodeWorkspaceWorkspaceIdProjectsProjectIdPutParams(args, argsEscaped, r)
+	params, err := decodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -690,7 +545,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdPutRequest(args [2]s
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeWorkspaceWorkspaceIdProjectsProjectIdPutRequest(r)
+	request, rawBody, close, err := s.decodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -710,7 +565,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdPutRequest(args [2]s
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    WorkspaceWorkspaceIdProjectsProjectIdPutOperation,
+			OperationName:    WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -729,8 +584,8 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdPutRequest(args [2]s
 		}
 
 		type (
-			Request  = *WorkspaceWorkspaceIdProjectsProjectIdPutReq
-			Params   = WorkspaceWorkspaceIdProjectsProjectIdPutParams
+			Request  = *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq
+			Params   = WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams
 			Response = *Project
 		)
 		response, err = middleware.HookMiddleware[
@@ -740,14 +595,14 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdPutRequest(args [2]s
 		](
 			m,
 			mreq,
-			unpackWorkspaceWorkspaceIdProjectsProjectIdPutParams,
+			unpackWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.WorkspaceWorkspaceIdProjectsProjectIdPut(ctx, request, params)
+				response, err = s.h.WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.WorkspaceWorkspaceIdProjectsProjectIdPut(ctx, request, params)
+		response, err = s.h.WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -766,7 +621,7 @@ func (s *Server) handleWorkspaceWorkspaceIdProjectsProjectIdPutRequest(args [2]s
 		return
 	}
 
-	if err := encodeWorkspaceWorkspaceIdProjectsProjectIdPutResponse(response, w); err != nil {
+	if err := encodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

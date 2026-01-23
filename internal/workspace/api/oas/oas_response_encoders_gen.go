@@ -10,7 +10,7 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeWorkspaceWorkspaceIdProjectsGetResponse(response []Project, w http.ResponseWriter) error {
+func encodeWorkspaceWorkspacesWorkspaceIdProjectsGetResponse(response []Project, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -27,7 +27,7 @@ func encodeWorkspaceWorkspaceIdProjectsGetResponse(response []Project, w http.Re
 	return nil
 }
 
-func encodeWorkspaceWorkspaceIdProjectsPostResponse(response *Project, w http.ResponseWriter) error {
+func encodeWorkspaceWorkspacesWorkspaceIdProjectsPostResponse(response *Project, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(201)
 
@@ -40,26 +40,13 @@ func encodeWorkspaceWorkspaceIdProjectsPostResponse(response *Project, w http.Re
 	return nil
 }
 
-func encodeWorkspaceWorkspaceIdProjectsProjectIdDeleteResponse(response *WorkspaceWorkspaceIdProjectsProjectIdDeleteNoContent, w http.ResponseWriter) error {
+func encodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteResponse(response *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
 
 	return nil
 }
 
-func encodeWorkspaceWorkspaceIdProjectsProjectIdGetResponse(response *Project, w http.ResponseWriter) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
-
-	e := new(jx.Encoder)
-	response.Encode(e)
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
-
-	return nil
-}
-
-func encodeWorkspaceWorkspaceIdProjectsProjectIdPutResponse(response *Project, w http.ResponseWriter) error {
+func encodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutResponse(response *Project, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 

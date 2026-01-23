@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/workspace/{workspaceId}/projects": {
+    "/workspace/workspaces/{workspaceId}/projects": {
         parameters: {
             query?: never;
             header?: never;
@@ -88,46 +88,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/workspace/{workspaceId}/projects/{projectId}": {
+    "/workspace/workspaces/{workspaceId}/projects/{projectId}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** @description get project */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    workspaceId: components["schemas"]["Id"];
-                    projectId: components["schemas"]["Id"];
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description success response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Project"];
-                    };
-                };
-                /** @description default error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Error"];
-                    };
-                };
-            };
-        };
+        get?: never;
         /** @description update project */
         put: {
             parameters: {

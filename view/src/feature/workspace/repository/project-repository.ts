@@ -4,7 +4,7 @@ import type { Project } from "../model/project";
 export class ProjectRepository {
   async list(workspaceId: string): Promise<Project[]> {
     const { data, error } = await client.GET(
-      "/workspace/{workspaceId}/projects",
+      "/workspace/workspaces/{workspaceId}/projects",
       {
         params: { path: { workspaceId } },
       },

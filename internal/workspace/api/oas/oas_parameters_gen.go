@@ -15,12 +15,12 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// WorkspaceWorkspaceIdProjectsGetParams is parameters of GET /workspace/{workspaceId}/projects operation.
-type WorkspaceWorkspaceIdProjectsGetParams struct {
+// WorkspaceWorkspacesWorkspaceIdProjectsGetParams is parameters of GET /workspace/workspaces/{workspaceId}/projects operation.
+type WorkspaceWorkspacesWorkspaceIdProjectsGetParams struct {
 	WorkspaceId ID
 }
 
-func unpackWorkspaceWorkspaceIdProjectsGetParams(packed middleware.Parameters) (params WorkspaceWorkspaceIdProjectsGetParams) {
+func unpackWorkspaceWorkspacesWorkspaceIdProjectsGetParams(packed middleware.Parameters) (params WorkspaceWorkspacesWorkspaceIdProjectsGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "workspaceId",
@@ -31,7 +31,7 @@ func unpackWorkspaceWorkspaceIdProjectsGetParams(packed middleware.Parameters) (
 	return params
 }
 
-func decodeWorkspaceWorkspaceIdProjectsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params WorkspaceWorkspaceIdProjectsGetParams, _ error) {
+func decodeWorkspaceWorkspacesWorkspaceIdProjectsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params WorkspaceWorkspacesWorkspaceIdProjectsGetParams, _ error) {
 	// Decode path: workspaceId.
 	if err := func() error {
 		param := args[0]
@@ -87,12 +87,12 @@ func decodeWorkspaceWorkspaceIdProjectsGetParams(args [1]string, argsEscaped boo
 	return params, nil
 }
 
-// WorkspaceWorkspaceIdProjectsPostParams is parameters of POST /workspace/{workspaceId}/projects operation.
-type WorkspaceWorkspaceIdProjectsPostParams struct {
+// WorkspaceWorkspacesWorkspaceIdProjectsPostParams is parameters of POST /workspace/workspaces/{workspaceId}/projects operation.
+type WorkspaceWorkspacesWorkspaceIdProjectsPostParams struct {
 	WorkspaceId ID
 }
 
-func unpackWorkspaceWorkspaceIdProjectsPostParams(packed middleware.Parameters) (params WorkspaceWorkspaceIdProjectsPostParams) {
+func unpackWorkspaceWorkspacesWorkspaceIdProjectsPostParams(packed middleware.Parameters) (params WorkspaceWorkspacesWorkspaceIdProjectsPostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "workspaceId",
@@ -103,7 +103,7 @@ func unpackWorkspaceWorkspaceIdProjectsPostParams(packed middleware.Parameters) 
 	return params
 }
 
-func decodeWorkspaceWorkspaceIdProjectsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params WorkspaceWorkspaceIdProjectsPostParams, _ error) {
+func decodeWorkspaceWorkspacesWorkspaceIdProjectsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params WorkspaceWorkspacesWorkspaceIdProjectsPostParams, _ error) {
 	// Decode path: workspaceId.
 	if err := func() error {
 		param := args[0]
@@ -159,13 +159,13 @@ func decodeWorkspaceWorkspaceIdProjectsPostParams(args [1]string, argsEscaped bo
 	return params, nil
 }
 
-// WorkspaceWorkspaceIdProjectsProjectIdDeleteParams is parameters of DELETE /workspace/{workspaceId}/projects/{projectId} operation.
-type WorkspaceWorkspaceIdProjectsProjectIdDeleteParams struct {
+// WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams is parameters of DELETE /workspace/workspaces/{workspaceId}/projects/{projectId} operation.
+type WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams struct {
 	WorkspaceId ID
 	ProjectId   ID
 }
 
-func unpackWorkspaceWorkspaceIdProjectsProjectIdDeleteParams(packed middleware.Parameters) (params WorkspaceWorkspaceIdProjectsProjectIdDeleteParams) {
+func unpackWorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams(packed middleware.Parameters) (params WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "workspaceId",
@@ -183,7 +183,7 @@ func unpackWorkspaceWorkspaceIdProjectsProjectIdDeleteParams(packed middleware.P
 	return params
 }
 
-func decodeWorkspaceWorkspaceIdProjectsProjectIdDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params WorkspaceWorkspaceIdProjectsProjectIdDeleteParams, _ error) {
+func decodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams, _ error) {
 	// Decode path: workspaceId.
 	if err := func() error {
 		param := args[0]
@@ -291,13 +291,13 @@ func decodeWorkspaceWorkspaceIdProjectsProjectIdDeleteParams(args [2]string, arg
 	return params, nil
 }
 
-// WorkspaceWorkspaceIdProjectsProjectIdGetParams is parameters of GET /workspace/{workspaceId}/projects/{projectId} operation.
-type WorkspaceWorkspaceIdProjectsProjectIdGetParams struct {
+// WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams is parameters of PUT /workspace/workspaces/{workspaceId}/projects/{projectId} operation.
+type WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams struct {
 	WorkspaceId ID
 	ProjectId   ID
 }
 
-func unpackWorkspaceWorkspaceIdProjectsProjectIdGetParams(packed middleware.Parameters) (params WorkspaceWorkspaceIdProjectsProjectIdGetParams) {
+func unpackWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams(packed middleware.Parameters) (params WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "workspaceId",
@@ -315,139 +315,7 @@ func unpackWorkspaceWorkspaceIdProjectsProjectIdGetParams(packed middleware.Para
 	return params
 }
 
-func decodeWorkspaceWorkspaceIdProjectsProjectIdGetParams(args [2]string, argsEscaped bool, r *http.Request) (params WorkspaceWorkspaceIdProjectsProjectIdGetParams, _ error) {
-	// Decode path: workspaceId.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "workspaceId",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				var paramsDotWorkspaceIdVal uuid.UUID
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToUUID(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotWorkspaceIdVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "workspaceId",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	// Decode path: projectId.
-	if err := func() error {
-		param := args[1]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[1])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "projectId",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				var paramsDotProjectIdVal uuid.UUID
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToUUID(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotProjectIdVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.ProjectId = ID(paramsDotProjectIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "projectId",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// WorkspaceWorkspaceIdProjectsProjectIdPutParams is parameters of PUT /workspace/{workspaceId}/projects/{projectId} operation.
-type WorkspaceWorkspaceIdProjectsProjectIdPutParams struct {
-	WorkspaceId ID
-	ProjectId   ID
-}
-
-func unpackWorkspaceWorkspaceIdProjectsProjectIdPutParams(packed middleware.Parameters) (params WorkspaceWorkspaceIdProjectsProjectIdPutParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "workspaceId",
-			In:   "path",
-		}
-		params.WorkspaceId = packed[key].(ID)
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "projectId",
-			In:   "path",
-		}
-		params.ProjectId = packed[key].(ID)
-	}
-	return params
-}
-
-func decodeWorkspaceWorkspaceIdProjectsProjectIdPutParams(args [2]string, argsEscaped bool, r *http.Request) (params WorkspaceWorkspaceIdProjectsProjectIdPutParams, _ error) {
+func decodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams(args [2]string, argsEscaped bool, r *http.Request) (params WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams, _ error) {
 	// Decode path: workspaceId.
 	if err := func() error {
 		param := args[0]
