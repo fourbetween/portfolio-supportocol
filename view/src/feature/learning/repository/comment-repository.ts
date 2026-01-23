@@ -1,19 +1,23 @@
 import { client } from "../api/client";
-import type { Comment } from "../model/comment";
+import type { Comment, CommentStatus } from "../model/comment";
 
 export class CommentRepository {
   private _cache = new Map<string, Comment[]>();
 
-  async list(discussionId: string, since?: string): Promise<Comment[]> {
+  async list(
+    workspaceId: string,
+    discussionId: string,
+    since?: string,
+  ): Promise<Comment[]> {
     if (!since && this._cache.has(discussionId)) {
       return this._cache.get(discussionId)!;
     }
 
     const { data, error } = await client.GET(
-      "/v1/learning/discussions/{discussionId}/comments",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
           query: { since },
         },
       },
@@ -36,6 +40,7 @@ export class CommentRepository {
   }
 
   async create(
+    workspaceId: string,
     discussionId: string,
     body: {
       parentCommentId: string | null;
@@ -44,10 +49,10 @@ export class CommentRepository {
     },
   ): Promise<Comment> {
     const { data, error } = await client.POST(
-      "/v1/learning/discussions/{discussionId}/comments",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
         },
         body,
       },
@@ -63,6 +68,7 @@ export class CommentRepository {
   }
 
   async update(
+    workspaceId: string,
     discussionId: string,
     commentId: string,
     body: {
@@ -71,10 +77,10 @@ export class CommentRepository {
     },
   ): Promise<Comment> {
     const { data, error } = await client.PUT(
-      "/v1/learning/discussions/{discussionId}/comments/{commentId}",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}",
       {
         params: {
-          path: { discussionId, commentId },
+          path: { workspaceId, discussionId, commentId },
         },
         body,
       },
@@ -92,12 +98,16 @@ export class CommentRepository {
     return data;
   }
 
-  async delete(discussionId: string, commentId: string): Promise<void> {
+  async delete(
+    workspaceId: string,
+    discussionId: string,
+    commentId: string,
+  ): Promise<void> {
     const { error } = await client.DELETE(
-      "/v1/learning/discussions/{discussionId}/comments/{commentId}",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}",
       {
         params: {
-          path: { discussionId, commentId },
+          path: { workspaceId, discussionId, commentId },
         },
       },
     );
@@ -113,6 +123,7 @@ export class CommentRepository {
   }
 
   async generate(
+    workspaceId: string,
     discussionId: string,
     body: {
       parentCommentId: string | null;
@@ -120,10 +131,10 @@ export class CommentRepository {
     },
   ): Promise<void> {
     const { error } = await client.POST(
-      "/v1/learning/discussions/{discussionId}/comments/generate",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
         },
         body,
       },
@@ -131,12 +142,16 @@ export class CommentRepository {
     if (error) throw new Error(error.message);
   }
 
-  async archive(discussionId: string, commentId: string): Promise<Comment> {
+  async archive(
+    workspaceId: string,
+    discussionId: string,
+    commentId: string,
+  ): Promise<Comment> {
     const { data, error } = await client.POST(
-      "/v1/learning/discussions/{discussionId}/comments/{commentId}/archive",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive",
       {
         params: {
-          path: { discussionId, commentId },
+          path: { workspaceId, discussionId, commentId },
         },
       },
     );
@@ -153,12 +168,16 @@ export class CommentRepository {
     return data;
   }
 
-  async unarchive(discussionId: string, commentId: string): Promise<Comment> {
+  async unarchive(
+    workspaceId: string,
+    discussionId: string,
+    commentId: string,
+  ): Promise<Comment> {
     const { data, error } = await client.DELETE(
-      "/v1/learning/discussions/{discussionId}/comments/{commentId}/archive",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive",
       {
         params: {
-          path: { discussionId, commentId },
+          path: { workspaceId, discussionId, commentId },
         },
       },
     );
@@ -176,15 +195,16 @@ export class CommentRepository {
   }
 
   async updateStatus(
+    workspaceId: string,
     discussionId: string,
     commentId: string,
-    status: "active" | "proposed",
+    status: CommentStatus,
   ): Promise<Comment> {
     const { data, error } = await client.PUT(
-      "/v1/learning/discussions/{discussionId}/comments/{commentId}/status",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/status",
       {
         params: {
-          path: { discussionId, commentId },
+          path: { workspaceId, discussionId, commentId },
         },
         body: { status },
       },

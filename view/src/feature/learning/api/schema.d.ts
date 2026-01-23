@@ -4,11 +4,13 @@
  */
 
 export interface paths {
-    "/v1/learning/discussions": {
+    "/v1/learning/workspaces/{workspaceId}/discussions": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["schemas"]["Id"];
+            };
             cookie?: never;
         };
         /** @description get discussions */
@@ -18,7 +20,9 @@ export interface paths {
                     archived?: boolean;
                 };
                 header?: never;
-                path?: never;
+                path: {
+                    workspaceId: components["schemas"]["Id"];
+                };
                 cookie?: never;
             };
             requestBody?: never;
@@ -49,7 +53,9 @@ export interface paths {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    workspaceId: components["schemas"]["Id"];
+                };
                 cookie?: never;
             };
             requestBody: {
@@ -87,11 +93,13 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/learning/discussions/{discussionId}": {
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["schemas"]["Id"];
+            };
             cookie?: never;
         };
         /** @description get discussion */
@@ -100,6 +108,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
@@ -132,6 +141,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
@@ -172,6 +182,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
@@ -201,11 +212,13 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/learning/discussions/{discussionId}/status": {
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/status": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["schemas"]["Id"];
+            };
             cookie?: never;
         };
         get?: never;
@@ -215,6 +228,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
@@ -255,11 +269,13 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/learning/discussions/{discussionId}/archive": {
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["schemas"]["Id"];
+            };
             cookie?: never;
         };
         get?: never;
@@ -270,6 +286,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
@@ -302,6 +319,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
@@ -333,11 +351,13 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/learning/discussions/{discussionId}/comments": {
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["schemas"]["Id"];
+            };
             cookie?: never;
         };
         /** @description get comments for a discussion */
@@ -348,6 +368,7 @@ export interface paths {
                 };
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
@@ -381,6 +402,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;
@@ -421,11 +443,13 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/learning/discussions/{discussionId}/comments/{commentId}": {
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["schemas"]["Id"];
+            };
             cookie?: never;
         };
         get?: never;
@@ -435,6 +459,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                     commentId: components["schemas"]["Id"];
                 };
@@ -476,6 +501,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                     commentId: components["schemas"]["Id"];
                 };
@@ -506,11 +532,13 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/learning/discussions/{discussionId}/comments/{commentId}/status": {
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/status": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["schemas"]["Id"];
+            };
             cookie?: never;
         };
         get?: never;
@@ -520,6 +548,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                     commentId: components["schemas"]["Id"];
                 };
@@ -560,11 +589,13 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/learning/discussions/{discussionId}/comments/{commentId}/archive": {
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["schemas"]["Id"];
+            };
             cookie?: never;
         };
         get?: never;
@@ -575,6 +606,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                     commentId: components["schemas"]["Id"];
                 };
@@ -608,6 +640,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                     commentId: components["schemas"]["Id"];
                 };
@@ -640,11 +673,13 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/learning/discussions/{discussionId}/comments/generate": {
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["schemas"]["Id"];
+            };
             cookie?: never;
         };
         get?: never;
@@ -655,6 +690,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
+                    workspaceId: components["schemas"]["Id"];
                     discussionId: components["schemas"]["Id"];
                 };
                 cookie?: never;

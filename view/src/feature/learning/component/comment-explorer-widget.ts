@@ -1,5 +1,8 @@
+import { consume } from "@lit/context";
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { userContext } from "../../../app/context/user";
+import type { User } from "../../../app/model/user";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { iconStyle } from "../../../shared/style/icon";
@@ -29,6 +32,9 @@ import "./comment-create-widget";
 
 @customElement("learning-comment-explorer-widget")
 export class LearningCommentExplorerWidget extends LitElement {
+  @consume({ context: userContext, subscribe: true })
+  private user?: User;
+
   @property({ type: String })
   discussionId?: string;
 
@@ -83,9 +89,11 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private async handleCommentUpdate(e: LearningCommentUpdateEvent) {
-    if (!this.discussionId) return;
+    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+    if (!this.discussionId || !workspaceId) return;
     try {
       const data = await commentRepository.update(
+        workspaceId,
         this.discussionId,
         e.commentId,
         { commentType: e.commentType, content: e.content },
@@ -99,11 +107,16 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private async handleCommentDelete(e: LearningCommentDeleteEvent) {
-    if (!this.discussionId) return;
+    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+    if (!this.discussionId || !workspaceId) return;
     if (!confirm("Are you sure you want to delete this comment?")) return;
 
     try {
-      await commentRepository.delete(this.discussionId, e.commentId);
+      await commentRepository.delete(
+        workspaceId,
+        this.discussionId,
+        e.commentId,
+      );
 
       showToast(this, "Comment deleted.", "success", 2000);
       this.dispatchEvent(new LearningCommentDeletedEvent(e.commentId));
@@ -113,9 +126,11 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private async handleCommentArchive(e: LearningCommentArchiveEvent) {
-    if (!this.discussionId) return;
+    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+    if (!this.discussionId || !workspaceId) return;
     try {
       const data = await commentRepository.archive(
+        workspaceId,
         this.discussionId,
         e.commentId,
       );
@@ -128,9 +143,11 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private async handleCommentUnarchive(e: LearningCommentUnarchiveEvent) {
-    if (!this.discussionId) return;
+    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+    if (!this.discussionId || !workspaceId) return;
     try {
       const data = await commentRepository.unarchive(
+        workspaceId,
         this.discussionId,
         e.commentId,
       );
@@ -143,9 +160,16 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private async handleCommentGenerate(e: LearningCommentGenerateEvent) {
-    if (!this.discussionId || !e.parentCommentId || !e.commentType) return;
+    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+    if (
+      !this.discussionId ||
+      !workspaceId ||
+      !e.parentCommentId ||
+      !e.commentType
+    )
+      return;
     try {
-      await commentRepository.generate(this.discussionId, {
+      await commentRepository.generate(workspaceId, this.discussionId, {
         parentCommentId: e.parentCommentId,
         commentType: e.commentType,
       });
@@ -160,13 +184,18 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private async handleCommentCreate(e: LearningCommentCreateEvent) {
-    if (!this.discussionId) return;
+    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+    if (!this.discussionId || !workspaceId) return;
     try {
-      const data = await commentRepository.create(this.discussionId, {
-        parentCommentId: e.parentCommentId,
-        commentType: e.commentType,
-        content: e.content,
-      });
+      const data = await commentRepository.create(
+        workspaceId,
+        this.discussionId,
+        {
+          parentCommentId: e.parentCommentId,
+          commentType: e.commentType,
+          content: e.content,
+        },
+      );
 
       showToast(this, "Comment created.", "success", 2000);
       if (data) {
@@ -178,11 +207,13 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private async handleAccept(e: LearningProposedCommentAcceptEvent) {
-    if (!this.discussionId) return;
+    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+    if (!this.discussionId || !workspaceId) return;
     const comment = e.comment;
 
     try {
       const data = await commentRepository.updateStatus(
+        workspaceId,
         this.discussionId,
         comment.id,
         "active",
@@ -196,10 +227,15 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private async handleReject(e: LearningProposedCommentRejectEvent) {
-    if (!this.discussionId) return;
+    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+    if (!this.discussionId || !workspaceId) return;
     const comment = e.comment;
     try {
-      await commentRepository.delete(this.discussionId, comment.id);
+      await commentRepository.delete(
+        workspaceId,
+        this.discussionId,
+        comment.id,
+      );
 
       showToast(this, "Comment deleted.", "success", 2000);
       this.dispatchEvent(new LearningCommentDeletedEvent(comment.id));

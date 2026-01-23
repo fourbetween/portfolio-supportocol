@@ -1423,14 +1423,14 @@ func (s *OptDialogueSettings) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Encode(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) encodeFields(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("commentType")
 		s.CommentType.Encode(e)
@@ -1441,15 +1441,15 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) encodeFields(
 	}
 }
 
-var jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq = [2]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq = [2]string{
 	0: "commentType",
 	1: "content",
 }
 
-// Decode decodes V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq from json.
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Decode(d *jx.Decoder) error {
+// Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq from json.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq to nil")
+		return errors.New("invalid: unable to decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -1480,7 +1480,7 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Decode(d *jx.
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq")
+		return errors.Wrap(err, "decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -1497,8 +1497,8 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Decode(d *jx.
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) {
-					name = jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) {
+					name = jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -1519,41 +1519,41 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Decode(d *jx.
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) MarshalJSON() ([]byte, error) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) UnmarshalJSON(data []byte) error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Encode(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) encodeFields(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("status")
 		s.Status.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq = [1]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq = [1]string{
 	0: "status",
 }
 
-// Decode decodes V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq from json.
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Decode(d *jx.Decoder) error {
+// Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq from json.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq to nil")
+		return errors.New("invalid: unable to decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -1574,7 +1574,7 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Decode(
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq")
+		return errors.Wrap(err, "decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -1591,8 +1591,8 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Decode(
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) {
-					name = jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) {
+					name = jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -1613,27 +1613,27 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Decode(
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) MarshalJSON() ([]byte, error) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) UnmarshalJSON(data []byte) error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Encode(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) encodeFields(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("parentCommentId")
 		s.ParentCommentId.Encode(e)
@@ -1644,15 +1644,15 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) encodeFields(
 	}
 }
 
-var jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsGeneratePostReq = [2]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq = [2]string{
 	0: "parentCommentId",
 	1: "commentType",
 }
 
-// Decode decodes V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq from json.
-func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Decode(d *jx.Decoder) error {
+// Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq from json.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq to nil")
+		return errors.New("invalid: unable to decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -1683,7 +1683,7 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Decode(d *jx.
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq")
+		return errors.Wrap(err, "decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -1700,8 +1700,8 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Decode(d *jx.
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) {
-					name = jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsGeneratePostReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) {
+					name = jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -1722,27 +1722,27 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Decode(d *jx.
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) MarshalJSON() ([]byte, error) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) UnmarshalJSON(data []byte) error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) Encode(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) encodeFields(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("parentCommentId")
 		s.ParentCommentId.Encode(e)
@@ -1757,16 +1757,16 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) encodeFields(e *jx.En
 	}
 }
 
-var jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsPostReq = [3]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq = [3]string{
 	0: "parentCommentId",
 	1: "commentType",
 	2: "content",
 }
 
-// Decode decodes V1LearningDiscussionsDiscussionIdCommentsPostReq from json.
-func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) Decode(d *jx.Decoder) error {
+// Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq from json.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1LearningDiscussionsDiscussionIdCommentsPostReq to nil")
+		return errors.New("invalid: unable to decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -1807,7 +1807,7 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) Decode(d *jx.Decoder)
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1LearningDiscussionsDiscussionIdCommentsPostReq")
+		return errors.Wrap(err, "decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -1824,8 +1824,8 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) Decode(d *jx.Decoder)
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsPostReq) {
-					name = jsonFieldsNameOfV1LearningDiscussionsDiscussionIdCommentsPostReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) {
+					name = jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -1846,27 +1846,27 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) Decode(d *jx.Decoder)
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) MarshalJSON() ([]byte, error) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) UnmarshalJSON(data []byte) error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdPutReq) Encode(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1LearningDiscussionsDiscussionIdPutReq) encodeFields(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("theme")
 		s.Theme.Encode(e)
@@ -1877,15 +1877,15 @@ func (s *V1LearningDiscussionsDiscussionIdPutReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfV1LearningDiscussionsDiscussionIdPutReq = [2]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq = [2]string{
 	0: "theme",
 	1: "conclusion",
 }
 
-// Decode decodes V1LearningDiscussionsDiscussionIdPutReq from json.
-func (s *V1LearningDiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
+// Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq from json.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1LearningDiscussionsDiscussionIdPutReq to nil")
+		return errors.New("invalid: unable to decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -1916,7 +1916,7 @@ func (s *V1LearningDiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1LearningDiscussionsDiscussionIdPutReq")
+		return errors.Wrap(err, "decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -1933,8 +1933,8 @@ func (s *V1LearningDiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1LearningDiscussionsDiscussionIdPutReq) {
-					name = jsonFieldsNameOfV1LearningDiscussionsDiscussionIdPutReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) {
+					name = jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -1955,27 +1955,27 @@ func (s *V1LearningDiscussionsDiscussionIdPutReq) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdPutReq) MarshalJSON() ([]byte, error) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LearningDiscussionsDiscussionIdPutReq) UnmarshalJSON(data []byte) error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) Encode(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) encodeFields(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("status")
 		s.Status.Encode(e)
@@ -1988,15 +1988,15 @@ func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) encodeFields(e *jx.Encod
 	}
 }
 
-var jsonFieldsNameOfV1LearningDiscussionsDiscussionIdStatusPutReq = [2]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq = [2]string{
 	0: "status",
 	1: "commentFrame",
 }
 
-// Decode decodes V1LearningDiscussionsDiscussionIdStatusPutReq from json.
-func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) Decode(d *jx.Decoder) error {
+// Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq from json.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1LearningDiscussionsDiscussionIdStatusPutReq to nil")
+		return errors.New("invalid: unable to decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -2027,7 +2027,7 @@ func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) Decode(d *jx.Decoder) er
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1LearningDiscussionsDiscussionIdStatusPutReq")
+		return errors.Wrap(err, "decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -2044,8 +2044,8 @@ func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) Decode(d *jx.Decoder) er
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1LearningDiscussionsDiscussionIdStatusPutReq) {
-					name = jsonFieldsNameOfV1LearningDiscussionsDiscussionIdStatusPutReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) {
+					name = jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -2066,27 +2066,27 @@ func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) Decode(d *jx.Decoder) er
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) MarshalJSON() ([]byte, error) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) UnmarshalJSON(data []byte) error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *V1LearningDiscussionsPostReq) Encode(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1LearningDiscussionsPostReq) encodeFields(e *jx.Encoder) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("theme")
 		s.Theme.Encode(e)
@@ -2097,15 +2097,15 @@ func (s *V1LearningDiscussionsPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfV1LearningDiscussionsPostReq = [2]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsPostReq = [2]string{
 	0: "theme",
 	1: "status",
 }
 
-// Decode decodes V1LearningDiscussionsPostReq from json.
-func (s *V1LearningDiscussionsPostReq) Decode(d *jx.Decoder) error {
+// Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsPostReq from json.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1LearningDiscussionsPostReq to nil")
+		return errors.New("invalid: unable to decode V1LearningWorkspacesWorkspaceIdDiscussionsPostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -2136,7 +2136,7 @@ func (s *V1LearningDiscussionsPostReq) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1LearningDiscussionsPostReq")
+		return errors.Wrap(err, "decode V1LearningWorkspacesWorkspaceIdDiscussionsPostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -2153,8 +2153,8 @@ func (s *V1LearningDiscussionsPostReq) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1LearningDiscussionsPostReq) {
-					name = jsonFieldsNameOfV1LearningDiscussionsPostReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsPostReq) {
+					name = jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsPostReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -2175,14 +2175,14 @@ func (s *V1LearningDiscussionsPostReq) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1LearningDiscussionsPostReq) MarshalJSON() ([]byte, error) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LearningDiscussionsPostReq) UnmarshalJSON(data []byte) error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

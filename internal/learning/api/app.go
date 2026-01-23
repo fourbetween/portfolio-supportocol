@@ -28,7 +28,7 @@ func NewHandler(con *learning.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
-func (h *appHandler) V1LearningDiscussionsGet(ctx context.Context, params oas.V1LearningDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params oas.V1LearningWorkspacesWorkspaceIdDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
 	items, err := h.con.ListDiscussions.Execute(ctx, httpctx.GetUserID(ctx), params.Archived.Or(false))
 	if err != nil {
 		return nil, err
@@ -41,9 +41,10 @@ func (h *appHandler) V1LearningDiscussionsGet(ctx context.Context, params oas.V1
 	return res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsPost(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsPost(
 	ctx context.Context,
-	req *oas.V1LearningDiscussionsPostReq,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsPostReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsPostParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.CreateDiscussion.Execute(ctx, usecase.CreateDiscussionInput{
 		Theme:     string(req.Theme),
@@ -58,9 +59,9 @@ func (h *appHandler) V1LearningDiscussionsPost(
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdGet(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(
 	ctx context.Context,
-	params oas.V1LearningDiscussionsDiscussionIdGetParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.GetDiscussion.Execute(ctx, usecase.GetDiscussionInput{
 		ID:        uuid.UUID(params.DiscussionId).String(),
@@ -74,10 +75,10 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdGet(
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdPut(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPut(
 	ctx context.Context,
-	req *oas.V1LearningDiscussionsDiscussionIdPutReq,
-	params oas.V1LearningDiscussionsDiscussionIdPutParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.UpdateDiscussion.Execute(ctx, usecase.UpdateDiscussionInput{
 		ID:         uuid.UUID(params.DiscussionId).String(),
@@ -93,9 +94,9 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdPut(
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdDelete(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDelete(
 	ctx context.Context,
-	params oas.V1LearningDiscussionsDiscussionIdDeleteParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteParams,
 ) error {
 	return h.con.DeleteDiscussion.Execute(ctx, usecase.DeleteDiscussionInput{
 		ID:        uuid.UUID(params.DiscussionId).String(),
@@ -103,10 +104,10 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdDelete(
 	})
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdStatusPut(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPut(
 	ctx context.Context,
-	req *oas.V1LearningDiscussionsDiscussionIdStatusPutReq,
-	params oas.V1LearningDiscussionsDiscussionIdStatusPutParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutParams,
 ) (*oas.Discussion, error) {
 	var commentFrame *domain.CommentFrame
 	if cf, ok := req.CommentFrame.Get(); ok {
@@ -142,9 +143,9 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdStatusPut(
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdArchivePost(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePost(
 	ctx context.Context,
-	params oas.V1LearningDiscussionsDiscussionIdArchivePostParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.ArchiveDiscussion.Execute(ctx, usecase.ArchiveDiscussionInput{
 		ID:        uuid.UUID(params.DiscussionId).String(),
@@ -158,9 +159,9 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdArchivePost(
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdArchiveDelete(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDelete(
 	ctx context.Context,
-	params oas.V1LearningDiscussionsDiscussionIdArchiveDeleteParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.UnarchiveDiscussion.Execute(ctx, usecase.UnarchiveDiscussionInput{
 		ID:        uuid.UUID(params.DiscussionId).String(),
@@ -174,9 +175,9 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdArchiveDelete(
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsGet(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet(
 	ctx context.Context,
-	params oas.V1LearningDiscussionsDiscussionIdCommentsGetParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams,
 ) ([]oas.Comment, error) {
 	var since *time.Time
 	if params.Since.Set {
@@ -199,10 +200,10 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsGet(
 	return res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsPost(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(
 	ctx context.Context,
-	req *oas.V1LearningDiscussionsDiscussionIdCommentsPostReq,
-	params oas.V1LearningDiscussionsDiscussionIdCommentsPostParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams,
 ) (*oas.Comment, error) {
 	var parentCommentID *string
 	if !req.ParentCommentId.Null {
@@ -225,10 +226,10 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsPost(
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdPut(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPut(
 	ctx context.Context,
-	req *oas.V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq,
-	params oas.V1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.UpdateComment.Execute(ctx, usecase.UpdateCommentInput{
 		ID:           uuid.UUID(params.CommentId).String(),
@@ -245,9 +246,9 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdPut(
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdDelete(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete(
 	ctx context.Context,
-	params oas.V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams,
 ) error {
 	return h.con.DeleteComment.Execute(ctx, usecase.DeleteCommentInput{
 		ID:           uuid.UUID(params.CommentId).String(),
@@ -256,10 +257,10 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdDelete(
 	})
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPut(
 	ctx context.Context,
-	req *oas.V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq,
-	params oas.V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.UpdateCommentStatus.Execute(ctx, usecase.UpdateCommentStatusInput{
 		ID:           uuid.UUID(params.CommentId).String(),
@@ -275,9 +276,9 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePost(
 	ctx context.Context,
-	params oas.V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.ArchiveComment.Execute(ctx, usecase.ArchiveCommentInput{
 		ID:           uuid.UUID(params.CommentId).String(),
@@ -292,9 +293,9 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePo
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(
 	ctx context.Context,
-	params oas.V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.UnarchiveComment.Execute(ctx, usecase.UnarchiveCommentInput{
 		ID:           uuid.UUID(params.CommentId).String(),
@@ -309,10 +310,10 @@ func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDe
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningDiscussionsDiscussionIdCommentsGeneratePost(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(
 	ctx context.Context,
-	req *oas.V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq,
-	params oas.V1LearningDiscussionsDiscussionIdCommentsGeneratePostParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams,
 ) error {
 	var parentCommentID *string
 	if !req.ParentCommentId.Null {

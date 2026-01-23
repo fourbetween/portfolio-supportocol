@@ -434,7 +434,7 @@ func (s *ErrorStatusCode) Validate() error {
 	return nil
 }
 
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -468,7 +468,7 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() er
 	return nil
 }
 
-func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Validate() error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -491,7 +491,7 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Validat
 	return nil
 }
 
-func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Validate() error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -514,7 +514,7 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Validate() er
 	return nil
 }
 
-func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) Validate() error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -548,7 +548,7 @@ func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) Validate() error {
 	return nil
 }
 
-func (s *V1LearningDiscussionsDiscussionIdPutReq) Validate() error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -582,7 +582,7 @@ func (s *V1LearningDiscussionsDiscussionIdPutReq) Validate() error {
 	return nil
 }
 
-func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) Validate() error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -623,7 +623,7 @@ func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) Validate() error {
 	return nil
 }
 
-func (s *V1LearningDiscussionsPostReq) Validate() error {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}

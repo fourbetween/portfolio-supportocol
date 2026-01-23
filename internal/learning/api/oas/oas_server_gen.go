@@ -8,102 +8,102 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// V1LearningDiscussionsDiscussionIdArchiveDelete implements DELETE /v1/learning/discussions/{discussionId}/archive operation.
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive operation.
 	//
 	// Unarchive discussion.
 	//
-	// DELETE /v1/learning/discussions/{discussionId}/archive
-	V1LearningDiscussionsDiscussionIdArchiveDelete(ctx context.Context, params V1LearningDiscussionsDiscussionIdArchiveDeleteParams) (*Discussion, error)
-	// V1LearningDiscussionsDiscussionIdArchivePost implements POST /v1/learning/discussions/{discussionId}/archive operation.
+	// DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDelete(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteParams) (*Discussion, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive operation.
 	//
 	// Archive discussion.
 	//
-	// POST /v1/learning/discussions/{discussionId}/archive
-	V1LearningDiscussionsDiscussionIdArchivePost(ctx context.Context, params V1LearningDiscussionsDiscussionIdArchivePostParams) (*Discussion, error)
-	// V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete implements DELETE /v1/learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+	// POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePost(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostParams) (*Discussion, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive operation.
 	//
 	// Unarchive comment.
 	//
-	// DELETE /v1/learning/discussions/{discussionId}/comments/{commentId}/archive
-	V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(ctx context.Context, params V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams) (*Comment, error)
-	// V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost implements POST /v1/learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+	// DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams) (*Comment, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive operation.
 	//
 	// Archive comment.
 	//
-	// POST /v1/learning/discussions/{discussionId}/comments/{commentId}/archive
-	V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(ctx context.Context, params V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams) (*Comment, error)
-	// V1LearningDiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /v1/learning/discussions/{discussionId}/comments/{commentId} operation.
+	// POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePost(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams) (*Comment, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId} operation.
 	//
 	// Delete comment.
 	//
-	// DELETE /v1/learning/discussions/{discussionId}/comments/{commentId}
-	V1LearningDiscussionsDiscussionIdCommentsCommentIdDelete(ctx context.Context, params V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams) error
-	// V1LearningDiscussionsDiscussionIdCommentsCommentIdPut implements PUT /v1/learning/discussions/{discussionId}/comments/{commentId} operation.
+	// DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams) error
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId} operation.
 	//
 	// Update comment.
 	//
-	// PUT /v1/learning/discussions/{discussionId}/comments/{commentId}
-	V1LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq, params V1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams) (*Comment, error)
-	// V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut implements PUT /v1/learning/discussions/{discussionId}/comments/{commentId}/status operation.
+	// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutParams) (*Comment, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/status operation.
 	//
 	// Update comment status.
 	//
-	// PUT /v1/learning/discussions/{discussionId}/comments/{commentId}/status
-	V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx context.Context, req *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq, params V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) (*Comment, error)
-	// V1LearningDiscussionsDiscussionIdCommentsGeneratePost implements POST /v1/learning/discussions/{discussionId}/comments/generate operation.
+	// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/status
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) (*Comment, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
 	//
 	// Generate comments using AI.
 	//
-	// POST /v1/learning/discussions/{discussionId}/comments/generate
-	V1LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq, params V1LearningDiscussionsDiscussionIdCommentsGeneratePostParams) error
-	// V1LearningDiscussionsDiscussionIdCommentsGet implements GET /v1/learning/discussions/{discussionId}/comments operation.
+	// POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams) error
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet implements GET /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
 	//
 	// Get comments for a discussion.
 	//
-	// GET /v1/learning/discussions/{discussionId}/comments
-	V1LearningDiscussionsDiscussionIdCommentsGet(ctx context.Context, params V1LearningDiscussionsDiscussionIdCommentsGetParams) ([]Comment, error)
-	// V1LearningDiscussionsDiscussionIdCommentsPost implements POST /v1/learning/discussions/{discussionId}/comments operation.
+	// GET /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams) ([]Comment, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
 	//
 	// Create comment.
 	//
-	// POST /v1/learning/discussions/{discussionId}/comments
-	V1LearningDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *V1LearningDiscussionsDiscussionIdCommentsPostReq, params V1LearningDiscussionsDiscussionIdCommentsPostParams) (*Comment, error)
-	// V1LearningDiscussionsDiscussionIdDelete implements DELETE /v1/learning/discussions/{discussionId} operation.
+	// POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams) (*Comment, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId} operation.
 	//
 	// Delete discussion.
 	//
-	// DELETE /v1/learning/discussions/{discussionId}
-	V1LearningDiscussionsDiscussionIdDelete(ctx context.Context, params V1LearningDiscussionsDiscussionIdDeleteParams) error
-	// V1LearningDiscussionsDiscussionIdGet implements GET /v1/learning/discussions/{discussionId} operation.
+	// DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDelete(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteParams) error
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGet implements GET /v1/learning/workspaces/{workspaceId}/discussions/{discussionId} operation.
 	//
 	// Get discussion.
 	//
-	// GET /v1/learning/discussions/{discussionId}
-	V1LearningDiscussionsDiscussionIdGet(ctx context.Context, params V1LearningDiscussionsDiscussionIdGetParams) (*Discussion, error)
-	// V1LearningDiscussionsDiscussionIdPut implements PUT /v1/learning/discussions/{discussionId} operation.
+	// GET /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams) (*Discussion, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId} operation.
 	//
 	// Update discussion.
 	//
-	// PUT /v1/learning/discussions/{discussionId}
-	V1LearningDiscussionsDiscussionIdPut(ctx context.Context, req *V1LearningDiscussionsDiscussionIdPutReq, params V1LearningDiscussionsDiscussionIdPutParams) (*Discussion, error)
-	// V1LearningDiscussionsDiscussionIdStatusPut implements PUT /v1/learning/discussions/{discussionId}/status operation.
+	// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutParams) (*Discussion, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/status operation.
 	//
 	// Update discussion status.
 	//
-	// PUT /v1/learning/discussions/{discussionId}/status
-	V1LearningDiscussionsDiscussionIdStatusPut(ctx context.Context, req *V1LearningDiscussionsDiscussionIdStatusPutReq, params V1LearningDiscussionsDiscussionIdStatusPutParams) (*Discussion, error)
-	// V1LearningDiscussionsGet implements GET /v1/learning/discussions operation.
+	// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/status
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutParams) (*Discussion, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsGet implements GET /v1/learning/workspaces/{workspaceId}/discussions operation.
 	//
 	// Get discussions.
 	//
-	// GET /v1/learning/discussions
-	V1LearningDiscussionsGet(ctx context.Context, params V1LearningDiscussionsGetParams) ([]DiscussionSummary, error)
-	// V1LearningDiscussionsPost implements POST /v1/learning/discussions operation.
+	// GET /v1/learning/workspaces/{workspaceId}/discussions
+	V1LearningWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsGetParams) ([]DiscussionSummary, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsPost implements POST /v1/learning/workspaces/{workspaceId}/discussions operation.
 	//
 	// Create discussion.
 	//
-	// POST /v1/learning/discussions
-	V1LearningDiscussionsPost(ctx context.Context, req *V1LearningDiscussionsPostReq) (*Discussion, error)
+	// POST /v1/learning/workspaces/{workspaceId}/discussions
+	V1LearningWorkspacesWorkspaceIdDiscussionsPost(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq, params V1LearningWorkspacesWorkspaceIdDiscussionsPostParams) (*Discussion, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

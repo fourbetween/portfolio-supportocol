@@ -1,5 +1,8 @@
+import { consume } from "@lit/context";
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { userContext } from "../../../app/context/user";
+import type { User } from "../../../app/model/user";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import {
@@ -17,6 +20,9 @@ import "../ui/discussion-search-bar/discussion-search-bar";
 
 @customElement("learning-discussion-list-widget")
 export class LearningDiscussionListWidget extends LitElement {
+  @consume({ context: userContext, subscribe: true })
+  private user?: User;
+
   @property({ type: Array })
   summaries: DiscussionSummary[] = [];
 
@@ -24,8 +30,14 @@ export class LearningDiscussionListWidget extends LitElement {
   private _searchQuery = "";
 
   private async _handleAddDiscussion(e: LearningDiscussionCreateEvent) {
+    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+    if (!workspaceId) return;
     try {
-      const data = await discussionRepository.create(e.theme, e.status);
+      const data = await discussionRepository.create(
+        workspaceId,
+        e.theme,
+        e.status,
+      );
       this.dispatchEvent(new LearningDiscussionCreatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -37,6 +49,8 @@ export class LearningDiscussionListWidget extends LitElement {
   }
 
   private async _handleDeleteDiscussion(e: LearningDiscussionDeleteEvent) {
+    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+    if (!workspaceId) return;
     const { discussionId } = e;
     const discussion = this.summaries.find((d) => d.id === discussionId);
     if (!discussion) {
@@ -46,7 +60,7 @@ export class LearningDiscussionListWidget extends LitElement {
       return;
     }
     try {
-      await discussionRepository.delete(discussionId);
+      await discussionRepository.delete(workspaceId, discussionId);
       this.dispatchEvent(new LearningDiscussionDeletedEvent(discussionId));
       showToast(this, "Succeeded.", "success", 2000);
     } catch (error: any) {
@@ -56,7 +70,7 @@ export class LearningDiscussionListWidget extends LitElement {
 
   private get _filteredSummaries() {
     return this.summaries.filter((d) =>
-      d.theme.toLowerCase().includes(this._searchQuery.toLowerCase())
+      d.theme.toLowerCase().includes(this._searchQuery.toLowerCase()),
     );
   }
 

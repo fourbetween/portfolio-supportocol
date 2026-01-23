@@ -1,7 +1,10 @@
+import { consume } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { userContext } from "../../../app/context/user";
 import { TouchController } from "../../../app/controller/touch";
+import type { User } from "../../../app/model/user";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
@@ -33,6 +36,9 @@ import { discussionRepository } from "../repository/discussion-repository";
 export class LearningDashboardPage extends LitElement {
   private _touch = new TouchController(this);
 
+  @consume({ context: userContext, subscribe: true })
+  private user?: User;
+
   @state()
   private _summaries: DiscussionSummary[] = [];
 
@@ -52,25 +58,26 @@ export class LearningDashboardPage extends LitElement {
   private _activeDrawer?: "left" | "right";
 
   private summariesTask = new Task(this, {
-    task: async () => {
-      return discussionRepository.list();
+    task: async ([workspaceId]) => {
+      if (!workspaceId) return [] as DiscussionSummary[];
+      return discussionRepository.list(workspaceId);
     },
     onComplete: (summaries) => {
-      this._summaries = summaries;
+      this._summaries = summaries as DiscussionSummary[];
     },
     onError: (e: unknown) => {
       showToast(this, String(e), "error");
     },
-    args: () => [],
+    args: () => [this.user ? "personal-" + this.user.id : undefined],
   });
 
   constructor() {
     super();
 
     new Task(this, {
-      task: async ([id]) => {
-        if (!id) return;
-        return discussionRepository.get(id);
+      task: async ([workspaceId, discussionId]) => {
+        if (!workspaceId || !discussionId) return;
+        return discussionRepository.get(workspaceId, discussionId);
       },
       onComplete: (discussion) => {
         this._selectedDiscussion = discussion;
@@ -78,13 +85,16 @@ export class LearningDashboardPage extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [this._selectedDiscussionId],
+      args: () => [
+        this.user ? "personal-" + this.user.id : undefined,
+        this._selectedDiscussionId,
+      ],
     });
 
     new Task(this, {
-      task: async ([id]) => {
-        if (!id) return [] as Comment[];
-        return commentRepository.list(id);
+      task: async ([workspaceId, discussionId]) => {
+        if (!workspaceId || !discussionId) return [] as Comment[];
+        return commentRepository.list(workspaceId, discussionId);
       },
       onComplete: (comments) => {
         this._comments = comments;
@@ -92,7 +102,10 @@ export class LearningDashboardPage extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [this._selectedDiscussionId],
+      args: () => [
+        this.user ? "personal-" + this.user.id : undefined,
+        this._selectedDiscussionId,
+      ],
     });
   }
 
@@ -196,7 +209,11 @@ export class LearningDashboardPage extends LitElement {
           : undefined;
 
       try {
+        const workspaceId = this.user ? "personal-" + this.user.id : undefined;
+        if (!workspaceId) return;
+
         const newComments = await commentRepository.list(
+          workspaceId,
           this._selectedDiscussionId,
           since,
         );
