@@ -152,7 +152,7 @@ components:
 security:
   - cookie_auth: []
 paths:
-  /learning/discussions:
+  /v1/learning/discussions:
     get:
       description: get discussions
       parameters:
@@ -206,7 +206,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}:
+  /v1/learning/discussions/{discussionId}:
     get:
       description: get discussion
       parameters:
@@ -280,7 +280,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/status:
+  /v1/learning/discussions/{discussionId}/status:
     put:
       description: update discussion status
       parameters:
@@ -315,7 +315,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/archive:
+  /v1/learning/discussions/{discussionId}/archive:
     post:
       description: archive discussion
       parameters:
@@ -358,7 +358,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/comments:
+  /v1/learning/discussions/{discussionId}/comments:
     get:
       description: get comments for a discussion
       parameters:
@@ -428,7 +428,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/comments/{commentId}:
+  /v1/learning/discussions/{discussionId}/comments/{commentId}:
     put:
       description: update comment
       parameters:
@@ -491,7 +491,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/comments/{commentId}/status:
+  /v1/learning/discussions/{discussionId}/comments/{commentId}/status:
     put:
       description: update comment status
       parameters:
@@ -529,7 +529,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/comments/{commentId}/archive:
+  /v1/learning/discussions/{discussionId}/comments/{commentId}/archive:
     post:
       description: archive comment
       parameters:
@@ -582,7 +582,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/comments/generate:
+  /v1/learning/discussions/{discussionId}/comments/generate:
     post:
       description: generate comments using AI
       parameters:

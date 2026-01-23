@@ -102,29 +102,6 @@ func (s *GoogleLoginRequest) SetIdToken(val string) {
 	s.IdToken = val
 }
 
-// IdentityErrorsPostOK is response for IdentityErrorsPost operation.
-type IdentityErrorsPostOK struct{}
-
-type IdentityErrorsPostReq struct {
-	Message string `json:"message"`
-}
-
-// GetMessage returns the value of Message.
-func (s *IdentityErrorsPostReq) GetMessage() string {
-	return s.Message
-}
-
-// SetMessage sets the value of Message.
-func (s *IdentityErrorsPostReq) SetMessage(val string) {
-	s.Message = val
-}
-
-// IdentityGooglePostOK is response for IdentityGooglePost operation.
-type IdentityGooglePostOK struct{}
-
-// IdentityLogoutPostOK is response for IdentityLogoutPost operation.
-type IdentityLogoutPostOK struct{}
-
 // Ref: #/components/schemas/User
 type User struct {
 	ID    string `json:"id"`
@@ -161,3 +138,26 @@ func (s *User) SetEmail(val string) {
 func (s *User) SetName(val string) {
 	s.Name = val
 }
+
+// V1IdentityErrorsPostOK is response for V1IdentityErrorsPost operation.
+type V1IdentityErrorsPostOK struct{}
+
+type V1IdentityErrorsPostReq struct {
+	Message string `json:"message"`
+}
+
+// GetMessage returns the value of Message.
+func (s *V1IdentityErrorsPostReq) GetMessage() string {
+	return s.Message
+}
+
+// SetMessage sets the value of Message.
+func (s *V1IdentityErrorsPostReq) SetMessage(val string) {
+	s.Message = val
+}
+
+// V1IdentityGooglePostOK is response for V1IdentityGooglePost operation.
+type V1IdentityGooglePostOK struct{}
+
+// V1IdentityLogoutPostOK is response for V1IdentityLogoutPost operation.
+type V1IdentityLogoutPostOK struct{}

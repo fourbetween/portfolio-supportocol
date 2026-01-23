@@ -10,7 +10,7 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeDialogueDiscussionsDiscussionIdCommentsGetResponse(response []Comment, w http.ResponseWriter) error {
+func encodeV1DialogueDiscussionsDiscussionIdCommentsGetResponse(response []Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -27,7 +27,7 @@ func encodeDialogueDiscussionsDiscussionIdCommentsGetResponse(response []Comment
 	return nil
 }
 
-func encodeDialogueDiscussionsDiscussionIdCommentsPostResponse(response *Comment, w http.ResponseWriter) error {
+func encodeV1DialogueDiscussionsDiscussionIdCommentsPostResponse(response *Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(201)
 
@@ -40,7 +40,7 @@ func encodeDialogueDiscussionsDiscussionIdCommentsPostResponse(response *Comment
 	return nil
 }
 
-func encodeDialogueDiscussionsDiscussionIdGetResponse(response *Discussion, w http.ResponseWriter) error {
+func encodeV1DialogueDiscussionsDiscussionIdGetResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -53,7 +53,7 @@ func encodeDialogueDiscussionsDiscussionIdGetResponse(response *Discussion, w ht
 	return nil
 }
 
-func encodeDialogueDiscussionsGetResponse(response []DiscussionSummary, w http.ResponseWriter) error {
+func encodeV1DialogueDiscussionsGetResponse(response []DiscussionSummary, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 

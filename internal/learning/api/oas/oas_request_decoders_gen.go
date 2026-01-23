@@ -14,8 +14,8 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutRequest(r *http.Request) (
-	req *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq,
+func (s *Server) decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdPutRequest(r *http.Request) (
+	req *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -62,7 +62,7 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request LearningDiscussionsDiscussionIdCommentsCommentIdPutReq
+		var request V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -93,8 +93,8 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 	}
 }
 
-func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest(r *http.Request) (
-	req *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq,
+func (s *Server) decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest(r *http.Request) (
+	req *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -141,7 +141,7 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq
+		var request V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -172,8 +172,8 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 	}
 }
 
-func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsGeneratePostRequest(r *http.Request) (
-	req *LearningDiscussionsDiscussionIdCommentsGeneratePostReq,
+func (s *Server) decodeV1LearningDiscussionsDiscussionIdCommentsGeneratePostRequest(r *http.Request) (
+	req *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -220,7 +220,7 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request LearningDiscussionsDiscussionIdCommentsGeneratePostReq
+		var request V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -251,8 +251,8 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 	}
 }
 
-func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsPostRequest(r *http.Request) (
-	req *LearningDiscussionsDiscussionIdCommentsPostReq,
+func (s *Server) decodeV1LearningDiscussionsDiscussionIdCommentsPostRequest(r *http.Request) (
+	req *V1LearningDiscussionsDiscussionIdCommentsPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -299,7 +299,7 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsPostRequest(r *htt
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request LearningDiscussionsDiscussionIdCommentsPostReq
+		var request V1LearningDiscussionsDiscussionIdCommentsPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -330,8 +330,8 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdCommentsPostRequest(r *htt
 	}
 }
 
-func (s *Server) decodeLearningDiscussionsDiscussionIdPutRequest(r *http.Request) (
-	req *LearningDiscussionsDiscussionIdPutReq,
+func (s *Server) decodeV1LearningDiscussionsDiscussionIdPutRequest(r *http.Request) (
+	req *V1LearningDiscussionsDiscussionIdPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -378,7 +378,7 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdPutRequest(r *http.Request
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request LearningDiscussionsDiscussionIdPutReq
+		var request V1LearningDiscussionsDiscussionIdPutReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -409,8 +409,8 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdPutRequest(r *http.Request
 	}
 }
 
-func (s *Server) decodeLearningDiscussionsDiscussionIdStatusPutRequest(r *http.Request) (
-	req *LearningDiscussionsDiscussionIdStatusPutReq,
+func (s *Server) decodeV1LearningDiscussionsDiscussionIdStatusPutRequest(r *http.Request) (
+	req *V1LearningDiscussionsDiscussionIdStatusPutReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -457,7 +457,7 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdStatusPutRequest(r *http.R
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request LearningDiscussionsDiscussionIdStatusPutReq
+		var request V1LearningDiscussionsDiscussionIdStatusPutReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -488,8 +488,8 @@ func (s *Server) decodeLearningDiscussionsDiscussionIdStatusPutRequest(r *http.R
 	}
 }
 
-func (s *Server) decodeLearningDiscussionsPostRequest(r *http.Request) (
-	req *LearningDiscussionsPostReq,
+func (s *Server) decodeV1LearningDiscussionsPostRequest(r *http.Request) (
+	req *V1LearningDiscussionsPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -536,7 +536,7 @@ func (s *Server) decodeLearningDiscussionsPostRequest(r *http.Request) (
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request LearningDiscussionsPostReq
+		var request V1LearningDiscussionsPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/workspace/workspaces/{workspaceId}/projects": {
+    "/v1/workspace/workspaces/{workspaceId}/projects": {
         parameters: {
             query?: never;
             header?: never;
@@ -88,7 +88,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/workspace/workspaces/{workspaceId}/projects/{projectId}": {
+    "/v1/workspace/workspaces/{workspaceId}/projects/{projectId}": {
         parameters: {
             query?: never;
             header?: never;

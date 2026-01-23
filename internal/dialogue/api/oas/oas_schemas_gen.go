@@ -204,42 +204,6 @@ func (s *CommentStatus) UnmarshalText(data []byte) error {
 
 type CommentType string
 
-type DialogueDiscussionsDiscussionIdCommentsPostReq struct {
-	ParentCommentId NilID          `json:"parentCommentId"`
-	CommentType     CommentType    `json:"commentType"`
-	Content         CommentContent `json:"content"`
-}
-
-// GetParentCommentId returns the value of ParentCommentId.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() NilID {
-	return s.ParentCommentId
-}
-
-// GetCommentType returns the value of CommentType.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) GetCommentType() CommentType {
-	return s.CommentType
-}
-
-// GetContent returns the value of Content.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) GetContent() CommentContent {
-	return s.Content
-}
-
-// SetParentCommentId sets the value of ParentCommentId.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val NilID) {
-	s.ParentCommentId = val
-}
-
-// SetCommentType sets the value of CommentType.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) SetCommentType(val CommentType) {
-	s.CommentType = val
-}
-
-// SetContent sets the value of Content.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentContent) {
-	s.Content = val
-}
-
 // Ref: #/components/schemas/DialogueSettings
 type DialogueSettings struct {
 	DiscussionId ID           `json:"discussionId"`
@@ -520,4 +484,40 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 		return v
 	}
 	return d
+}
+
+type V1DialogueDiscussionsDiscussionIdCommentsPostReq struct {
+	ParentCommentId NilID          `json:"parentCommentId"`
+	CommentType     CommentType    `json:"commentType"`
+	Content         CommentContent `json:"content"`
+}
+
+// GetParentCommentId returns the value of ParentCommentId.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() NilID {
+	return s.ParentCommentId
+}
+
+// GetCommentType returns the value of CommentType.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) GetCommentType() CommentType {
+	return s.CommentType
+}
+
+// GetContent returns the value of Content.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) GetContent() CommentContent {
+	return s.Content
+}
+
+// SetParentCommentId sets the value of ParentCommentId.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val NilID) {
+	s.ParentCommentId = val
+}
+
+// SetCommentType sets the value of CommentType.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) SetCommentType(val CommentType) {
+	s.CommentType = val
+}
+
+// SetContent sets the value of Content.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentContent) {
+	s.Content = val
 }

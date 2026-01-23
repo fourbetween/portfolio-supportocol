@@ -28,7 +28,7 @@ func NewHandler(con *identity.APIContainer) oas.Handler {
 	}
 }
 
-func (h *appHandler) IdentityErrorsPost(ctx context.Context, req *oas.IdentityErrorsPostReq) error {
+func (h *appHandler) V1IdentityErrorsPost(ctx context.Context, req *oas.V1IdentityErrorsPostReq) error {
 	slog.Error(
 		"frontend error",
 		slog.String("message", req.Message),
@@ -36,7 +36,7 @@ func (h *appHandler) IdentityErrorsPost(ctx context.Context, req *oas.IdentityEr
 	return nil
 }
 
-func (h *appHandler) IdentityGooglePost(ctx context.Context, req *oas.GoogleLoginRequest) error {
+func (h *appHandler) V1IdentityGooglePost(ctx context.Context, req *oas.GoogleLoginRequest) error {
 	token, err := h.con.LoginWithGoogle.Execute(ctx, req.IdToken)
 	if err != nil {
 		return err
@@ -55,7 +55,7 @@ func (h *appHandler) IdentityGooglePost(ctx context.Context, req *oas.GoogleLogi
 	return nil
 }
 
-func (h *appHandler) IdentityLogoutPost(ctx context.Context) error {
+func (h *appHandler) V1IdentityLogoutPost(ctx context.Context) error {
 	w := httpctx.GetResponseWriter(ctx)
 	http.SetCookie(w, &http.Cookie{
 		Name:     httpcookie.AuthCookieName,
@@ -69,7 +69,7 @@ func (h *appHandler) IdentityLogoutPost(ctx context.Context) error {
 	return nil
 }
 
-func (h *appHandler) IdentityMeGet(ctx context.Context) (*oas.User, error) {
+func (h *appHandler) V1IdentityMeGet(ctx context.Context) (*oas.User, error) {
 	uid := httpctx.GetUserID(ctx)
 	u, err := h.con.GetUser.Execute(ctx, uid)
 	if err != nil {

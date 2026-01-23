@@ -28,12 +28,12 @@ func (c *codeRecorder) Unwrap() http.ResponseWriter {
 
 func recordError(string, error) {}
 
-// handleLearningDiscussionsDiscussionIdArchiveDeleteRequest handles DELETE /learning/discussions/{discussionId}/archive operation.
+// handleV1LearningDiscussionsDiscussionIdArchiveDeleteRequest handles DELETE /v1/learning/discussions/{discussionId}/archive operation.
 //
 // Unarchive discussion.
 //
-// DELETE /learning/discussions/{discussionId}/archive
-func (s *Server) handleLearningDiscussionsDiscussionIdArchiveDeleteRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// DELETE /v1/learning/discussions/{discussionId}/archive
+func (s *Server) handleV1LearningDiscussionsDiscussionIdArchiveDeleteRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -41,7 +41,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchiveDeleteRequest(args 
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdArchiveDeleteOperation,
+			Name: V1LearningDiscussionsDiscussionIdArchiveDeleteOperation,
 			ID:   "",
 		}
 	)
@@ -49,7 +49,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchiveDeleteRequest(args 
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdArchiveDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdArchiveDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -91,7 +91,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchiveDeleteRequest(args 
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdArchiveDeleteParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdArchiveDeleteParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -108,7 +108,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchiveDeleteRequest(args 
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdArchiveDeleteOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdArchiveDeleteOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -124,7 +124,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchiveDeleteRequest(args 
 
 		type (
 			Request  = struct{}
-			Params   = LearningDiscussionsDiscussionIdArchiveDeleteParams
+			Params   = V1LearningDiscussionsDiscussionIdArchiveDeleteParams
 			Response = *Discussion
 		)
 		response, err = middleware.HookMiddleware[
@@ -134,14 +134,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchiveDeleteRequest(args 
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdArchiveDeleteParams,
+			unpackV1LearningDiscussionsDiscussionIdArchiveDeleteParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdArchiveDelete(ctx, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdArchiveDelete(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdArchiveDelete(ctx, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdArchiveDelete(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -160,7 +160,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchiveDeleteRequest(args 
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdArchiveDeleteResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdArchiveDeleteResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -169,12 +169,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchiveDeleteRequest(args 
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdArchivePostRequest handles POST /learning/discussions/{discussionId}/archive operation.
+// handleV1LearningDiscussionsDiscussionIdArchivePostRequest handles POST /v1/learning/discussions/{discussionId}/archive operation.
 //
 // Archive discussion.
 //
-// POST /learning/discussions/{discussionId}/archive
-func (s *Server) handleLearningDiscussionsDiscussionIdArchivePostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/learning/discussions/{discussionId}/archive
+func (s *Server) handleV1LearningDiscussionsDiscussionIdArchivePostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -182,7 +182,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchivePostRequest(args [1
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdArchivePostOperation,
+			Name: V1LearningDiscussionsDiscussionIdArchivePostOperation,
 			ID:   "",
 		}
 	)
@@ -190,7 +190,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchivePostRequest(args [1
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdArchivePostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdArchivePostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -232,7 +232,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchivePostRequest(args [1
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdArchivePostParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdArchivePostParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -249,7 +249,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchivePostRequest(args [1
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdArchivePostOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdArchivePostOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -265,7 +265,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchivePostRequest(args [1
 
 		type (
 			Request  = struct{}
-			Params   = LearningDiscussionsDiscussionIdArchivePostParams
+			Params   = V1LearningDiscussionsDiscussionIdArchivePostParams
 			Response = *Discussion
 		)
 		response, err = middleware.HookMiddleware[
@@ -275,14 +275,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchivePostRequest(args [1
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdArchivePostParams,
+			unpackV1LearningDiscussionsDiscussionIdArchivePostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdArchivePost(ctx, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdArchivePost(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdArchivePost(ctx, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdArchivePost(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -301,7 +301,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchivePostRequest(args [1
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdArchivePostResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdArchivePostResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -310,12 +310,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdArchivePostRequest(args [1
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteRequest handles DELETE /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+// handleV1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteRequest handles DELETE /v1/learning/discussions/{discussionId}/comments/{commentId}/archive operation.
 //
 // Unarchive comment.
 //
-// DELETE /learning/discussions/{discussionId}/comments/{commentId}/archive
-func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// DELETE /v1/learning/discussions/{discussionId}/comments/{commentId}/archive
+func (s *Server) handleV1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -323,7 +323,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDe
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation,
+			Name: V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation,
 			ID:   "",
 		}
 	)
@@ -331,7 +331,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDe
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -373,7 +373,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDe
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -390,7 +390,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDe
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -410,7 +410,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDe
 
 		type (
 			Request  = struct{}
-			Params   = LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams
+			Params   = V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams
 			Response = *Comment
 		)
 		response, err = middleware.HookMiddleware[
@@ -420,14 +420,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDe
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams,
+			unpackV1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(ctx, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(ctx, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -446,7 +446,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDe
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -455,12 +455,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDe
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostRequest handles POST /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+// handleV1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostRequest handles POST /v1/learning/discussions/{discussionId}/comments/{commentId}/archive operation.
 //
 // Archive comment.
 //
-// POST /learning/discussions/{discussionId}/comments/{commentId}/archive
-func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/learning/discussions/{discussionId}/comments/{commentId}/archive
+func (s *Server) handleV1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -468,7 +468,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePo
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation,
+			Name: V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation,
 			ID:   "",
 		}
 	)
@@ -476,7 +476,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePo
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -518,7 +518,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePo
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -535,7 +535,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePo
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -555,7 +555,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePo
 
 		type (
 			Request  = struct{}
-			Params   = LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams
+			Params   = V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams
 			Response = *Comment
 		)
 		response, err = middleware.HookMiddleware[
@@ -565,14 +565,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePo
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams,
+			unpackV1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(ctx, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(ctx, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -591,7 +591,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePo
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -600,12 +600,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePo
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteRequest handles DELETE /learning/discussions/{discussionId}/comments/{commentId} operation.
+// handleV1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteRequest handles DELETE /v1/learning/discussions/{discussionId}/comments/{commentId} operation.
 //
 // Delete comment.
 //
-// DELETE /learning/discussions/{discussionId}/comments/{commentId}
-func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// DELETE /v1/learning/discussions/{discussionId}/comments/{commentId}
+func (s *Server) handleV1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -613,7 +613,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteReq
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation,
+			Name: V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation,
 			ID:   "",
 		}
 	)
@@ -621,7 +621,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteReq
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -663,7 +663,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteReq
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -676,11 +676,11 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteReq
 
 	var rawBody []byte
 
-	var response *LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent
+	var response *V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -700,8 +700,8 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteReq
 
 		type (
 			Request  = struct{}
-			Params   = LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams
-			Response = *LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent
+			Params   = V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams
+			Response = *V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -710,14 +710,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteReq
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams,
+			unpackV1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.LearningDiscussionsDiscussionIdCommentsCommentIdDelete(ctx, params)
+				err = s.h.V1LearningDiscussionsDiscussionIdCommentsCommentIdDelete(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.LearningDiscussionsDiscussionIdCommentsCommentIdDelete(ctx, params)
+		err = s.h.V1LearningDiscussionsDiscussionIdCommentsCommentIdDelete(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -736,7 +736,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteReq
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -745,12 +745,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteReq
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdCommentsCommentIdPutRequest handles PUT /learning/discussions/{discussionId}/comments/{commentId} operation.
+// handleV1LearningDiscussionsDiscussionIdCommentsCommentIdPutRequest handles PUT /v1/learning/discussions/{discussionId}/comments/{commentId} operation.
 //
 // Update comment.
 //
-// PUT /learning/discussions/{discussionId}/comments/{commentId}
-func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdPutRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// PUT /v1/learning/discussions/{discussionId}/comments/{commentId}
+func (s *Server) handleV1LearningDiscussionsDiscussionIdCommentsCommentIdPutRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -758,7 +758,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation,
+			Name: V1LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation,
 			ID:   "",
 		}
 	)
@@ -766,7 +766,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -808,7 +808,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -820,7 +820,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutRequest(r)
+	request, rawBody, close, err := s.decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdPutRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -840,7 +840,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -859,8 +859,8 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 		}
 
 		type (
-			Request  = *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq
-			Params   = LearningDiscussionsDiscussionIdCommentsCommentIdPutParams
+			Request  = *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq
+			Params   = V1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams
 			Response = *Comment
 		)
 		response, err = middleware.HookMiddleware[
@@ -870,14 +870,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdCommentsCommentIdPutParams,
+			unpackV1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx, request, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx, request, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -896,7 +896,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdCommentsCommentIdPutResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdCommentsCommentIdPutResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -905,12 +905,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdPutReques
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest handles PUT /learning/discussions/{discussionId}/comments/{commentId}/status operation.
+// handleV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest handles PUT /v1/learning/discussions/{discussionId}/comments/{commentId}/status operation.
 //
 // Update comment status.
 //
-// PUT /learning/discussions/{discussionId}/comments/{commentId}/status
-func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// PUT /v1/learning/discussions/{discussionId}/comments/{commentId}/status
+func (s *Server) handleV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -918,7 +918,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation,
+			Name: V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation,
 			ID:   "",
 		}
 	)
@@ -926,7 +926,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -968,7 +968,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -980,7 +980,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest(r)
+	request, rawBody, close, err := s.decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -1000,7 +1000,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -1019,8 +1019,8 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 		}
 
 		type (
-			Request  = *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq
-			Params   = LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams
+			Request  = *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq
+			Params   = V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams
 			Response = *Comment
 		)
 		response, err = middleware.HookMiddleware[
@@ -1030,14 +1030,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams,
+			unpackV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx, request, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx, request, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -1056,7 +1056,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -1065,12 +1065,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPut
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdCommentsGeneratePostRequest handles POST /learning/discussions/{discussionId}/comments/generate operation.
+// handleV1LearningDiscussionsDiscussionIdCommentsGeneratePostRequest handles POST /v1/learning/discussions/{discussionId}/comments/generate operation.
 //
 // Generate comments using AI.
 //
-// POST /learning/discussions/{discussionId}/comments/generate
-func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/learning/discussions/{discussionId}/comments/generate
+func (s *Server) handleV1LearningDiscussionsDiscussionIdCommentsGeneratePostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -1078,7 +1078,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdCommentsGeneratePostOperation,
+			Name: V1LearningDiscussionsDiscussionIdCommentsGeneratePostOperation,
 			ID:   "",
 		}
 	)
@@ -1086,7 +1086,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdCommentsGeneratePostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdCommentsGeneratePostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -1128,7 +1128,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdCommentsGeneratePostParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdCommentsGeneratePostParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -1140,7 +1140,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeLearningDiscussionsDiscussionIdCommentsGeneratePostRequest(r)
+	request, rawBody, close, err := s.decodeV1LearningDiscussionsDiscussionIdCommentsGeneratePostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -1156,11 +1156,11 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 		}
 	}()
 
-	var response *LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted
+	var response *V1LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdCommentsGeneratePostOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdCommentsGeneratePostOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -1175,9 +1175,9 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 		}
 
 		type (
-			Request  = *LearningDiscussionsDiscussionIdCommentsGeneratePostReq
-			Params   = LearningDiscussionsDiscussionIdCommentsGeneratePostParams
-			Response = *LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted
+			Request  = *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq
+			Params   = V1LearningDiscussionsDiscussionIdCommentsGeneratePostParams
+			Response = *V1LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -1186,14 +1186,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdCommentsGeneratePostParams,
+			unpackV1LearningDiscussionsDiscussionIdCommentsGeneratePostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx, request, params)
+				err = s.h.V1LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx, request, params)
+		err = s.h.V1LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -1212,7 +1212,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdCommentsGeneratePostResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdCommentsGeneratePostResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -1221,12 +1221,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGeneratePostReques
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdCommentsGetRequest handles GET /learning/discussions/{discussionId}/comments operation.
+// handleV1LearningDiscussionsDiscussionIdCommentsGetRequest handles GET /v1/learning/discussions/{discussionId}/comments operation.
 //
 // Get comments for a discussion.
 //
-// GET /learning/discussions/{discussionId}/comments
-func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /v1/learning/discussions/{discussionId}/comments
+func (s *Server) handleV1LearningDiscussionsDiscussionIdCommentsGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -1234,7 +1234,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGetRequest(args [1
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdCommentsGetOperation,
+			Name: V1LearningDiscussionsDiscussionIdCommentsGetOperation,
 			ID:   "",
 		}
 	)
@@ -1242,7 +1242,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGetRequest(args [1
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdCommentsGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdCommentsGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -1284,7 +1284,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGetRequest(args [1
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdCommentsGetParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdCommentsGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -1301,7 +1301,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGetRequest(args [1
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdCommentsGetOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdCommentsGetOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -1321,7 +1321,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGetRequest(args [1
 
 		type (
 			Request  = struct{}
-			Params   = LearningDiscussionsDiscussionIdCommentsGetParams
+			Params   = V1LearningDiscussionsDiscussionIdCommentsGetParams
 			Response = []Comment
 		)
 		response, err = middleware.HookMiddleware[
@@ -1331,14 +1331,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGetRequest(args [1
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdCommentsGetParams,
+			unpackV1LearningDiscussionsDiscussionIdCommentsGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdCommentsGet(ctx, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdCommentsGet(ctx, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsGet(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -1357,7 +1357,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGetRequest(args [1
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdCommentsGetResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdCommentsGetResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -1366,12 +1366,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsGetRequest(args [1
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdCommentsPostRequest handles POST /learning/discussions/{discussionId}/comments operation.
+// handleV1LearningDiscussionsDiscussionIdCommentsPostRequest handles POST /v1/learning/discussions/{discussionId}/comments operation.
 //
 // Create comment.
 //
-// POST /learning/discussions/{discussionId}/comments
-func (s *Server) handleLearningDiscussionsDiscussionIdCommentsPostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/learning/discussions/{discussionId}/comments
+func (s *Server) handleV1LearningDiscussionsDiscussionIdCommentsPostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -1379,7 +1379,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsPostRequest(args [
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdCommentsPostOperation,
+			Name: V1LearningDiscussionsDiscussionIdCommentsPostOperation,
 			ID:   "",
 		}
 	)
@@ -1387,7 +1387,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsPostRequest(args [
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdCommentsPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdCommentsPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -1429,7 +1429,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsPostRequest(args [
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdCommentsPostParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdCommentsPostParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -1441,7 +1441,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsPostRequest(args [
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeLearningDiscussionsDiscussionIdCommentsPostRequest(r)
+	request, rawBody, close, err := s.decodeV1LearningDiscussionsDiscussionIdCommentsPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -1461,7 +1461,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsPostRequest(args [
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdCommentsPostOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdCommentsPostOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -1476,8 +1476,8 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsPostRequest(args [
 		}
 
 		type (
-			Request  = *LearningDiscussionsDiscussionIdCommentsPostReq
-			Params   = LearningDiscussionsDiscussionIdCommentsPostParams
+			Request  = *V1LearningDiscussionsDiscussionIdCommentsPostReq
+			Params   = V1LearningDiscussionsDiscussionIdCommentsPostParams
 			Response = *Comment
 		)
 		response, err = middleware.HookMiddleware[
@@ -1487,14 +1487,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsPostRequest(args [
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdCommentsPostParams,
+			unpackV1LearningDiscussionsDiscussionIdCommentsPostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdCommentsPost(ctx, request, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsPost(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdCommentsPost(ctx, request, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdCommentsPost(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -1513,7 +1513,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsPostRequest(args [
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdCommentsPostResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdCommentsPostResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -1522,12 +1522,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdCommentsPostRequest(args [
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdDeleteRequest handles DELETE /learning/discussions/{discussionId} operation.
+// handleV1LearningDiscussionsDiscussionIdDeleteRequest handles DELETE /v1/learning/discussions/{discussionId} operation.
 //
 // Delete discussion.
 //
-// DELETE /learning/discussions/{discussionId}
-func (s *Server) handleLearningDiscussionsDiscussionIdDeleteRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// DELETE /v1/learning/discussions/{discussionId}
+func (s *Server) handleV1LearningDiscussionsDiscussionIdDeleteRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -1535,7 +1535,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdDeleteRequest(args [1]stri
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdDeleteOperation,
+			Name: V1LearningDiscussionsDiscussionIdDeleteOperation,
 			ID:   "",
 		}
 	)
@@ -1543,7 +1543,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdDeleteRequest(args [1]stri
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdDeleteOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdDeleteOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -1585,7 +1585,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdDeleteRequest(args [1]stri
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdDeleteParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdDeleteParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -1598,11 +1598,11 @@ func (s *Server) handleLearningDiscussionsDiscussionIdDeleteRequest(args [1]stri
 
 	var rawBody []byte
 
-	var response *LearningDiscussionsDiscussionIdDeleteNoContent
+	var response *V1LearningDiscussionsDiscussionIdDeleteNoContent
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdDeleteOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdDeleteOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -1618,8 +1618,8 @@ func (s *Server) handleLearningDiscussionsDiscussionIdDeleteRequest(args [1]stri
 
 		type (
 			Request  = struct{}
-			Params   = LearningDiscussionsDiscussionIdDeleteParams
-			Response = *LearningDiscussionsDiscussionIdDeleteNoContent
+			Params   = V1LearningDiscussionsDiscussionIdDeleteParams
+			Response = *V1LearningDiscussionsDiscussionIdDeleteNoContent
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -1628,14 +1628,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdDeleteRequest(args [1]stri
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdDeleteParams,
+			unpackV1LearningDiscussionsDiscussionIdDeleteParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.LearningDiscussionsDiscussionIdDelete(ctx, params)
+				err = s.h.V1LearningDiscussionsDiscussionIdDelete(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.LearningDiscussionsDiscussionIdDelete(ctx, params)
+		err = s.h.V1LearningDiscussionsDiscussionIdDelete(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -1654,7 +1654,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdDeleteRequest(args [1]stri
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdDeleteResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdDeleteResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -1663,12 +1663,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdDeleteRequest(args [1]stri
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdGetRequest handles GET /learning/discussions/{discussionId} operation.
+// handleV1LearningDiscussionsDiscussionIdGetRequest handles GET /v1/learning/discussions/{discussionId} operation.
 //
 // Get discussion.
 //
-// GET /learning/discussions/{discussionId}
-func (s *Server) handleLearningDiscussionsDiscussionIdGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /v1/learning/discussions/{discussionId}
+func (s *Server) handleV1LearningDiscussionsDiscussionIdGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -1676,7 +1676,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdGetRequest(args [1]string,
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdGetOperation,
+			Name: V1LearningDiscussionsDiscussionIdGetOperation,
 			ID:   "",
 		}
 	)
@@ -1684,7 +1684,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdGetRequest(args [1]string,
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -1726,7 +1726,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdGetRequest(args [1]string,
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdGetParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -1743,7 +1743,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdGetRequest(args [1]string,
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdGetOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdGetOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -1759,7 +1759,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdGetRequest(args [1]string,
 
 		type (
 			Request  = struct{}
-			Params   = LearningDiscussionsDiscussionIdGetParams
+			Params   = V1LearningDiscussionsDiscussionIdGetParams
 			Response = *Discussion
 		)
 		response, err = middleware.HookMiddleware[
@@ -1769,14 +1769,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdGetRequest(args [1]string,
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdGetParams,
+			unpackV1LearningDiscussionsDiscussionIdGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdGet(ctx, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdGet(ctx, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdGet(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -1795,7 +1795,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdGetRequest(args [1]string,
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdGetResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdGetResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -1804,12 +1804,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdGetRequest(args [1]string,
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdPutRequest handles PUT /learning/discussions/{discussionId} operation.
+// handleV1LearningDiscussionsDiscussionIdPutRequest handles PUT /v1/learning/discussions/{discussionId} operation.
 //
 // Update discussion.
 //
-// PUT /learning/discussions/{discussionId}
-func (s *Server) handleLearningDiscussionsDiscussionIdPutRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// PUT /v1/learning/discussions/{discussionId}
+func (s *Server) handleV1LearningDiscussionsDiscussionIdPutRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -1817,7 +1817,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdPutRequest(args [1]string,
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdPutOperation,
+			Name: V1LearningDiscussionsDiscussionIdPutOperation,
 			ID:   "",
 		}
 	)
@@ -1825,7 +1825,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdPutRequest(args [1]string,
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -1867,7 +1867,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdPutRequest(args [1]string,
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdPutParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdPutParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -1879,7 +1879,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdPutRequest(args [1]string,
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeLearningDiscussionsDiscussionIdPutRequest(r)
+	request, rawBody, close, err := s.decodeV1LearningDiscussionsDiscussionIdPutRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -1899,7 +1899,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdPutRequest(args [1]string,
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdPutOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdPutOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -1914,8 +1914,8 @@ func (s *Server) handleLearningDiscussionsDiscussionIdPutRequest(args [1]string,
 		}
 
 		type (
-			Request  = *LearningDiscussionsDiscussionIdPutReq
-			Params   = LearningDiscussionsDiscussionIdPutParams
+			Request  = *V1LearningDiscussionsDiscussionIdPutReq
+			Params   = V1LearningDiscussionsDiscussionIdPutParams
 			Response = *Discussion
 		)
 		response, err = middleware.HookMiddleware[
@@ -1925,14 +1925,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdPutRequest(args [1]string,
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdPutParams,
+			unpackV1LearningDiscussionsDiscussionIdPutParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdPut(ctx, request, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdPut(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdPut(ctx, request, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdPut(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -1951,7 +1951,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdPutRequest(args [1]string,
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdPutResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdPutResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -1960,12 +1960,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdPutRequest(args [1]string,
 	}
 }
 
-// handleLearningDiscussionsDiscussionIdStatusPutRequest handles PUT /learning/discussions/{discussionId}/status operation.
+// handleV1LearningDiscussionsDiscussionIdStatusPutRequest handles PUT /v1/learning/discussions/{discussionId}/status operation.
 //
 // Update discussion status.
 //
-// PUT /learning/discussions/{discussionId}/status
-func (s *Server) handleLearningDiscussionsDiscussionIdStatusPutRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// PUT /v1/learning/discussions/{discussionId}/status
+func (s *Server) handleV1LearningDiscussionsDiscussionIdStatusPutRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -1973,7 +1973,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdStatusPutRequest(args [1]s
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsDiscussionIdStatusPutOperation,
+			Name: V1LearningDiscussionsDiscussionIdStatusPutOperation,
 			ID:   "",
 		}
 	)
@@ -1981,7 +1981,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdStatusPutRequest(args [1]s
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsDiscussionIdStatusPutOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsDiscussionIdStatusPutOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -2023,7 +2023,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdStatusPutRequest(args [1]s
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsDiscussionIdStatusPutParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsDiscussionIdStatusPutParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -2035,7 +2035,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdStatusPutRequest(args [1]s
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeLearningDiscussionsDiscussionIdStatusPutRequest(r)
+	request, rawBody, close, err := s.decodeV1LearningDiscussionsDiscussionIdStatusPutRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -2055,7 +2055,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdStatusPutRequest(args [1]s
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsDiscussionIdStatusPutOperation,
+			OperationName:    V1LearningDiscussionsDiscussionIdStatusPutOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -2070,8 +2070,8 @@ func (s *Server) handleLearningDiscussionsDiscussionIdStatusPutRequest(args [1]s
 		}
 
 		type (
-			Request  = *LearningDiscussionsDiscussionIdStatusPutReq
-			Params   = LearningDiscussionsDiscussionIdStatusPutParams
+			Request  = *V1LearningDiscussionsDiscussionIdStatusPutReq
+			Params   = V1LearningDiscussionsDiscussionIdStatusPutParams
 			Response = *Discussion
 		)
 		response, err = middleware.HookMiddleware[
@@ -2081,14 +2081,14 @@ func (s *Server) handleLearningDiscussionsDiscussionIdStatusPutRequest(args [1]s
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsDiscussionIdStatusPutParams,
+			unpackV1LearningDiscussionsDiscussionIdStatusPutParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsDiscussionIdStatusPut(ctx, request, params)
+				response, err = s.h.V1LearningDiscussionsDiscussionIdStatusPut(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsDiscussionIdStatusPut(ctx, request, params)
+		response, err = s.h.V1LearningDiscussionsDiscussionIdStatusPut(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -2107,7 +2107,7 @@ func (s *Server) handleLearningDiscussionsDiscussionIdStatusPutRequest(args [1]s
 		return
 	}
 
-	if err := encodeLearningDiscussionsDiscussionIdStatusPutResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsDiscussionIdStatusPutResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -2116,12 +2116,12 @@ func (s *Server) handleLearningDiscussionsDiscussionIdStatusPutRequest(args [1]s
 	}
 }
 
-// handleLearningDiscussionsGetRequest handles GET /learning/discussions operation.
+// handleV1LearningDiscussionsGetRequest handles GET /v1/learning/discussions operation.
 //
 // Get discussions.
 //
-// GET /learning/discussions
-func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /v1/learning/discussions
+func (s *Server) handleV1LearningDiscussionsGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -2129,7 +2129,7 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsGetOperation,
+			Name: V1LearningDiscussionsGetOperation,
 			ID:   "",
 		}
 	)
@@ -2137,7 +2137,7 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -2179,7 +2179,7 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 			return
 		}
 	}
-	params, err := decodeLearningDiscussionsGetParams(args, argsEscaped, r)
+	params, err := decodeV1LearningDiscussionsGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -2196,7 +2196,7 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsGetOperation,
+			OperationName:    V1LearningDiscussionsGetOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -2212,7 +2212,7 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 
 		type (
 			Request  = struct{}
-			Params   = LearningDiscussionsGetParams
+			Params   = V1LearningDiscussionsGetParams
 			Response = []DiscussionSummary
 		)
 		response, err = middleware.HookMiddleware[
@@ -2222,14 +2222,14 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 		](
 			m,
 			mreq,
-			unpackLearningDiscussionsGetParams,
+			unpackV1LearningDiscussionsGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsGet(ctx, params)
+				response, err = s.h.V1LearningDiscussionsGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsGet(ctx, params)
+		response, err = s.h.V1LearningDiscussionsGet(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -2248,7 +2248,7 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 		return
 	}
 
-	if err := encodeLearningDiscussionsGetResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsGetResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -2257,12 +2257,12 @@ func (s *Server) handleLearningDiscussionsGetRequest(args [0]string, argsEscaped
 	}
 }
 
-// handleLearningDiscussionsPostRequest handles POST /learning/discussions operation.
+// handleV1LearningDiscussionsPostRequest handles POST /v1/learning/discussions operation.
 //
 // Create discussion.
 //
-// POST /learning/discussions
-func (s *Server) handleLearningDiscussionsPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/learning/discussions
+func (s *Server) handleV1LearningDiscussionsPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -2270,7 +2270,7 @@ func (s *Server) handleLearningDiscussionsPostRequest(args [0]string, argsEscape
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: LearningDiscussionsPostOperation,
+			Name: V1LearningDiscussionsPostOperation,
 			ID:   "",
 		}
 	)
@@ -2278,7 +2278,7 @@ func (s *Server) handleLearningDiscussionsPostRequest(args [0]string, argsEscape
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, LearningDiscussionsPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningDiscussionsPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -2322,7 +2322,7 @@ func (s *Server) handleLearningDiscussionsPostRequest(args [0]string, argsEscape
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeLearningDiscussionsPostRequest(r)
+	request, rawBody, close, err := s.decodeV1LearningDiscussionsPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -2342,7 +2342,7 @@ func (s *Server) handleLearningDiscussionsPostRequest(args [0]string, argsEscape
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    LearningDiscussionsPostOperation,
+			OperationName:    V1LearningDiscussionsPostOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -2352,7 +2352,7 @@ func (s *Server) handleLearningDiscussionsPostRequest(args [0]string, argsEscape
 		}
 
 		type (
-			Request  = *LearningDiscussionsPostReq
+			Request  = *V1LearningDiscussionsPostReq
 			Params   = struct{}
 			Response = *Discussion
 		)
@@ -2365,12 +2365,12 @@ func (s *Server) handleLearningDiscussionsPostRequest(args [0]string, argsEscape
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.LearningDiscussionsPost(ctx, request)
+				response, err = s.h.V1LearningDiscussionsPost(ctx, request)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.LearningDiscussionsPost(ctx, request)
+		response, err = s.h.V1LearningDiscussionsPost(ctx, request)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -2389,7 +2389,7 @@ func (s *Server) handleLearningDiscussionsPostRequest(args [0]string, argsEscape
 		return
 	}
 
-	if err := encodeLearningDiscussionsPostResponse(response, w); err != nil {
+	if err := encodeV1LearningDiscussionsPostResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

@@ -33,8 +33,8 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 }
 
 var operationRolesCookieAuth = map[string][]string{
-	IdentityErrorsPostOperation: []string{},
-	IdentityMeGetOperation:      []string{},
+	V1IdentityErrorsPostOperation: []string{},
+	V1IdentityMeGetOperation:      []string{},
 }
 
 func (s *Server) securityCookieAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {

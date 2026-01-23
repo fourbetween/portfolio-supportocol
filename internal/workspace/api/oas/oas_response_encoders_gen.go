@@ -10,7 +10,7 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeWorkspaceWorkspacesWorkspaceIdProjectsGetResponse(response []Project, w http.ResponseWriter) error {
+func encodeV1WorkspaceWorkspacesWorkspaceIdProjectsGetResponse(response []Project, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -27,7 +27,7 @@ func encodeWorkspaceWorkspacesWorkspaceIdProjectsGetResponse(response []Project,
 	return nil
 }
 
-func encodeWorkspaceWorkspacesWorkspaceIdProjectsPostResponse(response *Project, w http.ResponseWriter) error {
+func encodeV1WorkspaceWorkspacesWorkspaceIdProjectsPostResponse(response *Project, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(201)
 
@@ -40,13 +40,13 @@ func encodeWorkspaceWorkspacesWorkspaceIdProjectsPostResponse(response *Project,
 	return nil
 }
 
-func encodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteResponse(response *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteNoContent, w http.ResponseWriter) error {
+func encodeV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteResponse(response *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
 
 	return nil
 }
 
-func encodeWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutResponse(response *Project, w http.ResponseWriter) error {
+func encodeV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutResponse(response *Project, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 

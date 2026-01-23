@@ -10,7 +10,7 @@ export class CommentRepository {
     }
 
     const { data, error } = await client.GET(
-      "/learning/discussions/{discussionId}/comments",
+      "/v1/learning/discussions/{discussionId}/comments",
       {
         params: {
           path: { discussionId },
@@ -44,7 +44,7 @@ export class CommentRepository {
     },
   ): Promise<Comment> {
     const { data, error } = await client.POST(
-      "/learning/discussions/{discussionId}/comments",
+      "/v1/learning/discussions/{discussionId}/comments",
       {
         params: {
           path: { discussionId },
@@ -71,7 +71,7 @@ export class CommentRepository {
     },
   ): Promise<Comment> {
     const { data, error } = await client.PUT(
-      "/learning/discussions/{discussionId}/comments/{commentId}",
+      "/v1/learning/discussions/{discussionId}/comments/{commentId}",
       {
         params: {
           path: { discussionId, commentId },
@@ -94,7 +94,7 @@ export class CommentRepository {
 
   async delete(discussionId: string, commentId: string): Promise<void> {
     const { error } = await client.DELETE(
-      "/learning/discussions/{discussionId}/comments/{commentId}",
+      "/v1/learning/discussions/{discussionId}/comments/{commentId}",
       {
         params: {
           path: { discussionId, commentId },
@@ -120,7 +120,7 @@ export class CommentRepository {
     },
   ): Promise<void> {
     const { error } = await client.POST(
-      "/learning/discussions/{discussionId}/comments/generate",
+      "/v1/learning/discussions/{discussionId}/comments/generate",
       {
         params: {
           path: { discussionId },
@@ -133,7 +133,7 @@ export class CommentRepository {
 
   async archive(discussionId: string, commentId: string): Promise<Comment> {
     const { data, error } = await client.POST(
-      "/learning/discussions/{discussionId}/comments/{commentId}/archive",
+      "/v1/learning/discussions/{discussionId}/comments/{commentId}/archive",
       {
         params: {
           path: { discussionId, commentId },
@@ -155,7 +155,7 @@ export class CommentRepository {
 
   async unarchive(discussionId: string, commentId: string): Promise<Comment> {
     const { data, error } = await client.DELETE(
-      "/learning/discussions/{discussionId}/comments/{commentId}/archive",
+      "/v1/learning/discussions/{discussionId}/comments/{commentId}/archive",
       {
         params: {
           path: { discussionId, commentId },
@@ -181,7 +181,7 @@ export class CommentRepository {
     status: "active" | "proposed",
   ): Promise<Comment> {
     const { data, error } = await client.PUT(
-      "/learning/discussions/{discussionId}/comments/{commentId}/status",
+      "/v1/learning/discussions/{discussionId}/comments/{commentId}/status",
       {
         params: {
           path: { discussionId, commentId },

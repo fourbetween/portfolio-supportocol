@@ -8,30 +8,30 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// DialogueDiscussionsDiscussionIdCommentsGet implements GET /dialogue/discussions/{discussionId}/comments operation.
+	// V1DialogueDiscussionsDiscussionIdCommentsGet implements GET /v1/dialogue/discussions/{discussionId}/comments operation.
 	//
 	// Get comments for a discussion.
 	//
-	// GET /dialogue/discussions/{discussionId}/comments
-	DialogueDiscussionsDiscussionIdCommentsGet(ctx context.Context, params DialogueDiscussionsDiscussionIdCommentsGetParams) ([]Comment, error)
-	// DialogueDiscussionsDiscussionIdCommentsPost implements POST /dialogue/discussions/{discussionId}/comments operation.
+	// GET /v1/dialogue/discussions/{discussionId}/comments
+	V1DialogueDiscussionsDiscussionIdCommentsGet(ctx context.Context, params V1DialogueDiscussionsDiscussionIdCommentsGetParams) ([]Comment, error)
+	// V1DialogueDiscussionsDiscussionIdCommentsPost implements POST /v1/dialogue/discussions/{discussionId}/comments operation.
 	//
 	// Create comment.
 	//
-	// POST /dialogue/discussions/{discussionId}/comments
-	DialogueDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *DialogueDiscussionsDiscussionIdCommentsPostReq, params DialogueDiscussionsDiscussionIdCommentsPostParams) (*Comment, error)
-	// DialogueDiscussionsDiscussionIdGet implements GET /dialogue/discussions/{discussionId} operation.
+	// POST /v1/dialogue/discussions/{discussionId}/comments
+	V1DialogueDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *V1DialogueDiscussionsDiscussionIdCommentsPostReq, params V1DialogueDiscussionsDiscussionIdCommentsPostParams) (*Comment, error)
+	// V1DialogueDiscussionsDiscussionIdGet implements GET /v1/dialogue/discussions/{discussionId} operation.
 	//
 	// Get discussion.
 	//
-	// GET /dialogue/discussions/{discussionId}
-	DialogueDiscussionsDiscussionIdGet(ctx context.Context, params DialogueDiscussionsDiscussionIdGetParams) (*Discussion, error)
-	// DialogueDiscussionsGet implements GET /dialogue/discussions operation.
+	// GET /v1/dialogue/discussions/{discussionId}
+	V1DialogueDiscussionsDiscussionIdGet(ctx context.Context, params V1DialogueDiscussionsDiscussionIdGetParams) (*Discussion, error)
+	// V1DialogueDiscussionsGet implements GET /v1/dialogue/discussions operation.
 	//
 	// Get discussions.
 	//
-	// GET /dialogue/discussions
-	DialogueDiscussionsGet(ctx context.Context) ([]DiscussionSummary, error)
+	// GET /v1/dialogue/discussions
+	V1DialogueDiscussionsGet(ctx context.Context) ([]DiscussionSummary, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

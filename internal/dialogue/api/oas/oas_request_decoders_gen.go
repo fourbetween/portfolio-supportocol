@@ -14,8 +14,8 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeDialogueDiscussionsDiscussionIdCommentsPostRequest(r *http.Request) (
-	req *DialogueDiscussionsDiscussionIdCommentsPostReq,
+func (s *Server) decodeV1DialogueDiscussionsDiscussionIdCommentsPostRequest(r *http.Request) (
+	req *V1DialogueDiscussionsDiscussionIdCommentsPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -62,7 +62,7 @@ func (s *Server) decodeDialogueDiscussionsDiscussionIdCommentsPostRequest(r *htt
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request DialogueDiscussionsDiscussionIdCommentsPostReq
+		var request V1DialogueDiscussionsDiscussionIdCommentsPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

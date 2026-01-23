@@ -473,190 +473,6 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 
 type ID uuid.UUID
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for LearningDiscussionsDiscussionIdCommentsCommentIdDelete operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
-
-type LearningDiscussionsDiscussionIdCommentsCommentIdPutReq struct {
-	CommentType CommentType    `json:"commentType"`
-	Content     CommentContent `json:"content"`
-}
-
-// GetCommentType returns the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) GetCommentType() CommentType {
-	return s.CommentType
-}
-
-// GetContent returns the value of Content.
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) GetContent() CommentContent {
-	return s.Content
-}
-
-// SetCommentType sets the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetCommentType(val CommentType) {
-	s.CommentType = val
-}
-
-// SetContent sets the value of Content.
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetContent(val CommentContent) {
-	s.Content = val
-}
-
-type LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq struct {
-	Status CommentStatus `json:"status"`
-}
-
-// GetStatus returns the value of Status.
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) GetStatus() CommentStatus {
-	return s.Status
-}
-
-// SetStatus sets the value of Status.
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) SetStatus(val CommentStatus) {
-	s.Status = val
-}
-
-// LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted is response for LearningDiscussionsDiscussionIdCommentsGeneratePost operation.
-type LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted struct{}
-
-type LearningDiscussionsDiscussionIdCommentsGeneratePostReq struct {
-	ParentCommentId NilID       `json:"parentCommentId"`
-	CommentType     CommentType `json:"commentType"`
-}
-
-// GetParentCommentId returns the value of ParentCommentId.
-func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) GetParentCommentId() NilID {
-	return s.ParentCommentId
-}
-
-// GetCommentType returns the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) GetCommentType() CommentType {
-	return s.CommentType
-}
-
-// SetParentCommentId sets the value of ParentCommentId.
-func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) SetParentCommentId(val NilID) {
-	s.ParentCommentId = val
-}
-
-// SetCommentType sets the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) SetCommentType(val CommentType) {
-	s.CommentType = val
-}
-
-type LearningDiscussionsDiscussionIdCommentsPostReq struct {
-	ParentCommentId NilID          `json:"parentCommentId"`
-	CommentType     CommentType    `json:"commentType"`
-	Content         CommentContent `json:"content"`
-}
-
-// GetParentCommentId returns the value of ParentCommentId.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() NilID {
-	return s.ParentCommentId
-}
-
-// GetCommentType returns the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetCommentType() CommentType {
-	return s.CommentType
-}
-
-// GetContent returns the value of Content.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) GetContent() CommentContent {
-	return s.Content
-}
-
-// SetParentCommentId sets the value of ParentCommentId.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val NilID) {
-	s.ParentCommentId = val
-}
-
-// SetCommentType sets the value of CommentType.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetCommentType(val CommentType) {
-	s.CommentType = val
-}
-
-// SetContent sets the value of Content.
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentContent) {
-	s.Content = val
-}
-
-// LearningDiscussionsDiscussionIdDeleteNoContent is response for LearningDiscussionsDiscussionIdDelete operation.
-type LearningDiscussionsDiscussionIdDeleteNoContent struct{}
-
-type LearningDiscussionsDiscussionIdPutReq struct {
-	Theme      DiscussionTheme      `json:"theme"`
-	Conclusion DiscussionConclusion `json:"conclusion"`
-}
-
-// GetTheme returns the value of Theme.
-func (s *LearningDiscussionsDiscussionIdPutReq) GetTheme() DiscussionTheme {
-	return s.Theme
-}
-
-// GetConclusion returns the value of Conclusion.
-func (s *LearningDiscussionsDiscussionIdPutReq) GetConclusion() DiscussionConclusion {
-	return s.Conclusion
-}
-
-// SetTheme sets the value of Theme.
-func (s *LearningDiscussionsDiscussionIdPutReq) SetTheme(val DiscussionTheme) {
-	s.Theme = val
-}
-
-// SetConclusion sets the value of Conclusion.
-func (s *LearningDiscussionsDiscussionIdPutReq) SetConclusion(val DiscussionConclusion) {
-	s.Conclusion = val
-}
-
-type LearningDiscussionsDiscussionIdStatusPutReq struct {
-	Status       DiscussionStatus `json:"status"`
-	CommentFrame OptCommentFrame  `json:"commentFrame"`
-}
-
-// GetStatus returns the value of Status.
-func (s *LearningDiscussionsDiscussionIdStatusPutReq) GetStatus() DiscussionStatus {
-	return s.Status
-}
-
-// GetCommentFrame returns the value of CommentFrame.
-func (s *LearningDiscussionsDiscussionIdStatusPutReq) GetCommentFrame() OptCommentFrame {
-	return s.CommentFrame
-}
-
-// SetStatus sets the value of Status.
-func (s *LearningDiscussionsDiscussionIdStatusPutReq) SetStatus(val DiscussionStatus) {
-	s.Status = val
-}
-
-// SetCommentFrame sets the value of CommentFrame.
-func (s *LearningDiscussionsDiscussionIdStatusPutReq) SetCommentFrame(val OptCommentFrame) {
-	s.CommentFrame = val
-}
-
-type LearningDiscussionsPostReq struct {
-	Theme  DiscussionTheme  `json:"theme"`
-	Status DiscussionStatus `json:"status"`
-}
-
-// GetTheme returns the value of Theme.
-func (s *LearningDiscussionsPostReq) GetTheme() DiscussionTheme {
-	return s.Theme
-}
-
-// GetStatus returns the value of Status.
-func (s *LearningDiscussionsPostReq) GetStatus() DiscussionStatus {
-	return s.Status
-}
-
-// SetTheme sets the value of Theme.
-func (s *LearningDiscussionsPostReq) SetTheme(val DiscussionTheme) {
-	s.Theme = val
-}
-
-// SetStatus sets the value of Status.
-func (s *LearningDiscussionsPostReq) SetStatus(val DiscussionStatus) {
-	s.Status = val
-}
-
 // NewNilID returns new NilID with value set to v.
 func NewNilID(v ID) NilID {
 	return NilID{
@@ -884,4 +700,188 @@ func (o OptDialogueSettings) Or(d DialogueSettings) DialogueSettings {
 		return v
 	}
 	return d
+}
+
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for V1LearningDiscussionsDiscussionIdCommentsCommentIdDelete operation.
+type V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
+
+type V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq struct {
+	CommentType CommentType    `json:"commentType"`
+	Content     CommentContent `json:"content"`
+}
+
+// GetCommentType returns the value of CommentType.
+func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) GetCommentType() CommentType {
+	return s.CommentType
+}
+
+// GetContent returns the value of Content.
+func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) GetContent() CommentContent {
+	return s.Content
+}
+
+// SetCommentType sets the value of CommentType.
+func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetCommentType(val CommentType) {
+	s.CommentType = val
+}
+
+// SetContent sets the value of Content.
+func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) SetContent(val CommentContent) {
+	s.Content = val
+}
+
+type V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq struct {
+	Status CommentStatus `json:"status"`
+}
+
+// GetStatus returns the value of Status.
+func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) GetStatus() CommentStatus {
+	return s.Status
+}
+
+// SetStatus sets the value of Status.
+func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) SetStatus(val CommentStatus) {
+	s.Status = val
+}
+
+// V1LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted is response for V1LearningDiscussionsDiscussionIdCommentsGeneratePost operation.
+type V1LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted struct{}
+
+type V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq struct {
+	ParentCommentId NilID       `json:"parentCommentId"`
+	CommentType     CommentType `json:"commentType"`
+}
+
+// GetParentCommentId returns the value of ParentCommentId.
+func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) GetParentCommentId() NilID {
+	return s.ParentCommentId
+}
+
+// GetCommentType returns the value of CommentType.
+func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) GetCommentType() CommentType {
+	return s.CommentType
+}
+
+// SetParentCommentId sets the value of ParentCommentId.
+func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) SetParentCommentId(val NilID) {
+	s.ParentCommentId = val
+}
+
+// SetCommentType sets the value of CommentType.
+func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) SetCommentType(val CommentType) {
+	s.CommentType = val
+}
+
+type V1LearningDiscussionsDiscussionIdCommentsPostReq struct {
+	ParentCommentId NilID          `json:"parentCommentId"`
+	CommentType     CommentType    `json:"commentType"`
+	Content         CommentContent `json:"content"`
+}
+
+// GetParentCommentId returns the value of ParentCommentId.
+func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() NilID {
+	return s.ParentCommentId
+}
+
+// GetCommentType returns the value of CommentType.
+func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) GetCommentType() CommentType {
+	return s.CommentType
+}
+
+// GetContent returns the value of Content.
+func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) GetContent() CommentContent {
+	return s.Content
+}
+
+// SetParentCommentId sets the value of ParentCommentId.
+func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val NilID) {
+	s.ParentCommentId = val
+}
+
+// SetCommentType sets the value of CommentType.
+func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) SetCommentType(val CommentType) {
+	s.CommentType = val
+}
+
+// SetContent sets the value of Content.
+func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentContent) {
+	s.Content = val
+}
+
+// V1LearningDiscussionsDiscussionIdDeleteNoContent is response for V1LearningDiscussionsDiscussionIdDelete operation.
+type V1LearningDiscussionsDiscussionIdDeleteNoContent struct{}
+
+type V1LearningDiscussionsDiscussionIdPutReq struct {
+	Theme      DiscussionTheme      `json:"theme"`
+	Conclusion DiscussionConclusion `json:"conclusion"`
+}
+
+// GetTheme returns the value of Theme.
+func (s *V1LearningDiscussionsDiscussionIdPutReq) GetTheme() DiscussionTheme {
+	return s.Theme
+}
+
+// GetConclusion returns the value of Conclusion.
+func (s *V1LearningDiscussionsDiscussionIdPutReq) GetConclusion() DiscussionConclusion {
+	return s.Conclusion
+}
+
+// SetTheme sets the value of Theme.
+func (s *V1LearningDiscussionsDiscussionIdPutReq) SetTheme(val DiscussionTheme) {
+	s.Theme = val
+}
+
+// SetConclusion sets the value of Conclusion.
+func (s *V1LearningDiscussionsDiscussionIdPutReq) SetConclusion(val DiscussionConclusion) {
+	s.Conclusion = val
+}
+
+type V1LearningDiscussionsDiscussionIdStatusPutReq struct {
+	Status       DiscussionStatus `json:"status"`
+	CommentFrame OptCommentFrame  `json:"commentFrame"`
+}
+
+// GetStatus returns the value of Status.
+func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) GetStatus() DiscussionStatus {
+	return s.Status
+}
+
+// GetCommentFrame returns the value of CommentFrame.
+func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) GetCommentFrame() OptCommentFrame {
+	return s.CommentFrame
+}
+
+// SetStatus sets the value of Status.
+func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) SetStatus(val DiscussionStatus) {
+	s.Status = val
+}
+
+// SetCommentFrame sets the value of CommentFrame.
+func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) SetCommentFrame(val OptCommentFrame) {
+	s.CommentFrame = val
+}
+
+type V1LearningDiscussionsPostReq struct {
+	Theme  DiscussionTheme  `json:"theme"`
+	Status DiscussionStatus `json:"status"`
+}
+
+// GetTheme returns the value of Theme.
+func (s *V1LearningDiscussionsPostReq) GetTheme() DiscussionTheme {
+	return s.Theme
+}
+
+// GetStatus returns the value of Status.
+func (s *V1LearningDiscussionsPostReq) GetStatus() DiscussionStatus {
+	return s.Status
+}
+
+// SetTheme sets the value of Theme.
+func (s *V1LearningDiscussionsPostReq) SetTheme(val DiscussionTheme) {
+	s.Theme = val
+}
+
+// SetStatus sets the value of Status.
+func (s *V1LearningDiscussionsPostReq) SetStatus(val DiscussionStatus) {
+	s.Status = val
 }

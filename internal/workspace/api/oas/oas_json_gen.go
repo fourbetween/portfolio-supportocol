@@ -348,28 +348,28 @@ func (s *ProjectName) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Encode(e *jx.Encoder) {
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) encodeFields(e *jx.Encoder) {
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("name")
 		s.Name.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfWorkspaceWorkspacesWorkspaceIdProjectsPostReq = [1]string{
+var jsonFieldsNameOfV1WorkspaceWorkspacesWorkspaceIdProjectsPostReq = [1]string{
 	0: "name",
 }
 
-// Decode decodes WorkspaceWorkspacesWorkspaceIdProjectsPostReq from json.
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Decode(d *jx.Decoder) error {
+// Decode decodes V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq from json.
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode WorkspaceWorkspacesWorkspaceIdProjectsPostReq to nil")
+		return errors.New("invalid: unable to decode V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -390,7 +390,7 @@ func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Decode(d *jx.Decoder) er
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode WorkspaceWorkspacesWorkspaceIdProjectsPostReq")
+		return errors.Wrap(err, "decode V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -407,8 +407,8 @@ func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Decode(d *jx.Decoder) er
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfWorkspaceWorkspacesWorkspaceIdProjectsPostReq) {
-					name = jsonFieldsNameOfWorkspaceWorkspacesWorkspaceIdProjectsPostReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) {
+					name = jsonFieldsNameOfV1WorkspaceWorkspacesWorkspaceIdProjectsPostReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -429,41 +429,41 @@ func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Decode(d *jx.Decoder) er
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) MarshalJSON() ([]byte, error) {
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) UnmarshalJSON(data []byte) error {
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Encode(e *jx.Encoder) {
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) encodeFields(e *jx.Encoder) {
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("name")
 		s.Name.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq = [1]string{
+var jsonFieldsNameOfV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq = [1]string{
 	0: "name",
 }
 
-// Decode decodes WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq from json.
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.Decoder) error {
+// Decode decodes V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq from json.
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq to nil")
+		return errors.New("invalid: unable to decode V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -484,7 +484,7 @@ func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.Dec
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq")
+		return errors.Wrap(err, "decode V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -501,8 +501,8 @@ func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.Dec
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) {
-					name = jsonFieldsNameOfWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) {
+					name = jsonFieldsNameOfV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -523,14 +523,14 @@ func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.Dec
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) MarshalJSON() ([]byte, error) {
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) UnmarshalJSON(data []byte) error {
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

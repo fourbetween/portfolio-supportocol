@@ -6,7 +6,7 @@ export class DiscussionRepository {
   private _cache = new Map<string, Discussion>();
 
   async list(archived?: boolean): Promise<DiscussionSummary[]> {
-    const { data, error } = await client.GET("/learning/discussions", {
+    const { data, error } = await client.GET("/v1/learning/discussions", {
       params: {
         query: { archived },
       },
@@ -20,7 +20,7 @@ export class DiscussionRepository {
     if (cached) return cached;
 
     const { data, error } = await client.GET(
-      "/learning/discussions/{discussionId}",
+      "/v1/learning/discussions/{discussionId}",
       {
         params: {
           path: { discussionId },
@@ -36,7 +36,7 @@ export class DiscussionRepository {
     theme: string,
     status: Discussion["status"]
   ): Promise<Discussion> {
-    const { data, error } = await client.POST("/learning/discussions", {
+    const { data, error } = await client.POST("/v1/learning/discussions", {
       body: { theme, status },
     });
     if (error) throw new Error(error.message);
@@ -50,7 +50,7 @@ export class DiscussionRepository {
     conclusion: string
   ): Promise<Discussion> {
     const { data, error } = await client.PUT(
-      "/learning/discussions/{discussionId}",
+      "/v1/learning/discussions/{discussionId}",
       {
         params: {
           path: { discussionId },
@@ -69,7 +69,7 @@ export class DiscussionRepository {
     commentFrame?: CommentFrame
   ): Promise<Discussion> {
     const { data, error } = await client.PUT(
-      "/learning/discussions/{discussionId}/status",
+      "/v1/learning/discussions/{discussionId}/status",
       {
         params: {
           path: { discussionId },
@@ -84,7 +84,7 @@ export class DiscussionRepository {
 
   async archive(discussionId: string): Promise<Discussion> {
     const { data, error } = await client.POST(
-      "/learning/discussions/{discussionId}/archive",
+      "/v1/learning/discussions/{discussionId}/archive",
       {
         params: {
           path: { discussionId },
@@ -98,7 +98,7 @@ export class DiscussionRepository {
 
   async unarchive(discussionId: string): Promise<Discussion> {
     const { data, error } = await client.DELETE(
-      "/learning/discussions/{discussionId}/archive",
+      "/v1/learning/discussions/{discussionId}/archive",
       {
         params: {
           path: { discussionId },
@@ -112,7 +112,7 @@ export class DiscussionRepository {
 
   async delete(discussionId: string): Promise<void> {
     const { error } = await client.DELETE(
-      "/learning/discussions/{discussionId}",
+      "/v1/learning/discussions/{discussionId}",
       {
         params: {
           path: { discussionId },

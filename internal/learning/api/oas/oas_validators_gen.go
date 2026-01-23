@@ -434,7 +434,7 @@ func (s *ErrorStatusCode) Validate() error {
 	return nil
 }
 
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {
+func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -468,7 +468,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() erro
 	return nil
 }
 
-func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Validate() error {
+func (s *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -491,7 +491,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq) Validate(
 	return nil
 }
 
-func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Validate() error {
+func (s *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -514,7 +514,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsGeneratePostReq) Validate() erro
 	return nil
 }
 
-func (s *LearningDiscussionsDiscussionIdCommentsPostReq) Validate() error {
+func (s *V1LearningDiscussionsDiscussionIdCommentsPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -548,7 +548,7 @@ func (s *LearningDiscussionsDiscussionIdCommentsPostReq) Validate() error {
 	return nil
 }
 
-func (s *LearningDiscussionsDiscussionIdPutReq) Validate() error {
+func (s *V1LearningDiscussionsDiscussionIdPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -582,7 +582,7 @@ func (s *LearningDiscussionsDiscussionIdPutReq) Validate() error {
 	return nil
 }
 
-func (s *LearningDiscussionsDiscussionIdStatusPutReq) Validate() error {
+func (s *V1LearningDiscussionsDiscussionIdStatusPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -623,7 +623,7 @@ func (s *LearningDiscussionsDiscussionIdStatusPutReq) Validate() error {
 	return nil
 }
 
-func (s *LearningDiscussionsPostReq) Validate() error {
+func (s *V1LearningDiscussionsPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}

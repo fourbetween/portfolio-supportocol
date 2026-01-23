@@ -16,12 +16,12 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// LearningDiscussionsDiscussionIdArchiveDeleteParams is parameters of DELETE /learning/discussions/{discussionId}/archive operation.
-type LearningDiscussionsDiscussionIdArchiveDeleteParams struct {
+// V1LearningDiscussionsDiscussionIdArchiveDeleteParams is parameters of DELETE /v1/learning/discussions/{discussionId}/archive operation.
+type V1LearningDiscussionsDiscussionIdArchiveDeleteParams struct {
 	DiscussionId ID
 }
 
-func unpackLearningDiscussionsDiscussionIdArchiveDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdArchiveDeleteParams) {
+func unpackV1LearningDiscussionsDiscussionIdArchiveDeleteParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdArchiveDeleteParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -32,7 +32,7 @@ func unpackLearningDiscussionsDiscussionIdArchiveDeleteParams(packed middleware.
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdArchiveDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdArchiveDeleteParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdArchiveDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdArchiveDeleteParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -88,12 +88,12 @@ func decodeLearningDiscussionsDiscussionIdArchiveDeleteParams(args [1]string, ar
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdArchivePostParams is parameters of POST /learning/discussions/{discussionId}/archive operation.
-type LearningDiscussionsDiscussionIdArchivePostParams struct {
+// V1LearningDiscussionsDiscussionIdArchivePostParams is parameters of POST /v1/learning/discussions/{discussionId}/archive operation.
+type V1LearningDiscussionsDiscussionIdArchivePostParams struct {
 	DiscussionId ID
 }
 
-func unpackLearningDiscussionsDiscussionIdArchivePostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdArchivePostParams) {
+func unpackV1LearningDiscussionsDiscussionIdArchivePostParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdArchivePostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -104,7 +104,7 @@ func unpackLearningDiscussionsDiscussionIdArchivePostParams(packed middleware.Pa
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdArchivePostParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdArchivePostParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdArchivePostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdArchivePostParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -160,13 +160,13 @@ func decodeLearningDiscussionsDiscussionIdArchivePostParams(args [1]string, args
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams is parameters of DELETE /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams struct {
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams is parameters of DELETE /v1/learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+type V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams struct {
 	DiscussionId ID
 	CommentId    ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams) {
+func unpackV1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -184,7 +184,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(p
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -292,13 +292,13 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(a
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams is parameters of POST /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams struct {
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams is parameters of POST /v1/learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+type V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams struct {
 	DiscussionId ID
 	CommentId    ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams) {
+func unpackV1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -316,7 +316,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(pac
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -424,13 +424,13 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(arg
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams is parameters of DELETE /learning/discussions/{discussionId}/comments/{commentId} operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams struct {
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams is parameters of DELETE /v1/learning/discussions/{discussionId}/comments/{commentId} operation.
+type V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams struct {
 	DiscussionId ID
 	CommentId    ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams) {
+func unpackV1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -448,7 +448,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(packed m
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -556,13 +556,13 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdPutParams is parameters of PUT /learning/discussions/{discussionId}/comments/{commentId} operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdPutParams struct {
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams is parameters of PUT /v1/learning/discussions/{discussionId}/comments/{commentId} operation.
+type V1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams struct {
 	DiscussionId ID
 	CommentId    ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdPutParams) {
+func unpackV1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -580,7 +580,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(packed midd
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdPutParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -688,13 +688,13 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]str
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams is parameters of PUT /learning/discussions/{discussionId}/comments/{commentId}/status operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams struct {
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams is parameters of PUT /v1/learning/discussions/{discussionId}/comments/{commentId}/status operation.
+type V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams struct {
 	DiscussionId ID
 	CommentId    ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) {
+func unpackV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -712,7 +712,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(packe
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -820,12 +820,12 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args 
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsGeneratePostParams is parameters of POST /learning/discussions/{discussionId}/comments/generate operation.
-type LearningDiscussionsDiscussionIdCommentsGeneratePostParams struct {
+// V1LearningDiscussionsDiscussionIdCommentsGeneratePostParams is parameters of POST /v1/learning/discussions/{discussionId}/comments/generate operation.
+type V1LearningDiscussionsDiscussionIdCommentsGeneratePostParams struct {
 	DiscussionId ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsGeneratePostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsGeneratePostParams) {
+func unpackV1LearningDiscussionsDiscussionIdCommentsGeneratePostParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdCommentsGeneratePostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -836,7 +836,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsGeneratePostParams(packed midd
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsGeneratePostParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsGeneratePostParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdCommentsGeneratePostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdCommentsGeneratePostParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -892,13 +892,13 @@ func decodeLearningDiscussionsDiscussionIdCommentsGeneratePostParams(args [1]str
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsGetParams is parameters of GET /learning/discussions/{discussionId}/comments operation.
-type LearningDiscussionsDiscussionIdCommentsGetParams struct {
+// V1LearningDiscussionsDiscussionIdCommentsGetParams is parameters of GET /v1/learning/discussions/{discussionId}/comments operation.
+type V1LearningDiscussionsDiscussionIdCommentsGetParams struct {
 	DiscussionId ID
 	Since        OptDateTime `json:",omitempty,omitzero"`
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsGetParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsGetParams) {
+func unpackV1LearningDiscussionsDiscussionIdCommentsGetParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdCommentsGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -918,7 +918,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsGetParams(packed middleware.Pa
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsGetParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdCommentsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdCommentsGetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: discussionId.
 	if err := func() error {
@@ -1016,12 +1016,12 @@ func decodeLearningDiscussionsDiscussionIdCommentsGetParams(args [1]string, args
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsPostParams is parameters of POST /learning/discussions/{discussionId}/comments operation.
-type LearningDiscussionsDiscussionIdCommentsPostParams struct {
+// V1LearningDiscussionsDiscussionIdCommentsPostParams is parameters of POST /v1/learning/discussions/{discussionId}/comments operation.
+type V1LearningDiscussionsDiscussionIdCommentsPostParams struct {
 	DiscussionId ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsPostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsPostParams) {
+func unpackV1LearningDiscussionsDiscussionIdCommentsPostParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdCommentsPostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -1032,7 +1032,7 @@ func unpackLearningDiscussionsDiscussionIdCommentsPostParams(packed middleware.P
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsPostParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdCommentsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdCommentsPostParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -1088,12 +1088,12 @@ func decodeLearningDiscussionsDiscussionIdCommentsPostParams(args [1]string, arg
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdDeleteParams is parameters of DELETE /learning/discussions/{discussionId} operation.
-type LearningDiscussionsDiscussionIdDeleteParams struct {
+// V1LearningDiscussionsDiscussionIdDeleteParams is parameters of DELETE /v1/learning/discussions/{discussionId} operation.
+type V1LearningDiscussionsDiscussionIdDeleteParams struct {
 	DiscussionId ID
 }
 
-func unpackLearningDiscussionsDiscussionIdDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdDeleteParams) {
+func unpackV1LearningDiscussionsDiscussionIdDeleteParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdDeleteParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -1104,7 +1104,7 @@ func unpackLearningDiscussionsDiscussionIdDeleteParams(packed middleware.Paramet
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdDeleteParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdDeleteParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -1160,12 +1160,12 @@ func decodeLearningDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscap
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdGetParams is parameters of GET /learning/discussions/{discussionId} operation.
-type LearningDiscussionsDiscussionIdGetParams struct {
+// V1LearningDiscussionsDiscussionIdGetParams is parameters of GET /v1/learning/discussions/{discussionId} operation.
+type V1LearningDiscussionsDiscussionIdGetParams struct {
 	DiscussionId ID
 }
 
-func unpackLearningDiscussionsDiscussionIdGetParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdGetParams) {
+func unpackV1LearningDiscussionsDiscussionIdGetParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -1176,7 +1176,7 @@ func unpackLearningDiscussionsDiscussionIdGetParams(packed middleware.Parameters
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdGetParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdGetParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -1232,12 +1232,12 @@ func decodeLearningDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped 
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdPutParams is parameters of PUT /learning/discussions/{discussionId} operation.
-type LearningDiscussionsDiscussionIdPutParams struct {
+// V1LearningDiscussionsDiscussionIdPutParams is parameters of PUT /v1/learning/discussions/{discussionId} operation.
+type V1LearningDiscussionsDiscussionIdPutParams struct {
 	DiscussionId ID
 }
 
-func unpackLearningDiscussionsDiscussionIdPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdPutParams) {
+func unpackV1LearningDiscussionsDiscussionIdPutParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdPutParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -1248,7 +1248,7 @@ func unpackLearningDiscussionsDiscussionIdPutParams(packed middleware.Parameters
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdPutParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdPutParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdPutParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -1304,12 +1304,12 @@ func decodeLearningDiscussionsDiscussionIdPutParams(args [1]string, argsEscaped 
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdStatusPutParams is parameters of PUT /learning/discussions/{discussionId}/status operation.
-type LearningDiscussionsDiscussionIdStatusPutParams struct {
+// V1LearningDiscussionsDiscussionIdStatusPutParams is parameters of PUT /v1/learning/discussions/{discussionId}/status operation.
+type V1LearningDiscussionsDiscussionIdStatusPutParams struct {
 	DiscussionId ID
 }
 
-func unpackLearningDiscussionsDiscussionIdStatusPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdStatusPutParams) {
+func unpackV1LearningDiscussionsDiscussionIdStatusPutParams(packed middleware.Parameters) (params V1LearningDiscussionsDiscussionIdStatusPutParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -1320,7 +1320,7 @@ func unpackLearningDiscussionsDiscussionIdStatusPutParams(packed middleware.Para
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdStatusPutParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdStatusPutParams, _ error) {
+func decodeV1LearningDiscussionsDiscussionIdStatusPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsDiscussionIdStatusPutParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -1376,12 +1376,12 @@ func decodeLearningDiscussionsDiscussionIdStatusPutParams(args [1]string, argsEs
 	return params, nil
 }
 
-// LearningDiscussionsGetParams is parameters of GET /learning/discussions operation.
-type LearningDiscussionsGetParams struct {
+// V1LearningDiscussionsGetParams is parameters of GET /v1/learning/discussions operation.
+type V1LearningDiscussionsGetParams struct {
 	Archived OptBool `json:",omitempty,omitzero"`
 }
 
-func unpackLearningDiscussionsGetParams(packed middleware.Parameters) (params LearningDiscussionsGetParams) {
+func unpackV1LearningDiscussionsGetParams(packed middleware.Parameters) (params V1LearningDiscussionsGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "archived",
@@ -1394,7 +1394,7 @@ func unpackLearningDiscussionsGetParams(packed middleware.Parameters) (params Le
 	return params
 }
 
-func decodeLearningDiscussionsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsGetParams, _ error) {
+func decodeV1LearningDiscussionsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1LearningDiscussionsGetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Set default value for query: archived.
 	{

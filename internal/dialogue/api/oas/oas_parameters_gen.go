@@ -16,13 +16,13 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// DialogueDiscussionsDiscussionIdCommentsGetParams is parameters of GET /dialogue/discussions/{discussionId}/comments operation.
-type DialogueDiscussionsDiscussionIdCommentsGetParams struct {
+// V1DialogueDiscussionsDiscussionIdCommentsGetParams is parameters of GET /v1/dialogue/discussions/{discussionId}/comments operation.
+type V1DialogueDiscussionsDiscussionIdCommentsGetParams struct {
 	DiscussionId ID
 	Since        OptDateTime `json:",omitempty,omitzero"`
 }
 
-func unpackDialogueDiscussionsDiscussionIdCommentsGetParams(packed middleware.Parameters) (params DialogueDiscussionsDiscussionIdCommentsGetParams) {
+func unpackV1DialogueDiscussionsDiscussionIdCommentsGetParams(packed middleware.Parameters) (params V1DialogueDiscussionsDiscussionIdCommentsGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -42,7 +42,7 @@ func unpackDialogueDiscussionsDiscussionIdCommentsGetParams(packed middleware.Pa
 	return params
 }
 
-func decodeDialogueDiscussionsDiscussionIdCommentsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params DialogueDiscussionsDiscussionIdCommentsGetParams, _ error) {
+func decodeV1DialogueDiscussionsDiscussionIdCommentsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1DialogueDiscussionsDiscussionIdCommentsGetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: discussionId.
 	if err := func() error {
@@ -140,12 +140,12 @@ func decodeDialogueDiscussionsDiscussionIdCommentsGetParams(args [1]string, args
 	return params, nil
 }
 
-// DialogueDiscussionsDiscussionIdCommentsPostParams is parameters of POST /dialogue/discussions/{discussionId}/comments operation.
-type DialogueDiscussionsDiscussionIdCommentsPostParams struct {
+// V1DialogueDiscussionsDiscussionIdCommentsPostParams is parameters of POST /v1/dialogue/discussions/{discussionId}/comments operation.
+type V1DialogueDiscussionsDiscussionIdCommentsPostParams struct {
 	DiscussionId ID
 }
 
-func unpackDialogueDiscussionsDiscussionIdCommentsPostParams(packed middleware.Parameters) (params DialogueDiscussionsDiscussionIdCommentsPostParams) {
+func unpackV1DialogueDiscussionsDiscussionIdCommentsPostParams(packed middleware.Parameters) (params V1DialogueDiscussionsDiscussionIdCommentsPostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -156,7 +156,7 @@ func unpackDialogueDiscussionsDiscussionIdCommentsPostParams(packed middleware.P
 	return params
 }
 
-func decodeDialogueDiscussionsDiscussionIdCommentsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params DialogueDiscussionsDiscussionIdCommentsPostParams, _ error) {
+func decodeV1DialogueDiscussionsDiscussionIdCommentsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1DialogueDiscussionsDiscussionIdCommentsPostParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]
@@ -212,12 +212,12 @@ func decodeDialogueDiscussionsDiscussionIdCommentsPostParams(args [1]string, arg
 	return params, nil
 }
 
-// DialogueDiscussionsDiscussionIdGetParams is parameters of GET /dialogue/discussions/{discussionId} operation.
-type DialogueDiscussionsDiscussionIdGetParams struct {
+// V1DialogueDiscussionsDiscussionIdGetParams is parameters of GET /v1/dialogue/discussions/{discussionId} operation.
+type V1DialogueDiscussionsDiscussionIdGetParams struct {
 	DiscussionId ID
 }
 
-func unpackDialogueDiscussionsDiscussionIdGetParams(packed middleware.Parameters) (params DialogueDiscussionsDiscussionIdGetParams) {
+func unpackV1DialogueDiscussionsDiscussionIdGetParams(packed middleware.Parameters) (params V1DialogueDiscussionsDiscussionIdGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -228,7 +228,7 @@ func unpackDialogueDiscussionsDiscussionIdGetParams(packed middleware.Parameters
 	return params
 }
 
-func decodeDialogueDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped bool, r *http.Request) (params DialogueDiscussionsDiscussionIdGetParams, _ error) {
+func decodeV1DialogueDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1DialogueDiscussionsDiscussionIdGetParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
 		param := args[0]

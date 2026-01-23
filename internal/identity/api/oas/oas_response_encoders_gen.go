@@ -10,25 +10,25 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeIdentityErrorsPostResponse(response *IdentityErrorsPostOK, w http.ResponseWriter) error {
+func encodeV1IdentityErrorsPostResponse(response *V1IdentityErrorsPostOK, w http.ResponseWriter) error {
 	w.WriteHeader(200)
 
 	return nil
 }
 
-func encodeIdentityGooglePostResponse(response *IdentityGooglePostOK, w http.ResponseWriter) error {
+func encodeV1IdentityGooglePostResponse(response *V1IdentityGooglePostOK, w http.ResponseWriter) error {
 	w.WriteHeader(200)
 
 	return nil
 }
 
-func encodeIdentityLogoutPostResponse(response *IdentityLogoutPostOK, w http.ResponseWriter) error {
+func encodeV1IdentityLogoutPostResponse(response *V1IdentityLogoutPostOK, w http.ResponseWriter) error {
 	w.WriteHeader(200)
 
 	return nil
 }
 
-func encodeIdentityMeGetResponse(response *User, w http.ResponseWriter) error {
+func encodeV1IdentityMeGetResponse(response *User, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 

@@ -49,9 +49,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/learning/discussions"
+		case '/': // Prefix: "/v1/learning/discussions"
 
-			if l := len("/learning/discussions"); len(elem) >= l && elem[0:l] == "/learning/discussions" {
+			if l := len("/v1/learning/discussions"); len(elem) >= l && elem[0:l] == "/v1/learning/discussions" {
 				elem = elem[l:]
 			} else {
 				break
@@ -60,9 +60,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			if len(elem) == 0 {
 				switch r.Method {
 				case "GET":
-					s.handleLearningDiscussionsGetRequest([0]string{}, elemIsEscaped, w, r)
+					s.handleV1LearningDiscussionsGetRequest([0]string{}, elemIsEscaped, w, r)
 				case "POST":
-					s.handleLearningDiscussionsPostRequest([0]string{}, elemIsEscaped, w, r)
+					s.handleV1LearningDiscussionsPostRequest([0]string{}, elemIsEscaped, w, r)
 				default:
 					s.notAllowed(w, r, "GET,POST")
 				}
@@ -90,15 +90,15 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "DELETE":
-						s.handleLearningDiscussionsDiscussionIdDeleteRequest([1]string{
+						s.handleV1LearningDiscussionsDiscussionIdDeleteRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					case "GET":
-						s.handleLearningDiscussionsDiscussionIdGetRequest([1]string{
+						s.handleV1LearningDiscussionsDiscussionIdGetRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					case "PUT":
-						s.handleLearningDiscussionsDiscussionIdPutRequest([1]string{
+						s.handleV1LearningDiscussionsDiscussionIdPutRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					default:
@@ -132,11 +132,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "DELETE":
-								s.handleLearningDiscussionsDiscussionIdArchiveDeleteRequest([1]string{
+								s.handleV1LearningDiscussionsDiscussionIdArchiveDeleteRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							case "POST":
-								s.handleLearningDiscussionsDiscussionIdArchivePostRequest([1]string{
+								s.handleV1LearningDiscussionsDiscussionIdArchivePostRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -157,11 +157,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						if len(elem) == 0 {
 							switch r.Method {
 							case "GET":
-								s.handleLearningDiscussionsDiscussionIdCommentsGetRequest([1]string{
+								s.handleV1LearningDiscussionsDiscussionIdCommentsGetRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							case "POST":
-								s.handleLearningDiscussionsDiscussionIdCommentsPostRequest([1]string{
+								s.handleV1LearningDiscussionsDiscussionIdCommentsPostRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -195,7 +195,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									// Leaf node.
 									switch r.Method {
 									case "POST":
-										s.handleLearningDiscussionsDiscussionIdCommentsGeneratePostRequest([1]string{
+										s.handleV1LearningDiscussionsDiscussionIdCommentsGeneratePostRequest([1]string{
 											args[0],
 										}, elemIsEscaped, w, r)
 									default:
@@ -219,12 +219,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							if len(elem) == 0 {
 								switch r.Method {
 								case "DELETE":
-									s.handleLearningDiscussionsDiscussionIdCommentsCommentIdDeleteRequest([2]string{
+									s.handleV1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteRequest([2]string{
 										args[0],
 										args[1],
 									}, elemIsEscaped, w, r)
 								case "PUT":
-									s.handleLearningDiscussionsDiscussionIdCommentsCommentIdPutRequest([2]string{
+									s.handleV1LearningDiscussionsDiscussionIdCommentsCommentIdPutRequest([2]string{
 										args[0],
 										args[1],
 									}, elemIsEscaped, w, r)
@@ -259,12 +259,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										// Leaf node.
 										switch r.Method {
 										case "DELETE":
-											s.handleLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteRequest([2]string{
+											s.handleV1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteRequest([2]string{
 												args[0],
 												args[1],
 											}, elemIsEscaped, w, r)
 										case "POST":
-											s.handleLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostRequest([2]string{
+											s.handleV1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostRequest([2]string{
 												args[0],
 												args[1],
 											}, elemIsEscaped, w, r)
@@ -287,7 +287,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										// Leaf node.
 										switch r.Method {
 										case "PUT":
-											s.handleLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest([2]string{
+											s.handleV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest([2]string{
 												args[0],
 												args[1],
 											}, elemIsEscaped, w, r)
@@ -316,7 +316,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "PUT":
-								s.handleLearningDiscussionsDiscussionIdStatusPutRequest([1]string{
+								s.handleV1LearningDiscussionsDiscussionIdStatusPutRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -418,9 +418,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/learning/discussions"
+		case '/': // Prefix: "/v1/learning/discussions"
 
-			if l := len("/learning/discussions"); len(elem) >= l && elem[0:l] == "/learning/discussions" {
+			if l := len("/v1/learning/discussions"); len(elem) >= l && elem[0:l] == "/v1/learning/discussions" {
 				elem = elem[l:]
 			} else {
 				break
@@ -429,20 +429,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			if len(elem) == 0 {
 				switch method {
 				case "GET":
-					r.name = LearningDiscussionsGetOperation
+					r.name = V1LearningDiscussionsGetOperation
 					r.summary = ""
 					r.operationID = ""
 					r.operationGroup = ""
-					r.pathPattern = "/learning/discussions"
+					r.pathPattern = "/v1/learning/discussions"
 					r.args = args
 					r.count = 0
 					return r, true
 				case "POST":
-					r.name = LearningDiscussionsPostOperation
+					r.name = V1LearningDiscussionsPostOperation
 					r.summary = ""
 					r.operationID = ""
 					r.operationGroup = ""
-					r.pathPattern = "/learning/discussions"
+					r.pathPattern = "/v1/learning/discussions"
 					r.args = args
 					r.count = 0
 					return r, true
@@ -471,29 +471,29 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "DELETE":
-						r.name = LearningDiscussionsDiscussionIdDeleteOperation
+						r.name = V1LearningDiscussionsDiscussionIdDeleteOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/learning/discussions/{discussionId}"
+						r.pathPattern = "/v1/learning/discussions/{discussionId}"
 						r.args = args
 						r.count = 1
 						return r, true
 					case "GET":
-						r.name = LearningDiscussionsDiscussionIdGetOperation
+						r.name = V1LearningDiscussionsDiscussionIdGetOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/learning/discussions/{discussionId}"
+						r.pathPattern = "/v1/learning/discussions/{discussionId}"
 						r.args = args
 						r.count = 1
 						return r, true
 					case "PUT":
-						r.name = LearningDiscussionsDiscussionIdPutOperation
+						r.name = V1LearningDiscussionsDiscussionIdPutOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/learning/discussions/{discussionId}"
+						r.pathPattern = "/v1/learning/discussions/{discussionId}"
 						r.args = args
 						r.count = 1
 						return r, true
@@ -526,20 +526,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "DELETE":
-								r.name = LearningDiscussionsDiscussionIdArchiveDeleteOperation
+								r.name = V1LearningDiscussionsDiscussionIdArchiveDeleteOperation
 								r.summary = ""
 								r.operationID = ""
 								r.operationGroup = ""
-								r.pathPattern = "/learning/discussions/{discussionId}/archive"
+								r.pathPattern = "/v1/learning/discussions/{discussionId}/archive"
 								r.args = args
 								r.count = 1
 								return r, true
 							case "POST":
-								r.name = LearningDiscussionsDiscussionIdArchivePostOperation
+								r.name = V1LearningDiscussionsDiscussionIdArchivePostOperation
 								r.summary = ""
 								r.operationID = ""
 								r.operationGroup = ""
-								r.pathPattern = "/learning/discussions/{discussionId}/archive"
+								r.pathPattern = "/v1/learning/discussions/{discussionId}/archive"
 								r.args = args
 								r.count = 1
 								return r, true
@@ -559,20 +559,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						if len(elem) == 0 {
 							switch method {
 							case "GET":
-								r.name = LearningDiscussionsDiscussionIdCommentsGetOperation
+								r.name = V1LearningDiscussionsDiscussionIdCommentsGetOperation
 								r.summary = ""
 								r.operationID = ""
 								r.operationGroup = ""
-								r.pathPattern = "/learning/discussions/{discussionId}/comments"
+								r.pathPattern = "/v1/learning/discussions/{discussionId}/comments"
 								r.args = args
 								r.count = 1
 								return r, true
 							case "POST":
-								r.name = LearningDiscussionsDiscussionIdCommentsPostOperation
+								r.name = V1LearningDiscussionsDiscussionIdCommentsPostOperation
 								r.summary = ""
 								r.operationID = ""
 								r.operationGroup = ""
-								r.pathPattern = "/learning/discussions/{discussionId}/comments"
+								r.pathPattern = "/v1/learning/discussions/{discussionId}/comments"
 								r.args = args
 								r.count = 1
 								return r, true
@@ -605,11 +605,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf node.
 									switch method {
 									case "POST":
-										r.name = LearningDiscussionsDiscussionIdCommentsGeneratePostOperation
+										r.name = V1LearningDiscussionsDiscussionIdCommentsGeneratePostOperation
 										r.summary = ""
 										r.operationID = ""
 										r.operationGroup = ""
-										r.pathPattern = "/learning/discussions/{discussionId}/comments/generate"
+										r.pathPattern = "/v1/learning/discussions/{discussionId}/comments/generate"
 										r.args = args
 										r.count = 1
 										return r, true
@@ -632,20 +632,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "DELETE":
-									r.name = LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation
+									r.name = V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation
 									r.summary = ""
 									r.operationID = ""
 									r.operationGroup = ""
-									r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}"
+									r.pathPattern = "/v1/learning/discussions/{discussionId}/comments/{commentId}"
 									r.args = args
 									r.count = 2
 									return r, true
 								case "PUT":
-									r.name = LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation
+									r.name = V1LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation
 									r.summary = ""
 									r.operationID = ""
 									r.operationGroup = ""
-									r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}"
+									r.pathPattern = "/v1/learning/discussions/{discussionId}/comments/{commentId}"
 									r.args = args
 									r.count = 2
 									return r, true
@@ -678,20 +678,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										// Leaf node.
 										switch method {
 										case "DELETE":
-											r.name = LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation
+											r.name = V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation
 											r.summary = ""
 											r.operationID = ""
 											r.operationGroup = ""
-											r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}/archive"
+											r.pathPattern = "/v1/learning/discussions/{discussionId}/comments/{commentId}/archive"
 											r.args = args
 											r.count = 2
 											return r, true
 										case "POST":
-											r.name = LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation
+											r.name = V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation
 											r.summary = ""
 											r.operationID = ""
 											r.operationGroup = ""
-											r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}/archive"
+											r.pathPattern = "/v1/learning/discussions/{discussionId}/comments/{commentId}/archive"
 											r.args = args
 											r.count = 2
 											return r, true
@@ -712,11 +712,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										// Leaf node.
 										switch method {
 										case "PUT":
-											r.name = LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation
+											r.name = V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation
 											r.summary = ""
 											r.operationID = ""
 											r.operationGroup = ""
-											r.pathPattern = "/learning/discussions/{discussionId}/comments/{commentId}/status"
+											r.pathPattern = "/v1/learning/discussions/{discussionId}/comments/{commentId}/status"
 											r.args = args
 											r.count = 2
 											return r, true
@@ -743,11 +743,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "PUT":
-								r.name = LearningDiscussionsDiscussionIdStatusPutOperation
+								r.name = V1LearningDiscussionsDiscussionIdStatusPutOperation
 								r.summary = ""
 								r.operationID = ""
 								r.operationGroup = ""
-								r.pathPattern = "/learning/discussions/{discussionId}/status"
+								r.pathPattern = "/v1/learning/discussions/{discussionId}/status"
 								r.args = args
 								r.count = 1
 								return r, true

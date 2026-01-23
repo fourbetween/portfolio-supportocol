@@ -8,30 +8,30 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// WorkspaceWorkspacesWorkspaceIdProjectsGet implements GET /workspace/workspaces/{workspaceId}/projects operation.
+	// V1WorkspaceWorkspacesWorkspaceIdProjectsGet implements GET /v1/workspace/workspaces/{workspaceId}/projects operation.
 	//
 	// Get projects.
 	//
-	// GET /workspace/workspaces/{workspaceId}/projects
-	WorkspaceWorkspacesWorkspaceIdProjectsGet(ctx context.Context, params WorkspaceWorkspacesWorkspaceIdProjectsGetParams) ([]Project, error)
-	// WorkspaceWorkspacesWorkspaceIdProjectsPost implements POST /workspace/workspaces/{workspaceId}/projects operation.
+	// GET /v1/workspace/workspaces/{workspaceId}/projects
+	V1WorkspaceWorkspacesWorkspaceIdProjectsGet(ctx context.Context, params V1WorkspaceWorkspacesWorkspaceIdProjectsGetParams) ([]Project, error)
+	// V1WorkspaceWorkspacesWorkspaceIdProjectsPost implements POST /v1/workspace/workspaces/{workspaceId}/projects operation.
 	//
 	// Create project.
 	//
-	// POST /workspace/workspaces/{workspaceId}/projects
-	WorkspaceWorkspacesWorkspaceIdProjectsPost(ctx context.Context, req *WorkspaceWorkspacesWorkspaceIdProjectsPostReq, params WorkspaceWorkspacesWorkspaceIdProjectsPostParams) (*Project, error)
-	// WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete implements DELETE /workspace/workspaces/{workspaceId}/projects/{projectId} operation.
+	// POST /v1/workspace/workspaces/{workspaceId}/projects
+	V1WorkspaceWorkspacesWorkspaceIdProjectsPost(ctx context.Context, req *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq, params V1WorkspaceWorkspacesWorkspaceIdProjectsPostParams) (*Project, error)
+	// V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete implements DELETE /v1/workspace/workspaces/{workspaceId}/projects/{projectId} operation.
 	//
 	// Delete project.
 	//
-	// DELETE /workspace/workspaces/{workspaceId}/projects/{projectId}
-	WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete(ctx context.Context, params WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams) error
-	// WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut implements PUT /workspace/workspaces/{workspaceId}/projects/{projectId} operation.
+	// DELETE /v1/workspace/workspaces/{workspaceId}/projects/{projectId}
+	V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete(ctx context.Context, params V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams) error
+	// V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut implements PUT /v1/workspace/workspaces/{workspaceId}/projects/{projectId} operation.
 	//
 	// Update project.
 	//
-	// PUT /workspace/workspaces/{workspaceId}/projects/{projectId}
-	WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut(ctx context.Context, req *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq, params WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams) (*Project, error)
+	// PUT /v1/workspace/workspaces/{workspaceId}/projects/{projectId}
+	V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut(ctx context.Context, req *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq, params V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams) (*Project, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

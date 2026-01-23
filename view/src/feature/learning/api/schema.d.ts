@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/learning/discussions": {
+    "/v1/learning/discussions": {
         parameters: {
             query?: never;
             header?: never;
@@ -87,7 +87,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/learning/discussions/{discussionId}": {
+    "/v1/learning/discussions/{discussionId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -201,7 +201,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/learning/discussions/{discussionId}/status": {
+    "/v1/learning/discussions/{discussionId}/status": {
         parameters: {
             query?: never;
             header?: never;
@@ -255,7 +255,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/learning/discussions/{discussionId}/archive": {
+    "/v1/learning/discussions/{discussionId}/archive": {
         parameters: {
             query?: never;
             header?: never;
@@ -333,7 +333,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/learning/discussions/{discussionId}/comments": {
+    "/v1/learning/discussions/{discussionId}/comments": {
         parameters: {
             query?: never;
             header?: never;
@@ -421,7 +421,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/learning/discussions/{discussionId}/comments/{commentId}": {
+    "/v1/learning/discussions/{discussionId}/comments/{commentId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -506,7 +506,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/learning/discussions/{discussionId}/comments/{commentId}/status": {
+    "/v1/learning/discussions/{discussionId}/comments/{commentId}/status": {
         parameters: {
             query?: never;
             header?: never;
@@ -560,7 +560,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/learning/discussions/{discussionId}/comments/{commentId}/archive": {
+    "/v1/learning/discussions/{discussionId}/comments/{commentId}/archive": {
         parameters: {
             query?: never;
             header?: never;
@@ -640,7 +640,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/learning/discussions/{discussionId}/comments/generate": {
+    "/v1/learning/discussions/{discussionId}/comments/generate": {
         parameters: {
             query?: never;
             header?: never;

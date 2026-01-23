@@ -28,12 +28,12 @@ func (c *codeRecorder) Unwrap() http.ResponseWriter {
 
 func recordError(string, error) {}
 
-// handleIdentityErrorsPostRequest handles POST /identity/errors operation.
+// handleV1IdentityErrorsPostRequest handles POST /v1/identity/errors operation.
 //
 // Post an error.
 //
-// POST /identity/errors
-func (s *Server) handleIdentityErrorsPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/identity/errors
+func (s *Server) handleV1IdentityErrorsPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -41,7 +41,7 @@ func (s *Server) handleIdentityErrorsPostRequest(args [0]string, argsEscaped boo
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: IdentityErrorsPostOperation,
+			Name: V1IdentityErrorsPostOperation,
 			ID:   "",
 		}
 	)
@@ -49,7 +49,7 @@ func (s *Server) handleIdentityErrorsPostRequest(args [0]string, argsEscaped boo
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, IdentityErrorsPostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1IdentityErrorsPostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -93,7 +93,7 @@ func (s *Server) handleIdentityErrorsPostRequest(args [0]string, argsEscaped boo
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeIdentityErrorsPostRequest(r)
+	request, rawBody, close, err := s.decodeV1IdentityErrorsPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -109,11 +109,11 @@ func (s *Server) handleIdentityErrorsPostRequest(args [0]string, argsEscaped boo
 		}
 	}()
 
-	var response *IdentityErrorsPostOK
+	var response *V1IdentityErrorsPostOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    IdentityErrorsPostOperation,
+			OperationName:    V1IdentityErrorsPostOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -123,9 +123,9 @@ func (s *Server) handleIdentityErrorsPostRequest(args [0]string, argsEscaped boo
 		}
 
 		type (
-			Request  = *IdentityErrorsPostReq
+			Request  = *V1IdentityErrorsPostReq
 			Params   = struct{}
-			Response = *IdentityErrorsPostOK
+			Response = *V1IdentityErrorsPostOK
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -136,12 +136,12 @@ func (s *Server) handleIdentityErrorsPostRequest(args [0]string, argsEscaped boo
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.IdentityErrorsPost(ctx, request)
+				err = s.h.V1IdentityErrorsPost(ctx, request)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.IdentityErrorsPost(ctx, request)
+		err = s.h.V1IdentityErrorsPost(ctx, request)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -160,7 +160,7 @@ func (s *Server) handleIdentityErrorsPostRequest(args [0]string, argsEscaped boo
 		return
 	}
 
-	if err := encodeIdentityErrorsPostResponse(response, w); err != nil {
+	if err := encodeV1IdentityErrorsPostResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -169,12 +169,12 @@ func (s *Server) handleIdentityErrorsPostRequest(args [0]string, argsEscaped boo
 	}
 }
 
-// handleIdentityGooglePostRequest handles POST /identity/google operation.
+// handleV1IdentityGooglePostRequest handles POST /v1/identity/google operation.
 //
 // Google login.
 //
-// POST /identity/google
-func (s *Server) handleIdentityGooglePostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/identity/google
+func (s *Server) handleV1IdentityGooglePostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -182,13 +182,13 @@ func (s *Server) handleIdentityGooglePostRequest(args [0]string, argsEscaped boo
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: IdentityGooglePostOperation,
+			Name: V1IdentityGooglePostOperation,
 			ID:   "",
 		}
 	)
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeIdentityGooglePostRequest(r)
+	request, rawBody, close, err := s.decodeV1IdentityGooglePostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -204,11 +204,11 @@ func (s *Server) handleIdentityGooglePostRequest(args [0]string, argsEscaped boo
 		}
 	}()
 
-	var response *IdentityGooglePostOK
+	var response *V1IdentityGooglePostOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    IdentityGooglePostOperation,
+			OperationName:    V1IdentityGooglePostOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -220,7 +220,7 @@ func (s *Server) handleIdentityGooglePostRequest(args [0]string, argsEscaped boo
 		type (
 			Request  = *GoogleLoginRequest
 			Params   = struct{}
-			Response = *IdentityGooglePostOK
+			Response = *V1IdentityGooglePostOK
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -231,12 +231,12 @@ func (s *Server) handleIdentityGooglePostRequest(args [0]string, argsEscaped boo
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.IdentityGooglePost(ctx, request)
+				err = s.h.V1IdentityGooglePost(ctx, request)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.IdentityGooglePost(ctx, request)
+		err = s.h.V1IdentityGooglePost(ctx, request)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -255,7 +255,7 @@ func (s *Server) handleIdentityGooglePostRequest(args [0]string, argsEscaped boo
 		return
 	}
 
-	if err := encodeIdentityGooglePostResponse(response, w); err != nil {
+	if err := encodeV1IdentityGooglePostResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -264,12 +264,12 @@ func (s *Server) handleIdentityGooglePostRequest(args [0]string, argsEscaped boo
 	}
 }
 
-// handleIdentityLogoutPostRequest handles POST /identity/logout operation.
+// handleV1IdentityLogoutPostRequest handles POST /v1/identity/logout operation.
 //
 // Logout.
 //
-// POST /identity/logout
-func (s *Server) handleIdentityLogoutPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/identity/logout
+func (s *Server) handleV1IdentityLogoutPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -280,11 +280,11 @@ func (s *Server) handleIdentityLogoutPostRequest(args [0]string, argsEscaped boo
 
 	var rawBody []byte
 
-	var response *IdentityLogoutPostOK
+	var response *V1IdentityLogoutPostOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    IdentityLogoutPostOperation,
+			OperationName:    V1IdentityLogoutPostOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -296,7 +296,7 @@ func (s *Server) handleIdentityLogoutPostRequest(args [0]string, argsEscaped boo
 		type (
 			Request  = struct{}
 			Params   = struct{}
-			Response = *IdentityLogoutPostOK
+			Response = *V1IdentityLogoutPostOK
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -307,12 +307,12 @@ func (s *Server) handleIdentityLogoutPostRequest(args [0]string, argsEscaped boo
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				err = s.h.IdentityLogoutPost(ctx)
+				err = s.h.V1IdentityLogoutPost(ctx)
 				return response, err
 			},
 		)
 	} else {
-		err = s.h.IdentityLogoutPost(ctx)
+		err = s.h.V1IdentityLogoutPost(ctx)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -331,7 +331,7 @@ func (s *Server) handleIdentityLogoutPostRequest(args [0]string, argsEscaped boo
 		return
 	}
 
-	if err := encodeIdentityLogoutPostResponse(response, w); err != nil {
+	if err := encodeV1IdentityLogoutPostResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -340,12 +340,12 @@ func (s *Server) handleIdentityLogoutPostRequest(args [0]string, argsEscaped boo
 	}
 }
 
-// handleIdentityMeGetRequest handles GET /identity/me operation.
+// handleV1IdentityMeGetRequest handles GET /v1/identity/me operation.
 //
 // Get current user.
 //
-// GET /identity/me
-func (s *Server) handleIdentityMeGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /v1/identity/me
+func (s *Server) handleV1IdentityMeGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -353,7 +353,7 @@ func (s *Server) handleIdentityMeGetRequest(args [0]string, argsEscaped bool, w 
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: IdentityMeGetOperation,
+			Name: V1IdentityMeGetOperation,
 			ID:   "",
 		}
 	)
@@ -361,7 +361,7 @@ func (s *Server) handleIdentityMeGetRequest(args [0]string, argsEscaped bool, w 
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, IdentityMeGetOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1IdentityMeGetOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -410,7 +410,7 @@ func (s *Server) handleIdentityMeGetRequest(args [0]string, argsEscaped bool, w 
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    IdentityMeGetOperation,
+			OperationName:    V1IdentityMeGetOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             nil,
@@ -433,12 +433,12 @@ func (s *Server) handleIdentityMeGetRequest(args [0]string, argsEscaped bool, w 
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.IdentityMeGet(ctx)
+				response, err = s.h.V1IdentityMeGet(ctx)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.IdentityMeGet(ctx)
+		response, err = s.h.V1IdentityMeGet(ctx)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -457,7 +457,7 @@ func (s *Server) handleIdentityMeGetRequest(args [0]string, argsEscaped bool, w 
 		return
 	}
 
-	if err := encodeIdentityMeGetResponse(response, w); err != nil {
+	if err := encodeV1IdentityMeGetResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

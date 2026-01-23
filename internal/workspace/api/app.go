@@ -27,9 +27,9 @@ func NewHandler(con *workspace.APIContainer) oas.Handler {
 	}
 }
 
-func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsGet(
+func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdProjectsGet(
 	ctx context.Context,
-	params oas.WorkspaceWorkspacesWorkspaceIdProjectsGetParams,
+	params oas.V1WorkspaceWorkspacesWorkspaceIdProjectsGetParams,
 ) ([]oas.Project, error) {
 	uid := httpctx.GetUserID(ctx)
 
@@ -49,10 +49,10 @@ func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsGet(
 	return res, nil
 }
 
-func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsPost(
+func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdProjectsPost(
 	ctx context.Context,
-	req *oas.WorkspaceWorkspacesWorkspaceIdProjectsPostReq,
-	params oas.WorkspaceWorkspacesWorkspaceIdProjectsPostParams,
+	req *oas.V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq,
+	params oas.V1WorkspaceWorkspacesWorkspaceIdProjectsPostParams,
 ) (*oas.Project, error) {
 	uid := httpctx.GetUserID(ctx)
 
@@ -69,10 +69,10 @@ func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsPost(
 	return &res, nil
 }
 
-func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut(
+func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut(
 	ctx context.Context,
-	req *oas.WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq,
-	params oas.WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams,
+	req *oas.V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq,
+	params oas.V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutParams,
 ) (*oas.Project, error) {
 	uid := httpctx.GetUserID(ctx)
 
@@ -90,9 +90,9 @@ func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut(
 	return &res, nil
 }
 
-func (h *appHandler) WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete(
+func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete(
 	ctx context.Context,
-	params oas.WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams,
+	params oas.V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams,
 ) error {
 	uid := httpctx.GetUserID(ctx)
 

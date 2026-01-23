@@ -112,7 +112,7 @@ components:
 security:
   - cookie_auth: []
 paths:
-  /workspace/workspaces/{workspaceId}/projects:
+  /v1/workspace/workspaces/{workspaceId}/projects:
     get:
       description: get projects
       parameters:
@@ -168,7 +168,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /workspace/workspaces/{workspaceId}/projects/{projectId}:
+  /v1/workspace/workspaces/{workspaceId}/projects/{projectId}:
     put:
       description: update project
       parameters:

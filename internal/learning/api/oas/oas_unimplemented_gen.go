@@ -13,147 +13,147 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// LearningDiscussionsDiscussionIdArchiveDelete implements DELETE /learning/discussions/{discussionId}/archive operation.
+// V1LearningDiscussionsDiscussionIdArchiveDelete implements DELETE /v1/learning/discussions/{discussionId}/archive operation.
 //
 // Unarchive discussion.
 //
-// DELETE /learning/discussions/{discussionId}/archive
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdArchiveDelete(ctx context.Context, params LearningDiscussionsDiscussionIdArchiveDeleteParams) (r *Discussion, _ error) {
+// DELETE /v1/learning/discussions/{discussionId}/archive
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdArchiveDelete(ctx context.Context, params V1LearningDiscussionsDiscussionIdArchiveDeleteParams) (r *Discussion, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdArchivePost implements POST /learning/discussions/{discussionId}/archive operation.
+// V1LearningDiscussionsDiscussionIdArchivePost implements POST /v1/learning/discussions/{discussionId}/archive operation.
 //
 // Archive discussion.
 //
-// POST /learning/discussions/{discussionId}/archive
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdArchivePost(ctx context.Context, params LearningDiscussionsDiscussionIdArchivePostParams) (r *Discussion, _ error) {
+// POST /v1/learning/discussions/{discussionId}/archive
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdArchivePost(ctx context.Context, params V1LearningDiscussionsDiscussionIdArchivePostParams) (r *Discussion, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete implements DELETE /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete implements DELETE /v1/learning/discussions/{discussionId}/comments/{commentId}/archive operation.
 //
 // Unarchive comment.
 //
-// DELETE /learning/discussions/{discussionId}/comments/{commentId}/archive
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(ctx context.Context, params LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams) (r *Comment, _ error) {
+// DELETE /v1/learning/discussions/{discussionId}/comments/{commentId}/archive
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(ctx context.Context, params V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams) (r *Comment, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost implements POST /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost implements POST /v1/learning/discussions/{discussionId}/comments/{commentId}/archive operation.
 //
 // Archive comment.
 //
-// POST /learning/discussions/{discussionId}/comments/{commentId}/archive
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(ctx context.Context, params LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams) (r *Comment, _ error) {
+// POST /v1/learning/discussions/{discussionId}/comments/{commentId}/archive
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(ctx context.Context, params V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams) (r *Comment, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /learning/discussions/{discussionId}/comments/{commentId} operation.
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdDelete implements DELETE /v1/learning/discussions/{discussionId}/comments/{commentId} operation.
 //
 // Delete comment.
 //
-// DELETE /learning/discussions/{discussionId}/comments/{commentId}
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsCommentIdDelete(ctx context.Context, params LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams) error {
+// DELETE /v1/learning/discussions/{discussionId}/comments/{commentId}
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdDelete(ctx context.Context, params V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams) error {
 	return ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdPut implements PUT /learning/discussions/{discussionId}/comments/{commentId} operation.
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdPut implements PUT /v1/learning/discussions/{discussionId}/comments/{commentId} operation.
 //
 // Update comment.
 //
-// PUT /learning/discussions/{discussionId}/comments/{commentId}
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req *LearningDiscussionsDiscussionIdCommentsCommentIdPutReq, params LearningDiscussionsDiscussionIdCommentsCommentIdPutParams) (r *Comment, _ error) {
+// PUT /v1/learning/discussions/{discussionId}/comments/{commentId}
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdPut(ctx context.Context, req *V1LearningDiscussionsDiscussionIdCommentsCommentIdPutReq, params V1LearningDiscussionsDiscussionIdCommentsCommentIdPutParams) (r *Comment, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut implements PUT /learning/discussions/{discussionId}/comments/{commentId}/status operation.
+// V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut implements PUT /v1/learning/discussions/{discussionId}/comments/{commentId}/status operation.
 //
 // Update comment status.
 //
-// PUT /learning/discussions/{discussionId}/comments/{commentId}/status
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx context.Context, req *LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq, params LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) (r *Comment, _ error) {
+// PUT /v1/learning/discussions/{discussionId}/comments/{commentId}/status
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx context.Context, req *V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq, params V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) (r *Comment, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdCommentsGeneratePost implements POST /learning/discussions/{discussionId}/comments/generate operation.
+// V1LearningDiscussionsDiscussionIdCommentsGeneratePost implements POST /v1/learning/discussions/{discussionId}/comments/generate operation.
 //
 // Generate comments using AI.
 //
-// POST /learning/discussions/{discussionId}/comments/generate
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *LearningDiscussionsDiscussionIdCommentsGeneratePostReq, params LearningDiscussionsDiscussionIdCommentsGeneratePostParams) error {
+// POST /v1/learning/discussions/{discussionId}/comments/generate
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *V1LearningDiscussionsDiscussionIdCommentsGeneratePostReq, params V1LearningDiscussionsDiscussionIdCommentsGeneratePostParams) error {
 	return ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdCommentsGet implements GET /learning/discussions/{discussionId}/comments operation.
+// V1LearningDiscussionsDiscussionIdCommentsGet implements GET /v1/learning/discussions/{discussionId}/comments operation.
 //
 // Get comments for a discussion.
 //
-// GET /learning/discussions/{discussionId}/comments
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsGet(ctx context.Context, params LearningDiscussionsDiscussionIdCommentsGetParams) (r []Comment, _ error) {
+// GET /v1/learning/discussions/{discussionId}/comments
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdCommentsGet(ctx context.Context, params V1LearningDiscussionsDiscussionIdCommentsGetParams) (r []Comment, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdCommentsPost implements POST /learning/discussions/{discussionId}/comments operation.
+// V1LearningDiscussionsDiscussionIdCommentsPost implements POST /v1/learning/discussions/{discussionId}/comments operation.
 //
 // Create comment.
 //
-// POST /learning/discussions/{discussionId}/comments
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *LearningDiscussionsDiscussionIdCommentsPostReq, params LearningDiscussionsDiscussionIdCommentsPostParams) (r *Comment, _ error) {
+// POST /v1/learning/discussions/{discussionId}/comments
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *V1LearningDiscussionsDiscussionIdCommentsPostReq, params V1LearningDiscussionsDiscussionIdCommentsPostParams) (r *Comment, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdDelete implements DELETE /learning/discussions/{discussionId} operation.
+// V1LearningDiscussionsDiscussionIdDelete implements DELETE /v1/learning/discussions/{discussionId} operation.
 //
 // Delete discussion.
 //
-// DELETE /learning/discussions/{discussionId}
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdDelete(ctx context.Context, params LearningDiscussionsDiscussionIdDeleteParams) error {
+// DELETE /v1/learning/discussions/{discussionId}
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdDelete(ctx context.Context, params V1LearningDiscussionsDiscussionIdDeleteParams) error {
 	return ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdGet implements GET /learning/discussions/{discussionId} operation.
+// V1LearningDiscussionsDiscussionIdGet implements GET /v1/learning/discussions/{discussionId} operation.
 //
 // Get discussion.
 //
-// GET /learning/discussions/{discussionId}
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdGet(ctx context.Context, params LearningDiscussionsDiscussionIdGetParams) (r *Discussion, _ error) {
+// GET /v1/learning/discussions/{discussionId}
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdGet(ctx context.Context, params V1LearningDiscussionsDiscussionIdGetParams) (r *Discussion, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdPut implements PUT /learning/discussions/{discussionId} operation.
+// V1LearningDiscussionsDiscussionIdPut implements PUT /v1/learning/discussions/{discussionId} operation.
 //
 // Update discussion.
 //
-// PUT /learning/discussions/{discussionId}
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdPut(ctx context.Context, req *LearningDiscussionsDiscussionIdPutReq, params LearningDiscussionsDiscussionIdPutParams) (r *Discussion, _ error) {
+// PUT /v1/learning/discussions/{discussionId}
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdPut(ctx context.Context, req *V1LearningDiscussionsDiscussionIdPutReq, params V1LearningDiscussionsDiscussionIdPutParams) (r *Discussion, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsDiscussionIdStatusPut implements PUT /learning/discussions/{discussionId}/status operation.
+// V1LearningDiscussionsDiscussionIdStatusPut implements PUT /v1/learning/discussions/{discussionId}/status operation.
 //
 // Update discussion status.
 //
-// PUT /learning/discussions/{discussionId}/status
-func (UnimplementedHandler) LearningDiscussionsDiscussionIdStatusPut(ctx context.Context, req *LearningDiscussionsDiscussionIdStatusPutReq, params LearningDiscussionsDiscussionIdStatusPutParams) (r *Discussion, _ error) {
+// PUT /v1/learning/discussions/{discussionId}/status
+func (UnimplementedHandler) V1LearningDiscussionsDiscussionIdStatusPut(ctx context.Context, req *V1LearningDiscussionsDiscussionIdStatusPutReq, params V1LearningDiscussionsDiscussionIdStatusPutParams) (r *Discussion, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsGet implements GET /learning/discussions operation.
+// V1LearningDiscussionsGet implements GET /v1/learning/discussions operation.
 //
 // Get discussions.
 //
-// GET /learning/discussions
-func (UnimplementedHandler) LearningDiscussionsGet(ctx context.Context, params LearningDiscussionsGetParams) (r []DiscussionSummary, _ error) {
+// GET /v1/learning/discussions
+func (UnimplementedHandler) V1LearningDiscussionsGet(ctx context.Context, params V1LearningDiscussionsGetParams) (r []DiscussionSummary, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// LearningDiscussionsPost implements POST /learning/discussions operation.
+// V1LearningDiscussionsPost implements POST /v1/learning/discussions operation.
 //
 // Create discussion.
 //
-// POST /learning/discussions
-func (UnimplementedHandler) LearningDiscussionsPost(ctx context.Context, req *LearningDiscussionsPostReq) (r *Discussion, _ error) {
+// POST /v1/learning/discussions
+func (UnimplementedHandler) V1LearningDiscussionsPost(ctx context.Context, req *V1LearningDiscussionsPostReq) (r *Discussion, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

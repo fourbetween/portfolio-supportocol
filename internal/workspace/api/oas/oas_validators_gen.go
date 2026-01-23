@@ -106,7 +106,7 @@ func (s ProjectName) Validate() error {
 	return nil
 }
 
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Validate() error {
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -129,7 +129,7 @@ func (s *WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Validate() error {
 	return nil
 }
 
-func (s *WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Validate() error {
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}

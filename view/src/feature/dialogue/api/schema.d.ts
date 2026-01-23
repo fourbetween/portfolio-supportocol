@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/dialogue/discussions": {
+    "/v1/dialogue/discussions": {
         parameters: {
             query?: never;
             header?: never;
@@ -49,7 +49,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/dialogue/discussions/{discussionId}": {
+    "/v1/dialogue/discussions/{discussionId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -96,7 +96,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/dialogue/discussions/{discussionId}/comments": {
+    "/v1/dialogue/discussions/{discussionId}/comments": {
         parameters: {
             query?: never;
             header?: never;

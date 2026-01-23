@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/identity/google": {
+    "/v1/identity/google": {
         parameters: {
             query?: never;
             header?: never;
@@ -51,7 +51,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/identity/logout": {
+    "/v1/identity/logout": {
         parameters: {
             query?: never;
             header?: never;
@@ -94,7 +94,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/identity/me": {
+    "/v1/identity/me": {
         parameters: {
             query?: never;
             header?: never;
@@ -139,7 +139,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/identity/errors": {
+    "/v1/identity/errors": {
         parameters: {
             query?: never;
             header?: never;

@@ -49,9 +49,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/workspace/workspaces/"
+		case '/': // Prefix: "/v1/workspace/workspaces/"
 
-			if l := len("/workspace/workspaces/"); len(elem) >= l && elem[0:l] == "/workspace/workspaces/" {
+			if l := len("/v1/workspace/workspaces/"); len(elem) >= l && elem[0:l] == "/v1/workspace/workspaces/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -81,11 +81,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleWorkspaceWorkspacesWorkspaceIdProjectsGetRequest([1]string{
+						s.handleV1WorkspaceWorkspacesWorkspaceIdProjectsGetRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					case "POST":
-						s.handleWorkspaceWorkspacesWorkspaceIdProjectsPostRequest([1]string{
+						s.handleV1WorkspaceWorkspacesWorkspaceIdProjectsPostRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					default:
@@ -116,12 +116,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "DELETE":
-							s.handleWorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteRequest([2]string{
+							s.handleV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteRequest([2]string{
 								args[0],
 								args[1],
 							}, elemIsEscaped, w, r)
 						case "PUT":
-							s.handleWorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutRequest([2]string{
+							s.handleV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutRequest([2]string{
 								args[0],
 								args[1],
 							}, elemIsEscaped, w, r)
@@ -222,9 +222,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/workspace/workspaces/"
+		case '/': // Prefix: "/v1/workspace/workspaces/"
 
-			if l := len("/workspace/workspaces/"); len(elem) >= l && elem[0:l] == "/workspace/workspaces/" {
+			if l := len("/v1/workspace/workspaces/"); len(elem) >= l && elem[0:l] == "/v1/workspace/workspaces/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -254,20 +254,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						r.name = WorkspaceWorkspacesWorkspaceIdProjectsGetOperation
+						r.name = V1WorkspaceWorkspacesWorkspaceIdProjectsGetOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/workspace/workspaces/{workspaceId}/projects"
+						r.pathPattern = "/v1/workspace/workspaces/{workspaceId}/projects"
 						r.args = args
 						r.count = 1
 						return r, true
 					case "POST":
-						r.name = WorkspaceWorkspacesWorkspaceIdProjectsPostOperation
+						r.name = V1WorkspaceWorkspacesWorkspaceIdProjectsPostOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/workspace/workspaces/{workspaceId}/projects"
+						r.pathPattern = "/v1/workspace/workspaces/{workspaceId}/projects"
 						r.args = args
 						r.count = 1
 						return r, true
@@ -297,20 +297,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "DELETE":
-							r.name = WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteOperation
+							r.name = V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteOperation
 							r.summary = ""
 							r.operationID = ""
 							r.operationGroup = ""
-							r.pathPattern = "/workspace/workspaces/{workspaceId}/projects/{projectId}"
+							r.pathPattern = "/v1/workspace/workspaces/{workspaceId}/projects/{projectId}"
 							r.args = args
 							r.count = 2
 							return r, true
 						case "PUT":
-							r.name = WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutOperation
+							r.name = V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutOperation
 							r.summary = ""
 							r.operationID = ""
 							r.operationGroup = ""
-							r.pathPattern = "/workspace/workspaces/{workspaceId}/projects/{projectId}"
+							r.pathPattern = "/v1/workspace/workspaces/{workspaceId}/projects/{projectId}"
 							r.args = args
 							r.count = 2
 							return r, true

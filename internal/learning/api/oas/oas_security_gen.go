@@ -33,22 +33,22 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 }
 
 var operationRolesCookieAuth = map[string][]string{
-	LearningDiscussionsDiscussionIdArchiveDeleteOperation:                  []string{},
-	LearningDiscussionsDiscussionIdArchivePostOperation:                    []string{},
-	LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation: []string{},
-	LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation:   []string{},
-	LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation:        []string{},
-	LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation:           []string{},
-	LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation:     []string{},
-	LearningDiscussionsDiscussionIdCommentsGeneratePostOperation:           []string{},
-	LearningDiscussionsDiscussionIdCommentsGetOperation:                    []string{},
-	LearningDiscussionsDiscussionIdCommentsPostOperation:                   []string{},
-	LearningDiscussionsDiscussionIdDeleteOperation:                         []string{},
-	LearningDiscussionsDiscussionIdGetOperation:                            []string{},
-	LearningDiscussionsDiscussionIdPutOperation:                            []string{},
-	LearningDiscussionsDiscussionIdStatusPutOperation:                      []string{},
-	LearningDiscussionsGetOperation:                                        []string{},
-	LearningDiscussionsPostOperation:                                       []string{},
+	V1LearningDiscussionsDiscussionIdArchiveDeleteOperation:                  []string{},
+	V1LearningDiscussionsDiscussionIdArchivePostOperation:                    []string{},
+	V1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation: []string{},
+	V1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation:   []string{},
+	V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteOperation:        []string{},
+	V1LearningDiscussionsDiscussionIdCommentsCommentIdPutOperation:           []string{},
+	V1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation:     []string{},
+	V1LearningDiscussionsDiscussionIdCommentsGeneratePostOperation:           []string{},
+	V1LearningDiscussionsDiscussionIdCommentsGetOperation:                    []string{},
+	V1LearningDiscussionsDiscussionIdCommentsPostOperation:                   []string{},
+	V1LearningDiscussionsDiscussionIdDeleteOperation:                         []string{},
+	V1LearningDiscussionsDiscussionIdGetOperation:                            []string{},
+	V1LearningDiscussionsDiscussionIdPutOperation:                            []string{},
+	V1LearningDiscussionsDiscussionIdStatusPutOperation:                      []string{},
+	V1LearningDiscussionsGetOperation:                                        []string{},
+	V1LearningDiscussionsPostOperation:                                       []string{},
 }
 
 func (s *Server) securityCookieAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {

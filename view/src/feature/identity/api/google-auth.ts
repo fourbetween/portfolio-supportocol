@@ -51,7 +51,7 @@ export class GoogleAuthService {
   ) {
     this.options.onLoading(true);
     try {
-      const { error } = await client.POST("/identity/google", {
+      const { error } = await client.POST("/v1/identity/google", {
         body: { idToken: response.credential },
       });
 

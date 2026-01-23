@@ -72,10 +72,10 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 	}
 
 	mux := http.NewServeMux()
-	mux.Handle("/identity/", identityHandler)
-	mux.Handle("/workspace/", workspaceHandler)
-	mux.Handle("/learning/", learningHandler)
-	mux.Handle("/dialogue/", dialogueHandler)
+	mux.Handle("/v1/identity/", identityHandler)
+	mux.Handle("/v1/workspace/", workspaceHandler)
+	mux.Handle("/v1/learning/", learningHandler)
+	mux.Handle("/v1/dialogue/", dialogueHandler)
 
 	return middleware.CSRFMiddleware(domain)(mux), nil
 }

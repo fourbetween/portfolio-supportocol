@@ -10,7 +10,7 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeLearningDiscussionsDiscussionIdArchiveDeleteResponse(response *Discussion, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdArchiveDeleteResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -23,7 +23,7 @@ func encodeLearningDiscussionsDiscussionIdArchiveDeleteResponse(response *Discus
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdArchivePostResponse(response *Discussion, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdArchivePostResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -36,7 +36,7 @@ func encodeLearningDiscussionsDiscussionIdArchivePostResponse(response *Discussi
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteResponse(response *Comment, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteResponse(response *Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -49,7 +49,7 @@ func encodeLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteResponse
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostResponse(response *Comment, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostResponse(response *Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -62,13 +62,13 @@ func encodeLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostResponse(r
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteResponse(response *LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteResponse(response *V1LearningDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
 
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdCommentsCommentIdPutResponse(response *Comment, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdCommentsCommentIdPutResponse(response *Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -81,7 +81,7 @@ func encodeLearningDiscussionsDiscussionIdCommentsCommentIdPutResponse(response 
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutResponse(response *Comment, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutResponse(response *Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -94,13 +94,13 @@ func encodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutResponse(res
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdCommentsGeneratePostResponse(response *LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdCommentsGeneratePostResponse(response *V1LearningDiscussionsDiscussionIdCommentsGeneratePostAccepted, w http.ResponseWriter) error {
 	w.WriteHeader(202)
 
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdCommentsGetResponse(response []Comment, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdCommentsGetResponse(response []Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -117,7 +117,7 @@ func encodeLearningDiscussionsDiscussionIdCommentsGetResponse(response []Comment
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdCommentsPostResponse(response *Comment, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdCommentsPostResponse(response *Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(201)
 
@@ -130,13 +130,13 @@ func encodeLearningDiscussionsDiscussionIdCommentsPostResponse(response *Comment
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdDeleteResponse(response *LearningDiscussionsDiscussionIdDeleteNoContent, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdDeleteResponse(response *V1LearningDiscussionsDiscussionIdDeleteNoContent, w http.ResponseWriter) error {
 	w.WriteHeader(204)
 
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdGetResponse(response *Discussion, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdGetResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -149,7 +149,7 @@ func encodeLearningDiscussionsDiscussionIdGetResponse(response *Discussion, w ht
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdPutResponse(response *Discussion, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdPutResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -162,7 +162,7 @@ func encodeLearningDiscussionsDiscussionIdPutResponse(response *Discussion, w ht
 	return nil
 }
 
-func encodeLearningDiscussionsDiscussionIdStatusPutResponse(response *Discussion, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsDiscussionIdStatusPutResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -175,7 +175,7 @@ func encodeLearningDiscussionsDiscussionIdStatusPutResponse(response *Discussion
 	return nil
 }
 
-func encodeLearningDiscussionsGetResponse(response []DiscussionSummary, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsGetResponse(response []DiscussionSummary, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
@@ -192,7 +192,7 @@ func encodeLearningDiscussionsGetResponse(response []DiscussionSummary, w http.R
 	return nil
 }
 
-func encodeLearningDiscussionsPostResponse(response *Discussion, w http.ResponseWriter) error {
+func encodeV1LearningDiscussionsPostResponse(response *Discussion, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(201)
 
