@@ -112,6 +112,24 @@ components:
 security:
   - cookie_auth: []
 paths:
+  /v1/workspace/me:
+    get:
+      description: get my workspaces
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkspaceWithMember"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/workspace/workspaces/{workspaceId}/projects:
     get:
       description: get projects

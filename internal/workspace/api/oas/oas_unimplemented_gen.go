@@ -13,6 +13,15 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// V1WorkspaceMeGet implements GET /v1/workspace/me operation.
+//
+// Get my workspaces.
+//
+// GET /v1/workspace/me
+func (UnimplementedHandler) V1WorkspaceMeGet(ctx context.Context) (r []WorkspaceWithMember, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1WorkspaceWorkspacesWorkspaceIdProjectsGet implements GET /v1/workspace/workspaces/{workspaceId}/projects operation.
 //
 // Get projects.

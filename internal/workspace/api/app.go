@@ -27,6 +27,22 @@ func NewHandler(con *workspace.APIContainer) oas.Handler {
 	}
 }
 
+func (h *appHandler) V1WorkspaceMeGet(ctx context.Context) ([]oas.WorkspaceWithMember, error) {
+	uid := httpctx.GetUserID(ctx)
+
+	workspaces, err := h.con.ListMyWorkspaces.Execute(ctx, uid)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]oas.WorkspaceWithMember, len(workspaces))
+	for i, w := range workspaces {
+		res[i] = h.toOasWorkspaceWithMember(w, uid)
+	}
+
+	return res, nil
+}
+
 func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdProjectsGet(
 	ctx context.Context,
 	params oas.V1WorkspaceWorkspacesWorkspaceIdProjectsGetParams,
@@ -132,6 +148,24 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 }
 
 // Converters
+
+func (h *appHandler) toOasWorkspaceWithMember(w *usecase.WorkspaceWithMember, userID string) oas.WorkspaceWithMember {
+	return oas.WorkspaceWithMember{
+		Workspace: oas.Workspace{
+			ID:        oas.ID(uuid.MustParse(w.WorkspaceID)),
+			Slug:      oas.WorkspaceSlug(w.WorkspaceSlug),
+			Name:      oas.WorkspaceName(w.WorkspaceName),
+			Type:      oas.WorkspaceType(w.WorkspaceType),
+			CreatedAt: w.WorkspaceCreatedAt,
+		},
+		Member: oas.Member{
+			WorkspaceId: oas.ID(uuid.MustParse(w.WorkspaceID)),
+			UserId:      oas.ID(uuid.MustParse(userID)),
+			Role:        oas.MemberRole(w.MemberRole),
+			CreatedAt:   w.MemberCreatedAt,
+		},
+	}
+}
 
 func (h *appHandler) toOasProject(p *domain.Project) oas.Project {
 	return oas.Project{

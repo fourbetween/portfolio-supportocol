@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/go-faster/errors"
 	"github.com/google/uuid"
 )
 
@@ -92,6 +93,103 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 
 type ID uuid.UUID
 
+// Ref: #/components/schemas/Member
+type Member struct {
+	WorkspaceId ID         `json:"workspaceId"`
+	UserId      ID         `json:"userId"`
+	Role        MemberRole `json:"role"`
+	CreatedAt   time.Time  `json:"createdAt"`
+}
+
+// GetWorkspaceId returns the value of WorkspaceId.
+func (s *Member) GetWorkspaceId() ID {
+	return s.WorkspaceId
+}
+
+// GetUserId returns the value of UserId.
+func (s *Member) GetUserId() ID {
+	return s.UserId
+}
+
+// GetRole returns the value of Role.
+func (s *Member) GetRole() MemberRole {
+	return s.Role
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Member) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetWorkspaceId sets the value of WorkspaceId.
+func (s *Member) SetWorkspaceId(val ID) {
+	s.WorkspaceId = val
+}
+
+// SetUserId sets the value of UserId.
+func (s *Member) SetUserId(val ID) {
+	s.UserId = val
+}
+
+// SetRole sets the value of Role.
+func (s *Member) SetRole(val MemberRole) {
+	s.Role = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Member) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// Ref: #/components/schemas/MemberRole
+type MemberRole string
+
+const (
+	MemberRoleOwner  MemberRole = "owner"
+	MemberRoleAdmin  MemberRole = "admin"
+	MemberRoleMember MemberRole = "member"
+)
+
+// AllValues returns all MemberRole values.
+func (MemberRole) AllValues() []MemberRole {
+	return []MemberRole{
+		MemberRoleOwner,
+		MemberRoleAdmin,
+		MemberRoleMember,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s MemberRole) MarshalText() ([]byte, error) {
+	switch s {
+	case MemberRoleOwner:
+		return []byte(s), nil
+	case MemberRoleAdmin:
+		return []byte(s), nil
+	case MemberRoleMember:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *MemberRole) UnmarshalText(data []byte) error {
+	switch MemberRole(data) {
+	case MemberRoleOwner:
+		*s = MemberRoleOwner
+		return nil
+	case MemberRoleAdmin:
+		*s = MemberRoleAdmin
+		return nil
+	case MemberRoleMember:
+		*s = MemberRoleMember
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/Project
 type Project struct {
 	ID          ID          `json:"id"`
@@ -171,4 +269,135 @@ func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) GetName() Proj
 // SetName sets the value of Name.
 func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) SetName(val ProjectName) {
 	s.Name = val
+}
+
+// Ref: #/components/schemas/Workspace
+type Workspace struct {
+	ID        ID            `json:"id"`
+	Slug      WorkspaceSlug `json:"slug"`
+	Name      WorkspaceName `json:"name"`
+	Type      WorkspaceType `json:"type"`
+	CreatedAt time.Time     `json:"createdAt"`
+}
+
+// GetID returns the value of ID.
+func (s *Workspace) GetID() ID {
+	return s.ID
+}
+
+// GetSlug returns the value of Slug.
+func (s *Workspace) GetSlug() WorkspaceSlug {
+	return s.Slug
+}
+
+// GetName returns the value of Name.
+func (s *Workspace) GetName() WorkspaceName {
+	return s.Name
+}
+
+// GetType returns the value of Type.
+func (s *Workspace) GetType() WorkspaceType {
+	return s.Type
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Workspace) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Workspace) SetID(val ID) {
+	s.ID = val
+}
+
+// SetSlug sets the value of Slug.
+func (s *Workspace) SetSlug(val WorkspaceSlug) {
+	s.Slug = val
+}
+
+// SetName sets the value of Name.
+func (s *Workspace) SetName(val WorkspaceName) {
+	s.Name = val
+}
+
+// SetType sets the value of Type.
+func (s *Workspace) SetType(val WorkspaceType) {
+	s.Type = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Workspace) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+type WorkspaceName string
+
+type WorkspaceSlug string
+
+// Ref: #/components/schemas/WorkspaceType
+type WorkspaceType string
+
+const (
+	WorkspaceTypePersonal     WorkspaceType = "personal"
+	WorkspaceTypeOrganization WorkspaceType = "organization"
+)
+
+// AllValues returns all WorkspaceType values.
+func (WorkspaceType) AllValues() []WorkspaceType {
+	return []WorkspaceType{
+		WorkspaceTypePersonal,
+		WorkspaceTypeOrganization,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s WorkspaceType) MarshalText() ([]byte, error) {
+	switch s {
+	case WorkspaceTypePersonal:
+		return []byte(s), nil
+	case WorkspaceTypeOrganization:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *WorkspaceType) UnmarshalText(data []byte) error {
+	switch WorkspaceType(data) {
+	case WorkspaceTypePersonal:
+		*s = WorkspaceTypePersonal
+		return nil
+	case WorkspaceTypeOrganization:
+		*s = WorkspaceTypeOrganization
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #/components/schemas/WorkspaceWithMember
+type WorkspaceWithMember struct {
+	Workspace Workspace `json:"workspace"`
+	Member    Member    `json:"member"`
+}
+
+// GetWorkspace returns the value of Workspace.
+func (s *WorkspaceWithMember) GetWorkspace() Workspace {
+	return s.Workspace
+}
+
+// GetMember returns the value of Member.
+func (s *WorkspaceWithMember) GetMember() Member {
+	return s.Member
+}
+
+// SetWorkspace sets the value of Workspace.
+func (s *WorkspaceWithMember) SetWorkspace(val Workspace) {
+	s.Workspace = val
+}
+
+// SetMember sets the value of Member.
+func (s *WorkspaceWithMember) SetMember(val Member) {
+	s.Member = val
 }

@@ -12,6 +12,9 @@ import (
 )
 
 type APIContainer struct {
+	// Workspaces
+	ListMyWorkspaces *usecase.ListMyWorkspacesUsecase
+
 	// Projects
 	CreateProject *usecase.CreateProjectUsecase
 	GetProject    *usecase.GetProjectUsecase
@@ -38,7 +41,12 @@ func NewAPIContainer(
 	memberRepo := db.NewMemberRepository(dbCon, memberFac)
 	projectRepo := db.NewProjectRepository(dbCon, projectFac)
 
+	workspaceQuerySrv := db.NewWorkspaceQueryService(dbCon)
+
 	return &APIContainer{
+		// Workspaces
+		ListMyWorkspaces: usecase.NewListMyWorkspacesUsecase(workspaceQuerySrv),
+
 		// Projects
 		CreateProject: usecase.NewCreateProjectUsecase(memberRepo, projectRepo, projectFac, txManager),
 		GetProject:    usecase.NewGetProjectUsecase(memberRepo, projectRepo),

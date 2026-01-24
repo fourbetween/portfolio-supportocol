@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1WorkspaceMeGet implements GET /v1/workspace/me operation.
+	//
+	// Get my workspaces.
+	//
+	// GET /v1/workspace/me
+	V1WorkspaceMeGet(ctx context.Context) ([]WorkspaceWithMember, error)
 	// V1WorkspaceWorkspacesWorkspaceIdProjectsGet implements GET /v1/workspace/workspaces/{workspaceId}/projects operation.
 	//
 	// Get projects.
