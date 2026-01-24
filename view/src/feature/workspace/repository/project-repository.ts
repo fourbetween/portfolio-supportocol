@@ -10,7 +10,7 @@ export class ProjectRepository {
       },
     );
     if (error) throw new Error(error.message);
-    return data || [];
+    return data;
   }
 }
 
