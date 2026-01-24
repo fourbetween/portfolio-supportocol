@@ -11,3 +11,9 @@ export class WorkspaceProjectSelectEvent extends Event {
     this.projectId = projectId;
   }
 }
+
+declare global {
+  interface HTMLElementEventMap {
+    [WORKSPACE_PROJECT_SELECT_EVENT_NAME]: WorkspaceProjectSelectEvent;
+  }
+}

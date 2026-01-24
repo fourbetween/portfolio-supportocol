@@ -1,10 +1,10 @@
 import { consume } from "@lit/context";
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { userContext } from "../../../app/context/user";
-import type { User } from "../../../app/model/user";
+import { workspaceContext } from "../../../app/context/workspace";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
   LearningDiscussionCreatedEvent,
   LearningDiscussionCreateEvent,
@@ -20,8 +20,8 @@ import "../ui/discussion-search-bar/discussion-search-bar";
 
 @customElement("learning-discussion-list-widget")
 export class LearningDiscussionListWidget extends LitElement {
-  @consume({ context: userContext, subscribe: true })
-  private user?: User;
+  @consume({ context: workspaceContext, subscribe: true })
+  private workspace?: WorkspaceWithMember;
 
   @property({ type: Array })
   summaries: DiscussionSummary[] = [];
@@ -30,11 +30,10 @@ export class LearningDiscussionListWidget extends LitElement {
   private _searchQuery = "";
 
   private async _handleAddDiscussion(e: LearningDiscussionCreateEvent) {
-    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
-    if (!workspaceId) return;
+    if (!this.workspace) return;
     try {
       const data = await discussionRepository.create(
-        workspaceId,
+        this.workspace.workspace.id,
         e.theme,
         e.status,
       );
@@ -49,8 +48,7 @@ export class LearningDiscussionListWidget extends LitElement {
   }
 
   private async _handleDeleteDiscussion(e: LearningDiscussionDeleteEvent) {
-    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
-    if (!workspaceId) return;
+    if (!this.workspace) return;
     const { discussionId } = e;
     const discussion = this.summaries.find((d) => d.id === discussionId);
     if (!discussion) {
@@ -60,7 +58,10 @@ export class LearningDiscussionListWidget extends LitElement {
       return;
     }
     try {
-      await discussionRepository.delete(workspaceId, discussionId);
+      await discussionRepository.delete(
+        this.workspace.workspace.id,
+        discussionId,
+      );
       this.dispatchEvent(new LearningDiscussionDeletedEvent(discussionId));
       showToast(this, "Succeeded.", "success", 2000);
     } catch (error: any) {

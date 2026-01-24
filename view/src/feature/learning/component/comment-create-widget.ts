@@ -1,10 +1,10 @@
 import { consume } from "@lit/context";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
-import { userContext } from "../../../app/context/user";
-import type { User } from "../../../app/model/user";
+import { workspaceContext } from "../../../app/context/workspace";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
   LearningCommentCreateEvent,
   LearningCommentCreatedEvent,
@@ -18,8 +18,8 @@ import type { LearningCommentTypePopup } from "../ui/comment-type-popup/comment-
 
 @customElement("learning-comment-create-widget")
 export class LearningCommentCreateWidget extends LitElement {
-  @consume({ context: userContext, subscribe: true })
-  private user?: User;
+  @consume({ context: workspaceContext, subscribe: true })
+  private workspace?: WorkspaceWithMember;
 
   @property({ type: String })
   discussionId?: string;
@@ -49,12 +49,11 @@ export class LearningCommentCreateWidget extends LitElement {
   }
 
   private async handleSave(e: LearningCommentCreateEvent) {
-    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
-    if (!this.discussionId || !workspaceId) return;
+    if (!this.discussionId || !this.workspace) return;
 
     try {
       const data = await commentRepository.create(
-        workspaceId,
+        this.workspace.workspace.id,
         this.discussionId,
         {
           parentCommentId: e.parentCommentId,

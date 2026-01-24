@@ -14,3 +14,9 @@ export class WorkspaceWorkspaceSelectEvent extends Event {
     this.workspace = workspace;
   }
 }
+
+declare global {
+  interface HTMLElementEventMap {
+    [WORKSPACE_WORKSPACE_SELECT_EVENT_NAME]: WorkspaceWorkspaceSelectEvent;
+  }
+}

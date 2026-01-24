@@ -2,15 +2,15 @@ import { consume } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { userContext } from "../../../app/context/user";
+import { workspaceContext } from "../../../app/context/workspace";
 import { TouchController } from "../../../app/controller/touch";
-import type { User } from "../../../app/model/user";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
 import { iconStyle } from "../../../shared/style/icon";
 import "../../../shared/ui/drawer/drawer";
+import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import "../component/comment-explorer-widget";
 import "../component/comment-frame-widget";
 import "../component/comment-proposed-widget";
@@ -36,8 +36,8 @@ import { discussionRepository } from "../repository/discussion-repository";
 export class LearningDashboardPage extends LitElement {
   private _touch = new TouchController(this);
 
-  @consume({ context: userContext, subscribe: true })
-  private user?: User;
+  @consume({ context: workspaceContext, subscribe: true })
+  private workspace?: WorkspaceWithMember;
 
   @state()
   private _summaries: DiscussionSummary[] = [];
@@ -58,9 +58,9 @@ export class LearningDashboardPage extends LitElement {
   private _activeDrawer?: "left" | "right";
 
   private summariesTask = new Task(this, {
-    task: async ([workspaceId]) => {
-      if (!workspaceId) return [] as DiscussionSummary[];
-      return discussionRepository.list(workspaceId);
+    task: async ([workspace]) => {
+      if (!workspace) return [] as DiscussionSummary[];
+      return discussionRepository.list(workspace.workspace.id);
     },
     onComplete: (summaries) => {
       this._summaries = summaries as DiscussionSummary[];
@@ -68,16 +68,16 @@ export class LearningDashboardPage extends LitElement {
     onError: (e: unknown) => {
       showToast(this, String(e), "error");
     },
-    args: () => [this.user ? "personal-" + this.user.id : undefined],
+    args: () => [this.workspace],
   });
 
   constructor() {
     super();
 
     new Task(this, {
-      task: async ([workspaceId, discussionId]) => {
-        if (!workspaceId || !discussionId) return;
-        return discussionRepository.get(workspaceId, discussionId);
+      task: async ([workspace, discussionId]) => {
+        if (!workspace || !discussionId) return;
+        return discussionRepository.get(workspace.workspace.id, discussionId);
       },
       onComplete: (discussion) => {
         this._selectedDiscussion = discussion;
@@ -85,16 +85,13 @@ export class LearningDashboardPage extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [
-        this.user ? "personal-" + this.user.id : undefined,
-        this._selectedDiscussionId,
-      ],
+      args: () => [this.workspace, this._selectedDiscussionId],
     });
 
     new Task(this, {
-      task: async ([workspaceId, discussionId]) => {
-        if (!workspaceId || !discussionId) return [] as Comment[];
-        return commentRepository.list(workspaceId, discussionId);
+      task: async ([workspace, discussionId]) => {
+        if (!workspace || !discussionId) return [] as Comment[];
+        return commentRepository.list(workspace.workspace.id, discussionId);
       },
       onComplete: (comments) => {
         this._comments = comments;
@@ -102,10 +99,7 @@ export class LearningDashboardPage extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [
-        this.user ? "personal-" + this.user.id : undefined,
-        this._selectedDiscussionId,
-      ],
+      args: () => [this.workspace, this._selectedDiscussionId],
     });
   }
 
@@ -209,11 +203,10 @@ export class LearningDashboardPage extends LitElement {
           : undefined;
 
       try {
-        const workspaceId = this.user ? "personal-" + this.user.id : undefined;
-        if (!workspaceId) return;
+        if (!this.workspace) return;
 
         const newComments = await commentRepository.list(
-          workspaceId,
+          this.workspace.workspace.id,
           this._selectedDiscussionId,
           since,
         );

@@ -1,4 +1,3 @@
-export type User = {
-  id: string;
-  email: string;
-};
+import type { components } from "../../feature/identity/api/schema";
+
+export type User = components["schemas"]["User"];

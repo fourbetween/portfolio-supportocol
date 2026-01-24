@@ -4,6 +4,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { userContext } from "../../../app/context/user";
 import type { User } from "../../../app/model/user";
+import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import type { Project } from "../model/project";
 import { projectRepository } from "../repository/project-repository";
@@ -31,10 +32,13 @@ export class WorkspaceProjectSelectWidget extends LitElement {
         }
         return projectRepository.list("personal-" + this.user.id);
       },
-      args: () => [],
       onComplete: (projects: Project[]) => {
         this.projects = projects;
       },
+      onError: (e: unknown) => {
+        showToast(this, String(e), "error");
+      },
+      args: () => [],
     });
   }
 

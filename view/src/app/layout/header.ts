@@ -3,6 +3,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { authService } from "../../feature/identity/model/auth-service";
 import type { User } from "../../feature/identity/model/user";
+import "../../feature/workspace/component/workspace-select-widget";
 import { baseStyle } from "../../shared/style/base";
 import { iconStyle } from "../../shared/style/icon";
 import { userContext } from "../context/user";
@@ -56,6 +57,7 @@ export class AppHeader extends LitElement {
                 </button>
               `}
         </div>
+        <workspace-workspace-select-widget></workspace-workspace-select-widget>
       </header>
     `;
   }

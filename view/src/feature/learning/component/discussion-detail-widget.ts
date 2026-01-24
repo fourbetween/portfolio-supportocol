@@ -1,10 +1,10 @@
 import { consume } from "@lit/context";
 import { html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { userContext } from "../../../app/context/user";
-import type { User } from "../../../app/model/user";
+import { workspaceContext } from "../../../app/context/workspace";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
   LearningDiscussionArchiveEvent,
   LearningDiscussionUnarchiveEvent,
@@ -21,8 +21,8 @@ import "../ui/discussion-detail/discussion-detail";
 
 @customElement("learning-discussion-detail-widget")
 export class LearningDiscussionDetailWidget extends LitElement {
-  @consume({ context: userContext, subscribe: true })
-  private user?: User;
+  @consume({ context: workspaceContext, subscribe: true })
+  private workspace?: WorkspaceWithMember;
 
   @property({ type: Object })
   discussion?: Discussion;
@@ -34,11 +34,10 @@ export class LearningDiscussionDetailWidget extends LitElement {
   private _isEditing = false;
 
   private async _handleUpdateDiscussion(e: LearningDiscussionUpdateEvent) {
-    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
-    if (!this.discussion || !workspaceId) return;
+    if (!this.discussion || !this.workspace) return;
     try {
       const data = await discussionRepository.update(
-        workspaceId,
+        this.workspace.workspace.id,
         this.discussion.id,
         e.theme,
         e.conclusion,
@@ -56,15 +55,14 @@ export class LearningDiscussionDetailWidget extends LitElement {
   private async _handleUpdateDiscussionStatus(
     e: LearningDiscussionUpdateStatusEvent,
   ) {
-    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
-    if (!this.discussion || !workspaceId) return;
+    if (!this.discussion || !this.workspace) return;
     try {
       let commentFrame;
       if (e.status === "public") {
         commentFrame = deriveCommentFrame(this.comments);
       }
       const data = await discussionRepository.updateStatus(
-        workspaceId,
+        this.workspace.workspace.id,
         this.discussion.id,
         e.status,
         commentFrame,
@@ -85,11 +83,10 @@ export class LearningDiscussionDetailWidget extends LitElement {
   private async _handleUpdateCommentFrame(
     e: LearningDiscussionUpdateCommentFrameEvent,
   ) {
-    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
-    if (!this.discussion || !workspaceId) return;
+    if (!this.discussion || !this.workspace) return;
     try {
       const data = await discussionRepository.updateStatus(
-        workspaceId,
+        this.workspace.workspace.id,
         this.discussion.id,
         this.discussion.status,
         e.commentFrame,
@@ -103,11 +100,10 @@ export class LearningDiscussionDetailWidget extends LitElement {
   }
 
   private async _handleArchiveDiscussion(e: LearningDiscussionArchiveEvent) {
-    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
-    if (!this.discussion || !workspaceId) return;
+    if (!this.discussion || !this.workspace) return;
     try {
       const data = await discussionRepository.archive(
-        workspaceId,
+        this.workspace.workspace.id,
         e.discussionId,
       );
       this.discussion = data;
@@ -121,11 +117,10 @@ export class LearningDiscussionDetailWidget extends LitElement {
   private async _handleUnarchiveDiscussion(
     e: LearningDiscussionUnarchiveEvent,
   ) {
-    const workspaceId = this.user ? "personal-" + this.user.id : undefined;
-    if (!this.discussion || !workspaceId) return;
+    if (!this.discussion || !this.workspace) return;
     try {
       const data = await discussionRepository.unarchive(
-        workspaceId,
+        this.workspace.workspace.id,
         e.discussionId,
       );
       this.discussion = data;
