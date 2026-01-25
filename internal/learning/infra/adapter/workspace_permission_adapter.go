@@ -17,3 +17,7 @@ func NewWorkspacePermissionAdapter(qs usecase.WorkspaceQueryService) *WorkspaceP
 func (a *WorkspacePermissionAdapter) CanAccessWorkspace(ctx context.Context, userID, workspaceID string) (bool, error) {
 	return a.qs.CanAccessWorkspace(ctx, userID, workspaceID)
 }
+
+func (a *WorkspacePermissionAdapter) CanAccessProject(ctx context.Context, userID, workspaceID, projectID string) (bool, error) {
+	return a.qs.CanAccessProject(ctx, userID, workspaceID, projectID)
+}

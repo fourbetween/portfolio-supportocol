@@ -3,13 +3,16 @@ package db
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 	"github.com/fourbetween/app-supportocol/internal/workspace/infra/db/schema/app-supportocol/model"
 	"github.com/fourbetween/app-supportocol/internal/workspace/infra/db/schema/app-supportocol/table"
 	"github.com/fourbetween/app-supportocol/internal/workspace/usecase"
 	"github.com/go-jet/jet/v2/mysql"
+	"github.com/go-jet/jet/v2/qrm"
 )
 
 // workspaceQueryService is implementation of usecase.WorkspaceQueryService.
@@ -52,6 +55,14 @@ func (s *workspaceQueryService) CanAccessWorkspace(ctx context.Context, userID s
 	return w.WorkspaceID == workspaceID, nil
 }
 
+func (s *workspaceQueryService) CanAccessProject(ctx context.Context, userID string, workspaceID string, projectID string) (bool, error) {
+	p, err := s.loadMyProjectByID(ctx, userID, workspaceID, projectID)
+	if err != nil {
+		return false, err
+	}
+	return p.ID == projectID, nil
+}
+
 func (s *workspaceQueryService) loadMyWorkspaceByID(ctx context.Context, userID string, workspaceID string) (usecase.WorkspaceWithMember, error) {
 	stmt := s.selectWorkspaceWithMember().
 		WHERE(
@@ -61,9 +72,30 @@ func (s *workspaceQueryService) loadMyWorkspaceByID(ctx context.Context, userID 
 
 	var dest workspaceWithMemberModel
 	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
+		if errors.Is(err, qrm.ErrNoRows) {
+			return usecase.WorkspaceWithMember{}, apperr.ErrNotFound
+		}
 		return usecase.WorkspaceWithMember{}, fmt.Errorf("failed to load my workspace by ID: %w", err)
 	}
 	return dest.toUseCase(), nil
+}
+
+func (s *workspaceQueryService) loadMyProjectByID(ctx context.Context, userID string, workspaceID string, projectID string) (model.Projects, error) {
+	stmt := s.selectProjectWithMember().
+		WHERE(
+			table.Projects.ID.EQ(mysql.String(projectID)).
+				AND(table.Projects.WorkspaceID.EQ(mysql.String(workspaceID))).
+				AND(table.Members.UserID.EQ(mysql.String(userID))),
+		)
+
+	var dest model.Projects
+	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
+		if errors.Is(err, qrm.ErrNoRows) {
+			return model.Projects{}, apperr.ErrNotFound
+		}
+		return model.Projects{}, fmt.Errorf("failed to load my project by ID: %w", err)
+	}
+	return dest, nil
 }
 
 func (m workspaceWithMemberModel) toUseCase() usecase.WorkspaceWithMember {
@@ -87,5 +119,16 @@ func (s *workspaceQueryService) selectWorkspaceWithMember() mysql.SelectStatemen
 		FROM(
 			table.Workspaces.
 				INNER_JOIN(table.Members, table.Workspaces.ID.EQ(table.Members.WorkspaceID)),
+		)
+}
+
+func (s *workspaceQueryService) selectProjectWithMember() mysql.SelectStatement {
+	return mysql.
+		SELECT(
+			table.Projects.AllColumns,
+		).
+		FROM(
+			table.Projects.
+				INNER_JOIN(table.Members, table.Projects.WorkspaceID.EQ(table.Members.WorkspaceID)),
 		)
 }
