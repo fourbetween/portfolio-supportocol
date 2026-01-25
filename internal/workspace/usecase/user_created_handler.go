@@ -70,6 +70,7 @@ func (h *UserCreatedHandler) OnUserCreated(ctx context.Context, userID string) e
 		project, err := h.projectFac.Create(domain.CreateProjectParams{
 			WorkspaceID: workspace.ID(),
 			Name:        "uncategorized",
+			IsDefault:   true,
 		})
 		if err != nil {
 			return err

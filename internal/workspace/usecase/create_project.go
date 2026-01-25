@@ -52,6 +52,7 @@ func (u *CreateProjectUsecase) Execute(ctx context.Context, input CreateProjectI
 		project, err = u.projectFac.Create(domain.CreateProjectParams{
 			WorkspaceID: input.WorkspaceID,
 			Name:        input.Name,
+			IsDefault:   false,
 		})
 		if err != nil {
 			return err

@@ -25,6 +25,7 @@ func NewProjectFactory(
 type CreateProjectParams struct {
 	WorkspaceID string
 	Name        string
+	IsDefault   bool
 }
 
 func (f *ProjectFactory) Create(params CreateProjectParams) (*Project, error) {
@@ -48,6 +49,7 @@ func (f *ProjectFactory) Reconstruct(params ReconstructProjectParams) (*Project,
 		id:          params.ID,
 		workspaceID: params.WorkspaceID,
 		name:        params.Name,
+		isDefault:   params.IsDefault,
 		createdAt:   params.CreatedAt,
 	}
 

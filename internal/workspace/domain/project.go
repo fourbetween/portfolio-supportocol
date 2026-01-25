@@ -11,6 +11,7 @@ type Project struct {
 	id          string
 	workspaceID string
 	name        string
+	isDefault   bool
 	createdAt   time.Time
 }
 
@@ -24,6 +25,10 @@ func (p *Project) WorkspaceID() string {
 
 func (p *Project) Name() string {
 	return p.name
+}
+
+func (p *Project) IsDefault() bool {
+	return p.isDefault
 }
 
 func (p *Project) CreatedAt() time.Time {

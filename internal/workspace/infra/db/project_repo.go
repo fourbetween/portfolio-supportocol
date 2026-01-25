@@ -74,6 +74,7 @@ func (r *ProjectRepository) Save(ctx context.Context, p *domain.Project) error {
 		ID:          p.ID(),
 		WorkspaceID: p.WorkspaceID(),
 		Name:        p.Name(),
+		IsDefault:   p.IsDefault(),
 		CreatedAt:   p.CreatedAt(),
 	}
 
@@ -112,6 +113,7 @@ func (r *ProjectRepository) toDomain(row model.Projects) (*domain.Project, error
 		CreateProjectParams: domain.CreateProjectParams{
 			WorkspaceID: row.WorkspaceID,
 			Name:        row.Name,
+			IsDefault:   row.IsDefault,
 		},
 		CreatedAt: row.CreatedAt,
 	})
