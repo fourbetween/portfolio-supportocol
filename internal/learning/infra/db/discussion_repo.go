@@ -32,6 +32,7 @@ type discussionWithSettings struct {
 
 func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscussionParams) (*domain.Discussion, error) {
 	cond := table.Discussions.ID.EQ(mysql.String(params.ID)).
+		AND(table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID))).
 		AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
 
 	stmt := mysql.
@@ -57,7 +58,10 @@ func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscu
 	return r.toDomain(dest)
 }
 
-func (r *DiscussionRepository) Search(ctx context.Context, createdBy string) ([]*domain.Discussion, error) {
+func (r *DiscussionRepository) Search(ctx context.Context, params domain.SearchDiscussionsParams) ([]*domain.Discussion, error) {
+	cond := table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)).
+		AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
+
 	stmt := mysql.
 		SELECT(
 			table.Discussions.AllColumns,
@@ -67,7 +71,7 @@ func (r *DiscussionRepository) Search(ctx context.Context, createdBy string) ([]
 			table.Discussions.
 				LEFT_JOIN(table.DialogueSettings, table.Discussions.ID.EQ(table.DialogueSettings.DiscussionID)),
 		).
-		WHERE(table.Discussions.CreatedBy.EQ(mysql.String(createdBy))).
+		WHERE(cond).
 		ORDER_BY(table.Discussions.CreatedAt.DESC())
 
 	var dest []discussionWithSettings
@@ -163,9 +167,10 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
 		ID: row.ID,
 		CreateDiscussionParams: domain.CreateDiscussionParams{
-			Theme:     row.Theme,
-			Status:    domain.DiscussionStatus(row.Status),
-			CreatedBy: row.CreatedBy,
+			WorkspaceID: row.WorkspaceID,
+			Theme:       row.Theme,
+			Status:      domain.DiscussionStatus(row.Status),
+			CreatedBy:   row.CreatedBy,
 		},
 		Conclusion:       row.Conclusion,
 		CommentsCount:    int(row.CommentsCount),
@@ -190,6 +195,7 @@ func (r *DiscussionRepository) toDialogueSettingsDomain(row *model.DialogueSetti
 func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Discussions {
 	return model.Discussions{
 		ID:              d.ID(),
+		WorkspaceID:     d.WorkspaceID(),
 		Theme:           d.Theme(),
 		Conclusion:      d.Conclusion(),
 		Status:          string(d.Status()),

@@ -2,30 +2,44 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
 type EnqueueCommentGenerationUsecase struct {
 	discussionRepo domain.DiscussionRepository
+	permSv         domain.PermissionService
 	queue          domain.CommentGenerationQueue
 }
 
 func NewEnqueueCommentGenerationUsecase(
 	discussionRepo domain.DiscussionRepository,
+	permSv domain.PermissionService,
 	queue domain.CommentGenerationQueue,
 ) *EnqueueCommentGenerationUsecase {
 	return &EnqueueCommentGenerationUsecase{
 		discussionRepo: discussionRepo,
+		permSv:         permSv,
 		queue:          queue,
 	}
 }
 
 func (u *EnqueueCommentGenerationUsecase) Execute(ctx context.Context, input GenerateCommentInput) error {
+	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	if err != nil {
+		return fmt.Errorf("failed to check workspace access: %w", err)
+	}
+	if !canAccess {
+		return apperr.ErrPermissionDenied
+	}
+
 	// Verify discussion exists and user has access
 	discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-		ID:        input.DiscussionID,
-		CreatedBy: input.UserID,
+		ID:          input.DiscussionID,
+		WorkspaceID: input.WorkspaceID,
+		CreatedBy:   input.UserID,
 	})
 	if err != nil {
 		return err

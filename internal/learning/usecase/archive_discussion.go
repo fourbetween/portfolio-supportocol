@@ -2,38 +2,52 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
 type ArchiveDiscussionUsecase struct {
-	repo  domain.DiscussionRepository
-	tx    dbtx.Manager
-	clock clock.Service
+	repo   domain.DiscussionRepository
+	permSv domain.PermissionService
+	tx     dbtx.Manager
+	clock  clock.Service
 }
 
-func NewArchiveDiscussionUsecase(repo domain.DiscussionRepository, tx dbtx.Manager, clock clock.Service) *ArchiveDiscussionUsecase {
+func NewArchiveDiscussionUsecase(repo domain.DiscussionRepository, permSv domain.PermissionService, tx dbtx.Manager, clock clock.Service) *ArchiveDiscussionUsecase {
 	return &ArchiveDiscussionUsecase{
-		repo:  repo,
-		tx:    tx,
-		clock: clock,
+		repo:   repo,
+		permSv: permSv,
+		tx:     tx,
+		clock:  clock,
 	}
 }
 
 type ArchiveDiscussionInput struct {
-	ID        string
-	CreatedBy string
+	ID          string
+	WorkspaceID string
+	UserID      string
 }
 
 func (u *ArchiveDiscussionUsecase) Execute(ctx context.Context, input ArchiveDiscussionInput) (*domain.Discussion, error) {
+	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check workspace access: %w", err)
+	}
+	if !canAccess {
+		return nil, apperr.ErrPermissionDenied
+	}
+
 	var discussion *domain.Discussion
-	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		var err error
 		discussion, err = u.repo.Load(ctx, domain.LoadDiscussionParams{
-			ID:        input.ID,
-			CreatedBy: input.CreatedBy,
+			ID:          input.ID,
+			WorkspaceID: input.WorkspaceID,
+			CreatedBy:   input.UserID,
 		})
 		if err != nil {
 			return err

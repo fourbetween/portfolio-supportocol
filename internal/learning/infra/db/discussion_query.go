@@ -21,9 +21,10 @@ func NewDiscussionQueryService(db *sql.DB) *discussionQueryService {
 	return &discussionQueryService{db: db}
 }
 
-func (s *discussionQueryService) ListDiscussions(ctx context.Context, createdBy string, archived bool) ([]usecase.DiscussionSummary, error) {
-	condition := table.Discussions.CreatedBy.EQ(mysql.String(createdBy))
-	if archived {
+func (s *discussionQueryService) ListDiscussions(ctx context.Context, params usecase.ListDiscussionsParams) ([]usecase.DiscussionSummary, error) {
+	condition := table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)).
+		AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
+	if params.Archived {
 		condition = condition.AND(table.Discussions.ArchivedAt.IS_NOT_NULL())
 	} else {
 		condition = condition.AND(table.Discussions.ArchivedAt.IS_NULL())

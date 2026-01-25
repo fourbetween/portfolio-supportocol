@@ -17,6 +17,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/learning"
 	learningapi "github.com/fourbetween/app-supportocol/internal/learning/api"
 	learningoas "github.com/fourbetween/app-supportocol/internal/learning/api/oas"
+	learningadapter "github.com/fourbetween/app-supportocol/internal/learning/infra/adapter"
 	"github.com/fourbetween/app-supportocol/internal/pkg/env"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
@@ -61,7 +62,8 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 		return nil, fmt.Errorf("failed to create workspace handler: %w", err)
 	}
 
-	learningHandler, err := newLearningHandler(dbCon, appConf, jwtSrv, awscfg)
+	learningPermSv := learningadapter.NewWorkspacePermissionAdapter(workspaceCon.WorkspaceQueryService)
+	learningHandler, err := newLearningHandler(dbCon, appConf, jwtSrv, awscfg, learningPermSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning handler: %w", err)
 	}
@@ -132,8 +134,9 @@ func newLearningHandler(
 	appConf conf.Service,
 	jwtSrv jwt.Service,
 	awscfg aws.Config,
+	permSv *learningadapter.WorkspacePermissionAdapter,
 ) (http.Handler, error) {
-	con, err := learning.NewAPIContainer(dbCon, appConf, jwtSrv, awscfg)
+	con, err := learning.NewAPIContainer(dbCon, appConf, jwtSrv, awscfg, permSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning api container: %w", err)
 	}

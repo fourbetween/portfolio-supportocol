@@ -15,6 +15,12 @@ type DiscussionSummary struct {
 	LastCommentedAt time.Time
 }
 
+type ListDiscussionsParams struct {
+	WorkspaceID string
+	CreatedBy   string
+	Archived    bool
+}
+
 type DiscussionQueryService interface {
-	ListDiscussions(ctx context.Context, createdBy string, archived bool) ([]DiscussionSummary, error)
+	ListDiscussions(ctx context.Context, params ListDiscussionsParams) ([]DiscussionSummary, error)
 }

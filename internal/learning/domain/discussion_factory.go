@@ -23,9 +23,10 @@ func NewDiscussionFactory(
 }
 
 type CreateDiscussionParams struct {
-	Theme     string
-	Status    DiscussionStatus
-	CreatedBy string
+	WorkspaceID string
+	Theme       string
+	Status      DiscussionStatus
+	CreatedBy   string
 }
 
 func (f *DiscussionFactory) Create(params CreateDiscussionParams) (*Discussion, error) {
@@ -53,6 +54,7 @@ type ReconstructDiscussionParams struct {
 func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Discussion, error) {
 	d := &Discussion{
 		id:               params.ID,
+		workspaceID:      params.WorkspaceID,
 		theme:            params.Theme,
 		conclusion:       params.Conclusion,
 		status:           params.Status,

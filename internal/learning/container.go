@@ -42,6 +42,7 @@ func NewAPIContainer(
 	appConf conf.Service,
 	jwtSrv jwt.Service,
 	awscfg aws.Config,
+	permSv domain.PermissionService,
 ) (*APIContainer, error) {
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
@@ -68,22 +69,22 @@ func NewAPIContainer(
 	)
 
 	return &APIContainer{
-		CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac, txManager),
-		GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo),
-		ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionQS),
-		UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo, txManager),
-		UpdateDiscussionStatus:   usecase.NewUpdateDiscussionStatusUsecase(discussionRepo, commentRepo, txManager),
-		ArchiveDiscussion:        usecase.NewArchiveDiscussionUsecase(discussionRepo, txManager, clockSrv),
-		UnarchiveDiscussion:      usecase.NewUnarchiveDiscussionUsecase(discussionRepo, txManager),
-		DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo, txManager),
-		CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, clockSrv, txManager),
-		ListComments:             usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
-		UpdateComment:            usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo, txManager),
-		ArchiveComment:           usecase.NewArchiveCommentUsecase(discussionRepo, commentRepo, txManager, clockSrv),
-		UnarchiveComment:         usecase.NewUnarchiveCommentUsecase(discussionRepo, commentRepo, txManager),
-		DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo, txManager),
-		UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo, txManager),
-		EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, commentGenerationQueue),
+		CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac, permSv, txManager),
+		GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo, permSv),
+		ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionQS, permSv),
+		UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo, permSv, txManager),
+		UpdateDiscussionStatus:   usecase.NewUpdateDiscussionStatusUsecase(discussionRepo, commentRepo, permSv, txManager),
+		ArchiveDiscussion:        usecase.NewArchiveDiscussionUsecase(discussionRepo, permSv, txManager, clockSrv),
+		UnarchiveDiscussion:      usecase.NewUnarchiveDiscussionUsecase(discussionRepo, permSv, txManager),
+		DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo, permSv, txManager),
+		CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, permSv, clockSrv, txManager),
+		ListComments:             usecase.NewListCommentsUsecase(discussionRepo, commentRepo, permSv),
+		UpdateComment:            usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo, permSv, txManager),
+		ArchiveComment:           usecase.NewArchiveCommentUsecase(discussionRepo, commentRepo, permSv, txManager, clockSrv),
+		UnarchiveComment:         usecase.NewUnarchiveCommentUsecase(discussionRepo, commentRepo, permSv, txManager),
+		DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo, permSv, txManager),
+		UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo, permSv, txManager),
+		EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, permSv, commentGenerationQueue),
 	}, nil
 }
 
@@ -97,6 +98,7 @@ func NewCommentGenerationContainer(
 	appConf conf.Service,
 	shareConf conf.Service,
 	awscfg aws.Config,
+	permSv domain.PermissionService,
 ) (*CommentGenerationContainer, error) {
 	geminiAPIKey, err := shareConf.Get("google/gemini/apikey")
 	if err != nil {
@@ -134,7 +136,7 @@ func NewCommentGenerationContainer(
 	}
 
 	return &CommentGenerationContainer{
-		GenerateComment: usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator, clockSrv, txManager),
+		GenerateComment: usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator, permSv, clockSrv, txManager),
 		Queue:           sqs.NewDefaultQueue[domain.GenerateCommentParams](queueURL, awscfg),
 	}, nil
 }

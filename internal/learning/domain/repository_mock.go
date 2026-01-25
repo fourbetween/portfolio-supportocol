@@ -84,18 +84,18 @@ func (mr *MockDiscussionRepositoryMockRecorder) Save(ctx, discussion any) *gomoc
 }
 
 // Search mocks base method.
-func (m *MockDiscussionRepository) Search(ctx context.Context, createdBy string) ([]*Discussion, error) {
+func (m *MockDiscussionRepository) Search(ctx context.Context, params SearchDiscussionsParams) ([]*Discussion, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Search", ctx, createdBy)
+	ret := m.ctrl.Call(m, "Search", ctx, params)
 	ret0, _ := ret[0].([]*Discussion)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Search indicates an expected call of Search.
-func (mr *MockDiscussionRepositoryMockRecorder) Search(ctx, createdBy any) *gomock.Call {
+func (mr *MockDiscussionRepositoryMockRecorder) Search(ctx, params any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockDiscussionRepository)(nil).Search), ctx, createdBy)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockDiscussionRepository)(nil).Search), ctx, params)
 }
 
 // MockCommentRepository is a mock of CommentRepository interface.

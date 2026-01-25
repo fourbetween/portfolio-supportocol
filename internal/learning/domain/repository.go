@@ -10,14 +10,20 @@ import (
 type (
 	DiscussionRepository interface {
 		Load(ctx context.Context, params LoadDiscussionParams) (*Discussion, error)
-		Search(ctx context.Context, createdBy string) ([]*Discussion, error)
+		Search(ctx context.Context, params SearchDiscussionsParams) ([]*Discussion, error)
 		Save(ctx context.Context, discussion *Discussion) error
 		Delete(ctx context.Context, discussion *Discussion) error
 	}
 
 	LoadDiscussionParams struct {
-		ID        string
-		CreatedBy string
+		ID          string
+		WorkspaceID string
+		CreatedBy   string
+	}
+
+	SearchDiscussionsParams struct {
+		WorkspaceID string
+		CreatedBy   string
 	}
 
 	CommentRepository interface {

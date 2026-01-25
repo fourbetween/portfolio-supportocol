@@ -24,6 +24,9 @@ type APIContainer struct {
 
 	// Hooks
 	UserCreatedHandler *usecase.UserCreatedHandler
+
+	// Services
+	WorkspaceQueryService usecase.WorkspaceQueryService
 }
 
 func NewAPIContainer(
@@ -56,5 +59,8 @@ func NewAPIContainer(
 
 		// Hooks
 		UserCreatedHandler: usecase.NewUserCreatedHandler(workspaceRepo, memberRepo, projectRepo, workspaceFac, memberFac, projectFac, txManager),
+
+		// Services
+		WorkspaceQueryService: workspaceQuerySrv,
 	}, nil
 }
