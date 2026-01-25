@@ -40,6 +40,9 @@ type UpdateProjectParams struct {
 }
 
 func (p *Project) Update(params UpdateProjectParams) error {
+	if p.isDefault {
+		return fmt.Errorf("default project cannot be updated: %w", apperr.ErrPermissionDenied)
+	}
 	if params.Name == "" {
 		return fmt.Errorf("project name is required: %w", apperr.ErrInvalidArgument)
 	}

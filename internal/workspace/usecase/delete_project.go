@@ -53,6 +53,11 @@ func (u *DeleteProjectUsecase) Execute(ctx context.Context, input DeleteProjectI
 			return err
 		}
 
+		// デフォルトプロジェクトの削除禁止
+		if project.IsDefault() {
+			return fmt.Errorf("default project cannot be deleted: %w", apperr.ErrPermissionDenied)
+		}
+
 		// プロジェクトの削除
 		if err := u.projectRepo.Delete(ctx, project); err != nil {
 			return err
