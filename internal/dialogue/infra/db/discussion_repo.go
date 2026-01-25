@@ -42,7 +42,9 @@ func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscu
 			table.Discussions.
 				LEFT_JOIN(table.DialogueSettings, table.Discussions.ID.EQ(table.DialogueSettings.DiscussionID)),
 		).
-		WHERE(cond).
+		WHERE(
+			cond.AND(table.Discussions.Status.EQ(mysql.String("public"))),
+		).
 		LIMIT(1)
 
 	var dest discussionWithSettings

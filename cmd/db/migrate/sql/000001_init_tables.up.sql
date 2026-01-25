@@ -55,6 +55,7 @@ CREATE TABLE projects (
 -- 議論
 CREATE TABLE discussions (
 	id CHAR(36) NOT NULL,
+	workspace_id CHAR(36) NOT NULL,
 	project_id CHAR(36) NOT NULL,
 	theme VARCHAR(255) NOT NULL,
 	conclusion TEXT NOT NULL,
@@ -66,6 +67,7 @@ CREATE TABLE discussions (
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
+	CONSTRAINT discussions_workspaces_fk FOREIGN KEY (workspace_id) REFERENCES workspaces(id) ON DELETE CASCADE,
 	CONSTRAINT discussions_projects_fk FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
 	CONSTRAINT discussions_users_fk FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
