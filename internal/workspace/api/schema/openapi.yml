@@ -101,6 +101,8 @@ components:
           $ref: "#/components/schemas/Id"
         name:
           $ref: "#/components/schemas/ProjectName"
+        isDefault:
+          type: boolean
         createdAt:
           type: string
           format: date-time
@@ -108,6 +110,7 @@ components:
         - id
         - workspaceId
         - name
+        - isDefault
         - createdAt
 security:
   - cookie_auth: []

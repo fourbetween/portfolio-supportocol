@@ -195,6 +195,7 @@ type Project struct {
 	ID          ID          `json:"id"`
 	WorkspaceId ID          `json:"workspaceId"`
 	Name        ProjectName `json:"name"`
+	IsDefault   bool        `json:"isDefault"`
 	CreatedAt   time.Time   `json:"createdAt"`
 }
 
@@ -211,6 +212,11 @@ func (s *Project) GetWorkspaceId() ID {
 // GetName returns the value of Name.
 func (s *Project) GetName() ProjectName {
 	return s.Name
+}
+
+// GetIsDefault returns the value of IsDefault.
+func (s *Project) GetIsDefault() bool {
+	return s.IsDefault
 }
 
 // GetCreatedAt returns the value of CreatedAt.
@@ -231,6 +237,11 @@ func (s *Project) SetWorkspaceId(val ID) {
 // SetName sets the value of Name.
 func (s *Project) SetName(val ProjectName) {
 	s.Name = val
+}
+
+// SetIsDefault sets the value of IsDefault.
+func (s *Project) SetIsDefault(val bool) {
+	s.IsDefault = val
 }
 
 // SetCreatedAt sets the value of CreatedAt.

@@ -257,6 +257,7 @@ export interface components {
             id: components["schemas"]["Id"];
             workspaceId: components["schemas"]["Id"];
             name: components["schemas"]["ProjectName"];
+            isDefault: boolean;
             /** Format: date-time */
             createdAt: string;
         };
