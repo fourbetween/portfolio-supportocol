@@ -46,7 +46,6 @@ func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscu
 		discussion, err = u.repo.Load(ctx, domain.LoadDiscussionParams{
 			ID:          input.ID,
 			WorkspaceID: input.WorkspaceID,
-			CreatedBy:   input.UserID,
 		})
 		if err != nil {
 			return err

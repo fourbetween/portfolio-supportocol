@@ -38,6 +38,5 @@ func (u *GetDiscussionUsecase) Execute(ctx context.Context, input GetDiscussionI
 	return u.repo.Load(ctx, domain.LoadDiscussionParams{
 		ID:          input.ID,
 		WorkspaceID: input.WorkspaceID,
-		CreatedBy:   input.UserID,
 	})
 }

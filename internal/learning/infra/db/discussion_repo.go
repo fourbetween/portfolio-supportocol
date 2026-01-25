@@ -32,8 +32,7 @@ type discussionWithSettings struct {
 
 func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscussionParams) (*domain.Discussion, error) {
 	cond := table.Discussions.ID.EQ(mysql.String(params.ID)).
-		AND(table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID))).
-		AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
+		AND(table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)))
 
 	stmt := mysql.
 		SELECT(
@@ -59,8 +58,7 @@ func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscu
 }
 
 func (r *DiscussionRepository) Search(ctx context.Context, params domain.SearchDiscussionsParams) ([]*domain.Discussion, error) {
-	cond := table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)).
-		AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
+	cond := table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID))
 
 	stmt := mysql.
 		SELECT(

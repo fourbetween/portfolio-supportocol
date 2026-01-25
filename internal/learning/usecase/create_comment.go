@@ -61,7 +61,6 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 			ID:          input.DiscussionID,
 			WorkspaceID: input.WorkspaceID,
-			CreatedBy:   input.UserID,
 		})
 		if err != nil {
 			return err

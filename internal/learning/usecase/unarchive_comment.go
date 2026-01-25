@@ -52,7 +52,6 @@ func (u *UnarchiveCommentUsecase) Execute(ctx context.Context, input UnarchiveCo
 		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 			ID:          input.DiscussionID,
 			WorkspaceID: input.WorkspaceID,
-			CreatedBy:   input.UserID,
 		})
 		if err != nil {
 			return err

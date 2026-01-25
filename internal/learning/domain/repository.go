@@ -18,12 +18,10 @@ type (
 	LoadDiscussionParams struct {
 		ID          string
 		WorkspaceID string
-		CreatedBy   string
 	}
 
 	SearchDiscussionsParams struct {
 		WorkspaceID string
-		CreatedBy   string
 	}
 
 	CommentRepository interface {

@@ -42,7 +42,6 @@ func (u *DeleteDiscussionUsecase) Execute(ctx context.Context, input DeleteDiscu
 		discussion, err := u.repo.Load(ctx, domain.LoadDiscussionParams{
 			ID:          input.ID,
 			WorkspaceID: input.WorkspaceID,
-			CreatedBy:   input.UserID,
 		})
 		if err != nil {
 			return err

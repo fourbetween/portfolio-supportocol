@@ -63,8 +63,8 @@ func (cg *CommentGenerator) fetchContext(
 	params domain.GenerateCommentParams,
 ) (*domain.Discussion, []*domain.Comment, []*domain.Comment, error) {
 	discussion, err := cg.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-		ID:        params.DiscussionID,
-		CreatedBy: params.UserID,
+		ID:          params.DiscussionID,
+		WorkspaceID: params.WorkspaceID,
 	})
 	if err != nil {
 		return nil, nil, nil, err

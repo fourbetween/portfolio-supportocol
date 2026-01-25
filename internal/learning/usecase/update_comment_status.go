@@ -53,7 +53,6 @@ func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCo
 		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 			ID:          input.DiscussionID,
 			WorkspaceID: input.WorkspaceID,
-			CreatedBy:   input.UserID,
 		})
 		if err != nil {
 			return err
