@@ -12,7 +12,7 @@ import (
 	"github.com/go-jet/jet/v2/mysql"
 )
 
-// discussionQueryService is implementation of usecase.discussionQueryService.
+// discussionQueryService is implementation of usecase.DiscussionQueryService.
 type discussionQueryService struct {
 	db *sql.DB
 }
@@ -21,7 +21,7 @@ func NewDiscussionQueryService(db *sql.DB) *discussionQueryService {
 	return &discussionQueryService{db: db}
 }
 
-func (s *discussionQueryService) ListDiscussions(ctx context.Context, createdBy string, archived bool) ([]*usecase.DiscussionSummary, error) {
+func (s *discussionQueryService) ListDiscussions(ctx context.Context, createdBy string, archived bool) ([]usecase.DiscussionSummary, error) {
 	condition := table.Discussions.CreatedBy.EQ(mysql.String(createdBy))
 	if archived {
 		condition = condition.AND(table.Discussions.ArchivedAt.IS_NOT_NULL())
@@ -46,9 +46,9 @@ func (s *discussionQueryService) ListDiscussions(ctx context.Context, createdBy 
 		return nil, err
 	}
 
-	res := make([]*usecase.DiscussionSummary, len(dest))
+	res := make([]usecase.DiscussionSummary, len(dest))
 	for i, d := range dest {
-		res[i] = &usecase.DiscussionSummary{
+		res[i] = usecase.DiscussionSummary{
 			ID:              d.ID,
 			Theme:           d.Theme,
 			Status:          domain.DiscussionStatus(d.Status),

@@ -14,6 +14,6 @@ func NewListDiscussionsUsecase(qs DiscussionQueryService) *ListDiscussionsUsecas
 	}
 }
 
-func (u *ListDiscussionsUsecase) Execute(ctx context.Context) ([]*DiscussionSummary, error) {
+func (u *ListDiscussionsUsecase) Execute(ctx context.Context) ([]DiscussionSummary, error) {
 	return u.qs.ListDiscussions(ctx)
 }

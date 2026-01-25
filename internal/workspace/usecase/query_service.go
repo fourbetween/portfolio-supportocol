@@ -16,5 +16,6 @@ type WorkspaceWithMember struct {
 }
 
 type WorkspaceQueryService interface {
-	ListMyWorkspaces(ctx context.Context, userID string) ([]*WorkspaceWithMember, error)
+	ListMyWorkspaces(ctx context.Context, userID string) ([]WorkspaceWithMember, error)
+	LoadMyWorkspaceByID(ctx context.Context, workspaceID string, userID string) (WorkspaceWithMember, error)
 }

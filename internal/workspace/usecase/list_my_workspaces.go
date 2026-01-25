@@ -16,6 +16,6 @@ func NewListMyWorkspacesUsecase(
 	}
 }
 
-func (u *ListMyWorkspacesUsecase) Execute(ctx context.Context, userID string) ([]*WorkspaceWithMember, error) {
+func (u *ListMyWorkspacesUsecase) Execute(ctx context.Context, userID string) ([]WorkspaceWithMember, error) {
 	return u.queryService.ListMyWorkspaces(ctx, userID)
 }

@@ -149,7 +149,7 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 
 // Converters
 
-func (h *appHandler) toOasWorkspaceWithMember(w *usecase.WorkspaceWithMember, userID string) oas.WorkspaceWithMember {
+func (h *appHandler) toOasWorkspaceWithMember(w usecase.WorkspaceWithMember, userID string) oas.WorkspaceWithMember {
 	return oas.WorkspaceWithMember{
 		Workspace: oas.Workspace{
 			ID:        oas.ID(uuid.MustParse(w.WorkspaceID)),

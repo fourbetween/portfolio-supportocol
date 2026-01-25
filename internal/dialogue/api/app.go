@@ -130,7 +130,7 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 	}
 }
 
-func (h *appHandler) toOasDiscussionSummary(item *usecase.DiscussionSummary) oas.DiscussionSummary {
+func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.DiscussionSummary {
 	res := oas.DiscussionSummary{
 		ID:              oas.ID(uuid.MustParse(item.ID)),
 		Theme:           oas.DiscussionTheme(item.Theme),
