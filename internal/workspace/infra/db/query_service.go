@@ -44,7 +44,15 @@ func (s *workspaceQueryService) ListMyWorkspaces(ctx context.Context, userID str
 	return res, nil
 }
 
-func (s *workspaceQueryService) LoadMyWorkspaceByID(ctx context.Context, workspaceID string, userID string) (usecase.WorkspaceWithMember, error) {
+func (s *workspaceQueryService) CanAccessWorkspace(ctx context.Context, userID string, workspaceID string) (bool, error) {
+	w, err := s.loadMyWorkspaceByID(ctx, userID, workspaceID)
+	if err != nil {
+		return false, err
+	}
+	return w.WorkspaceID == workspaceID, nil
+}
+
+func (s *workspaceQueryService) loadMyWorkspaceByID(ctx context.Context, userID string, workspaceID string) (usecase.WorkspaceWithMember, error) {
 	stmt := s.selectWorkspaceWithMember().
 		WHERE(
 			table.Workspaces.ID.EQ(mysql.String(workspaceID)).
