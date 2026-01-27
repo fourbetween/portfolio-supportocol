@@ -24,6 +24,7 @@ func NewDiscussionFactory(
 
 type CreateDiscussionParams struct {
 	WorkspaceID string
+	ProjectID   string
 	Theme       string
 	Status      DiscussionStatus
 	CreatedBy   string
@@ -55,6 +56,7 @@ func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Di
 	d := &Discussion{
 		id:               params.ID,
 		workspaceID:      params.WorkspaceID,
+		projectID:        params.ProjectID,
 		theme:            params.Theme,
 		conclusion:       params.Conclusion,
 		status:           params.Status,

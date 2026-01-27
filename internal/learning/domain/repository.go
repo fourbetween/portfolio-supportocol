@@ -22,6 +22,7 @@ type (
 
 	SearchDiscussionsParams struct {
 		WorkspaceID string
+		ProjectID   string
 	}
 
 	CommentRepository interface {

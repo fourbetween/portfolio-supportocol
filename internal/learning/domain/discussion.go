@@ -14,6 +14,7 @@ const (
 type Discussion struct {
 	id               string
 	workspaceID      string
+	projectID        string
 	theme            string
 	conclusion       string
 	status           DiscussionStatus
@@ -31,6 +32,10 @@ func (d *Discussion) ID() string {
 
 func (d *Discussion) WorkspaceID() string {
 	return d.workspaceID
+}
+
+func (d *Discussion) ProjectID() string {
+	return d.projectID
 }
 
 func (d *Discussion) Theme() string {

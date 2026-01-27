@@ -23,6 +23,7 @@ func NewDiscussionQueryService(db *sql.DB) *discussionQueryService {
 
 func (s *discussionQueryService) ListDiscussions(ctx context.Context, params usecase.ListDiscussionsParams) ([]usecase.DiscussionSummary, error) {
 	condition := table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)).
+		AND(table.Discussions.ProjectID.EQ(mysql.String(params.ProjectID))).
 		AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
 	if params.Archived {
 		condition = condition.AND(table.Discussions.ArchivedAt.IS_NOT_NULL())
@@ -33,6 +34,7 @@ func (s *discussionQueryService) ListDiscussions(ctx context.Context, params use
 	stmt := mysql.
 		SELECT(
 			table.Discussions.ID,
+			table.Discussions.ProjectID,
 			table.Discussions.Theme,
 			table.Discussions.Status,
 			table.Discussions.ArchivedAt,
@@ -51,6 +53,7 @@ func (s *discussionQueryService) ListDiscussions(ctx context.Context, params use
 	for i, d := range dest {
 		res[i] = usecase.DiscussionSummary{
 			ID:              d.ID,
+			ProjectID:       d.ProjectID,
 			Theme:           d.Theme,
 			Status:          domain.DiscussionStatus(d.Status),
 			ArchivedAt:      d.ArchivedAt,

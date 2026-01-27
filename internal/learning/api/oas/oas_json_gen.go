@@ -687,6 +687,10 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 		s.ID.Encode(e)
 	}
 	{
+		e.FieldStart("projectId")
+		s.ProjectId.Encode(e)
+	}
+	{
 		e.FieldStart("theme")
 		s.Theme.Encode(e)
 	}
@@ -712,13 +716,14 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfDiscussion = [6]string{
+var jsonFieldsNameOfDiscussion = [7]string{
 	0: "id",
-	1: "theme",
-	2: "conclusion",
-	3: "status",
-	4: "archivedAt",
-	5: "dialogueSettings",
+	1: "projectId",
+	2: "theme",
+	3: "conclusion",
+	4: "status",
+	5: "archivedAt",
+	6: "dialogueSettings",
 }
 
 // Decode decodes Discussion from json.
@@ -740,8 +745,18 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"id\"")
 			}
-		case "theme":
+		case "projectId":
 			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.ProjectId.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"projectId\"")
+			}
+		case "theme":
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				if err := s.Theme.Decode(d); err != nil {
 					return err
@@ -751,7 +766,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
 		case "conclusion":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				if err := s.Conclusion.Decode(d); err != nil {
 					return err
@@ -761,7 +776,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"conclusion\"")
 			}
 		case "status":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				if err := s.Status.Decode(d); err != nil {
 					return err
@@ -800,7 +815,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00011111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -940,6 +955,10 @@ func (s *DiscussionSummary) encodeFields(e *jx.Encoder) {
 		s.ID.Encode(e)
 	}
 	{
+		e.FieldStart("projectId")
+		s.ProjectId.Encode(e)
+	}
+	{
 		e.FieldStart("theme")
 		s.Theme.Encode(e)
 	}
@@ -959,12 +978,13 @@ func (s *DiscussionSummary) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfDiscussionSummary = [5]string{
+var jsonFieldsNameOfDiscussionSummary = [6]string{
 	0: "id",
-	1: "theme",
-	2: "status",
-	3: "archivedAt",
-	4: "lastCommentedAt",
+	1: "projectId",
+	2: "theme",
+	3: "status",
+	4: "archivedAt",
+	5: "lastCommentedAt",
 }
 
 // Decode decodes DiscussionSummary from json.
@@ -986,8 +1006,18 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"id\"")
 			}
-		case "theme":
+		case "projectId":
 			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.ProjectId.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"projectId\"")
+			}
+		case "theme":
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				if err := s.Theme.Decode(d); err != nil {
 					return err
@@ -997,7 +1027,7 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
 		case "status":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				if err := s.Status.Decode(d); err != nil {
 					return err
@@ -1017,7 +1047,7 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"archivedAt\"")
 			}
 		case "lastCommentedAt":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.LastCommentedAt = v
@@ -1038,7 +1068,7 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00010111,
+		0b00101111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1868,6 +1898,10 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) Encode(e 
 // encodeFields encodes fields.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) encodeFields(e *jx.Encoder) {
 	{
+		e.FieldStart("projectId")
+		s.ProjectId.Encode(e)
+	}
+	{
 		e.FieldStart("theme")
 		s.Theme.Encode(e)
 	}
@@ -1877,9 +1911,10 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) encodeFie
 	}
 }
 
-var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq = [2]string{
-	0: "theme",
-	1: "conclusion",
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq = [3]string{
+	0: "projectId",
+	1: "theme",
+	2: "conclusion",
 }
 
 // Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq from json.
@@ -1891,8 +1926,18 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) Decode(d 
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "theme":
+		case "projectId":
 			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.ProjectId.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"projectId\"")
+			}
+		case "theme":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				if err := s.Theme.Decode(d); err != nil {
 					return err
@@ -1902,7 +1947,7 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) Decode(d 
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
 		case "conclusion":
-			requiredBitSet[0] |= 1 << 1
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				if err := s.Conclusion.Decode(d); err != nil {
 					return err
@@ -1921,7 +1966,7 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) Decode(d 
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2088,6 +2133,10 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Encode(e *jx.Encoder
 // encodeFields encodes fields.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) encodeFields(e *jx.Encoder) {
 	{
+		e.FieldStart("projectId")
+		s.ProjectId.Encode(e)
+	}
+	{
 		e.FieldStart("theme")
 		s.Theme.Encode(e)
 	}
@@ -2097,9 +2146,10 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) encodeFields(e *jx.E
 	}
 }
 
-var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsPostReq = [2]string{
-	0: "theme",
-	1: "status",
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsPostReq = [3]string{
+	0: "projectId",
+	1: "theme",
+	2: "status",
 }
 
 // Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsPostReq from json.
@@ -2111,8 +2161,18 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Decode(d *jx.Decoder
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "theme":
+		case "projectId":
 			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.ProjectId.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"projectId\"")
+			}
+		case "theme":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				if err := s.Theme.Decode(d); err != nil {
 					return err
@@ -2122,7 +2182,7 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Decode(d *jx.Decoder
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
 		case "status":
-			requiredBitSet[0] |= 1 << 1
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				if err := s.Status.Decode(d); err != nil {
 					return err
@@ -2141,7 +2201,7 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Decode(d *jx.Decoder
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

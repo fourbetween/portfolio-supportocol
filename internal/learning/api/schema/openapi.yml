@@ -82,6 +82,8 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/Id"
+        projectId:
+          $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
         status:
@@ -94,6 +96,7 @@ components:
           format: date-time
       required:
         - id
+        - projectId
         - theme
         - status
         - lastCommentedAt
@@ -101,6 +104,8 @@ components:
       type: object
       properties:
         id:
+          $ref: "#/components/schemas/Id"
+        projectId:
           $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
@@ -115,6 +120,7 @@ components:
           $ref: "#/components/schemas/DialogueSettings"
       required:
         - id
+        - projectId
         - theme
         - conclusion
         - status
@@ -192,11 +198,14 @@ paths:
             schema:
               type: object
               properties:
+                projectId:
+                  $ref: "#/components/schemas/Id"
                 theme:
                   $ref: "#/components/schemas/DiscussionTheme"
                 status:
                   $ref: "#/components/schemas/DiscussionStatus"
               required:
+                - projectId
                 - theme
                 - status
       responses:
@@ -255,11 +264,14 @@ paths:
             schema:
               type: object
               properties:
+                projectId:
+                  $ref: "#/components/schemas/Id"
                 theme:
                   $ref: "#/components/schemas/DiscussionTheme"
                 conclusion:
                   $ref: "#/components/schemas/DiscussionConclusion"
               required:
+                - projectId
                 - theme
                 - conclusion
       responses:

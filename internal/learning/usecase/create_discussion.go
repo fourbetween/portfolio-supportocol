@@ -32,6 +32,7 @@ func NewCreateDiscussionUsecase(
 
 type CreateDiscussionInput struct {
 	WorkspaceID string
+	ProjectID   string
 	Theme       string
 	Status      domain.DiscussionStatus
 	UserID      string
@@ -51,6 +52,7 @@ func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscu
 		var err error
 		discussion, err = u.fac.Create(domain.CreateDiscussionParams{
 			WorkspaceID: input.WorkspaceID,
+			ProjectID:   input.ProjectID,
 			Theme:       input.Theme,
 			Status:      input.Status,
 			CreatedBy:   input.UserID,

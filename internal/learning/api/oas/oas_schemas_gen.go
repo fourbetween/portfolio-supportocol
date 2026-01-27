@@ -247,6 +247,7 @@ func (s *DialogueSettings) SetCommentFrame(val CommentFrame) {
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
 	ID               ID                   `json:"id"`
+	ProjectId        ID                   `json:"projectId"`
 	Theme            DiscussionTheme      `json:"theme"`
 	Conclusion       DiscussionConclusion `json:"conclusion"`
 	Status           DiscussionStatus     `json:"status"`
@@ -257,6 +258,11 @@ type Discussion struct {
 // GetID returns the value of ID.
 func (s *Discussion) GetID() ID {
 	return s.ID
+}
+
+// GetProjectId returns the value of ProjectId.
+func (s *Discussion) GetProjectId() ID {
+	return s.ProjectId
 }
 
 // GetTheme returns the value of Theme.
@@ -287,6 +293,11 @@ func (s *Discussion) GetDialogueSettings() OptDialogueSettings {
 // SetID sets the value of ID.
 func (s *Discussion) SetID(val ID) {
 	s.ID = val
+}
+
+// SetProjectId sets the value of ProjectId.
+func (s *Discussion) SetProjectId(val ID) {
+	s.ProjectId = val
 }
 
 // SetTheme sets the value of Theme.
@@ -361,6 +372,7 @@ func (s *DiscussionStatus) UnmarshalText(data []byte) error {
 // Ref: #/components/schemas/DiscussionSummary
 type DiscussionSummary struct {
 	ID              ID               `json:"id"`
+	ProjectId       ID               `json:"projectId"`
 	Theme           DiscussionTheme  `json:"theme"`
 	Status          DiscussionStatus `json:"status"`
 	ArchivedAt      OptDateTime      `json:"archivedAt"`
@@ -370,6 +382,11 @@ type DiscussionSummary struct {
 // GetID returns the value of ID.
 func (s *DiscussionSummary) GetID() ID {
 	return s.ID
+}
+
+// GetProjectId returns the value of ProjectId.
+func (s *DiscussionSummary) GetProjectId() ID {
+	return s.ProjectId
 }
 
 // GetTheme returns the value of Theme.
@@ -395,6 +412,11 @@ func (s *DiscussionSummary) GetLastCommentedAt() time.Time {
 // SetID sets the value of ID.
 func (s *DiscussionSummary) SetID(val ID) {
 	s.ID = val
+}
+
+// SetProjectId sets the value of ProjectId.
+func (s *DiscussionSummary) SetProjectId(val ID) {
+	s.ProjectId = val
 }
 
 // SetTheme sets the value of Theme.
@@ -812,8 +834,14 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) 
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteNoContent struct{}
 
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq struct {
+	ProjectId  ID                   `json:"projectId"`
 	Theme      DiscussionTheme      `json:"theme"`
 	Conclusion DiscussionConclusion `json:"conclusion"`
+}
+
+// GetProjectId returns the value of ProjectId.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) GetProjectId() ID {
+	return s.ProjectId
 }
 
 // GetTheme returns the value of Theme.
@@ -824,6 +852,11 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) GetTheme(
 // GetConclusion returns the value of Conclusion.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) GetConclusion() DiscussionConclusion {
 	return s.Conclusion
+}
+
+// SetProjectId sets the value of ProjectId.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) SetProjectId(val ID) {
+	s.ProjectId = val
 }
 
 // SetTheme sets the value of Theme.
@@ -862,8 +895,14 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Set
 }
 
 type V1LearningWorkspacesWorkspaceIdDiscussionsPostReq struct {
-	Theme  DiscussionTheme  `json:"theme"`
-	Status DiscussionStatus `json:"status"`
+	ProjectId ID               `json:"projectId"`
+	Theme     DiscussionTheme  `json:"theme"`
+	Status    DiscussionStatus `json:"status"`
+}
+
+// GetProjectId returns the value of ProjectId.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetProjectId() ID {
+	return s.ProjectId
 }
 
 // GetTheme returns the value of Theme.
@@ -874,6 +913,11 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetTheme() Discussio
 // GetStatus returns the value of Status.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetStatus() DiscussionStatus {
 	return s.Status
+}
+
+// SetProjectId sets the value of ProjectId.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetProjectId(val ID) {
+	s.ProjectId = val
 }
 
 // SetTheme sets the value of Theme.

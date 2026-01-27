@@ -61,6 +61,7 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
+                        projectId: components["schemas"]["Id"];
                         theme: components["schemas"]["DiscussionTheme"];
                         status: components["schemas"]["DiscussionStatus"];
                     };
@@ -149,6 +150,7 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
+                        projectId: components["schemas"]["Id"];
                         theme: components["schemas"]["DiscussionTheme"];
                         conclusion: components["schemas"]["DiscussionConclusion"];
                     };
@@ -759,6 +761,7 @@ export interface components {
         CommentContent: string;
         DiscussionSummary: {
             id: components["schemas"]["Id"];
+            projectId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             status: components["schemas"]["DiscussionStatus"];
             /** Format: date-time */
@@ -768,6 +771,7 @@ export interface components {
         };
         Discussion: {
             id: components["schemas"]["Id"];
+            projectId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             conclusion: components["schemas"]["DiscussionConclusion"];
             status: components["schemas"]["DiscussionStatus"];

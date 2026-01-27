@@ -58,7 +58,8 @@ func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscu
 }
 
 func (r *DiscussionRepository) Search(ctx context.Context, params domain.SearchDiscussionsParams) ([]*domain.Discussion, error) {
-	cond := table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID))
+	cond := table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)).
+		AND(table.Discussions.ProjectID.EQ(mysql.String(params.ProjectID)))
 
 	stmt := mysql.
 		SELECT(
@@ -99,6 +100,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 		MODEL(discussionModel).
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(
+			table.Discussions.ProjectID.SET(table.Discussions.NEW.ProjectID),
 			table.Discussions.Theme.SET(table.Discussions.NEW.Theme),
 			table.Discussions.Conclusion.SET(table.Discussions.NEW.Conclusion),
 			table.Discussions.Status.SET(table.Discussions.NEW.Status),
@@ -166,6 +168,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 		ID: row.ID,
 		CreateDiscussionParams: domain.CreateDiscussionParams{
 			WorkspaceID: row.WorkspaceID,
+			ProjectID:   row.ProjectID,
 			Theme:       row.Theme,
 			Status:      domain.DiscussionStatus(row.Status),
 			CreatedBy:   row.CreatedBy,
@@ -194,6 +197,7 @@ func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Dis
 	return model.Discussions{
 		ID:              d.ID(),
 		WorkspaceID:     d.WorkspaceID(),
+		ProjectID:       d.ProjectID(),
 		Theme:           d.Theme(),
 		Conclusion:      d.Conclusion(),
 		Status:          string(d.Status()),

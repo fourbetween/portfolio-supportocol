@@ -9,6 +9,7 @@ import (
 
 type DiscussionSummary struct {
 	ID              string
+	ProjectID       string
 	Theme           string
 	Status          domain.DiscussionStatus
 	ArchivedAt      *time.Time
@@ -17,6 +18,7 @@ type DiscussionSummary struct {
 
 type ListDiscussionsParams struct {
 	WorkspaceID string
+	ProjectID   string
 	CreatedBy   string
 	Archived    bool
 }
