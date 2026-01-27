@@ -39,7 +39,7 @@ type CreateDiscussionInput struct {
 }
 
 func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscussionInput) (*domain.Discussion, error) {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	canAccess, err := u.permSv.CanAccessProject(ctx, input.UserID, input.WorkspaceID, input.ProjectID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check workspace access: %w", err)
 	}
