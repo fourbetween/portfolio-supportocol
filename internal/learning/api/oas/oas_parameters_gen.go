@@ -2218,11 +2218,19 @@ func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutParams
 
 // V1LearningWorkspacesWorkspaceIdDiscussionsGetParams is parameters of GET /v1/learning/workspaces/{workspaceId}/discussions operation.
 type V1LearningWorkspacesWorkspaceIdDiscussionsGetParams struct {
+	ProjectId   ID
 	Archived    OptBool `json:",omitempty,omitzero"`
 	WorkspaceId ID
 }
 
 func unpackV1LearningWorkspacesWorkspaceIdDiscussionsGetParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "projectId",
+			In:   "query",
+		}
+		params.ProjectId = packed[key].(ID)
+	}
 	{
 		key := middleware.ParameterKey{
 			Name: "archived",
@@ -2244,6 +2252,49 @@ func unpackV1LearningWorkspacesWorkspaceIdDiscussionsGetParams(packed middleware
 
 func decodeV1LearningWorkspacesWorkspaceIdDiscussionsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsGetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: projectId.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "projectId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotProjectIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotProjectIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.ProjectId = ID(paramsDotProjectIdVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "projectId",
+			In:   "query",
+			Err:  err,
+		}
+	}
 	// Set default value for query: archived.
 	{
 		val := bool(false)

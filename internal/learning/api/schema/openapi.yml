@@ -168,6 +168,11 @@ paths:
     get:
       description: get discussions
       parameters:
+        - name: projectId
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
         - name: archived
           in: query
           required: false

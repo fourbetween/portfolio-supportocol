@@ -22,6 +22,7 @@ func NewListDiscussionsUsecase(qs DiscussionQueryService, permSv domain.Permissi
 
 type ListDiscussionsInput struct {
 	WorkspaceID string
+	ProjectID   string
 	UserID      string
 	Archived    bool
 }
@@ -37,6 +38,7 @@ func (u *ListDiscussionsUsecase) Execute(ctx context.Context, input ListDiscussi
 
 	return u.qs.ListDiscussions(ctx, ListDiscussionsParams{
 		WorkspaceID: input.WorkspaceID,
+		ProjectID:   input.ProjectID,
 		CreatedBy:   input.UserID,
 		Archived:    input.Archived,
 	})

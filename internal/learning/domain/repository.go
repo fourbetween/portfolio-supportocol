@@ -10,7 +10,6 @@ import (
 type (
 	DiscussionRepository interface {
 		Load(ctx context.Context, params LoadDiscussionParams) (*Discussion, error)
-		Search(ctx context.Context, params SearchDiscussionsParams) ([]*Discussion, error)
 		Save(ctx context.Context, discussion *Discussion) error
 		Delete(ctx context.Context, discussion *Discussion) error
 	}
@@ -18,11 +17,6 @@ type (
 	LoadDiscussionParams struct {
 		ID          string
 		WorkspaceID string
-	}
-
-	SearchDiscussionsParams struct {
-		WorkspaceID string
-		ProjectID   string
 	}
 
 	CommentRepository interface {

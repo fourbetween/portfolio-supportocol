@@ -16,7 +16,8 @@ export interface paths {
         /** @description get discussions */
         get: {
             parameters: {
-                query?: {
+                query: {
+                    projectId: components["schemas"]["Id"];
                     archived?: boolean;
                 };
                 header?: never;

@@ -57,39 +57,6 @@ func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscu
 	return r.toDomain(dest)
 }
 
-func (r *DiscussionRepository) Search(ctx context.Context, params domain.SearchDiscussionsParams) ([]*domain.Discussion, error) {
-	cond := table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)).
-		AND(table.Discussions.ProjectID.EQ(mysql.String(params.ProjectID)))
-
-	stmt := mysql.
-		SELECT(
-			table.Discussions.AllColumns,
-			table.DialogueSettings.AllColumns,
-		).
-		FROM(
-			table.Discussions.
-				LEFT_JOIN(table.DialogueSettings, table.Discussions.ID.EQ(table.DialogueSettings.DiscussionID)),
-		).
-		WHERE(cond).
-		ORDER_BY(table.Discussions.CreatedAt.DESC())
-
-	var dest []discussionWithSettings
-	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
-		return nil, fmt.Errorf("failed to list discussions: %w", err)
-	}
-
-	discussions := make([]*domain.Discussion, len(dest))
-	for i, row := range dest {
-		d, err := r.toDomain(row)
-		if err != nil {
-			return nil, err
-		}
-		discussions[i] = d
-	}
-
-	return discussions, nil
-}
-
 func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) error {
 	discussionModel := r.toDiscussionModel(d)
 

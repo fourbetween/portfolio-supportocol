@@ -2259,6 +2259,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsGetRequest(args
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "projectId",
+					In:   "query",
+				}: params.ProjectId,
+				{
 					Name: "archived",
 					In:   "query",
 				}: params.Archived,

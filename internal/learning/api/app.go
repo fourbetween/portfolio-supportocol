@@ -31,6 +31,7 @@ func NewHandler(con *learning.APIContainer) oas.Handler {
 func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params oas.V1LearningWorkspacesWorkspaceIdDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
 	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
 		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		ProjectID:   uuid.UUID(params.ProjectId).String(),
 		UserID:      httpctx.GetUserID(ctx),
 		Archived:    params.Archived.Or(false),
 	})
