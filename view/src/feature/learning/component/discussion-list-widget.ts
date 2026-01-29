@@ -26,15 +26,18 @@ export class LearningDiscussionListWidget extends LitElement {
   @property({ type: Array })
   summaries: DiscussionSummary[] = [];
 
+  @property({ type: String })
+  projectId?: string;
+
   @state()
   private _searchQuery = "";
 
   private async _handleAddDiscussion(e: LearningDiscussionCreateEvent) {
-    if (!this.workspace) return;
+    if (!this.workspace || !this.projectId) return;
     try {
       const data = await discussionRepository.create(
         this.workspace.workspace.id,
-        "default", // TODO: use real project ID
+        this.projectId,
         e.theme,
         e.status,
       );
