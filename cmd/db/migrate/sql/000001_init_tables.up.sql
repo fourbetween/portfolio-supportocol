@@ -14,7 +14,9 @@ CREATE TABLE users (
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (id),
 	UNIQUE KEY (email),
-	UNIQUE KEY (google_sub)
+	UNIQUE KEY (google_sub),
+	UNIQUE KEY (email_verify_token_hash),
+	UNIQUE KEY (password_reset_token_hash)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ワークスペース
@@ -70,7 +72,9 @@ CREATE TABLE discussions (
 	PRIMARY KEY (id),
 	CONSTRAINT discussions_workspaces_fk FOREIGN KEY (workspace_id) REFERENCES workspaces(id) ON DELETE CASCADE,
 	CONSTRAINT discussions_projects_fk FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-	CONSTRAINT discussions_users_fk FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
+	CONSTRAINT discussions_users_fk FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE,
+	INDEX idx_discussions_workspace_project_activity (workspace_id, project_id, last_commented_at DESC),
+	INDEX idx_discussions_public_feed (status, last_commented_at DESC)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- コメント

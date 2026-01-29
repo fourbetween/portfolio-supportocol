@@ -39,7 +39,6 @@ func (u *ListDiscussionsUsecase) Execute(ctx context.Context, input ListDiscussi
 	return u.qs.ListDiscussions(ctx, ListDiscussionsParams{
 		WorkspaceID: input.WorkspaceID,
 		ProjectID:   input.ProjectID,
-		CreatedBy:   input.UserID,
 		Archived:    input.Archived,
 	})
 }
