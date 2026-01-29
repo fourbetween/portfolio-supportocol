@@ -50,7 +50,7 @@ func (r *ProjectRepository) Search(ctx context.Context, params domain.SearchProj
 		SELECT(table.Projects.AllColumns).
 		FROM(table.Projects).
 		WHERE(table.Projects.WorkspaceID.EQ(mysql.String(params.WorkspaceID))).
-		ORDER_BY(table.Projects.CreatedAt.ASC())
+		ORDER_BY(table.Projects.Name.ASC())
 
 	var dest []model.Projects
 	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
