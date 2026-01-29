@@ -66,11 +66,8 @@ export class LearningDashboardPage extends LitElement {
 
   private summariesTask = new Task(this, {
     task: async ([workspace, projectId]) => {
-      if (!workspace) return [] as DiscussionSummary[];
-      return discussionRepository.list(
-        workspace.workspace.id,
-        (projectId as string) || "default",
-      );
+      if (!workspace || !projectId) return [] as DiscussionSummary[];
+      return discussionRepository.list(workspace.workspace.id, projectId);
     },
     onComplete: (summaries) => {
       this._summaries = summaries as DiscussionSummary[];

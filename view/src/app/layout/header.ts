@@ -57,8 +57,8 @@ export class AppHeader extends LitElement {
                 </button>
               `}
         </div>
-        <workspace-workspace-select-widget></workspace-workspace-select-widget>
       </header>
+      <workspace-workspace-select-widget></workspace-workspace-select-widget>
     `;
   }
 

@@ -2,8 +2,8 @@ import { consume } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { userContext } from "../../../app/context/user";
-import type { User } from "../../../app/model/user";
+import { workspaceContext } from "../../../app/context/workspace";
+import type { WorkspaceWithMember } from "../../../app/model/workspace";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import type { Project } from "../model/project";
@@ -18,19 +18,19 @@ export class WorkspaceProjectSelectWidget extends LitElement {
   @state()
   private projects: Project[] = [];
 
-  @consume({ context: userContext, subscribe: true })
+  @consume({ context: workspaceContext, subscribe: true })
   @state()
-  private user?: User;
+  private workspace?: WorkspaceWithMember;
 
   constructor() {
     super();
 
     new Task(this, {
-      task: async () => {
-        if (!this.user) {
+      task: async ([workspace]) => {
+        if (!workspace) {
           return [] as Project[];
         }
-        return projectRepository.list("personal-" + this.user.id);
+        return projectRepository.list(workspace.workspace.id);
       },
       onComplete: (projects: Project[]) => {
         this.projects = projects;
@@ -38,7 +38,7 @@ export class WorkspaceProjectSelectWidget extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [],
+      args: () => [this.workspace],
     });
   }
 
