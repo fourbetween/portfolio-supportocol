@@ -19,7 +19,6 @@ type DiscussionSummary struct {
 type ListDiscussionsParams struct {
 	WorkspaceID string
 	ProjectID   string
-	CreatedBy   string
 	Archived    bool
 }
 
