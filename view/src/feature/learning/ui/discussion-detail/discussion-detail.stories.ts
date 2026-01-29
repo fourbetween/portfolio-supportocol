@@ -17,6 +17,7 @@ export const Default: Story = {
   args: {
     discussion: {
       id: "1",
+      projectId: "p1",
       theme: "論理的な議論とは何か",
       conclusion: "前提を共有し、推論を積み重ねること。",
       status: "public",

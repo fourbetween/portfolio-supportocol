@@ -39,6 +39,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
       const data = await discussionRepository.update(
         this.workspace.workspace.id,
         this.discussion.id,
+        this.discussion.projectId,
         e.theme,
         e.conclusion,
       );

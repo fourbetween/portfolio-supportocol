@@ -6,12 +6,11 @@ import type { LearningDiscussionItem } from "./discussion-item";
 const meta: Meta<LearningDiscussionItem> = {
   title: "learning/ui/discussion-item",
   component: "learning-discussion-item",
-  render: (args) =>
-    html`
-      <learning-discussion-item
-        .summary=${args.summary}
-      ></learning-discussion-item>
-    `,
+  render: (args) => html`
+    <learning-discussion-item
+      .summary=${args.summary}
+    ></learning-discussion-item>
+  `,
 };
 
 export default meta;
@@ -21,6 +20,7 @@ export const Default: Story = {
   args: {
     summary: {
       id: "1",
+      projectId: "p1",
       theme: "Sample Discussion Theme",
       status: "public",
       lastCommentedAt: "2023-01-01T00:00:00Z",
@@ -32,6 +32,7 @@ export const Archived: Story = {
   args: {
     summary: {
       id: "2",
+      projectId: "p1",
       theme: "Archived Discussion Theme",
       status: "public",
       archivedAt: "2023-01-02T00:00:00Z",

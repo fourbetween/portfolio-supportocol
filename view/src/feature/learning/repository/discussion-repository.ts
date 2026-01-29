@@ -7,6 +7,7 @@ export class DiscussionRepository {
 
   async list(
     workspaceId: string,
+    projectId: string,
     archived?: boolean,
   ): Promise<DiscussionSummary[]> {
     const { data, error } = await client.GET(
@@ -14,7 +15,7 @@ export class DiscussionRepository {
       {
         params: {
           path: { workspaceId },
-          query: { archived },
+          query: { projectId, archived },
         },
       },
     );
@@ -41,6 +42,7 @@ export class DiscussionRepository {
 
   async create(
     workspaceId: string,
+    projectId: string,
     theme: string,
     status: Discussion["status"],
   ): Promise<Discussion> {
@@ -50,7 +52,7 @@ export class DiscussionRepository {
         params: {
           path: { workspaceId },
         },
-        body: { theme, status },
+        body: { projectId, theme, status },
       },
     );
     if (error) throw new Error(error.message);
@@ -61,6 +63,7 @@ export class DiscussionRepository {
   async update(
     workspaceId: string,
     discussionId: string,
+    projectId: string,
     theme: string,
     conclusion: string,
   ): Promise<Discussion> {
@@ -70,7 +73,7 @@ export class DiscussionRepository {
         params: {
           path: { workspaceId, discussionId },
         },
-        body: { theme, conclusion },
+        body: { projectId, theme, conclusion },
       },
     );
     if (error) throw new Error(error.message);

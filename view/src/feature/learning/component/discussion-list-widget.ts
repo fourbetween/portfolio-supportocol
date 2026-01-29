@@ -34,6 +34,7 @@ export class LearningDiscussionListWidget extends LitElement {
     try {
       const data = await discussionRepository.create(
         this.workspace.workspace.id,
+        "default", // TODO: use real project ID
         e.theme,
         e.status,
       );

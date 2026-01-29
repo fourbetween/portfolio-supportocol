@@ -21,8 +21,10 @@ describe("learning-discussion-item", () => {
 
   const discussion = {
     id: "1",
+    projectId: "p1",
     theme: "Test Theme",
     status: "public" as const,
+    archivedAt: undefined,
     lastCommentedAt: "2023-01-01T00:00:00Z",
   };
 
@@ -33,7 +35,7 @@ describe("learning-discussion-item", () => {
           .summary=${discussion}
         ></learning-discussion-item>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("Test Theme")).toBeVisible();
@@ -48,7 +50,7 @@ describe("learning-discussion-item", () => {
           @learning-discussion-select=${(e: Event) => selectHandler(e)}
         ></learning-discussion-item>
       `,
-      container
+      container,
     );
 
     await page.getByText("Test Theme").click();
@@ -68,7 +70,7 @@ describe("learning-discussion-item", () => {
           @learning-discussion-delete=${(e: Event) => deleteHandler(e)}
         ></learning-discussion-item>
       `,
-      container
+      container,
     );
 
     await page.getByRole("button", { name: "delete" }).click();
@@ -86,7 +88,7 @@ describe("learning-discussion-item", () => {
           .summary=${discussion}
         ></learning-discussion-item>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("public").first()).toBeVisible();
@@ -100,14 +102,14 @@ describe("learning-discussion-item", () => {
           .summary=${discussion}
         ></learning-discussion-item>
       `,
-      container
+      container,
     );
 
     const el = container.querySelector("learning-discussion-item")!;
     // Lit update waiting
     await (el as any).updateComplete;
     const badge = el.shadowRoot!.querySelector(
-      "learning-discussion-status-badge"
+      "learning-discussion-status-badge",
     )! as HTMLElement;
     const styles = window.getComputedStyle(badge);
 
@@ -125,7 +127,7 @@ describe("learning-discussion-item", () => {
           .summary=${archivedDiscussion}
         ></learning-discussion-item>
       `,
-      container
+      container,
     );
 
     const el = container.querySelector("learning-discussion-item")!;

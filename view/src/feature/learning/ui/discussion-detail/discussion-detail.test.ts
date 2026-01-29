@@ -19,9 +19,12 @@ describe("learning-discussion-detail", async () => {
   it("テーマが表示されること", async () => {
     const discussion = {
       id: "1",
+      projectId: "p1",
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
+      archivedAt: undefined,
+      dialogueSettings: undefined,
     };
     render(
       html`
@@ -38,9 +41,12 @@ describe("learning-discussion-detail", async () => {
   it("セクションタイトル 'Theme' と 'Conclusion' が表示されること", async () => {
     const discussion = {
       id: "1",
+      projectId: "p1",
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
+      archivedAt: undefined,
+      dialogueSettings: undefined,
     };
     render(
       html`
@@ -58,9 +64,12 @@ describe("learning-discussion-detail", async () => {
     const onEdit = vi.fn();
     const discussion = {
       id: "1",
+      projectId: "p1",
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
+      archivedAt: undefined,
+      dialogueSettings: undefined,
     };
     render(
       html`
@@ -79,9 +88,12 @@ describe("learning-discussion-detail", async () => {
   it("isEditing が true のときに入力フォームが表示されること", async () => {
     const discussion = {
       id: "1",
+      projectId: "p1",
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
+      archivedAt: undefined,
+      dialogueSettings: undefined,
     };
     render(
       html`
@@ -102,9 +114,12 @@ describe("learning-discussion-detail", async () => {
     const onSave = vi.fn();
     const discussion = {
       id: "1",
+      projectId: "p1",
       theme: "元のテーマ",
       conclusion: "元の結論",
       status: "public" as const,
+      archivedAt: undefined,
+      dialogueSettings: undefined,
     };
     render(
       html`
@@ -128,9 +143,19 @@ describe("learning-discussion-detail", async () => {
 
   it("キャンセルボタンをクリックすると discussion-form-close イベントが発火されること", async () => {
     const onCancel = vi.fn();
+    const discussion = {
+      id: "1",
+      projectId: "p1",
+      theme: "テストテーマ",
+      conclusion: "テスト結論",
+      status: "public" as const,
+      archivedAt: undefined,
+      dialogueSettings: undefined,
+    };
     render(
       html`
         <learning-discussion-detail
+          .discussion=${discussion}
           .isEditing=${true}
           @learning-discussion-form-close=${() => onCancel()}
         ></learning-discussion-detail>
@@ -146,9 +171,12 @@ describe("learning-discussion-detail", async () => {
   it("編集ボタンに正しいアイコンクラスが設定されていること", async () => {
     const discussion = {
       id: "1",
+      projectId: "p1",
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
+      archivedAt: undefined,
+      dialogueSettings: undefined,
     };
     render(
       html`
