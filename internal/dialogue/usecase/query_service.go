@@ -13,5 +13,5 @@ type DiscussionSummary struct {
 }
 
 type DiscussionQueryService interface {
-	ListDiscussions(ctx context.Context) ([]*DiscussionSummary, error)
+	ListDiscussions(ctx context.Context) ([]DiscussionSummary, error)
 }

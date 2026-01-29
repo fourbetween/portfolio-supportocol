@@ -2,43 +2,60 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
 type CreateDiscussionUsecase struct {
-	repo domain.DiscussionRepository
-	fac  *domain.DiscussionFactory
-	tx   dbtx.Manager
+	repo   domain.DiscussionRepository
+	fac    *domain.DiscussionFactory
+	permSv domain.PermissionService
+	tx     dbtx.Manager
 }
 
 func NewCreateDiscussionUsecase(
 	repo domain.DiscussionRepository,
 	fac *domain.DiscussionFactory,
+	permSv domain.PermissionService,
 	tx dbtx.Manager,
 ) *CreateDiscussionUsecase {
 	return &CreateDiscussionUsecase{
-		repo: repo,
-		fac:  fac,
-		tx:   tx,
+		repo:   repo,
+		fac:    fac,
+		permSv: permSv,
+		tx:     tx,
 	}
 }
 
 type CreateDiscussionInput struct {
-	Theme     string
-	Status    domain.DiscussionStatus
-	CreatedBy string
+	WorkspaceID string
+	ProjectID   string
+	Theme       string
+	Status      domain.DiscussionStatus
+	UserID      string
 }
 
 func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscussionInput) (*domain.Discussion, error) {
+	canAccess, err := u.permSv.CanAccessProject(ctx, input.UserID, input.WorkspaceID, input.ProjectID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check workspace access: %w", err)
+	}
+	if !canAccess {
+		return nil, apperr.ErrPermissionDenied
+	}
+
 	var discussion *domain.Discussion
-	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		var err error
 		discussion, err = u.fac.Create(domain.CreateDiscussionParams{
-			Theme:     input.Theme,
-			Status:    input.Status,
-			CreatedBy: input.CreatedBy,
+			WorkspaceID: input.WorkspaceID,
+			ProjectID:   input.ProjectID,
+			Theme:       input.Theme,
+			Status:      input.Status,
+			CreatedBy:   input.UserID,
 		})
 		if err != nil {
 			return err

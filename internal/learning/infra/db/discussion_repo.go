@@ -32,7 +32,7 @@ type discussionWithSettings struct {
 
 func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscussionParams) (*domain.Discussion, error) {
 	cond := table.Discussions.ID.EQ(mysql.String(params.ID)).
-		AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
+		AND(table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)))
 
 	stmt := mysql.
 		SELECT(
@@ -57,36 +57,6 @@ func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscu
 	return r.toDomain(dest)
 }
 
-func (r *DiscussionRepository) Search(ctx context.Context, createdBy string) ([]*domain.Discussion, error) {
-	stmt := mysql.
-		SELECT(
-			table.Discussions.AllColumns,
-			table.DialogueSettings.AllColumns,
-		).
-		FROM(
-			table.Discussions.
-				LEFT_JOIN(table.DialogueSettings, table.Discussions.ID.EQ(table.DialogueSettings.DiscussionID)),
-		).
-		WHERE(table.Discussions.CreatedBy.EQ(mysql.String(createdBy))).
-		ORDER_BY(table.Discussions.CreatedAt.DESC())
-
-	var dest []discussionWithSettings
-	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
-		return nil, fmt.Errorf("failed to list discussions: %w", err)
-	}
-
-	discussions := make([]*domain.Discussion, len(dest))
-	for i, row := range dest {
-		d, err := r.toDomain(row)
-		if err != nil {
-			return nil, err
-		}
-		discussions[i] = d
-	}
-
-	return discussions, nil
-}
-
 func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) error {
 	discussionModel := r.toDiscussionModel(d)
 
@@ -97,6 +67,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 		MODEL(discussionModel).
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(
+			table.Discussions.ProjectID.SET(table.Discussions.NEW.ProjectID),
 			table.Discussions.Theme.SET(table.Discussions.NEW.Theme),
 			table.Discussions.Conclusion.SET(table.Discussions.NEW.Conclusion),
 			table.Discussions.Status.SET(table.Discussions.NEW.Status),
@@ -163,9 +134,11 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
 		ID: row.ID,
 		CreateDiscussionParams: domain.CreateDiscussionParams{
-			Theme:     row.Theme,
-			Status:    domain.DiscussionStatus(row.Status),
-			CreatedBy: row.CreatedBy,
+			WorkspaceID: row.WorkspaceID,
+			ProjectID:   row.ProjectID,
+			Theme:       row.Theme,
+			Status:      domain.DiscussionStatus(row.Status),
+			CreatedBy:   row.CreatedBy,
 		},
 		Conclusion:       row.Conclusion,
 		CommentsCount:    int(row.CommentsCount),
@@ -190,6 +163,8 @@ func (r *DiscussionRepository) toDialogueSettingsDomain(row *model.DialogueSetti
 func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Discussions {
 	return model.Discussions{
 		ID:              d.ID(),
+		WorkspaceID:     d.WorkspaceID(),
+		ProjectID:       d.ProjectID(),
 		Theme:           d.Theme(),
 		Conclusion:      d.Conclusion(),
 		Status:          string(d.Status()),

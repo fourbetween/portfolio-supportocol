@@ -13,13 +13,18 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/identity"
 	identityapi "github.com/fourbetween/app-supportocol/internal/identity/api"
 	identityoas "github.com/fourbetween/app-supportocol/internal/identity/api/oas"
+	identityusecase "github.com/fourbetween/app-supportocol/internal/identity/usecase"
 	"github.com/fourbetween/app-supportocol/internal/learning"
 	learningapi "github.com/fourbetween/app-supportocol/internal/learning/api"
 	learningoas "github.com/fourbetween/app-supportocol/internal/learning/api/oas"
+	learningadapter "github.com/fourbetween/app-supportocol/internal/learning/infra/adapter"
 	"github.com/fourbetween/app-supportocol/internal/pkg/env"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httperr"
+	"github.com/fourbetween/app-supportocol/internal/workspace"
+	workspaceapi "github.com/fourbetween/app-supportocol/internal/workspace/api"
+	workspaceoas "github.com/fourbetween/app-supportocol/internal/workspace/api/oas"
 	"github.com/fourbetween/pkg-auth/jwt"
 	"github.com/fourbetween/pkg-conf/conf"
 )
@@ -42,12 +47,23 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 
 	jwtSrv := jwt.NewDefaultService(jwtSecret, httpcookie.CookieMaxAge)
 
-	identityHandler, err := newIdentityHandler(dbCon, appConf, jwtSrv)
+	workspaceCon, err := workspace.NewAPIContainer(dbCon)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create workspace api container: %w", err)
+	}
+
+	identityHandler, err := newIdentityHandler(dbCon, appConf, jwtSrv, workspaceCon.UserCreatedHandler)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create identity handler: %w", err)
 	}
 
-	learningHandler, err := newLearningHandler(dbCon, appConf, jwtSrv, awscfg)
+	workspaceHandler, err := newWorkspaceHandler(workspaceCon, jwtSrv)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create workspace handler: %w", err)
+	}
+
+	learningPermSv := learningadapter.NewWorkspacePermissionAdapter(workspaceCon.WorkspaceQueryService)
+	learningHandler, err := newLearningHandler(dbCon, appConf, jwtSrv, awscfg, learningPermSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning handler: %w", err)
 	}
@@ -58,9 +74,10 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 	}
 
 	mux := http.NewServeMux()
-	mux.Handle("/identity/", identityHandler)
-	mux.Handle("/learning/", learningHandler)
-	mux.Handle("/dialogue/", dialogueHandler)
+	mux.Handle("/v1/identity/", identityHandler)
+	mux.Handle("/v1/workspace/", workspaceHandler)
+	mux.Handle("/v1/learning/", learningHandler)
+	mux.Handle("/v1/dialogue/", dialogueHandler)
 
 	return middleware.CSRFMiddleware(domain)(mux), nil
 }
@@ -69,8 +86,9 @@ func newIdentityHandler(
 	dbCon *sql.DB,
 	appConf conf.Service,
 	jwtSrv jwt.Service,
+	userCreatedHandler identityusecase.UserCreatedHandler,
 ) (http.Handler, error) {
-	con, err := identity.NewAPIContainer(dbCon, appConf, jwtSrv)
+	con, err := identity.NewAPIContainer(dbCon, appConf, jwtSrv, userCreatedHandler)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create identity api container: %w", err)
 	}
@@ -88,7 +106,26 @@ func newIdentityHandler(
 		ctx := httpctx.WithResponseWriter(r.Context(), w)
 		server.ServeHTTP(w, r.WithContext(ctx))
 	})
+	return handler, nil
+}
 
+func newWorkspaceHandler(
+	con *workspace.APIContainer,
+	jwtSrv jwt.Service,
+) (http.Handler, error) {
+	server, err := workspaceoas.NewServer(
+		workspaceapi.NewHandler(con),
+		workspaceapi.NewSecurityHandler(jwtSrv),
+		workspaceoas.WithErrorHandler(httperr.ErrorHandler),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := httpctx.WithResponseWriter(r.Context(), w)
+		server.ServeHTTP(w, r.WithContext(ctx))
+	})
 	return handler, nil
 }
 
@@ -97,8 +134,9 @@ func newLearningHandler(
 	appConf conf.Service,
 	jwtSrv jwt.Service,
 	awscfg aws.Config,
+	permSv *learningadapter.WorkspacePermissionAdapter,
 ) (http.Handler, error) {
-	con, err := learning.NewAPIContainer(dbCon, appConf, jwtSrv, awscfg)
+	con, err := learning.NewAPIContainer(dbCon, appConf, jwtSrv, awscfg, permSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning api container: %w", err)
 	}

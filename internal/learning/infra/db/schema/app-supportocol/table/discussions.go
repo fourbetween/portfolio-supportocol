@@ -18,6 +18,8 @@ type discussionsTable struct {
 
 	// Columns
 	ID              mysql.ColumnString
+	WorkspaceID     mysql.ColumnString
+	ProjectID       mysql.ColumnString
 	Theme           mysql.ColumnString
 	Conclusion      mysql.ColumnString
 	Status          mysql.ColumnString
@@ -69,6 +71,8 @@ func newDiscussionsTable(schemaName, tableName, alias string) *DiscussionsTable 
 func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTable {
 	var (
 		IDColumn              = mysql.StringColumn("id")
+		WorkspaceIDColumn     = mysql.StringColumn("workspace_id")
+		ProjectIDColumn       = mysql.StringColumn("project_id")
 		ThemeColumn           = mysql.StringColumn("theme")
 		ConclusionColumn      = mysql.StringColumn("conclusion")
 		StatusColumn          = mysql.StringColumn("status")
@@ -78,8 +82,8 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		CreatedByColumn       = mysql.StringColumn("created_by")
 		CreatedAtColumn       = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
-		allColumns            = mysql.ColumnList{IDColumn, ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns        = mysql.ColumnList{ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns            = mysql.ColumnList{IDColumn, WorkspaceIDColumn, ProjectIDColumn, ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns        = mysql.ColumnList{WorkspaceIDColumn, ProjectIDColumn, ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
 		defaultColumns        = mysql.ColumnList{StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
@@ -88,6 +92,8 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 
 		//Columns
 		ID:              IDColumn,
+		WorkspaceID:     WorkspaceIDColumn,
+		ProjectID:       ProjectIDColumn,
 		Theme:           ThemeColumn,
 		Conclusion:      ConclusionColumn,
 		Status:          StatusColumn,

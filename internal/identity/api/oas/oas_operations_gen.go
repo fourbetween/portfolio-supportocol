@@ -6,8 +6,8 @@ package oas
 type OperationName = string
 
 const (
-	IdentityErrorsPostOperation OperationName = "IdentityErrorsPost"
-	IdentityGooglePostOperation OperationName = "IdentityGooglePost"
-	IdentityLogoutPostOperation OperationName = "IdentityLogoutPost"
-	IdentityMeGetOperation      OperationName = "IdentityMeGet"
+	V1IdentityErrorsPostOperation OperationName = "V1IdentityErrorsPost"
+	V1IdentityGooglePostOperation OperationName = "V1IdentityGooglePost"
+	V1IdentityLogoutPostOperation OperationName = "V1IdentityLogoutPost"
+	V1IdentityMeGetOperation      OperationName = "V1IdentityMeGet"
 )

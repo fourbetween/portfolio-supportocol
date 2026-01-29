@@ -49,9 +49,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/dialogue/discussions"
+		case '/': // Prefix: "/v1/dialogue/discussions"
 
-			if l := len("/dialogue/discussions"); len(elem) >= l && elem[0:l] == "/dialogue/discussions" {
+			if l := len("/v1/dialogue/discussions"); len(elem) >= l && elem[0:l] == "/v1/dialogue/discussions" {
 				elem = elem[l:]
 			} else {
 				break
@@ -60,7 +60,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			if len(elem) == 0 {
 				switch r.Method {
 				case "GET":
-					s.handleDialogueDiscussionsGetRequest([0]string{}, elemIsEscaped, w, r)
+					s.handleV1DialogueDiscussionsGetRequest([0]string{}, elemIsEscaped, w, r)
 				default:
 					s.notAllowed(w, r, "GET")
 				}
@@ -88,7 +88,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleDialogueDiscussionsDiscussionIdGetRequest([1]string{
+						s.handleV1DialogueDiscussionsDiscussionIdGetRequest([1]string{
 							args[0],
 						}, elemIsEscaped, w, r)
 					default:
@@ -110,11 +110,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleDialogueDiscussionsDiscussionIdCommentsGetRequest([1]string{
+							s.handleV1DialogueDiscussionsDiscussionIdCommentsGetRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						case "POST":
-							s.handleDialogueDiscussionsDiscussionIdCommentsPostRequest([1]string{
+							s.handleV1DialogueDiscussionsDiscussionIdCommentsPostRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
@@ -214,9 +214,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/dialogue/discussions"
+		case '/': // Prefix: "/v1/dialogue/discussions"
 
-			if l := len("/dialogue/discussions"); len(elem) >= l && elem[0:l] == "/dialogue/discussions" {
+			if l := len("/v1/dialogue/discussions"); len(elem) >= l && elem[0:l] == "/v1/dialogue/discussions" {
 				elem = elem[l:]
 			} else {
 				break
@@ -225,11 +225,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			if len(elem) == 0 {
 				switch method {
 				case "GET":
-					r.name = DialogueDiscussionsGetOperation
+					r.name = V1DialogueDiscussionsGetOperation
 					r.summary = ""
 					r.operationID = ""
 					r.operationGroup = ""
-					r.pathPattern = "/dialogue/discussions"
+					r.pathPattern = "/v1/dialogue/discussions"
 					r.args = args
 					r.count = 0
 					return r, true
@@ -258,11 +258,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						r.name = DialogueDiscussionsDiscussionIdGetOperation
+						r.name = V1DialogueDiscussionsDiscussionIdGetOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/dialogue/discussions/{discussionId}"
+						r.pathPattern = "/v1/dialogue/discussions/{discussionId}"
 						r.args = args
 						r.count = 1
 						return r, true
@@ -283,20 +283,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = DialogueDiscussionsDiscussionIdCommentsGetOperation
+							r.name = V1DialogueDiscussionsDiscussionIdCommentsGetOperation
 							r.summary = ""
 							r.operationID = ""
 							r.operationGroup = ""
-							r.pathPattern = "/dialogue/discussions/{discussionId}/comments"
+							r.pathPattern = "/v1/dialogue/discussions/{discussionId}/comments"
 							r.args = args
 							r.count = 1
 							return r, true
 						case "POST":
-							r.name = DialogueDiscussionsDiscussionIdCommentsPostOperation
+							r.name = V1DialogueDiscussionsDiscussionIdCommentsPostOperation
 							r.summary = ""
 							r.operationID = ""
 							r.operationGroup = ""
-							r.pathPattern = "/dialogue/discussions/{discussionId}/comments"
+							r.pathPattern = "/v1/dialogue/discussions/{discussionId}/comments"
 							r.args = args
 							r.count = 1
 							return r, true

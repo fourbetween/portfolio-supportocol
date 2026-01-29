@@ -2,8 +2,10 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
@@ -12,6 +14,7 @@ type CreateCommentUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
 	fac            *domain.CommentFactory
+	permSv         domain.PermissionService
 	clock          clock.Service
 	tx             dbtx.Manager
 }
@@ -20,6 +23,7 @@ func NewCreateCommentUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
 	fac *domain.CommentFactory,
+	permSv domain.PermissionService,
 	clock clock.Service,
 	tx dbtx.Manager,
 ) *CreateCommentUsecase {
@@ -27,6 +31,7 @@ func NewCreateCommentUsecase(
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
 		fac:            fac,
+		permSv:         permSv,
 		clock:          clock,
 		tx:             tx,
 	}
@@ -34,19 +39,28 @@ func NewCreateCommentUsecase(
 
 type CreateCommentInput struct {
 	DiscussionID    string
+	WorkspaceID     string
 	ParentCommentID *string
 	CommentType     string
 	Content         string
-	CreatedBy       string
+	UserID          string
 }
 
 func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentInput) (*domain.Comment, error) {
+	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check workspace access: %w", err)
+	}
+	if !canAccess {
+		return nil, apperr.ErrPermissionDenied
+	}
+
 	var comment *domain.Comment
-	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// Verify discussion exists and user has access
 		discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-			ID:        input.DiscussionID,
-			CreatedBy: input.CreatedBy,
+			ID:          input.DiscussionID,
+			WorkspaceID: input.WorkspaceID,
 		})
 		if err != nil {
 			return err
@@ -72,7 +86,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			CommentTypeID:   input.CommentType,
 			Content:         input.Content,
 			Status:          domain.CommentStatusActive,
-			CreatedBy:       &input.CreatedBy,
+			CreatedBy:       &input.UserID,
 		})
 		if createErr != nil {
 			return createErr

@@ -12,9 +12,11 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/fourbetween/app-supportocol/internal/learning"
+	"github.com/fourbetween/app-supportocol/internal/learning/infra/adapter"
 	"github.com/fourbetween/app-supportocol/internal/learning/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbcon"
 	"github.com/fourbetween/app-supportocol/internal/pkg/env"
+	wsdb "github.com/fourbetween/app-supportocol/internal/workspace/infra/db"
 	"github.com/fourbetween/pkg-conf/conf"
 )
 
@@ -80,10 +82,14 @@ func newContainer() (*learning.CommentGenerationContainer, error) {
 		return nil, fmt.Errorf("failed to load share config: %w", err)
 	}
 
+	wsQueryService := wsdb.NewWorkspaceQueryService(dbCon)
+	permSv := adapter.NewWorkspacePermissionAdapter(wsQueryService)
+
 	return learning.NewCommentGenerationContainer(
 		dbCon,
 		appConf,
 		shareConf,
 		awscfg,
+		permSv,
 	)
 }

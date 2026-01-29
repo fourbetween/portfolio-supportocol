@@ -13,39 +13,39 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// IdentityErrorsPost implements POST /identity/errors operation.
+// V1IdentityErrorsPost implements POST /v1/identity/errors operation.
 //
 // Post an error.
 //
-// POST /identity/errors
-func (UnimplementedHandler) IdentityErrorsPost(ctx context.Context, req *IdentityErrorsPostReq) error {
+// POST /v1/identity/errors
+func (UnimplementedHandler) V1IdentityErrorsPost(ctx context.Context, req *V1IdentityErrorsPostReq) error {
 	return ht.ErrNotImplemented
 }
 
-// IdentityGooglePost implements POST /identity/google operation.
+// V1IdentityGooglePost implements POST /v1/identity/google operation.
 //
 // Google login.
 //
-// POST /identity/google
-func (UnimplementedHandler) IdentityGooglePost(ctx context.Context, req *GoogleLoginRequest) error {
+// POST /v1/identity/google
+func (UnimplementedHandler) V1IdentityGooglePost(ctx context.Context, req *GoogleLoginRequest) error {
 	return ht.ErrNotImplemented
 }
 
-// IdentityLogoutPost implements POST /identity/logout operation.
+// V1IdentityLogoutPost implements POST /v1/identity/logout operation.
 //
 // Logout.
 //
-// POST /identity/logout
-func (UnimplementedHandler) IdentityLogoutPost(ctx context.Context) error {
+// POST /v1/identity/logout
+func (UnimplementedHandler) V1IdentityLogoutPost(ctx context.Context) error {
 	return ht.ErrNotImplemented
 }
 
-// IdentityMeGet implements GET /identity/me operation.
+// V1IdentityMeGet implements GET /v1/identity/me operation.
 //
 // Get current user.
 //
-// GET /identity/me
-func (UnimplementedHandler) IdentityMeGet(ctx context.Context) (r *User, _ error) {
+// GET /v1/identity/me
+func (UnimplementedHandler) V1IdentityMeGet(ctx context.Context) (r *User, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

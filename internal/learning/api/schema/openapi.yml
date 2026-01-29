@@ -82,6 +82,8 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/Id"
+        projectId:
+          $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
         status:
@@ -94,6 +96,7 @@ components:
           format: date-time
       required:
         - id
+        - projectId
         - theme
         - status
         - lastCommentedAt
@@ -101,6 +104,8 @@ components:
       type: object
       properties:
         id:
+          $ref: "#/components/schemas/Id"
+        projectId:
           $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
@@ -115,6 +120,7 @@ components:
           $ref: "#/components/schemas/DialogueSettings"
       required:
         - id
+        - projectId
         - theme
         - conclusion
         - status
@@ -152,10 +158,21 @@ components:
 security:
   - cookie_auth: []
 paths:
-  /learning/discussions:
+  /v1/learning/workspaces/{workspaceId}/discussions:
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/Id"
     get:
       description: get discussions
       parameters:
+        - name: projectId
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
         - name: archived
           in: query
           required: false
@@ -186,11 +203,14 @@ paths:
             schema:
               type: object
               properties:
+                projectId:
+                  $ref: "#/components/schemas/Id"
                 theme:
                   $ref: "#/components/schemas/DiscussionTheme"
                 status:
                   $ref: "#/components/schemas/DiscussionStatus"
               required:
+                - projectId
                 - theme
                 - status
       responses:
@@ -206,7 +226,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}:
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}:
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/Id"
     get:
       description: get discussion
       parameters:
@@ -243,11 +269,14 @@ paths:
             schema:
               type: object
               properties:
+                projectId:
+                  $ref: "#/components/schemas/Id"
                 theme:
                   $ref: "#/components/schemas/DiscussionTheme"
                 conclusion:
                   $ref: "#/components/schemas/DiscussionConclusion"
               required:
+                - projectId
                 - theme
                 - conclusion
       responses:
@@ -280,7 +309,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/status:
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/status:
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/Id"
     put:
       description: update discussion status
       parameters:
@@ -315,7 +350,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/archive:
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive:
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/Id"
     post:
       description: archive discussion
       parameters:
@@ -358,7 +399,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/comments:
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments:
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/Id"
     get:
       description: get comments for a discussion
       parameters:
@@ -428,7 +475,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/comments/{commentId}:
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}:
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/Id"
     put:
       description: update comment
       parameters:
@@ -491,7 +544,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/comments/{commentId}/status:
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/status:
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/Id"
     put:
       description: update comment status
       parameters:
@@ -529,7 +588,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/comments/{commentId}/archive:
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive:
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/Id"
     post:
       description: archive comment
       parameters:
@@ -582,7 +647,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /learning/discussions/{discussionId}/comments/generate:
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate:
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/Id"
     post:
       description: generate comments using AI
       parameters:

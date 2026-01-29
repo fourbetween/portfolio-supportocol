@@ -580,130 +580,6 @@ func (s *CommentType) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("parentCommentId")
-		s.ParentCommentId.Encode(e)
-	}
-	{
-		e.FieldStart("commentType")
-		s.CommentType.Encode(e)
-	}
-	{
-		e.FieldStart("content")
-		s.Content.Encode(e)
-	}
-}
-
-var jsonFieldsNameOfDialogueDiscussionsDiscussionIdCommentsPostReq = [3]string{
-	0: "parentCommentId",
-	1: "commentType",
-	2: "content",
-}
-
-// Decode decodes DialogueDiscussionsDiscussionIdCommentsPostReq from json.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode DialogueDiscussionsDiscussionIdCommentsPostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "parentCommentId":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				if err := s.ParentCommentId.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"parentCommentId\"")
-			}
-		case "commentType":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				if err := s.CommentType.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"commentType\"")
-			}
-		case "content":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				if err := s.Content.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"content\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode DialogueDiscussionsDiscussionIdCommentsPostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfDialogueDiscussionsDiscussionIdCommentsPostReq) {
-					name = jsonFieldsNameOfDialogueDiscussionsDiscussionIdCommentsPostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *DialogueDiscussionsDiscussionIdCommentsPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
 func (s *DialogueSettings) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -1421,4 +1297,128 @@ func (s OptDateTime) MarshalJSON() ([]byte, error) {
 func (s *OptDateTime) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d, json.DecodeDateTime)
+}
+
+// Encode implements json.Marshaler.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("parentCommentId")
+		s.ParentCommentId.Encode(e)
+	}
+	{
+		e.FieldStart("commentType")
+		s.CommentType.Encode(e)
+	}
+	{
+		e.FieldStart("content")
+		s.Content.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfV1DialogueDiscussionsDiscussionIdCommentsPostReq = [3]string{
+	0: "parentCommentId",
+	1: "commentType",
+	2: "content",
+}
+
+// Decode decodes V1DialogueDiscussionsDiscussionIdCommentsPostReq from json.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1DialogueDiscussionsDiscussionIdCommentsPostReq to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "parentCommentId":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.ParentCommentId.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"parentCommentId\"")
+			}
+		case "commentType":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.CommentType.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"commentType\"")
+			}
+		case "content":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Content.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"content\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode V1DialogueDiscussionsDiscussionIdCommentsPostReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfV1DialogueDiscussionsDiscussionIdCommentsPostReq) {
+					name = jsonFieldsNameOfV1DialogueDiscussionsDiscussionIdCommentsPostReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
 }

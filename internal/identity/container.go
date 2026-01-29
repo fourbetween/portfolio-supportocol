@@ -7,6 +7,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/identity/domain"
 	"github.com/fourbetween/app-supportocol/internal/identity/infra/db"
 	"github.com/fourbetween/app-supportocol/internal/identity/usecase"
+	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 	"github.com/fourbetween/pkg-auth/auth"
 	"github.com/fourbetween/pkg-auth/jwt"
 	"github.com/fourbetween/pkg-auth/password"
@@ -18,7 +19,12 @@ type APIContainer struct {
 	GetUser         *usecase.GetUserUsecase
 }
 
-func NewAPIContainer(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (*APIContainer, error) {
+func NewAPIContainer(
+	dbCon *sql.DB,
+	appConf conf.Service,
+	jwtSrv jwt.Service,
+	userCreatedHandler usecase.UserCreatedHandler,
+) (*APIContainer, error) {
 	googleClientID, err := appConf.Get("google/client/id")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get Google client ID from config: %w", err)
@@ -26,6 +32,7 @@ func NewAPIContainer(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (*
 
 	userFac := domain.NewFactory()
 	userRepo := db.NewUserRepository(dbCon, userFac)
+	txManager := dbtx.NewManager(dbCon)
 
 	buildUser := func(p auth.BuildParams) *domain.User {
 		return userFac.Reconstruct(domain.ReconstructParams{
@@ -51,7 +58,7 @@ func NewAPIContainer(dbCon *sql.DB, appConf conf.Service, jwtSrv jwt.Service) (*
 	)
 
 	return &APIContainer{
-		LoginWithGoogle: usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv),
+		LoginWithGoogle: usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv, userCreatedHandler, txManager),
 		GetUser:         usecase.NewGetUserUsecase(userRepo),
 	}, nil
 }

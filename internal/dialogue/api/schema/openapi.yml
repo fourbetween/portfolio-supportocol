@@ -138,7 +138,7 @@ components:
         - status
         - createdAt
 paths:
-  /dialogue/discussions:
+  /v1/dialogue/discussions:
     get:
       description: get discussions
       responses:
@@ -156,7 +156,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /dialogue/discussions/{discussionId}:
+  /v1/dialogue/discussions/{discussionId}:
     get:
       description: get discussion
       parameters:
@@ -178,7 +178,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /dialogue/discussions/{discussionId}/comments:
+  /v1/dialogue/discussions/{discussionId}/comments:
     get:
       description: get comments for a discussion
       parameters:

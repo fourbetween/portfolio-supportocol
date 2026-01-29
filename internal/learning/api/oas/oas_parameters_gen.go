@@ -16,12 +16,13 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// LearningDiscussionsDiscussionIdArchiveDeleteParams is parameters of DELETE /learning/discussions/{discussionId}/archive operation.
-type LearningDiscussionsDiscussionIdArchiveDeleteParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteParams is parameters of DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteParams struct {
 	DiscussionId ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdArchiveDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdArchiveDeleteParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -29,15 +30,22 @@ func unpackLearningDiscussionsDiscussionIdArchiveDeleteParams(packed middleware.
 		}
 		params.DiscussionId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdArchiveDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdArchiveDeleteParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -85,15 +93,68 @@ func decodeLearningDiscussionsDiscussionIdArchiveDeleteParams(args [1]string, ar
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdArchivePostParams is parameters of POST /learning/discussions/{discussionId}/archive operation.
-type LearningDiscussionsDiscussionIdArchivePostParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostParams is parameters of POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostParams struct {
 	DiscussionId ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdArchivePostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdArchivePostParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -101,15 +162,22 @@ func unpackLearningDiscussionsDiscussionIdArchivePostParams(packed middleware.Pa
 		}
 		params.DiscussionId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdArchivePostParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdArchivePostParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -157,16 +225,69 @@ func decodeLearningDiscussionsDiscussionIdArchivePostParams(args [1]string, args
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams is parameters of DELETE /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams is parameters of DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams struct {
 	DiscussionId ID
 	CommentId    ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -181,15 +302,22 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(p
 		}
 		params.CommentId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(args [3]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -239,9 +367,9 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(a
 	}
 	// Decode path: commentId.
 	if err := func() error {
-		param := args[1]
+		param := args[2]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[1])
+			unescaped, err := url.PathUnescape(args[2])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -289,16 +417,69 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams(a
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams is parameters of POST /learning/discussions/{discussionId}/comments/{commentId}/archive operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams is parameters of POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams struct {
 	DiscussionId ID
 	CommentId    ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -313,15 +494,22 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(pac
 		}
 		params.CommentId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(args [3]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -371,9 +559,9 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(arg
 	}
 	// Decode path: commentId.
 	if err := func() error {
-		param := args[1]
+		param := args[2]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[1])
+			unescaped, err := url.PathUnescape(args[2])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -421,16 +609,69 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams(arg
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams is parameters of DELETE /learning/discussions/{discussionId}/comments/{commentId} operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams is parameters of DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId} operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams struct {
 	DiscussionId ID
 	CommentId    ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -445,15 +686,22 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(packed m
 		}
 		params.CommentId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [3]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -503,9 +751,9 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]
 	}
 	// Decode path: commentId.
 	if err := func() error {
-		param := args[1]
+		param := args[2]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[1])
+			unescaped, err := url.PathUnescape(args[2])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -553,16 +801,69 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams(args [2]
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdPutParams is parameters of PUT /learning/discussions/{discussionId}/comments/{commentId} operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdPutParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutParams is parameters of PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId} operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutParams struct {
 	DiscussionId ID
 	CommentId    ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdPutParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -577,15 +878,22 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(packed midd
 		}
 		params.CommentId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdPutParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutParams(args [3]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -635,9 +943,9 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]str
 	}
 	// Decode path: commentId.
 	if err := func() error {
-		param := args[1]
+		param := args[2]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[1])
+			unescaped, err := url.PathUnescape(args[2])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -685,16 +993,69 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdPutParams(args [2]str
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams is parameters of PUT /learning/discussions/{discussionId}/comments/{commentId}/status operation.
-type LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutParams is parameters of PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/status operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutParams struct {
 	DiscussionId ID
 	CommentId    ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -709,15 +1070,22 @@ func unpackLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(packe
 		}
 		params.CommentId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args [2]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args [3]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -767,9 +1135,9 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args 
 	}
 	// Decode path: commentId.
 	if err := func() error {
-		param := args[1]
+		param := args[2]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[1])
+			unescaped, err := url.PathUnescape(args[2])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -817,15 +1185,68 @@ func decodeLearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams(args 
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsGeneratePostParams is parameters of POST /learning/discussions/{discussionId}/comments/generate operation.
-type LearningDiscussionsDiscussionIdCommentsGeneratePostParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams is parameters of POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams struct {
 	DiscussionId ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsGeneratePostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsGeneratePostParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -833,15 +1254,22 @@ func unpackLearningDiscussionsDiscussionIdCommentsGeneratePostParams(packed midd
 		}
 		params.DiscussionId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsGeneratePostParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsGeneratePostParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -889,16 +1317,69 @@ func decodeLearningDiscussionsDiscussionIdCommentsGeneratePostParams(args [1]str
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsGetParams is parameters of GET /learning/discussions/{discussionId}/comments operation.
-type LearningDiscussionsDiscussionIdCommentsGetParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams is parameters of GET /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams struct {
 	DiscussionId ID
 	Since        OptDateTime `json:",omitempty,omitzero"`
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsGetParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsGetParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -915,16 +1396,23 @@ func unpackLearningDiscussionsDiscussionIdCommentsGetParams(packed middleware.Pa
 			params.Since = v.(OptDateTime)
 		}
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsGetParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -1013,15 +1501,68 @@ func decodeLearningDiscussionsDiscussionIdCommentsGetParams(args [1]string, args
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdCommentsPostParams is parameters of POST /learning/discussions/{discussionId}/comments operation.
-type LearningDiscussionsDiscussionIdCommentsPostParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams is parameters of POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams struct {
 	DiscussionId ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdCommentsPostParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdCommentsPostParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -1029,15 +1570,22 @@ func unpackLearningDiscussionsDiscussionIdCommentsPostParams(packed middleware.P
 		}
 		params.DiscussionId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdCommentsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdCommentsPostParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -1085,15 +1633,68 @@ func decodeLearningDiscussionsDiscussionIdCommentsPostParams(args [1]string, arg
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdDeleteParams is parameters of DELETE /learning/discussions/{discussionId} operation.
-type LearningDiscussionsDiscussionIdDeleteParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteParams is parameters of DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId} operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteParams struct {
 	DiscussionId ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdDeleteParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdDeleteParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -1101,15 +1702,22 @@ func unpackLearningDiscussionsDiscussionIdDeleteParams(packed middleware.Paramet
 		}
 		params.DiscussionId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdDeleteParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -1157,15 +1765,68 @@ func decodeLearningDiscussionsDiscussionIdDeleteParams(args [1]string, argsEscap
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdGetParams is parameters of GET /learning/discussions/{discussionId} operation.
-type LearningDiscussionsDiscussionIdGetParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams is parameters of GET /v1/learning/workspaces/{workspaceId}/discussions/{discussionId} operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams struct {
 	DiscussionId ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdGetParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdGetParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -1173,15 +1834,22 @@ func unpackLearningDiscussionsDiscussionIdGetParams(packed middleware.Parameters
 		}
 		params.DiscussionId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdGetParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -1229,15 +1897,68 @@ func decodeLearningDiscussionsDiscussionIdGetParams(args [1]string, argsEscaped 
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdPutParams is parameters of PUT /learning/discussions/{discussionId} operation.
-type LearningDiscussionsDiscussionIdPutParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutParams is parameters of PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId} operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutParams struct {
 	DiscussionId ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdPutParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -1245,15 +1966,22 @@ func unpackLearningDiscussionsDiscussionIdPutParams(packed middleware.Parameters
 		}
 		params.DiscussionId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdPutParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdPutParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -1301,15 +2029,68 @@ func decodeLearningDiscussionsDiscussionIdPutParams(args [1]string, argsEscaped 
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsDiscussionIdStatusPutParams is parameters of PUT /learning/discussions/{discussionId}/status operation.
-type LearningDiscussionsDiscussionIdStatusPutParams struct {
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutParams is parameters of PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/status operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutParams struct {
 	DiscussionId ID
+	WorkspaceId  ID
 }
 
-func unpackLearningDiscussionsDiscussionIdStatusPutParams(packed middleware.Parameters) (params LearningDiscussionsDiscussionIdStatusPutParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "discussionId",
@@ -1317,15 +2098,22 @@ func unpackLearningDiscussionsDiscussionIdStatusPutParams(packed middleware.Para
 		}
 		params.DiscussionId = packed[key].(ID)
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsDiscussionIdStatusPutParams(args [1]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsDiscussionIdStatusPutParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutParams(args [2]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutParams, _ error) {
 	// Decode path: discussionId.
 	if err := func() error {
-		param := args[0]
+		param := args[1]
 		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
+			unescaped, err := url.PathUnescape(args[1])
 			if err != nil {
 				return errors.Wrap(err, "unescape path")
 			}
@@ -1373,15 +2161,76 @@ func decodeLearningDiscussionsDiscussionIdStatusPutParams(args [1]string, argsEs
 			Err:  err,
 		}
 	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
 	return params, nil
 }
 
-// LearningDiscussionsGetParams is parameters of GET /learning/discussions operation.
-type LearningDiscussionsGetParams struct {
-	Archived OptBool `json:",omitempty,omitzero"`
+// V1LearningWorkspacesWorkspaceIdDiscussionsGetParams is parameters of GET /v1/learning/workspaces/{workspaceId}/discussions operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsGetParams struct {
+	ProjectId   ID
+	Archived    OptBool `json:",omitempty,omitzero"`
+	WorkspaceId ID
 }
 
-func unpackLearningDiscussionsGetParams(packed middleware.Parameters) (params LearningDiscussionsGetParams) {
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsGetParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "projectId",
+			In:   "query",
+		}
+		params.ProjectId = packed[key].(ID)
+	}
 	{
 		key := middleware.ParameterKey{
 			Name: "archived",
@@ -1391,11 +2240,61 @@ func unpackLearningDiscussionsGetParams(packed middleware.Parameters) (params Le
 			params.Archived = v.(OptBool)
 		}
 	}
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
 	return params
 }
 
-func decodeLearningDiscussionsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params LearningDiscussionsGetParams, _ error) {
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsGetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: projectId.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "projectId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotProjectIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotProjectIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.ProjectId = ID(paramsDotProjectIdVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "projectId",
+			In:   "query",
+			Err:  err,
+		}
+	}
 	// Set default value for query: archived.
 	{
 		val := bool(false)
@@ -1439,6 +2338,130 @@ func decodeLearningDiscussionsGetParams(args [0]string, argsEscaped bool, r *htt
 		return params, &ogenerrors.DecodeParamError{
 			Name: "archived",
 			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1LearningWorkspacesWorkspaceIdDiscussionsPostParams is parameters of POST /v1/learning/workspaces/{workspaceId}/discussions operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsPostParams struct {
+	WorkspaceId ID
+}
+
+func unpackV1LearningWorkspacesWorkspaceIdDiscussionsPostParams(packed middleware.Parameters) (params V1LearningWorkspacesWorkspaceIdDiscussionsPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeV1LearningWorkspacesWorkspaceIdDiscussionsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1LearningWorkspacesWorkspaceIdDiscussionsPostParams, _ error) {
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
 			Err:  err,
 		}
 	}

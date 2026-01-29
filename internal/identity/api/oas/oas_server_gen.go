@@ -8,30 +8,30 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// IdentityErrorsPost implements POST /identity/errors operation.
+	// V1IdentityErrorsPost implements POST /v1/identity/errors operation.
 	//
 	// Post an error.
 	//
-	// POST /identity/errors
-	IdentityErrorsPost(ctx context.Context, req *IdentityErrorsPostReq) error
-	// IdentityGooglePost implements POST /identity/google operation.
+	// POST /v1/identity/errors
+	V1IdentityErrorsPost(ctx context.Context, req *V1IdentityErrorsPostReq) error
+	// V1IdentityGooglePost implements POST /v1/identity/google operation.
 	//
 	// Google login.
 	//
-	// POST /identity/google
-	IdentityGooglePost(ctx context.Context, req *GoogleLoginRequest) error
-	// IdentityLogoutPost implements POST /identity/logout operation.
+	// POST /v1/identity/google
+	V1IdentityGooglePost(ctx context.Context, req *GoogleLoginRequest) error
+	// V1IdentityLogoutPost implements POST /v1/identity/logout operation.
 	//
 	// Logout.
 	//
-	// POST /identity/logout
-	IdentityLogoutPost(ctx context.Context) error
-	// IdentityMeGet implements GET /identity/me operation.
+	// POST /v1/identity/logout
+	V1IdentityLogoutPost(ctx context.Context) error
+	// V1IdentityMeGet implements GET /v1/identity/me operation.
 	//
 	// Get current user.
 	//
-	// GET /identity/me
-	IdentityMeGet(ctx context.Context) (*User, error)
+	// GET /v1/identity/me
+	V1IdentityMeGet(ctx context.Context) (*User, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

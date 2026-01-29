@@ -21,18 +21,21 @@ export const Default: Story = {
     summaries: [
       {
         id: "1",
+        projectId: "p1",
         theme: "論理的な議論とは何か",
         status: "public",
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
       {
         id: "2",
+        projectId: "p1",
         theme: "AIを活用した学習の効率化",
         status: "public",
         lastCommentedAt: "2023-01-02T00:00:00Z",
       },
       {
         id: "3",
+        projectId: "p1",
         theme: "プログラミング教育の未来",
         status: "private",
         lastCommentedAt: "2023-01-03T00:00:00Z",

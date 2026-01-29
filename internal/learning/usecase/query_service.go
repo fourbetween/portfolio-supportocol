@@ -9,12 +9,20 @@ import (
 
 type DiscussionSummary struct {
 	ID              string
+	ProjectID       string
 	Theme           string
 	Status          domain.DiscussionStatus
 	ArchivedAt      *time.Time
 	LastCommentedAt time.Time
 }
 
+type ListDiscussionsParams struct {
+	WorkspaceID string
+	ProjectID   string
+	CreatedBy   string
+	Archived    bool
+}
+
 type DiscussionQueryService interface {
-	ListDiscussions(ctx context.Context, createdBy string, archived bool) ([]*DiscussionSummary, error)
+	ListDiscussions(ctx context.Context, params ListDiscussionsParams) ([]DiscussionSummary, error)
 }

@@ -23,14 +23,18 @@ describe("learning-discussion-list", () => {
     const discussions = [
       {
         id: "1",
+        projectId: "p1",
         theme: "テーマ1",
         status: "public" as const,
+        archivedAt: undefined,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
       {
         id: "2",
+        projectId: "p1",
         theme: "テーマ2",
         status: "public" as const,
+        archivedAt: undefined,
         lastCommentedAt: "2023-01-02T00:00:00Z",
       },
     ];
@@ -40,7 +44,7 @@ describe("learning-discussion-list", () => {
           .summaries=${discussions}
         ></learning-discussion-list>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("テーマ1")).toBeVisible();
@@ -52,7 +56,7 @@ describe("learning-discussion-list", () => {
       html`
         <learning-discussion-list .summaries=${[]}></learning-discussion-list>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("No discussions found.")).toBeVisible();
@@ -63,8 +67,10 @@ describe("learning-discussion-list", () => {
     const discussions = [
       {
         id: "1",
+        projectId: "p1",
         theme: "テーマ1",
         status: "public" as const,
+        archivedAt: undefined,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
     ];
@@ -76,7 +82,7 @@ describe("learning-discussion-list", () => {
             onSelect(e.discussionId)}
         ></learning-discussion-list>
       `,
-      container
+      container,
     );
 
     await page.getByText("テーマ1").click();
@@ -89,8 +95,10 @@ describe("learning-discussion-list", () => {
     const discussions = [
       {
         id: "1",
+        projectId: "p1",
         theme: "テーマ1",
         status: "public" as const,
+        archivedAt: undefined,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
     ];
@@ -102,7 +110,7 @@ describe("learning-discussion-list", () => {
             onDelete(e.discussionId)}
         ></learning-discussion-list>
       `,
-      container
+      container,
     );
 
     const item = page.getByText("テーマ1");
@@ -116,8 +124,10 @@ describe("learning-discussion-list", () => {
     const discussions = [
       {
         id: "1",
+        projectId: "p1",
         theme: "テーマ1",
         status: "public" as const,
+        archivedAt: undefined,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
     ];
@@ -127,7 +137,7 @@ describe("learning-discussion-list", () => {
           .summaries=${discussions}
         ></learning-discussion-list>
       `,
-      container
+      container,
     );
 
     const deleteButton = page.getByRole("button", { name: "delete" });
@@ -142,8 +152,10 @@ describe("learning-discussion-list", () => {
     const discussions = [
       {
         id: "1",
+        projectId: "p1",
         theme: "テーマ1",
         status: "public" as const,
+        archivedAt: undefined,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
     ];
@@ -153,7 +165,7 @@ describe("learning-discussion-list", () => {
           .summaries=${discussions}
         ></learning-discussion-list>
       `,
-      container
+      container,
     );
 
     const item = page.getByText("テーマ1");

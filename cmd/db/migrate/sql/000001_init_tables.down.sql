@@ -1,4 +1,7 @@
 DROP TABLE IF EXISTS dialogue_settings;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS discussions;
+DROP TABLE IF EXISTS projects;
+DROP TABLE IF EXISTS members;
+DROP TABLE IF EXISTS workspaces;
 DROP TABLE IF EXISTS users;

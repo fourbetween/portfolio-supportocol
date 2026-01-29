@@ -1,7 +1,10 @@
+import { consume } from "@lit/context";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
+import { workspaceContext } from "../../../app/context/workspace";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
   LearningCommentCreateEvent,
   LearningCommentCreatedEvent,
@@ -15,6 +18,9 @@ import type { LearningCommentTypePopup } from "../ui/comment-type-popup/comment-
 
 @customElement("learning-comment-create-widget")
 export class LearningCommentCreateWidget extends LitElement {
+  @consume({ context: workspaceContext, subscribe: true })
+  private workspace?: WorkspaceWithMember;
+
   @property({ type: String })
   discussionId?: string;
 
@@ -43,14 +49,18 @@ export class LearningCommentCreateWidget extends LitElement {
   }
 
   private async handleSave(e: LearningCommentCreateEvent) {
-    if (!this.discussionId) return;
+    if (!this.discussionId || !this.workspace) return;
 
     try {
-      const data = await commentRepository.create(this.discussionId, {
-        parentCommentId: e.parentCommentId,
-        commentType: e.commentType,
-        content: e.content,
-      });
+      const data = await commentRepository.create(
+        this.workspace.workspace.id,
+        this.discussionId,
+        {
+          parentCommentId: e.parentCommentId,
+          commentType: e.commentType,
+          content: e.content,
+        },
+      );
 
       showToast(this, "Comment created.", "success", 2000);
       this.handleCancel();

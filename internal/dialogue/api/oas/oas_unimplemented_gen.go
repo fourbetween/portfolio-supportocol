@@ -13,39 +13,39 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// DialogueDiscussionsDiscussionIdCommentsGet implements GET /dialogue/discussions/{discussionId}/comments operation.
+// V1DialogueDiscussionsDiscussionIdCommentsGet implements GET /v1/dialogue/discussions/{discussionId}/comments operation.
 //
 // Get comments for a discussion.
 //
-// GET /dialogue/discussions/{discussionId}/comments
-func (UnimplementedHandler) DialogueDiscussionsDiscussionIdCommentsGet(ctx context.Context, params DialogueDiscussionsDiscussionIdCommentsGetParams) (r []Comment, _ error) {
+// GET /v1/dialogue/discussions/{discussionId}/comments
+func (UnimplementedHandler) V1DialogueDiscussionsDiscussionIdCommentsGet(ctx context.Context, params V1DialogueDiscussionsDiscussionIdCommentsGetParams) (r []Comment, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// DialogueDiscussionsDiscussionIdCommentsPost implements POST /dialogue/discussions/{discussionId}/comments operation.
+// V1DialogueDiscussionsDiscussionIdCommentsPost implements POST /v1/dialogue/discussions/{discussionId}/comments operation.
 //
 // Create comment.
 //
-// POST /dialogue/discussions/{discussionId}/comments
-func (UnimplementedHandler) DialogueDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *DialogueDiscussionsDiscussionIdCommentsPostReq, params DialogueDiscussionsDiscussionIdCommentsPostParams) (r *Comment, _ error) {
+// POST /v1/dialogue/discussions/{discussionId}/comments
+func (UnimplementedHandler) V1DialogueDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *V1DialogueDiscussionsDiscussionIdCommentsPostReq, params V1DialogueDiscussionsDiscussionIdCommentsPostParams) (r *Comment, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// DialogueDiscussionsDiscussionIdGet implements GET /dialogue/discussions/{discussionId} operation.
+// V1DialogueDiscussionsDiscussionIdGet implements GET /v1/dialogue/discussions/{discussionId} operation.
 //
 // Get discussion.
 //
-// GET /dialogue/discussions/{discussionId}
-func (UnimplementedHandler) DialogueDiscussionsDiscussionIdGet(ctx context.Context, params DialogueDiscussionsDiscussionIdGetParams) (r *Discussion, _ error) {
+// GET /v1/dialogue/discussions/{discussionId}
+func (UnimplementedHandler) V1DialogueDiscussionsDiscussionIdGet(ctx context.Context, params V1DialogueDiscussionsDiscussionIdGetParams) (r *Discussion, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// DialogueDiscussionsGet implements GET /dialogue/discussions operation.
+// V1DialogueDiscussionsGet implements GET /v1/dialogue/discussions operation.
 //
 // Get discussions.
 //
-// GET /dialogue/discussions
-func (UnimplementedHandler) DialogueDiscussionsGet(ctx context.Context) (r []DiscussionSummary, _ error) {
+// GET /v1/dialogue/discussions
+func (UnimplementedHandler) V1DialogueDiscussionsGet(ctx context.Context) (r []DiscussionSummary, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

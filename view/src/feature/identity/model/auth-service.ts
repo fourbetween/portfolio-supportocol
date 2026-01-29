@@ -22,7 +22,7 @@ class AuthService {
    */
   async logout(): Promise<void> {
     try {
-      await client.POST("/identity/logout", {});
+      await client.POST("/v1/identity/logout", {});
     } catch (e) {
       console.warn("Logout API call failed, proceeding with local logout", e);
     } finally {
@@ -66,7 +66,7 @@ class AuthService {
 
   private async fetchUser(): Promise<User | undefined> {
     try {
-      const { data, error } = await client.GET("/identity/me", {});
+      const { data, error } = await client.GET("/v1/identity/me", {});
       if (error) {
         throw new Error(`Failed to fetch user: ${error.message}`);
       }

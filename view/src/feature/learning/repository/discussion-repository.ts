@@ -5,27 +5,35 @@ import type { Discussion, DiscussionSummary } from "../model/discussion";
 export class DiscussionRepository {
   private _cache = new Map<string, Discussion>();
 
-  async list(archived?: boolean): Promise<DiscussionSummary[]> {
-    const { data, error } = await client.GET("/learning/discussions", {
-      params: {
-        query: { archived },
+  async list(
+    workspaceId: string,
+    projectId: string,
+    archived?: boolean,
+  ): Promise<DiscussionSummary[]> {
+    const { data, error } = await client.GET(
+      "/v1/learning/workspaces/{workspaceId}/discussions",
+      {
+        params: {
+          path: { workspaceId },
+          query: { projectId, archived },
+        },
       },
-    });
+    );
     if (error) throw new Error(error.message);
     return data || [];
   }
 
-  async get(discussionId: string): Promise<Discussion> {
+  async get(workspaceId: string, discussionId: string): Promise<Discussion> {
     const cached = this._cache.get(discussionId);
     if (cached) return cached;
 
     const { data, error } = await client.GET(
-      "/learning/discussions/{discussionId}",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
         },
-      }
+      },
     );
     if (error) throw new Error(error.message);
     this._cache.set(discussionId, data);
@@ -33,30 +41,40 @@ export class DiscussionRepository {
   }
 
   async create(
+    workspaceId: string,
+    projectId: string,
     theme: string,
-    status: Discussion["status"]
+    status: Discussion["status"],
   ): Promise<Discussion> {
-    const { data, error } = await client.POST("/learning/discussions", {
-      body: { theme, status },
-    });
+    const { data, error } = await client.POST(
+      "/v1/learning/workspaces/{workspaceId}/discussions",
+      {
+        params: {
+          path: { workspaceId },
+        },
+        body: { projectId, theme, status },
+      },
+    );
     if (error) throw new Error(error.message);
     this._cache.set(data.id, data);
     return data;
   }
 
   async update(
+    workspaceId: string,
     discussionId: string,
+    projectId: string,
     theme: string,
-    conclusion: string
+    conclusion: string,
   ): Promise<Discussion> {
     const { data, error } = await client.PUT(
-      "/learning/discussions/{discussionId}",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
         },
-        body: { theme, conclusion },
-      }
+        body: { projectId, theme, conclusion },
+      },
     );
     if (error) throw new Error(error.message);
     this._cache.set(data.id, data);
@@ -64,60 +82,67 @@ export class DiscussionRepository {
   }
 
   async updateStatus(
+    workspaceId: string,
     discussionId: string,
     status: Discussion["status"],
-    commentFrame?: CommentFrame
+    commentFrame?: CommentFrame,
   ): Promise<Discussion> {
     const { data, error } = await client.PUT(
-      "/learning/discussions/{discussionId}/status",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/status",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
         },
         body: { status, commentFrame },
-      }
+      },
     );
     if (error) throw new Error(error.message);
     this._cache.set(data.id, data);
     return data;
   }
 
-  async archive(discussionId: string): Promise<Discussion> {
+  async archive(
+    workspaceId: string,
+    discussionId: string,
+  ): Promise<Discussion> {
     const { data, error } = await client.POST(
-      "/learning/discussions/{discussionId}/archive",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
         },
-      }
+      },
     );
     if (error) throw new Error(error.message);
     this._cache.set(data.id, data);
     return data;
   }
 
-  async unarchive(discussionId: string): Promise<Discussion> {
+  async unarchive(
+    workspaceId: string,
+    discussionId: string,
+  ): Promise<Discussion> {
     const { data, error } = await client.DELETE(
-      "/learning/discussions/{discussionId}/archive",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
         },
-      }
+      },
     );
     if (error) throw new Error(error.message);
     this._cache.set(data.id, data);
     return data;
   }
 
-  async delete(discussionId: string): Promise<void> {
+  async delete(workspaceId: string, discussionId: string): Promise<void> {
     const { error } = await client.DELETE(
-      "/learning/discussions/{discussionId}",
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
         },
-      }
+      },
     );
     if (error) throw new Error(error.message);
     this._cache.delete(discussionId);

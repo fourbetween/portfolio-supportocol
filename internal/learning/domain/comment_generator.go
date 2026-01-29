@@ -4,6 +4,7 @@ import "context"
 
 type GenerateCommentParams struct {
 	DiscussionID    string
+	WorkspaceID     string
 	ParentCommentID *string
 	CommentType     string
 	UserID          string

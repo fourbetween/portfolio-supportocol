@@ -1,6 +1,8 @@
+import { consume } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { workspaceContext } from "../../../app/context/workspace";
 import { TouchController } from "../../../app/controller/touch";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
@@ -8,6 +10,9 @@ import { buttonStyle } from "../../../shared/style/button";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
 import { iconStyle } from "../../../shared/style/icon";
 import "../../../shared/ui/drawer/drawer";
+import "../../workspace/component/project-select-widget";
+import { type WorkspaceProjectSelectEvent } from "../../workspace/event/project";
+import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import "../component/comment-explorer-widget";
 import "../component/comment-frame-widget";
 import "../component/comment-proposed-widget";
@@ -29,15 +34,23 @@ import type { Discussion, DiscussionSummary } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
 
+const PROJECT_ID_STORAGE_KEY = "learning:selected-project-id";
+
 @customElement("learning-dashboard-page")
 export class LearningDashboardPage extends LitElement {
   private _touch = new TouchController(this);
+
+  @consume({ context: workspaceContext, subscribe: true })
+  private workspace?: WorkspaceWithMember;
 
   @state()
   private _summaries: DiscussionSummary[] = [];
 
   @state()
   private _comments: Comment[] = [];
+
+  @state()
+  private _selectedProjectId?: string;
 
   @state()
   private _selectedDiscussionId?: string;
@@ -52,25 +65,26 @@ export class LearningDashboardPage extends LitElement {
   private _activeDrawer?: "left" | "right";
 
   private summariesTask = new Task(this, {
-    task: async () => {
-      return discussionRepository.list();
+    task: async ([workspace, projectId]) => {
+      if (!workspace || !projectId) return [] as DiscussionSummary[];
+      return discussionRepository.list(workspace.workspace.id, projectId);
     },
     onComplete: (summaries) => {
-      this._summaries = summaries;
+      this._summaries = summaries as DiscussionSummary[];
     },
     onError: (e: unknown) => {
       showToast(this, String(e), "error");
     },
-    args: () => [],
+    args: () => [this.workspace, this._selectedProjectId],
   });
 
   constructor() {
     super();
 
     new Task(this, {
-      task: async ([id]) => {
-        if (!id) return;
-        return discussionRepository.get(id);
+      task: async ([workspace, discussionId]) => {
+        if (!workspace || !discussionId) return;
+        return discussionRepository.get(workspace.workspace.id, discussionId);
       },
       onComplete: (discussion) => {
         this._selectedDiscussion = discussion;
@@ -78,13 +92,13 @@ export class LearningDashboardPage extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [this._selectedDiscussionId],
+      args: () => [this.workspace, this._selectedDiscussionId],
     });
 
     new Task(this, {
-      task: async ([id]) => {
-        if (!id) return [] as Comment[];
-        return commentRepository.list(id);
+      task: async ([workspace, discussionId]) => {
+        if (!workspace || !discussionId) return [] as Comment[];
+        return commentRepository.list(workspace.workspace.id, discussionId);
       },
       onComplete: (comments) => {
         this._comments = comments;
@@ -92,7 +106,7 @@ export class LearningDashboardPage extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [this._selectedDiscussionId],
+      args: () => [this.workspace, this._selectedDiscussionId],
     });
   }
 
@@ -105,6 +119,12 @@ export class LearningDashboardPage extends LitElement {
     } else if (this._touch.isTouchDevice) {
       this._activeDrawer = "left";
     }
+
+    const savedProjectId = localStorage.getItem(PROJECT_ID_STORAGE_KEY);
+    if (savedProjectId) {
+      this._selectedProjectId = savedProjectId;
+    }
+
     window.addEventListener("popstate", this._handlePopState);
   }
 
@@ -120,6 +140,15 @@ export class LearningDashboardPage extends LitElement {
       this._activeDrawer = "left";
     }
   };
+
+  private _handleProjectSelect(e: WorkspaceProjectSelectEvent) {
+    this._selectedProjectId = e.projectId;
+    if (e.projectId) {
+      localStorage.setItem(PROJECT_ID_STORAGE_KEY, e.projectId);
+    } else {
+      localStorage.removeItem(PROJECT_ID_STORAGE_KEY);
+    }
+  }
 
   private _handleDiscussionSelect(e: LearningDiscussionSelectEvent) {
     if (this._selectedDiscussionId === e.discussionId) {
@@ -196,7 +225,10 @@ export class LearningDashboardPage extends LitElement {
           : undefined;
 
       try {
+        if (!this.workspace) return;
+
         const newComments = await commentRepository.list(
+          this.workspace.workspace.id,
           this._selectedDiscussionId,
           since,
         );
@@ -218,6 +250,7 @@ export class LearningDashboardPage extends LitElement {
     return html`
       <learning-discussion-list-widget
         .summaries=${this._summaries}
+        .projectId=${this._selectedProjectId}
         @learning-discussion-select=${this._handleDiscussionSelect}
         @learning-discussion-created=${this._handleDiscussionUpdated}
         @learning-discussion-deleted=${this._handleDiscussionDeleted}
@@ -238,6 +271,14 @@ export class LearningDashboardPage extends LitElement {
   }
 
   private _renderLeftSidebar(isTouch: boolean) {
+    const projectSelect = html`
+      <div class="sidebar-project-select">
+        <workspace-project-select-widget
+          .selectedProjectId=${this._selectedProjectId ?? ""}
+          @workspace-project-select=${this._handleProjectSelect}
+        ></workspace-project-select-widget>
+      </div>
+    `;
     const list = this._renderDiscussionList();
     if (isTouch) {
       return html`
@@ -247,12 +288,12 @@ export class LearningDashboardPage extends LitElement {
           @drawer-close=${() => (this._activeDrawer = undefined)}
         >
           <span slot="header">Discussions</span>
-          ${list}
+          ${projectSelect} ${list}
         </ui-drawer>
       `;
     }
     return html`
-      <aside class="sidebar sidebar-left">${list}</aside>
+      <aside class="sidebar sidebar-left">${projectSelect} ${list}</aside>
     `;
   }
 
@@ -367,6 +408,10 @@ export class LearningDashboardPage extends LitElement {
       }
       .sidebar-right {
         border-left: 1px solid var(--color-border-default);
+      }
+      .sidebar-project-select {
+        padding: 16px;
+        border-bottom: 1px solid var(--color-border-default);
       }
       .main {
         flex: 1;

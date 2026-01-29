@@ -27,7 +27,7 @@ func NewHandler(con *dialogue.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
-func (h *appHandler) DialogueDiscussionsGet(ctx context.Context) ([]oas.DiscussionSummary, error) {
+func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context) ([]oas.DiscussionSummary, error) {
 	items, err := h.con.ListDiscussions.Execute(ctx)
 	if err != nil {
 		return nil, err
@@ -40,9 +40,9 @@ func (h *appHandler) DialogueDiscussionsGet(ctx context.Context) ([]oas.Discussi
 	return res, nil
 }
 
-func (h *appHandler) DialogueDiscussionsDiscussionIdGet(
+func (h *appHandler) V1DialogueDiscussionsDiscussionIdGet(
 	ctx context.Context,
-	params oas.DialogueDiscussionsDiscussionIdGetParams,
+	params oas.V1DialogueDiscussionsDiscussionIdGetParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.GetDiscussion.Execute(ctx, usecase.GetDiscussionInput{
 		ID: uuid.UUID(params.DiscussionId).String(),
@@ -55,9 +55,9 @@ func (h *appHandler) DialogueDiscussionsDiscussionIdGet(
 	return &res, nil
 }
 
-func (h *appHandler) DialogueDiscussionsDiscussionIdCommentsGet(
+func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsGet(
 	ctx context.Context,
-	params oas.DialogueDiscussionsDiscussionIdCommentsGetParams,
+	params oas.V1DialogueDiscussionsDiscussionIdCommentsGetParams,
 ) ([]oas.Comment, error) {
 	var since *time.Time
 	if params.Since.Set {
@@ -79,10 +79,10 @@ func (h *appHandler) DialogueDiscussionsDiscussionIdCommentsGet(
 	return res, nil
 }
 
-func (h *appHandler) DialogueDiscussionsDiscussionIdCommentsPost(
+func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsPost(
 	ctx context.Context,
-	req *oas.DialogueDiscussionsDiscussionIdCommentsPostReq,
-	params oas.DialogueDiscussionsDiscussionIdCommentsPostParams,
+	req *oas.V1DialogueDiscussionsDiscussionIdCommentsPostReq,
+	params oas.V1DialogueDiscussionsDiscussionIdCommentsPostParams,
 ) (*oas.Comment, error) {
 	var parentCommentID *string
 	if !req.ParentCommentId.Null {
@@ -130,7 +130,7 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 	}
 }
 
-func (h *appHandler) toOasDiscussionSummary(item *usecase.DiscussionSummary) oas.DiscussionSummary {
+func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.DiscussionSummary {
 	res := oas.DiscussionSummary{
 		ID:              oas.ID(uuid.MustParse(item.ID)),
 		Theme:           oas.DiscussionTheme(item.Theme),

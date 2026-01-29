@@ -2,25 +2,30 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
 type UpdateCommentStatusUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
+	permSv         domain.PermissionService
 	tx             dbtx.Manager
 }
 
 func NewUpdateCommentStatusUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
+	permSv domain.PermissionService,
 	tx dbtx.Manager,
 ) *UpdateCommentStatusUsecase {
 	return &UpdateCommentStatusUsecase{
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
+		permSv:         permSv,
 		tx:             tx,
 	}
 }
@@ -28,17 +33,26 @@ func NewUpdateCommentStatusUsecase(
 type UpdateCommentStatusInput struct {
 	ID           string
 	DiscussionID string
+	WorkspaceID  string
 	UserID       string
 	Status       string
 }
 
 func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCommentStatusInput) (*domain.Comment, error) {
+	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check workspace access: %w", err)
+	}
+	if !canAccess {
+		return nil, apperr.ErrPermissionDenied
+	}
+
 	var comment *domain.Comment
-	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// Verify discussion exists and user has access
 		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-			ID:        input.DiscussionID,
-			CreatedBy: input.UserID,
+			ID:          input.DiscussionID,
+			WorkspaceID: input.WorkspaceID,
 		})
 		if err != nil {
 			return err

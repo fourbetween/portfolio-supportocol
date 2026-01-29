@@ -4,7 +4,7 @@ import type { Comment } from "../model/comment";
 export class CommentRepository {
   async list(discussionId: string, since?: string): Promise<Comment[]> {
     const { data, error } = await client.GET(
-      "/dialogue/discussions/{discussionId}/comments",
+      "/v1/dialogue/discussions/{discussionId}/comments",
       {
         params: {
           path: { discussionId },
@@ -25,7 +25,7 @@ export class CommentRepository {
     }
   ): Promise<Comment> {
     const { data, error } = await client.POST(
-      "/dialogue/discussions/{discussionId}/comments",
+      "/v1/dialogue/discussions/{discussionId}/comments",
       {
         params: {
           path: { discussionId },

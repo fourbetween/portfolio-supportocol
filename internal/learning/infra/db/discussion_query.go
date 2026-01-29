@@ -12,18 +12,20 @@ import (
 	"github.com/go-jet/jet/v2/mysql"
 )
 
-// DiscussionQueryService is implementation of usecase.DiscussionQueryService.
-type DiscussionQueryService struct {
+// discussionQueryService is implementation of usecase.DiscussionQueryService.
+type discussionQueryService struct {
 	db *sql.DB
 }
 
-func NewDiscussionQueryService(db *sql.DB) *DiscussionQueryService {
-	return &DiscussionQueryService{db: db}
+func NewDiscussionQueryService(db *sql.DB) *discussionQueryService {
+	return &discussionQueryService{db: db}
 }
 
-func (s *DiscussionQueryService) ListDiscussions(ctx context.Context, createdBy string, archived bool) ([]*usecase.DiscussionSummary, error) {
-	condition := table.Discussions.CreatedBy.EQ(mysql.String(createdBy))
-	if archived {
+func (s *discussionQueryService) ListDiscussions(ctx context.Context, params usecase.ListDiscussionsParams) ([]usecase.DiscussionSummary, error) {
+	condition := table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)).
+		AND(table.Discussions.ProjectID.EQ(mysql.String(params.ProjectID))).
+		AND(table.Discussions.CreatedBy.EQ(mysql.String(params.CreatedBy)))
+	if params.Archived {
 		condition = condition.AND(table.Discussions.ArchivedAt.IS_NOT_NULL())
 	} else {
 		condition = condition.AND(table.Discussions.ArchivedAt.IS_NULL())
@@ -32,6 +34,7 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context, createdBy 
 	stmt := mysql.
 		SELECT(
 			table.Discussions.ID,
+			table.Discussions.ProjectID,
 			table.Discussions.Theme,
 			table.Discussions.Status,
 			table.Discussions.ArchivedAt,
@@ -46,10 +49,11 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context, createdBy 
 		return nil, err
 	}
 
-	res := make([]*usecase.DiscussionSummary, len(dest))
+	res := make([]usecase.DiscussionSummary, len(dest))
 	for i, d := range dest {
-		res[i] = &usecase.DiscussionSummary{
+		res[i] = usecase.DiscussionSummary{
 			ID:              d.ID,
+			ProjectID:       d.ProjectID,
 			Theme:           d.Theme,
 			Status:          domain.DiscussionStatus(d.Status),
 			ArchivedAt:      d.ArchivedAt,

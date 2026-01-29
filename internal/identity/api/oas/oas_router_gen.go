@@ -48,9 +48,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/identity/"
+		case '/': // Prefix: "/v1/identity/"
 
-			if l := len("/identity/"); len(elem) >= l && elem[0:l] == "/identity/" {
+			if l := len("/v1/identity/"); len(elem) >= l && elem[0:l] == "/v1/identity/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -72,7 +72,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "POST":
-						s.handleIdentityErrorsPostRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleV1IdentityErrorsPostRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "POST")
 					}
@@ -92,7 +92,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "POST":
-						s.handleIdentityGooglePostRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleV1IdentityGooglePostRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "POST")
 					}
@@ -112,7 +112,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "POST":
-						s.handleIdentityLogoutPostRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleV1IdentityLogoutPostRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "POST")
 					}
@@ -132,7 +132,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleIdentityMeGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleV1IdentityMeGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -228,9 +228,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/identity/"
+		case '/': // Prefix: "/v1/identity/"
 
-			if l := len("/identity/"); len(elem) >= l && elem[0:l] == "/identity/" {
+			if l := len("/v1/identity/"); len(elem) >= l && elem[0:l] == "/v1/identity/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -252,11 +252,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "POST":
-						r.name = IdentityErrorsPostOperation
+						r.name = V1IdentityErrorsPostOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/identity/errors"
+						r.pathPattern = "/v1/identity/errors"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -277,11 +277,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "POST":
-						r.name = IdentityGooglePostOperation
+						r.name = V1IdentityGooglePostOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/identity/google"
+						r.pathPattern = "/v1/identity/google"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -302,11 +302,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "POST":
-						r.name = IdentityLogoutPostOperation
+						r.name = V1IdentityLogoutPostOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/identity/logout"
+						r.pathPattern = "/v1/identity/logout"
 						r.args = args
 						r.count = 0
 						return r, true
@@ -327,11 +327,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "GET":
-						r.name = IdentityMeGetOperation
+						r.name = V1IdentityMeGetOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/identity/me"
+						r.pathPattern = "/v1/identity/me"
 						r.args = args
 						r.count = 0
 						return r, true

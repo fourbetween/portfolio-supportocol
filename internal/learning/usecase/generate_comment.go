@@ -2,8 +2,10 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
@@ -12,6 +14,7 @@ type GenerateCommentUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
 	generator      domain.CommentGenerator
+	permSv         domain.PermissionService
 	clock          clock.Service
 	tx             dbtx.Manager
 }
@@ -20,6 +23,7 @@ func NewGenerateCommentUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
 	generator domain.CommentGenerator,
+	permSv domain.PermissionService,
 	clock clock.Service,
 	tx dbtx.Manager,
 ) *GenerateCommentUsecase {
@@ -27,6 +31,7 @@ func NewGenerateCommentUsecase(
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
 		generator:      generator,
+		permSv:         permSv,
 		clock:          clock,
 		tx:             tx,
 	}
@@ -34,15 +39,24 @@ func NewGenerateCommentUsecase(
 
 type GenerateCommentInput struct {
 	DiscussionID    string
+	WorkspaceID     string
 	ParentCommentID *string
 	CommentType     string
 	UserID          string
 }
 
 func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateCommentInput) ([]*domain.Comment, error) {
+	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check workspace access: %w", err)
+	}
+	if !canAccess {
+		return nil, apperr.ErrPermissionDenied
+	}
+
 	discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-		ID:        input.DiscussionID,
-		CreatedBy: input.UserID,
+		ID:          input.DiscussionID,
+		WorkspaceID: input.WorkspaceID,
 	})
 	if err != nil {
 		return nil, err
@@ -54,6 +68,7 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 
 	comments, err := u.generator.Generate(ctx, domain.GenerateCommentParams{
 		DiscussionID:    input.DiscussionID,
+		WorkspaceID:     input.WorkspaceID,
 		ParentCommentID: input.ParentCommentID,
 		CommentType:     input.CommentType,
 		UserID:          input.UserID,

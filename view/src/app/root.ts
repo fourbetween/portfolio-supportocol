@@ -7,15 +7,18 @@ import "urlpattern-polyfill";
 import "../feature/dialogue/root";
 import "../feature/identity/component/auth-widget";
 import { authService } from "../feature/identity/model/auth-service";
-import type { User } from "../feature/identity/model/user";
 import "../feature/learning/root";
 import "../feature/marketing/root";
+import type { WorkspaceWorkspaceSelectEvent } from "../feature/workspace/event/workspace";
 import { showToast } from "../shared/event/toast";
 import "../shared/ui/loading/loading-manager";
 import "../shared/ui/toast/toast-manager";
 import { routerContext } from "./context/router";
 import { userContext } from "./context/user";
+import { workspaceContext } from "./context/workspace";
 import "./layout/layout";
+import type { User } from "./model/user";
+import type { WorkspaceWithMember } from "./model/workspace";
 
 @customElement("app-root")
 export class AppRoot extends LitElement {
@@ -44,10 +47,14 @@ export class AppRoot extends LitElement {
   @provide({ context: userContext })
   private user?: User;
 
+  @provide({ context: workspaceContext })
+  private workspace?: WorkspaceWithMember;
+
   constructor() {
     super();
 
     this.user;
+    this.workspace;
     new Task(this, {
       task: async () => {
         return authService.getCurrentUser();
@@ -64,10 +71,16 @@ export class AppRoot extends LitElement {
 
   render() {
     return html`
-      <app-layout>${this.router.outlet()}</app-layout>
+      <app-layout @workspace-workspace-select=${this.onWorkspaceSelect}>
+        ${this.router.outlet()}
+      </app-layout>
       <toast-manager></toast-manager>
       <loading-manager></loading-manager>
       <identity-auth-widget></identity-auth-widget>
     `;
+  }
+
+  private onWorkspaceSelect(e: WorkspaceWorkspaceSelectEvent) {
+    this.workspace = e.workspace;
   }
 }

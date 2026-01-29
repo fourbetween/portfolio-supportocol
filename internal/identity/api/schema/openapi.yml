@@ -43,7 +43,7 @@ components:
         - email
         - name
 paths:
-  /identity/google:
+  /v1/identity/google:
     post:
       description: google login
       requestBody:
@@ -61,7 +61,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /identity/logout:
+  /v1/identity/logout:
     post:
       description: logout
       responses:
@@ -73,7 +73,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /identity/me:
+  /v1/identity/me:
     get:
       description: get current user
       security:
@@ -91,7 +91,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /identity/errors:
+  /v1/identity/errors:
     post:
       description: post an error
       security:

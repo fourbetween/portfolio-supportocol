@@ -20,7 +20,7 @@ func NewDiscussionQueryService(db *sql.DB) *DiscussionQueryService {
 	return &DiscussionQueryService{db: db}
 }
 
-func (s *DiscussionQueryService) ListDiscussions(ctx context.Context) ([]*usecase.DiscussionSummary, error) {
+func (s *DiscussionQueryService) ListDiscussions(ctx context.Context) ([]usecase.DiscussionSummary, error) {
 	stmt := mysql.
 		SELECT(
 			table.Discussions.ID,
@@ -39,9 +39,9 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context) ([]*usecas
 		return nil, err
 	}
 
-	res := make([]*usecase.DiscussionSummary, len(dest))
+	res := make([]usecase.DiscussionSummary, len(dest))
 	for i, d := range dest {
-		res[i] = &usecase.DiscussionSummary{
+		res[i] = usecase.DiscussionSummary{
 			ID:              d.ID,
 			Theme:           d.Theme,
 			ArchivedAt:      d.ArchivedAt,

@@ -14,8 +14,8 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeIdentityErrorsPostRequest(r *http.Request) (
-	req *IdentityErrorsPostReq,
+func (s *Server) decodeV1IdentityErrorsPostRequest(r *http.Request) (
+	req *V1IdentityErrorsPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -62,7 +62,7 @@ func (s *Server) decodeIdentityErrorsPostRequest(r *http.Request) (
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request IdentityErrorsPostReq
+		var request V1IdentityErrorsPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -85,7 +85,7 @@ func (s *Server) decodeIdentityErrorsPostRequest(r *http.Request) (
 	}
 }
 
-func (s *Server) decodeIdentityGooglePostRequest(r *http.Request) (
+func (s *Server) decodeV1IdentityGooglePostRequest(r *http.Request) (
 	req *GoogleLoginRequest,
 	rawBody []byte,
 	close func() error,

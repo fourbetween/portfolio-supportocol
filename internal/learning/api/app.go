@@ -28,8 +28,13 @@ func NewHandler(con *learning.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
-func (h *appHandler) LearningDiscussionsGet(ctx context.Context, params oas.LearningDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
-	items, err := h.con.ListDiscussions.Execute(ctx, httpctx.GetUserID(ctx), params.Archived.Or(false))
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params oas.V1LearningWorkspacesWorkspaceIdDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
+	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		ProjectID:   uuid.UUID(params.ProjectId).String(),
+		UserID:      httpctx.GetUserID(ctx),
+		Archived:    params.Archived.Or(false),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -41,14 +46,17 @@ func (h *appHandler) LearningDiscussionsGet(ctx context.Context, params oas.Lear
 	return res, nil
 }
 
-func (h *appHandler) LearningDiscussionsPost(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsPost(
 	ctx context.Context,
-	req *oas.LearningDiscussionsPostReq,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsPostReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsPostParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.CreateDiscussion.Execute(ctx, usecase.CreateDiscussionInput{
-		Theme:     string(req.Theme),
-		Status:    domain.DiscussionStatus(req.Status),
-		CreatedBy: httpctx.GetUserID(ctx),
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		ProjectID:   uuid.UUID(req.ProjectId).String(),
+		Theme:       string(req.Theme),
+		Status:      domain.DiscussionStatus(req.Status),
+		UserID:      httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err
@@ -58,13 +66,14 @@ func (h *appHandler) LearningDiscussionsPost(
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdGet(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(
 	ctx context.Context,
-	params oas.LearningDiscussionsDiscussionIdGetParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.GetDiscussion.Execute(ctx, usecase.GetDiscussionInput{
-		ID:        uuid.UUID(params.DiscussionId).String(),
-		CreatedBy: httpctx.GetUserID(ctx),
+		ID:          uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		UserID:      httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err
@@ -74,16 +83,17 @@ func (h *appHandler) LearningDiscussionsDiscussionIdGet(
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdPut(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPut(
 	ctx context.Context,
-	req *oas.LearningDiscussionsDiscussionIdPutReq,
-	params oas.LearningDiscussionsDiscussionIdPutParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.UpdateDiscussion.Execute(ctx, usecase.UpdateDiscussionInput{
-		ID:         uuid.UUID(params.DiscussionId).String(),
-		CreatedBy:  httpctx.GetUserID(ctx),
-		Theme:      string(req.Theme),
-		Conclusion: string(req.Conclusion),
+		ID:          uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		UserID:      httpctx.GetUserID(ctx),
+		Theme:       string(req.Theme),
+		Conclusion:  string(req.Conclusion),
 	})
 	if err != nil {
 		return nil, err
@@ -93,20 +103,21 @@ func (h *appHandler) LearningDiscussionsDiscussionIdPut(
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdDelete(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDelete(
 	ctx context.Context,
-	params oas.LearningDiscussionsDiscussionIdDeleteParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteParams,
 ) error {
 	return h.con.DeleteDiscussion.Execute(ctx, usecase.DeleteDiscussionInput{
-		ID:        uuid.UUID(params.DiscussionId).String(),
-		CreatedBy: httpctx.GetUserID(ctx),
+		ID:          uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		UserID:      httpctx.GetUserID(ctx),
 	})
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdStatusPut(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPut(
 	ctx context.Context,
-	req *oas.LearningDiscussionsDiscussionIdStatusPutReq,
-	params oas.LearningDiscussionsDiscussionIdStatusPutParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutParams,
 ) (*oas.Discussion, error) {
 	var commentFrame *domain.CommentFrame
 	if cf, ok := req.CommentFrame.Get(); ok {
@@ -130,7 +141,8 @@ func (h *appHandler) LearningDiscussionsDiscussionIdStatusPut(
 
 	item, err := h.con.UpdateDiscussionStatus.Execute(ctx, usecase.UpdateDiscussionStatusInput{
 		ID:           uuid.UUID(params.DiscussionId).String(),
-		CreatedBy:    httpctx.GetUserID(ctx),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		UserID:       httpctx.GetUserID(ctx),
 		Status:       string(req.Status),
 		CommentFrame: commentFrame,
 	})
@@ -142,13 +154,14 @@ func (h *appHandler) LearningDiscussionsDiscussionIdStatusPut(
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdArchivePost(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePost(
 	ctx context.Context,
-	params oas.LearningDiscussionsDiscussionIdArchivePostParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.ArchiveDiscussion.Execute(ctx, usecase.ArchiveDiscussionInput{
-		ID:        uuid.UUID(params.DiscussionId).String(),
-		CreatedBy: httpctx.GetUserID(ctx),
+		ID:          uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		UserID:      httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err
@@ -158,13 +171,14 @@ func (h *appHandler) LearningDiscussionsDiscussionIdArchivePost(
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdArchiveDelete(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDelete(
 	ctx context.Context,
-	params oas.LearningDiscussionsDiscussionIdArchiveDeleteParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.UnarchiveDiscussion.Execute(ctx, usecase.UnarchiveDiscussionInput{
-		ID:        uuid.UUID(params.DiscussionId).String(),
-		CreatedBy: httpctx.GetUserID(ctx),
+		ID:          uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		UserID:      httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err
@@ -174,9 +188,9 @@ func (h *appHandler) LearningDiscussionsDiscussionIdArchiveDelete(
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet(
 	ctx context.Context,
-	params oas.LearningDiscussionsDiscussionIdCommentsGetParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams,
 ) ([]oas.Comment, error) {
 	var since *time.Time
 	if params.Since.Set {
@@ -185,6 +199,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(
 
 	items, err := h.con.ListComments.Execute(ctx, usecase.ListCommentsInput{
 		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
 		UserID:       httpctx.GetUserID(ctx),
 		Since:        since,
 	})
@@ -199,10 +214,10 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGet(
 	return res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdCommentsPost(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(
 	ctx context.Context,
-	req *oas.LearningDiscussionsDiscussionIdCommentsPostReq,
-	params oas.LearningDiscussionsDiscussionIdCommentsPostParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams,
 ) (*oas.Comment, error) {
 	var parentCommentID *string
 	if !req.ParentCommentId.Null {
@@ -212,10 +227,11 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsPost(
 
 	item, err := h.con.CreateComment.Execute(ctx, usecase.CreateCommentInput{
 		DiscussionID:    uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:     uuid.UUID(params.WorkspaceId).String(),
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
 		Content:         string(req.Content),
-		CreatedBy:       httpctx.GetUserID(ctx),
+		UserID:          httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err
@@ -225,14 +241,15 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsPost(
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdPut(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPut(
 	ctx context.Context,
-	req *oas.LearningDiscussionsDiscussionIdCommentsCommentIdPutReq,
-	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdPutParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.UpdateComment.Execute(ctx, usecase.UpdateCommentInput{
 		ID:           uuid.UUID(params.CommentId).String(),
 		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
 		UserID:       httpctx.GetUserID(ctx),
 		CommentType:  string(req.CommentType),
 		Content:      string(req.Content),
@@ -245,25 +262,27 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdPut(
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdDelete(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete(
 	ctx context.Context,
-	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdDeleteParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams,
 ) error {
 	return h.con.DeleteComment.Execute(ctx, usecase.DeleteCommentInput{
 		ID:           uuid.UUID(params.CommentId).String(),
 		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
 		UserID:       httpctx.GetUserID(ctx),
 	})
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPut(
 	ctx context.Context,
-	req *oas.LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutReq,
-	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdStatusPutParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.UpdateCommentStatus.Execute(ctx, usecase.UpdateCommentStatusInput{
 		ID:           uuid.UUID(params.CommentId).String(),
 		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
 		UserID:       httpctx.GetUserID(ctx),
 		Status:       string(req.Status),
 	})
@@ -275,13 +294,14 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdStatusPut(
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePost(
 	ctx context.Context,
-	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdArchivePostParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.ArchiveComment.Execute(ctx, usecase.ArchiveCommentInput{
 		ID:           uuid.UUID(params.CommentId).String(),
 		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
 		UserID:       httpctx.GetUserID(ctx),
 	})
 	if err != nil {
@@ -292,13 +312,14 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdArchivePost
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDelete(
 	ctx context.Context,
-	params oas.LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.UnarchiveComment.Execute(ctx, usecase.UnarchiveCommentInput{
 		ID:           uuid.UUID(params.CommentId).String(),
 		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
 		UserID:       httpctx.GetUserID(ctx),
 	})
 	if err != nil {
@@ -309,10 +330,10 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsCommentIdArchiveDele
 	return &res, nil
 }
 
-func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(
 	ctx context.Context,
-	req *oas.LearningDiscussionsDiscussionIdCommentsGeneratePostReq,
-	params oas.LearningDiscussionsDiscussionIdCommentsGeneratePostParams,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams,
 ) error {
 	var parentCommentID *string
 	if !req.ParentCommentId.Null {
@@ -322,6 +343,7 @@ func (h *appHandler) LearningDiscussionsDiscussionIdCommentsGeneratePost(
 
 	return h.con.EnqueueCommentGeneration.Execute(ctx, usecase.GenerateCommentInput{
 		DiscussionID:    uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:     uuid.UUID(params.WorkspaceId).String(),
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
 		UserID:          httpctx.GetUserID(ctx),
@@ -354,9 +376,10 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 	}
 }
 
-func (h *appHandler) toOasDiscussionSummary(item *usecase.DiscussionSummary) oas.DiscussionSummary {
+func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.DiscussionSummary {
 	res := oas.DiscussionSummary{
 		ID:              oas.ID(uuid.MustParse(item.ID)),
+		ProjectId:       oas.ID(uuid.MustParse(item.ProjectID)),
 		Theme:           oas.DiscussionTheme(item.Theme),
 		Status:          oas.DiscussionStatus(item.Status),
 		LastCommentedAt: item.LastCommentedAt,
@@ -370,6 +393,7 @@ func (h *appHandler) toOasDiscussionSummary(item *usecase.DiscussionSummary) oas
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	res := oas.Discussion{
 		ID:         oas.ID(uuid.MustParse(item.ID())),
+		ProjectId:  oas.ID(uuid.MustParse(item.ProjectID())),
 		Theme:      oas.DiscussionTheme(item.Theme()),
 		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
 		Status:     oas.DiscussionStatus(item.Status()),
