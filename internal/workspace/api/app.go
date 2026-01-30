@@ -172,6 +172,7 @@ func (h *appHandler) toOasProject(p *domain.Project) oas.Project {
 		ID:          oas.ID(uuid.MustParse(p.ID())),
 		WorkspaceId: oas.ID(uuid.MustParse(p.WorkspaceID())),
 		Name:        oas.ProjectName(p.Name()),
+		IsDefault:   p.IsDefault(),
 		CreatedAt:   p.CreatedAt(),
 	}
 }
