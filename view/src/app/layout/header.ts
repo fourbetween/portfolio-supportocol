@@ -33,6 +33,7 @@ export class AppHeader extends LitElement {
         <nav class="header-nav">
           <a href=${paths.learning.dashboard} class="nav-item">Learning</a>
           <a href=${paths.dialogue.search} class="nav-item">Dialogue</a>
+          <a href=${paths.workspace.projects} class="nav-item">Projects</a>
         </nav>
         <div class="header-actions">
           ${this.user

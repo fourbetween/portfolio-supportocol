@@ -19,14 +19,18 @@ export class WorkspaceProjectSelect extends LitElement {
   }
 
   render() {
+    const effectiveSelectedId =
+      this.selectedProjectId ||
+      this.projects.find((p) => p.isDefault)?.id ||
+      "";
+
     return html`
-      <select .value=${this.selectedProjectId} @change=${this.onChange}>
-        <option value="">Select a project</option>
+      <select .value=${effectiveSelectedId} @change=${this.onChange}>
         ${this.projects.map(
           (project) => html`
             <option
               value=${project.id}
-              ?selected=${this.selectedProjectId === project.id}
+              ?selected=${effectiveSelectedId === project.id}
             >
               ${project.name}
             </option>
