@@ -2,6 +2,8 @@ import { client } from "../api/client";
 import type { Project } from "../model/project";
 
 export class ProjectRepository {
+  private _cache = new Map<string, Project>();
+
   async list(workspaceId: string): Promise<Project[]> {
     const { data, error } = await client.GET(
       "/v1/workspace/workspaces/{workspaceId}/projects",
@@ -10,6 +12,7 @@ export class ProjectRepository {
       },
     );
     if (error) throw new Error(error.message);
+    data.forEach((p) => this._cache.set(p.id, p));
     return data;
   }
 
@@ -22,6 +25,7 @@ export class ProjectRepository {
       },
     );
     if (error) throw new Error(error.message);
+    this._cache.set(data.id, data);
     return data;
   }
 
@@ -38,6 +42,7 @@ export class ProjectRepository {
       },
     );
     if (error) throw new Error(error.message);
+    this._cache.set(data.id, data);
     return data;
   }
 
@@ -49,6 +54,7 @@ export class ProjectRepository {
       },
     );
     if (error) throw new Error(error.message);
+    this._cache.delete(projectId);
   }
 }
 
