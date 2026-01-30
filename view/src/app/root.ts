@@ -10,6 +10,7 @@ import { authService } from "../feature/identity/model/auth-service";
 import "../feature/learning/root";
 import "../feature/marketing/root";
 import type { WorkspaceWorkspaceSelectEvent } from "../feature/workspace/event/workspace";
+import "../feature/workspace/root";
 import { showToast } from "../shared/event/toast";
 import "../shared/ui/loading/loading-manager";
 import "../shared/ui/toast/toast-manager";
@@ -34,6 +35,12 @@ export class AppRoot extends LitElement {
       path: "/learning/*",
       render: () => html`
         <learning-root></learning-root>
+      `,
+    },
+    {
+      path: "/workspace/*",
+      render: () => html`
+        <workspace-root></workspace-root>
       `,
     },
     {

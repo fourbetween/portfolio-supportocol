@@ -13,6 +13,9 @@ export const paths = {
     // :id として discussions が解釈されてしまう問題があるため、 /dialogue/discussions/:id としている
     item: "/dialogue/discussions/:id",
   },
+  workspace: {
+    projects: "/workspace/projects",
+  },
 };
 
 export const buildPath = (
@@ -42,7 +45,7 @@ export const navigate = async (
 };
 
 export const pathInFeature = (path: string): string => {
-  const features = ["learning", "dialogue"];
+  const features = ["learning", "dialogue", "workspace"];
   for (const feature of features) {
     const prefix = "/" + feature + "/";
     if (path.startsWith(prefix)) {
