@@ -95,6 +95,29 @@ CREATE TABLE comments (
 	CONSTRAINT comments_users_fk FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- 指摘
+CREATE TABLE issues (
+	id CHAR(36) NOT NULL,
+	type VARCHAR(50) NOT NULL,
+	description TEXT,
+	status VARCHAR(20),
+	PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- コメントと指摘の関連
+CREATE TABLE comment_issues (
+	comment_id CHAR(36) NOT NULL,
+	issue_id CHAR(36) NOT NULL,
+	status VARCHAR(20) NOT NULL,
+	created_by CHAR(36),
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (comment_id, issue_id),
+	CONSTRAINT comment_issues_comments_fk FOREIGN KEY (comment_id) REFERENCES comments(id) ON DELETE CASCADE,
+	CONSTRAINT comment_issues_issues_fk FOREIGN KEY (issue_id) REFERENCES issues(id) ON DELETE CASCADE,
+	CONSTRAINT comment_issues_users_fk FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- 対話設定
 CREATE TABLE dialogue_settings (
 	discussion_id CHAR(36) NOT NULL,
