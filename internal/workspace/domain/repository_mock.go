@@ -219,6 +219,21 @@ func (m *MockProjectRepository) EXPECT() *MockProjectRepositoryMockRecorder {
 	return m.recorder
 }
 
+// CountByWorkspaceID mocks base method.
+func (m *MockProjectRepository) CountByWorkspaceID(ctx context.Context, workspaceID string) (int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountByWorkspaceID", ctx, workspaceID)
+	ret0, _ := ret[0].(int)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountByWorkspaceID indicates an expected call of CountByWorkspaceID.
+func (mr *MockProjectRepositoryMockRecorder) CountByWorkspaceID(ctx, workspaceID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountByWorkspaceID", reflect.TypeOf((*MockProjectRepository)(nil).CountByWorkspaceID), ctx, workspaceID)
+}
+
 // Delete mocks base method.
 func (m *MockProjectRepository) Delete(ctx context.Context, project *Project) error {
 	m.ctrl.T.Helper()

@@ -3,6 +3,7 @@ package domain
 import (
 	"time"
 
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 )
@@ -30,7 +31,11 @@ type CreateDiscussionParams struct {
 	CreatedBy   string
 }
 
-func (f *DiscussionFactory) Create(params CreateDiscussionParams) (*Discussion, error) {
+func (f *DiscussionFactory) Create(params CreateDiscussionParams, count int) (*Discussion, error) {
+	if count >= MaxDiscussionsPerProject {
+		return nil, apperr.ErrLimitExceeded
+	}
+
 	id := f.idSrv.Generate()
 	now := f.clockSrv.Now()
 	return f.Reconstruct(ReconstructDiscussionParams{

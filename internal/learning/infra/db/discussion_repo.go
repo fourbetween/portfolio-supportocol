@@ -121,6 +121,24 @@ func (r *DiscussionRepository) Delete(ctx context.Context, d *domain.Discussion)
 	return nil
 }
 
+func (r *DiscussionRepository) CountByProjectID(ctx context.Context, workspaceID, projectID string) (int, error) {
+	stmt := mysql.
+		SELECT(mysql.COUNT(table.Discussions.ID).AS("Count")).
+		FROM(table.Discussions).
+		WHERE(
+			table.Discussions.WorkspaceID.EQ(mysql.String(workspaceID)).
+				AND(table.Discussions.ProjectID.EQ(mysql.String(projectID))),
+		)
+
+	var dest struct {
+		Count int64
+	}
+	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
+		return 0, fmt.Errorf("failed to count discussions: %w", err)
+	}
+	return int(dest.Count), nil
+}
+
 func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Discussion, error) {
 	var dialogueSettings *domain.DialogueSettings
 	if row.DialogueSettings != nil {

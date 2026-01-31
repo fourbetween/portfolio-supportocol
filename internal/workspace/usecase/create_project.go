@@ -10,23 +10,26 @@ import (
 )
 
 type CreateProjectUsecase struct {
-	memberRepo  domain.MemberRepository
-	projectRepo domain.ProjectRepository
-	projectFac  *domain.ProjectFactory
-	tx          dbtx.Manager
+	workspaceRepo domain.WorkspaceRepository
+	memberRepo    domain.MemberRepository
+	projectRepo   domain.ProjectRepository
+	projectFac    *domain.ProjectFactory
+	tx            dbtx.Manager
 }
 
 func NewCreateProjectUsecase(
+	workspaceRepo domain.WorkspaceRepository,
 	memberRepo domain.MemberRepository,
 	projectRepo domain.ProjectRepository,
 	projectFac *domain.ProjectFactory,
 	tx dbtx.Manager,
 ) *CreateProjectUsecase {
 	return &CreateProjectUsecase{
-		memberRepo:  memberRepo,
-		projectRepo: projectRepo,
-		projectFac:  projectFac,
-		tx:          tx,
+		workspaceRepo: workspaceRepo,
+		memberRepo:    memberRepo,
+		projectRepo:   projectRepo,
+		projectFac:    projectFac,
+		tx:            tx,
 	}
 }
 
@@ -46,6 +49,21 @@ func (u *CreateProjectUsecase) Execute(ctx context.Context, input CreateProjectI
 		}
 		if !member.CanManageProjects() {
 			return fmt.Errorf("user cannot manage projects: %w", apperr.ErrPermissionDenied)
+		}
+
+		// ワークスペースの取得
+		workspace, err := u.workspaceRepo.Load(ctx, input.WorkspaceID)
+		if err != nil {
+			return err
+		}
+
+		// プロジェクト数の制限を確認
+		count, err := u.projectRepo.CountByWorkspaceID(ctx, input.WorkspaceID)
+		if err != nil {
+			return err
+		}
+		if err := workspace.CanAddProject(count); err != nil {
+			return err
 		}
 
 		// プロジェクトの作成

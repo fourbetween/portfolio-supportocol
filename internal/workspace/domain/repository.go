@@ -31,6 +31,7 @@ type (
 	ProjectRepository interface {
 		Load(ctx context.Context, params LoadProjectParams) (*Project, error)
 		Search(ctx context.Context, params SearchProjectsParams) ([]*Project, error)
+		CountByWorkspaceID(ctx context.Context, workspaceID string) (int, error)
 		Save(ctx context.Context, project *Project) error
 		Delete(ctx context.Context, project *Project) error
 	}

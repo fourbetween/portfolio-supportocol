@@ -12,6 +12,7 @@ type (
 		Load(ctx context.Context, params LoadDiscussionParams) (*Discussion, error)
 		Save(ctx context.Context, discussion *Discussion) error
 		Delete(ctx context.Context, discussion *Discussion) error
+		CountByProjectID(ctx context.Context, workspaceID, projectID string) (int, error)
 	}
 
 	LoadDiscussionParams struct {
