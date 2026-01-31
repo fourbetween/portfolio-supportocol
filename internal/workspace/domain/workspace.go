@@ -43,6 +43,15 @@ func (w *Workspace) IsOrganization() bool {
 	return w.wsType.IsOrganization()
 }
 
+const MaxProjectsForPersonalWorkspace = 20
+
+func (w *Workspace) CanAddProject(currentCount int) error {
+	if w.IsPersonal() && currentCount >= MaxProjectsForPersonalWorkspace {
+		return fmt.Errorf("project limit exceeded for personal workspace: %w", apperr.ErrLimitExceeded)
+	}
+	return nil
+}
+
 // UpdateParams はワークスペースの更新パラメータ
 type UpdateWorkspaceParams struct {
 	Name string

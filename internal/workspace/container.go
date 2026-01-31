@@ -51,7 +51,7 @@ func NewAPIContainer(
 		ListMyWorkspaces: usecase.NewListMyWorkspacesUsecase(workspaceQuerySrv),
 
 		// Projects
-		CreateProject: usecase.NewCreateProjectUsecase(memberRepo, projectRepo, projectFac, txManager),
+		CreateProject: usecase.NewCreateProjectUsecase(workspaceRepo, memberRepo, projectRepo, projectFac, txManager),
 		GetProject:    usecase.NewGetProjectUsecase(memberRepo, projectRepo),
 		ListProjects:  usecase.NewListProjectsUsecase(memberRepo, projectRepo),
 		UpdateProject: usecase.NewUpdateProjectUsecase(memberRepo, projectRepo, txManager),

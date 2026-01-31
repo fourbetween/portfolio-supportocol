@@ -69,6 +69,22 @@ func (r *ProjectRepository) Search(ctx context.Context, params domain.SearchProj
 	return projects, nil
 }
 
+func (r *ProjectRepository) CountByWorkspaceID(ctx context.Context, workspaceID string) (int, error) {
+	stmt := mysql.
+		SELECT(mysql.COUNT(mysql.STAR).AS("Count")).
+		FROM(table.Projects).
+		WHERE(table.Projects.WorkspaceID.EQ(mysql.String(workspaceID)))
+
+	var dest struct {
+		Count int64
+	}
+	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
+		return 0, fmt.Errorf("failed to count projects: %w", err)
+	}
+
+	return int(dest.Count), nil
+}
+
 func (r *ProjectRepository) Save(ctx context.Context, p *domain.Project) error {
 	record := model.Projects{
 		ID:          p.ID(),

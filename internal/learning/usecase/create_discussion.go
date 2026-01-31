@@ -49,14 +49,18 @@ func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscu
 
 	var discussion *domain.Discussion
 	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
-		var err error
+		count, err := u.repo.CountByProjectID(ctx, input.WorkspaceID, input.ProjectID)
+		if err != nil {
+			return err
+		}
+
 		discussion, err = u.fac.Create(domain.CreateDiscussionParams{
 			WorkspaceID: input.WorkspaceID,
 			ProjectID:   input.ProjectID,
 			Theme:       input.Theme,
 			Status:      input.Status,
 			CreatedBy:   input.UserID,
-		})
+		}, count)
 		if err != nil {
 			return err
 		}

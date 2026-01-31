@@ -43,7 +43,7 @@ func (h *UserCreatedHandler) OnUserCreated(ctx context.Context, userID string) e
 		// 1. パーソナルワークスペースの作成
 		workspace, err := h.workspaceFac.Create(domain.CreateWorkspaceParams{
 			Slug: domain.NewPersonalWorkspaceID(userID),
-			Name: "個人用ワークスペース",
+			Name: "Personal Workspace",
 			Type: domain.WorkspaceTypePersonal,
 		})
 		if err != nil {
@@ -69,7 +69,7 @@ func (h *UserCreatedHandler) OnUserCreated(ctx context.Context, userID string) e
 		// 3. 未分類プロジェクトの作成
 		project, err := h.projectFac.Create(domain.CreateProjectParams{
 			WorkspaceID: workspace.ID(),
-			Name:        "uncategorized",
+			Name:        "Uncategorized",
 			IsDefault:   true,
 		})
 		if err != nil {

@@ -40,6 +40,21 @@ func (m *MockDiscussionRepository) EXPECT() *MockDiscussionRepositoryMockRecorde
 	return m.recorder
 }
 
+// CountByProjectID mocks base method.
+func (m *MockDiscussionRepository) CountByProjectID(ctx context.Context, workspaceID, projectID string) (int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CountByProjectID", ctx, workspaceID, projectID)
+	ret0, _ := ret[0].(int)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CountByProjectID indicates an expected call of CountByProjectID.
+func (mr *MockDiscussionRepositoryMockRecorder) CountByProjectID(ctx, workspaceID, projectID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountByProjectID", reflect.TypeOf((*MockDiscussionRepository)(nil).CountByProjectID), ctx, workspaceID, projectID)
+}
+
 // Delete mocks base method.
 func (m *MockDiscussionRepository) Delete(ctx context.Context, discussion *Discussion) error {
 	m.ctrl.T.Helper()
