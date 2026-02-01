@@ -33,6 +33,7 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 }
 
 var operationRolesCookieAuth = map[string][]string{
+	V1LearningIssuesGetOperation: []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteOperation:                  []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostOperation:                    []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation: []string{},

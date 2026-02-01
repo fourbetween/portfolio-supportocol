@@ -29,6 +29,27 @@ components:
       enum:
         - active
         - proposed
+    IssueStatus:
+      type: string
+      enum:
+        - open
+        - closed
+    Issue:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        issueType:
+          type: string
+        description:
+          type: string
+        status:
+          $ref: "#/components/schemas/IssueStatus"
+      required:
+        - id
+        - issueType
+        - description
+        - status
     DialogueSettings:
       type: object
       properties:
@@ -158,6 +179,24 @@ components:
 security:
   - cookie_auth: []
 paths:
+  /v1/learning/issues:
+    get:
+      description: list issues
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Issue"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/learning/workspaces/{workspaceId}/discussions:
     parameters:
       - name: workspaceId

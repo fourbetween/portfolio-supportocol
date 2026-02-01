@@ -28,6 +28,19 @@ func NewHandler(con *learning.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
+func (h *appHandler) V1LearningIssuesGet(ctx context.Context) ([]oas.Issue, error) {
+	items, err := h.con.ListIssues.Execute(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]oas.Issue, len(items))
+	for i, item := range items {
+		res[i] = h.toOasIssue(item)
+	}
+	return res, nil
+}
+
 func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params oas.V1LearningWorkspacesWorkspaceIdDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
 	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
 		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
@@ -444,4 +457,13 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())
 	}
 	return res
+}
+
+func (h *appHandler) toOasIssue(item *domain.Issue) oas.Issue {
+	return oas.Issue{
+		ID:          oas.ID(uuid.MustParse(item.ID())),
+		IssueType:   item.IssueType(),
+		Description: item.Description(),
+		Status:      oas.IssueStatus(item.Status()),
+	}
 }

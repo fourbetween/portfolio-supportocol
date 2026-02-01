@@ -495,6 +495,96 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 
 type ID uuid.UUID
 
+// Ref: #/components/schemas/Issue
+type Issue struct {
+	ID          ID          `json:"id"`
+	IssueType   string      `json:"issueType"`
+	Description string      `json:"description"`
+	Status      IssueStatus `json:"status"`
+}
+
+// GetID returns the value of ID.
+func (s *Issue) GetID() ID {
+	return s.ID
+}
+
+// GetIssueType returns the value of IssueType.
+func (s *Issue) GetIssueType() string {
+	return s.IssueType
+}
+
+// GetDescription returns the value of Description.
+func (s *Issue) GetDescription() string {
+	return s.Description
+}
+
+// GetStatus returns the value of Status.
+func (s *Issue) GetStatus() IssueStatus {
+	return s.Status
+}
+
+// SetID sets the value of ID.
+func (s *Issue) SetID(val ID) {
+	s.ID = val
+}
+
+// SetIssueType sets the value of IssueType.
+func (s *Issue) SetIssueType(val string) {
+	s.IssueType = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Issue) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetStatus sets the value of Status.
+func (s *Issue) SetStatus(val IssueStatus) {
+	s.Status = val
+}
+
+// Ref: #/components/schemas/IssueStatus
+type IssueStatus string
+
+const (
+	IssueStatusOpen   IssueStatus = "open"
+	IssueStatusClosed IssueStatus = "closed"
+)
+
+// AllValues returns all IssueStatus values.
+func (IssueStatus) AllValues() []IssueStatus {
+	return []IssueStatus{
+		IssueStatusOpen,
+		IssueStatusClosed,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s IssueStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case IssueStatusOpen:
+		return []byte(s), nil
+	case IssueStatusClosed:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *IssueStatus) UnmarshalText(data []byte) error {
+	switch IssueStatus(data) {
+	case IssueStatusOpen:
+		*s = IssueStatusOpen
+		return nil
+	case IssueStatusClosed:
+		*s = IssueStatusClosed
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // NewNilID returns new NilID with value set to v.
 func NewNilID(v ID) NilID {
 	return NilID{
