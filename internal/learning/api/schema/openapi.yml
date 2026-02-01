@@ -139,9 +139,7 @@ components:
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
         conclusion:
-          anyOf:
-            - $ref: "#/components/schemas/DiscussionConclusion"
-            - type: "null"
+          $ref: "#/components/schemas/DiscussionConclusion"
         status:
           $ref: "#/components/schemas/DiscussionStatus"
         archivedAt:

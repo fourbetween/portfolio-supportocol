@@ -1014,7 +1014,7 @@ export interface components {
             id: components["schemas"]["Id"];
             projectId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
-            conclusion: components["schemas"]["DiscussionConclusion"] | null;
+            conclusion: components["schemas"]["DiscussionConclusion"];
             status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;
             dialogueSettings?: components["schemas"]["DialogueSettings"];

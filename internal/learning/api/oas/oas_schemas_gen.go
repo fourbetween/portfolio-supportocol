@@ -325,13 +325,13 @@ func (s *DialogueSettings) SetCommentFrame(val CommentFrame) {
 
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID               ID                      `json:"id"`
-	ProjectId        ID                      `json:"projectId"`
-	Theme            DiscussionTheme         `json:"theme"`
-	Conclusion       NilDiscussionConclusion `json:"conclusion"`
-	Status           DiscussionStatus        `json:"status"`
-	ArchivedAt       NilDateTime             `json:"archivedAt"`
-	DialogueSettings OptDialogueSettings     `json:"dialogueSettings"`
+	ID               ID                   `json:"id"`
+	ProjectId        ID                   `json:"projectId"`
+	Theme            DiscussionTheme      `json:"theme"`
+	Conclusion       DiscussionConclusion `json:"conclusion"`
+	Status           DiscussionStatus     `json:"status"`
+	ArchivedAt       NilDateTime          `json:"archivedAt"`
+	DialogueSettings OptDialogueSettings  `json:"dialogueSettings"`
 }
 
 // GetID returns the value of ID.
@@ -350,7 +350,7 @@ func (s *Discussion) GetTheme() DiscussionTheme {
 }
 
 // GetConclusion returns the value of Conclusion.
-func (s *Discussion) GetConclusion() NilDiscussionConclusion {
+func (s *Discussion) GetConclusion() DiscussionConclusion {
 	return s.Conclusion
 }
 
@@ -385,7 +385,7 @@ func (s *Discussion) SetTheme(val DiscussionTheme) {
 }
 
 // SetConclusion sets the value of Conclusion.
-func (s *Discussion) SetConclusion(val NilDiscussionConclusion) {
+func (s *Discussion) SetConclusion(val DiscussionConclusion) {
 	s.Conclusion = val
 }
 
@@ -703,51 +703,6 @@ func (o NilDateTime) Get() (v time.Time, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o NilDateTime) Or(d time.Time) time.Time {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewNilDiscussionConclusion returns new NilDiscussionConclusion with value set to v.
-func NewNilDiscussionConclusion(v DiscussionConclusion) NilDiscussionConclusion {
-	return NilDiscussionConclusion{
-		Value: v,
-	}
-}
-
-// NilDiscussionConclusion is nullable DiscussionConclusion.
-type NilDiscussionConclusion struct {
-	Value DiscussionConclusion
-	Null  bool
-}
-
-// SetTo sets value to v.
-func (o *NilDiscussionConclusion) SetTo(v DiscussionConclusion) {
-	o.Null = false
-	o.Value = v
-}
-
-// IsNull returns true if value is Null.
-func (o NilDiscussionConclusion) IsNull() bool { return o.Null }
-
-// SetToNull sets value to null.
-func (o *NilDiscussionConclusion) SetToNull() {
-	o.Null = true
-	var v DiscussionConclusion
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o NilDiscussionConclusion) Get() (v DiscussionConclusion, ok bool) {
-	if o.Null {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o NilDiscussionConclusion) Or(d DiscussionConclusion) DiscussionConclusion {
 	if v, ok := o.Get(); ok {
 		return v
 	}

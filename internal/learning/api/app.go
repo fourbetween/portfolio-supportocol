@@ -467,15 +467,11 @@ func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.
 
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	res := oas.Discussion{
-		ID:        oas.ID(uuid.MustParse(item.ID())),
-		ProjectId: oas.ID(uuid.MustParse(item.ProjectID())),
-		Theme:     oas.DiscussionTheme(item.Theme()),
-		Status:    oas.DiscussionStatus(item.Status()),
-	}
-	if item.Conclusion() != "" {
-		res.Conclusion.SetTo(oas.DiscussionConclusion(item.Conclusion()))
-	} else {
-		res.Conclusion.Null = true
+		ID:         oas.ID(uuid.MustParse(item.ID())),
+		ProjectId:  oas.ID(uuid.MustParse(item.ProjectID())),
+		Theme:      oas.DiscussionTheme(item.Theme()),
+		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
+		Status:     oas.DiscussionStatus(item.Status()),
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())
