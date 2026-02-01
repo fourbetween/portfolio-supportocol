@@ -21,6 +21,7 @@ export const Default: Story = {
       theme: "論理的な議論とは何か",
       conclusion: "前提を共有し、推論を積み重ねること。",
       status: "public",
+      archivedAt: null,
     },
     isEditing: false,
   },

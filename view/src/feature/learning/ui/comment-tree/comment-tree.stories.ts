@@ -54,7 +54,9 @@ const mockComments = [
     content: "論理的な議論を支援するためのプラットフォームについて",
     commentType: "idea",
     status: "active" as const,
+    issues: [],
     createdAt: "2026-01-04T00:00:00Z",
+    archivedAt: null,
   },
   {
     id: "2",
@@ -63,7 +65,9 @@ const mockComments = [
     content: "具体的にどのような機能がありますか？",
     commentType: "question",
     status: "active" as const,
+    issues: [],
     createdAt: "2026-01-04T00:00:00Z",
+    archivedAt: null,
   },
   {
     id: "3",
@@ -72,7 +76,9 @@ const mockComments = [
     content: "コメントフレームと木構造を用います。",
     commentType: "answer",
     status: "active" as const,
+    issues: [],
     createdAt: "2026-01-04T00:00:00Z",
+    archivedAt: null,
   },
   {
     id: "4",
@@ -81,7 +87,9 @@ const mockComments = [
     content: "それは使いやすそうですね。",
     commentType: "agree",
     status: "active" as const,
+    issues: [],
     createdAt: "2026-01-04T00:00:00Z",
+    archivedAt: null,
   },
   {
     id: "5",
@@ -90,7 +98,9 @@ const mockComments = [
     content: "モバイルでの表示はどうなりますか？",
     commentType: "question",
     status: "active" as const,
+    issues: [],
     createdAt: "2026-01-04T00:00:00Z",
+    archivedAt: null,
   },
   {
     id: "6",
@@ -99,7 +109,9 @@ const mockComments = [
     content: "AIサポート機能も検討しています。",
     commentType: "idea",
     status: "active" as const,
+    issues: [],
     createdAt: "2026-01-04T00:00:00Z",
+    archivedAt: null,
   },
 ];
 
@@ -126,7 +138,9 @@ export const DeepNesting: Story = {
         content: "Level 0",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -135,7 +149,9 @@ export const DeepNesting: Story = {
         content: "Level 1",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "3",
@@ -144,7 +160,9 @@ export const DeepNesting: Story = {
         content: "Level 2",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "4",
@@ -153,7 +171,9 @@ export const DeepNesting: Story = {
         content: "Level 3",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ],
   },
@@ -169,7 +189,9 @@ export const SameTypeChildren: Story = {
         content: "Root",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -178,7 +200,9 @@ export const SameTypeChildren: Story = {
         content: "Child 1",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "3",
@@ -187,7 +211,9 @@ export const SameTypeChildren: Story = {
         content: "Child 2",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "4",
@@ -196,7 +222,9 @@ export const SameTypeChildren: Story = {
         content: "Child 3",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ],
   },
@@ -212,7 +240,9 @@ export const SameTypeRoots: Story = {
         content: "Root 1",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -221,7 +251,9 @@ export const SameTypeRoots: Story = {
         content: "Root 2",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "3",
@@ -230,7 +262,9 @@ export const SameTypeRoots: Story = {
         content: "Root 3",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ],
   },
@@ -241,6 +275,7 @@ export const Archived: Story = {
     comments: [
       {
         ...mockComments[0],
+        issues: [],
         archivedAt: "2026-01-05T00:00:00Z",
       },
       ...mockComments.slice(1),

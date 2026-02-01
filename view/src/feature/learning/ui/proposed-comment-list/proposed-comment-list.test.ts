@@ -26,7 +26,9 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -35,7 +37,9 @@ describe("learning-proposed-comment-list", () => {
         content: "提案2",
         commentType: "question",
         status: "proposed",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
 
@@ -45,7 +49,7 @@ describe("learning-proposed-comment-list", () => {
           .comments=${comments}
         ></learning-proposed-comment-list>
       `,
-      container
+      container,
     );
 
     await expect.element(page.getByText("提案1")).toBeVisible();
@@ -59,7 +63,7 @@ describe("learning-proposed-comment-list", () => {
           .comments=${[]}
         ></learning-proposed-comment-list>
       `,
-      container
+      container,
     );
 
     await expect
@@ -77,7 +81,9 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
 
@@ -85,10 +91,11 @@ describe("learning-proposed-comment-list", () => {
       html`
         <learning-proposed-comment-list
           .comments=${comments}
-          @learning-comment-select=${(e: LearningCommentSelectEvent) => onSelect(e.commentId)}
+          @learning-comment-select=${(e: LearningCommentSelectEvent) =>
+            onSelect(e.commentId)}
         ></learning-proposed-comment-list>
       `,
-      container
+      container,
     );
 
     await page.getByText("提案1").click();
@@ -105,7 +112,9 @@ describe("learning-proposed-comment-list", () => {
         content: "提案1",
         commentType: "idea",
         status: "proposed",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
 
@@ -115,7 +124,7 @@ describe("learning-proposed-comment-list", () => {
           .comments=${comments}
         ></learning-proposed-comment-list>
       `,
-      container
+      container,
     );
 
     await expect

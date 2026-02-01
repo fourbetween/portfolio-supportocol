@@ -26,7 +26,7 @@ describe("learning-discussion-list", () => {
         projectId: "p1",
         theme: "テーマ1",
         status: "public" as const,
-        archivedAt: undefined,
+        archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
       {
@@ -34,7 +34,7 @@ describe("learning-discussion-list", () => {
         projectId: "p1",
         theme: "テーマ2",
         status: "public" as const,
-        archivedAt: undefined,
+        archivedAt: null,
         lastCommentedAt: "2023-01-02T00:00:00Z",
       },
     ];
@@ -70,7 +70,7 @@ describe("learning-discussion-list", () => {
         projectId: "p1",
         theme: "テーマ1",
         status: "public" as const,
-        archivedAt: undefined,
+        archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
     ];
@@ -98,7 +98,7 @@ describe("learning-discussion-list", () => {
         projectId: "p1",
         theme: "テーマ1",
         status: "public" as const,
-        archivedAt: undefined,
+        archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
     ];
@@ -127,7 +127,7 @@ describe("learning-discussion-list", () => {
         projectId: "p1",
         theme: "テーマ1",
         status: "public" as const,
-        archivedAt: undefined,
+        archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
     ];
@@ -155,7 +155,7 @@ describe("learning-discussion-list", () => {
         projectId: "p1",
         theme: "テーマ1",
         status: "public" as const,
-        archivedAt: undefined,
+        archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
     ];

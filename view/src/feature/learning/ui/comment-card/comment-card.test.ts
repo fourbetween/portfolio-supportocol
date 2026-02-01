@@ -23,7 +23,9 @@ describe("learning-comment-card", async () => {
       content: "content",
       commentType: "idea",
       status: "active" as const,
+      issues: [],
       createdAt: "2026-01-04T00:00:00Z",
+      archivedAt: null,
     };
     render(
       html`
@@ -42,7 +44,9 @@ describe("learning-comment-card", async () => {
       content: "content",
       commentType: "idea",
       status: "active" as const,
+      issues: [],
       createdAt: "2026-01-04T00:00:00Z",
+      archivedAt: null,
     };
     render(
       html`
@@ -64,7 +68,9 @@ describe("learning-comment-card", async () => {
       content: "content",
       commentType: "idea",
       status: "active" as const,
+      issues: [],
       createdAt: "2026-01-04T00:00:00Z",
+      archivedAt: null,
     };
     render(
       html`
@@ -90,7 +96,9 @@ describe("learning-comment-card", async () => {
       content: "content",
       commentType: "idea",
       status: "active" as const,
+      issues: [],
       createdAt: "2026-01-04T12:34:56Z",
+      archivedAt: null,
     };
     render(
       html`
@@ -108,7 +116,9 @@ describe("learning-comment-card", async () => {
       content: "content",
       commentType: "idea",
       status: "proposed" as const,
+      issues: [],
       createdAt: "2026-01-04T12:34:56Z",
+      archivedAt: null,
     };
     render(
       html`
@@ -130,8 +140,9 @@ describe("learning-comment-card", async () => {
       content: "content",
       commentType: "idea",
       status: "active" as const,
+      issues: [],
       createdAt: "2026-01-04T00:00:00Z",
-      archivedAt: undefined,
+      archivedAt: null,
     };
     render(
       html`
@@ -157,6 +168,7 @@ describe("learning-comment-card", async () => {
       content: "content",
       commentType: "idea",
       status: "active" as const,
+      issues: [],
       createdAt: "2026-01-04T00:00:00Z",
       archivedAt: "2026-01-05T00:00:00Z",
     };

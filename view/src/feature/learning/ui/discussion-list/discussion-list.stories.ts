@@ -24,6 +24,7 @@ export const Default: Story = {
         projectId: "p1",
         theme: "論理的な議論とは何か",
         status: "public",
+        archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
       },
       {
@@ -31,6 +32,7 @@ export const Default: Story = {
         projectId: "p1",
         theme: "AIを活用した学習の効率化",
         status: "public",
+        archivedAt: null,
         lastCommentedAt: "2023-01-02T00:00:00Z",
       },
       {
@@ -38,6 +40,7 @@ export const Default: Story = {
         projectId: "p1",
         theme: "プログラミング教育の未来",
         status: "private",
+        archivedAt: null,
         lastCommentedAt: "2023-01-03T00:00:00Z",
       },
     ],

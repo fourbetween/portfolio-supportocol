@@ -14,7 +14,9 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
     commentType: "idea",
     status: "active" as const,
     content: "This is a test comment",
+    issues: [],
     createdAt: "2026-01-04T00:00:00Z",
+    archivedAt: null,
   };
 
   const availableTypes = ["idea", "question", "answer"];
@@ -113,6 +115,7 @@ describe("learning-comment-item", { timeout: 5000 }, () => {
   it("アーカイブ済みコメントでも、アーカイブがアンアーカイブボタンになり、他のアクションも表示される", async () => {
     const archivedComment: Comment = {
       ...mockComment,
+      issues: [],
       archivedAt: "2026-01-05T00:00:00Z",
     };
     render(
