@@ -54,7 +54,7 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
             };
             cookie?: never;
         };
@@ -67,7 +67,7 @@ export interface paths {
                 };
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
                 };
                 cookie?: never;
             };
@@ -100,7 +100,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
                 };
                 cookie?: never;
             };
@@ -145,7 +145,8 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
@@ -155,8 +156,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -188,8 +189,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -230,8 +231,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -265,7 +266,8 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
@@ -276,8 +278,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -322,7 +324,8 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
@@ -334,8 +337,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -367,8 +370,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -404,7 +407,8 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
@@ -416,8 +420,8 @@ export interface paths {
                 };
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -450,8 +454,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -496,7 +500,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
             };
             cookie?: never;
         };
@@ -507,9 +513,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -549,9 +555,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -585,7 +591,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
             };
             cookie?: never;
         };
@@ -596,9 +604,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -642,7 +650,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
             };
             cookie?: never;
         };
@@ -654,9 +664,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -688,9 +698,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -726,7 +736,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
             };
             cookie?: never;
         };
@@ -738,9 +750,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -783,7 +795,8 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
@@ -795,8 +808,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -911,7 +924,11 @@ export interface components {
         };
     };
     responses: never;
-    parameters: never;
+    parameters: {
+        workspaceId: components["schemas"]["Id"];
+        discussionId: components["schemas"]["Id"];
+        commentId: components["schemas"]["Id"];
+    };
     requestBodies: never;
     headers: never;
     pathItems: never;

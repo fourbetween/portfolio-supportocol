@@ -241,13 +241,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArc
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -386,13 +386,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArc
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -531,6 +531,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -538,10 +542,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -680,6 +680,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -687,10 +691,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -829,6 +829,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -836,10 +840,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -993,6 +993,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -1000,10 +1004,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -1157,6 +1157,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -1164,10 +1168,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -1321,6 +1321,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -1328,10 +1332,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -1485,13 +1485,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -1630,10 +1630,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "since",
 					In:   "query",
 				}: params.Since,
@@ -1641,6 +1637,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -1794,13 +1794,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -1939,13 +1939,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDel
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -2084,13 +2084,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGet
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -2244,13 +2244,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPut
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -2404,13 +2404,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdSta
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
