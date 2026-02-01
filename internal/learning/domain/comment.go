@@ -16,6 +16,7 @@ type Comment struct {
 	archivedAt      *time.Time
 	createdBy       *string
 	createdAt       time.Time
+	issues          []CommentIssue
 }
 
 func (c *Comment) ID() string {
@@ -48,6 +49,10 @@ func (c *Comment) CreatedBy() *string {
 
 func (c *Comment) CreatedAt() time.Time {
 	return c.createdAt
+}
+
+func (c *Comment) Issues() []CommentIssue {
+	return c.issues
 }
 
 func (c *Comment) ArchivedAt() *time.Time {
