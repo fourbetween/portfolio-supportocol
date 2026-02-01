@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//go:generate go tool mockgen -package domain -destination ./repository_mock.go . DiscussionRepository,CommentRepository
+//go:generate go tool mockgen -package domain -destination ./repository_mock.go . DiscussionRepository,CommentRepository,IssueRepository
 
 type (
 	DiscussionRepository interface {
@@ -41,5 +41,12 @@ type (
 		DiscussionID    string
 		ParentCommentID *string
 		CommentType     string
+	}
+
+	IssueRepository interface {
+		Load(ctx context.Context, id string) (*Issue, error)
+		Save(ctx context.Context, issue *Issue) error
+		List(ctx context.Context) ([]*Issue, error)
+		Delete(ctx context.Context, issue *Issue) error
 	}
 )
