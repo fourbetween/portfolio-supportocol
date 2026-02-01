@@ -896,6 +896,20 @@ func (o OptDialogueSettings) Or(d DialogueSettings) DialogueSettings {
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete operation.
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
 
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq struct {
+	Status CommentIssueStatus `json:"status"`
+}
+
+// GetStatus returns the value of Status.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) GetStatus() CommentIssueStatus {
+	return s.Status
+}
+
+// SetStatus sets the value of Status.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) SetStatus(val CommentIssueStatus) {
+	s.Status = val
+}
+
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq struct {
 	IssueId ID `json:"issueId"`
 }

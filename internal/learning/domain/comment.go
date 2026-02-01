@@ -103,6 +103,22 @@ func (c *Comment) AddIssue(issueID string, status CommentIssueStatus, createdBy 
 	return true
 }
 
+func (c *Comment) UpdateIssueStatus(issueID string, status CommentIssueStatus) (bool, error) {
+	if err := status.Validate(); err != nil {
+		return false, err
+	}
+	for i, issue := range c.issues {
+		if issue.IssueID == issueID {
+			if issue.Status == status {
+				return false, nil
+			}
+			c.issues[i].Status = status
+			return true, nil
+		}
+	}
+	return false, apperr.ErrNotFound
+}
+
 func (c *Comment) RemoveIssue(issueID string) bool {
 	for i, issue := range c.issues {
 		if issue.IssueID == issueID {
