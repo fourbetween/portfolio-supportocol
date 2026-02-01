@@ -95,7 +95,7 @@ CREATE TABLE comments (
 	CONSTRAINT comments_users_fk FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 指摘
+-- 指摘の定義
 CREATE TABLE issues (
 	id CHAR(36) NOT NULL,
 	type VARCHAR(50) NOT NULL,
@@ -104,7 +104,7 @@ CREATE TABLE issues (
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- コメントと指摘の関連
+-- コメントへの指摘
 CREATE TABLE comment_issues (
 	comment_id CHAR(36) NOT NULL,
 	issue_id CHAR(36) NOT NULL,
