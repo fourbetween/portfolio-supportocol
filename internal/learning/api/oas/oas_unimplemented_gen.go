@@ -67,6 +67,15 @@ func (UnimplementedHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussion
 	return ht.ErrNotImplemented
 }
 
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues operation.
+//
+// Add issue to comment.
+//
+// POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues
+func (UnimplementedHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams) (r *Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId} operation.
 //
 // Update comment.

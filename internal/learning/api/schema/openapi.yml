@@ -29,6 +29,11 @@ components:
       enum:
         - active
         - proposed
+    CommentIssueStatus:
+      type: string
+      enum:
+        - active
+        - proposed
     IssueStatus:
       type: string
       enum:
@@ -162,6 +167,10 @@ components:
           $ref: "#/components/schemas/CommentContent"
         status:
           $ref: "#/components/schemas/CommentStatus"
+        issues:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommentIssue"
         createdAt:
           type: string
           format: date-time
@@ -175,7 +184,18 @@ components:
         - commentType
         - content
         - status
+        - issues
         - createdAt
+    CommentIssue:
+      type: object
+      properties:
+        issueId:
+          $ref: "#/components/schemas/Id"
+        status:
+          $ref: "#/components/schemas/CommentIssueStatus"
+      required:
+        - issueId
+        - status
 security:
   - cookie_auth: []
 paths:
@@ -675,6 +695,50 @@ paths:
           in: path
       responses:
         "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues:
+    parameters:
+      - name: workspaceId
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/Id"
+    post:
+      description: add issue to comment
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: commentId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                issueId:
+                  $ref: "#/components/schemas/Id"
+              required:
+                - issueId
+      responses:
+        "201":
           description: success response
           content:
             application/json:

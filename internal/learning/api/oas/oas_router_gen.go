@@ -344,6 +344,30 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 												return
 											}
 
+										case 'i': // Prefix: "issues"
+
+											if l := len("issues"); len(elem) >= l && elem[0:l] == "issues" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "POST":
+													s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest([3]string{
+														args[0],
+														args[1],
+														args[2],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, "POST")
+												}
+
+												return
+											}
+
 										case 's': // Prefix: "status"
 
 											if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
@@ -825,6 +849,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 													r.operationID = ""
 													r.operationGroup = ""
 													r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive"
+													r.args = args
+													r.count = 3
+													return r, true
+												default:
+													return
+												}
+											}
+
+										case 'i': // Prefix: "issues"
+
+											if l := len("issues"); len(elem) >= l && elem[0:l] == "issues" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "POST":
+													r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation
+													r.summary = ""
+													r.operationID = ""
+													r.operationGroup = ""
+													r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues"
 													r.args = args
 													r.count = 3
 													return r, true

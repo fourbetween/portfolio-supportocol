@@ -85,6 +85,23 @@ func (c *Comment) UpdateStatus(status CommentStatus) error {
 	return nil
 }
 
+func (c *Comment) AddIssue(issueID string, status CommentIssueStatus) bool {
+	for i, issue := range c.issues {
+		if issue.IssueID == issueID {
+			if issue.Status == status {
+				return false
+			}
+			c.issues[i].Status = status
+			return true
+		}
+	}
+	c.issues = append(c.issues, CommentIssue{
+		IssueID: issueID,
+		Status:  status,
+	})
+	return true
+}
+
 func (c *Comment) CheckBelongsTo(discussionID string) error {
 	if c.discussionID != discussionID {
 		return apperr.ErrInvalidArgument

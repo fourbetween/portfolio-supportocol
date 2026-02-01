@@ -44,6 +44,12 @@ type Handler interface {
 	//
 	// DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams) error
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues operation.
+	//
+	// Add issue to comment.
+	//
+	// POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams) (*Comment, error)
 	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId} operation.
 	//
 	// Update comment.
