@@ -790,6 +790,61 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
+                issueId: components["parameters"]["issueId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description remove issue from comment */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
+                    issueId: components["parameters"]["issueId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate": {
         parameters: {
             query?: never;
@@ -928,6 +983,7 @@ export interface components {
         workspaceId: components["schemas"]["Id"];
         discussionId: components["schemas"]["Id"];
         commentId: components["schemas"]["Id"];
+        issueId: components["schemas"]["Id"];
     };
     requestBodies: never;
     headers: never;

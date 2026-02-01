@@ -102,6 +102,16 @@ func (c *Comment) AddIssue(issueID string, status CommentIssueStatus) bool {
 	return true
 }
 
+func (c *Comment) RemoveIssue(issueID string) bool {
+	for i, issue := range c.issues {
+		if issue.IssueID == issueID {
+			c.issues = append(c.issues[:i], c.issues[i+1:]...)
+			return true
+		}
+	}
+	return false
+}
+
 func (c *Comment) CheckBelongsTo(discussionID string) error {
 	if c.discussionID != discussionID {
 		return apperr.ErrInvalidArgument

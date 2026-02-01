@@ -327,6 +327,25 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	return &res, nil
 }
 
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDelete(
+	ctx context.Context,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteParams,
+) (*oas.Comment, error) {
+	item, err := h.con.RemoveCommentIssue.Execute(ctx, usecase.RemoveCommentIssueInput{
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		CommentID:    uuid.UUID(params.CommentId).String(),
+		IssueID:      uuid.UUID(params.IssueId).String(),
+		UserID:       httpctx.GetUserID(ctx),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := h.toOasComment(item)
+	return &res, nil
+}
+
 func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePost(
 	ctx context.Context,
 	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams,

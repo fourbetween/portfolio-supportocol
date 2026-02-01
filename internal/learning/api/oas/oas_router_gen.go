@@ -40,7 +40,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s.notFound(w, r)
 		return
 	}
-	args := [3]string{}
+	args := [4]string{}
 
 	// Static code generated router with unwrapped path search.
 	switch {
@@ -353,7 +353,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											}
 
 											if len(elem) == 0 {
-												// Leaf node.
 												switch r.Method {
 												case "POST":
 													s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest([3]string{
@@ -366,6 +365,42 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 												}
 
 												return
+											}
+											switch elem[0] {
+											case '/': // Prefix: "/"
+
+												if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+													elem = elem[l:]
+												} else {
+													break
+												}
+
+												// Param: "issueId"
+												// Leaf parameter, slashes are prohibited
+												idx := strings.IndexByte(elem, '/')
+												if idx >= 0 {
+													break
+												}
+												args[3] = elem
+												elem = ""
+
+												if len(elem) == 0 {
+													// Leaf node.
+													switch r.Method {
+													case "DELETE":
+														s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteRequest([4]string{
+															args[0],
+															args[1],
+															args[2],
+															args[3],
+														}, elemIsEscaped, w, r)
+													default:
+														s.notAllowed(w, r, "DELETE")
+													}
+
+													return
+												}
+
 											}
 
 										case 's': // Prefix: "status"
@@ -444,7 +479,7 @@ type Route struct {
 	operationGroup string
 	pathPattern    string
 	count          int
-	args           [3]string
+	args           [4]string
 }
 
 // Name returns ogen operation name.
@@ -866,7 +901,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											}
 
 											if len(elem) == 0 {
-												// Leaf node.
 												switch method {
 												case "POST":
 													r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation
@@ -880,6 +914,42 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 												default:
 													return
 												}
+											}
+											switch elem[0] {
+											case '/': // Prefix: "/"
+
+												if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+													elem = elem[l:]
+												} else {
+													break
+												}
+
+												// Param: "issueId"
+												// Leaf parameter, slashes are prohibited
+												idx := strings.IndexByte(elem, '/')
+												if idx >= 0 {
+													break
+												}
+												args[3] = elem
+												elem = ""
+
+												if len(elem) == 0 {
+													// Leaf node.
+													switch method {
+													case "DELETE":
+														r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteOperation
+														r.summary = ""
+														r.operationID = ""
+														r.operationGroup = ""
+														r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}"
+														r.args = args
+														r.count = 4
+														return r, true
+													default:
+														return
+													}
+												}
+
 											}
 
 										case 's': // Prefix: "status"

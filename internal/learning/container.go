@@ -35,6 +35,7 @@ type APIContainer struct {
 	DeleteComment            *usecase.DeleteCommentUsecase
 	UpdateCommentStatus      *usecase.UpdateCommentStatusUsecase
 	AddCommentIssue          *usecase.AddCommentIssueUsecase
+	RemoveCommentIssue       *usecase.RemoveCommentIssueUsecase
 	EnqueueCommentGeneration *usecase.EnqueueCommentGenerationUsecase
 	ListIssues               *usecase.ListIssuesUsecase
 }
@@ -89,6 +90,7 @@ func NewAPIContainer(
 		DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo, permSv, txManager),
 		UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo, permSv, txManager),
 		AddCommentIssue:          usecase.NewAddCommentIssueUsecase(discussionRepo, commentRepo, issueRepo, permSv, txManager),
+		RemoveCommentIssue:       usecase.NewRemoveCommentIssueUsecase(discussionRepo, commentRepo, permSv, txManager),
 		EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, permSv, commentGenerationQueue),
 		ListIssues:               usecase.NewListIssuesUsecase(issueRepo),
 	}, nil

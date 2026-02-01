@@ -67,6 +67,15 @@ func (UnimplementedHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussion
 	return ht.ErrNotImplemented
 }
 
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId} operation.
+//
+// Remove issue from comment.
+//
+// DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}
+func (UnimplementedHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDelete(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteParams) (r *Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues operation.
 //
 // Add issue to comment.
