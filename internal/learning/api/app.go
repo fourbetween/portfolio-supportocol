@@ -489,9 +489,6 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 			IssueId: oas.ID(uuid.MustParse(issue.IssueID)),
 			Status:  oas.CommentIssueStatus(issue.Status),
 		}
-		if issue.CreatedBy != nil {
-			issues[i].CreatedBy.SetTo(oas.ID(uuid.MustParse(*issue.CreatedBy)))
-		}
 	}
 
 	res := oas.Comment{
