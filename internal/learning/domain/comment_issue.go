@@ -1,8 +1,9 @@
 package domain
 
 type CommentIssue struct {
-	IssueID string
-	Status  CommentIssueStatus
+	IssueID   string
+	Status    CommentIssueStatus
+	CreatedBy *string
 }
 
 type CommentIssueStatus string

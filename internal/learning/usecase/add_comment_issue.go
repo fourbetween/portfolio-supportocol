@@ -73,7 +73,7 @@ func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIs
 			return err
 		}
 
-		if !comment.AddIssue(issue.ID(), domain.CommentIssueStatusActive) {
+		if !comment.AddIssue(issue.ID(), domain.CommentIssueStatusActive, &input.UserID) {
 			return nil
 		}
 

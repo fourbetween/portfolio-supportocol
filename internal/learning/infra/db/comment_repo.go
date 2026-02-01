@@ -218,8 +218,9 @@ func (r *CommentRepository) toCommentDomain(row model.Comments, issueRows []mode
 	issues := make([]domain.CommentIssue, len(issueRows))
 	for i, ir := range issueRows {
 		issues[i] = domain.CommentIssue{
-			IssueID: ir.IssueID,
-			Status:  domain.CommentIssueStatus(ir.Status),
+			IssueID:   ir.IssueID,
+			Status:    domain.CommentIssueStatus(ir.Status),
+			CreatedBy: ir.CreatedBy,
 		}
 	}
 	return r.fac.Reconstruct(domain.ReconstructCommentParams{
@@ -276,6 +277,7 @@ func (r *CommentRepository) toCommentIssueModels(commentID string, issues []doma
 			CommentID: commentID,
 			IssueID:   is.IssueID,
 			Status:    string(is.Status),
+			CreatedBy: is.CreatedBy,
 		}
 	}
 	return issueModels
@@ -287,7 +289,10 @@ func (r *CommentRepository) saveCommentIssues(ctx context.Context, commentID str
 	}
 	issueModels := r.toCommentIssueModels(commentID, issues)
 	stmtIssues := table.CommentIssues.
-		INSERT(table.CommentIssues.CommentID, table.CommentIssues.IssueID, table.CommentIssues.Status).
+		INSERT(table.CommentIssues.AllColumns.Except(
+			table.CommentIssues.CreatedAt,
+			table.CommentIssues.UpdatedAt,
+		)).
 		MODELS(issueModels)
 	if _, err := stmtIssues.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
 		return fmt.Errorf("failed to save comment issues: %w", err)
@@ -314,7 +319,10 @@ func (r *CommentRepository) saveCommentIssuesBatch(ctx context.Context, comments
 		return nil
 	}
 	stmtIssues := table.CommentIssues.
-		INSERT(table.CommentIssues.CommentID, table.CommentIssues.IssueID, table.CommentIssues.Status).
+		INSERT(table.CommentIssues.AllColumns.Except(
+			table.CommentIssues.CreatedAt,
+			table.CommentIssues.UpdatedAt,
+		)).
 		MODELS(issueModels)
 	if _, err := stmtIssues.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
 		return fmt.Errorf("failed to save comment issues batch: %w", err)

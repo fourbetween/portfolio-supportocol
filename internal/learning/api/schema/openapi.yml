@@ -193,6 +193,8 @@ components:
           $ref: "#/components/schemas/Id"
         status:
           $ref: "#/components/schemas/CommentIssueStatus"
+        createdBy:
+          $ref: "#/components/schemas/Id"
       required:
         - issueId
         - status

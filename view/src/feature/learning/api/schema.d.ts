@@ -976,6 +976,7 @@ export interface components {
         CommentIssue: {
             issueId: components["schemas"]["Id"];
             status: components["schemas"]["CommentIssueStatus"];
+            createdBy?: components["schemas"]["Id"];
         };
     };
     responses: never;

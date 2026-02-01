@@ -85,7 +85,7 @@ func (c *Comment) UpdateStatus(status CommentStatus) error {
 	return nil
 }
 
-func (c *Comment) AddIssue(issueID string, status CommentIssueStatus) bool {
+func (c *Comment) AddIssue(issueID string, status CommentIssueStatus, createdBy *string) bool {
 	for i, issue := range c.issues {
 		if issue.IssueID == issueID {
 			if issue.Status == status {
@@ -96,8 +96,9 @@ func (c *Comment) AddIssue(issueID string, status CommentIssueStatus) bool {
 		}
 	}
 	c.issues = append(c.issues, CommentIssue{
-		IssueID: issueID,
-		Status:  status,
+		IssueID:   issueID,
+		Status:    status,
+		CreatedBy: createdBy,
 	})
 	return true
 }
