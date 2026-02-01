@@ -845,6 +845,67 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
+                issueId: components["parameters"]["issueId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** @description update comment issue status */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
+                    issueId: components["parameters"]["issueId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        status: components["schemas"]["CommentIssueStatus"];
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate": {
         parameters: {
             query?: never;
@@ -945,8 +1006,7 @@ export interface components {
             projectId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             status: components["schemas"]["DiscussionStatus"];
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
             /** Format: date-time */
             lastCommentedAt: string;
         };
@@ -954,10 +1014,9 @@ export interface components {
             id: components["schemas"]["Id"];
             projectId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
-            conclusion: components["schemas"]["DiscussionConclusion"];
+            conclusion: components["schemas"]["DiscussionConclusion"] | null;
             status: components["schemas"]["DiscussionStatus"];
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
             dialogueSettings?: components["schemas"]["DialogueSettings"];
         };
         Comment: {
@@ -970,8 +1029,7 @@ export interface components {
             issues: components["schemas"]["CommentIssue"][];
             /** Format: date-time */
             createdAt: string;
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
         };
         CommentIssue: {
             issueId: components["schemas"]["Id"];

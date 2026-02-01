@@ -60,10 +60,8 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 		json.EncodeDateTime(e, s.CreatedAt)
 	}
 	{
-		if s.ArchivedAt.Set {
-			e.FieldStart("archivedAt")
-			s.ArchivedAt.Encode(e, json.EncodeDateTime)
-		}
+		e.FieldStart("archivedAt")
+		s.ArchivedAt.Encode(e, json.EncodeDateTime)
 	}
 }
 
@@ -179,8 +177,8 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"createdAt\"")
 			}
 		case "archivedAt":
+			requiredBitSet[1] |= 1 << 0
 			if err := func() error {
-				s.ArchivedAt.Reset()
 				if err := s.ArchivedAt.Decode(d, json.DecodeDateTime); err != nil {
 					return err
 				}
@@ -199,7 +197,7 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
 		0b11111111,
-		0b00000000,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -880,10 +878,8 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 		s.Status.Encode(e)
 	}
 	{
-		if s.ArchivedAt.Set {
-			e.FieldStart("archivedAt")
-			s.ArchivedAt.Encode(e, json.EncodeDateTime)
-		}
+		e.FieldStart("archivedAt")
+		s.ArchivedAt.Encode(e, json.EncodeDateTime)
 	}
 	{
 		if s.DialogueSettings.Set {
@@ -963,8 +959,8 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"status\"")
 			}
 		case "archivedAt":
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
-				s.ArchivedAt.Reset()
 				if err := s.ArchivedAt.Decode(d, json.DecodeDateTime); err != nil {
 					return err
 				}
@@ -992,7 +988,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011111,
+		0b00111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1144,10 +1140,8 @@ func (s *DiscussionSummary) encodeFields(e *jx.Encoder) {
 		s.Status.Encode(e)
 	}
 	{
-		if s.ArchivedAt.Set {
-			e.FieldStart("archivedAt")
-			s.ArchivedAt.Encode(e, json.EncodeDateTime)
-		}
+		e.FieldStart("archivedAt")
+		s.ArchivedAt.Encode(e, json.EncodeDateTime)
 	}
 	{
 		e.FieldStart("lastCommentedAt")
@@ -1214,8 +1208,8 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"status\"")
 			}
 		case "archivedAt":
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
-				s.ArchivedAt.Reset()
 				if err := s.ArchivedAt.Decode(d, json.DecodeDateTime); err != nil {
 					return err
 				}
@@ -1245,7 +1239,7 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00101111,
+		0b00111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1667,6 +1661,96 @@ func (s *IssueStatus) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes time.Time as json.
+func (o NilDateTime) Encode(e *jx.Encoder, format func(*jx.Encoder, time.Time)) {
+	if o.Null {
+		e.Null()
+		return
+	}
+	format(e, o.Value)
+}
+
+// Decode decodes time.Time from json.
+func (o *NilDateTime) Decode(d *jx.Decoder, format func(*jx.Decoder) (time.Time, error)) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode NilDateTime to nil")
+	}
+	if d.Next() == jx.Null {
+		if err := d.Null(); err != nil {
+			return err
+		}
+
+		var v time.Time
+		o.Value = v
+		o.Null = true
+		return nil
+	}
+	o.Null = false
+	v, err := format(d)
+	if err != nil {
+		return err
+	}
+	o.Value = v
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s NilDateTime) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e, json.EncodeDateTime)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *NilDateTime) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d, json.DecodeDateTime)
+}
+
+// Encode encodes DiscussionConclusion as json.
+func (o NilDiscussionConclusion) Encode(e *jx.Encoder) {
+	if o.Null {
+		e.Null()
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes DiscussionConclusion from json.
+func (o *NilDiscussionConclusion) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode NilDiscussionConclusion to nil")
+	}
+	if d.Next() == jx.Null {
+		if err := d.Null(); err != nil {
+			return err
+		}
+
+		var v DiscussionConclusion
+		o.Value = v
+		o.Null = true
+		return nil
+	}
+	o.Null = false
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s NilDiscussionConclusion) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *NilDiscussionConclusion) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ID as json.
 func (o NilID) Encode(e *jx.Encoder) {
 	if o.Null {
@@ -1742,41 +1826,6 @@ func (s OptCommentFrame) MarshalJSON() ([]byte, error) {
 func (s *OptCommentFrame) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
-}
-
-// Encode encodes time.Time as json.
-func (o OptDateTime) Encode(e *jx.Encoder, format func(*jx.Encoder, time.Time)) {
-	if !o.Set {
-		return
-	}
-	format(e, o.Value)
-}
-
-// Decode decodes time.Time from json.
-func (o *OptDateTime) Decode(d *jx.Decoder, format func(*jx.Decoder) (time.Time, error)) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptDateTime to nil")
-	}
-	o.Set = true
-	v, err := format(d)
-	if err != nil {
-		return err
-	}
-	o.Value = v
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptDateTime) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e, json.EncodeDateTime)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptDateTime) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d, json.DecodeDateTime)
 }
 
 // Encode encodes DialogueSettings as json.

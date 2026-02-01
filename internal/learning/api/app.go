@@ -459,20 +459,28 @@ func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.
 	}
 	if item.ArchivedAt != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt)
+	} else {
+		res.ArchivedAt.Null = true
 	}
 	return res
 }
 
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	res := oas.Discussion{
-		ID:         oas.ID(uuid.MustParse(item.ID())),
-		ProjectId:  oas.ID(uuid.MustParse(item.ProjectID())),
-		Theme:      oas.DiscussionTheme(item.Theme()),
-		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
-		Status:     oas.DiscussionStatus(item.Status()),
+		ID:        oas.ID(uuid.MustParse(item.ID())),
+		ProjectId: oas.ID(uuid.MustParse(item.ProjectID())),
+		Theme:     oas.DiscussionTheme(item.Theme()),
+		Status:    oas.DiscussionStatus(item.Status()),
+	}
+	if item.Conclusion() != "" {
+		res.Conclusion.SetTo(oas.DiscussionConclusion(item.Conclusion()))
+	} else {
+		res.Conclusion.Null = true
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	} else {
+		res.ArchivedAt.Null = true
 	}
 	if ds := item.DialogueSettings(); ds != nil {
 		paths := make([]oas.CommentPath, len(ds.CommentFrame.Paths))
@@ -524,6 +532,8 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	} else {
+		res.ArchivedAt.Null = true
 	}
 	return res
 }

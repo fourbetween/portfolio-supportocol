@@ -24,7 +24,7 @@ type Comment struct {
 	Status          CommentStatus  `json:"status"`
 	Issues          []CommentIssue `json:"issues"`
 	CreatedAt       time.Time      `json:"createdAt"`
-	ArchivedAt      OptDateTime    `json:"archivedAt"`
+	ArchivedAt      NilDateTime    `json:"archivedAt"`
 }
 
 // GetID returns the value of ID.
@@ -68,7 +68,7 @@ func (s *Comment) GetCreatedAt() time.Time {
 }
 
 // GetArchivedAt returns the value of ArchivedAt.
-func (s *Comment) GetArchivedAt() OptDateTime {
+func (s *Comment) GetArchivedAt() NilDateTime {
 	return s.ArchivedAt
 }
 
@@ -113,7 +113,7 @@ func (s *Comment) SetCreatedAt(val time.Time) {
 }
 
 // SetArchivedAt sets the value of ArchivedAt.
-func (s *Comment) SetArchivedAt(val OptDateTime) {
+func (s *Comment) SetArchivedAt(val NilDateTime) {
 	s.ArchivedAt = val
 }
 
@@ -325,13 +325,13 @@ func (s *DialogueSettings) SetCommentFrame(val CommentFrame) {
 
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID               ID                   `json:"id"`
-	ProjectId        ID                   `json:"projectId"`
-	Theme            DiscussionTheme      `json:"theme"`
-	Conclusion       DiscussionConclusion `json:"conclusion"`
-	Status           DiscussionStatus     `json:"status"`
-	ArchivedAt       OptDateTime          `json:"archivedAt"`
-	DialogueSettings OptDialogueSettings  `json:"dialogueSettings"`
+	ID               ID                      `json:"id"`
+	ProjectId        ID                      `json:"projectId"`
+	Theme            DiscussionTheme         `json:"theme"`
+	Conclusion       NilDiscussionConclusion `json:"conclusion"`
+	Status           DiscussionStatus        `json:"status"`
+	ArchivedAt       NilDateTime             `json:"archivedAt"`
+	DialogueSettings OptDialogueSettings     `json:"dialogueSettings"`
 }
 
 // GetID returns the value of ID.
@@ -350,7 +350,7 @@ func (s *Discussion) GetTheme() DiscussionTheme {
 }
 
 // GetConclusion returns the value of Conclusion.
-func (s *Discussion) GetConclusion() DiscussionConclusion {
+func (s *Discussion) GetConclusion() NilDiscussionConclusion {
 	return s.Conclusion
 }
 
@@ -360,7 +360,7 @@ func (s *Discussion) GetStatus() DiscussionStatus {
 }
 
 // GetArchivedAt returns the value of ArchivedAt.
-func (s *Discussion) GetArchivedAt() OptDateTime {
+func (s *Discussion) GetArchivedAt() NilDateTime {
 	return s.ArchivedAt
 }
 
@@ -385,7 +385,7 @@ func (s *Discussion) SetTheme(val DiscussionTheme) {
 }
 
 // SetConclusion sets the value of Conclusion.
-func (s *Discussion) SetConclusion(val DiscussionConclusion) {
+func (s *Discussion) SetConclusion(val NilDiscussionConclusion) {
 	s.Conclusion = val
 }
 
@@ -395,7 +395,7 @@ func (s *Discussion) SetStatus(val DiscussionStatus) {
 }
 
 // SetArchivedAt sets the value of ArchivedAt.
-func (s *Discussion) SetArchivedAt(val OptDateTime) {
+func (s *Discussion) SetArchivedAt(val NilDateTime) {
 	s.ArchivedAt = val
 }
 
@@ -454,7 +454,7 @@ type DiscussionSummary struct {
 	ProjectId       ID               `json:"projectId"`
 	Theme           DiscussionTheme  `json:"theme"`
 	Status          DiscussionStatus `json:"status"`
-	ArchivedAt      OptDateTime      `json:"archivedAt"`
+	ArchivedAt      NilDateTime      `json:"archivedAt"`
 	LastCommentedAt time.Time        `json:"lastCommentedAt"`
 }
 
@@ -479,7 +479,7 @@ func (s *DiscussionSummary) GetStatus() DiscussionStatus {
 }
 
 // GetArchivedAt returns the value of ArchivedAt.
-func (s *DiscussionSummary) GetArchivedAt() OptDateTime {
+func (s *DiscussionSummary) GetArchivedAt() NilDateTime {
 	return s.ArchivedAt
 }
 
@@ -509,7 +509,7 @@ func (s *DiscussionSummary) SetStatus(val DiscussionStatus) {
 }
 
 // SetArchivedAt sets the value of ArchivedAt.
-func (s *DiscussionSummary) SetArchivedAt(val OptDateTime) {
+func (s *DiscussionSummary) SetArchivedAt(val NilDateTime) {
 	s.ArchivedAt = val
 }
 
@@ -662,6 +662,96 @@ func (s *IssueStatus) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+// NewNilDateTime returns new NilDateTime with value set to v.
+func NewNilDateTime(v time.Time) NilDateTime {
+	return NilDateTime{
+		Value: v,
+	}
+}
+
+// NilDateTime is nullable time.Time.
+type NilDateTime struct {
+	Value time.Time
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilDateTime) SetTo(v time.Time) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilDateTime) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilDateTime) SetToNull() {
+	o.Null = true
+	var v time.Time
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilDateTime) Get() (v time.Time, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilDateTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewNilDiscussionConclusion returns new NilDiscussionConclusion with value set to v.
+func NewNilDiscussionConclusion(v DiscussionConclusion) NilDiscussionConclusion {
+	return NilDiscussionConclusion{
+		Value: v,
+	}
+}
+
+// NilDiscussionConclusion is nullable DiscussionConclusion.
+type NilDiscussionConclusion struct {
+	Value DiscussionConclusion
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilDiscussionConclusion) SetTo(v DiscussionConclusion) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilDiscussionConclusion) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilDiscussionConclusion) SetToNull() {
+	o.Null = true
+	var v DiscussionConclusion
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilDiscussionConclusion) Get() (v DiscussionConclusion, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilDiscussionConclusion) Or(d DiscussionConclusion) DiscussionConclusion {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }
 
 // NewNilID returns new NilID with value set to v.

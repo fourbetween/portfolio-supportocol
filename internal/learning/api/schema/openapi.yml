@@ -115,8 +115,10 @@ components:
         status:
           $ref: "#/components/schemas/DiscussionStatus"
         archivedAt:
-          type: string
-          format: date-time
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
         lastCommentedAt:
           type: string
           format: date-time
@@ -125,6 +127,7 @@ components:
         - projectId
         - theme
         - status
+        - archivedAt
         - lastCommentedAt
     Discussion:
       type: object
@@ -136,12 +139,16 @@ components:
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
         conclusion:
-          $ref: "#/components/schemas/DiscussionConclusion"
+          anyOf:
+            - $ref: "#/components/schemas/DiscussionConclusion"
+            - type: "null"
         status:
           $ref: "#/components/schemas/DiscussionStatus"
         archivedAt:
-          type: string
-          format: date-time
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
         dialogueSettings:
           $ref: "#/components/schemas/DialogueSettings"
       required:
@@ -150,6 +157,7 @@ components:
         - theme
         - conclusion
         - status
+        - archivedAt
     Comment:
       type: object
       properties:
@@ -175,8 +183,10 @@ components:
           type: string
           format: date-time
         archivedAt:
-          type: string
-          format: date-time
+          anyOf:
+            - type: string
+              format: date-time
+            - type: "null"
       required:
         - id
         - discussionId
@@ -186,6 +196,7 @@ components:
         - status
         - issues
         - createdAt
+        - archivedAt
     CommentIssue:
       type: object
       properties:

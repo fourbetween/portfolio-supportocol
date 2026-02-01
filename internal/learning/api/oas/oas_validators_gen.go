@@ -310,8 +310,15 @@ func (s *Discussion) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := s.Conclusion.Validate(); err != nil {
-			return err
+		if value, ok := s.Conclusion.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
 		}
 		return nil
 	}(); err != nil {
