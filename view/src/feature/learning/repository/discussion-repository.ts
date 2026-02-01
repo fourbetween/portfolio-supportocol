@@ -8,14 +8,13 @@ export class DiscussionRepository {
   async list(
     workspaceId: string,
     projectId: string,
-    archived?: boolean,
   ): Promise<DiscussionSummary[]> {
     const { data, error } = await client.GET(
       "/v1/learning/workspaces/{workspaceId}/discussions",
       {
         params: {
           path: { workspaceId },
-          query: { projectId, archived },
+          query: { projectId },
         },
       },
     );
