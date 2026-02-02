@@ -28,6 +28,120 @@ func (c *codeRecorder) Unwrap() http.ResponseWriter {
 
 func recordError(string, error) {}
 
+// handleV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest handles POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues operation.
+//
+// Add issue to comment.
+//
+// POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues
+func (s *Server) handleV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation,
+			ID:   "",
+		}
+	)
+	params, err := decodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response *Comment
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             request,
+			RawBody:          rawBody,
+			Params: middleware.Parameters{
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
+				{
+					Name: "commentId",
+					In:   "path",
+				}: params.CommentId,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq
+			Params   = V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams
+			Response = *Comment
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx, request, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx, request, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleV1DialogueDiscussionsDiscussionIdCommentsGetRequest handles GET /v1/dialogue/discussions/{discussionId}/comments operation.
 //
 // Get comments for a discussion.
@@ -400,6 +514,82 @@ func (s *Server) handleV1DialogueDiscussionsGetRequest(args [0]string, argsEscap
 	}
 
 	if err := encodeV1DialogueDiscussionsGetResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1DialogueIssuesGetRequest handles GET /v1/dialogue/issues operation.
+//
+// List issues.
+//
+// GET /v1/dialogue/issues
+func (s *Server) handleV1DialogueIssuesGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err error
+	)
+
+	var rawBody []byte
+
+	var response []Issue
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1DialogueIssuesGetOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             nil,
+			RawBody:          rawBody,
+			Params:           middleware.Parameters{},
+			Raw:              r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = struct{}
+			Response = []Issue
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			nil,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1DialogueIssuesGet(ctx)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1DialogueIssuesGet(ctx)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1DialogueIssuesGetResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

@@ -16,6 +16,138 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+// V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams is parameters of POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues operation.
+type V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams struct {
+	DiscussionId ID
+	CommentId    ID
+}
+
+func unpackV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams(packed middleware.Parameters) (params V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "discussionId",
+			In:   "path",
+		}
+		params.DiscussionId = packed[key].(ID)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "commentId",
+			In:   "path",
+		}
+		params.CommentId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams(args [2]string, argsEscaped bool, r *http.Request) (params V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams, _ error) {
+	// Decode path: discussionId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "discussionId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotDiscussionIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "discussionId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: commentId.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "commentId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotCommentIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotCommentIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.CommentId = ID(paramsDotCommentIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "commentId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1DialogueDiscussionsDiscussionIdCommentsGetParams is parameters of GET /v1/dialogue/discussions/{discussionId}/comments operation.
 type V1DialogueDiscussionsDiscussionIdCommentsGetParams struct {
 	DiscussionId ID

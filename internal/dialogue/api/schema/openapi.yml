@@ -24,6 +24,32 @@ components:
       enum:
         - active
         - proposed
+    CommentIssueStatus:
+      type: string
+      enum:
+        - active
+        - proposed
+    IssueStatus:
+      type: string
+      enum:
+        - open
+        - closed
+    Issue:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        issueType:
+          type: string
+        description:
+          type: string
+        status:
+          $ref: "#/components/schemas/IssueStatus"
+      required:
+        - id
+        - issueType
+        - description
+        - status
     DialogueSettings:
       type: object
       properties:
@@ -123,6 +149,10 @@ components:
           $ref: "#/components/schemas/CommentContent"
         status:
           $ref: "#/components/schemas/CommentStatus"
+        issues:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommentIssue"
         archivedAt:
           type: string
           format: date-time
@@ -136,8 +166,37 @@ components:
         - commentType
         - content
         - status
+        - issues
         - createdAt
+    CommentIssue:
+      type: object
+      properties:
+        issueId:
+          $ref: "#/components/schemas/Id"
+        status:
+          $ref: "#/components/schemas/CommentIssueStatus"
+      required:
+        - issueId
+        - status
 paths:
+  /v1/dialogue/issues:
+    get:
+      description: list issues
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Issue"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/dialogue/discussions:
     get:
       description: get discussions
@@ -237,6 +296,44 @@ paths:
                 - content
       responses:
         "201":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues:
+    post:
+      description: add issue to comment
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: commentId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                issueId:
+                  $ref: "#/components/schemas/Id"
+              required:
+                - issueId
+      responses:
+        "200":
           description: success response
           content:
             application/json:

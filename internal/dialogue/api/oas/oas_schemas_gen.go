@@ -22,6 +22,7 @@ type Comment struct {
 	CommentType     CommentType    `json:"commentType"`
 	Content         CommentContent `json:"content"`
 	Status          CommentStatus  `json:"status"`
+	Issues          []CommentIssue `json:"issues"`
 	ArchivedAt      OptDateTime    `json:"archivedAt"`
 	CreatedAt       time.Time      `json:"createdAt"`
 }
@@ -54,6 +55,11 @@ func (s *Comment) GetContent() CommentContent {
 // GetStatus returns the value of Status.
 func (s *Comment) GetStatus() CommentStatus {
 	return s.Status
+}
+
+// GetIssues returns the value of Issues.
+func (s *Comment) GetIssues() []CommentIssue {
+	return s.Issues
 }
 
 // GetArchivedAt returns the value of ArchivedAt.
@@ -96,6 +102,11 @@ func (s *Comment) SetStatus(val CommentStatus) {
 	s.Status = val
 }
 
+// SetIssues sets the value of Issues.
+func (s *Comment) SetIssues(val []CommentIssue) {
+	s.Issues = val
+}
+
 // SetArchivedAt sets the value of ArchivedAt.
 func (s *Comment) SetArchivedAt(val OptDateTime) {
 	s.ArchivedAt = val
@@ -132,6 +143,74 @@ func (s *CommentFrame) SetTypes(val []CommentType) {
 // SetPaths sets the value of Paths.
 func (s *CommentFrame) SetPaths(val []CommentPath) {
 	s.Paths = val
+}
+
+// Ref: #/components/schemas/CommentIssue
+type CommentIssue struct {
+	IssueId ID                 `json:"issueId"`
+	Status  CommentIssueStatus `json:"status"`
+}
+
+// GetIssueId returns the value of IssueId.
+func (s *CommentIssue) GetIssueId() ID {
+	return s.IssueId
+}
+
+// GetStatus returns the value of Status.
+func (s *CommentIssue) GetStatus() CommentIssueStatus {
+	return s.Status
+}
+
+// SetIssueId sets the value of IssueId.
+func (s *CommentIssue) SetIssueId(val ID) {
+	s.IssueId = val
+}
+
+// SetStatus sets the value of Status.
+func (s *CommentIssue) SetStatus(val CommentIssueStatus) {
+	s.Status = val
+}
+
+// Ref: #/components/schemas/CommentIssueStatus
+type CommentIssueStatus string
+
+const (
+	CommentIssueStatusActive   CommentIssueStatus = "active"
+	CommentIssueStatusProposed CommentIssueStatus = "proposed"
+)
+
+// AllValues returns all CommentIssueStatus values.
+func (CommentIssueStatus) AllValues() []CommentIssueStatus {
+	return []CommentIssueStatus{
+		CommentIssueStatusActive,
+		CommentIssueStatusProposed,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CommentIssueStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case CommentIssueStatusActive:
+		return []byte(s), nil
+	case CommentIssueStatusProposed:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CommentIssueStatus) UnmarshalText(data []byte) error {
+	switch CommentIssueStatus(data) {
+	case CommentIssueStatusActive:
+		*s = CommentIssueStatusActive
+		return nil
+	case CommentIssueStatusProposed:
+		*s = CommentIssueStatusProposed
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 // Ref: #/components/schemas/CommentPath
@@ -395,6 +474,96 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 
 type ID uuid.UUID
 
+// Ref: #/components/schemas/Issue
+type Issue struct {
+	ID          ID          `json:"id"`
+	IssueType   string      `json:"issueType"`
+	Description string      `json:"description"`
+	Status      IssueStatus `json:"status"`
+}
+
+// GetID returns the value of ID.
+func (s *Issue) GetID() ID {
+	return s.ID
+}
+
+// GetIssueType returns the value of IssueType.
+func (s *Issue) GetIssueType() string {
+	return s.IssueType
+}
+
+// GetDescription returns the value of Description.
+func (s *Issue) GetDescription() string {
+	return s.Description
+}
+
+// GetStatus returns the value of Status.
+func (s *Issue) GetStatus() IssueStatus {
+	return s.Status
+}
+
+// SetID sets the value of ID.
+func (s *Issue) SetID(val ID) {
+	s.ID = val
+}
+
+// SetIssueType sets the value of IssueType.
+func (s *Issue) SetIssueType(val string) {
+	s.IssueType = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Issue) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetStatus sets the value of Status.
+func (s *Issue) SetStatus(val IssueStatus) {
+	s.Status = val
+}
+
+// Ref: #/components/schemas/IssueStatus
+type IssueStatus string
+
+const (
+	IssueStatusOpen   IssueStatus = "open"
+	IssueStatusClosed IssueStatus = "closed"
+)
+
+// AllValues returns all IssueStatus values.
+func (IssueStatus) AllValues() []IssueStatus {
+	return []IssueStatus{
+		IssueStatusOpen,
+		IssueStatusClosed,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s IssueStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case IssueStatusOpen:
+		return []byte(s), nil
+	case IssueStatusClosed:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *IssueStatus) UnmarshalText(data []byte) error {
+	switch IssueStatus(data) {
+	case IssueStatusOpen:
+		*s = IssueStatusOpen
+		return nil
+	case IssueStatusClosed:
+		*s = IssueStatusClosed
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // NewNilID returns new NilID with value set to v.
 func NewNilID(v ID) NilID {
 	return NilID{
@@ -484,6 +653,20 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 		return v
 	}
 	return d
+}
+
+type V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq struct {
+	IssueId ID `json:"issueId"`
+}
+
+// GetIssueId returns the value of IssueId.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) GetIssueId() ID {
+	return s.IssueId
+}
+
+// SetIssueId sets the value of IssueId.
+func (s *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) SetIssueId(val ID) {
+	s.IssueId = val
 }
 
 type V1DialogueDiscussionsDiscussionIdCommentsPostReq struct {

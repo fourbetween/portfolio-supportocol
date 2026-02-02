@@ -27,6 +27,19 @@ func NewHandler(con *dialogue.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
+func (h *appHandler) V1DialogueIssuesGet(ctx context.Context) ([]oas.Issue, error) {
+	items, err := h.con.ListIssues.Execute(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]oas.Issue, len(items))
+	for i, item := range items {
+		res[i] = h.toOasIssue(item)
+	}
+	return res, nil
+}
+
 func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context) ([]oas.DiscussionSummary, error) {
 	items, err := h.con.ListDiscussions.Execute(ctx)
 	if err != nil {
@@ -95,6 +108,24 @@ func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsPost(
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
 		Content:         string(req.Content),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := h.toOasComment(item)
+	return &res, nil
+}
+
+func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost(
+	ctx context.Context,
+	req *oas.V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq,
+	params oas.V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams,
+) (*oas.Comment, error) {
+	item, err := h.con.AddCommentIssue.Execute(ctx, usecase.AddCommentIssueInput{
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		CommentID:    uuid.UUID(params.CommentId).String(),
+		IssueID:      uuid.UUID(req.IssueId).String(),
 	})
 	if err != nil {
 		return nil, err
@@ -185,6 +216,14 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		parentCommentID.Null = true
 	}
 
+	issues := make([]oas.CommentIssue, len(item.Issues()))
+	for i, issue := range item.Issues() {
+		issues[i] = oas.CommentIssue{
+			IssueId: oas.ID(uuid.MustParse(issue.IssueID)),
+			Status:  oas.CommentIssueStatus(issue.Status),
+		}
+	}
+
 	res := oas.Comment{
 		ID:              oas.ID(uuid.MustParse(item.ID())),
 		DiscussionId:    oas.ID(uuid.MustParse(item.DiscussionID())),
@@ -192,10 +231,20 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		CommentType:     oas.CommentType(item.CommentType()),
 		Content:         oas.CommentContent(item.Content()),
 		Status:          oas.CommentStatus(item.Status()),
+		Issues:          issues,
 		CreatedAt:       item.CreatedAt(),
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())
 	}
 	return res
+}
+
+func (h *appHandler) toOasIssue(item *domain.Issue) oas.Issue {
+	return oas.Issue{
+		ID:          oas.ID(uuid.MustParse(item.ID())),
+		IssueType:   item.IssueType(),
+		Description: item.Description(),
+		Status:      oas.IssueStatus(item.Status()),
+	}
 }
