@@ -616,37 +616,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues:
-    parameters:
-      - $ref: "#/components/parameters/workspaceId"
-      - $ref: "#/components/parameters/discussionId"
-      - $ref: "#/components/parameters/commentId"
-    post:
-      description: add issue to comment
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                issueId:
-                  $ref: "#/components/schemas/Id"
-              required:
-                - issueId
-      responses:
-        "201":
-          description: success response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Comment"
-        default:
-          description: default error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}:
     parameters:
       - $ref: "#/components/parameters/workspaceId"

@@ -226,34 +226,6 @@ export class CommentRepository {
     return data;
   }
 
-  async addIssue(
-    workspaceId: string,
-    discussionId: string,
-    commentId: string,
-    issueId: string,
-  ): Promise<Comment> {
-    const { data, error } = await client.POST(
-      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues",
-      {
-        params: {
-          path: { workspaceId, discussionId, commentId },
-        },
-        body: { issueId },
-      },
-    );
-    if (error) throw new Error(error.message);
-
-    const cached = this._cache.get(discussionId);
-    if (cached) {
-      this._cache.set(
-        discussionId,
-        cached.map((c) => (c.id === data.id ? data : c)),
-      );
-    }
-
-    return data;
-  }
-
   async removeIssue(
     workspaceId: string,
     discussionId: string,

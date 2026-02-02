@@ -56,12 +56,6 @@ type Handler interface {
 	//
 	// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}/status
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutParams) (*Comment, error)
-	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues operation.
-	//
-	// Add issue to comment.
-	//
-	// POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues
-	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams) (*Comment, error)
 	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId} operation.
 	//
 	// Update comment.

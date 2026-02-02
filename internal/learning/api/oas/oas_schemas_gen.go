@@ -955,20 +955,6 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentId
 	s.Status = val
 }
 
-type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq struct {
-	IssueId ID `json:"issueId"`
-}
-
-// GetIssueId returns the value of IssueId.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) GetIssueId() ID {
-	return s.IssueId
-}
-
-// SetIssueId sets the value of IssueId.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) SetIssueId(val ID) {
-	s.IssueId = val
-}
-
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq struct {
 	CommentType CommentType    `json:"commentType"`
 	Content     CommentContent `json:"content"`
