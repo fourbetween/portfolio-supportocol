@@ -1,14 +1,22 @@
+import { consume } from "@lit/context";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { issuesContext } from "../../../../app/context/issues";
 import { TouchController } from "../../../../app/controller/touch";
+import type { Issue } from "../../../../app/model/issue";
 import { actionStyle } from "../../../../shared/style/action";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
-import { DialogueCommentSelectEvent } from "../../event/comment";
+import {
+  DialogueCommentIssueAddEvent,
+  DialogueCommentSelectEvent,
+  DialogueIssueSelectEvent,
+} from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import type { CommentFrame } from "../../model/comment-frame";
 import "../comment-card/comment-card";
+import "../comment-issue-popup/comment-issue-popup";
 import "../comment-reply-form/comment-reply-form";
 
 @customElement("dialogue-comment-item")
@@ -31,6 +39,13 @@ export class DialogueCommentItem extends LitElement {
   @state()
   private mode: "view" | "reply" = "view";
 
+  @state()
+  private issuePopupOpen = false;
+
+  @consume({ context: issuesContext, subscribe: true })
+  @property({ attribute: false })
+  allIssues: Issue[] = [];
+
   private touch = new TouchController(this);
 
   private get canReply() {
@@ -38,6 +53,12 @@ export class DialogueCommentItem extends LitElement {
     if (this.archived || this.comment?.archivedAt) return false;
     if (!this.comment || !this.frame) return false;
     return this.frame.paths.some((p) => p.parent === this.comment?.commentType);
+  }
+
+  private get canAddIssue() {
+    if (this.readonly) return false;
+    if (this.archived || this.comment?.archivedAt) return false;
+    return !!this.comment;
   }
 
   private handleCommentSelect(e: DialogueCommentSelectEvent) {
@@ -59,6 +80,20 @@ export class DialogueCommentItem extends LitElement {
     this.mode = "reply";
   }
 
+  private handleAddIssueClick(e: Event) {
+    e.stopPropagation();
+    this.issuePopupOpen = true;
+  }
+
+  private handleIssueSelect(e: DialogueIssueSelectEvent) {
+    if (this.comment) {
+      this.dispatchEvent(
+        new DialogueCommentIssueAddEvent(this.comment.id, e.issueId),
+      );
+    }
+    this.issuePopupOpen = false;
+  }
+
   render() {
     if (!this.comment) return html``;
 
@@ -77,6 +112,14 @@ export class DialogueCommentItem extends LitElement {
             </div>
           `
         : nothing}
+      <dialogue-comment-issue-popup
+        .open=${this.issuePopupOpen}
+        .issues=${this.allIssues}
+        .selectable=${true}
+        .excludedIssueIds=${(this.comment.issues || []).map((i) => i.issueId)}
+        @dialogue-issue-select=${this.handleIssueSelect}
+        @close=${() => (this.issuePopupOpen = false)}
+      ></dialogue-comment-issue-popup>
     `;
   }
 
@@ -97,6 +140,17 @@ export class DialogueCommentItem extends LitElement {
                 aria-label="reply"
               >
                 reply
+              </button>
+            `
+          : nothing}
+        ${this.canAddIssue
+          ? html`
+              <button
+                class="btn-hover danger issue-button material-symbols-outlined"
+                @click=${this.handleAddIssueClick}
+                aria-label="add issue"
+              >
+                report
               </button>
             `
           : nothing}

@@ -8,7 +8,9 @@ import { widgetStyle } from "../../../shared/style/widget";
 import {
   DialogueCommentCreatedEvent,
   DialogueCommentSelectEvent,
+  DialogueCommentUpdatedEvent,
   type DialogueCommentCreateEvent,
+  type DialogueCommentIssueAddEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
@@ -79,6 +81,24 @@ export class DialogueCommentExplorerWidget extends LitElement {
       showToast(this, "Comment created.", "success", 2000);
       if (data) {
         this.dispatchEvent(new DialogueCommentCreatedEvent(data));
+      }
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
+  private async handleCommentIssueAdd(e: DialogueCommentIssueAddEvent) {
+    if (!this.discussion || this.readonly) return;
+    try {
+      const data = await commentRepository.addIssue(
+        this.discussion.id,
+        e.commentId,
+        e.issueId,
+      );
+
+      showToast(this, "Issue added.", "success", 2000);
+      if (data) {
+        this.dispatchEvent(new DialogueCommentUpdatedEvent(data));
       }
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -157,6 +177,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
             .frame=${this.discussion?.dialogueSettings.commentFrame}
             .readonly=${this.readonly}
             @dialogue-comment-create=${this.handleCommentCreate}
+            @dialogue-comment-issue-add=${this.handleCommentIssueAdd}
           ></dialogue-comment-tree>
         </div>
       </div>
@@ -181,6 +202,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
           .frame=${this.discussion?.dialogueSettings.commentFrame}
           .readonly=${this.readonly}
           @dialogue-comment-create=${this.handleCommentCreate}
+          @dialogue-comment-issue-add=${this.handleCommentIssueAdd}
         ></dialogue-comment-context>
       </div>
     `;
