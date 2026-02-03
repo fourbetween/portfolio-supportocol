@@ -1,15 +1,11 @@
-import { consume } from "@lit/context";
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { issuesContext } from "../../../../app/context/issues";
-import type { Issue } from "../../../../app/model/issue";
 import { baseStyle } from "../../../../shared/style/base";
 import { commentCardStyle } from "../../../../shared/style/comment-card";
 import { iconStyle } from "../../../../shared/style/icon";
 import { DialogueCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
-import "../comment-issue-popup/comment-issue-popup";
 
 @customElement("dialogue-comment-card")
 export class DialogueCommentCard extends LitElement {
@@ -22,22 +18,10 @@ export class DialogueCommentCard extends LitElement {
   @property({ type: Boolean })
   archived = false;
 
-  @state()
-  private _isIssuePopupOpen = false;
-
-  @consume({ context: issuesContext, subscribe: true })
-  @property({ attribute: false })
-  issues: Issue[] = [];
-
   private _handleClick() {
     if (this.comment) {
       this.dispatchEvent(new DialogueCommentSelectEvent(this.comment.id));
     }
-  }
-
-  private _handleIssueClick(e: Event) {
-    e.stopPropagation();
-    this._isIssuePopupOpen = true;
   }
 
   render() {
@@ -45,12 +29,6 @@ export class DialogueCommentCard extends LitElement {
 
     const isArchivedForStyle = this.archived || !!this.comment.archivedAt;
     const isSelfArchived = !!this.comment.archivedAt;
-
-    const commentIssues = this.comment.issues || [];
-    const relatedIssues = this.issues.filter((i) =>
-      commentIssues.some((ci) => ci.issueId === i.id),
-    );
-    const hasIssues = relatedIssues.length > 0;
 
     return html`
       <div
@@ -66,16 +44,6 @@ export class DialogueCommentCard extends LitElement {
                 </span>
               `
             : nothing}
-          ${hasIssues
-            ? html`
-                <span
-                  class="material-symbols-outlined issue-icon"
-                  @click=${this._handleIssueClick}
-                >
-                  report
-                </span>
-              `
-            : nothing}
           ${this.activeChildrenCount > 0
             ? html`
                 <div class="child-count">${this.activeChildrenCount}</div>
@@ -86,11 +54,6 @@ export class DialogueCommentCard extends LitElement {
           </div>
         </div>
       </div>
-      <dialogue-comment-issue-popup
-        .open=${this._isIssuePopupOpen}
-        .issues=${relatedIssues}
-        @popup-closed=${() => (this._isIssuePopupOpen = false)}
-      ></dialogue-comment-issue-popup>
     `;
   }
 

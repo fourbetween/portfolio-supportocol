@@ -6,8 +6,6 @@ const DIALOGUE_COMMENT_CREATE_CANCEL_EVENT_NAME =
   "dialogue-comment-create-cancel";
 const DIALOGUE_COMMENT_CREATED_EVENT_NAME = "dialogue-comment-created";
 const DIALOGUE_COMMENT_UPDATED_EVENT_NAME = "dialogue-comment-updated";
-const DIALOGUE_COMMENT_ISSUE_ADD_EVENT_NAME = "dialogue-comment-issue-add";
-const DIALOGUE_ISSUE_SELECT_EVENT_NAME = "dialogue-issue-select";
 
 export class DialogueCommentSelectEvent extends Event {
   public readonly commentId?: string;
@@ -74,32 +72,6 @@ export class DialogueCommentUpdatedEvent extends Event {
   }
 }
 
-export class DialogueCommentIssueAddEvent extends Event {
-  public readonly commentId: string;
-  public readonly issueId: string;
-
-  constructor(commentId: string, issueId: string) {
-    super(DIALOGUE_COMMENT_ISSUE_ADD_EVENT_NAME, {
-      bubbles: true,
-      composed: true,
-    });
-    this.commentId = commentId;
-    this.issueId = issueId;
-  }
-}
-
-export class DialogueIssueSelectEvent extends Event {
-  public readonly issueId: string;
-
-  constructor(issueId: string) {
-    super(DIALOGUE_ISSUE_SELECT_EVENT_NAME, {
-      bubbles: true,
-      composed: true,
-    });
-    this.issueId = issueId;
-  }
-}
-
 declare global {
   interface HTMLElementEventMap {
     [DIALOGUE_COMMENT_SELECT_EVENT_NAME]: DialogueCommentSelectEvent;
@@ -107,7 +79,5 @@ declare global {
     [DIALOGUE_COMMENT_CREATE_CANCEL_EVENT_NAME]: DialogueCommentCreateCancelEvent;
     [DIALOGUE_COMMENT_CREATED_EVENT_NAME]: DialogueCommentCreatedEvent;
     [DIALOGUE_COMMENT_UPDATED_EVENT_NAME]: DialogueCommentUpdatedEvent;
-    [DIALOGUE_COMMENT_ISSUE_ADD_EVENT_NAME]: DialogueCommentIssueAddEvent;
-    [DIALOGUE_ISSUE_SELECT_EVENT_NAME]: DialogueIssueSelectEvent;
   }
 }
