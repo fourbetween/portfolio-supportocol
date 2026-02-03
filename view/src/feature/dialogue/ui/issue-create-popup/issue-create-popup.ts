@@ -1,13 +1,16 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
+import { buttonStyle } from "../../../../shared/style/button";
+import { formStyle } from "../../../../shared/style/form";
 import { iconStyle } from "../../../../shared/style/icon";
+import { inputStyle } from "../../../../shared/style/input";
 import { titleStyle } from "../../../../shared/style/title";
 import "../../../../shared/ui/popup/popup";
+import { DialogueIssueCreateEvent } from "../../event/issue";
 import type { Comment } from "../../model/comment";
 import type { CommentFrame } from "../../model/comment-frame";
 import "../comment-context/comment-context";
-import "../issue-form/issue-form";
 
 @customElement("dialogue-issue-create-popup")
 export class DialogueIssueCreatePopup extends LitElement {
@@ -20,6 +23,25 @@ export class DialogueIssueCreatePopup extends LitElement {
   @property({ type: Object })
   frame?: CommentFrame;
 
+  @query("#title")
+  private _titleInput!: HTMLInputElement;
+
+  @query("#description")
+  private _descriptionInput!: HTMLTextAreaElement;
+
+  private _handleSubmit(e: Event) {
+    e.preventDefault();
+    const title = this._titleInput.value.trim();
+    const description = this._descriptionInput.value.trim();
+
+    if (title) {
+      this.dispatchEvent(new DialogueIssueCreateEvent(title, description));
+      this._titleInput.value = "";
+      this._descriptionInput.value = "";
+      this.open = false;
+    }
+  }
+
   render() {
     return html`
       <ui-popup .open=${this.open}>
@@ -29,9 +51,32 @@ export class DialogueIssueCreatePopup extends LitElement {
             ${this.renderContextSection()}
             <div class="section">
               <div class="section-title">Issue Details</div>
-              <dialogue-issue-form></dialogue-issue-form>
+              <form id="issue-form" @submit=${this._handleSubmit}>
+                <div class="field">
+                  <label for="title">Title</label>
+                  <input
+                    type="text"
+                    id="title"
+                    required
+                    placeholder="Type issue title..."
+                  />
+                </div>
+                <div class="field">
+                  <label for="description">Description (Optional)</label>
+                  <textarea
+                    id="description"
+                    placeholder="Type issue description..."
+                  ></textarea>
+                </div>
+              </form>
             </div>
           </div>
+        </div>
+        <div slot="footer">
+          <button type="button" class="btn close">Cancel</button>
+          <button type="submit" form="issue-form" class="btn btn-primary">
+            Add Issue
+          </button>
         </div>
       </ui-popup>
     `;
@@ -54,8 +99,11 @@ export class DialogueIssueCreatePopup extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
     iconStyle,
     titleStyle,
+    inputStyle,
+    formStyle,
     css`
       :host {
         display: block;
@@ -71,6 +119,28 @@ export class DialogueIssueCreatePopup extends LitElement {
         font-size: 1.1rem;
         margin-bottom: 12px;
         color: var(--color-text-primary);
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      label {
+        font-weight: bold;
+        font-size: 0.9rem;
+      }
+      input,
+      textarea {
+        width: 100%;
+      }
+      textarea {
+        min-height: 100px;
+        resize: vertical;
       }
     `,
   ];

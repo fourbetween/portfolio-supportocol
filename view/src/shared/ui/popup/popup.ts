@@ -34,6 +34,12 @@ export class Popup extends LitElement {
     this.dispatchEvent(new PopupClosedEvent());
   }
 
+  private _handleFooterClick(e: Event) {
+    if ((e.target as HTMLElement).closest(".close")) {
+      this.open = false;
+    }
+  }
+
   private _handleFooterSlotChange(e: Event) {
     const slot = e.target as HTMLSlotElement;
     this._hasFooter = slot.assignedNodes().length > 0;
@@ -55,7 +61,11 @@ export class Popup extends LitElement {
         <div class="main">
           <slot name="main"></slot>
         </div>
-        <div class="footer" ?hidden=${!this._hasFooter}>
+        <div
+          class="footer"
+          ?hidden=${!this._hasFooter}
+          @click=${this._handleFooterClick}
+        >
           <slot
             name="footer"
             @slotchange=${this._handleFooterSlotChange}
