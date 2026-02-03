@@ -34,7 +34,7 @@ export class LearningCommentFramePopup extends LitElement {
 
   render() {
     return html`
-      <ui-popup .open=${this.open} @close=${this._handleClose}>
+      <ui-popup .open=${this.open} @popup-closed=${this._handleClose}>
         <div slot="header">Edit Comment Frame</div>
         <div slot="main">
           <learning-comment-frame-form

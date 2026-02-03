@@ -4,51 +4,6 @@
  */
 
 export interface paths {
-    "/v1/learning/issues": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description list issues */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description success response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Issue"][];
-                    };
-                };
-                /** @description default error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Error"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/learning/workspaces/{workspaceId}/discussions": {
         parameters: {
             query?: never;
@@ -854,14 +809,6 @@ export interface components {
         Id: string;
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
-        /** @enum {string} */
-        IssueStatus: "open" | "closed";
-        Issue: {
-            id: components["schemas"]["Id"];
-            issueType: string;
-            description: string;
-            status: components["schemas"]["IssueStatus"];
-        };
         DialogueSettings: {
             commentFrame: components["schemas"]["CommentFrame"];
         };
@@ -879,6 +826,8 @@ export interface components {
         DiscussionConclusion: string;
         CommentType: string;
         CommentContent: string;
+        CommentIssueTitle: string;
+        CommentIssueDescription: string;
         DiscussionSummary: {
             id: components["schemas"]["Id"];
             projectId: components["schemas"]["Id"];
@@ -910,7 +859,9 @@ export interface components {
             archivedAt: string | null;
         };
         CommentIssue: {
-            issueId: components["schemas"]["Id"];
+            id: components["schemas"]["Id"];
+            title: components["schemas"]["CommentIssueTitle"];
+            description: components["schemas"]["CommentIssueDescription"];
         };
     };
     responses: never;

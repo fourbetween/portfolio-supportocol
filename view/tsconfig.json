@@ -32,7 +32,9 @@
           "no-unknown-property": "error",
           "no-noncallable-event-binding": "error",
           "no-unknown-event": "error"
-        }
+        },
+        // dialog uses "close" event
+        "globalEvents": ["close"]
       }
     ]
   },

@@ -6,7 +6,6 @@ package oas
 type OperationName = string
 
 const (
-	V1LearningIssuesGetOperation                                                                        OperationName = "V1LearningIssuesGet"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteOperation                        OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDelete"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostOperation                          OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePost"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation       OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDelete"

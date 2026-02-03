@@ -10,13 +10,15 @@ import {
   DialogueCommentSelectEvent,
   DialogueCommentUpdatedEvent,
   type DialogueCommentCreateEvent,
-  type DialogueCommentIssueAddEvent,
+  type DialogueCommentIssueRequestEvent,
 } from "../event/comment";
+import { type DialogueIssueCreateEvent } from "../event/issue";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import "../ui/comment-context/comment-context";
 import "../ui/comment-tree/comment-tree";
+import "../ui/issue-create-popup/issue-create-popup";
 import "./comment-create-widget";
 
 @customElement("dialogue-comment-explorer-widget")
@@ -35,6 +37,12 @@ export class DialogueCommentExplorerWidget extends LitElement {
 
   @state()
   private childCounts = new Map<string, number>();
+
+  @state()
+  private isIssuePopupOpen = false;
+
+  @state()
+  private issueTargetCommentId?: string;
 
   private commentMap = new Map<string, Comment>();
   private childrenMap = new Map<string, Comment[]>();
@@ -87,16 +95,31 @@ export class DialogueCommentExplorerWidget extends LitElement {
     }
   }
 
-  private async handleCommentIssueAdd(e: DialogueCommentIssueAddEvent) {
-    if (!this.discussion || this.readonly) return;
+  private handleClearSelection() {
+    this.dispatchEvent(new DialogueCommentSelectEvent(undefined));
+  }
+
+  private handleIssueRequest(e: DialogueCommentIssueRequestEvent) {
+    this.issueTargetCommentId = e.commentId;
+    this.isIssuePopupOpen = true;
+  }
+
+  private async handleIssueCreate(e: DialogueIssueCreateEvent) {
+    if (!this.discussion || !this.issueTargetCommentId) return;
     try {
       const data = await commentRepository.addIssue(
         this.discussion.id,
-        e.commentId,
-        e.issueId,
+        this.issueTargetCommentId,
+        {
+          title: e.title,
+          description: e.description,
+        },
       );
 
+      this.isIssuePopupOpen = false;
+      this.issueTargetCommentId = undefined;
       showToast(this, "Issue added.", "success", 2000);
+
       if (data) {
         this.dispatchEvent(new DialogueCommentUpdatedEvent(data));
       }
@@ -105,13 +128,20 @@ export class DialogueCommentExplorerWidget extends LitElement {
     }
   }
 
-  private handleClearSelection() {
-    this.dispatchEvent(new DialogueCommentSelectEvent(undefined));
+  private handleIssueCancel() {
+    this.isIssuePopupOpen = false;
+    this.issueTargetCommentId = undefined;
   }
 
   private get _path(): Comment[] {
     return this.selectedCommentId
       ? this.getPathToRoot(this.selectedCommentId)
+      : [];
+  }
+
+  private get _issuePath(): Comment[] {
+    return this.issueTargetCommentId
+      ? this.getPathToRoot(this.issueTargetCommentId)
       : [];
   }
 
@@ -158,7 +188,10 @@ export class DialogueCommentExplorerWidget extends LitElement {
     const descendants = this._descendants;
 
     return html`
-      <div class="container">
+      <div
+        class="container"
+        @dialogue-comment-issue-request=${this.handleIssueRequest}
+      >
         ${this.renderContextSection(path)}
         ${this.selectedCommentId || this.readonly
           ? nothing
@@ -177,10 +210,15 @@ export class DialogueCommentExplorerWidget extends LitElement {
             .frame=${this.discussion?.dialogueSettings.commentFrame}
             .readonly=${this.readonly}
             @dialogue-comment-create=${this.handleCommentCreate}
-            @dialogue-comment-issue-add=${this.handleCommentIssueAdd}
           ></dialogue-comment-tree>
         </div>
       </div>
+      <dialogue-issue-create-popup
+        .open=${this.isIssuePopupOpen}
+        .path=${this._issuePath}
+        @dialogue-issue-create=${this.handleIssueCreate}
+        @popup-closed=${this.handleIssueCancel}
+      ></dialogue-issue-create-popup>
     `;
   }
 
@@ -202,7 +240,6 @@ export class DialogueCommentExplorerWidget extends LitElement {
           .frame=${this.discussion?.dialogueSettings.commentFrame}
           .readonly=${this.readonly}
           @dialogue-comment-create=${this.handleCommentCreate}
-          @dialogue-comment-issue-add=${this.handleCommentIssueAdd}
         ></dialogue-comment-context>
       </div>
     `;

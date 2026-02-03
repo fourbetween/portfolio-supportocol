@@ -12,9 +12,11 @@ import (
 )
 
 type CommentIssues struct {
-	CommentID string `sql:"primary_key"`
-	IssueID   string `sql:"primary_key"`
-	CreatedBy *string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID          string `sql:"primary_key"`
+	CommentID   string
+	Title       string
+	Description string
+	CreatedBy   *string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }

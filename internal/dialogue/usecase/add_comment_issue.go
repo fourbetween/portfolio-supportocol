@@ -5,25 +5,26 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal/dialogue/domain"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
+	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 )
 
 type AddCommentIssueUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
-	issueRepo      domain.IssueRepository
+	idSrv          id.Service
 	tx             dbtx.Manager
 }
 
 func NewAddCommentIssueUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
-	issueRepo domain.IssueRepository,
+	idSrv id.Service,
 	tx dbtx.Manager,
 ) *AddCommentIssueUsecase {
 	return &AddCommentIssueUsecase{
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
-		issueRepo:      issueRepo,
+		idSrv:          idSrv,
 		tx:             tx,
 	}
 }
@@ -31,7 +32,8 @@ func NewAddCommentIssueUsecase(
 type AddCommentIssueInput struct {
 	DiscussionID string
 	CommentID    string
-	IssueID      string
+	Title        string
+	Description  string
 }
 
 func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIssueInput) (*domain.Comment, error) {
@@ -53,14 +55,11 @@ func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIs
 			return err
 		}
 
-		issue, err := u.issueRepo.Load(ctx, input.IssueID)
-		if err != nil {
-			return err
-		}
-
-		if !comment.AddIssue(issue.ID(), nil) {
-			return nil
-		}
+		comment.AddIssue(domain.CommentIssue{
+			ID:          u.idSrv.Generate(),
+			Title:       input.Title,
+			Description: input.Description,
+		})
 
 		return u.commentRepo.Update(ctx, comment)
 	})

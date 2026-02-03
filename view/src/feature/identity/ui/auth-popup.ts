@@ -43,7 +43,6 @@ export class IdentityAuthPopup extends LitElement {
 
   private _handlePopupClose() {
     this.open = false;
-    this.dispatchEvent(new Event("close"));
   }
 
   private renderSwitchPrompt() {
@@ -91,7 +90,7 @@ export class IdentityAuthPopup extends LitElement {
 
   private validateSignup(
     password: string,
-    passwordConfirm: string
+    passwordConfirm: string,
   ): string | null {
     if (password !== passwordConfirm) {
       return "Passwords do not match";

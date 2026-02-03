@@ -16,7 +16,6 @@ type APIContainer struct {
 	ListDiscussions *usecase.ListDiscussionsUsecase
 	ListComments    *usecase.ListCommentsUsecase
 	CreateComment   *usecase.CreateCommentUsecase
-	ListIssues      *usecase.ListIssuesUsecase
 	AddCommentIssue *usecase.AddCommentIssueUsecase
 }
 
@@ -32,18 +31,15 @@ func NewAPIContainer(
 		idSrv,
 		clockSrv,
 	)
-	issueFac := domain.NewIssueFactory(idSrv)
 	discussionRepo := db.NewDiscussionRepository(dbCon, discussionFac)
 	discussionQS := db.NewDiscussionQueryService(dbCon)
 	commentRepo := db.NewCommentRepository(dbCon, commentFac)
-	issueRepo := db.NewIssueRepository(dbCon, issueFac)
 
 	return &APIContainer{
 		GetDiscussion:   usecase.NewGetDiscussionUsecase(discussionRepo),
 		ListDiscussions: usecase.NewListDiscussionsUsecase(discussionQS),
 		ListComments:    usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
 		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, clockSrv, txManager),
-		ListIssues:      usecase.NewListIssuesUsecase(issueRepo),
-		AddCommentIssue: usecase.NewAddCommentIssueUsecase(discussionRepo, commentRepo, issueRepo, txManager),
+		AddCommentIssue: usecase.NewAddCommentIssueUsecase(discussionRepo, commentRepo, idSrv, txManager),
 	}, nil
 }

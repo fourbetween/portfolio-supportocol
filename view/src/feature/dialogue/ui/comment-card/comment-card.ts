@@ -1,15 +1,12 @@
-import { consume } from "@lit/context";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
-import { issuesContext } from "../../../../app/context/issues";
-import type { Issue } from "../../../../app/model/issue";
 import { baseStyle } from "../../../../shared/style/base";
 import { commentCardStyle } from "../../../../shared/style/comment-card";
 import { iconStyle } from "../../../../shared/style/icon";
 import { DialogueCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
-import "../comment-issue-popup/comment-issue-popup";
+import "../issue-list-popup/issue-list-popup";
 
 @customElement("dialogue-comment-card")
 export class DialogueCommentCard extends LitElement {
@@ -22,20 +19,21 @@ export class DialogueCommentCard extends LitElement {
   @property({ type: Boolean })
   archived = false;
 
+  @property({ type: Boolean })
+  readonly = false;
+
   @state()
   private _isIssuePopupOpen = false;
 
-  @consume({ context: issuesContext, subscribe: true })
-  @property({ attribute: false })
-  issues: Issue[] = [];
-
   private _handleClick() {
+    if (this.readonly) return;
     if (this.comment) {
       this.dispatchEvent(new DialogueCommentSelectEvent(this.comment.id));
     }
   }
 
   private _handleIssueClick(e: Event) {
+    if (this.readonly) return;
     e.stopPropagation();
     this._isIssuePopupOpen = true;
   }
@@ -45,12 +43,6 @@ export class DialogueCommentCard extends LitElement {
 
     const isArchivedForStyle = this.archived || !!this.comment.archivedAt;
     const isSelfArchived = !!this.comment.archivedAt;
-
-    const commentIssues = this.comment.issues || [];
-    const relatedIssues = this.issues.filter((i) =>
-      commentIssues.some((ci) => ci.issueId === i.id),
-    );
-    const hasIssues = relatedIssues.length > 0;
 
     return html`
       <div
@@ -66,16 +58,6 @@ export class DialogueCommentCard extends LitElement {
                 </span>
               `
             : nothing}
-          ${hasIssues
-            ? html`
-                <span
-                  class="material-symbols-outlined issue-icon"
-                  @click=${this._handleIssueClick}
-                >
-                  report
-                </span>
-              `
-            : nothing}
           ${this.activeChildrenCount > 0
             ? html`
                 <div class="child-count">${this.activeChildrenCount}</div>
@@ -84,13 +66,27 @@ export class DialogueCommentCard extends LitElement {
           <div class="created-at">
             ${this._formatDate(this.comment.createdAt)}
           </div>
+          ${this.comment.issues && this.comment.issues.length > 0
+            ? html`
+                <span
+                  class="material-symbols-outlined issue-icon"
+                  @click=${this._handleIssueClick}
+                >
+                  warning
+                </span>
+              `
+            : nothing}
         </div>
       </div>
-      <dialogue-comment-issue-popup
-        .open=${this._isIssuePopupOpen}
-        .issues=${relatedIssues}
-        @popup-closed=${() => (this._isIssuePopupOpen = false)}
-      ></dialogue-comment-issue-popup>
+      ${this.comment.issues && this.comment.issues.length > 0
+        ? html`
+            <dialogue-issue-list-popup
+              .open=${this._isIssuePopupOpen}
+              .issues=${this.comment.issues ?? []}
+              @popup-closed=${() => (this._isIssuePopupOpen = false)}
+            ></dialogue-issue-list-popup>
+          `
+        : nothing}
     `;
   }
 
@@ -99,6 +95,7 @@ export class DialogueCommentCard extends LitElement {
       "card-body": true,
       proposed: this.comment?.status === "proposed",
       archived: isArchived,
+      readonly: this.readonly,
     };
   }
 
@@ -114,13 +111,22 @@ export class DialogueCommentCard extends LitElement {
       .card-body {
         cursor: pointer;
       }
+      .card-body.readonly {
+        cursor: default;
+      }
       .issue-icon {
         font-size: 16px;
         color: var(--color-error, #d32f2f);
         cursor: pointer;
       }
+      .card-body.readonly .issue-icon {
+        cursor: default;
+      }
       .issue-icon:hover {
         opacity: 0.8;
+      }
+      .card-body.readonly .issue-icon:hover {
+        opacity: 1;
       }
     `,
   ];

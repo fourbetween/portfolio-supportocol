@@ -36,7 +36,6 @@ type APIContainer struct {
 	UpdateCommentStatus      *usecase.UpdateCommentStatusUsecase
 	RemoveCommentIssue       *usecase.RemoveCommentIssueUsecase
 	EnqueueCommentGeneration *usecase.EnqueueCommentGenerationUsecase
-	ListIssues               *usecase.ListIssuesUsecase
 }
 
 func NewAPIContainer(
@@ -58,10 +57,8 @@ func NewAPIContainer(
 		idSrv,
 		clockSrv,
 	)
-	issueFac := domain.NewIssueFactory(idSrv)
 	discussionRepo := db.NewDiscussionRepository(dbCon, discussionFac)
 	commentRepo := db.NewCommentRepository(dbCon, commentFac)
-	issueRepo := db.NewIssueRepository(dbCon, issueFac)
 	discussionQS := db.NewDiscussionQueryService(dbCon)
 
 	queueURL, err := appConf.Get("sqs/comment-generation/url")
@@ -90,7 +87,6 @@ func NewAPIContainer(
 		UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo, permSv, txManager),
 		RemoveCommentIssue:       usecase.NewRemoveCommentIssueUsecase(discussionRepo, commentRepo, permSv, txManager),
 		EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, permSv, commentGenerationQueue),
-		ListIssues:               usecase.NewListIssuesUsecase(issueRepo),
 	}, nil
 }
 

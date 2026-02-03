@@ -38,12 +38,6 @@ type Handler interface {
 	//
 	// GET /v1/dialogue/discussions
 	V1DialogueDiscussionsGet(ctx context.Context) ([]DiscussionSummary, error)
-	// V1DialogueIssuesGet implements GET /v1/dialogue/issues operation.
-	//
-	// List issues.
-	//
-	// GET /v1/dialogue/issues
-	V1DialogueIssuesGet(ctx context.Context) ([]Issue, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

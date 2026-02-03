@@ -40,7 +40,10 @@ export class CommentRepository {
   async addIssue(
     discussionId: string,
     commentId: string,
-    issueId: string,
+    body: {
+      title: string;
+      description: string;
+    },
   ): Promise<Comment> {
     const { data, error } = await client.POST(
       "/v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues",
@@ -48,7 +51,7 @@ export class CommentRepository {
         params: {
           path: { discussionId, commentId },
         },
-        body: { issueId },
+        body,
       },
     );
     if (error) throw new Error(error.message);

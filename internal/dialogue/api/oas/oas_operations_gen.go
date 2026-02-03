@@ -11,5 +11,4 @@ const (
 	V1DialogueDiscussionsDiscussionIdCommentsPostOperation                OperationName = "V1DialogueDiscussionsDiscussionIdCommentsPost"
 	V1DialogueDiscussionsDiscussionIdGetOperation                         OperationName = "V1DialogueDiscussionsDiscussionIdGet"
 	V1DialogueDiscussionsGetOperation                                     OperationName = "V1DialogueDiscussionsGet"
-	V1DialogueIssuesGetOperation                                          OperationName = "V1DialogueIssuesGet"
 )

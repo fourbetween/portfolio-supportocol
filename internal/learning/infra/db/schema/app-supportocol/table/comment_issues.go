@@ -17,11 +17,13 @@ type commentIssuesTable struct {
 	mysql.Table
 
 	// Columns
-	CommentID mysql.ColumnString
-	IssueID   mysql.ColumnString
-	CreatedBy mysql.ColumnString
-	CreatedAt mysql.ColumnTimestamp
-	UpdatedAt mysql.ColumnTimestamp
+	ID          mysql.ColumnString
+	CommentID   mysql.ColumnString
+	Title       mysql.ColumnString
+	Description mysql.ColumnString
+	CreatedBy   mysql.ColumnString
+	CreatedAt   mysql.ColumnTimestamp
+	UpdatedAt   mysql.ColumnTimestamp
 
 	AllColumns     mysql.ColumnList
 	MutableColumns mysql.ColumnList
@@ -63,25 +65,29 @@ func newCommentIssuesTable(schemaName, tableName, alias string) *CommentIssuesTa
 
 func newCommentIssuesTableImpl(schemaName, tableName, alias string) commentIssuesTable {
 	var (
-		CommentIDColumn = mysql.StringColumn("comment_id")
-		IssueIDColumn   = mysql.StringColumn("issue_id")
-		CreatedByColumn = mysql.StringColumn("created_by")
-		CreatedAtColumn = mysql.TimestampColumn("created_at")
-		UpdatedAtColumn = mysql.TimestampColumn("updated_at")
-		allColumns      = mysql.ColumnList{CommentIDColumn, IssueIDColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns  = mysql.ColumnList{CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		defaultColumns  = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
+		IDColumn          = mysql.StringColumn("id")
+		CommentIDColumn   = mysql.StringColumn("comment_id")
+		TitleColumn       = mysql.StringColumn("title")
+		DescriptionColumn = mysql.StringColumn("description")
+		CreatedByColumn   = mysql.StringColumn("created_by")
+		CreatedAtColumn   = mysql.TimestampColumn("created_at")
+		UpdatedAtColumn   = mysql.TimestampColumn("updated_at")
+		allColumns        = mysql.ColumnList{IDColumn, CommentIDColumn, TitleColumn, DescriptionColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns    = mysql.ColumnList{CommentIDColumn, TitleColumn, DescriptionColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns    = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return commentIssuesTable{
 		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
-		CommentID: CommentIDColumn,
-		IssueID:   IssueIDColumn,
-		CreatedBy: CreatedByColumn,
-		CreatedAt: CreatedAtColumn,
-		UpdatedAt: UpdatedAtColumn,
+		ID:          IDColumn,
+		CommentID:   CommentIDColumn,
+		Title:       TitleColumn,
+		Description: DescriptionColumn,
+		CreatedBy:   CreatedByColumn,
+		CreatedAt:   CreatedAtColumn,
+		UpdatedAt:   UpdatedAtColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,
