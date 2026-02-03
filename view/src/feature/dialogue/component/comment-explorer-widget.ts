@@ -218,7 +218,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
         .path=${this._issuePath}
         .frame=${this.discussion?.dialogueSettings.commentFrame}
         @dialogue-issue-create=${this.handleIssueCreate}
-        @dialogue-issue-create-cancel=${this.handleIssueCancel}
+        @popup-closed=${this.handleIssueCancel}
       ></dialogue-issue-create-popup>
     `;
   }

@@ -4,7 +4,6 @@ import type {
 } from "../model/comment";
 
 const DIALOGUE_ISSUE_CREATE_EVENT_NAME = "dialogue-issue-create";
-const DIALOGUE_ISSUE_CREATE_CANCEL_EVENT_NAME = "dialogue-issue-create-cancel";
 
 export class DialogueIssueCreateEvent extends Event {
   public readonly title: CommentIssueTitle;
@@ -20,18 +19,8 @@ export class DialogueIssueCreateEvent extends Event {
   }
 }
 
-export class DialogueIssueCreateCancelEvent extends Event {
-  constructor() {
-    super(DIALOGUE_ISSUE_CREATE_CANCEL_EVENT_NAME, {
-      bubbles: true,
-      composed: true,
-    });
-  }
-}
-
 declare global {
   interface HTMLElementEventMap {
     [DIALOGUE_ISSUE_CREATE_EVENT_NAME]: DialogueIssueCreateEvent;
-    [DIALOGUE_ISSUE_CREATE_CANCEL_EVENT_NAME]: DialogueIssueCreateCancelEvent;
   }
 }
