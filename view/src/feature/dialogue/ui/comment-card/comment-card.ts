@@ -19,16 +19,21 @@ export class DialogueCommentCard extends LitElement {
   @property({ type: Boolean })
   archived = false;
 
+  @property({ type: Boolean })
+  readonly = false;
+
   @state()
   private _isIssuePopupOpen = false;
 
   private _handleClick() {
+    if (this.readonly) return;
     if (this.comment) {
       this.dispatchEvent(new DialogueCommentSelectEvent(this.comment.id));
     }
   }
 
   private _handleIssueClick(e: Event) {
+    if (this.readonly) return;
     e.stopPropagation();
     this._isIssuePopupOpen = true;
   }
@@ -90,6 +95,7 @@ export class DialogueCommentCard extends LitElement {
       "card-body": true,
       proposed: this.comment?.status === "proposed",
       archived: isArchived,
+      readonly: this.readonly,
     };
   }
 
@@ -105,13 +111,22 @@ export class DialogueCommentCard extends LitElement {
       .card-body {
         cursor: pointer;
       }
+      .card-body.readonly {
+        cursor: default;
+      }
       .issue-icon {
         font-size: 16px;
         color: var(--color-error, #d32f2f);
         cursor: pointer;
       }
+      .card-body.readonly .issue-icon {
+        cursor: default;
+      }
       .issue-icon:hover {
         opacity: 0.8;
+      }
+      .card-body.readonly .issue-icon:hover {
+        opacity: 1;
       }
     `,
   ];

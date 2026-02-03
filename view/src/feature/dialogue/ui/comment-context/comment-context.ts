@@ -30,7 +30,7 @@ export class DialogueCommentContext extends LitElement {
       <ui-comment-type-badge
         .type=${comment.commentType}
       ></ui-comment-type-badge>
-      ${isLast
+      ${isLast && !this.readonly
         ? html`
             <dialogue-comment-item
               .comment=${comment}
@@ -45,6 +45,7 @@ export class DialogueCommentContext extends LitElement {
               .comment=${comment}
               .activeChildrenCount=${childCount}
               .archived=${isArchived}
+              .readonly=${this.readonly}
             ></dialogue-comment-card>
           `}
     `;

@@ -9,7 +9,6 @@ import { titleStyle } from "../../../../shared/style/title";
 import "../../../../shared/ui/popup/popup";
 import { DialogueIssueCreateEvent } from "../../event/issue";
 import type { Comment } from "../../model/comment";
-import type { CommentFrame } from "../../model/comment-frame";
 import "../comment-context/comment-context";
 
 @customElement("dialogue-issue-create-popup")
@@ -19,9 +18,6 @@ export class DialogueIssueCreatePopup extends LitElement {
 
   @property({ type: Array })
   path: Comment[] = [];
-
-  @property({ type: Object })
-  frame?: CommentFrame;
 
   @query("#title")
   private _titleInput!: HTMLInputElement;
@@ -90,7 +86,6 @@ export class DialogueIssueCreatePopup extends LitElement {
         <div class="section-title">Target Comment Context</div>
         <dialogue-comment-context
           .path=${this.path}
-          .frame=${this.frame}
           .readonly=${true}
         ></dialogue-comment-context>
       </div>

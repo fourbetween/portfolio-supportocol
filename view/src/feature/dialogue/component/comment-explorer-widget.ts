@@ -216,7 +216,6 @@ export class DialogueCommentExplorerWidget extends LitElement {
       <dialogue-issue-create-popup
         .open=${this.isIssuePopupOpen}
         .path=${this._issuePath}
-        .frame=${this.discussion?.dialogueSettings.commentFrame}
         @dialogue-issue-create=${this.handleIssueCreate}
         @popup-closed=${this.handleIssueCancel}
       ></dialogue-issue-create-popup>
