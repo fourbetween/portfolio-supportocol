@@ -786,67 +786,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}/status": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                workspaceId: components["parameters"]["workspaceId"];
-                discussionId: components["parameters"]["discussionId"];
-                commentId: components["parameters"]["commentId"];
-                issueId: components["parameters"]["issueId"];
-            };
-            cookie?: never;
-        };
-        get?: never;
-        /** @description update comment issue status */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    workspaceId: components["parameters"]["workspaceId"];
-                    discussionId: components["parameters"]["discussionId"];
-                    commentId: components["parameters"]["commentId"];
-                    issueId: components["parameters"]["issueId"];
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        status: components["schemas"]["CommentIssueStatus"];
-                    };
-                };
-            };
-            responses: {
-                /** @description success response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Comment"];
-                    };
-                };
-                /** @description default error */
-                default: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["Error"];
-                    };
-                };
-            };
-        };
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate": {
         parameters: {
             query?: never;
@@ -916,8 +855,6 @@ export interface components {
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
         /** @enum {string} */
-        CommentIssueStatus: "active" | "proposed";
-        /** @enum {string} */
         IssueStatus: "open" | "closed";
         Issue: {
             id: components["schemas"]["Id"];
@@ -974,7 +911,6 @@ export interface components {
         };
         CommentIssue: {
             issueId: components["schemas"]["Id"];
-            status: components["schemas"]["CommentIssueStatus"];
         };
     };
     responses: never;

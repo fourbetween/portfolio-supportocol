@@ -296,8 +296,6 @@ export interface components {
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
         /** @enum {string} */
-        CommentIssueStatus: "active" | "proposed";
-        /** @enum {string} */
         IssueStatus: "open" | "closed";
         Issue: {
             id: components["schemas"]["Id"];
@@ -352,7 +350,6 @@ export interface components {
         };
         CommentIssue: {
             issueId: components["schemas"]["Id"];
-            status: components["schemas"]["CommentIssueStatus"];
         };
     };
     responses: never;
