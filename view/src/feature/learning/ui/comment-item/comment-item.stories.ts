@@ -49,7 +49,9 @@ const mockComment: Comment = {
   commentType: "idea",
   status: "active" as const,
   content: "This is a test comment",
+  issues: [],
   createdAt: "2026-01-04T00:00:00Z",
+  archivedAt: null,
 };
 
 const mockProposedComment: Comment = {
@@ -107,7 +109,11 @@ export const Proposed: Story = {
 export const Archived: Story = {
   render: (args) => html`
     <learning-comment-item
-      .comment=${{ ...mockComment, archivedAt: "2026-01-05T00:00:00Z" }}
+      .comment=${{
+        ...mockComment,
+        issues: [],
+        archivedAt: "2026-01-05T00:00:00Z",
+      }}
       .availableTypes=${availableTypes}
       @learning-comment-select=${args.onSelectComment}
       @learning-comment-deleted=${args.onCommentDeleted}

@@ -28,6 +28,132 @@ func (c *codeRecorder) Unwrap() http.ResponseWriter {
 
 func recordError(string, error) {}
 
+// handleV1LearningIssuesGetRequest handles GET /v1/learning/issues operation.
+//
+// List issues.
+//
+// GET /v1/learning/issues
+func (s *Server) handleV1LearningIssuesGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: V1LearningIssuesGetOperation,
+			ID:   "",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningIssuesGetOperation, r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "CookieAuth",
+					Err:              err,
+				}
+				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
+					defer recordError("Security:CookieAuth", err)
+				}
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
+				defer recordError("Security", err)
+			}
+			return
+		}
+	}
+
+	var rawBody []byte
+
+	var response []Issue
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1LearningIssuesGetOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             nil,
+			RawBody:          rawBody,
+			Params:           middleware.Parameters{},
+			Raw:              r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = struct{}
+			Response = []Issue
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			nil,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1LearningIssuesGet(ctx)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1LearningIssuesGet(ctx)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1LearningIssuesGetResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteRequest handles DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive operation.
 //
 // Unarchive discussion.
@@ -115,13 +241,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArc
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -260,13 +386,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArc
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -405,6 +531,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -412,10 +542,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -554,6 +680,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -561,10 +691,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -703,6 +829,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -710,10 +840,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -757,6 +883,159 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 	}
 
 	if err := encodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteRequest handles DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId} operation.
+//
+// Remove issue from comment.
+//
+// DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}
+func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteRequest(args [4]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteOperation,
+			ID:   "",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteOperation, r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "CookieAuth",
+					Err:              err,
+				}
+				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
+					defer recordError("Security:CookieAuth", err)
+				}
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
+				defer recordError("Security", err)
+			}
+			return
+		}
+	}
+	params, err := decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var rawBody []byte
+
+	var response *Comment
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             nil,
+			RawBody:          rawBody,
+			Params: middleware.Parameters{
+				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
+				{
+					Name: "commentId",
+					In:   "path",
+				}: params.CommentId,
+				{
+					Name: "issueId",
+					In:   "path",
+				}: params.IssueId,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteParams
+			Response = *Comment
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDelete(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDelete(ctx, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)
@@ -867,6 +1146,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -874,10 +1157,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -1031,6 +1310,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
 					Name: "discussionId",
 					In:   "path",
 				}: params.DiscussionId,
@@ -1038,10 +1321,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "commentId",
 					In:   "path",
 				}: params.CommentId,
-				{
-					Name: "workspaceId",
-					In:   "path",
-				}: params.WorkspaceId,
 			},
 			Raw: r,
 		}
@@ -1195,13 +1474,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -1340,10 +1619,6 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "since",
 					In:   "query",
 				}: params.Since,
@@ -1351,6 +1626,10 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -1504,13 +1783,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -1649,13 +1928,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDel
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -1794,13 +2073,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGet
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -1954,13 +2233,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPut
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
@@ -2114,13 +2393,13 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdSta
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
 				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
 			},
 			Raw: r,
 		}

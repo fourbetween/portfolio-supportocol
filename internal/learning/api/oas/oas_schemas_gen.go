@@ -22,8 +22,9 @@ type Comment struct {
 	CommentType     CommentType    `json:"commentType"`
 	Content         CommentContent `json:"content"`
 	Status          CommentStatus  `json:"status"`
+	Issues          []CommentIssue `json:"issues"`
 	CreatedAt       time.Time      `json:"createdAt"`
-	ArchivedAt      OptDateTime    `json:"archivedAt"`
+	ArchivedAt      NilDateTime    `json:"archivedAt"`
 }
 
 // GetID returns the value of ID.
@@ -56,13 +57,18 @@ func (s *Comment) GetStatus() CommentStatus {
 	return s.Status
 }
 
+// GetIssues returns the value of Issues.
+func (s *Comment) GetIssues() []CommentIssue {
+	return s.Issues
+}
+
 // GetCreatedAt returns the value of CreatedAt.
 func (s *Comment) GetCreatedAt() time.Time {
 	return s.CreatedAt
 }
 
 // GetArchivedAt returns the value of ArchivedAt.
-func (s *Comment) GetArchivedAt() OptDateTime {
+func (s *Comment) GetArchivedAt() NilDateTime {
 	return s.ArchivedAt
 }
 
@@ -96,13 +102,18 @@ func (s *Comment) SetStatus(val CommentStatus) {
 	s.Status = val
 }
 
+// SetIssues sets the value of Issues.
+func (s *Comment) SetIssues(val []CommentIssue) {
+	s.Issues = val
+}
+
 // SetCreatedAt sets the value of CreatedAt.
 func (s *Comment) SetCreatedAt(val time.Time) {
 	s.CreatedAt = val
 }
 
 // SetArchivedAt sets the value of ArchivedAt.
-func (s *Comment) SetArchivedAt(val OptDateTime) {
+func (s *Comment) SetArchivedAt(val NilDateTime) {
 	s.ArchivedAt = val
 }
 
@@ -132,6 +143,21 @@ func (s *CommentFrame) SetTypes(val []CommentType) {
 // SetPaths sets the value of Paths.
 func (s *CommentFrame) SetPaths(val []CommentPath) {
 	s.Paths = val
+}
+
+// Ref: #/components/schemas/CommentIssue
+type CommentIssue struct {
+	IssueId ID `json:"issueId"`
+}
+
+// GetIssueId returns the value of IssueId.
+func (s *CommentIssue) GetIssueId() ID {
+	return s.IssueId
+}
+
+// SetIssueId sets the value of IssueId.
+func (s *CommentIssue) SetIssueId(val ID) {
+	s.IssueId = val
 }
 
 // Ref: #/components/schemas/CommentPath
@@ -251,7 +277,7 @@ type Discussion struct {
 	Theme            DiscussionTheme      `json:"theme"`
 	Conclusion       DiscussionConclusion `json:"conclusion"`
 	Status           DiscussionStatus     `json:"status"`
-	ArchivedAt       OptDateTime          `json:"archivedAt"`
+	ArchivedAt       NilDateTime          `json:"archivedAt"`
 	DialogueSettings OptDialogueSettings  `json:"dialogueSettings"`
 }
 
@@ -281,7 +307,7 @@ func (s *Discussion) GetStatus() DiscussionStatus {
 }
 
 // GetArchivedAt returns the value of ArchivedAt.
-func (s *Discussion) GetArchivedAt() OptDateTime {
+func (s *Discussion) GetArchivedAt() NilDateTime {
 	return s.ArchivedAt
 }
 
@@ -316,7 +342,7 @@ func (s *Discussion) SetStatus(val DiscussionStatus) {
 }
 
 // SetArchivedAt sets the value of ArchivedAt.
-func (s *Discussion) SetArchivedAt(val OptDateTime) {
+func (s *Discussion) SetArchivedAt(val NilDateTime) {
 	s.ArchivedAt = val
 }
 
@@ -375,7 +401,7 @@ type DiscussionSummary struct {
 	ProjectId       ID               `json:"projectId"`
 	Theme           DiscussionTheme  `json:"theme"`
 	Status          DiscussionStatus `json:"status"`
-	ArchivedAt      OptDateTime      `json:"archivedAt"`
+	ArchivedAt      NilDateTime      `json:"archivedAt"`
 	LastCommentedAt time.Time        `json:"lastCommentedAt"`
 }
 
@@ -400,7 +426,7 @@ func (s *DiscussionSummary) GetStatus() DiscussionStatus {
 }
 
 // GetArchivedAt returns the value of ArchivedAt.
-func (s *DiscussionSummary) GetArchivedAt() OptDateTime {
+func (s *DiscussionSummary) GetArchivedAt() NilDateTime {
 	return s.ArchivedAt
 }
 
@@ -430,7 +456,7 @@ func (s *DiscussionSummary) SetStatus(val DiscussionStatus) {
 }
 
 // SetArchivedAt sets the value of ArchivedAt.
-func (s *DiscussionSummary) SetArchivedAt(val OptDateTime) {
+func (s *DiscussionSummary) SetArchivedAt(val NilDateTime) {
 	s.ArchivedAt = val
 }
 
@@ -494,6 +520,141 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 }
 
 type ID uuid.UUID
+
+// Ref: #/components/schemas/Issue
+type Issue struct {
+	ID          ID          `json:"id"`
+	IssueType   string      `json:"issueType"`
+	Description string      `json:"description"`
+	Status      IssueStatus `json:"status"`
+}
+
+// GetID returns the value of ID.
+func (s *Issue) GetID() ID {
+	return s.ID
+}
+
+// GetIssueType returns the value of IssueType.
+func (s *Issue) GetIssueType() string {
+	return s.IssueType
+}
+
+// GetDescription returns the value of Description.
+func (s *Issue) GetDescription() string {
+	return s.Description
+}
+
+// GetStatus returns the value of Status.
+func (s *Issue) GetStatus() IssueStatus {
+	return s.Status
+}
+
+// SetID sets the value of ID.
+func (s *Issue) SetID(val ID) {
+	s.ID = val
+}
+
+// SetIssueType sets the value of IssueType.
+func (s *Issue) SetIssueType(val string) {
+	s.IssueType = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Issue) SetDescription(val string) {
+	s.Description = val
+}
+
+// SetStatus sets the value of Status.
+func (s *Issue) SetStatus(val IssueStatus) {
+	s.Status = val
+}
+
+// Ref: #/components/schemas/IssueStatus
+type IssueStatus string
+
+const (
+	IssueStatusOpen   IssueStatus = "open"
+	IssueStatusClosed IssueStatus = "closed"
+)
+
+// AllValues returns all IssueStatus values.
+func (IssueStatus) AllValues() []IssueStatus {
+	return []IssueStatus{
+		IssueStatusOpen,
+		IssueStatusClosed,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s IssueStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case IssueStatusOpen:
+		return []byte(s), nil
+	case IssueStatusClosed:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *IssueStatus) UnmarshalText(data []byte) error {
+	switch IssueStatus(data) {
+	case IssueStatusOpen:
+		*s = IssueStatusOpen
+		return nil
+	case IssueStatusClosed:
+		*s = IssueStatusClosed
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// NewNilDateTime returns new NilDateTime with value set to v.
+func NewNilDateTime(v time.Time) NilDateTime {
+	return NilDateTime{
+		Value: v,
+	}
+}
+
+// NilDateTime is nullable time.Time.
+type NilDateTime struct {
+	Value time.Time
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilDateTime) SetTo(v time.Time) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilDateTime) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilDateTime) SetToNull() {
+	o.Null = true
+	var v time.Time
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilDateTime) Get() (v time.Time, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilDateTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewNilID returns new NilID with value set to v.
 func NewNilID(v ID) NilID {

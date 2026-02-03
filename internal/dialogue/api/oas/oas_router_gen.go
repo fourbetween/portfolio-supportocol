@@ -40,7 +40,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s.notFound(w, r)
 		return
 	}
-	args := [1]string{}
+	args := [2]string{}
 
 	// Static code generated router with unwrapped path search.
 	switch {
@@ -49,48 +49,30 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/v1/dialogue/discussions"
+		case '/': // Prefix: "/v1/dialogue/"
 
-			if l := len("/v1/dialogue/discussions"); len(elem) >= l && elem[0:l] == "/v1/dialogue/discussions" {
+			if l := len("/v1/dialogue/"); len(elem) >= l && elem[0:l] == "/v1/dialogue/" {
 				elem = elem[l:]
 			} else {
 				break
 			}
 
 			if len(elem) == 0 {
-				switch r.Method {
-				case "GET":
-					s.handleV1DialogueDiscussionsGetRequest([0]string{}, elemIsEscaped, w, r)
-				default:
-					s.notAllowed(w, r, "GET")
-				}
-
-				return
+				break
 			}
 			switch elem[0] {
-			case '/': // Prefix: "/"
+			case 'd': // Prefix: "discussions"
 
-				if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+				if l := len("discussions"); len(elem) >= l && elem[0:l] == "discussions" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				// Param: "discussionId"
-				// Match until "/"
-				idx := strings.IndexByte(elem, '/')
-				if idx < 0 {
-					idx = len(elem)
-				}
-				args[0] = elem[:idx]
-				elem = elem[idx:]
-
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleV1DialogueDiscussionsDiscussionIdGetRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
+						s.handleV1DialogueDiscussionsGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -98,32 +80,131 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/comments"
+				case '/': // Prefix: "/"
 
-					if l := len("/comments"); len(elem) >= l && elem[0:l] == "/comments" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
+					// Param: "discussionId"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
 					if len(elem) == 0 {
-						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleV1DialogueDiscussionsDiscussionIdCommentsGetRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
-						case "POST":
-							s.handleV1DialogueDiscussionsDiscussionIdCommentsPostRequest([1]string{
+							s.handleV1DialogueDiscussionsDiscussionIdGetRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "GET,POST")
+							s.notAllowed(w, r, "GET")
 						}
 
 						return
 					}
+					switch elem[0] {
+					case '/': // Prefix: "/comments"
 
+						if l := len("/comments"); len(elem) >= l && elem[0:l] == "/comments" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch r.Method {
+							case "GET":
+								s.handleV1DialogueDiscussionsDiscussionIdCommentsGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleV1DialogueDiscussionsDiscussionIdCommentsPostRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,POST")
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "commentId"
+							// Match until "/"
+							idx := strings.IndexByte(elem, '/')
+							if idx < 0 {
+								idx = len(elem)
+							}
+							args[1] = elem[:idx]
+							elem = elem[idx:]
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/issues"
+
+								if l := len("/issues"); len(elem) >= l && elem[0:l] == "/issues" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest([2]string{
+											args[0],
+											args[1],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			case 'i': // Prefix: "issues"
+
+				if l := len("issues"); len(elem) >= l && elem[0:l] == "issues" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleV1DialogueIssuesGetRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
 				}
 
 			}
@@ -141,7 +222,7 @@ type Route struct {
 	operationGroup string
 	pathPattern    string
 	count          int
-	args           [1]string
+	args           [2]string
 }
 
 // Name returns ogen operation name.
@@ -214,89 +295,67 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/v1/dialogue/discussions"
+		case '/': // Prefix: "/v1/dialogue/"
 
-			if l := len("/v1/dialogue/discussions"); len(elem) >= l && elem[0:l] == "/v1/dialogue/discussions" {
+			if l := len("/v1/dialogue/"); len(elem) >= l && elem[0:l] == "/v1/dialogue/" {
 				elem = elem[l:]
 			} else {
 				break
 			}
 
 			if len(elem) == 0 {
-				switch method {
-				case "GET":
-					r.name = V1DialogueDiscussionsGetOperation
-					r.summary = ""
-					r.operationID = ""
-					r.operationGroup = ""
-					r.pathPattern = "/v1/dialogue/discussions"
-					r.args = args
-					r.count = 0
-					return r, true
-				default:
-					return
-				}
+				break
 			}
 			switch elem[0] {
-			case '/': // Prefix: "/"
+			case 'd': // Prefix: "discussions"
 
-				if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+				if l := len("discussions"); len(elem) >= l && elem[0:l] == "discussions" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				// Param: "discussionId"
-				// Match until "/"
-				idx := strings.IndexByte(elem, '/')
-				if idx < 0 {
-					idx = len(elem)
-				}
-				args[0] = elem[:idx]
-				elem = elem[idx:]
-
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						r.name = V1DialogueDiscussionsDiscussionIdGetOperation
+						r.name = V1DialogueDiscussionsGetOperation
 						r.summary = ""
 						r.operationID = ""
 						r.operationGroup = ""
-						r.pathPattern = "/v1/dialogue/discussions/{discussionId}"
+						r.pathPattern = "/v1/dialogue/discussions"
 						r.args = args
-						r.count = 1
+						r.count = 0
 						return r, true
 					default:
 						return
 					}
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/comments"
+				case '/': // Prefix: "/"
 
-					if l := len("/comments"); len(elem) >= l && elem[0:l] == "/comments" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
+					// Param: "discussionId"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
 					if len(elem) == 0 {
-						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = V1DialogueDiscussionsDiscussionIdCommentsGetOperation
+							r.name = V1DialogueDiscussionsDiscussionIdGetOperation
 							r.summary = ""
 							r.operationID = ""
 							r.operationGroup = ""
-							r.pathPattern = "/v1/dialogue/discussions/{discussionId}/comments"
-							r.args = args
-							r.count = 1
-							return r, true
-						case "POST":
-							r.name = V1DialogueDiscussionsDiscussionIdCommentsPostOperation
-							r.summary = ""
-							r.operationID = ""
-							r.operationGroup = ""
-							r.pathPattern = "/v1/dialogue/discussions/{discussionId}/comments"
+							r.pathPattern = "/v1/dialogue/discussions/{discussionId}"
 							r.args = args
 							r.count = 1
 							return r, true
@@ -304,7 +363,117 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return
 						}
 					}
+					switch elem[0] {
+					case '/': // Prefix: "/comments"
 
+						if l := len("/comments"); len(elem) >= l && elem[0:l] == "/comments" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "GET":
+								r.name = V1DialogueDiscussionsDiscussionIdCommentsGetOperation
+								r.summary = ""
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/v1/dialogue/discussions/{discussionId}/comments"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "POST":
+								r.name = V1DialogueDiscussionsDiscussionIdCommentsPostOperation
+								r.summary = ""
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/v1/dialogue/discussions/{discussionId}/comments"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "commentId"
+							// Match until "/"
+							idx := strings.IndexByte(elem, '/')
+							if idx < 0 {
+								idx = len(elem)
+							}
+							args[1] = elem[:idx]
+							elem = elem[idx:]
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case '/': // Prefix: "/issues"
+
+								if l := len("/issues"); len(elem) >= l && elem[0:l] == "/issues" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "POST":
+										r.name = V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation
+										r.summary = ""
+										r.operationID = ""
+										r.operationGroup = ""
+										r.pathPattern = "/v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues"
+										r.args = args
+										r.count = 2
+										return r, true
+									default:
+										return
+									}
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			case 'i': // Prefix: "issues"
+
+				if l := len("issues"); len(elem) >= l && elem[0:l] == "issues" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "GET":
+						r.name = V1DialogueIssuesGetOperation
+						r.summary = ""
+						r.operationID = ""
+						r.operationGroup = ""
+						r.pathPattern = "/v1/dialogue/issues"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 
 			}

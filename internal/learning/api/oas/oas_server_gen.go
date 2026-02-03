@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1LearningIssuesGet implements GET /v1/learning/issues operation.
+	//
+	// List issues.
+	//
+	// GET /v1/learning/issues
+	V1LearningIssuesGet(ctx context.Context) ([]Issue, error)
 	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive operation.
 	//
 	// Unarchive discussion.
@@ -38,6 +44,12 @@ type Handler interface {
 	//
 	// DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams) error
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId} operation.
+	//
+	// Remove issue from comment.
+	//
+	// DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDelete(ctx context.Context, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteParams) (*Comment, error)
 	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId} operation.
 	//
 	// Update comment.

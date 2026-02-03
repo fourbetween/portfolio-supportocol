@@ -4,6 +4,7 @@ import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import "urlpattern-polyfill";
+import { issueRepository } from "../feature/dialogue/repository/issue-repository";
 import "../feature/dialogue/root";
 import "../feature/identity/component/auth-widget";
 import { authService } from "../feature/identity/model/auth-service";
@@ -14,10 +15,12 @@ import "../feature/workspace/root";
 import { showToast } from "../shared/event/toast";
 import "../shared/ui/loading/loading-manager";
 import "../shared/ui/toast/toast-manager";
+import { issuesContext } from "./context/issues";
 import { routerContext } from "./context/router";
 import { userContext } from "./context/user";
 import { workspaceContext } from "./context/workspace";
 import "./layout/layout";
+import type { Issue } from "./model/issue";
 import type { User } from "./model/user";
 import type { WorkspaceWithMember } from "./model/workspace";
 
@@ -57,17 +60,34 @@ export class AppRoot extends LitElement {
   @provide({ context: workspaceContext })
   private workspace?: WorkspaceWithMember;
 
+  @provide({ context: issuesContext })
+  private issues: Issue[] = [];
+
   constructor() {
     super();
 
     this.user;
     this.workspace;
+    this.issues;
     new Task(this, {
       task: async () => {
         return authService.getCurrentUser();
       },
       onComplete: (user) => {
         this.user = user;
+      },
+      onError: (e: unknown) => {
+        showToast(this, String(e), "error");
+      },
+      args: () => [],
+    });
+
+    new Task(this, {
+      task: async () => {
+        return issueRepository.list();
+      },
+      onComplete: (issues) => {
+        this.issues = issues;
       },
       onError: (e: unknown) => {
         showToast(this, String(e), "error");

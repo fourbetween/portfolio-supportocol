@@ -24,6 +24,27 @@ components:
       enum:
         - active
         - proposed
+    IssueStatus:
+      type: string
+      enum:
+        - open
+        - closed
+    Issue:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        issueType:
+          type: string
+        description:
+          type: string
+        status:
+          $ref: "#/components/schemas/IssueStatus"
+      required:
+        - id
+        - issueType
+        - description
+        - status
     DialogueSettings:
       type: object
       properties:
@@ -78,14 +99,17 @@ components:
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
         archivedAt:
-          type: string
-          format: date-time
+          oneOf:
+            - type: string
+              format: date-time
+            - type: "null"
         lastCommentedAt:
           type: string
           format: date-time
       required:
         - id
         - theme
+        - archivedAt
         - lastCommentedAt
     Discussion:
       type: object
@@ -97,14 +121,17 @@ components:
         conclusion:
           $ref: "#/components/schemas/DiscussionConclusion"
         archivedAt:
-          type: string
-          format: date-time
+          oneOf:
+            - type: string
+              format: date-time
+            - type: "null"
         dialogueSettings:
           $ref: "#/components/schemas/DialogueSettings"
       required:
         - id
         - theme
         - conclusion
+        - archivedAt
         - dialogueSettings
     Comment:
       type: object
@@ -123,9 +150,15 @@ components:
           $ref: "#/components/schemas/CommentContent"
         status:
           $ref: "#/components/schemas/CommentStatus"
+        issues:
+          type: array
+          items:
+            $ref: "#/components/schemas/CommentIssue"
         archivedAt:
-          type: string
-          format: date-time
+          oneOf:
+            - type: string
+              format: date-time
+            - type: "null"
         createdAt:
           type: string
           format: date-time
@@ -136,8 +169,35 @@ components:
         - commentType
         - content
         - status
+        - issues
+        - archivedAt
         - createdAt
+    CommentIssue:
+      type: object
+      properties:
+        issueId:
+          $ref: "#/components/schemas/Id"
+      required:
+        - issueId
 paths:
+  /v1/dialogue/issues:
+    get:
+      description: list issues
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Issue"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/dialogue/discussions:
     get:
       description: get discussions
@@ -237,6 +297,44 @@ paths:
                 - content
       responses:
         "201":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues:
+    post:
+      description: add issue to comment
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: discussionId
+          in: path
+        - schema:
+            $ref: "#/components/schemas/Id"
+          required: true
+          name: commentId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                issueId:
+                  $ref: "#/components/schemas/Id"
+              required:
+                - issueId
+      responses:
+        "200":
           description: success response
           content:
             application/json:

@@ -10,7 +10,7 @@ export class CommentRepository {
           path: { discussionId },
           query: { since },
         },
-      }
+      },
     );
     if (error) throw new Error(error.message);
     return data;
@@ -22,7 +22,7 @@ export class CommentRepository {
       parentCommentId: string | null;
       commentType: string;
       content: string;
-    }
+    },
   ): Promise<Comment> {
     const { data, error } = await client.POST(
       "/v1/dialogue/discussions/{discussionId}/comments",
@@ -31,7 +31,25 @@ export class CommentRepository {
           path: { discussionId },
         },
         body,
-      }
+      },
+    );
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
+  async addIssue(
+    discussionId: string,
+    commentId: string,
+    issueId: string,
+  ): Promise<Comment> {
+    const { data, error } = await client.POST(
+      "/v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues",
+      {
+        params: {
+          path: { discussionId, commentId },
+        },
+        body: { issueId },
+      },
     );
     if (error) throw new Error(error.message);
     return data;

@@ -25,7 +25,9 @@ describe("learning-comment-tree", async () => {
         content: "root comment",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -46,7 +48,9 @@ describe("learning-comment-tree", async () => {
         content: "root comment",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -55,7 +59,9 @@ describe("learning-comment-tree", async () => {
         content: "child idea 1",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "3",
@@ -64,7 +70,9 @@ describe("learning-comment-tree", async () => {
         content: "child question 1",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "4",
@@ -73,7 +81,9 @@ describe("learning-comment-tree", async () => {
         content: "child idea 2",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -107,7 +117,9 @@ describe("learning-comment-tree", async () => {
         content: "root comment",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -135,7 +147,9 @@ describe("learning-comment-tree", async () => {
         content: "root",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -144,7 +158,9 @@ describe("learning-comment-tree", async () => {
         content: "child",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "3",
@@ -153,7 +169,9 @@ describe("learning-comment-tree", async () => {
         content: "grandchild",
         commentType: "answer",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -205,7 +223,9 @@ describe("learning-comment-tree", async () => {
         content: "root comment",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -246,7 +266,9 @@ describe("learning-comment-tree", async () => {
         content: "root",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -255,7 +277,9 @@ describe("learning-comment-tree", async () => {
         content: "child 1",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "3",
@@ -264,7 +288,9 @@ describe("learning-comment-tree", async () => {
         content: "child 2",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -291,7 +317,9 @@ describe("learning-comment-tree", async () => {
         content: "root 1",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -300,7 +328,9 @@ describe("learning-comment-tree", async () => {
         content: "root 2",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -323,7 +353,9 @@ describe("learning-comment-tree", async () => {
         content: "root 1",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -332,7 +364,9 @@ describe("learning-comment-tree", async () => {
         content: "root 2",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -359,7 +393,9 @@ describe("learning-comment-tree", async () => {
       content: "root comment",
       commentType: "idea",
       status: "active" as const,
+      issues: [],
       createdAt: "2026-01-04T00:00:00Z",
+      archivedAt: null,
     };
     let clickedId = "";
     const onSelect = (e: any) => {
@@ -380,7 +416,7 @@ describe("learning-comment-tree", async () => {
     expect(clickedId).toBe("1");
   });
 
-  it("深い階層のコメントが表示されること", async () => {
+  it("深い階層의 コメントが表示されること", async () => {
     const comments = [
       {
         id: "1",
@@ -389,7 +425,9 @@ describe("learning-comment-tree", async () => {
         content: "root",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -398,7 +436,9 @@ describe("learning-comment-tree", async () => {
         content: "level 1",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "3",
@@ -407,7 +447,9 @@ describe("learning-comment-tree", async () => {
         content: "level 2",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -431,7 +473,9 @@ describe("learning-comment-tree", async () => {
         content: "root comment",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -455,7 +499,9 @@ describe("learning-comment-tree", async () => {
         content: "root",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -464,7 +510,9 @@ describe("learning-comment-tree", async () => {
         content: "child 1",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "3",
@@ -473,7 +521,9 @@ describe("learning-comment-tree", async () => {
         content: "child 2",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -508,7 +558,9 @@ describe("learning-comment-tree", async () => {
         content: "root comment",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -545,7 +597,9 @@ describe("learning-comment-tree", async () => {
         content: "root comment",
         commentType: "idea",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -583,6 +637,7 @@ describe("learning-comment-tree", async () => {
         commentType: "idea",
         status: "active" as const,
         createdAt: "2026-01-04T00:00:00Z",
+        issues: [],
         archivedAt: "2026-01-05T00:00:00Z",
       },
       {
@@ -592,7 +647,9 @@ describe("learning-comment-tree", async () => {
         content: "child",
         commentType: "question",
         status: "active" as const,
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     render(
@@ -627,7 +684,9 @@ describe("learning-comment-tree", async () => {
         content: "active comment",
         commentType: "idea",
         status: "active",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -637,6 +696,7 @@ describe("learning-comment-tree", async () => {
         commentType: "idea",
         status: "active",
         createdAt: "2026-01-04T00:00:00Z",
+        issues: [],
         archivedAt: "2026-01-05T00:00:00Z",
       },
     ];

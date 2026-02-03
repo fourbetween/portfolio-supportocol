@@ -39,7 +39,7 @@ func main() {
 		con,
 		env.AppName(),
 		"../../../internal/learning/infra/db/schema",
-		makeTmpl([]string{"discussions", "comments", "dialogue_settings"}),
+		makeTmpl([]string{"discussions", "comments", "issues", "comment_issues", "dialogue_settings"}),
 	); err != nil {
 		panic(err)
 	}
@@ -48,7 +48,7 @@ func main() {
 		con,
 		env.AppName(),
 		"../../../internal/dialogue/infra/db/schema",
-		makeTmpl([]string{"discussions", "comments", "dialogue_settings"}),
+		makeTmpl([]string{"discussions", "comments", "issues", "comment_issues", "dialogue_settings"}),
 	); err != nil {
 		panic(err)
 	}

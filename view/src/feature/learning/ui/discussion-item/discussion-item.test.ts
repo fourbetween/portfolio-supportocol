@@ -24,7 +24,7 @@ describe("learning-discussion-item", () => {
     projectId: "p1",
     theme: "Test Theme",
     status: "public" as const,
-    archivedAt: undefined,
+    archivedAt: null,
     lastCommentedAt: "2023-01-01T00:00:00Z",
   };
 

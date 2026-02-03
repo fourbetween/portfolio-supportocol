@@ -13,6 +13,15 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost implements POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues operation.
+//
+// Add issue to comment.
+//
+// POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues
+func (UnimplementedHandler) V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx context.Context, req *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq, params V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams) (r *Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1DialogueDiscussionsDiscussionIdCommentsGet implements GET /v1/dialogue/discussions/{discussionId}/comments operation.
 //
 // Get comments for a discussion.
@@ -46,6 +55,15 @@ func (UnimplementedHandler) V1DialogueDiscussionsDiscussionIdGet(ctx context.Con
 //
 // GET /v1/dialogue/discussions
 func (UnimplementedHandler) V1DialogueDiscussionsGet(ctx context.Context) (r []DiscussionSummary, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1DialogueIssuesGet implements GET /v1/dialogue/issues operation.
+//
+// List issues.
+//
+// GET /v1/dialogue/issues
+func (UnimplementedHandler) V1DialogueIssuesGet(ctx context.Context) (r []Issue, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

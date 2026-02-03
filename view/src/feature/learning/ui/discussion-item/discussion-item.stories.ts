@@ -23,6 +23,7 @@ export const Default: Story = {
       projectId: "p1",
       theme: "Sample Discussion Theme",
       status: "public",
+      archivedAt: null,
       lastCommentedAt: "2023-01-01T00:00:00Z",
     },
   },

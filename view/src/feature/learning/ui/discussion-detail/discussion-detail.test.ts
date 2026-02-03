@@ -23,7 +23,7 @@ describe("learning-discussion-detail", async () => {
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
-      archivedAt: undefined,
+      archivedAt: null,
       dialogueSettings: undefined,
     };
     render(
@@ -45,7 +45,7 @@ describe("learning-discussion-detail", async () => {
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
-      archivedAt: undefined,
+      archivedAt: null,
       dialogueSettings: undefined,
     };
     render(
@@ -68,7 +68,7 @@ describe("learning-discussion-detail", async () => {
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
-      archivedAt: undefined,
+      archivedAt: null,
       dialogueSettings: undefined,
     };
     render(
@@ -92,7 +92,7 @@ describe("learning-discussion-detail", async () => {
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
-      archivedAt: undefined,
+      archivedAt: null,
       dialogueSettings: undefined,
     };
     render(
@@ -118,7 +118,7 @@ describe("learning-discussion-detail", async () => {
       theme: "元のテーマ",
       conclusion: "元の結論",
       status: "public" as const,
-      archivedAt: undefined,
+      archivedAt: null,
       dialogueSettings: undefined,
     };
     render(
@@ -149,7 +149,7 @@ describe("learning-discussion-detail", async () => {
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
-      archivedAt: undefined,
+      archivedAt: null,
       dialogueSettings: undefined,
     };
     render(
@@ -175,7 +175,7 @@ describe("learning-discussion-detail", async () => {
       theme: "テストテーマ",
       conclusion: "テスト結論",
       status: "public" as const,
-      archivedAt: undefined,
+      archivedAt: null,
       dialogueSettings: undefined,
     };
     render(

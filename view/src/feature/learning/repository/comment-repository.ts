@@ -221,6 +221,33 @@ export class CommentRepository {
 
     return data;
   }
+
+  async removeIssue(
+    workspaceId: string,
+    discussionId: string,
+    commentId: string,
+    issueId: string,
+  ): Promise<Comment> {
+    const { data, error } = await client.DELETE(
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}",
+      {
+        params: {
+          path: { workspaceId, discussionId, commentId, issueId },
+        },
+      },
+    );
+    if (error) throw new Error(error.message);
+
+    const cached = this._cache.get(discussionId);
+    if (cached) {
+      this._cache.set(
+        discussionId,
+        cached.map((c) => (c.id === data.id ? data : c)),
+      );
+    }
+
+    return data;
+  }
 }
 
 export const commentRepository = new CommentRepository();

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//go:generate go tool mockgen -package domain -destination ./repository_mock.go . DiscussionRepository,CommentRepository
+//go:generate go tool mockgen -package domain -destination ./repository_mock.go . DiscussionRepository,CommentRepository,IssueRepository
 
 type (
 	DiscussionRepository interface {
@@ -21,11 +21,17 @@ type (
 		Load(ctx context.Context, id string) (*Comment, error)
 		Search(ctx context.Context, params SearchCommentsParams) ([]*Comment, error)
 		Create(ctx context.Context, comment *Comment) error
+		Update(ctx context.Context, comment *Comment) error
 		GetPathToRoot(ctx context.Context, id string) ([]*Comment, error)
 	}
 
 	SearchCommentsParams struct {
 		DiscussionID string
 		Since        *time.Time
+	}
+
+	IssueRepository interface {
+		Load(ctx context.Context, id string) (*Issue, error)
+		List(ctx context.Context) ([]*Issue, error)
 	}
 )

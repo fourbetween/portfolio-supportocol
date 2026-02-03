@@ -53,6 +53,8 @@ const mockPath = [
     content: "論理的な議論を支援するためのプラットフォームについて",
     commentType: "idea",
     status: "active" as const,
+    issues: [],
+    archivedAt: null,
     createdAt: "2026-01-04T00:00:00Z",
   },
   {
@@ -62,6 +64,8 @@ const mockPath = [
     content: "具体的にどのような機能がありますか？",
     commentType: "question",
     status: "active" as const,
+    issues: [],
+    archivedAt: null,
     createdAt: "2026-01-04T00:00:00Z",
   },
   {
@@ -71,6 +75,8 @@ const mockPath = [
     content: "コメントフレームと木構造を用います。",
     commentType: "answer",
     status: "active" as const,
+    issues: [],
+    archivedAt: null,
     createdAt: "2026-01-04T00:00:00Z",
   },
 ];
@@ -111,6 +117,7 @@ export const Archived: Story = {
     path: [
       {
         ...mockPath[0],
+        issues: [],
         archivedAt: "2026-01-05T00:00:00Z",
       },
       ...mockPath.slice(1),

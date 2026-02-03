@@ -16,6 +16,7 @@ type Comment struct {
 	archivedAt      *time.Time
 	createdBy       *string
 	createdAt       time.Time
+	issues          []CommentIssue
 }
 
 func (c *Comment) ID() string {
@@ -50,6 +51,10 @@ func (c *Comment) CreatedAt() time.Time {
 	return c.createdAt
 }
 
+func (c *Comment) Issues() []CommentIssue {
+	return c.issues
+}
+
 func (c *Comment) ArchivedAt() *time.Time {
 	return c.archivedAt
 }
@@ -78,6 +83,29 @@ func (c *Comment) UpdateStatus(status CommentStatus) error {
 	}
 	c.status = status
 	return nil
+}
+
+func (c *Comment) AddIssue(issueID string, createdBy *string) bool {
+	for _, issue := range c.issues {
+		if issue.IssueID == issueID {
+			return false
+		}
+	}
+	c.issues = append(c.issues, CommentIssue{
+		IssueID:   issueID,
+		CreatedBy: createdBy,
+	})
+	return true
+}
+
+func (c *Comment) RemoveIssue(issueID string) bool {
+	for i, issue := range c.issues {
+		if issue.IssueID == issueID {
+			c.issues = append(c.issues[:i], c.issues[i+1:]...)
+			return true
+		}
+	}
+	return false
 }
 
 func (c *Comment) CheckBelongsTo(discussionID string) error {

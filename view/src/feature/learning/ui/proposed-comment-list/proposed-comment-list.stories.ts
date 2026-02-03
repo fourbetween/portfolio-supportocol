@@ -23,7 +23,9 @@ const comments: Comment[] = [
       "これは提案されたコメントの例です。AIによって生成された可能性があります。",
     commentType: "idea",
     status: "proposed",
+    issues: [],
     createdAt: "2026-01-04T00:00:00Z",
+    archivedAt: null,
   },
   {
     id: "2",
@@ -32,7 +34,9 @@ const comments: Comment[] = [
     content: "別の視点からの提案です。議論を深めるための質問が含まれています。",
     commentType: "question",
     status: "proposed",
+    issues: [],
     createdAt: "2026-01-04T00:00:00Z",
+    archivedAt: null,
   },
 ];
 

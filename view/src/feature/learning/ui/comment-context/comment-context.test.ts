@@ -24,7 +24,9 @@ describe("learning-comment-context", async () => {
         commentType: "idea",
         status: "active" as const,
         content: "First comment",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -33,7 +35,9 @@ describe("learning-comment-context", async () => {
         commentType: "question",
         status: "active" as const,
         content: "Second comment",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
 
@@ -59,7 +63,9 @@ describe("learning-comment-context", async () => {
         commentType: "idea",
         status: "active" as const,
         content: "First comment",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
       {
         id: "2",
@@ -68,7 +74,9 @@ describe("learning-comment-context", async () => {
         commentType: "question",
         status: "active" as const,
         content: "Second comment",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
 
@@ -100,7 +108,9 @@ describe("learning-comment-context", async () => {
         commentType: "idea",
         status: "active" as const,
         content: "First comment",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
 
@@ -129,7 +139,9 @@ describe("learning-comment-context", async () => {
         commentType: "idea",
         status: "active" as const,
         content: "First comment",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
 
@@ -161,7 +173,9 @@ describe("learning-comment-context", async () => {
         commentType: "idea",
         status: "active" as const,
         content: "First comment",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
     const childCounts = new Map([["1", 5]]);
@@ -188,6 +202,7 @@ describe("learning-comment-context", async () => {
         commentType: "idea",
         status: "active" as const,
         content: "Archived parent",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
         archivedAt: "2026-01-05T00:00:00Z",
       },
@@ -198,7 +213,9 @@ describe("learning-comment-context", async () => {
         commentType: "question",
         status: "active" as const,
         content: "Child comment",
+        issues: [],
         createdAt: "2026-01-04T00:00:00Z",
+        archivedAt: null,
       },
     ];
 

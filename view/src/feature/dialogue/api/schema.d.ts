@@ -4,6 +4,51 @@
  */
 
 export interface paths {
+    "/v1/dialogue/issues": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description list issues */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Issue"][];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/dialogue/discussions": {
         parameters: {
             query?: never;
@@ -184,6 +229,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description add issue to comment */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    discussionId: components["schemas"]["Id"];
+                    commentId: components["schemas"]["Id"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        issueId: components["schemas"]["Id"];
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -196,6 +295,14 @@ export interface components {
         Id: string;
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
+        /** @enum {string} */
+        IssueStatus: "open" | "closed";
+        Issue: {
+            id: components["schemas"]["Id"];
+            issueType: string;
+            description: string;
+            status: components["schemas"]["IssueStatus"];
+        };
         DialogueSettings: {
             discussionId: components["schemas"]["Id"];
             commentFrame: components["schemas"]["CommentFrame"];
@@ -215,8 +322,7 @@ export interface components {
         DiscussionSummary: {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
             /** Format: date-time */
             lastCommentedAt: string;
         };
@@ -224,8 +330,7 @@ export interface components {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             conclusion: components["schemas"]["DiscussionConclusion"];
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
             dialogueSettings: components["schemas"]["DialogueSettings"];
         };
         Comment: {
@@ -235,10 +340,13 @@ export interface components {
             commentType: components["schemas"]["CommentType"];
             content: components["schemas"]["CommentContent"];
             status: components["schemas"]["CommentStatus"];
-            /** Format: date-time */
-            archivedAt?: string;
+            issues: components["schemas"]["CommentIssue"][];
+            archivedAt: string | null;
             /** Format: date-time */
             createdAt: string;
+        };
+        CommentIssue: {
+            issueId: components["schemas"]["Id"];
         };
     };
     responses: never;

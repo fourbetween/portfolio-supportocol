@@ -28,6 +28,19 @@ func NewHandler(con *learning.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
+func (h *appHandler) V1LearningIssuesGet(ctx context.Context) ([]oas.Issue, error) {
+	items, err := h.con.ListIssues.Execute(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]oas.Issue, len(items))
+	for i, item := range items {
+		res[i] = h.toOasIssue(item)
+	}
+	return res, nil
+}
+
 func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params oas.V1LearningWorkspacesWorkspaceIdDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
 	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
 		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
@@ -294,6 +307,25 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	return &res, nil
 }
 
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDelete(
+	ctx context.Context,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteParams,
+) (*oas.Comment, error) {
+	item, err := h.con.RemoveCommentIssue.Execute(ctx, usecase.RemoveCommentIssueInput{
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		CommentID:    uuid.UUID(params.CommentId).String(),
+		IssueID:      uuid.UUID(params.IssueId).String(),
+		UserID:       httpctx.GetUserID(ctx),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := h.toOasComment(item)
+	return &res, nil
+}
+
 func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePost(
 	ctx context.Context,
 	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams,
@@ -386,6 +418,8 @@ func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.
 	}
 	if item.ArchivedAt != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt)
+	} else {
+		res.ArchivedAt.Null = true
 	}
 	return res
 }
@@ -400,6 +434,8 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	} else {
+		res.ArchivedAt.Null = true
 	}
 	if ds := item.DialogueSettings(); ds != nil {
 		paths := make([]oas.CommentPath, len(ds.CommentFrame.Paths))
@@ -431,6 +467,13 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		parentCommentID.Null = true
 	}
 
+	issues := make([]oas.CommentIssue, len(item.Issues()))
+	for i, issue := range item.Issues() {
+		issues[i] = oas.CommentIssue{
+			IssueId: oas.ID(uuid.MustParse(issue.IssueID)),
+		}
+	}
+
 	res := oas.Comment{
 		ID:              oas.ID(uuid.MustParse(item.ID())),
 		DiscussionId:    oas.ID(uuid.MustParse(item.DiscussionID())),
@@ -438,10 +481,22 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		CommentType:     oas.CommentType(item.CommentType()),
 		Content:         oas.CommentContent(item.Content()),
 		Status:          oas.CommentStatus(item.Status()),
+		Issues:          issues,
 		CreatedAt:       item.CreatedAt(),
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	} else {
+		res.ArchivedAt.Null = true
 	}
 	return res
+}
+
+func (h *appHandler) toOasIssue(item *domain.Issue) oas.Issue {
+	return oas.Issue{
+		ID:          oas.ID(uuid.MustParse(item.ID())),
+		IssueType:   item.IssueType(),
+		Description: item.Description(),
+		Status:      oas.IssueStatus(item.Status()),
+	}
 }

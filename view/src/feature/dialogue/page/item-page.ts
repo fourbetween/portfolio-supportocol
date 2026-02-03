@@ -13,6 +13,7 @@ import "../component/comment-explorer-widget";
 import {
   type DialogueCommentCreatedEvent,
   type DialogueCommentSelectEvent,
+  type DialogueCommentUpdatedEvent,
 } from "../event/comment";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
@@ -80,6 +81,12 @@ export class DialogueItemPage extends LitElement {
     this._comments = [...this._comments, e.comment];
   }
 
+  private _handleCommentUpdated(e: DialogueCommentUpdatedEvent) {
+    this._comments = this._comments.map((c) =>
+      c.id === e.comment.id ? e.comment : c,
+    );
+  }
+
   private _renderRightSidebar(isTouch: boolean) {
     const list = html`
       <dialogue-comment-list
@@ -132,6 +139,7 @@ export class DialogueItemPage extends LitElement {
             .readonly=${!!this._discussion?.archivedAt}
             @dialogue-comment-select=${this._handleCommentSelect}
             @dialogue-comment-created=${this._handleCommentCreated}
+            @dialogue-comment-updated=${this._handleCommentUpdated}
           ></dialogue-comment-explorer-widget>
         </div>
       </main>

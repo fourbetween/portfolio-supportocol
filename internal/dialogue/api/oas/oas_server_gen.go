@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost implements POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues operation.
+	//
+	// Add issue to comment.
+	//
+	// POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues
+	V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx context.Context, req *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq, params V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams) (*Comment, error)
 	// V1DialogueDiscussionsDiscussionIdCommentsGet implements GET /v1/dialogue/discussions/{discussionId}/comments operation.
 	//
 	// Get comments for a discussion.
@@ -32,6 +38,12 @@ type Handler interface {
 	//
 	// GET /v1/dialogue/discussions
 	V1DialogueDiscussionsGet(ctx context.Context) ([]DiscussionSummary, error)
+	// V1DialogueIssuesGet implements GET /v1/dialogue/issues operation.
+	//
+	// List issues.
+	//
+	// GET /v1/dialogue/issues
+	V1DialogueIssuesGet(ctx context.Context) ([]Issue, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

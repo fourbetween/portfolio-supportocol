@@ -29,6 +29,7 @@ type CreateCommentParams struct {
 	Content         string
 	Status          CommentStatus
 	CreatedBy       *string
+	Issues          []CommentIssue
 }
 
 func (f *CommentFactory) Create(params CreateCommentParams) (*Comment, error) {
@@ -58,6 +59,7 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 		createdBy:       params.CreatedBy,
 		createdAt:       params.CreatedAt,
 		archivedAt:      params.ArchivedAt,
+		issues:          params.Issues,
 	}
 
 	if err := c.Validate(); err != nil {

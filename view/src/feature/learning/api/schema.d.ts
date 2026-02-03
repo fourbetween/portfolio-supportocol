@@ -4,12 +4,57 @@
  */
 
 export interface paths {
+    "/v1/learning/issues": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description list issues */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Issue"][];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/learning/workspaces/{workspaceId}/discussions": {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
             };
             cookie?: never;
         };
@@ -22,7 +67,7 @@ export interface paths {
                 };
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
                 };
                 cookie?: never;
             };
@@ -55,7 +100,7 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
                 };
                 cookie?: never;
             };
@@ -100,7 +145,8 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
@@ -110,8 +156,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -143,8 +189,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -185,8 +231,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -220,7 +266,8 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
@@ -231,8 +278,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -277,7 +324,8 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
@@ -289,8 +337,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -322,8 +370,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -359,7 +407,8 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
@@ -371,8 +420,8 @@ export interface paths {
                 };
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -405,8 +454,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -451,7 +500,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
             };
             cookie?: never;
         };
@@ -462,9 +513,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -504,9 +555,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -540,7 +591,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
             };
             cookie?: never;
         };
@@ -551,9 +604,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -597,7 +650,9 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
             };
             cookie?: never;
         };
@@ -609,9 +664,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -643,9 +698,64 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
+                issueId: components["parameters"]["issueId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description remove issue from comment */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
+                    issueId: components["parameters"]["issueId"];
                 };
                 cookie?: never;
             };
@@ -681,7 +791,8 @@ export interface paths {
             query?: never;
             header?: never;
             path: {
-                workspaceId: components["schemas"]["Id"];
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
@@ -693,8 +804,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    workspaceId: components["schemas"]["Id"];
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -743,6 +854,14 @@ export interface components {
         Id: string;
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
+        /** @enum {string} */
+        IssueStatus: "open" | "closed";
+        Issue: {
+            id: components["schemas"]["Id"];
+            issueType: string;
+            description: string;
+            status: components["schemas"]["IssueStatus"];
+        };
         DialogueSettings: {
             commentFrame: components["schemas"]["CommentFrame"];
         };
@@ -765,8 +884,7 @@ export interface components {
             projectId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             status: components["schemas"]["DiscussionStatus"];
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
             /** Format: date-time */
             lastCommentedAt: string;
         };
@@ -776,8 +894,7 @@ export interface components {
             theme: components["schemas"]["DiscussionTheme"];
             conclusion: components["schemas"]["DiscussionConclusion"];
             status: components["schemas"]["DiscussionStatus"];
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
             dialogueSettings?: components["schemas"]["DialogueSettings"];
         };
         Comment: {
@@ -787,14 +904,22 @@ export interface components {
             commentType: components["schemas"]["CommentType"];
             content: components["schemas"]["CommentContent"];
             status: components["schemas"]["CommentStatus"];
+            issues: components["schemas"]["CommentIssue"][];
             /** Format: date-time */
             createdAt: string;
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
+        };
+        CommentIssue: {
+            issueId: components["schemas"]["Id"];
         };
     };
     responses: never;
-    parameters: never;
+    parameters: {
+        workspaceId: components["schemas"]["Id"];
+        discussionId: components["schemas"]["Id"];
+        commentId: components["schemas"]["Id"];
+        issueId: components["schemas"]["Id"];
+    };
     requestBodies: never;
     headers: never;
     pathItems: never;

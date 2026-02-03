@@ -10,6 +10,19 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
+func encodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostResponse(response *Comment, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(200)
+
+	e := new(jx.Encoder)
+	response.Encode(e)
+	if _, err := e.WriteTo(w); err != nil {
+		return errors.Wrap(err, "write")
+	}
+
+	return nil
+}
+
 func encodeV1DialogueDiscussionsDiscussionIdCommentsGetResponse(response []Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
@@ -54,6 +67,23 @@ func encodeV1DialogueDiscussionsDiscussionIdGetResponse(response *Discussion, w 
 }
 
 func encodeV1DialogueDiscussionsGetResponse(response []DiscussionSummary, w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(200)
+
+	e := new(jx.Encoder)
+	e.ArrStart()
+	for _, elem := range response {
+		elem.Encode(e)
+	}
+	e.ArrEnd()
+	if _, err := e.WriteTo(w); err != nil {
+		return errors.Wrap(err, "write")
+	}
+
+	return nil
+}
+
+func encodeV1DialogueIssuesGetResponse(response []Issue, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 

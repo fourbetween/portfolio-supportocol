@@ -16,6 +16,7 @@ type Comment struct {
 	archivedAt      *time.Time
 	createdBy       *string
 	createdAt       time.Time
+	issues          []CommentIssue
 }
 
 func (c *Comment) ID() string {
@@ -58,6 +59,10 @@ func (c *Comment) CreatedAt() time.Time {
 	return c.createdAt
 }
 
+func (c *Comment) Issues() []CommentIssue {
+	return c.issues
+}
+
 type UpdateCommentParams struct {
 	CommentType string
 	Content     string
@@ -90,6 +95,26 @@ func (c *Comment) Validate() error {
 func (c *Comment) CanAddChild() error {
 	if c.IsArchived() {
 		return apperr.ErrPermissionDenied
+	}
+	return nil
+}
+
+func (c *Comment) AddIssue(issueID string, createdBy *string) bool {
+	for _, issue := range c.issues {
+		if issue.IssueID == issueID {
+			return false
+		}
+	}
+	c.issues = append(c.issues, CommentIssue{
+		IssueID:   issueID,
+		CreatedBy: createdBy,
+	})
+	return true
+}
+
+func (c *Comment) CheckBelongsTo(discussionID string) error {
+	if c.discussionID != discussionID {
+		return apperr.ErrInvalidArgument
 	}
 	return nil
 }
