@@ -157,6 +157,8 @@ func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.
 	}
 	if item.ArchivedAt != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt)
+	} else {
+		res.ArchivedAt.SetToNull()
 	}
 	return res
 }
@@ -192,6 +194,8 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	} else {
+		res.ArchivedAt.SetToNull()
 	}
 	return res
 }
@@ -225,6 +229,8 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	} else {
+		res.ArchivedAt.SetToNull()
 	}
 	return res
 }
