@@ -58,15 +58,6 @@ func (UnimplementedHandler) V1DialogueDiscussionsGet(ctx context.Context) (r []D
 	return r, ht.ErrNotImplemented
 }
 
-// V1DialogueIssuesGet implements GET /v1/dialogue/issues operation.
-//
-// List issues.
-//
-// GET /v1/dialogue/issues
-func (UnimplementedHandler) V1DialogueIssuesGet(ctx context.Context) (r []Issue, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // NewError creates *ErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

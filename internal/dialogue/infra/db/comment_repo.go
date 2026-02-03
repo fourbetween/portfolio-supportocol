@@ -146,8 +146,10 @@ func (r *CommentRepository) toCommentDomain(row model.Comments, issueRows []mode
 	issues := make([]domain.CommentIssue, len(issueRows))
 	for i, ir := range issueRows {
 		issues[i] = domain.CommentIssue{
-			IssueID:   ir.IssueID,
-			CreatedBy: ir.CreatedBy,
+			ID:          ir.ID,
+			Title:       ir.Title,
+			Description: ir.Description,
+			CreatedBy:   ir.CreatedBy,
 		}
 	}
 	return r.fac.Reconstruct(domain.ReconstructCommentParams{
@@ -201,9 +203,11 @@ func (r *CommentRepository) toCommentIssueModels(commentID string, issues []doma
 	issueModels := make([]model.CommentIssues, len(issues))
 	for i, is := range issues {
 		issueModels[i] = model.CommentIssues{
-			CommentID: commentID,
-			IssueID:   is.IssueID,
-			CreatedBy: is.CreatedBy,
+			ID:          is.ID,
+			CommentID:   commentID,
+			Title:       is.Title,
+			Description: is.Description,
+			CreatedBy:   is.CreatedBy,
 		}
 	}
 	return issueModels

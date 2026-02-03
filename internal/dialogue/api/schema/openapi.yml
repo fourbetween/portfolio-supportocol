@@ -24,27 +24,6 @@ components:
       enum:
         - active
         - proposed
-    IssueStatus:
-      type: string
-      enum:
-        - open
-        - closed
-    Issue:
-      type: object
-      properties:
-        id:
-          $ref: "#/components/schemas/Id"
-        issueType:
-          type: string
-        description:
-          type: string
-        status:
-          $ref: "#/components/schemas/IssueStatus"
-      required:
-        - id
-        - issueType
-        - description
-        - status
     DialogueSettings:
       type: object
       properties:
@@ -91,6 +70,12 @@ components:
     CommentContent:
       type: string
       maxLength: 400
+    CommentIssueTitle:
+      type: string
+      maxLength: 255
+    CommentIssueDescription:
+      type: string
+      maxLength: 1000
     DiscussionSummary:
       type: object
       properties:
@@ -175,29 +160,17 @@ components:
     CommentIssue:
       type: object
       properties:
-        issueId:
+        id:
           $ref: "#/components/schemas/Id"
+        title:
+          $ref: "#/components/schemas/CommentIssueTitle"
+        description:
+          $ref: "#/components/schemas/CommentIssueDescription"
       required:
-        - issueId
+        - id
+        - title
+        - description
 paths:
-  /v1/dialogue/issues:
-    get:
-      description: list issues
-      responses:
-        "200":
-          description: success response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Issue"
-        default:
-          description: default error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
   /v1/dialogue/discussions:
     get:
       description: get discussions
@@ -329,10 +302,13 @@ paths:
             schema:
               type: object
               properties:
-                issueId:
-                  $ref: "#/components/schemas/Id"
+                title:
+                  $ref: "#/components/schemas/CommentIssueTitle"
+                description:
+                  $ref: "#/components/schemas/CommentIssueDescription"
               required:
-                - issueId
+                - title
+                - description
       responses:
         "200":
           description: success response

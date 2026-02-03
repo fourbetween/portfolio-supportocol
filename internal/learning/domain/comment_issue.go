@@ -1,6 +1,8 @@
 package domain
 
 type CommentIssue struct {
-	IssueID   string
-	CreatedBy *string
+	ID          string
+	Title       string
+	Description string
+	CreatedBy   *string
 }

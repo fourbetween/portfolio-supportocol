@@ -13,15 +13,6 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// V1LearningIssuesGet implements GET /v1/learning/issues operation.
-//
-// List issues.
-//
-// GET /v1/learning/issues
-func (UnimplementedHandler) V1LearningIssuesGet(ctx context.Context) (r []Issue, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive operation.
 //
 // Unarchive discussion.

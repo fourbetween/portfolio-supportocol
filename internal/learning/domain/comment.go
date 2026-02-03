@@ -85,22 +85,13 @@ func (c *Comment) UpdateStatus(status CommentStatus) error {
 	return nil
 }
 
-func (c *Comment) AddIssue(issueID string, createdBy *string) bool {
-	for _, issue := range c.issues {
-		if issue.IssueID == issueID {
-			return false
-		}
-	}
-	c.issues = append(c.issues, CommentIssue{
-		IssueID:   issueID,
-		CreatedBy: createdBy,
-	})
-	return true
+func (c *Comment) AddIssue(issue CommentIssue) {
+	c.issues = append(c.issues, issue)
 }
 
 func (c *Comment) RemoveIssue(issueID string) bool {
 	for i, issue := range c.issues {
-		if issue.IssueID == issueID {
+		if issue.ID == issueID {
 			c.issues = append(c.issues[:i], c.issues[i+1:]...)
 			return true
 		}
