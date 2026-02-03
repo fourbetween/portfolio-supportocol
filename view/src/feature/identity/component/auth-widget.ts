@@ -32,7 +32,7 @@ export class IdentityAuthWidget extends LitElement {
     this.initializeGoogleAuth();
     document.addEventListener(
       "identity-auth-popup-open",
-      this.handleOpenAuthPopup
+      this.handleOpenAuthPopup,
     );
   }
 
@@ -40,7 +40,7 @@ export class IdentityAuthWidget extends LitElement {
     super.disconnectedCallback();
     document.removeEventListener(
       "identity-auth-popup-open",
-      this.handleOpenAuthPopup
+      this.handleOpenAuthPopup,
     );
   }
 
@@ -132,7 +132,7 @@ export class IdentityAuthWidget extends LitElement {
         .mode=${this.currentMode}
         .errorMessage=${this.errorMessage}
         .loading=${this.isLoading}
-        @close=${() => this.close()}
+        @popup-closed=${() => this.close()}
         @identity-auth-mode-switch=${(e: IdentityAuthModeSwitchEvent) =>
           this.handleSwitchMode(e.mode)}
         @identity-auth-login=${(e: IdentityAuthLoginEvent) =>

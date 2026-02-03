@@ -36,7 +36,7 @@ export class DiscussionStatusPopup extends LitElement {
     const actionLabel = isPrivate ? "Publish" : "Unpublish";
 
     return html`
-      <ui-popup .open=${this.open} @close=${this._handleClose}>
+      <ui-popup .open=${this.open} @popup-closed=${this._handleClose}>
         <div slot="header">${title}</div>
         <div slot="main">${message}</div>
         <div slot="footer">

@@ -5,7 +5,10 @@ import { actionStyle } from "../../../../shared/style/action";
 import { baseStyle } from "../../../../shared/style/base";
 import { hoverButtonStyle } from "../../../../shared/style/hover-button";
 import { iconStyle } from "../../../../shared/style/icon";
-import { DialogueCommentSelectEvent } from "../../event/comment";
+import {
+  DialogueCommentIssueRequestEvent,
+  DialogueCommentSelectEvent,
+} from "../../event/comment";
 import type { Comment } from "../../model/comment";
 import type { CommentFrame } from "../../model/comment-frame";
 import "../comment-card/comment-card";
@@ -59,6 +62,13 @@ export class DialogueCommentItem extends LitElement {
     this.mode = "reply";
   }
 
+  private handleIssueClick(e: Event) {
+    e.stopPropagation();
+    if (this.comment) {
+      this.dispatchEvent(new DialogueCommentIssueRequestEvent(this.comment.id));
+    }
+  }
+
   render() {
     if (!this.comment) return html``;
 
@@ -97,6 +107,17 @@ export class DialogueCommentItem extends LitElement {
                 aria-label="reply"
               >
                 reply
+              </button>
+            `
+          : nothing}
+        ${!this.readonly
+          ? html`
+              <button
+                class="btn-hover issue-button material-symbols-outlined"
+                @click=${this.handleIssueClick}
+                aria-label="report problem"
+              >
+                report_problem
               </button>
             `
           : nothing}

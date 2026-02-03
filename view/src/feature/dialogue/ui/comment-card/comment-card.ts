@@ -1,11 +1,12 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { commentCardStyle } from "../../../../shared/style/comment-card";
 import { iconStyle } from "../../../../shared/style/icon";
 import { DialogueCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
+import "../issue-list-popup/issue-list-popup";
 
 @customElement("dialogue-comment-card")
 export class DialogueCommentCard extends LitElement {
@@ -18,10 +19,18 @@ export class DialogueCommentCard extends LitElement {
   @property({ type: Boolean })
   archived = false;
 
+  @state()
+  private _isIssuePopupOpen = false;
+
   private _handleClick() {
     if (this.comment) {
       this.dispatchEvent(new DialogueCommentSelectEvent(this.comment.id));
     }
+  }
+
+  private _handleIssueClick(e: Event) {
+    e.stopPropagation();
+    this._isIssuePopupOpen = true;
   }
 
   render() {
@@ -52,8 +61,27 @@ export class DialogueCommentCard extends LitElement {
           <div class="created-at">
             ${this._formatDate(this.comment.createdAt)}
           </div>
+          ${this.comment.issues && this.comment.issues.length > 0
+            ? html`
+                <span
+                  class="material-symbols-outlined issue-icon"
+                  @click=${this._handleIssueClick}
+                >
+                  warning
+                </span>
+              `
+            : nothing}
         </div>
       </div>
+      ${this.comment.issues && this.comment.issues.length > 0
+        ? html`
+            <dialogue-issue-list-popup
+              .open=${this._isIssuePopupOpen}
+              .issues=${this.comment.issues ?? []}
+              @popup-closed=${() => (this._isIssuePopupOpen = false)}
+            ></dialogue-issue-list-popup>
+          `
+        : nothing}
     `;
   }
 

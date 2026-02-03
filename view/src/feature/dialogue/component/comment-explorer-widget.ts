@@ -8,13 +8,17 @@ import { widgetStyle } from "../../../shared/style/widget";
 import {
   DialogueCommentCreatedEvent,
   DialogueCommentSelectEvent,
+  DialogueCommentUpdatedEvent,
   type DialogueCommentCreateEvent,
+  type DialogueCommentIssueRequestEvent,
 } from "../event/comment";
+import { type DialogueIssueCreateEvent } from "../event/issue";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import "../ui/comment-context/comment-context";
 import "../ui/comment-tree/comment-tree";
+import "../ui/issue-create-popup/issue-create-popup";
 import "./comment-create-widget";
 
 @customElement("dialogue-comment-explorer-widget")
@@ -33,6 +37,12 @@ export class DialogueCommentExplorerWidget extends LitElement {
 
   @state()
   private childCounts = new Map<string, number>();
+
+  @state()
+  private isIssuePopupOpen = false;
+
+  @state()
+  private issueTargetCommentId?: string;
 
   private commentMap = new Map<string, Comment>();
   private childrenMap = new Map<string, Comment[]>();
@@ -89,9 +99,49 @@ export class DialogueCommentExplorerWidget extends LitElement {
     this.dispatchEvent(new DialogueCommentSelectEvent(undefined));
   }
 
+  private handleIssueRequest(e: DialogueCommentIssueRequestEvent) {
+    this.issueTargetCommentId = e.commentId;
+    this.isIssuePopupOpen = true;
+  }
+
+  private async handleIssueCreate(e: DialogueIssueCreateEvent) {
+    if (!this.discussion || !this.issueTargetCommentId) return;
+    try {
+      const data = await commentRepository.addIssue(
+        this.discussion.id,
+        this.issueTargetCommentId,
+        {
+          title: e.title,
+          description: e.description,
+        },
+      );
+
+      this.isIssuePopupOpen = false;
+      this.issueTargetCommentId = undefined;
+      showToast(this, "Issue added.", "success", 2000);
+
+      if (data) {
+        this.dispatchEvent(new DialogueCommentUpdatedEvent(data));
+      }
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
+  private handleIssueCancel() {
+    this.isIssuePopupOpen = false;
+    this.issueTargetCommentId = undefined;
+  }
+
   private get _path(): Comment[] {
     return this.selectedCommentId
       ? this.getPathToRoot(this.selectedCommentId)
+      : [];
+  }
+
+  private get _issuePath(): Comment[] {
+    return this.issueTargetCommentId
+      ? this.getPathToRoot(this.issueTargetCommentId)
       : [];
   }
 
@@ -138,7 +188,10 @@ export class DialogueCommentExplorerWidget extends LitElement {
     const descendants = this._descendants;
 
     return html`
-      <div class="container">
+      <div
+        class="container"
+        @dialogue-comment-issue-request=${this.handleIssueRequest}
+      >
         ${this.renderContextSection(path)}
         ${this.selectedCommentId || this.readonly
           ? nothing
@@ -160,6 +213,13 @@ export class DialogueCommentExplorerWidget extends LitElement {
           ></dialogue-comment-tree>
         </div>
       </div>
+      <dialogue-issue-create-popup
+        .open=${this.isIssuePopupOpen}
+        .path=${this._issuePath}
+        .frame=${this.discussion?.dialogueSettings.commentFrame}
+        @dialogue-issue-create=${this.handleIssueCreate}
+        @dialogue-issue-create-cancel=${this.handleIssueCancel}
+      ></dialogue-issue-create-popup>
     `;
   }
 
