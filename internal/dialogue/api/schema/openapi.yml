@@ -99,14 +99,17 @@ components:
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
         archivedAt:
-          type: string
-          format: date-time
+          oneOf:
+            - type: string
+              format: date-time
+            - type: "null"
         lastCommentedAt:
           type: string
           format: date-time
       required:
         - id
         - theme
+        - archivedAt
         - lastCommentedAt
     Discussion:
       type: object
@@ -118,14 +121,17 @@ components:
         conclusion:
           $ref: "#/components/schemas/DiscussionConclusion"
         archivedAt:
-          type: string
-          format: date-time
+          oneOf:
+            - type: string
+              format: date-time
+            - type: "null"
         dialogueSettings:
           $ref: "#/components/schemas/DialogueSettings"
       required:
         - id
         - theme
         - conclusion
+        - archivedAt
         - dialogueSettings
     Comment:
       type: object
@@ -149,8 +155,10 @@ components:
           items:
             $ref: "#/components/schemas/CommentIssue"
         archivedAt:
-          type: string
-          format: date-time
+          oneOf:
+            - type: string
+              format: date-time
+            - type: "null"
         createdAt:
           type: string
           format: date-time
@@ -162,6 +170,7 @@ components:
         - content
         - status
         - issues
+        - archivedAt
         - createdAt
     CommentIssue:
       type: object

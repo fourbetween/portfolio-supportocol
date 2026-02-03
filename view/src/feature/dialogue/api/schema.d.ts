@@ -322,8 +322,7 @@ export interface components {
         DiscussionSummary: {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
             /** Format: date-time */
             lastCommentedAt: string;
         };
@@ -331,8 +330,7 @@ export interface components {
             id: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             conclusion: components["schemas"]["DiscussionConclusion"];
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
             dialogueSettings: components["schemas"]["DialogueSettings"];
         };
         Comment: {
@@ -343,8 +341,7 @@ export interface components {
             content: components["schemas"]["CommentContent"];
             status: components["schemas"]["CommentStatus"];
             issues: components["schemas"]["CommentIssue"][];
-            /** Format: date-time */
-            archivedAt?: string;
+            archivedAt: string | null;
             /** Format: date-time */
             createdAt: string;
         };
