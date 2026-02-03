@@ -19,7 +19,6 @@ type commentIssuesTable struct {
 	// Columns
 	CommentID mysql.ColumnString
 	IssueID   mysql.ColumnString
-	Status    mysql.ColumnString
 	CreatedBy mysql.ColumnString
 	CreatedAt mysql.ColumnTimestamp
 	UpdatedAt mysql.ColumnTimestamp
@@ -66,12 +65,11 @@ func newCommentIssuesTableImpl(schemaName, tableName, alias string) commentIssue
 	var (
 		CommentIDColumn = mysql.StringColumn("comment_id")
 		IssueIDColumn   = mysql.StringColumn("issue_id")
-		StatusColumn    = mysql.StringColumn("status")
 		CreatedByColumn = mysql.StringColumn("created_by")
 		CreatedAtColumn = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn = mysql.TimestampColumn("updated_at")
-		allColumns      = mysql.ColumnList{CommentIDColumn, IssueIDColumn, StatusColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns  = mysql.ColumnList{StatusColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns      = mysql.ColumnList{CommentIDColumn, IssueIDColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns  = mysql.ColumnList{CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
 		defaultColumns  = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
@@ -81,7 +79,6 @@ func newCommentIssuesTableImpl(schemaName, tableName, alias string) commentIssue
 		//Columns
 		CommentID: CommentIDColumn,
 		IssueID:   IssueIDColumn,
-		Status:    StatusColumn,
 		CreatedBy: CreatedByColumn,
 		CreatedAt: CreatedAtColumn,
 		UpdatedAt: UpdatedAtColumn,

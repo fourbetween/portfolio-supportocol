@@ -326,27 +326,6 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	return &res, nil
 }
 
-func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPut(
-	ctx context.Context,
-	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq,
-	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutParams,
-) (*oas.Comment, error) {
-	item, err := h.con.UpdateCommentIssueStatus.Execute(ctx, usecase.UpdateCommentIssueStatusInput{
-		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
-		DiscussionID: uuid.UUID(params.DiscussionId).String(),
-		CommentID:    uuid.UUID(params.CommentId).String(),
-		IssueID:      uuid.UUID(params.IssueId).String(),
-		Status:       domain.CommentIssueStatus(req.Status),
-		UserID:       httpctx.GetUserID(ctx),
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	res := h.toOasComment(item)
-	return &res, nil
-}
-
 func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePost(
 	ctx context.Context,
 	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostParams,
@@ -492,7 +471,6 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 	for i, issue := range item.Issues() {
 		issues[i] = oas.CommentIssue{
 			IssueId: oas.ID(uuid.MustParse(issue.IssueID)),
-			Status:  oas.CommentIssueStatus(issue.Status),
 		}
 	}
 

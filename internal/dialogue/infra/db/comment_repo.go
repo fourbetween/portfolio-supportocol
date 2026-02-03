@@ -147,7 +147,6 @@ func (r *CommentRepository) toCommentDomain(row model.Comments, issueRows []mode
 	for i, ir := range issueRows {
 		issues[i] = domain.CommentIssue{
 			IssueID:   ir.IssueID,
-			Status:    domain.CommentIssueStatus(ir.Status),
 			CreatedBy: ir.CreatedBy,
 		}
 	}
@@ -204,7 +203,6 @@ func (r *CommentRepository) toCommentIssueModels(commentID string, issues []doma
 		issueModels[i] = model.CommentIssues{
 			CommentID: commentID,
 			IssueID:   is.IssueID,
-			Status:    string(is.Status),
 			CreatedBy: is.CreatedBy,
 		}
 	}

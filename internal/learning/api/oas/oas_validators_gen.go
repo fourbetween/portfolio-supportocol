@@ -52,23 +52,6 @@ func (s *Comment) Validate() error {
 		if s.Issues == nil {
 			return errors.New("nil is invalid value")
 		}
-		var failures []validate.FieldError
-		for i, elem := range s.Issues {
-			if err := func() error {
-				if err := elem.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				failures = append(failures, validate.FieldError{
-					Name:  fmt.Sprintf("[%d]", i),
-					Error: err,
-				})
-			}
-		}
-		if len(failures) > 0 {
-			return &validate.Error{Fields: failures}
-		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
@@ -168,40 +151,6 @@ func (s *CommentFrame) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s *CommentIssue) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.Status.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "status",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s CommentIssueStatus) Validate() error {
-	switch s {
-	case "active":
-		return nil
-	case "proposed":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *CommentPath) Validate() error {
@@ -528,29 +477,6 @@ func (s IssueStatus) Validate() error {
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
-}
-
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.Status.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "status",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
 }
 
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {

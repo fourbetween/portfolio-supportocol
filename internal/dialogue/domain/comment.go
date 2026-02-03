@@ -99,19 +99,14 @@ func (c *Comment) CanAddChild() error {
 	return nil
 }
 
-func (c *Comment) AddIssue(issueID string, status CommentIssueStatus, createdBy *string) bool {
-	for i, issue := range c.issues {
+func (c *Comment) AddIssue(issueID string, createdBy *string) bool {
+	for _, issue := range c.issues {
 		if issue.IssueID == issueID {
-			if issue.Status == status {
-				return false
-			}
-			c.issues[i].Status = status
-			return true
+			return false
 		}
 	}
 	c.issues = append(c.issues, CommentIssue{
 		IssueID:   issueID,
-		Status:    status,
 		CreatedBy: createdBy,
 	})
 	return true

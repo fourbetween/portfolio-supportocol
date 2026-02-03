@@ -14,7 +14,6 @@ import (
 type CommentIssues struct {
 	CommentID string `sql:"primary_key"`
 	IssueID   string `sql:"primary_key"`
-	Status    string
 	CreatedBy *string
 	CreatedAt time.Time
 	UpdatedAt time.Time

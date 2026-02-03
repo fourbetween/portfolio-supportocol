@@ -24,11 +24,6 @@ components:
       enum:
         - active
         - proposed
-    CommentIssueStatus:
-      type: string
-      enum:
-        - active
-        - proposed
     IssueStatus:
       type: string
       enum:
@@ -173,11 +168,8 @@ components:
       properties:
         issueId:
           $ref: "#/components/schemas/Id"
-        status:
-          $ref: "#/components/schemas/CommentIssueStatus"
       required:
         - issueId
-        - status
 paths:
   /v1/dialogue/issues:
     get:

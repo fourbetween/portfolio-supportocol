@@ -147,8 +147,7 @@ func (s *CommentFrame) SetPaths(val []CommentPath) {
 
 // Ref: #/components/schemas/CommentIssue
 type CommentIssue struct {
-	IssueId ID                 `json:"issueId"`
-	Status  CommentIssueStatus `json:"status"`
+	IssueId ID `json:"issueId"`
 }
 
 // GetIssueId returns the value of IssueId.
@@ -156,61 +155,9 @@ func (s *CommentIssue) GetIssueId() ID {
 	return s.IssueId
 }
 
-// GetStatus returns the value of Status.
-func (s *CommentIssue) GetStatus() CommentIssueStatus {
-	return s.Status
-}
-
 // SetIssueId sets the value of IssueId.
 func (s *CommentIssue) SetIssueId(val ID) {
 	s.IssueId = val
-}
-
-// SetStatus sets the value of Status.
-func (s *CommentIssue) SetStatus(val CommentIssueStatus) {
-	s.Status = val
-}
-
-// Ref: #/components/schemas/CommentIssueStatus
-type CommentIssueStatus string
-
-const (
-	CommentIssueStatusActive   CommentIssueStatus = "active"
-	CommentIssueStatusProposed CommentIssueStatus = "proposed"
-)
-
-// AllValues returns all CommentIssueStatus values.
-func (CommentIssueStatus) AllValues() []CommentIssueStatus {
-	return []CommentIssueStatus{
-		CommentIssueStatusActive,
-		CommentIssueStatusProposed,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s CommentIssueStatus) MarshalText() ([]byte, error) {
-	switch s {
-	case CommentIssueStatusActive:
-		return []byte(s), nil
-	case CommentIssueStatusProposed:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *CommentIssueStatus) UnmarshalText(data []byte) error {
-	switch CommentIssueStatus(data) {
-	case CommentIssueStatusActive:
-		*s = CommentIssueStatusActive
-		return nil
-	case CommentIssueStatusProposed:
-		*s = CommentIssueStatusProposed
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
 }
 
 // Ref: #/components/schemas/CommentPath
@@ -940,20 +887,6 @@ func (o OptDialogueSettings) Or(d DialogueSettings) DialogueSettings {
 
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete operation.
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
-
-type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq struct {
-	Status CommentIssueStatus `json:"status"`
-}
-
-// GetStatus returns the value of Status.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) GetStatus() CommentIssueStatus {
-	return s.Status
-}
-
-// SetStatus sets the value of Status.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) SetStatus(val CommentIssueStatus) {
-	s.Status = val
-}
 
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq struct {
 	CommentType CommentType    `json:"commentType"`

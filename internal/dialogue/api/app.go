@@ -220,7 +220,6 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 	for i, issue := range item.Issues() {
 		issues[i] = oas.CommentIssue{
 			IssueId: oas.ID(uuid.MustParse(issue.IssueID)),
-			Status:  oas.CommentIssueStatus(issue.Status),
 		}
 	}
 

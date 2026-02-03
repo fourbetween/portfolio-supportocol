@@ -29,11 +29,6 @@ components:
       enum:
         - active
         - proposed
-    CommentIssueStatus:
-      type: string
-      enum:
-        - active
-        - proposed
     IssueStatus:
       type: string
       enum:
@@ -200,11 +195,8 @@ components:
       properties:
         issueId:
           $ref: "#/components/schemas/Id"
-        status:
-          $ref: "#/components/schemas/CommentIssueStatus"
       required:
         - issueId
-        - status
   parameters:
     workspaceId:
       name: workspaceId
@@ -624,38 +616,6 @@ paths:
       - $ref: "#/components/parameters/issueId"
     delete:
       description: remove issue from comment
-      responses:
-        "200":
-          description: success response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Comment"
-        default:
-          description: default error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}/status:
-    parameters:
-      - $ref: "#/components/parameters/workspaceId"
-      - $ref: "#/components/parameters/discussionId"
-      - $ref: "#/components/parameters/commentId"
-      - $ref: "#/components/parameters/issueId"
-    put:
-      description: update comment issue status
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  $ref: "#/components/schemas/CommentIssueStatus"
-              required:
-                - status
       responses:
         "200":
           description: success response

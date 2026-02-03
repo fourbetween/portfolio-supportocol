@@ -429,15 +429,10 @@ func (s *CommentIssue) encodeFields(e *jx.Encoder) {
 		e.FieldStart("issueId")
 		s.IssueId.Encode(e)
 	}
-	{
-		e.FieldStart("status")
-		s.Status.Encode(e)
-	}
 }
 
-var jsonFieldsNameOfCommentIssue = [2]string{
+var jsonFieldsNameOfCommentIssue = [1]string{
 	0: "issueId",
-	1: "status",
 }
 
 // Decode decodes CommentIssue from json.
@@ -459,16 +454,6 @@ func (s *CommentIssue) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"issueId\"")
 			}
-		case "status":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				if err := s.Status.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"status\"")
-			}
 		default:
 			return d.Skip()
 		}
@@ -479,7 +464,7 @@ func (s *CommentIssue) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -521,46 +506,6 @@ func (s *CommentIssue) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *CommentIssue) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes CommentIssueStatus as json.
-func (s CommentIssueStatus) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes CommentIssueStatus from json.
-func (s *CommentIssueStatus) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode CommentIssueStatus to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch CommentIssueStatus(v) {
-	case CommentIssueStatusActive:
-		*s = CommentIssueStatusActive
-	case CommentIssueStatusProposed:
-		*s = CommentIssueStatusProposed
-	default:
-		*s = CommentIssueStatus(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s CommentIssueStatus) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *CommentIssueStatus) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -1813,100 +1758,6 @@ func (s OptDialogueSettings) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptDialogueSettings) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("status")
-		s.Status.Encode(e)
-	}
-}
-
-var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq = [1]string{
-	0: "status",
-}
-
-// Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq from json.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "status":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				if err := s.Status.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"status\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) {
-					name = jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdStatusPutReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
