@@ -113,7 +113,7 @@ export class DialogueCommentItem extends LitElement {
         ${!this.readonly
           ? html`
               <button
-                class="btn-hover issue-button material-symbols-outlined"
+                class="btn-hover danger issue-button material-symbols-outlined"
                 @click=${this.handleIssueClick}
                 aria-label="report problem"
               >

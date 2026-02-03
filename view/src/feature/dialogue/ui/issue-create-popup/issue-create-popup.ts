@@ -47,30 +47,28 @@ export class DialogueIssueCreatePopup extends LitElement {
             ${this.renderContextSection()}
             <div class="section">
               <div class="section-title">Issue Details</div>
-              <form id="issue-form" @submit=${this._handleSubmit}>
-                <div class="field">
-                  <label for="title">Title</label>
-                  <input
-                    type="text"
-                    id="title"
-                    required
-                    placeholder="Type issue title..."
-                  />
-                </div>
-                <div class="field">
-                  <label for="description">Description (Optional)</label>
-                  <textarea
-                    id="description"
-                    placeholder="Type issue description..."
-                  ></textarea>
-                </div>
+              <form @submit=${this._handleSubmit}>
+                <input
+                  type="text"
+                  id="title"
+                  required
+                  placeholder="Issue title..."
+                />
+                <textarea
+                  id="description"
+                  placeholder="Issue description..."
+                ></textarea>
               </form>
             </div>
           </div>
         </div>
         <div slot="footer">
           <button type="button" class="btn close">Cancel</button>
-          <button type="submit" form="issue-form" class="btn btn-primary">
+          <button
+            form="issue-form"
+            class="btn btn-primary"
+            @click=${this._handleSubmit}
+          >
             Add Issue
           </button>
         </div>
@@ -100,9 +98,6 @@ export class DialogueIssueCreatePopup extends LitElement {
     inputStyle,
     formStyle,
     css`
-      :host {
-        display: block;
-      }
       .container {
         display: flex;
         flex-direction: column;
@@ -110,28 +105,10 @@ export class DialogueIssueCreatePopup extends LitElement {
         min-width: 400px;
         max-width: 600px;
       }
-      .section-title {
-        font-size: 1.1rem;
-        margin-bottom: 12px;
-        color: var(--color-text-primary);
-      }
       form {
         display: flex;
         flex-direction: column;
-        gap: 16px;
-      }
-      .field {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-      label {
-        font-weight: bold;
-        font-size: 0.9rem;
-      }
-      input,
-      textarea {
-        width: 100%;
+        gap: 8px;
       }
       textarea {
         min-height: 100px;
