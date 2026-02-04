@@ -144,14 +144,8 @@ func (r *CommentRepository) GetPathToRoot(ctx context.Context, commentID string)
 
 	stmt := mysql.
 		WITH_RECURSIVE(ancestors.AS(initialSelect.UNION_ALL(recursiveSelect)))(
-		mysql.SELECT(
-			ancestors.AllColumns(),
-			table.CommentIssues.AllColumns,
-		).
-			FROM(
-				ancestors.
-					LEFT_JOIN(table.CommentIssues, table.CommentIssues.CommentID.EQ(mysql.StringColumn("id").From(ancestors))),
-			),
+		mysql.SELECT(ancestors.AllColumns()).
+			FROM(ancestors),
 	)
 
 	var dest []commentModel
