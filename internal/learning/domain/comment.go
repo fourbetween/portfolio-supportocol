@@ -31,7 +31,7 @@ func (c *Comment) ParentCommentID() *string {
 	return c.parentCommentID
 }
 
-func (c *Comment) CommentType() string {
+func (c *Comment) Type() string {
 	return c.commentType
 }
 

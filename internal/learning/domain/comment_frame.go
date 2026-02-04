@@ -112,20 +112,20 @@ func (cf CommentFrame) Supplement(comments []*Comment) CommentFrame {
 	}
 
 	for _, c := range comments {
-		if _, ok := typeMap[c.CommentType()]; !ok {
-			newCF.Types = append(newCF.Types, c.CommentType())
-			typeMap[c.CommentType()] = struct{}{}
+		if _, ok := typeMap[c.Type()]; !ok {
+			newCF.Types = append(newCF.Types, c.Type())
+			typeMap[c.Type()] = struct{}{}
 		}
 
 		var parentType string
 		if c.ParentCommentID() != nil {
 			if parent, ok := commentMap[*c.ParentCommentID()]; ok {
-				parentType = parent.CommentType()
+				parentType = parent.Type()
 			}
 		}
 
 		path := CommentPath{
-			Child:  c.CommentType(),
+			Child:  c.Type(),
 			Parent: parentType,
 		}
 		if _, ok := pathMap[path]; !ok {

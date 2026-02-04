@@ -221,7 +221,7 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		ID:              oas.ID(uuid.MustParse(item.ID())),
 		DiscussionId:    oas.ID(uuid.MustParse(item.DiscussionID())),
 		ParentCommentId: parentCommentID,
-		CommentType:     oas.CommentType(item.CommentType()),
+		Type:            oas.CommentType(item.Type()),
 		Content:         oas.CommentContent(item.Content()),
 		Status:          oas.CommentStatus(item.Status()),
 		Issues:          issues,

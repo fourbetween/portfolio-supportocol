@@ -87,7 +87,7 @@ func (d *Discussion) ValidateComment(commentType string, parent *Comment) error 
 		if parent.DiscussionID() != d.id {
 			return apperr.ErrInvalidArgument
 		}
-		pt := parent.CommentType()
+		pt := parent.Type()
 		parentType = &pt
 	}
 	return d.settings.CommentFrame.ValidateComment(commentType, parentType)

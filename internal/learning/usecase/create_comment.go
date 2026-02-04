@@ -76,7 +76,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			if err != nil {
 				return err
 			}
-			parentType = parent.CommentType()
+			parentType = parent.Type()
 		}
 
 		var createErr error
@@ -96,7 +96,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			return err
 		}
 
-		discussion.EnsureCommentFrameRequirement(comment.CommentType(), parentType)
+		discussion.EnsureCommentFrameRequirement(comment.Type(), parentType)
 		discussion.AddComment(u.clock.Now())
 		return u.discussionRepo.Save(ctx, discussion)
 	})

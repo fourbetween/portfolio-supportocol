@@ -36,8 +36,8 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 		s.ParentCommentId.Encode(e)
 	}
 	{
-		e.FieldStart("commentType")
-		s.CommentType.Encode(e)
+		e.FieldStart("type")
+		s.Type.Encode(e)
 	}
 	{
 		e.FieldStart("content")
@@ -69,7 +69,7 @@ var jsonFieldsNameOfComment = [9]string{
 	0: "id",
 	1: "discussionId",
 	2: "parentCommentId",
-	3: "commentType",
+	3: "type",
 	4: "content",
 	5: "status",
 	6: "issues",
@@ -116,15 +116,15 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"parentCommentId\"")
 			}
-		case "commentType":
+		case "type":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				if err := s.CommentType.Decode(d); err != nil {
+				if err := s.Type.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"commentType\"")
+				return errors.Wrap(err, "decode field \"type\"")
 			}
 		case "content":
 			requiredBitSet[0] |= 1 << 4

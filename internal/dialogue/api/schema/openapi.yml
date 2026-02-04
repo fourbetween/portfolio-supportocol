@@ -129,7 +129,7 @@ components:
           oneOf:
             - $ref: "#/components/schemas/Id"
             - type: "null"
-        commentType:
+        type:
           $ref: "#/components/schemas/CommentType"
         content:
           $ref: "#/components/schemas/CommentContent"
@@ -151,7 +151,7 @@ components:
         - id
         - discussionId
         - parentCommentId
-        - commentType
+        - type
         - content
         - status
         - issues

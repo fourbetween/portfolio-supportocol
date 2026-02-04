@@ -20,7 +20,7 @@ type commentsTable struct {
 	ID              mysql.ColumnString
 	DiscussionID    mysql.ColumnString
 	ParentCommentID mysql.ColumnString
-	CommentType     mysql.ColumnString
+	Type            mysql.ColumnString
 	Content         mysql.ColumnString
 	Status          mysql.ColumnString
 	ArchivedAt      mysql.ColumnTimestamp
@@ -71,15 +71,15 @@ func newCommentsTableImpl(schemaName, tableName, alias string) commentsTable {
 		IDColumn              = mysql.StringColumn("id")
 		DiscussionIDColumn    = mysql.StringColumn("discussion_id")
 		ParentCommentIDColumn = mysql.StringColumn("parent_comment_id")
-		CommentTypeColumn     = mysql.StringColumn("comment_type")
+		TypeColumn            = mysql.StringColumn("type")
 		ContentColumn         = mysql.StringColumn("content")
 		StatusColumn          = mysql.StringColumn("status")
 		ArchivedAtColumn      = mysql.TimestampColumn("archived_at")
 		CreatedByColumn       = mysql.StringColumn("created_by")
 		CreatedAtColumn       = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
-		allColumns            = mysql.ColumnList{IDColumn, DiscussionIDColumn, ParentCommentIDColumn, CommentTypeColumn, ContentColumn, StatusColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns        = mysql.ColumnList{DiscussionIDColumn, ParentCommentIDColumn, CommentTypeColumn, ContentColumn, StatusColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns            = mysql.ColumnList{IDColumn, DiscussionIDColumn, ParentCommentIDColumn, TypeColumn, ContentColumn, StatusColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns        = mysql.ColumnList{DiscussionIDColumn, ParentCommentIDColumn, TypeColumn, ContentColumn, StatusColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
 		defaultColumns        = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
@@ -90,7 +90,7 @@ func newCommentsTableImpl(schemaName, tableName, alias string) commentsTable {
 		ID:              IDColumn,
 		DiscussionID:    DiscussionIDColumn,
 		ParentCommentID: ParentCommentIDColumn,
-		CommentType:     CommentTypeColumn,
+		Type:            TypeColumn,
 		Content:         ContentColumn,
 		Status:          StatusColumn,
 		ArchivedAt:      ArchivedAtColumn,

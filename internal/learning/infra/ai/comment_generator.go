@@ -172,7 +172,7 @@ func (cg *CommentGenerator) writeContext(sb *strings.Builder, path []*domain.Com
 	}
 	sb.WriteString("Context (Ancestors):\n")
 	for i, c := range path {
-		fmt.Fprintf(sb, "%d. %s: %s\n", i+1, c.CommentType(), c.Content())
+		fmt.Fprintf(sb, "%d. %s: %s\n", i+1, c.Type(), c.Content())
 	}
 }
 
