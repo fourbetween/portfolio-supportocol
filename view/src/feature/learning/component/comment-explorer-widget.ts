@@ -23,6 +23,7 @@ import {
   LearningProposedCommentAcceptEvent,
   LearningProposedCommentRejectEvent,
 } from "../event/comment";
+import { LearningIssueRemoveEvent } from "../event/issue";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
 import { commentRepository } from "../repository/comment-repository";
@@ -240,6 +241,23 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
+  private async handleIssueRemove(e: LearningIssueRemoveEvent) {
+    if (!this.discussionId || !this.workspace) return;
+    try {
+      const data = await commentRepository.removeIssue(
+        this.workspace.workspace.id,
+        this.discussionId,
+        e.commentId,
+        e.issueId,
+      );
+
+      showToast(this, "Issue removed.", "success", 2000);
+      this.dispatchEvent(new LearningCommentUpdatedEvent(data));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
   private handleClearSelection() {
     this.dispatchEvent(new LearningCommentSelectEvent(undefined));
   }
@@ -319,6 +337,7 @@ export class LearningCommentExplorerWidget extends LitElement {
             @learning-comment-generate=${this.handleCommentGenerate}
             @learning-proposed-comment-accept=${this.handleAccept}
             @learning-proposed-comment-reject=${this.handleReject}
+            @learning-issue-remove=${this.handleIssueRemove}
           ></learning-comment-tree>
         </div>
       </div>
@@ -350,6 +369,7 @@ export class LearningCommentExplorerWidget extends LitElement {
           @learning-comment-generate=${this.handleCommentGenerate}
           @learning-proposed-comment-accept=${this.handleAccept}
           @learning-proposed-comment-reject=${this.handleReject}
+          @learning-issue-remove=${this.handleIssueRemove}
         ></learning-comment-context>
       </div>
     `;

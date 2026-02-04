@@ -1,11 +1,12 @@
 import { LitElement, css, html, nothing } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { commentCardStyle } from "../../../../shared/style/comment-card";
 import { iconStyle } from "../../../../shared/style/icon";
 import { LearningCommentSelectEvent } from "../../event/comment";
 import type { Comment } from "../../model/comment";
+import "../issue-list-popup/issue-list-popup";
 
 @customElement("learning-comment-card")
 export class LearningCommentCard extends LitElement {
@@ -18,8 +19,21 @@ export class LearningCommentCard extends LitElement {
   @property({ type: Boolean })
   archived = false;
 
+  @property({ type: Boolean })
+  readonly = false;
+
+  @state()
+  private _isIssuePopupOpen = false;
+
   private _handleClick() {
+    if (this.readonly) return;
     this.dispatchEvent(new LearningCommentSelectEvent(this.comment?.id));
+  }
+
+  private _handleIssueClick(e: Event) {
+    if (this.readonly) return;
+    e.stopPropagation();
+    this._isIssuePopupOpen = true;
   }
 
   render() {
@@ -50,8 +64,29 @@ export class LearningCommentCard extends LitElement {
           <div class="created-at">
             ${this._formatDate(this.comment.createdAt)}
           </div>
+          ${this.comment.issues && this.comment.issues.length > 0
+            ? html`
+                <span
+                  class="material-symbols-outlined issue-icon"
+                  @click=${this._handleIssueClick}
+                >
+                  warning
+                </span>
+              `
+            : nothing}
         </div>
       </div>
+      ${this.comment.issues && this.comment.issues.length > 0
+        ? html`
+            <learning-issue-list-popup
+              .open=${this._isIssuePopupOpen}
+              .commentId=${this.comment.id}
+              .issues=${this.comment.issues ?? []}
+              .readonly=${this.readonly}
+              @popup-closed=${() => (this._isIssuePopupOpen = false)}
+            ></learning-issue-list-popup>
+          `
+        : nothing}
     `;
   }
 
@@ -60,6 +95,7 @@ export class LearningCommentCard extends LitElement {
       "card-body": true,
       proposed: this.comment?.status === "proposed",
       archived: isArchived,
+      readonly: this.readonly,
     };
   }
 
@@ -74,6 +110,23 @@ export class LearningCommentCard extends LitElement {
     css`
       :host {
         cursor: pointer;
+      }
+      .card-body.readonly {
+        cursor: default;
+      }
+      .issue-icon {
+        font-size: 16px;
+        color: var(--color-error, #d32f2f);
+        cursor: pointer;
+      }
+      .card-body.readonly .issue-icon {
+        cursor: default;
+      }
+      .issue-icon:hover {
+        opacity: 0.8;
+      }
+      .card-body.readonly .issue-icon:hover {
+        opacity: 1;
       }
     `,
   ];
