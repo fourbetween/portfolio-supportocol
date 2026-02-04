@@ -172,10 +172,10 @@ export class LearningCommentTree extends LitElement {
   private groupCommentsByType(comments: Comment[]): Record<string, Comment[]> {
     return comments.reduce(
       (acc, comment) => {
-        if (!acc[comment.commentType]) {
-          acc[comment.commentType] = [];
+        if (!acc[comment.type]) {
+          acc[comment.type] = [];
         }
-        acc[comment.commentType].push(comment);
+        acc[comment.type].push(comment);
         return acc;
       },
       {} as Record<string, Comment[]>,

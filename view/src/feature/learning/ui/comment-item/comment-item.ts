@@ -277,7 +277,7 @@ export class LearningCommentItem extends LitElement {
     return html`
       <learning-comment-edit-form
         .commentId=${this.comment?.id}
-        .initialType=${this.comment!.commentType}
+        .initialType=${this.comment!.type}
         .initialContent=${this.comment!.content}
         .availableTypes=${this.availableTypes}
         @learning-comment-form-close=${() => (this.mode = "view")}

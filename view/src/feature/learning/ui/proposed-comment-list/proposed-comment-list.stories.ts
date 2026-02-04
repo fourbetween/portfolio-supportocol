@@ -21,7 +21,7 @@ const comments: Comment[] = [
     parentCommentId: null,
     content:
       "これは提案されたコメントの例です。AIによって生成された可能性があります。",
-    commentType: "idea",
+    type: "idea",
     status: "proposed",
     issues: [],
     createdAt: "2026-01-04T00:00:00Z",
@@ -32,7 +32,7 @@ const comments: Comment[] = [
     discussionId: "d1",
     parentCommentId: null,
     content: "別の視点からの提案です。議論を深めるための質問が含まれています。",
-    commentType: "question",
+    type: "question",
     status: "proposed",
     issues: [],
     createdAt: "2026-01-04T00:00:00Z",

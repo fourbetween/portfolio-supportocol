@@ -40,7 +40,7 @@ export class DialogueCommentItem extends LitElement {
     if (this.readonly) return false;
     if (this.archived || this.comment?.archivedAt) return false;
     if (!this.comment || !this.frame) return false;
-    return this.frame.paths.some((p) => p.parent === this.comment?.commentType);
+    return this.frame.paths.some((p) => p.parent === this.comment?.type);
   }
 
   private handleCommentSelect(e: DialogueCommentSelectEvent) {
@@ -79,7 +79,7 @@ export class DialogueCommentItem extends LitElement {
             <div class="reply-form-wrapper">
               <dialogue-comment-reply-form
                 .parentCommentId=${this.comment.id}
-                .parentCommentType=${this.comment.commentType}
+                .parentCommentType=${this.comment.type}
                 .frame=${this.frame}
                 @dialogue-comment-create=${() => (this.mode = "view")}
                 @dialogue-comment-create-cancel=${() => (this.mode = "view")}

@@ -27,9 +27,7 @@ export class DialogueCommentContext extends LitElement {
   private renderItem(comment: Comment, isLast: boolean, isArchived: boolean) {
     const childCount = this.childCounts.get(comment.id) || 0;
     return html`
-      <ui-comment-type-badge
-        .type=${comment.commentType}
-      ></ui-comment-type-badge>
+      <ui-comment-type-badge .type=${comment.type}></ui-comment-type-badge>
       ${isLast && !this.readonly
         ? html`
             <dialogue-comment-item

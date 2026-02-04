@@ -46,7 +46,7 @@ const mockComment: Comment = {
   id: "1",
   discussionId: "d1",
   parentCommentId: null,
-  commentType: "idea",
+  type: "idea",
   status: "active" as const,
   content: "This is a test comment",
   issues: [],
