@@ -43,20 +43,7 @@ export class WorkspaceWorkspaceSelect extends LitElement {
     inputStyle,
     css`
       select {
-        padding: 5px 12px;
-        font-size: 14px;
-        line-height: 20px;
-        color: var(--color-fg-default);
-        background-color: var(--color-canvas-default);
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        outline: none;
         width: 100%;
-      }
-
-      select:focus {
-        border-color: var(--color-accent-fg);
-        box-shadow: inset 0 0 0 1px var(--color-accent-fg);
       }
     `,
   ];

@@ -3,6 +3,7 @@ import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import { iconStyle } from "../../../../shared/style/icon";
+import { inputStyle } from "../../../../shared/style/input";
 import {
   DialogueCommentCreateCancelEvent,
   DialogueCommentCreateEvent,
@@ -108,6 +109,7 @@ export class DialogueCommentReplyForm extends LitElement {
     baseStyle,
     buttonStyle,
     iconStyle,
+    inputStyle,
     css`
       :host {
         display: block;
@@ -117,20 +119,9 @@ export class DialogueCommentReplyForm extends LitElement {
         flex-direction: column;
         gap: 8px;
       }
-      .reply-form select {
-        padding: 8px;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
-        background-color: var(--color-canvas-default);
-        font-size: 14px;
-      }
       .reply-form textarea {
-        padding: 8px;
-        border: 1px solid var(--color-border-default);
-        border-radius: 6px;
         min-height: 80px;
         resize: vertical;
-        font-size: 14px;
       }
       .actions {
         display: flex;

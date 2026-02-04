@@ -281,11 +281,6 @@ export class LearningCommentFrameForm extends LitElement {
       input,
       select {
         flex: 1;
-        padding: 5px 12px;
-        border: 1px solid var(--border-color, #ccc);
-        border-radius: 4px;
-        background: var(--surface-color, #fff);
-        color: var(--text-color, #000);
       }
       .types,
       .paths {
