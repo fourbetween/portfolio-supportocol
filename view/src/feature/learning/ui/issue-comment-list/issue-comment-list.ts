@@ -42,7 +42,10 @@ export class LearningIssueCommentList extends LitElement {
           <ui-comment-type-badge
             .type=${comment.commentType}
           ></ui-comment-type-badge>
-          <learning-comment-card .comment=${comment}></learning-comment-card>
+          <learning-comment-card
+            .comment=${comment}
+            readonly
+          ></learning-comment-card>
           <div class="issue-container">
             <learning-issue-list
               .commentId=${comment.id}
