@@ -82,7 +82,7 @@ CREATE TABLE comments (
 	id CHAR(36) NOT NULL,
 	discussion_id CHAR(36) NOT NULL,
 	parent_comment_id CHAR(36),
-	comment_type VARCHAR(20) NOT NULL,
+	type VARCHAR(20) NOT NULL,
 	content TEXT NOT NULL,
 	status VARCHAR(20) NOT NULL,
 	archived_at DATETIME,

@@ -74,7 +74,7 @@ func (r *CommentRepository) Update(ctx context.Context, c *domain.Comment) error
 	m := r.toCommentModel(c)
 	stmt := table.Comments.
 		UPDATE(
-			table.Comments.CommentType,
+			table.Comments.Type,
 			table.Comments.Content,
 			table.Comments.Status,
 			table.Comments.ArchivedAt,
@@ -151,7 +151,7 @@ func (r *CommentRepository) toCommentDomain(row model.Comments, issueRows []mode
 		CreateCommentParams: domain.CreateCommentParams{
 			DiscussionID:    row.DiscussionID,
 			ParentCommentID: row.ParentCommentID,
-			CommentTypeID:   row.CommentType,
+			CommentTypeID:   row.Type,
 			Content:         row.Content,
 			Status:          domain.CommentStatus(row.Status),
 			CreatedBy:       row.CreatedBy,
@@ -172,7 +172,7 @@ func (r *CommentRepository) toCommentModel(c *domain.Comment) model.Comments {
 		ID:              c.ID(),
 		DiscussionID:    c.DiscussionID(),
 		ParentCommentID: c.ParentCommentID(),
-		CommentType:     c.CommentType(),
+		Type:            c.Type(),
 		Content:         c.Content(),
 		Status:          string(c.Status()),
 		ArchivedAt:      c.ArchivedAt(),

@@ -287,7 +287,7 @@ export interface components {
             id: components["schemas"]["Id"];
             discussionId: components["schemas"]["Id"];
             parentCommentId: components["schemas"]["Id"] | null;
-            commentType: components["schemas"]["CommentType"];
+            type: components["schemas"]["CommentType"];
             content: components["schemas"]["CommentContent"];
             status: components["schemas"]["CommentStatus"];
             issues: components["schemas"]["CommentIssue"][];

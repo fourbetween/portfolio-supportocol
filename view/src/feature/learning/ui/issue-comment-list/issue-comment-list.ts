@@ -39,9 +39,7 @@ export class LearningIssueCommentList extends LitElement {
     return html`
       <div class="item" @click=${() => this._handleSelect(comment.id)}>
         <div class="comment-container">
-          <ui-comment-type-badge
-            .type=${comment.commentType}
-          ></ui-comment-type-badge>
+          <ui-comment-type-badge .type=${comment.type}></ui-comment-type-badge>
           <learning-comment-card
             .comment=${comment}
             readonly

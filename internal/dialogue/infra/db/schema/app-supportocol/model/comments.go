@@ -15,7 +15,7 @@ type Comments struct {
 	ID              string `sql:"primary_key"`
 	DiscussionID    string
 	ParentCommentID *string
-	CommentType     string
+	Type            string
 	Content         string
 	Status          string
 	ArchivedAt      *time.Time

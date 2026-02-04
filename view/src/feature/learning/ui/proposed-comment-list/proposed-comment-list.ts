@@ -33,9 +33,7 @@ export class LearningProposedCommentList extends LitElement {
     return html`
       <div class="item">
         <div class="comment-container">
-          <ui-comment-type-badge
-            .type=${comment.commentType}
-          ></ui-comment-type-badge>
+          <ui-comment-type-badge .type=${comment.type}></ui-comment-type-badge>
           <learning-comment-card .comment=${comment}></learning-comment-card>
         </div>
       </div>

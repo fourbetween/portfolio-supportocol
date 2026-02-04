@@ -24,13 +24,13 @@ export class DialogueCommentList extends LitElement {
           (comment) => html`
             <div class="comment-item">
               <ui-comment-type-badge
-                .type=${comment.commentType}
+                .type=${comment.type}
               ></ui-comment-type-badge>
               <dialogue-comment-card
                 .comment=${comment}
               ></dialogue-comment-card>
             </div>
-          `
+          `,
         )}
       </div>
     `;

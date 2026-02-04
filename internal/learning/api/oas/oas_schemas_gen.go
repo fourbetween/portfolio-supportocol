@@ -19,7 +19,7 @@ type Comment struct {
 	ID              ID             `json:"id"`
 	DiscussionId    ID             `json:"discussionId"`
 	ParentCommentId NilID          `json:"parentCommentId"`
-	CommentType     CommentType    `json:"commentType"`
+	Type            CommentType    `json:"type"`
 	Content         CommentContent `json:"content"`
 	Status          CommentStatus  `json:"status"`
 	Issues          []CommentIssue `json:"issues"`
@@ -42,9 +42,9 @@ func (s *Comment) GetParentCommentId() NilID {
 	return s.ParentCommentId
 }
 
-// GetCommentType returns the value of CommentType.
-func (s *Comment) GetCommentType() CommentType {
-	return s.CommentType
+// GetType returns the value of Type.
+func (s *Comment) GetType() CommentType {
+	return s.Type
 }
 
 // GetContent returns the value of Content.
@@ -87,9 +87,9 @@ func (s *Comment) SetParentCommentId(val NilID) {
 	s.ParentCommentId = val
 }
 
-// SetCommentType sets the value of CommentType.
-func (s *Comment) SetCommentType(val CommentType) {
-	s.CommentType = val
+// SetType sets the value of Type.
+func (s *Comment) SetType(val CommentType) {
+	s.Type = val
 }
 
 // SetContent sets the value of Content.

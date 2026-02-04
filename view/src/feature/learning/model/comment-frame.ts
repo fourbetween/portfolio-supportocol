@@ -10,7 +10,7 @@ export function deriveCommentFrame(comments: Comment[]): CommentFrame {
   const commentMap = new Map<string, Comment>();
   for (const comment of comments) {
     commentMap.set(comment.id, comment);
-    types.add(comment.commentType);
+    types.add(comment.type);
   }
 
   for (const comment of comments) {
@@ -18,12 +18,12 @@ export function deriveCommentFrame(comments: Comment[]): CommentFrame {
     if (comment.parentCommentId) {
       const parent = commentMap.get(comment.parentCommentId);
       if (parent) {
-        parentType = parent.commentType;
+        parentType = parent.type;
       }
     }
     paths.add(
       JSON.stringify({
-        child: comment.commentType,
+        child: comment.type,
         parent: parentType,
       }),
     );

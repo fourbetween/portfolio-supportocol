@@ -75,7 +75,7 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 			if err != nil {
 				return err
 			}
-			parentType = parent.CommentType()
+			parentType = parent.Type()
 		}
 
 		if err := comment.Update(domain.UpdateCommentParams{
@@ -89,7 +89,7 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 			return err
 		}
 
-		discussion.EnsureCommentFrameRequirement(comment.CommentType(), parentType)
+		discussion.EnsureCommentFrameRequirement(comment.Type(), parentType)
 		return u.discussionRepo.Save(ctx, discussion)
 	})
 	if err != nil {
