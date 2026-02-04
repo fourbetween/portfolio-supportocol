@@ -15,6 +15,7 @@ import { type WorkspaceProjectSelectEvent } from "../../workspace/event/project"
 import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import "../component/comment-explorer-widget";
 import "../component/comment-frame-widget";
+import "../component/comment-issue-widget";
 import "../component/comment-proposed-widget";
 import "../component/discussion-detail-widget";
 import "../component/discussion-list-widget";
@@ -212,6 +213,14 @@ export class LearningDashboardPage extends LitElement {
     return this._comments.some((c) => c.status === "proposed");
   }
 
+  private get _hasCommentsWithIssues() {
+    return this._comments.some((c) => c.issues && c.issues.length > 0);
+  }
+
+  private get _hasRightSidebarContent() {
+    return this._hasProposedComments || this._hasCommentsWithIssues;
+  }
+
   private _handleCommentGenerated() {
     setTimeout(async () => {
       if (!this.isConnected || !this._selectedDiscussionId) return;
@@ -258,7 +267,7 @@ export class LearningDashboardPage extends LitElement {
     `;
   }
 
-  private _renderProposedComments() {
+  private _renderRightSidebarContent() {
     return html`
       <learning-comment-proposed-widget
         .discussionId=${this._selectedDiscussionId}
@@ -267,6 +276,10 @@ export class LearningDashboardPage extends LitElement {
         @learning-comment-deleted=${this._handleCommentDeleted}
         @learning-comment-select=${this._handleCommentSelect}
       ></learning-comment-proposed-widget>
+      <learning-comment-issue-widget
+        .comments=${this._comments}
+        @learning-comment-select=${this._handleCommentSelect}
+      ></learning-comment-issue-widget>
     `;
   }
 
@@ -298,9 +311,9 @@ export class LearningDashboardPage extends LitElement {
   }
 
   private _renderRightSidebar(isTouch: boolean) {
-    if (!this._hasProposedComments) return nothing;
+    if (!this._hasRightSidebarContent) return nothing;
 
-    const list = this._renderProposedComments();
+    const content = this._renderRightSidebarContent();
     if (isTouch) {
       return html`
         <ui-drawer
@@ -308,13 +321,13 @@ export class LearningDashboardPage extends LitElement {
           .open=${this._activeDrawer === "right"}
           @drawer-close=${() => (this._activeDrawer = undefined)}
         >
-          <span slot="header">Proposed Comments</span>
-          ${list}
+          <span slot="header">Proposed / Issues</span>
+          ${content}
         </ui-drawer>
       `;
     }
     return html`
-      <aside class="sidebar sidebar-right">${list}</aside>
+      <aside class="sidebar sidebar-right">${content}</aside>
     `;
   }
 
@@ -359,7 +372,7 @@ export class LearningDashboardPage extends LitElement {
       >
         <span class="material-symbols-outlined">menu</span>
       </button>
-      ${this._hasProposedComments
+      ${this._hasRightSidebarContent
         ? html`
             <button
               class="btn-hover btn-right"
@@ -408,6 +421,9 @@ export class LearningDashboardPage extends LitElement {
       }
       .sidebar-right {
         border-left: 1px solid var(--color-border-default);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
       .sidebar-project-select {
         padding: 16px;
