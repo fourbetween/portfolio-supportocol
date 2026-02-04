@@ -108,6 +108,74 @@ describe("learning-comment-card", async () => {
     );
     await expect.element(page.getByText("1/4/2026, 12:34:56 PM")).toBeVisible();
   });
+
+  it("指摘がある場合にアイコンが表示されること", async () => {
+    const comment = {
+      id: "1",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "content",
+      commentType: "idea",
+      status: "active" as const,
+      issues: [{ id: "i1", title: "issue1", description: "desc1" }],
+      createdAt: "2026-01-04T00:00:00Z",
+      archivedAt: null,
+    };
+    render(
+      html`
+        <learning-comment-card .comment=${comment}></learning-comment-card>
+      `,
+      container,
+    );
+    await expect.element(page.getByText("warning")).toBeVisible();
+  });
+
+  it("指摘削除ボタンをクリックするとイベントが発火すること", async () => {
+    const comment = {
+      id: "c1",
+      discussionId: "d1",
+      parentCommentId: "0",
+      content: "content",
+      commentType: "idea",
+      status: "active" as const,
+      issues: [{ id: "i1", title: "issue1", description: "desc1" }],
+      createdAt: "2026-01-04T00:00:00Z",
+      archivedAt: null,
+    };
+    render(
+      html`
+        <learning-comment-card .comment=${comment}></learning-comment-card>
+      `,
+      container,
+    );
+    const el = container.querySelector("learning-comment-card") as any;
+    await el.updateComplete;
+
+    // ポップアップを開くためにアイコンをクリック
+    const issueIcon = el.shadowRoot.querySelector(".issue-icon");
+    issueIcon.click();
+    await el.updateComplete;
+
+    const popup = el.shadowRoot.querySelector("learning-issue-list-popup");
+    await popup.updateComplete;
+    const issueList = popup.shadowRoot.querySelector("learning-issue-list");
+    await issueList.updateComplete;
+
+    const promise = new Promise<any>((resolve) => {
+      el.addEventListener("learning-issue-remove", (e: any) => {
+        resolve(e);
+      });
+    });
+
+    // 削除ボタンをクリック
+    const removeButton = issueList.shadowRoot.querySelector(".remove-button");
+    removeButton.click();
+
+    const event = await promise;
+    expect(event.commentId).toBe("c1");
+    expect(event.issueId).toBe("i1");
+  });
+
   it("statusがproposedの場合、proposedクラスが付与されること", async () => {
     const comment = {
       id: "1",

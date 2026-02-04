@@ -119,3 +119,30 @@ export const AncestorArchived: Story = {
     archived: true,
   },
 };
+
+export const WithIssues: Story = {
+  args: {
+    comment: {
+      id: "7",
+      discussionId: "1",
+      parentCommentId: "0",
+      content: "このコメントには指摘があります。",
+      commentType: "idea",
+      status: "active" as const,
+      issues: [
+        {
+          id: "i1",
+          title: "論理的な飛躍",
+          description: "AからCへの推論において、Bのステップが欠けています。",
+        },
+        {
+          id: "i2",
+          title: "用語の定義不足",
+          description: "「プラットフォーム」という言葉が多義的です。",
+        },
+      ],
+      createdAt: "2026-01-04T00:00:00Z",
+      archivedAt: null,
+    },
+  },
+};
