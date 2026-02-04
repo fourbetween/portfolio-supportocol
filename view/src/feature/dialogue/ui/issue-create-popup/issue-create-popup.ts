@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
@@ -10,6 +10,28 @@ import "../../../../shared/ui/popup/popup";
 import { DialogueIssueCreateEvent } from "../../event/issue";
 import type { Comment } from "../../model/comment";
 import "../comment-context/comment-context";
+
+const TEMPLATES = [
+  {
+    title: "Circular Reasoning",
+    description: "The conclusion is included in the premise of the argument.",
+  },
+  {
+    title: "Ad Hominem",
+    description:
+      "Attacking the person making the argument rather than the argument itself.",
+  },
+  {
+    title: "Straw Man",
+    description:
+      "Misrepresenting someone's argument to make it easier to attack.",
+  },
+  {
+    title: "Red Herring",
+    description:
+      "Introducing an irrelevant topic to divert attention from the original issue.",
+  },
+];
 
 @customElement("dialogue-issue-create-popup")
 export class DialogueIssueCreatePopup extends LitElement {
@@ -25,6 +47,27 @@ export class DialogueIssueCreatePopup extends LitElement {
   @query("#description")
   private _descriptionInput!: HTMLTextAreaElement;
 
+  @query("select")
+  private _templateSelect!: HTMLSelectElement;
+
+  protected updated(changedProperties: PropertyValues) {
+    if (changedProperties.has("open") && this.open) {
+      if (this._titleInput) this._titleInput.value = "";
+      if (this._descriptionInput) this._descriptionInput.value = "";
+      if (this._templateSelect) this._templateSelect.value = "";
+    }
+  }
+
+  private _handleTemplateChange(e: Event) {
+    const select = e.target as HTMLSelectElement;
+    const index = parseInt(select.value);
+    if (!isNaN(index)) {
+      const template = TEMPLATES[index];
+      this._titleInput.value = template.title;
+      this._descriptionInput.value = template.description;
+    }
+  }
+
   private _handleSubmit(e: Event) {
     e.preventDefault();
     const title = this._titleInput.value.trim();
@@ -34,6 +77,7 @@ export class DialogueIssueCreatePopup extends LitElement {
       this.dispatchEvent(new DialogueIssueCreateEvent(title, description));
       this._titleInput.value = "";
       this._descriptionInput.value = "";
+      this._templateSelect.value = "";
       this.open = false;
     }
   }
@@ -48,6 +92,16 @@ export class DialogueIssueCreatePopup extends LitElement {
             <div class="section">
               <div class="section-title">Issue Details</div>
               <form @submit=${this._handleSubmit}>
+                <select @change=${this._handleTemplateChange}>
+                  <option value="" selected disabled>
+                    Use Template (optional)
+                  </option>
+                  ${TEMPLATES.map(
+                    (t, i) => html`
+                      <option value=${i}>${t.title}</option>
+                    `,
+                  )}
+                </select>
                 <input
                   type="text"
                   id="title"
