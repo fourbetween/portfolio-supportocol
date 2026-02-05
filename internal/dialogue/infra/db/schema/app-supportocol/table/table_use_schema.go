@@ -14,4 +14,5 @@ func UseSchema(schema string) {
 	Comments = Comments.FromSchema(schema)
 	DialogueSettings = DialogueSettings.FromSchema(schema)
 	Discussions = Discussions.FromSchema(schema)
+	Workspaces = Workspaces.FromSchema(schema)
 }

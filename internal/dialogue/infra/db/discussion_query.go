@@ -29,9 +29,13 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context) ([]usecase
 			table.Discussions.ArchivedAt,
 			table.Discussions.LastCommentedAt,
 		).
-		FROM(table.Discussions).
+		FROM(
+			table.Discussions.
+				INNER_JOIN(table.Workspaces, table.Discussions.WorkspaceID.EQ(table.Workspaces.ID)),
+		).
 		WHERE(
-			table.Discussions.Status.EQ(mysql.String("public")),
+			table.Discussions.Status.EQ(mysql.String("public")).
+				AND(table.Workspaces.Type.EQ(mysql.String("personal"))),
 		).
 		ORDER_BY(table.Discussions.LastCommentedAt.DESC())
 
