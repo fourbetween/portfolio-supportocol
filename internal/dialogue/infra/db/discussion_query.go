@@ -24,6 +24,7 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context) ([]usecase
 	stmt := mysql.
 		SELECT(
 			table.Discussions.ID,
+			table.Discussions.WorkspaceID,
 			table.Discussions.Theme,
 			table.Discussions.ArchivedAt,
 			table.Discussions.LastCommentedAt,
@@ -43,6 +44,7 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context) ([]usecase
 	for i, d := range dest {
 		res[i] = usecase.DiscussionSummary{
 			ID:              d.ID,
+			WorkspaceID:     d.WorkspaceID,
 			Theme:           d.Theme,
 			ArchivedAt:      d.ArchivedAt,
 			LastCommentedAt: d.LastCommentedAt,

@@ -132,3 +132,21 @@ func (s *workspaceQueryService) selectProjectWithMember() mysql.SelectStatement 
 				INNER_JOIN(table.Members, table.Projects.WorkspaceID.EQ(table.Members.WorkspaceID)),
 		)
 }
+
+func (s *workspaceQueryService) IsPersonalWorkspace(ctx context.Context, workspaceID string) (bool, error) {
+	stmt := mysql.
+		SELECT(table.Workspaces.Type).
+		FROM(table.Workspaces).
+		WHERE(table.Workspaces.ID.EQ(mysql.String(workspaceID))).
+		LIMIT(1)
+
+	var dest model.Workspaces
+	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
+		if errors.Is(err, qrm.ErrNoRows) {
+			return false, apperr.ErrNotFound
+		}
+		return false, fmt.Errorf("failed to check workspace type: %w", err)
+	}
+
+	return dest.Type == "personal", nil
+}

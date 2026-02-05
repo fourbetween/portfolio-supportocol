@@ -81,6 +81,8 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/Id"
+        workspaceId:
+          $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
         archivedAt:
@@ -93,6 +95,7 @@ components:
           format: date-time
       required:
         - id
+        - workspaceId
         - theme
         - archivedAt
         - lastCommentedAt
@@ -100,6 +103,8 @@ components:
       type: object
       properties:
         id:
+          $ref: "#/components/schemas/Id"
+        workspaceId:
           $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
@@ -114,6 +119,7 @@ components:
           $ref: "#/components/schemas/DialogueSettings"
       required:
         - id
+        - workspaceId
         - theme
         - conclusion
         - archivedAt
@@ -170,10 +176,29 @@ components:
         - id
         - title
         - description
+  parameters:
+    workspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/Id"
+    discussionId:
+      name: discussionId
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/Id"
+    commentId:
+      name: commentId
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/Id"
 paths:
   /v1/dialogue/discussions:
     get:
-      description: get discussions
+      description: get public discussions
       responses:
         "200":
           description: success response
@@ -189,15 +214,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/dialogue/discussions/{discussionId}:
+  /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}:
+    parameters:
+      - $ref: "#/components/parameters/workspaceId"
+      - $ref: "#/components/parameters/discussionId"
     get:
       description: get discussion
-      parameters:
-        - schema:
-            $ref: "#/components/schemas/Id"
-          required: true
-          name: discussionId
-          in: path
       responses:
         "200":
           description: success response
@@ -211,15 +233,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/dialogue/discussions/{discussionId}/comments:
+  /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments:
+    parameters:
+      - $ref: "#/components/parameters/workspaceId"
+      - $ref: "#/components/parameters/discussionId"
     get:
       description: get comments for a discussion
       parameters:
-        - schema:
-            $ref: "#/components/schemas/Id"
-          required: true
-          name: discussionId
-          in: path
         - schema:
             type: string
             format: date-time
@@ -243,12 +263,6 @@ paths:
                 $ref: "#/components/schemas/Error"
     post:
       description: create comment
-      parameters:
-        - schema:
-            $ref: "#/components/schemas/Id"
-          required: true
-          name: discussionId
-          in: path
       requestBody:
         required: true
         content:
@@ -281,20 +295,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues:
+  /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues:
+    parameters:
+      - $ref: "#/components/parameters/workspaceId"
+      - $ref: "#/components/parameters/discussionId"
+      - $ref: "#/components/parameters/commentId"
     post:
       description: add issue to comment
-      parameters:
-        - schema:
-            $ref: "#/components/schemas/Id"
-          required: true
-          name: discussionId
-          in: path
-        - schema:
-            $ref: "#/components/schemas/Id"
-          required: true
-          name: commentId
-          in: path
       requestBody:
         required: true
         content:

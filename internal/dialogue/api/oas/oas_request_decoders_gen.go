@@ -14,8 +14,8 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest(r *http.Request) (
-	req *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq,
+func (s *Server) decodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest(r *http.Request) (
+	req *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -62,7 +62,7 @@ func (s *Server) decodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesP
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq
+		var request V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -93,8 +93,8 @@ func (s *Server) decodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesP
 	}
 }
 
-func (s *Server) decodeV1DialogueDiscussionsDiscussionIdCommentsPostRequest(r *http.Request) (
-	req *V1DialogueDiscussionsDiscussionIdCommentsPostReq,
+func (s *Server) decodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostRequest(r *http.Request) (
+	req *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -141,7 +141,7 @@ func (s *Server) decodeV1DialogueDiscussionsDiscussionIdCommentsPostRequest(r *h
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request V1DialogueDiscussionsDiscussionIdCommentsPostReq
+		var request V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

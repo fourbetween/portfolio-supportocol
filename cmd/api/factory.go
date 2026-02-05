@@ -10,6 +10,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/dialogue"
 	dialogueapi "github.com/fourbetween/app-supportocol/internal/dialogue/api"
 	dialogueoas "github.com/fourbetween/app-supportocol/internal/dialogue/api/oas"
+	dialogueadapter "github.com/fourbetween/app-supportocol/internal/dialogue/infra/adapter"
 	"github.com/fourbetween/app-supportocol/internal/identity"
 	identityapi "github.com/fourbetween/app-supportocol/internal/identity/api"
 	identityoas "github.com/fourbetween/app-supportocol/internal/identity/api/oas"
@@ -68,7 +69,8 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 		return nil, fmt.Errorf("failed to create learning handler: %w", err)
 	}
 
-	dialogueHandler, err := newDialogueHandler(dbCon)
+	dialoguePermSv := dialogueadapter.NewWorkspacePermissionAdapter(workspaceCon.WorkspaceQueryService)
+	dialogueHandler, err := newDialogueHandler(dbCon, dialoguePermSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create dialogue handler: %w", err)
 	}
@@ -157,8 +159,8 @@ func newLearningHandler(
 	return handler, nil
 }
 
-func newDialogueHandler(dbCon *sql.DB) (http.Handler, error) {
-	con, err := dialogue.NewAPIContainer(dbCon)
+func newDialogueHandler(dbCon *sql.DB, permSv *dialogueadapter.WorkspacePermissionAdapter) (http.Handler, error) {
+	con, err := dialogue.NewAPIContainer(dbCon, permSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create dialogue api container: %w", err)
 	}

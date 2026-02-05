@@ -6,9 +6,9 @@ package oas
 type OperationName = string
 
 const (
-	V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation OperationName = "V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost"
-	V1DialogueDiscussionsDiscussionIdCommentsGetOperation                 OperationName = "V1DialogueDiscussionsDiscussionIdCommentsGet"
-	V1DialogueDiscussionsDiscussionIdCommentsPostOperation                OperationName = "V1DialogueDiscussionsDiscussionIdCommentsPost"
-	V1DialogueDiscussionsDiscussionIdGetOperation                         OperationName = "V1DialogueDiscussionsDiscussionIdGet"
-	V1DialogueDiscussionsGetOperation                                     OperationName = "V1DialogueDiscussionsGet"
+	V1DialogueDiscussionsGetOperation                                                          OperationName = "V1DialogueDiscussionsGet"
+	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation OperationName = "V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost"
+	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetOperation                 OperationName = "V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet"
+	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation                OperationName = "V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost"
+	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetOperation                         OperationName = "V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet"
 )

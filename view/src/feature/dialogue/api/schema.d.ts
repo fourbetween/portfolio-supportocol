@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description get discussions */
+        /** @description get public discussions */
         get: {
             parameters: {
                 query?: never;
@@ -49,11 +49,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/dialogue/discussions/{discussionId}": {
+    "/v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+            };
             cookie?: never;
         };
         /** @description get discussion */
@@ -62,7 +65,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -96,11 +100,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/dialogue/discussions/{discussionId}/comments": {
+    "/v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+            };
             cookie?: never;
         };
         /** @description get comments for a discussion */
@@ -111,7 +118,8 @@ export interface paths {
                 };
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -144,7 +152,8 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
@@ -184,11 +193,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues": {
+    "/v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues": {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
+            };
             cookie?: never;
         };
         get?: never;
@@ -199,8 +212,9 @@ export interface paths {
                 query?: never;
                 header?: never;
                 path: {
-                    discussionId: components["schemas"]["Id"];
-                    commentId: components["schemas"]["Id"];
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
                 };
                 cookie?: never;
             };
@@ -271,6 +285,7 @@ export interface components {
         CommentIssueDescription: string;
         DiscussionSummary: {
             id: components["schemas"]["Id"];
+            workspaceId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             archivedAt: string | null;
             /** Format: date-time */
@@ -278,6 +293,7 @@ export interface components {
         };
         Discussion: {
             id: components["schemas"]["Id"];
+            workspaceId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             conclusion: components["schemas"]["DiscussionConclusion"];
             archivedAt: string | null;
@@ -302,7 +318,11 @@ export interface components {
         };
     };
     responses: never;
-    parameters: never;
+    parameters: {
+        workspaceId: components["schemas"]["Id"];
+        discussionId: components["schemas"]["Id"];
+        commentId: components["schemas"]["Id"];
+    };
     requestBodies: never;
     headers: never;
     pathItems: never;

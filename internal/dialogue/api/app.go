@@ -40,12 +40,13 @@ func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context) ([]oas.Discus
 	return res, nil
 }
 
-func (h *appHandler) V1DialogueDiscussionsDiscussionIdGet(
+func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(
 	ctx context.Context,
-	params oas.V1DialogueDiscussionsDiscussionIdGetParams,
+	params oas.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams,
 ) (*oas.Discussion, error) {
 	item, err := h.con.GetDiscussion.Execute(ctx, usecase.GetDiscussionInput{
-		ID: uuid.UUID(params.DiscussionId).String(),
+		ID:          uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
 	})
 	if err != nil {
 		return nil, err
@@ -55,9 +56,9 @@ func (h *appHandler) V1DialogueDiscussionsDiscussionIdGet(
 	return &res, nil
 }
 
-func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsGet(
+func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet(
 	ctx context.Context,
-	params oas.V1DialogueDiscussionsDiscussionIdCommentsGetParams,
+	params oas.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams,
 ) ([]oas.Comment, error) {
 	var since *time.Time
 	if params.Since.Set {
@@ -66,6 +67,7 @@ func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsGet(
 
 	items, err := h.con.ListComments.Execute(ctx, usecase.ListCommentsInput{
 		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
 		Since:        since,
 	})
 	if err != nil {
@@ -79,10 +81,10 @@ func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsGet(
 	return res, nil
 }
 
-func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsPost(
+func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(
 	ctx context.Context,
-	req *oas.V1DialogueDiscussionsDiscussionIdCommentsPostReq,
-	params oas.V1DialogueDiscussionsDiscussionIdCommentsPostParams,
+	req *oas.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq,
+	params oas.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams,
 ) (*oas.Comment, error) {
 	var parentCommentID *string
 	if !req.ParentCommentId.Null {
@@ -92,6 +94,7 @@ func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsPost(
 
 	item, err := h.con.CreateComment.Execute(ctx, usecase.CreateCommentInput{
 		DiscussionID:    uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:     uuid.UUID(params.WorkspaceId).String(),
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
 		Content:         string(req.Content),
@@ -104,13 +107,14 @@ func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsPost(
 	return &res, nil
 }
 
-func (h *appHandler) V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost(
+func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost(
 	ctx context.Context,
-	req *oas.V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq,
-	params oas.V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams,
+	req *oas.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq,
+	params oas.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams,
 ) (*oas.Comment, error) {
 	item, err := h.con.AddCommentIssue.Execute(ctx, usecase.AddCommentIssueInput{
 		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
 		CommentID:    uuid.UUID(params.CommentId).String(),
 		Title:        string(req.Title),
 		Description:  string(req.Description),
@@ -152,6 +156,7 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.DiscussionSummary {
 	res := oas.DiscussionSummary{
 		ID:              oas.ID(uuid.MustParse(item.ID)),
+		WorkspaceId:     oas.ID(uuid.MustParse(item.WorkspaceID)),
 		Theme:           oas.DiscussionTheme(item.Theme),
 		LastCommentedAt: item.LastCommentedAt,
 	}
@@ -181,9 +186,10 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	}
 
 	res := oas.Discussion{
-		ID:         oas.ID(uuid.MustParse(item.ID())),
-		Theme:      oas.DiscussionTheme(item.Theme()),
-		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
+		ID:          oas.ID(uuid.MustParse(item.ID())),
+		WorkspaceId: oas.ID(uuid.MustParse(item.WorkspaceID())),
+		Theme:       oas.DiscussionTheme(item.Theme()),
+		Conclusion:  oas.DiscussionConclusion(item.Conclusion()),
 		DialogueSettings: oas.DialogueSettings{
 			DiscussionId: oas.ID(uuid.MustParse(item.ID())),
 			CommentFrame: oas.CommentFrame{

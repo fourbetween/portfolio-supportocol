@@ -14,7 +14,8 @@ type (
 	}
 
 	LoadDiscussionParams struct {
-		ID string
+		ID          string
+		WorkspaceID string
 	}
 
 	CommentRepository interface {
