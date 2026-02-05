@@ -24,9 +24,10 @@ export class DialogueRoot extends LitElement {
           await import("./page/item-page");
           return true;
         },
-        render: ({ id }) => html`
+        render: ({ workspaceId, discussionId }) => html`
           <dialogue-item-page
-            .discussionId=${id as string}
+            .workspaceId=${workspaceId as string}
+            .discussionId=${discussionId as string}
           ></dialogue-item-page>
         `,
       },
@@ -35,7 +36,7 @@ export class DialogueRoot extends LitElement {
       fallback: {
         render: () => nothing,
       },
-    }
+    },
   );
 
   render() {

@@ -2,12 +2,16 @@ import { client } from "../api/client";
 import type { Comment } from "../model/comment";
 
 export class CommentRepository {
-  async list(discussionId: string, since?: string): Promise<Comment[]> {
+  async list(
+    workspaceId: string,
+    discussionId: string,
+    since?: string,
+  ): Promise<Comment[]> {
     const { data, error } = await client.GET(
-      "/v1/dialogue/discussions/{discussionId}/comments",
+      "/v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
           query: { since },
         },
       },
@@ -17,6 +21,7 @@ export class CommentRepository {
   }
 
   async create(
+    workspaceId: string,
     discussionId: string,
     body: {
       parentCommentId: string | null;
@@ -25,10 +30,10 @@ export class CommentRepository {
     },
   ): Promise<Comment> {
     const { data, error } = await client.POST(
-      "/v1/dialogue/discussions/{discussionId}/comments",
+      "/v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments",
       {
         params: {
-          path: { discussionId },
+          path: { workspaceId, discussionId },
         },
         body,
       },
@@ -38,6 +43,7 @@ export class CommentRepository {
   }
 
   async addIssue(
+    workspaceId: string,
     discussionId: string,
     commentId: string,
     body: {
@@ -46,10 +52,10 @@ export class CommentRepository {
     },
   ): Promise<Comment> {
     const { data, error } = await client.POST(
-      "/v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues",
+      "/v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues",
       {
         params: {
-          path: { discussionId, commentId },
+          path: { workspaceId, discussionId, commentId },
         },
         body,
       },

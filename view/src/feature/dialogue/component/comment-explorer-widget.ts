@@ -80,11 +80,15 @@ export class DialogueCommentExplorerWidget extends LitElement {
   private async handleCommentCreate(e: DialogueCommentCreateEvent) {
     if (!this.discussion || this.readonly) return;
     try {
-      const data = await commentRepository.create(this.discussion.id, {
-        parentCommentId: e.parentCommentId,
-        commentType: e.commentType,
-        content: e.content,
-      });
+      const data = await commentRepository.create(
+        this.discussion.workspaceId,
+        this.discussion.id,
+        {
+          parentCommentId: e.parentCommentId,
+          commentType: e.commentType,
+          content: e.content,
+        },
+      );
 
       showToast(this, "Comment created.", "success", 2000);
       if (data) {
@@ -108,6 +112,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
     if (!this.discussion || !this.issueTargetCommentId) return;
     try {
       const data = await commentRepository.addIssue(
+        this.discussion.workspaceId,
         this.discussion.id,
         this.issueTargetCommentId,
         {

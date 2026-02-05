@@ -40,7 +40,10 @@ export class DialogueDiscussionListWidget extends LitElement {
 
   private handleDiscussionSelect(event: DialogueDiscussionSelectEvent) {
     if (!this.router) return;
-    navigate(this.router, paths.dialogue.item, { id: event.discussionId });
+    navigate(this.router, paths.dialogue.item, {
+      workspaceId: event.workspaceId,
+      discussionId: event.discussionId,
+    });
   }
 
   render() {

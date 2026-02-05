@@ -8,12 +8,12 @@ export class DiscussionRepository {
     return data;
   }
 
-  async load(id: string): Promise<Discussion> {
+  async load(workspaceId: string, discussionId: string): Promise<Discussion> {
     const { data, error } = await client.GET(
-      "/v1/dialogue/discussions/{discussionId}",
+      "/v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}",
       {
-        params: { path: { discussionId: id } },
-      }
+        params: { path: { workspaceId, discussionId } },
+      },
     );
     if (error) throw new Error(error.message);
     return data;
