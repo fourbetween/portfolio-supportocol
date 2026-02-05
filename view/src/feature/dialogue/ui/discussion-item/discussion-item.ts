@@ -11,7 +11,12 @@ export class DialogueDiscussionItem extends LitElement {
   summary!: DiscussionSummary;
 
   private handleClick() {
-    this.dispatchEvent(new DialogueDiscussionSelectEvent(this.summary.id));
+    this.dispatchEvent(
+      new DialogueDiscussionSelectEvent(
+        this.summary.workspaceId,
+        this.summary.id,
+      ),
+    );
   }
 
   render() {

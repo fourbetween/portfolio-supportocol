@@ -9,9 +9,7 @@ export const paths = {
   },
   dialogue: {
     search: "/dialogue/search",
-    // /dialogue/:id にすると /learning/discussions への遷移時に、
-    // :id として discussions が解釈されてしまう問題があるため、 /dialogue/discussions/:id としている
-    item: "/dialogue/discussions/:id",
+    item: "/dialogue/workspaces/:workspaceId/discussions/:discussionId",
   },
   workspace: {
     projects: "/workspace/projects",

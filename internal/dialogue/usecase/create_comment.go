@@ -2,8 +2,10 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal/dialogue/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
@@ -14,6 +16,7 @@ type CreateCommentUsecase struct {
 	fac            *domain.CommentFactory
 	clock          clock.Service
 	tx             dbtx.Manager
+	permSv         domain.PermissionService
 }
 
 func NewCreateCommentUsecase(
@@ -22,6 +25,7 @@ func NewCreateCommentUsecase(
 	fac *domain.CommentFactory,
 	clock clock.Service,
 	tx dbtx.Manager,
+	permSv domain.PermissionService,
 ) *CreateCommentUsecase {
 	return &CreateCommentUsecase{
 		discussionRepo: discussionRepo,
@@ -29,22 +33,33 @@ func NewCreateCommentUsecase(
 		fac:            fac,
 		clock:          clock,
 		tx:             tx,
+		permSv:         permSv,
 	}
 }
 
 type CreateCommentInput struct {
 	DiscussionID    string
+	WorkspaceID     string
 	ParentCommentID *string
 	CommentType     string
 	Content         string
 }
 
 func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentInput) (*domain.Comment, error) {
+	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.WorkspaceID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check workspace access: %w", err)
+	}
+	if !canAccess {
+		return nil, apperr.ErrPermissionDenied
+	}
+
 	var comment *domain.Comment
-	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// Verify discussion exists
 		discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-			ID: input.DiscussionID,
+			ID:          input.DiscussionID,
+			WorkspaceID: input.WorkspaceID,
 		})
 		if err != nil {
 			return err

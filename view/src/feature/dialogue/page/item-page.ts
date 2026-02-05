@@ -28,6 +28,9 @@ export class DialogueItemPage extends LitElement {
   private _touch = new TouchController(this);
 
   @property({ type: String })
+  workspaceId!: string;
+
+  @property({ type: String })
   discussionId!: string;
 
   @state()
@@ -46,8 +49,8 @@ export class DialogueItemPage extends LitElement {
     super();
 
     new Task(this, {
-      task: async ([discussionId]) => {
-        return discussionRepository.load(discussionId);
+      task: async ([workspaceId, discussionId]) => {
+        return discussionRepository.load(workspaceId, discussionId);
       },
       onComplete: (discussion) => {
         this._discussion = discussion;
@@ -55,13 +58,13 @@ export class DialogueItemPage extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [this.discussionId],
+      args: () => [this.workspaceId, this.discussionId],
     });
 
     new Task(this, {
-      task: async ([discussionId]) => {
-        if (!discussionId) return [] as Comment[];
-        return commentRepository.list(discussionId);
+      task: async ([workspaceId, discussionId]) => {
+        if (!workspaceId || !discussionId) return [] as Comment[];
+        return commentRepository.list(workspaceId, discussionId);
       },
       onComplete: (comments) => {
         this._comments = comments;
@@ -69,7 +72,7 @@ export class DialogueItemPage extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [this.discussionId],
+      args: () => [this.workspaceId, this.discussionId],
     });
   }
 

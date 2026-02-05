@@ -8,36 +8,36 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost implements POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues operation.
-	//
-	// Add issue to comment.
-	//
-	// POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues
-	V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx context.Context, req *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq, params V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams) (*Comment, error)
-	// V1DialogueDiscussionsDiscussionIdCommentsGet implements GET /v1/dialogue/discussions/{discussionId}/comments operation.
-	//
-	// Get comments for a discussion.
-	//
-	// GET /v1/dialogue/discussions/{discussionId}/comments
-	V1DialogueDiscussionsDiscussionIdCommentsGet(ctx context.Context, params V1DialogueDiscussionsDiscussionIdCommentsGetParams) ([]Comment, error)
-	// V1DialogueDiscussionsDiscussionIdCommentsPost implements POST /v1/dialogue/discussions/{discussionId}/comments operation.
-	//
-	// Create comment.
-	//
-	// POST /v1/dialogue/discussions/{discussionId}/comments
-	V1DialogueDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *V1DialogueDiscussionsDiscussionIdCommentsPostReq, params V1DialogueDiscussionsDiscussionIdCommentsPostParams) (*Comment, error)
-	// V1DialogueDiscussionsDiscussionIdGet implements GET /v1/dialogue/discussions/{discussionId} operation.
-	//
-	// Get discussion.
-	//
-	// GET /v1/dialogue/discussions/{discussionId}
-	V1DialogueDiscussionsDiscussionIdGet(ctx context.Context, params V1DialogueDiscussionsDiscussionIdGetParams) (*Discussion, error)
 	// V1DialogueDiscussionsGet implements GET /v1/dialogue/discussions operation.
 	//
-	// Get discussions.
+	// Get public discussions.
 	//
 	// GET /v1/dialogue/discussions
 	V1DialogueDiscussionsGet(ctx context.Context) ([]DiscussionSummary, error)
+	// V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost implements POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues operation.
+	//
+	// Add issue to comment.
+	//
+	// POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues
+	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx context.Context, req *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq, params V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams) (*Comment, error)
+	// V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet implements GET /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
+	//
+	// Get comments for a discussion.
+	//
+	// GET /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments
+	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet(ctx context.Context, params V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams) ([]Comment, error)
+	// V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost implements POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
+	//
+	// Create comment.
+	//
+	// POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments
+	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq, params V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams) (*Comment, error)
+	// V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet implements GET /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId} operation.
+	//
+	// Get discussion.
+	//
+	// GET /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}
+	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(ctx context.Context, params V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams) (*Discussion, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

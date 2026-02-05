@@ -21,6 +21,7 @@ type APIContainer struct {
 
 func NewAPIContainer(
 	dbCon *sql.DB,
+	permSv domain.PermissionService,
 ) (*APIContainer, error) {
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
@@ -36,10 +37,10 @@ func NewAPIContainer(
 	commentRepo := db.NewCommentRepository(dbCon, commentFac)
 
 	return &APIContainer{
-		GetDiscussion:   usecase.NewGetDiscussionUsecase(discussionRepo),
+		GetDiscussion:   usecase.NewGetDiscussionUsecase(discussionRepo, permSv),
 		ListDiscussions: usecase.NewListDiscussionsUsecase(discussionQS),
-		ListComments:    usecase.NewListCommentsUsecase(discussionRepo, commentRepo),
-		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, clockSrv, txManager),
-		AddCommentIssue: usecase.NewAddCommentIssueUsecase(discussionRepo, commentRepo, idSrv, txManager),
+		ListComments:    usecase.NewListCommentsUsecase(discussionRepo, commentRepo, permSv),
+		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, clockSrv, txManager, permSv),
+		AddCommentIssue: usecase.NewAddCommentIssueUsecase(discussionRepo, commentRepo, idSrv, txManager, permSv),
 	}, nil
 }

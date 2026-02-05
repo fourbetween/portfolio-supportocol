@@ -285,6 +285,7 @@ func (s *DialogueSettings) SetCommentFrame(val CommentFrame) {
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
 	ID               ID                   `json:"id"`
+	WorkspaceId      ID                   `json:"workspaceId"`
 	Theme            DiscussionTheme      `json:"theme"`
 	Conclusion       DiscussionConclusion `json:"conclusion"`
 	ArchivedAt       NilDateTime          `json:"archivedAt"`
@@ -294,6 +295,11 @@ type Discussion struct {
 // GetID returns the value of ID.
 func (s *Discussion) GetID() ID {
 	return s.ID
+}
+
+// GetWorkspaceId returns the value of WorkspaceId.
+func (s *Discussion) GetWorkspaceId() ID {
+	return s.WorkspaceId
 }
 
 // GetTheme returns the value of Theme.
@@ -321,6 +327,11 @@ func (s *Discussion) SetID(val ID) {
 	s.ID = val
 }
 
+// SetWorkspaceId sets the value of WorkspaceId.
+func (s *Discussion) SetWorkspaceId(val ID) {
+	s.WorkspaceId = val
+}
+
 // SetTheme sets the value of Theme.
 func (s *Discussion) SetTheme(val DiscussionTheme) {
 	s.Theme = val
@@ -346,6 +357,7 @@ type DiscussionConclusion string
 // Ref: #/components/schemas/DiscussionSummary
 type DiscussionSummary struct {
 	ID              ID              `json:"id"`
+	WorkspaceId     ID              `json:"workspaceId"`
 	Theme           DiscussionTheme `json:"theme"`
 	ArchivedAt      NilDateTime     `json:"archivedAt"`
 	LastCommentedAt time.Time       `json:"lastCommentedAt"`
@@ -354,6 +366,11 @@ type DiscussionSummary struct {
 // GetID returns the value of ID.
 func (s *DiscussionSummary) GetID() ID {
 	return s.ID
+}
+
+// GetWorkspaceId returns the value of WorkspaceId.
+func (s *DiscussionSummary) GetWorkspaceId() ID {
+	return s.WorkspaceId
 }
 
 // GetTheme returns the value of Theme.
@@ -374,6 +391,11 @@ func (s *DiscussionSummary) GetLastCommentedAt() time.Time {
 // SetID sets the value of ID.
 func (s *DiscussionSummary) SetID(val ID) {
 	s.ID = val
+}
+
+// SetWorkspaceId sets the value of WorkspaceId.
+func (s *DiscussionSummary) SetWorkspaceId(val ID) {
+	s.WorkspaceId = val
 }
 
 // SetTheme sets the value of Theme.
@@ -583,63 +605,63 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
-type V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq struct {
+type V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq struct {
 	Title       CommentIssueTitle       `json:"title"`
 	Description CommentIssueDescription `json:"description"`
 }
 
 // GetTitle returns the value of Title.
-func (s *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) GetTitle() CommentIssueTitle {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) GetTitle() CommentIssueTitle {
 	return s.Title
 }
 
 // GetDescription returns the value of Description.
-func (s *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) GetDescription() CommentIssueDescription {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) GetDescription() CommentIssueDescription {
 	return s.Description
 }
 
 // SetTitle sets the value of Title.
-func (s *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) SetTitle(val CommentIssueTitle) {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) SetTitle(val CommentIssueTitle) {
 	s.Title = val
 }
 
 // SetDescription sets the value of Description.
-func (s *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) SetDescription(val CommentIssueDescription) {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) SetDescription(val CommentIssueDescription) {
 	s.Description = val
 }
 
-type V1DialogueDiscussionsDiscussionIdCommentsPostReq struct {
+type V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq struct {
 	ParentCommentId NilID          `json:"parentCommentId"`
 	CommentType     CommentType    `json:"commentType"`
 	Content         CommentContent `json:"content"`
 }
 
 // GetParentCommentId returns the value of ParentCommentId.
-func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() NilID {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) GetParentCommentId() NilID {
 	return s.ParentCommentId
 }
 
 // GetCommentType returns the value of CommentType.
-func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) GetCommentType() CommentType {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) GetCommentType() CommentType {
 	return s.CommentType
 }
 
 // GetContent returns the value of Content.
-func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) GetContent() CommentContent {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) GetContent() CommentContent {
 	return s.Content
 }
 
 // SetParentCommentId sets the value of ParentCommentId.
-func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val NilID) {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) SetParentCommentId(val NilID) {
 	s.ParentCommentId = val
 }
 
 // SetCommentType sets the value of CommentType.
-func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) SetCommentType(val CommentType) {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) SetCommentType(val CommentType) {
 	s.CommentType = val
 }
 
 // SetContent sets the value of Content.
-func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentContent) {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentContent) {
 	s.Content = val
 }

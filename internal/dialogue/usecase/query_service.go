@@ -7,6 +7,7 @@ import (
 
 type DiscussionSummary struct {
 	ID              string
+	WorkspaceID     string
 	Theme           string
 	ArchivedAt      *time.Time
 	LastCommentedAt time.Time

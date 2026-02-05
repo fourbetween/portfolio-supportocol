@@ -19,4 +19,5 @@ type WorkspaceQueryService interface {
 	ListMyWorkspaces(ctx context.Context, userID string) ([]WorkspaceWithMember, error)
 	CanAccessWorkspace(ctx context.Context, userID string, workspaceID string) (bool, error)
 	CanAccessProject(ctx context.Context, userID string, workspaceID string, projectID string) (bool, error)
+	IsPersonalWorkspace(ctx context.Context, workspaceID string) (bool, error)
 }

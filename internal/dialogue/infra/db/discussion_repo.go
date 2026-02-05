@@ -31,7 +31,8 @@ type discussionWithSettings struct {
 }
 
 func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscussionParams) (*domain.Discussion, error) {
-	cond := table.Discussions.ID.EQ(mysql.String(params.ID))
+	cond := table.Discussions.ID.EQ(mysql.String(params.ID)).
+		AND(table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)))
 
 	stmt := mysql.
 		SELECT(
@@ -66,6 +67,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
 		ID:              row.ID,
+		WorkspaceID:     row.WorkspaceID,
 		Theme:           row.Theme,
 		Conclusion:      row.Conclusion,
 		Settings:        settings,

@@ -28,427 +28,9 @@ func (c *codeRecorder) Unwrap() http.ResponseWriter {
 
 func recordError(string, error) {}
 
-// handleV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest handles POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues operation.
-//
-// Add issue to comment.
-//
-// POST /v1/dialogue/discussions/{discussionId}/comments/{commentId}/issues
-func (s *Server) handleV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
-	statusWriter := &codeRecorder{ResponseWriter: w}
-	w = statusWriter
-	ctx := r.Context()
-
-	var (
-		err          error
-		opErrContext = ogenerrors.OperationContext{
-			Name: V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation,
-			ID:   "",
-		}
-	)
-	params, err := decodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-
-	var rawBody []byte
-	request, rawBody, close, err := s.decodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest(r)
-	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeRequest", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
-
-	var response *Comment
-	if m := s.cfg.Middleware; m != nil {
-		mreq := middleware.Request{
-			Context:          ctx,
-			OperationName:    V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation,
-			OperationSummary: "",
-			OperationID:      "",
-			Body:             request,
-			RawBody:          rawBody,
-			Params: middleware.Parameters{
-				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
-					Name: "commentId",
-					In:   "path",
-				}: params.CommentId,
-			},
-			Raw: r,
-		}
-
-		type (
-			Request  = *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq
-			Params   = V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams
-			Response = *Comment
-		)
-		response, err = middleware.HookMiddleware[
-			Request,
-			Params,
-			Response,
-		](
-			m,
-			mreq,
-			unpackV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams,
-			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx, request, params)
-				return response, err
-			},
-		)
-	} else {
-		response, err = s.h.V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx, request, params)
-	}
-	if err != nil {
-		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
-			if err := encodeErrorResponse(errRes, w); err != nil {
-				defer recordError("Internal", err)
-			}
-			return
-		}
-		if errors.Is(err, ht.ErrNotImplemented) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-			return
-		}
-		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
-			defer recordError("Internal", err)
-		}
-		return
-	}
-
-	if err := encodeV1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostResponse(response, w); err != nil {
-		defer recordError("EncodeResponse", err)
-		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-		}
-		return
-	}
-}
-
-// handleV1DialogueDiscussionsDiscussionIdCommentsGetRequest handles GET /v1/dialogue/discussions/{discussionId}/comments operation.
-//
-// Get comments for a discussion.
-//
-// GET /v1/dialogue/discussions/{discussionId}/comments
-func (s *Server) handleV1DialogueDiscussionsDiscussionIdCommentsGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
-	statusWriter := &codeRecorder{ResponseWriter: w}
-	w = statusWriter
-	ctx := r.Context()
-
-	var (
-		err          error
-		opErrContext = ogenerrors.OperationContext{
-			Name: V1DialogueDiscussionsDiscussionIdCommentsGetOperation,
-			ID:   "",
-		}
-	)
-	params, err := decodeV1DialogueDiscussionsDiscussionIdCommentsGetParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-
-	var rawBody []byte
-
-	var response []Comment
-	if m := s.cfg.Middleware; m != nil {
-		mreq := middleware.Request{
-			Context:          ctx,
-			OperationName:    V1DialogueDiscussionsDiscussionIdCommentsGetOperation,
-			OperationSummary: "",
-			OperationID:      "",
-			Body:             nil,
-			RawBody:          rawBody,
-			Params: middleware.Parameters{
-				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-				{
-					Name: "since",
-					In:   "query",
-				}: params.Since,
-			},
-			Raw: r,
-		}
-
-		type (
-			Request  = struct{}
-			Params   = V1DialogueDiscussionsDiscussionIdCommentsGetParams
-			Response = []Comment
-		)
-		response, err = middleware.HookMiddleware[
-			Request,
-			Params,
-			Response,
-		](
-			m,
-			mreq,
-			unpackV1DialogueDiscussionsDiscussionIdCommentsGetParams,
-			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1DialogueDiscussionsDiscussionIdCommentsGet(ctx, params)
-				return response, err
-			},
-		)
-	} else {
-		response, err = s.h.V1DialogueDiscussionsDiscussionIdCommentsGet(ctx, params)
-	}
-	if err != nil {
-		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
-			if err := encodeErrorResponse(errRes, w); err != nil {
-				defer recordError("Internal", err)
-			}
-			return
-		}
-		if errors.Is(err, ht.ErrNotImplemented) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-			return
-		}
-		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
-			defer recordError("Internal", err)
-		}
-		return
-	}
-
-	if err := encodeV1DialogueDiscussionsDiscussionIdCommentsGetResponse(response, w); err != nil {
-		defer recordError("EncodeResponse", err)
-		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-		}
-		return
-	}
-}
-
-// handleV1DialogueDiscussionsDiscussionIdCommentsPostRequest handles POST /v1/dialogue/discussions/{discussionId}/comments operation.
-//
-// Create comment.
-//
-// POST /v1/dialogue/discussions/{discussionId}/comments
-func (s *Server) handleV1DialogueDiscussionsDiscussionIdCommentsPostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
-	statusWriter := &codeRecorder{ResponseWriter: w}
-	w = statusWriter
-	ctx := r.Context()
-
-	var (
-		err          error
-		opErrContext = ogenerrors.OperationContext{
-			Name: V1DialogueDiscussionsDiscussionIdCommentsPostOperation,
-			ID:   "",
-		}
-	)
-	params, err := decodeV1DialogueDiscussionsDiscussionIdCommentsPostParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-
-	var rawBody []byte
-	request, rawBody, close, err := s.decodeV1DialogueDiscussionsDiscussionIdCommentsPostRequest(r)
-	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeRequest", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
-
-	var response *Comment
-	if m := s.cfg.Middleware; m != nil {
-		mreq := middleware.Request{
-			Context:          ctx,
-			OperationName:    V1DialogueDiscussionsDiscussionIdCommentsPostOperation,
-			OperationSummary: "",
-			OperationID:      "",
-			Body:             request,
-			RawBody:          rawBody,
-			Params: middleware.Parameters{
-				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-			},
-			Raw: r,
-		}
-
-		type (
-			Request  = *V1DialogueDiscussionsDiscussionIdCommentsPostReq
-			Params   = V1DialogueDiscussionsDiscussionIdCommentsPostParams
-			Response = *Comment
-		)
-		response, err = middleware.HookMiddleware[
-			Request,
-			Params,
-			Response,
-		](
-			m,
-			mreq,
-			unpackV1DialogueDiscussionsDiscussionIdCommentsPostParams,
-			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1DialogueDiscussionsDiscussionIdCommentsPost(ctx, request, params)
-				return response, err
-			},
-		)
-	} else {
-		response, err = s.h.V1DialogueDiscussionsDiscussionIdCommentsPost(ctx, request, params)
-	}
-	if err != nil {
-		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
-			if err := encodeErrorResponse(errRes, w); err != nil {
-				defer recordError("Internal", err)
-			}
-			return
-		}
-		if errors.Is(err, ht.ErrNotImplemented) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-			return
-		}
-		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
-			defer recordError("Internal", err)
-		}
-		return
-	}
-
-	if err := encodeV1DialogueDiscussionsDiscussionIdCommentsPostResponse(response, w); err != nil {
-		defer recordError("EncodeResponse", err)
-		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-		}
-		return
-	}
-}
-
-// handleV1DialogueDiscussionsDiscussionIdGetRequest handles GET /v1/dialogue/discussions/{discussionId} operation.
-//
-// Get discussion.
-//
-// GET /v1/dialogue/discussions/{discussionId}
-func (s *Server) handleV1DialogueDiscussionsDiscussionIdGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
-	statusWriter := &codeRecorder{ResponseWriter: w}
-	w = statusWriter
-	ctx := r.Context()
-
-	var (
-		err          error
-		opErrContext = ogenerrors.OperationContext{
-			Name: V1DialogueDiscussionsDiscussionIdGetOperation,
-			ID:   "",
-		}
-	)
-	params, err := decodeV1DialogueDiscussionsDiscussionIdGetParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-
-	var rawBody []byte
-
-	var response *Discussion
-	if m := s.cfg.Middleware; m != nil {
-		mreq := middleware.Request{
-			Context:          ctx,
-			OperationName:    V1DialogueDiscussionsDiscussionIdGetOperation,
-			OperationSummary: "",
-			OperationID:      "",
-			Body:             nil,
-			RawBody:          rawBody,
-			Params: middleware.Parameters{
-				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
-			},
-			Raw: r,
-		}
-
-		type (
-			Request  = struct{}
-			Params   = V1DialogueDiscussionsDiscussionIdGetParams
-			Response = *Discussion
-		)
-		response, err = middleware.HookMiddleware[
-			Request,
-			Params,
-			Response,
-		](
-			m,
-			mreq,
-			unpackV1DialogueDiscussionsDiscussionIdGetParams,
-			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1DialogueDiscussionsDiscussionIdGet(ctx, params)
-				return response, err
-			},
-		)
-	} else {
-		response, err = s.h.V1DialogueDiscussionsDiscussionIdGet(ctx, params)
-	}
-	if err != nil {
-		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
-			if err := encodeErrorResponse(errRes, w); err != nil {
-				defer recordError("Internal", err)
-			}
-			return
-		}
-		if errors.Is(err, ht.ErrNotImplemented) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-			return
-		}
-		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
-			defer recordError("Internal", err)
-		}
-		return
-	}
-
-	if err := encodeV1DialogueDiscussionsDiscussionIdGetResponse(response, w); err != nil {
-		defer recordError("EncodeResponse", err)
-		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-		}
-		return
-	}
-}
-
 // handleV1DialogueDiscussionsGetRequest handles GET /v1/dialogue/discussions operation.
 //
-// Get discussions.
+// Get public discussions.
 //
 // GET /v1/dialogue/discussions
 func (s *Server) handleV1DialogueDiscussionsGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -514,6 +96,440 @@ func (s *Server) handleV1DialogueDiscussionsGetRequest(args [0]string, argsEscap
 	}
 
 	if err := encodeV1DialogueDiscussionsGetResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest handles POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues operation.
+//
+// Add issue to comment.
+//
+// POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues
+func (s *Server) handleV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest(args [3]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation,
+			ID:   "",
+		}
+	)
+	params, err := decodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response *Comment
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             request,
+			RawBody:          rawBody,
+			Params: middleware.Parameters{
+				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
+				{
+					Name: "commentId",
+					In:   "path",
+				}: params.CommentId,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq
+			Params   = V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams
+			Response = *Comment
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx, request, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost(ctx, request, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetRequest handles GET /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
+//
+// Get comments for a discussion.
+//
+// GET /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments
+func (s *Server) handleV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetOperation,
+			ID:   "",
+		}
+	)
+	params, err := decodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var rawBody []byte
+
+	var response []Comment
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             nil,
+			RawBody:          rawBody,
+			Params: middleware.Parameters{
+				{
+					Name: "since",
+					In:   "query",
+				}: params.Since,
+				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams
+			Response = []Comment
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet(ctx, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostRequest handles POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
+//
+// Create comment.
+//
+// POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments
+func (s *Server) handleV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation,
+			ID:   "",
+		}
+	)
+	params, err := decodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response *Comment
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             request,
+			RawBody:          rawBody,
+			Params: middleware.Parameters{
+				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq
+			Params   = V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams
+			Response = *Comment
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(ctx, request, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(ctx, request, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetRequest handles GET /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId} operation.
+//
+// Get discussion.
+//
+// GET /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}
+func (s *Server) handleV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetOperation,
+			ID:   "",
+		}
+	)
+	params, err := decodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var rawBody []byte
+
+	var response *Discussion
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             nil,
+			RawBody:          rawBody,
+			Params: middleware.Parameters{
+				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams
+			Response = *Discussion
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(ctx, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

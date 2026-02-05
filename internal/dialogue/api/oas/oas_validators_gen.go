@@ -496,7 +496,7 @@ func (s *ErrorStatusCode) Validate() error {
 	return nil
 }
 
-func (s *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) Validate() error {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -530,7 +530,7 @@ func (s *V1DialogueDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) Valida
 	return nil
 }
 
-func (s *V1DialogueDiscussionsDiscussionIdCommentsPostReq) Validate() error {
+func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}

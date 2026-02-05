@@ -12,6 +12,7 @@ func NewDiscussionFactory() *DiscussionFactory {
 
 type ReconstructDiscussionParams struct {
 	ID              string
+	WorkspaceID     string
 	Theme           string
 	Conclusion      string
 	Settings        DiscussionSettings
@@ -25,6 +26,7 @@ type ReconstructDiscussionParams struct {
 func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Discussion, error) {
 	return &Discussion{
 		id:              params.ID,
+		workspaceID:     params.WorkspaceID,
 		theme:           params.Theme,
 		conclusion:      params.Conclusion,
 		settings:        params.Settings,
