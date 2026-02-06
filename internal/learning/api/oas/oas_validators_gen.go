@@ -421,6 +421,8 @@ func (s DiscussionStatus) Validate() error {
 		return nil
 	case "public":
 		return nil
+	case "internal":
+		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}

@@ -16,6 +16,7 @@ type Discussion struct {
 	workspaceID     string
 	theme           string
 	conclusion      string
+	status          DiscussionStatus
 	settings        DiscussionSettings
 	commentsCount   int
 	lastCommentedAt time.Time
@@ -38,6 +39,10 @@ func (d *Discussion) Theme() string {
 
 func (d *Discussion) Conclusion() string {
 	return d.conclusion
+}
+
+func (d *Discussion) Status() DiscussionStatus {
+	return d.status
 }
 
 func (d *Discussion) Settings() DiscussionSettings {

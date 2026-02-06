@@ -44,7 +44,9 @@ func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscu
 				LEFT_JOIN(table.DialogueSettings, table.Discussions.ID.EQ(table.DialogueSettings.DiscussionID)),
 		).
 		WHERE(
-			cond.AND(table.Discussions.Status.EQ(mysql.String("public"))),
+			cond.AND(
+				table.Discussions.Status.IN(mysql.String("public"), mysql.String("internal")),
+			),
 		).
 		LIMIT(1)
 
@@ -70,6 +72,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 		WorkspaceID:     row.WorkspaceID,
 		Theme:           row.Theme,
 		Conclusion:      row.Conclusion,
+		Status:          domain.DiscussionStatus(row.Status),
 		Settings:        settings,
 		CommentsCount:   int(row.CommentsCount),
 		LastCommentedAt: row.LastCommentedAt,

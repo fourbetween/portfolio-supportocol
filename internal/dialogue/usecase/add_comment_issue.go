@@ -40,25 +40,26 @@ type AddCommentIssueInput struct {
 	CommentID    string
 	Title        string
 	Description  string
+	UserID       string
 }
 
 func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIssueInput) (*domain.Comment, error) {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.WorkspaceID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to check workspace access: %w", err)
-	}
-	if !canAccess {
-		return nil, apperr.ErrPermissionDenied
-	}
-
 	var comment *domain.Comment
-	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
-		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
+		discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 			ID:          input.DiscussionID,
 			WorkspaceID: input.WorkspaceID,
 		})
 		if err != nil {
 			return err
+		}
+
+		canAccess, err := u.permSv.CanAccessDiscussion(ctx, input.UserID, input.WorkspaceID, discussion.Status())
+		if err != nil {
+			return fmt.Errorf("failed to check discussion access: %w", err)
+		}
+		if !canAccess {
+			return apperr.ErrPermissionDenied
 		}
 
 		comment, err = u.commentRepo.Load(ctx, input.CommentID)
@@ -70,10 +71,16 @@ func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIs
 			return err
 		}
 
+		var createdBy *string
+		if input.UserID != "" {
+			createdBy = &input.UserID
+		}
+
 		comment.AddIssue(domain.CommentIssue{
 			ID:          u.idSrv.Generate(),
 			Title:       input.Title,
 			Description: input.Description,
+			CreatedBy:   createdBy,
 		})
 
 		return u.commentRepo.Update(ctx, comment)

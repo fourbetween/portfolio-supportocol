@@ -38,7 +38,7 @@ func NewAPIContainer(
 
 	return &APIContainer{
 		GetDiscussion:   usecase.NewGetDiscussionUsecase(discussionRepo, permSv),
-		ListDiscussions: usecase.NewListDiscussionsUsecase(discussionQS),
+		ListDiscussions: usecase.NewListDiscussionsUsecase(discussionQS, permSv),
 		ListComments:    usecase.NewListCommentsUsecase(discussionRepo, commentRepo, permSv),
 		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, clockSrv, txManager, permSv),
 		AddCommentIssue: usecase.NewAddCommentIssueUsecase(discussionRepo, commentRepo, idSrv, txManager, permSv),

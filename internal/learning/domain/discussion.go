@@ -124,9 +124,9 @@ func (d *Discussion) UpdateStatus(params UpdateStatusParams) error {
 		return fmt.Errorf("invalid discussion status: %s: %w", params.Status, err)
 	}
 
-	if params.Status.IsPublic() {
+	if params.Status.RequiresDialogueSettings() {
 		if params.CommentFrame == nil {
-			return fmt.Errorf("comment frame is required for public status: %w", apperr.ErrInvalidArgument)
+			return fmt.Errorf("comment frame is required for %s status: %w", params.Status, apperr.ErrInvalidArgument)
 		}
 		d.dialogueSettings = &DialogueSettings{
 			CommentFrame: params.CommentFrame.Sorted(),
@@ -143,9 +143,9 @@ func (d *Discussion) Validate() error {
 	if err := d.status.Validate(); err != nil {
 		return err
 	}
-	if d.status.IsPublic() {
+	if d.status.RequiresDialogueSettings() {
 		if d.dialogueSettings == nil {
-			return fmt.Errorf("dialogue settings is required for public status: %w", apperr.ErrInvalidArgument)
+			return fmt.Errorf("dialogue settings is required for %s status: %w", d.status, apperr.ErrInvalidArgument)
 		}
 		if err := d.dialogueSettings.Validate(); err != nil {
 			return err
@@ -174,7 +174,7 @@ func (d *Discussion) Unarchive() error {
 }
 
 func (d *Discussion) EnsureCommentFrameRequirement(commentType string, parentType string) {
-	if !d.status.IsPublic() || d.dialogueSettings == nil {
+	if !d.status.RequiresDialogueSettings() || d.dialogueSettings == nil {
 		return
 	}
 

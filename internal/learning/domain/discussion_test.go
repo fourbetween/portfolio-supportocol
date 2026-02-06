@@ -43,6 +43,25 @@ func TestDiscussion_EnsureCommentFrameRequirement(t *testing.T) {
 			},
 		},
 		{
+			name:   "内部公開済みの議論に新しいタイプとパスが追加されること",
+			status: DiscussionStatusInternal,
+			initialCF: &CommentFrame{
+				Types: []string{"既存"},
+				Paths: []CommentPath{
+					{Child: "既存", Parent: ""},
+				},
+			},
+			commentType: "新規",
+			parentType:  "既存",
+			wantCF: &CommentFrame{
+				Types: []string{"新規", "既存"},
+				Paths: []CommentPath{
+					{Child: "既存", Parent: ""},
+					{Child: "新規", Parent: "既存"},
+				},
+			},
+		},
+		{
 			name:   "既にあるなら追加されないこと",
 			status: DiscussionStatusPublic,
 			initialCF: &CommentFrame{

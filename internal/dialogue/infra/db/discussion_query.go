@@ -20,19 +20,31 @@ func NewDiscussionQueryService(db *sql.DB) *DiscussionQueryService {
 	return &DiscussionQueryService{db: db}
 }
 
-func (s *DiscussionQueryService) ListDiscussions(ctx context.Context) ([]usecase.DiscussionSummary, error) {
+func (s *DiscussionQueryService) ListPublicDiscussions(ctx context.Context) ([]usecase.DiscussionSummary, error) {
+	return s.listDiscussionsByStatus(ctx, "public", nil)
+}
+
+func (s *DiscussionQueryService) ListInternalDiscussions(ctx context.Context, workspaceID string) ([]usecase.DiscussionSummary, error) {
+	return s.listDiscussionsByStatus(ctx, "internal", &workspaceID)
+}
+
+func (s *DiscussionQueryService) listDiscussionsByStatus(ctx context.Context, status string, workspaceID *string) ([]usecase.DiscussionSummary, error) {
+	cond := table.Discussions.Status.EQ(mysql.String(status))
+	if workspaceID != nil {
+		cond = cond.AND(table.Discussions.WorkspaceID.EQ(mysql.String(*workspaceID)))
+	}
+
 	stmt := mysql.
 		SELECT(
 			table.Discussions.ID,
 			table.Discussions.WorkspaceID,
 			table.Discussions.Theme,
+			table.Discussions.Status,
 			table.Discussions.ArchivedAt,
 			table.Discussions.LastCommentedAt,
 		).
 		FROM(table.Discussions).
-		WHERE(
-			table.Discussions.Status.EQ(mysql.String("public")),
-		).
+		WHERE(cond).
 		ORDER_BY(table.Discussions.LastCommentedAt.DESC())
 
 	var dest []model.Discussions
@@ -46,6 +58,7 @@ func (s *DiscussionQueryService) ListDiscussions(ctx context.Context) ([]usecase
 			ID:              d.ID,
 			WorkspaceID:     d.WorkspaceID,
 			Theme:           d.Theme,
+			Status:          d.Status,
 			ArchivedAt:      d.ArchivedAt,
 			LastCommentedAt: d.LastCommentedAt,
 		}

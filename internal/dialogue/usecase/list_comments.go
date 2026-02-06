@@ -30,25 +30,25 @@ func NewListCommentsUsecase(
 type ListCommentsInput struct {
 	DiscussionID string
 	WorkspaceID  string
+	UserID       string
 	Since        *time.Time
 }
 
 func (u *ListCommentsUsecase) Execute(ctx context.Context, input ListCommentsInput) ([]*domain.Comment, error) {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.WorkspaceID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to check workspace access: %w", err)
-	}
-	if !canAccess {
-		return nil, apperr.ErrPermissionDenied
-	}
-
-	// Verify discussion exists
-	_, err = u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+	discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:          input.DiscussionID,
 		WorkspaceID: input.WorkspaceID,
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	canAccess, err := u.permSv.CanAccessDiscussion(ctx, input.UserID, input.WorkspaceID, discussion.Status())
+	if err != nil {
+		return nil, fmt.Errorf("failed to check discussion access: %w", err)
+	}
+	if !canAccess {
+		return nil, apperr.ErrPermissionDenied
 	}
 
 	return u.commentRepo.Search(ctx, domain.SearchCommentsParams{

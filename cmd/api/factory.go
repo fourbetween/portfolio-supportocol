@@ -70,7 +70,7 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 	}
 
 	dialoguePermSv := dialogueadapter.NewWorkspacePermissionAdapter(workspaceCon.WorkspaceQueryService)
-	dialogueHandler, err := newDialogueHandler(dbCon, dialoguePermSv)
+	dialogueHandler, err := newDialogueHandler(dbCon, jwtSrv, dialoguePermSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create dialogue handler: %w", err)
 	}
@@ -159,7 +159,7 @@ func newLearningHandler(
 	return handler, nil
 }
 
-func newDialogueHandler(dbCon *sql.DB, permSv *dialogueadapter.WorkspacePermissionAdapter) (http.Handler, error) {
+func newDialogueHandler(dbCon *sql.DB, jwtSrv jwt.Service, permSv *dialogueadapter.WorkspacePermissionAdapter) (http.Handler, error) {
 	con, err := dialogue.NewAPIContainer(dbCon, permSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create dialogue api container: %w", err)
@@ -167,6 +167,7 @@ func newDialogueHandler(dbCon *sql.DB, permSv *dialogueadapter.WorkspacePermissi
 
 	server, err := dialogueoas.NewServer(
 		dialogueapi.NewHandler(con),
+		dialogueapi.NewSecurityHandler(jwtSrv),
 		dialogueoas.WithErrorHandler(httperr.ErrorHandler),
 	)
 	if err != nil {

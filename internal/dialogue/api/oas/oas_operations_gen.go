@@ -11,4 +11,5 @@ const (
 	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetOperation                 OperationName = "V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet"
 	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation                OperationName = "V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost"
 	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetOperation                         OperationName = "V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet"
+	V1DialogueWorkspacesWorkspaceIdDiscussionsGetOperation                                     OperationName = "V1DialogueWorkspacesWorkspaceIdDiscussionsGet"
 )

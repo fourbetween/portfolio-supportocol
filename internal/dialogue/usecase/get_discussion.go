@@ -23,19 +23,25 @@ func NewGetDiscussionUsecase(repo domain.DiscussionRepository, permSv domain.Per
 type GetDiscussionInput struct {
 	ID          string
 	WorkspaceID string
+	UserID      string
 }
 
 func (u *GetDiscussionUsecase) Execute(ctx context.Context, input GetDiscussionInput) (*domain.Discussion, error) {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.WorkspaceID)
+	discussion, err := u.repo.Load(ctx, domain.LoadDiscussionParams{
+		ID:          input.ID,
+		WorkspaceID: input.WorkspaceID,
+	})
 	if err != nil {
-		return nil, fmt.Errorf("failed to check workspace access: %w", err)
+		return nil, err
+	}
+
+	canAccess, err := u.permSv.CanAccessDiscussion(ctx, input.UserID, input.WorkspaceID, discussion.Status())
+	if err != nil {
+		return nil, fmt.Errorf("failed to check discussion access: %w", err)
 	}
 	if !canAccess {
 		return nil, apperr.ErrPermissionDenied
 	}
 
-	return u.repo.Load(ctx, domain.LoadDiscussionParams{
-		ID:          input.ID,
-		WorkspaceID: input.WorkspaceID,
-	})
+	return discussion, nil
 }

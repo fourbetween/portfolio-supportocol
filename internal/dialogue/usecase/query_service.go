@@ -9,10 +9,14 @@ type DiscussionSummary struct {
 	ID              string
 	WorkspaceID     string
 	Theme           string
+	Status          string
 	ArchivedAt      *time.Time
 	LastCommentedAt time.Time
 }
 
 type DiscussionQueryService interface {
-	ListDiscussions(ctx context.Context) ([]DiscussionSummary, error)
+	// ListPublicDiscussions lists all public discussions (accessible by everyone).
+	ListPublicDiscussions(ctx context.Context) ([]DiscussionSummary, error)
+	// ListInternalDiscussions lists internal discussions for a specific workspace (accessible by members).
+	ListInternalDiscussions(ctx context.Context, workspaceID string) ([]DiscussionSummary, error)
 }

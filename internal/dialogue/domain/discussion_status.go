@@ -5,22 +5,17 @@ import "github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 type DiscussionStatus string
 
 const (
-	DiscussionStatusPrivate  DiscussionStatus = "private"
 	DiscussionStatusPublic   DiscussionStatus = "public"
 	DiscussionStatusInternal DiscussionStatus = "internal"
 )
 
 func (s DiscussionStatus) Validate() error {
 	switch s {
-	case DiscussionStatusPrivate, DiscussionStatusPublic, DiscussionStatusInternal:
+	case DiscussionStatusPublic, DiscussionStatusInternal:
 		return nil
 	default:
 		return apperr.ErrInvalidArgument
 	}
-}
-
-func (s DiscussionStatus) IsPrivate() bool {
-	return s == DiscussionStatusPrivate
 }
 
 func (s DiscussionStatus) IsPublic() bool {
@@ -29,9 +24,4 @@ func (s DiscussionStatus) IsPublic() bool {
 
 func (s DiscussionStatus) IsInternal() bool {
 	return s == DiscussionStatusInternal
-}
-
-// RequiresDialogueSettings returns true if the status requires dialogue settings (comment frame).
-func (s DiscussionStatus) RequiresDialogueSettings() bool {
-	return s.IsPublic() || s.IsInternal()
 }
