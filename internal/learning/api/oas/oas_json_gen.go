@@ -1149,6 +1149,8 @@ func (s *DiscussionStatus) Decode(d *jx.Decoder) error {
 		*s = DiscussionStatusPrivate
 	case DiscussionStatusPublic:
 		*s = DiscussionStatusPublic
+	case DiscussionStatusInternal:
+		*s = DiscussionStatusInternal
 	default:
 		*s = DiscussionStatus(v)
 	}

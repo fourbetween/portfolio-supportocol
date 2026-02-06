@@ -43,19 +43,12 @@ type CreateCommentInput struct {
 	ParentCommentID *string
 	CommentType     string
 	Content         string
+	UserID          string
 }
 
 func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentInput) (*domain.Comment, error) {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.WorkspaceID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to check workspace access: %w", err)
-	}
-	if !canAccess {
-		return nil, apperr.ErrPermissionDenied
-	}
-
 	var comment *domain.Comment
-	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
+	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// Verify discussion exists
 		discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 			ID:          input.DiscussionID,
@@ -63,6 +56,14 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		})
 		if err != nil {
 			return err
+		}
+
+		canAccess, err := u.permSv.CanAccessDiscussion(ctx, input.UserID, input.WorkspaceID, discussion.Status())
+		if err != nil {
+			return fmt.Errorf("failed to check discussion access: %w", err)
+		}
+		if !canAccess {
+			return apperr.ErrPermissionDenied
 		}
 
 		var parent *domain.Comment
@@ -87,6 +88,11 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			return err
 		}
 
+		var createdBy *string
+		if input.UserID != "" {
+			createdBy = &input.UserID
+		}
+
 		var createErr error
 		comment, createErr = u.fac.Create(domain.CreateCommentParams{
 			DiscussionID:    input.DiscussionID,
@@ -94,6 +100,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			CommentTypeID:   input.CommentType,
 			Content:         input.Content,
 			Status:          domain.CommentStatusProposed,
+			CreatedBy:       createdBy,
 		})
 		if createErr != nil {
 			return createErr

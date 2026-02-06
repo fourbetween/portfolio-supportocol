@@ -361,6 +361,17 @@ func (s *Discussion) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.Status.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "status",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.DialogueSettings.Validate(); err != nil {
 			return err
 		}
@@ -397,6 +408,17 @@ func (s DiscussionConclusion) Validate() error {
 	return nil
 }
 
+func (s DiscussionStatus) Validate() error {
+	switch s {
+	case "public":
+		return nil
+	case "internal":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s *DiscussionSummary) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -411,6 +433,17 @@ func (s *DiscussionSummary) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "theme",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Status.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "status",
 			Error: err,
 		})
 	}

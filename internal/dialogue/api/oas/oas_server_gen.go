@@ -38,6 +38,12 @@ type Handler interface {
 	//
 	// GET /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}
 	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(ctx context.Context, params V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams) (*Discussion, error)
+	// V1DialogueWorkspacesWorkspaceIdDiscussionsGet implements GET /v1/dialogue/workspaces/{workspaceId}/discussions operation.
+	//
+	// Get internal discussions for a workspace.
+	//
+	// GET /v1/dialogue/workspaces/{workspaceId}/discussions
+	V1DialogueWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams) ([]DiscussionSummary, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.
@@ -47,18 +53,20 @@ type Handler interface {
 // Server implements http server based on OpenAPI v3 specification and
 // calls Handler to handle requests.
 type Server struct {
-	h Handler
+	h   Handler
+	sec SecurityHandler
 	baseServer
 }
 
 // NewServer creates new Server.
-func NewServer(h Handler, opts ...ServerOption) (*Server, error) {
+func NewServer(h Handler, sec SecurityHandler, opts ...ServerOption) (*Server, error) {
 	s, err := newServerConfig(opts...).baseServer()
 	if err != nil {
 		return nil, err
 	}
 	return &Server{
 		h:          h,
+		sec:        sec,
 		baseServer: s,
 	}, nil
 }

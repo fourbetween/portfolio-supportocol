@@ -65,6 +65,7 @@ components:
       enum:
         - private
         - public
+        - internal
     DiscussionTheme:
       type: string
       maxLength: 255

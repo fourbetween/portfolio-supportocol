@@ -58,6 +58,15 @@ func (UnimplementedHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussion
 	return r, ht.ErrNotImplemented
 }
 
+// V1DialogueWorkspacesWorkspaceIdDiscussionsGet implements GET /v1/dialogue/workspaces/{workspaceId}/discussions operation.
+//
+// Get internal discussions for a workspace.
+//
+// GET /v1/dialogue/workspaces/{workspaceId}/discussions
+func (UnimplementedHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams) (r []DiscussionSummary, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // NewError creates *ErrorStatusCode from error returned by handler.
 //
 // Used for common default response.

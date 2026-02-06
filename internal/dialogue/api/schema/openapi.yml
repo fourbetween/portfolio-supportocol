@@ -3,6 +3,11 @@ info:
   title: app-supportocol dialogue api
   version: 1.0.0
 components:
+  securitySchemes:
+    cookie_auth:
+      type: apiKey
+      in: cookie
+      name: auth_token
   schemas:
     Error:
       type: object
@@ -24,6 +29,11 @@ components:
       enum:
         - active
         - proposed
+    DiscussionStatus:
+      type: string
+      enum:
+        - public
+        - internal
     DialogueSettings:
       type: object
       properties:
@@ -85,6 +95,8 @@ components:
           $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
+        status:
+          $ref: "#/components/schemas/DiscussionStatus"
         archivedAt:
           oneOf:
             - type: string
@@ -97,6 +109,7 @@ components:
         - id
         - workspaceId
         - theme
+        - status
         - archivedAt
         - lastCommentedAt
     Discussion:
@@ -110,6 +123,8 @@ components:
           $ref: "#/components/schemas/DiscussionTheme"
         conclusion:
           $ref: "#/components/schemas/DiscussionConclusion"
+        status:
+          $ref: "#/components/schemas/DiscussionStatus"
         archivedAt:
           oneOf:
             - type: string
@@ -122,6 +137,7 @@ components:
         - workspaceId
         - theme
         - conclusion
+        - status
         - archivedAt
         - dialogueSettings
     Comment:
@@ -195,10 +211,33 @@ components:
       required: true
       schema:
         $ref: "#/components/schemas/Id"
+security:
+  - cookie_auth: []
+  - {}
 paths:
   /v1/dialogue/discussions:
     get:
       description: get public discussions
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DiscussionSummary"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/dialogue/workspaces/{workspaceId}/discussions:
+    parameters:
+      - $ref: "#/components/parameters/workspaceId"
+    get:
+      description: get internal discussions for a workspace
       responses:
         "200":
           description: success response

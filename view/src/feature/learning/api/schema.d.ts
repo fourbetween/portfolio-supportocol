@@ -821,7 +821,7 @@ export interface components {
             parent: components["schemas"]["CommentType"];
         };
         /** @enum {string} */
-        DiscussionStatus: "private" | "public";
+        DiscussionStatus: "private" | "public" | "internal";
         DiscussionTheme: string;
         DiscussionConclusion: string;
         CommentType: string;

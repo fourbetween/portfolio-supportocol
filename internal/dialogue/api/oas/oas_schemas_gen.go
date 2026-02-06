@@ -256,6 +256,31 @@ func (s *CommentStatus) UnmarshalText(data []byte) error {
 
 type CommentType string
 
+type CookieAuth struct {
+	APIKey string
+	Roles  []string
+}
+
+// GetAPIKey returns the value of APIKey.
+func (s *CookieAuth) GetAPIKey() string {
+	return s.APIKey
+}
+
+// GetRoles returns the value of Roles.
+func (s *CookieAuth) GetRoles() []string {
+	return s.Roles
+}
+
+// SetAPIKey sets the value of APIKey.
+func (s *CookieAuth) SetAPIKey(val string) {
+	s.APIKey = val
+}
+
+// SetRoles sets the value of Roles.
+func (s *CookieAuth) SetRoles(val []string) {
+	s.Roles = val
+}
+
 // Ref: #/components/schemas/DialogueSettings
 type DialogueSettings struct {
 	DiscussionId ID           `json:"discussionId"`
@@ -288,6 +313,7 @@ type Discussion struct {
 	WorkspaceId      ID                   `json:"workspaceId"`
 	Theme            DiscussionTheme      `json:"theme"`
 	Conclusion       DiscussionConclusion `json:"conclusion"`
+	Status           DiscussionStatus     `json:"status"`
 	ArchivedAt       NilDateTime          `json:"archivedAt"`
 	DialogueSettings DialogueSettings     `json:"dialogueSettings"`
 }
@@ -310,6 +336,11 @@ func (s *Discussion) GetTheme() DiscussionTheme {
 // GetConclusion returns the value of Conclusion.
 func (s *Discussion) GetConclusion() DiscussionConclusion {
 	return s.Conclusion
+}
+
+// GetStatus returns the value of Status.
+func (s *Discussion) GetStatus() DiscussionStatus {
+	return s.Status
 }
 
 // GetArchivedAt returns the value of ArchivedAt.
@@ -342,6 +373,11 @@ func (s *Discussion) SetConclusion(val DiscussionConclusion) {
 	s.Conclusion = val
 }
 
+// SetStatus sets the value of Status.
+func (s *Discussion) SetStatus(val DiscussionStatus) {
+	s.Status = val
+}
+
 // SetArchivedAt sets the value of ArchivedAt.
 func (s *Discussion) SetArchivedAt(val NilDateTime) {
 	s.ArchivedAt = val
@@ -354,13 +390,56 @@ func (s *Discussion) SetDialogueSettings(val DialogueSettings) {
 
 type DiscussionConclusion string
 
+// Ref: #/components/schemas/DiscussionStatus
+type DiscussionStatus string
+
+const (
+	DiscussionStatusPublic   DiscussionStatus = "public"
+	DiscussionStatusInternal DiscussionStatus = "internal"
+)
+
+// AllValues returns all DiscussionStatus values.
+func (DiscussionStatus) AllValues() []DiscussionStatus {
+	return []DiscussionStatus{
+		DiscussionStatusPublic,
+		DiscussionStatusInternal,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s DiscussionStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case DiscussionStatusPublic:
+		return []byte(s), nil
+	case DiscussionStatusInternal:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *DiscussionStatus) UnmarshalText(data []byte) error {
+	switch DiscussionStatus(data) {
+	case DiscussionStatusPublic:
+		*s = DiscussionStatusPublic
+		return nil
+	case DiscussionStatusInternal:
+		*s = DiscussionStatusInternal
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/DiscussionSummary
 type DiscussionSummary struct {
-	ID              ID              `json:"id"`
-	WorkspaceId     ID              `json:"workspaceId"`
-	Theme           DiscussionTheme `json:"theme"`
-	ArchivedAt      NilDateTime     `json:"archivedAt"`
-	LastCommentedAt time.Time       `json:"lastCommentedAt"`
+	ID              ID               `json:"id"`
+	WorkspaceId     ID               `json:"workspaceId"`
+	Theme           DiscussionTheme  `json:"theme"`
+	Status          DiscussionStatus `json:"status"`
+	ArchivedAt      NilDateTime      `json:"archivedAt"`
+	LastCommentedAt time.Time        `json:"lastCommentedAt"`
 }
 
 // GetID returns the value of ID.
@@ -376,6 +455,11 @@ func (s *DiscussionSummary) GetWorkspaceId() ID {
 // GetTheme returns the value of Theme.
 func (s *DiscussionSummary) GetTheme() DiscussionTheme {
 	return s.Theme
+}
+
+// GetStatus returns the value of Status.
+func (s *DiscussionSummary) GetStatus() DiscussionStatus {
+	return s.Status
 }
 
 // GetArchivedAt returns the value of ArchivedAt.
@@ -401,6 +485,11 @@ func (s *DiscussionSummary) SetWorkspaceId(val ID) {
 // SetTheme sets the value of Theme.
 func (s *DiscussionSummary) SetTheme(val DiscussionTheme) {
 	s.Theme = val
+}
+
+// SetStatus sets the value of Status.
+func (s *DiscussionSummary) SetStatus(val DiscussionStatus) {
+	s.Status = val
 }
 
 // SetArchivedAt sets the value of ArchivedAt.

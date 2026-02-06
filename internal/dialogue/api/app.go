@@ -14,6 +14,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/dialogue/domain"
 	"github.com/fourbetween/app-supportocol/internal/dialogue/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
 	"github.com/fourbetween/pkg-auth/auth"
 	"github.com/google/uuid"
 	"github.com/ogen-go/ogen/ogenerrors"
@@ -28,7 +29,26 @@ func NewHandler(con *dialogue.APIContainer) oas.Handler {
 }
 
 func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context) ([]oas.DiscussionSummary, error) {
-	items, err := h.con.ListDiscussions.Execute(ctx)
+	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{})
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]oas.DiscussionSummary, len(items))
+	for i, item := range items {
+		res[i] = h.toOasDiscussionSummary(item)
+	}
+	return res, nil
+}
+
+func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsGet(
+	ctx context.Context,
+	params oas.V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams,
+) ([]oas.DiscussionSummary, error) {
+	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		UserID:      httpctx.GetUserID(ctx),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -47,6 +67,7 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(
 	item, err := h.con.GetDiscussion.Execute(ctx, usecase.GetDiscussionInput{
 		ID:          uuid.UUID(params.DiscussionId).String(),
 		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		UserID:      httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err
@@ -68,6 +89,7 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	items, err := h.con.ListComments.Execute(ctx, usecase.ListCommentsInput{
 		DiscussionID: uuid.UUID(params.DiscussionId).String(),
 		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		UserID:       httpctx.GetUserID(ctx),
 		Since:        since,
 	})
 	if err != nil {
@@ -98,6 +120,7 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
 		Content:         string(req.Content),
+		UserID:          httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err
@@ -118,6 +141,7 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 		CommentID:    uuid.UUID(params.CommentId).String(),
 		Title:        string(req.Title),
 		Description:  string(req.Description),
+		UserID:       httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err
@@ -158,6 +182,7 @@ func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.
 		ID:              oas.ID(uuid.MustParse(item.ID)),
 		WorkspaceId:     oas.ID(uuid.MustParse(item.WorkspaceID)),
 		Theme:           oas.DiscussionTheme(item.Theme),
+		Status:          oas.DiscussionStatus(item.Status),
 		LastCommentedAt: item.LastCommentedAt,
 	}
 	if item.ArchivedAt != nil {
@@ -190,6 +215,7 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 		WorkspaceId: oas.ID(uuid.MustParse(item.WorkspaceID())),
 		Theme:       oas.DiscussionTheme(item.Theme()),
 		Conclusion:  oas.DiscussionConclusion(item.Conclusion()),
+		Status:      oas.DiscussionStatus(item.Status()),
 		DialogueSettings: oas.DialogueSettings{
 			DiscussionId: oas.ID(uuid.MustParse(item.ID())),
 			CommentFrame: oas.CommentFrame{

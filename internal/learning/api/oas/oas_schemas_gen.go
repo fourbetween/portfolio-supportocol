@@ -383,8 +383,9 @@ type DiscussionConclusion string
 type DiscussionStatus string
 
 const (
-	DiscussionStatusPrivate DiscussionStatus = "private"
-	DiscussionStatusPublic  DiscussionStatus = "public"
+	DiscussionStatusPrivate  DiscussionStatus = "private"
+	DiscussionStatusPublic   DiscussionStatus = "public"
+	DiscussionStatusInternal DiscussionStatus = "internal"
 )
 
 // AllValues returns all DiscussionStatus values.
@@ -392,6 +393,7 @@ func (DiscussionStatus) AllValues() []DiscussionStatus {
 	return []DiscussionStatus{
 		DiscussionStatusPrivate,
 		DiscussionStatusPublic,
+		DiscussionStatusInternal,
 	}
 }
 
@@ -401,6 +403,8 @@ func (s DiscussionStatus) MarshalText() ([]byte, error) {
 	case DiscussionStatusPrivate:
 		return []byte(s), nil
 	case DiscussionStatusPublic:
+		return []byte(s), nil
+	case DiscussionStatusInternal:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -415,6 +419,9 @@ func (s *DiscussionStatus) UnmarshalText(data []byte) error {
 		return nil
 	case DiscussionStatusPublic:
 		*s = DiscussionStatusPublic
+		return nil
+	case DiscussionStatusInternal:
+		*s = DiscussionStatusInternal
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)

@@ -49,6 +49,55 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/dialogue/workspaces/{workspaceId}/discussions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspaceId: components["parameters"]["workspaceId"];
+            };
+            cookie?: never;
+        };
+        /** @description get internal discussions for a workspace */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["parameters"]["workspaceId"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["DiscussionSummary"][];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}": {
         parameters: {
             query?: never;
@@ -265,6 +314,8 @@ export interface components {
         Id: string;
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
+        /** @enum {string} */
+        DiscussionStatus: "public" | "internal";
         DialogueSettings: {
             discussionId: components["schemas"]["Id"];
             commentFrame: components["schemas"]["CommentFrame"];
@@ -287,6 +338,7 @@ export interface components {
             id: components["schemas"]["Id"];
             workspaceId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
+            status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;
             /** Format: date-time */
             lastCommentedAt: string;
@@ -296,6 +348,7 @@ export interface components {
             workspaceId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
             conclusion: components["schemas"]["DiscussionConclusion"];
+            status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;
             dialogueSettings: components["schemas"]["DialogueSettings"];
         };
