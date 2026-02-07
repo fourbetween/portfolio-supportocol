@@ -10,7 +10,8 @@ import {
   DialogueCommentSelectEvent,
 } from "../../event/comment";
 import type { Comment } from "../../model/comment";
-import type { CommentFrame } from "../../model/comment-frame";
+import type { DialogueSettings } from "../../model/discussion";
+import { canPerform } from "../../model/permission";
 import "../comment-card/comment-card";
 import "../comment-reply-form/comment-reply-form";
 
@@ -23,10 +24,13 @@ export class DialogueCommentItem extends LitElement {
   activeChildrenCount = 0;
 
   @property({ type: Object })
-  frame?: CommentFrame;
+  settings?: DialogueSettings;
 
   @property({ type: Boolean })
   readonly = false;
+
+  @property({ type: Boolean })
+  isAuthenticated = false;
 
   @property({ type: Boolean })
   archived = false;
@@ -39,8 +43,22 @@ export class DialogueCommentItem extends LitElement {
   private get canReply() {
     if (this.readonly) return false;
     if (this.archived || this.comment?.archivedAt) return false;
-    if (!this.comment || !this.frame) return false;
-    return this.frame.paths.some((p) => p.parent === this.comment?.type);
+    if (!this.comment || !this.settings) return false;
+
+    if (!canPerform(this.settings.commentPermission, this.isAuthenticated)) {
+      return false;
+    }
+
+    return this.settings.commentFrame.paths.some(
+      (p) => p.parent === this.comment?.type,
+    );
+  }
+
+  private get canIssue() {
+    if (this.readonly) return false;
+    if (!this.comment || !this.settings) return false;
+
+    return canPerform(this.settings.issuePermission, this.isAuthenticated);
   }
 
   private handleCommentSelect(e: DialogueCommentSelectEvent) {
@@ -80,7 +98,7 @@ export class DialogueCommentItem extends LitElement {
               <dialogue-comment-reply-form
                 .parentCommentId=${this.comment.id}
                 .parentCommentType=${this.comment.type}
-                .frame=${this.frame}
+                .frame=${this.settings?.commentFrame}
                 @dialogue-comment-create=${() => (this.mode = "view")}
                 @dialogue-comment-create-cancel=${() => (this.mode = "view")}
               ></dialogue-comment-reply-form>
@@ -110,7 +128,7 @@ export class DialogueCommentItem extends LitElement {
               </button>
             `
           : nothing}
-        ${!this.readonly
+        ${this.canIssue
           ? html`
               <button
                 class="btn-hover danger issue-button material-symbols-outlined"

@@ -1,7 +1,10 @@
+import { consume } from "@lit/context";
 import { Task } from "@lit/task";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { userContext } from "../../../app/context/user";
 import { TouchController } from "../../../app/controller/touch";
+import type { User } from "../../../app/model/user";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
@@ -32,6 +35,10 @@ export class DialogueItemPage extends LitElement {
 
   @property({ type: String })
   discussionId!: string;
+
+  @consume({ context: userContext, subscribe: true })
+  @state()
+  private _user?: User;
 
   @state()
   private _discussion?: Discussion;
@@ -140,6 +147,7 @@ export class DialogueItemPage extends LitElement {
             .comments=${this._comments}
             .selectedCommentId=${this._selectedCommentId}
             .readonly=${!!this._discussion?.archivedAt}
+            .isAuthenticated=${!!this._user}
             @dialogue-comment-select=${this._handleCommentSelect}
             @dialogue-comment-created=${this._handleCommentCreated}
             @dialogue-comment-updated=${this._handleCommentUpdated}

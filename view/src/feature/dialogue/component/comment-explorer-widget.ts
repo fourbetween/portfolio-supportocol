@@ -15,6 +15,7 @@ import {
 import { type DialogueIssueCreateEvent } from "../event/issue";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
+import { canPerform } from "../model/permission";
 import { commentRepository } from "../repository/comment-repository";
 import "../ui/comment-context/comment-context";
 import "../ui/comment-tree/comment-tree";
@@ -34,6 +35,9 @@ export class DialogueCommentExplorerWidget extends LitElement {
 
   @property({ type: Boolean })
   readonly = false;
+
+  @property({ type: Boolean })
+  isAuthenticated = false;
 
   @state()
   private childCounts = new Map<string, number>();
@@ -78,7 +82,15 @@ export class DialogueCommentExplorerWidget extends LitElement {
   }
 
   private async handleCommentCreate(e: DialogueCommentCreateEvent) {
-    if (!this.discussion || this.readonly) return;
+    if (
+      !this.discussion ||
+      this.readonly ||
+      !canPerform(
+        this.discussion.dialogueSettings.commentPermission,
+        this.isAuthenticated,
+      )
+    )
+      return;
     try {
       const data = await commentRepository.create(
         this.discussion.workspaceId,
@@ -104,12 +116,30 @@ export class DialogueCommentExplorerWidget extends LitElement {
   }
 
   private handleIssueRequest(e: DialogueCommentIssueRequestEvent) {
+    if (
+      !this.discussion ||
+      this.readonly ||
+      !canPerform(
+        this.discussion.dialogueSettings.issuePermission,
+        this.isAuthenticated,
+      )
+    )
+      return;
     this.issueTargetCommentId = e.commentId;
     this.isIssuePopupOpen = true;
   }
 
   private async handleIssueCreate(e: DialogueIssueCreateEvent) {
-    if (!this.discussion || !this.issueTargetCommentId) return;
+    if (
+      !this.discussion ||
+      this.readonly ||
+      !this.issueTargetCommentId ||
+      !canPerform(
+        this.discussion.dialogueSettings.issuePermission,
+        this.isAuthenticated,
+      )
+    )
+      return;
     try {
       const data = await commentRepository.addIssue(
         this.discussion.workspaceId,
@@ -191,6 +221,12 @@ export class DialogueCommentExplorerWidget extends LitElement {
   render() {
     const path = this._path;
     const descendants = this._descendants;
+    const canComment =
+      !!this.discussion &&
+      canPerform(
+        this.discussion.dialogueSettings.commentPermission,
+        this.isAuthenticated,
+      );
 
     return html`
       <div
@@ -198,7 +234,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
         @dialogue-comment-issue-request=${this.handleIssueRequest}
       >
         ${this.renderContextSection(path)}
-        ${this.selectedCommentId || this.readonly
+        ${this.selectedCommentId || this.readonly || !canComment
           ? nothing
           : html`
               <dialogue-comment-create-widget
@@ -212,8 +248,9 @@ export class DialogueCommentExplorerWidget extends LitElement {
           </div>
           <dialogue-comment-tree
             .comments=${descendants}
-            .frame=${this.discussion?.dialogueSettings.commentFrame}
+            .settings=${this.discussion?.dialogueSettings}
             .readonly=${this.readonly}
+            .isAuthenticated=${this.isAuthenticated}
             @dialogue-comment-create=${this.handleCommentCreate}
           ></dialogue-comment-tree>
         </div>
@@ -242,8 +279,9 @@ export class DialogueCommentExplorerWidget extends LitElement {
         <dialogue-comment-context
           .path=${path}
           .childCounts=${this.childCounts}
-          .frame=${this.discussion?.dialogueSettings.commentFrame}
+          .settings=${this.discussion?.dialogueSettings}
           .readonly=${this.readonly}
+          .isAuthenticated=${this.isAuthenticated}
           @dialogue-comment-create=${this.handleCommentCreate}
         ></dialogue-comment-context>
       </div>
