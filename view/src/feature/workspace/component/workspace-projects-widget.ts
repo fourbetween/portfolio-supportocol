@@ -16,8 +16,8 @@ import {
 } from "../event/project";
 import type { Project } from "../model/project";
 import { projectRepository } from "../repository/project-repository";
-import "../ui/workspace-project-add-form/workspace-project-add-form";
-import "../ui/workspace-project-list/workspace-project-list";
+import "../ui/workspace-project-add-form";
+import "../ui/workspace-project-list";
 
 @customElement("workspace-projects-widget")
 export class WorkspaceProjectsWidget extends LitElement {

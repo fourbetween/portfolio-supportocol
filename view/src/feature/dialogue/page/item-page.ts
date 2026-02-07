@@ -22,9 +22,9 @@ import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
-import "../ui/comment-frame-detail/comment-frame-detail";
-import "../ui/comment-list/comment-list";
-import "../ui/discussion-detail/discussion-detail";
+import "../ui/comment-frame-detail";
+import "../ui/comment-list";
+import "../ui/discussion-detail";
 
 @customElement("dialogue-item-page")
 export class DialogueItemPage extends LitElement {

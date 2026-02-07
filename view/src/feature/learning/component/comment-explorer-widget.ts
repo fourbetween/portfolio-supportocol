@@ -27,8 +27,8 @@ import { LearningIssueRemoveEvent } from "../event/issue";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
 import { commentRepository } from "../repository/comment-repository";
-import "../ui/comment-context/comment-context";
-import "../ui/comment-tree/comment-tree";
+import "../ui/comment-context";
+import "../ui/comment-tree";
 import "./comment-create-widget";
 
 @customElement("learning-comment-explorer-widget")

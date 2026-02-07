@@ -4,7 +4,7 @@ import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { iconStyle } from "../../../shared/style/icon";
 import type { CommentFrame } from "../model/comment-frame";
-import "../ui/comment-reply-form/comment-reply-form";
+import "../ui/comment-reply-form";
 
 @customElement("dialogue-comment-create-widget")
 export class DialogueCommentCreateWidget extends LitElement {

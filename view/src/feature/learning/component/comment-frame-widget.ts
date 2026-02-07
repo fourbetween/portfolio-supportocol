@@ -2,7 +2,7 @@ import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
-import "../ui/comment-frame-detail/comment-frame-detail";
+import "../ui/comment-frame-detail";
 
 @customElement("learning-comment-frame-widget")
 export class LearningCommentFrameWidget extends LitElement {

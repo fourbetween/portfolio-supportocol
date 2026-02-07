@@ -10,7 +10,7 @@ import { baseStyle } from "../../../shared/style/base";
 import type { DialogueDiscussionSelectEvent } from "../event/discussion";
 import type { DiscussionSummary } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
-import "../ui/discussion-list/discussion-list";
+import "../ui/discussion-list";
 
 @customElement("dialogue-discussion-list-widget")
 export class DialogueDiscussionListWidget extends LitElement {
