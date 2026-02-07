@@ -72,6 +72,8 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 			table.Discussions.Conclusion.SET(table.Discussions.NEW.Conclusion),
 			table.Discussions.Status.SET(table.Discussions.NEW.Status),
 			table.Discussions.CommentsCount.SET(table.Discussions.NEW.CommentsCount),
+			table.Discussions.ProposedCommentsCount.SET(table.Discussions.NEW.ProposedCommentsCount),
+			table.Discussions.IssuesCount.SET(table.Discussions.NEW.IssuesCount),
 			table.Discussions.LastCommentedAt.SET(table.Discussions.NEW.LastCommentedAt),
 			table.Discussions.ArchivedAt.SET(table.Discussions.NEW.ArchivedAt),
 		)
@@ -160,12 +162,14 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 			Status:      domain.DiscussionStatus(row.Status),
 			CreatedBy:   row.CreatedBy,
 		},
-		Conclusion:       row.Conclusion,
-		CommentsCount:    int(row.CommentsCount),
-		LastCommentedAt:  row.LastCommentedAt,
-		ArchivedAt:       row.ArchivedAt,
-		CreatedAt:        row.CreatedAt,
-		DialogueSettings: dialogueSettings,
+		Conclusion:            row.Conclusion,
+		CommentsCount:         int(row.CommentsCount),
+		ProposedCommentsCount: int(row.ProposedCommentsCount),
+		IssuesCount:           int(row.IssuesCount),
+		LastCommentedAt:       row.LastCommentedAt,
+		ArchivedAt:            row.ArchivedAt,
+		CreatedAt:             row.CreatedAt,
+		DialogueSettings:      dialogueSettings,
 	})
 }
 
@@ -184,17 +188,19 @@ func (r *DiscussionRepository) toDialogueSettingsDomain(row *model.DialogueSetti
 
 func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Discussions {
 	return model.Discussions{
-		ID:              d.ID(),
-		WorkspaceID:     d.WorkspaceID(),
-		ProjectID:       d.ProjectID(),
-		Theme:           d.Theme(),
-		Conclusion:      d.Conclusion(),
-		Status:          string(d.Status()),
-		CommentsCount:   int32(d.CommentsCount()),
-		LastCommentedAt: d.LastCommentedAt(),
-		ArchivedAt:      d.ArchivedAt(),
-		CreatedBy:       d.CreatedBy(),
-		CreatedAt:       d.CreatedAt(),
+		ID:                    d.ID(),
+		WorkspaceID:           d.WorkspaceID(),
+		ProjectID:             d.ProjectID(),
+		Theme:                 d.Theme(),
+		Conclusion:            d.Conclusion(),
+		Status:                string(d.Status()),
+		CommentsCount:         int32(d.CommentsCount()),
+		ProposedCommentsCount: int32(d.ProposedCommentsCount()),
+		IssuesCount:           int32(d.IssuesCount()),
+		LastCommentedAt:       d.LastCommentedAt(),
+		ArchivedAt:            d.ArchivedAt(),
+		CreatedBy:             d.CreatedBy(),
+		CreatedAt:             d.CreatedAt(),
 	}
 }
 

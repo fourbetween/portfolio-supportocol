@@ -38,6 +38,8 @@ func (s *discussionQueryService) ListDiscussions(ctx context.Context, params use
 			table.Discussions.Status,
 			table.Discussions.ArchivedAt,
 			table.Discussions.LastCommentedAt,
+			table.Discussions.ProposedCommentsCount,
+			table.Discussions.IssuesCount,
 		).
 		FROM(table.Discussions).
 		WHERE(condition).
@@ -51,12 +53,14 @@ func (s *discussionQueryService) ListDiscussions(ctx context.Context, params use
 	res := make([]usecase.DiscussionSummary, len(dest))
 	for i, d := range dest {
 		res[i] = usecase.DiscussionSummary{
-			ID:              d.ID,
-			ProjectID:       d.ProjectID,
-			Theme:           d.Theme,
-			Status:          domain.DiscussionStatus(d.Status),
-			ArchivedAt:      d.ArchivedAt,
-			LastCommentedAt: d.LastCommentedAt,
+			ID:                    d.ID,
+			ProjectID:             d.ProjectID,
+			Theme:                 d.Theme,
+			Status:                domain.DiscussionStatus(d.Status),
+			ArchivedAt:            d.ArchivedAt,
+			LastCommentedAt:       d.LastCommentedAt,
+			ProposedCommentsCount: int(d.ProposedCommentsCount),
+			IssuesCount:           int(d.IssuesCount),
 		}
 	}
 

@@ -12,16 +12,18 @@ import (
 )
 
 type Discussions struct {
-	ID              string `sql:"primary_key"`
-	WorkspaceID     string
-	ProjectID       string
-	Theme           string
-	Conclusion      string
-	Status          string
-	CommentsCount   int32
-	LastCommentedAt time.Time
-	ArchivedAt      *time.Time
-	CreatedBy       string
-	CreatedAt       time.Time
-	UpdatedAt       time.Time
+	ID                    string `sql:"primary_key"`
+	WorkspaceID           string
+	ProjectID             string
+	Theme                 string
+	Conclusion            string
+	Status                string
+	CommentsCount         int32
+	ProposedCommentsCount int32
+	IssuesCount           int32
+	LastCommentedAt       time.Time
+	ArchivedAt            *time.Time
+	CreatedBy             string
+	CreatedAt             time.Time
+	UpdatedAt             time.Time
 }

@@ -17,18 +17,20 @@ type discussionsTable struct {
 	mysql.Table
 
 	// Columns
-	ID              mysql.ColumnString
-	WorkspaceID     mysql.ColumnString
-	ProjectID       mysql.ColumnString
-	Theme           mysql.ColumnString
-	Conclusion      mysql.ColumnString
-	Status          mysql.ColumnString
-	CommentsCount   mysql.ColumnInteger
-	LastCommentedAt mysql.ColumnTimestamp
-	ArchivedAt      mysql.ColumnTimestamp
-	CreatedBy       mysql.ColumnString
-	CreatedAt       mysql.ColumnTimestamp
-	UpdatedAt       mysql.ColumnTimestamp
+	ID                    mysql.ColumnString
+	WorkspaceID           mysql.ColumnString
+	ProjectID             mysql.ColumnString
+	Theme                 mysql.ColumnString
+	Conclusion            mysql.ColumnString
+	Status                mysql.ColumnString
+	CommentsCount         mysql.ColumnInteger
+	ProposedCommentsCount mysql.ColumnInteger
+	IssuesCount           mysql.ColumnInteger
+	LastCommentedAt       mysql.ColumnTimestamp
+	ArchivedAt            mysql.ColumnTimestamp
+	CreatedBy             mysql.ColumnString
+	CreatedAt             mysql.ColumnTimestamp
+	UpdatedAt             mysql.ColumnTimestamp
 
 	AllColumns     mysql.ColumnList
 	MutableColumns mysql.ColumnList
@@ -70,39 +72,43 @@ func newDiscussionsTable(schemaName, tableName, alias string) *DiscussionsTable 
 
 func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTable {
 	var (
-		IDColumn              = mysql.StringColumn("id")
-		WorkspaceIDColumn     = mysql.StringColumn("workspace_id")
-		ProjectIDColumn       = mysql.StringColumn("project_id")
-		ThemeColumn           = mysql.StringColumn("theme")
-		ConclusionColumn      = mysql.StringColumn("conclusion")
-		StatusColumn          = mysql.StringColumn("status")
-		CommentsCountColumn   = mysql.IntegerColumn("comments_count")
-		LastCommentedAtColumn = mysql.TimestampColumn("last_commented_at")
-		ArchivedAtColumn      = mysql.TimestampColumn("archived_at")
-		CreatedByColumn       = mysql.StringColumn("created_by")
-		CreatedAtColumn       = mysql.TimestampColumn("created_at")
-		UpdatedAtColumn       = mysql.TimestampColumn("updated_at")
-		allColumns            = mysql.ColumnList{IDColumn, WorkspaceIDColumn, ProjectIDColumn, ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns        = mysql.ColumnList{WorkspaceIDColumn, ProjectIDColumn, ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		defaultColumns        = mysql.ColumnList{StatusColumn, CommentsCountColumn, LastCommentedAtColumn, CreatedAtColumn, UpdatedAtColumn}
+		IDColumn                    = mysql.StringColumn("id")
+		WorkspaceIDColumn           = mysql.StringColumn("workspace_id")
+		ProjectIDColumn             = mysql.StringColumn("project_id")
+		ThemeColumn                 = mysql.StringColumn("theme")
+		ConclusionColumn            = mysql.StringColumn("conclusion")
+		StatusColumn                = mysql.StringColumn("status")
+		CommentsCountColumn         = mysql.IntegerColumn("comments_count")
+		ProposedCommentsCountColumn = mysql.IntegerColumn("proposed_comments_count")
+		IssuesCountColumn           = mysql.IntegerColumn("issues_count")
+		LastCommentedAtColumn       = mysql.TimestampColumn("last_commented_at")
+		ArchivedAtColumn            = mysql.TimestampColumn("archived_at")
+		CreatedByColumn             = mysql.StringColumn("created_by")
+		CreatedAtColumn             = mysql.TimestampColumn("created_at")
+		UpdatedAtColumn             = mysql.TimestampColumn("updated_at")
+		allColumns                  = mysql.ColumnList{IDColumn, WorkspaceIDColumn, ProjectIDColumn, ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, ProposedCommentsCountColumn, IssuesCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns              = mysql.ColumnList{WorkspaceIDColumn, ProjectIDColumn, ThemeColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, ProposedCommentsCountColumn, IssuesCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns              = mysql.ColumnList{StatusColumn, CommentsCountColumn, ProposedCommentsCountColumn, IssuesCountColumn, LastCommentedAtColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return discussionsTable{
 		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
-		ID:              IDColumn,
-		WorkspaceID:     WorkspaceIDColumn,
-		ProjectID:       ProjectIDColumn,
-		Theme:           ThemeColumn,
-		Conclusion:      ConclusionColumn,
-		Status:          StatusColumn,
-		CommentsCount:   CommentsCountColumn,
-		LastCommentedAt: LastCommentedAtColumn,
-		ArchivedAt:      ArchivedAtColumn,
-		CreatedBy:       CreatedByColumn,
-		CreatedAt:       CreatedAtColumn,
-		UpdatedAt:       UpdatedAtColumn,
+		ID:                    IDColumn,
+		WorkspaceID:           WorkspaceIDColumn,
+		ProjectID:             ProjectIDColumn,
+		Theme:                 ThemeColumn,
+		Conclusion:            ConclusionColumn,
+		Status:                StatusColumn,
+		CommentsCount:         CommentsCountColumn,
+		ProposedCommentsCount: ProposedCommentsCountColumn,
+		IssuesCount:           IssuesCountColumn,
+		LastCommentedAt:       LastCommentedAtColumn,
+		ArchivedAt:            ArchivedAtColumn,
+		CreatedBy:             CreatedByColumn,
+		CreatedAt:             CreatedAtColumn,
+		UpdatedAt:             UpdatedAtColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

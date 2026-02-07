@@ -87,7 +87,12 @@ func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIs
 			CreatedBy:   createdBy,
 		})
 
-		return u.commentRepo.Update(ctx, comment)
+		if err := u.commentRepo.Update(ctx, comment); err != nil {
+			return err
+		}
+
+		discussion.AddCommentIssue()
+		return u.discussionRepo.Save(ctx, discussion)
 	})
 	if err != nil {
 		return nil, err

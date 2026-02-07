@@ -68,25 +68,34 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 	}
 
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
-		ID:              row.ID,
-		WorkspaceID:     row.WorkspaceID,
-		Theme:           row.Theme,
-		Conclusion:      row.Conclusion,
-		Status:          domain.DiscussionStatus(row.Status),
-		Settings:        settings,
-		CommentsCount:   int(row.CommentsCount),
-		LastCommentedAt: row.LastCommentedAt,
-		ArchivedAt:      row.ArchivedAt,
-		CreatedBy:       row.CreatedBy,
-		CreatedAt:       row.CreatedAt,
+		ID:                    row.ID,
+		WorkspaceID:           row.WorkspaceID,
+		Theme:                 row.Theme,
+		Conclusion:            row.Conclusion,
+		Status:                domain.DiscussionStatus(row.Status),
+		Settings:              settings,
+		CommentsCount:         int(row.CommentsCount),
+		ProposedCommentsCount: int(row.ProposedCommentsCount),
+		IssuesCount:           int(row.IssuesCount),
+		LastCommentedAt:       row.LastCommentedAt,
+		ArchivedAt:            row.ArchivedAt,
+		CreatedBy:             row.CreatedBy,
+		CreatedAt:             row.CreatedAt,
 	})
 }
 
 func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) error {
 	stmt := table.Discussions.
-		UPDATE(table.Discussions.CommentsCount, table.Discussions.LastCommentedAt).
+		UPDATE(
+			table.Discussions.CommentsCount,
+			table.Discussions.ProposedCommentsCount,
+			table.Discussions.IssuesCount,
+			table.Discussions.LastCommentedAt,
+		).
 		SET(
 			mysql.Int(int64(d.CommentsCount())),
+			mysql.Int(int64(d.ProposedCommentsCount())),
+			mysql.Int(int64(d.IssuesCount())),
 			d.LastCommentedAt(),
 		).
 		WHERE(table.Discussions.ID.EQ(mysql.String(d.ID())))

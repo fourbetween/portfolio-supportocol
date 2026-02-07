@@ -22,6 +22,8 @@ export const Default: Story = {
       conclusion: "前提を共有し、推論を積み重ねること。",
       status: "public",
       archivedAt: null,
+      proposedCommentsCount: 0,
+      issuesCount: 0,
     },
     isEditing: false,
   },

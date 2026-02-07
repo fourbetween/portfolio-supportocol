@@ -8,12 +8,14 @@ import (
 )
 
 type DiscussionSummary struct {
-	ID              string
-	ProjectID       string
-	Theme           string
-	Status          domain.DiscussionStatus
-	ArchivedAt      *time.Time
-	LastCommentedAt time.Time
+	ID                    string
+	ProjectID             string
+	Theme                 string
+	Status                domain.DiscussionStatus
+	ArchivedAt            *time.Time
+	LastCommentedAt       time.Time
+	ProposedCommentsCount int
+	IssuesCount           int
 }
 
 type ListDiscussionsParams struct {

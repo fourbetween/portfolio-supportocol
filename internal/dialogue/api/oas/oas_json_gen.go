@@ -970,9 +970,17 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 		e.FieldStart("dialogueSettings")
 		s.DialogueSettings.Encode(e)
 	}
+	{
+		e.FieldStart("proposedCommentsCount")
+		e.Int(s.ProposedCommentsCount)
+	}
+	{
+		e.FieldStart("issuesCount")
+		e.Int(s.IssuesCount)
+	}
 }
 
-var jsonFieldsNameOfDiscussion = [7]string{
+var jsonFieldsNameOfDiscussion = [9]string{
 	0: "id",
 	1: "workspaceId",
 	2: "theme",
@@ -980,6 +988,8 @@ var jsonFieldsNameOfDiscussion = [7]string{
 	4: "status",
 	5: "archivedAt",
 	6: "dialogueSettings",
+	7: "proposedCommentsCount",
+	8: "issuesCount",
 }
 
 // Decode decodes Discussion from json.
@@ -987,7 +997,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode Discussion to nil")
 	}
-	var requiredBitSet [1]uint8
+	var requiredBitSet [2]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -1061,6 +1071,30 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"dialogueSettings\"")
 			}
+		case "proposedCommentsCount":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int()
+				s.ProposedCommentsCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"proposedCommentsCount\"")
+			}
+		case "issuesCount":
+			requiredBitSet[1] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.IssuesCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"issuesCount\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1070,8 +1104,9 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b01111111,
+	for i, mask := range [2]uint8{
+		0b11111111,
+		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1230,15 +1265,25 @@ func (s *DiscussionSummary) encodeFields(e *jx.Encoder) {
 		e.FieldStart("lastCommentedAt")
 		json.EncodeDateTime(e, s.LastCommentedAt)
 	}
+	{
+		e.FieldStart("proposedCommentsCount")
+		e.Int(s.ProposedCommentsCount)
+	}
+	{
+		e.FieldStart("issuesCount")
+		e.Int(s.IssuesCount)
+	}
 }
 
-var jsonFieldsNameOfDiscussionSummary = [6]string{
+var jsonFieldsNameOfDiscussionSummary = [8]string{
 	0: "id",
 	1: "workspaceId",
 	2: "theme",
 	3: "status",
 	4: "archivedAt",
 	5: "lastCommentedAt",
+	6: "proposedCommentsCount",
+	7: "issuesCount",
 }
 
 // Decode decodes DiscussionSummary from json.
@@ -1312,6 +1357,30 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"lastCommentedAt\"")
 			}
+		case "proposedCommentsCount":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				v, err := d.Int()
+				s.ProposedCommentsCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"proposedCommentsCount\"")
+			}
+		case "issuesCount":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int()
+				s.IssuesCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"issuesCount\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1322,7 +1391,7 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00111111,
+		0b11111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

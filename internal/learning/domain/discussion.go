@@ -13,18 +13,20 @@ const (
 )
 
 type Discussion struct {
-	id               string
-	workspaceID      string
-	projectID        string
-	theme            string
-	conclusion       string
-	status           DiscussionStatus
-	commentsCount    int
-	lastCommentedAt  time.Time
-	archivedAt       *time.Time
-	createdBy        string
-	createdAt        time.Time
-	dialogueSettings *DialogueSettings
+	id                    string
+	workspaceID           string
+	projectID             string
+	theme                 string
+	conclusion            string
+	status                DiscussionStatus
+	commentsCount         int
+	proposedCommentsCount int
+	issuesCount           int
+	lastCommentedAt       time.Time
+	archivedAt            *time.Time
+	createdBy             string
+	createdAt             time.Time
+	dialogueSettings      *DialogueSettings
 }
 
 func (d *Discussion) ID() string {
@@ -53,6 +55,14 @@ func (d *Discussion) Status() DiscussionStatus {
 
 func (d *Discussion) CommentsCount() int {
 	return d.commentsCount
+}
+
+func (d *Discussion) ProposedCommentsCount() int {
+	return d.proposedCommentsCount
+}
+
+func (d *Discussion) IssuesCount() int {
+	return d.issuesCount
 }
 
 func (d *Discussion) LastCommentedAt() time.Time {
@@ -97,6 +107,10 @@ func (d *Discussion) AddComment(now time.Time) {
 func (d *Discussion) AddComments(count int, now time.Time) {
 	d.commentsCount += count
 	d.lastCommentedAt = now
+}
+
+func (d *Discussion) AddCommentIssue() {
+	d.issuesCount++
 }
 
 func (d *Discussion) SyncCommentsCount(count int) {
