@@ -6,11 +6,11 @@ import "../../../../shared/ui/popup/popup";
 import { LearningDiscussionUpdateDialogueSettingsEvent } from "../../event/discussion";
 import type { CommentFrame } from "../../model/comment-frame";
 import type { DialogueSettings } from "../../model/discussion";
-import "../comment-frame-form/comment-frame-form";
-import type { LearningCommentFrameForm } from "../comment-frame-form/comment-frame-form";
+import "../dialogue-settings-form/dialogue-settings-form";
+import type { LearningDialogueSettingsForm } from "../dialogue-settings-form/dialogue-settings-form";
 
-@customElement("learning-comment-frame-popup")
-export class LearningCommentFramePopup extends LitElement {
+@customElement("learning-dialogue-settings-popup")
+export class LearningDialogueSettingsPopup extends LitElement {
   @property({ type: Boolean })
   open = false;
 
@@ -20,8 +20,8 @@ export class LearningCommentFramePopup extends LitElement {
   @property({ type: Object })
   usedFrame?: CommentFrame;
 
-  @query("learning-comment-frame-form")
-  private _form!: LearningCommentFrameForm;
+  @query("learning-dialogue-settings-form")
+  private _form!: LearningDialogueSettingsForm;
 
   private _handleClose() {
     this.open = false;
@@ -40,10 +40,10 @@ export class LearningCommentFramePopup extends LitElement {
       <ui-popup .open=${this.open} @popup-closed=${this._handleClose}>
         <div slot="header">Edit Dialogue Settings</div>
         <div slot="main">
-          <learning-comment-frame-form
+          <learning-dialogue-settings-form
             .initialSettings=${this.initialSettings}
             .usedFrame=${this.usedFrame}
-          ></learning-comment-frame-form>
+          ></learning-dialogue-settings-form>
         </div>
         <div slot="footer">
           <button class="btn" @click=${this._handleClose}>Cancel</button>

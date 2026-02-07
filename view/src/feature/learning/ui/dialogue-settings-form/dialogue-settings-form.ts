@@ -10,8 +10,8 @@ import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { CommentFrame } from "../../model/comment-frame";
 import type { DialogueSettings } from "../../model/discussion";
 
-@customElement("learning-comment-frame-form")
-export class LearningCommentFrameForm extends LitElement {
+@customElement("learning-dialogue-settings-form")
+export class LearningDialogueSettingsForm extends LitElement {
   @property({ type: Object })
   initialSettings?: DialogueSettings;
 
