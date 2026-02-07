@@ -26,6 +26,8 @@ export const Default: Story = {
         status: "public",
         archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
+        proposedCommentsCount: 0,
+        issuesCount: 0,
       },
       {
         id: "2",
@@ -34,6 +36,8 @@ export const Default: Story = {
         status: "public",
         archivedAt: null,
         lastCommentedAt: "2023-01-02T00:00:00Z",
+        proposedCommentsCount: 0,
+        issuesCount: 0,
       },
       {
         id: "3",
@@ -42,6 +46,8 @@ export const Default: Story = {
         status: "private",
         archivedAt: null,
         lastCommentedAt: "2023-01-03T00:00:00Z",
+        proposedCommentsCount: 0,
+        issuesCount: 0,
       },
     ],
   },

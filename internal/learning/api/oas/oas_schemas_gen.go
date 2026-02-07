@@ -320,13 +320,15 @@ func (s *DialogueSettings) SetIssuePermission(val PermissionLevel) {
 
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID               ID                   `json:"id"`
-	ProjectId        ID                   `json:"projectId"`
-	Theme            DiscussionTheme      `json:"theme"`
-	Conclusion       DiscussionConclusion `json:"conclusion"`
-	Status           DiscussionStatus     `json:"status"`
-	ArchivedAt       NilDateTime          `json:"archivedAt"`
-	DialogueSettings OptDialogueSettings  `json:"dialogueSettings"`
+	ID                    ID                   `json:"id"`
+	ProjectId             ID                   `json:"projectId"`
+	Theme                 DiscussionTheme      `json:"theme"`
+	Conclusion            DiscussionConclusion `json:"conclusion"`
+	Status                DiscussionStatus     `json:"status"`
+	ArchivedAt            NilDateTime          `json:"archivedAt"`
+	DialogueSettings      OptDialogueSettings  `json:"dialogueSettings"`
+	ProposedCommentsCount int                  `json:"proposedCommentsCount"`
+	IssuesCount           int                  `json:"issuesCount"`
 }
 
 // GetID returns the value of ID.
@@ -364,6 +366,16 @@ func (s *Discussion) GetDialogueSettings() OptDialogueSettings {
 	return s.DialogueSettings
 }
 
+// GetProposedCommentsCount returns the value of ProposedCommentsCount.
+func (s *Discussion) GetProposedCommentsCount() int {
+	return s.ProposedCommentsCount
+}
+
+// GetIssuesCount returns the value of IssuesCount.
+func (s *Discussion) GetIssuesCount() int {
+	return s.IssuesCount
+}
+
 // SetID sets the value of ID.
 func (s *Discussion) SetID(val ID) {
 	s.ID = val
@@ -397,6 +409,16 @@ func (s *Discussion) SetArchivedAt(val NilDateTime) {
 // SetDialogueSettings sets the value of DialogueSettings.
 func (s *Discussion) SetDialogueSettings(val OptDialogueSettings) {
 	s.DialogueSettings = val
+}
+
+// SetProposedCommentsCount sets the value of ProposedCommentsCount.
+func (s *Discussion) SetProposedCommentsCount(val int) {
+	s.ProposedCommentsCount = val
+}
+
+// SetIssuesCount sets the value of IssuesCount.
+func (s *Discussion) SetIssuesCount(val int) {
+	s.IssuesCount = val
 }
 
 type DiscussionConclusion string
@@ -452,12 +474,14 @@ func (s *DiscussionStatus) UnmarshalText(data []byte) error {
 
 // Ref: #/components/schemas/DiscussionSummary
 type DiscussionSummary struct {
-	ID              ID               `json:"id"`
-	ProjectId       ID               `json:"projectId"`
-	Theme           DiscussionTheme  `json:"theme"`
-	Status          DiscussionStatus `json:"status"`
-	ArchivedAt      NilDateTime      `json:"archivedAt"`
-	LastCommentedAt time.Time        `json:"lastCommentedAt"`
+	ID                    ID               `json:"id"`
+	ProjectId             ID               `json:"projectId"`
+	Theme                 DiscussionTheme  `json:"theme"`
+	Status                DiscussionStatus `json:"status"`
+	ArchivedAt            NilDateTime      `json:"archivedAt"`
+	LastCommentedAt       time.Time        `json:"lastCommentedAt"`
+	ProposedCommentsCount int              `json:"proposedCommentsCount"`
+	IssuesCount           int              `json:"issuesCount"`
 }
 
 // GetID returns the value of ID.
@@ -490,6 +514,16 @@ func (s *DiscussionSummary) GetLastCommentedAt() time.Time {
 	return s.LastCommentedAt
 }
 
+// GetProposedCommentsCount returns the value of ProposedCommentsCount.
+func (s *DiscussionSummary) GetProposedCommentsCount() int {
+	return s.ProposedCommentsCount
+}
+
+// GetIssuesCount returns the value of IssuesCount.
+func (s *DiscussionSummary) GetIssuesCount() int {
+	return s.IssuesCount
+}
+
 // SetID sets the value of ID.
 func (s *DiscussionSummary) SetID(val ID) {
 	s.ID = val
@@ -518,6 +552,16 @@ func (s *DiscussionSummary) SetArchivedAt(val NilDateTime) {
 // SetLastCommentedAt sets the value of LastCommentedAt.
 func (s *DiscussionSummary) SetLastCommentedAt(val time.Time) {
 	s.LastCommentedAt = val
+}
+
+// SetProposedCommentsCount sets the value of ProposedCommentsCount.
+func (s *DiscussionSummary) SetProposedCommentsCount(val int) {
+	s.ProposedCommentsCount = val
+}
+
+// SetIssuesCount sets the value of IssuesCount.
+func (s *DiscussionSummary) SetIssuesCount(val int) {
+	s.IssuesCount = val
 }
 
 type DiscussionTheme string

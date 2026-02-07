@@ -842,6 +842,8 @@ export interface components {
             archivedAt: string | null;
             /** Format: date-time */
             lastCommentedAt: string;
+            proposedCommentsCount: number;
+            issuesCount: number;
         };
         Discussion: {
             id: components["schemas"]["Id"];
@@ -851,6 +853,8 @@ export interface components {
             status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;
             dialogueSettings?: components["schemas"]["DialogueSettings"];
+            proposedCommentsCount: number;
+            issuesCount: number;
         };
         Comment: {
             id: components["schemas"]["Id"];

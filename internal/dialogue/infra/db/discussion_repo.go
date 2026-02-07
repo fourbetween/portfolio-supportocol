@@ -27,17 +27,29 @@ func NewDiscussionRepository(db *sql.DB, fac *domain.DiscussionFactory) *Discuss
 
 type discussionWithSettings struct {
 	model.Discussions
-	DialogueSettings *model.DialogueSettings
+	DialogueSettings      *model.DialogueSettings
+	ProposedCommentsCount int64 `alias:"proposed_comments_count"`
+	IssuesCount           int64 `alias:"issues_count"`
 }
 
 func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscussionParams) (*domain.Discussion, error) {
 	cond := table.Discussions.ID.EQ(mysql.String(params.ID)).
 		AND(table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)))
 
+	proposedCommentsCount := mysql.RawInt(
+		"(SELECT COUNT(*) FROM comments c WHERE c.discussion_id = discussions.id AND c.status = 'proposed')",
+	).AS("proposed_comments_count")
+
+	issuesCount := mysql.RawInt(
+		"(SELECT COUNT(*) FROM comment_issues ci INNER JOIN comments c ON ci.comment_id = c.id WHERE c.discussion_id = discussions.id)",
+	).AS("issues_count")
+
 	stmt := mysql.
 		SELECT(
 			table.Discussions.AllColumns,
 			table.DialogueSettings.AllColumns,
+			proposedCommentsCount,
+			issuesCount,
 		).
 		FROM(
 			table.Discussions.
@@ -68,17 +80,19 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 	}
 
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
-		ID:              row.ID,
-		WorkspaceID:     row.WorkspaceID,
-		Theme:           row.Theme,
-		Conclusion:      row.Conclusion,
-		Status:          domain.DiscussionStatus(row.Status),
-		Settings:        settings,
-		CommentsCount:   int(row.CommentsCount),
-		LastCommentedAt: row.LastCommentedAt,
-		ArchivedAt:      row.ArchivedAt,
-		CreatedBy:       row.CreatedBy,
-		CreatedAt:       row.CreatedAt,
+		ID:                    row.ID,
+		WorkspaceID:           row.WorkspaceID,
+		Theme:                 row.Theme,
+		Conclusion:            row.Conclusion,
+		Status:                domain.DiscussionStatus(row.Status),
+		Settings:              settings,
+		CommentsCount:         int(row.CommentsCount),
+		ProposedCommentsCount: int(row.ProposedCommentsCount),
+		IssuesCount:           int(row.IssuesCount),
+		LastCommentedAt:       row.LastCommentedAt,
+		ArchivedAt:            row.ArchivedAt,
+		CreatedBy:             row.CreatedBy,
+		CreatedAt:             row.CreatedAt,
 	})
 }
 

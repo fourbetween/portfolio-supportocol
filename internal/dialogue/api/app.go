@@ -179,11 +179,13 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 
 func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.DiscussionSummary {
 	res := oas.DiscussionSummary{
-		ID:              oas.ID(uuid.MustParse(item.ID)),
-		WorkspaceId:     oas.ID(uuid.MustParse(item.WorkspaceID)),
-		Theme:           oas.DiscussionTheme(item.Theme),
-		Status:          oas.DiscussionStatus(item.Status),
-		LastCommentedAt: item.LastCommentedAt,
+		ID:                    oas.ID(uuid.MustParse(item.ID)),
+		WorkspaceId:           oas.ID(uuid.MustParse(item.WorkspaceID)),
+		Theme:                 oas.DiscussionTheme(item.Theme),
+		Status:                oas.DiscussionStatus(item.Status),
+		LastCommentedAt:       item.LastCommentedAt,
+		ProposedCommentsCount: item.ProposedCommentsCount,
+		IssuesCount:           item.IssuesCount,
 	}
 	if item.ArchivedAt != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt)
@@ -224,6 +226,8 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 				Paths: paths,
 			},
 		},
+		ProposedCommentsCount: item.ProposedCommentsCount(),
+		IssuesCount:           item.IssuesCount(),
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())

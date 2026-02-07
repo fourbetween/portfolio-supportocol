@@ -115,6 +115,10 @@ components:
         lastCommentedAt:
           type: string
           format: date-time
+        proposedCommentsCount:
+          type: integer
+        issuesCount:
+          type: integer
       required:
         - id
         - projectId
@@ -122,6 +126,8 @@ components:
         - status
         - archivedAt
         - lastCommentedAt
+        - proposedCommentsCount
+        - issuesCount
     Discussion:
       type: object
       properties:
@@ -142,6 +148,10 @@ components:
             - type: "null"
         dialogueSettings:
           $ref: "#/components/schemas/DialogueSettings"
+        proposedCommentsCount:
+          type: integer
+        issuesCount:
+          type: integer
       required:
         - id
         - projectId
@@ -149,6 +159,8 @@ components:
         - conclusion
         - status
         - archivedAt
+        - proposedCommentsCount
+        - issuesCount
     Comment:
       type: object
       properties:

@@ -409,11 +409,13 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 
 func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.DiscussionSummary {
 	res := oas.DiscussionSummary{
-		ID:              oas.ID(uuid.MustParse(item.ID)),
-		ProjectId:       oas.ID(uuid.MustParse(item.ProjectID)),
-		Theme:           oas.DiscussionTheme(item.Theme),
-		Status:          oas.DiscussionStatus(item.Status),
-		LastCommentedAt: item.LastCommentedAt,
+		ID:                    oas.ID(uuid.MustParse(item.ID)),
+		ProjectId:             oas.ID(uuid.MustParse(item.ProjectID)),
+		Theme:                 oas.DiscussionTheme(item.Theme),
+		Status:                oas.DiscussionStatus(item.Status),
+		LastCommentedAt:       item.LastCommentedAt,
+		ProposedCommentsCount: item.ProposedCommentsCount,
+		IssuesCount:           item.IssuesCount,
 	}
 	if item.ArchivedAt != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt)
@@ -425,11 +427,13 @@ func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.
 
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	res := oas.Discussion{
-		ID:         oas.ID(uuid.MustParse(item.ID())),
-		ProjectId:  oas.ID(uuid.MustParse(item.ProjectID())),
-		Theme:      oas.DiscussionTheme(item.Theme()),
-		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
-		Status:     oas.DiscussionStatus(item.Status()),
+		ID:                    oas.ID(uuid.MustParse(item.ID())),
+		ProjectId:             oas.ID(uuid.MustParse(item.ProjectID())),
+		Theme:                 oas.DiscussionTheme(item.Theme()),
+		Conclusion:            oas.DiscussionConclusion(item.Conclusion()),
+		Status:                oas.DiscussionStatus(item.Status()),
+		ProposedCommentsCount: item.ProposedCommentsCount(),
+		IssuesCount:           item.IssuesCount(),
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())

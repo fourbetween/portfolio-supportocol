@@ -25,6 +25,8 @@ export const Default: Story = {
       status: "public",
       archivedAt: null,
       lastCommentedAt: "2023-01-01T00:00:00Z",
+      proposedCommentsCount: 0,
+      issuesCount: 0,
     },
   },
 };
@@ -38,6 +40,8 @@ export const Archived: Story = {
       status: "public",
       archivedAt: "2023-01-02T00:00:00Z",
       lastCommentedAt: "2023-01-01T00:00:00Z",
+      proposedCommentsCount: 0,
+      issuesCount: 0,
     },
   },
 };
