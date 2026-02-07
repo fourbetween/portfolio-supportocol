@@ -147,6 +147,8 @@ func TestDialogueSettings_Validate(t *testing.T) {
 					Types: []string{"質問"},
 					Paths: []CommentPath{{Child: "質問", Parent: ""}},
 				},
+				CommentPermission: PermissionEveryone,
+				IssuePermission:   PermissionAuthenticated,
 			},
 			wantErr: nil,
 		},
@@ -156,6 +158,32 @@ func TestDialogueSettings_Validate(t *testing.T) {
 				CommentFrame: CommentFrame{
 					Types: []string{},
 				},
+				CommentPermission: PermissionEveryone,
+				IssuePermission:   PermissionNone,
+			},
+			wantErr: apperr.ErrInvalidArgument,
+		},
+		{
+			name: "不正なCommentPermissionならエラーが返ること",
+			s: DialogueSettings{
+				CommentFrame: CommentFrame{
+					Types: []string{"質問"},
+					Paths: []CommentPath{{Child: "質問", Parent: ""}},
+				},
+				CommentPermission: "invalid",
+				IssuePermission:   PermissionNone,
+			},
+			wantErr: apperr.ErrInvalidArgument,
+		},
+		{
+			name: "不正なIssuePermissionならエラーが返ること",
+			s: DialogueSettings{
+				CommentFrame: CommentFrame{
+					Types: []string{"質問"},
+					Paths: []CommentPath{{Child: "質問", Parent: ""}},
+				},
+				CommentPermission: PermissionEveryone,
+				IssuePermission:   "invalid",
 			},
 			wantErr: apperr.ErrInvalidArgument,
 		},

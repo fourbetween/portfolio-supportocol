@@ -115,8 +115,10 @@ func (d *Discussion) Update(params UpdateParams) error {
 }
 
 type UpdateStatusParams struct {
-	Status       DiscussionStatus
-	CommentFrame *CommentFrame
+	Status            DiscussionStatus
+	CommentFrame      *CommentFrame
+	CommentPermission PermissionLevel
+	IssuePermission   PermissionLevel
 }
 
 func (d *Discussion) UpdateStatus(params UpdateStatusParams) error {
@@ -129,7 +131,9 @@ func (d *Discussion) UpdateStatus(params UpdateStatusParams) error {
 			return fmt.Errorf("comment frame is required for %s status: %w", params.Status, apperr.ErrInvalidArgument)
 		}
 		d.dialogueSettings = &DialogueSettings{
-			CommentFrame: params.CommentFrame.Sorted(),
+			CommentFrame:      params.CommentFrame.Sorted(),
+			CommentPermission: params.CommentPermission,
+			IssuePermission:   params.IssuePermission,
 		}
 	} else {
 		d.dialogueSettings = nil

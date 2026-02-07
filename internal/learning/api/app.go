@@ -139,12 +139,24 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatu
 		}
 	}
 
+	var commentPermission domain.PermissionLevel
+	if cp, ok := req.CommentPermission.Get(); ok {
+		commentPermission = domain.PermissionLevel(cp)
+	}
+
+	var issuePermission domain.PermissionLevel
+	if ip, ok := req.IssuePermission.Get(); ok {
+		issuePermission = domain.PermissionLevel(ip)
+	}
+
 	item, err := h.con.UpdateDiscussionStatus.Execute(ctx, usecase.UpdateDiscussionStatusInput{
-		ID:           uuid.UUID(params.DiscussionId).String(),
-		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
-		UserID:       httpctx.GetUserID(ctx),
-		Status:       string(req.Status),
-		CommentFrame: commentFrame,
+		ID:                uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:       uuid.UUID(params.WorkspaceId).String(),
+		UserID:            httpctx.GetUserID(ctx),
+		Status:            string(req.Status),
+		CommentFrame:      commentFrame,
+		CommentPermission: commentPermission,
+		IssuePermission:   issuePermission,
 	})
 	if err != nil {
 		return nil, err
@@ -441,6 +453,8 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 				Types: oasTypes,
 				Paths: paths,
 			},
+			CommentPermission: oas.PermissionLevel(ds.CommentPermission),
+			IssuePermission:   oas.PermissionLevel(ds.IssuePermission),
 		})
 	}
 	return res

@@ -326,6 +326,28 @@ func (s *DialogueSettings) Validate() error {
 			Error: err,
 		})
 	}
+	if err := func() error {
+		if err := s.CommentPermission.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "commentPermission",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.IssuePermission.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "issuePermission",
+			Error: err,
+		})
+	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}
@@ -538,6 +560,19 @@ func (s *ErrorStatusCode) Validate() error {
 	return nil
 }
 
+func (s PermissionLevel) Validate() error {
+	switch s {
+	case "everyone":
+		return nil
+	case "authenticated":
+		return nil
+	case "none":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -718,6 +753,42 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Val
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "commentFrame",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if value, ok := s.CommentPermission.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "commentPermission",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if value, ok := s.IssuePermission.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "issuePermission",
 			Error: err,
 		})
 	}

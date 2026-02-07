@@ -113,6 +113,8 @@ CREATE TABLE comment_issues (
 CREATE TABLE dialogue_settings (
 	discussion_id CHAR(36) NOT NULL,
 	comment_frame JSON NOT NULL,
+	comment_permission VARCHAR(20) NOT NULL,
+	issue_permission VARCHAR(20) NOT NULL,
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (discussion_id),

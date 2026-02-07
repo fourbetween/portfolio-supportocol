@@ -80,7 +80,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 		return fmt.Errorf("failed to save discussion: %w", err)
 	}
 
-	if d.Status() == domain.DiscussionStatusPublic {
+	if d.Status().RequiresDialogueSettings() {
 		settingsModel, err := r.toDialogueSettingsModel(d.ID(), d.DialogueSettings())
 		if err != nil {
 			return fmt.Errorf("failed to convert dialogue settings to model: %w", err)
@@ -92,6 +92,8 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 			AS_NEW().
 			ON_DUPLICATE_KEY_UPDATE(
 				table.DialogueSettings.CommentFrame.SET(table.DialogueSettings.NEW.CommentFrame),
+				table.DialogueSettings.CommentPermission.SET(table.DialogueSettings.NEW.CommentPermission),
+				table.DialogueSettings.IssuePermission.SET(table.DialogueSettings.NEW.IssuePermission),
 			)
 
 		if _, err := settingsStmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
@@ -174,7 +176,9 @@ func (r *DiscussionRepository) toDialogueSettingsDomain(row *model.DialogueSetti
 	}
 
 	return &domain.DialogueSettings{
-		CommentFrame: commentFrame,
+		CommentFrame:      commentFrame,
+		CommentPermission: domain.PermissionLevel(row.CommentPermission),
+		IssuePermission:   domain.PermissionLevel(row.IssuePermission),
 	}, nil
 }
 
@@ -201,7 +205,9 @@ func (r *DiscussionRepository) toDialogueSettingsModel(discussionID string, sett
 	}
 
 	return model.DialogueSettings{
-		DiscussionID: discussionID,
-		CommentFrame: string(commentFrameJSON),
+		DiscussionID:      discussionID,
+		CommentFrame:      string(commentFrameJSON),
+		CommentPermission: string(settings.CommentPermission),
+		IssuePermission:   string(settings.IssuePermission),
 	}, nil
 }
