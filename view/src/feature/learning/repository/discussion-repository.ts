@@ -1,6 +1,9 @@
 import { client } from "../api/client";
-import type { CommentFrame } from "../model/comment-frame";
-import type { Discussion, DiscussionSummary } from "../model/discussion";
+import type {
+  DialogueSettings,
+  Discussion,
+  DiscussionSummary,
+} from "../model/discussion";
 
 export class DiscussionRepository {
   private _cache = new Map<string, Discussion>();
@@ -85,7 +88,7 @@ export class DiscussionRepository {
     workspaceId: string,
     discussionId: string,
     status: Discussion["status"],
-    commentFrame?: CommentFrame,
+    dialogueSettings?: DialogueSettings,
   ): Promise<Discussion> {
     const { data, error } = await client.PUT(
       "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/status",
@@ -93,7 +96,12 @@ export class DiscussionRepository {
         params: {
           path: { workspaceId, discussionId },
         },
-        body: { status, commentFrame },
+        body: {
+          status,
+          commentFrame: dialogueSettings?.commentFrame,
+          commentPermission: dialogueSettings?.commentPermission,
+          issuePermission: dialogueSettings?.issuePermission,
+        },
       },
     );
     if (error) throw new Error(error.message);

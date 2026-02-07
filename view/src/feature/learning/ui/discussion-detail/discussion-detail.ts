@@ -53,7 +53,7 @@ export class LearningDiscussionDetail extends LitElement {
         .status=${this.discussion?.status ?? "private"}
       ></learning-discussion-status-popup>
       <learning-comment-frame-popup
-        .initialFrame=${this.discussion?.dialogueSettings?.commentFrame}
+        .initialSettings=${this.discussion?.dialogueSettings}
         .usedFrame=${this.usedFrame}
       ></learning-comment-frame-popup>
     `;

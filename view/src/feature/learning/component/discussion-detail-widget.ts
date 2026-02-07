@@ -8,14 +8,14 @@ import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
   LearningDiscussionArchiveEvent,
   LearningDiscussionUnarchiveEvent,
-  LearningDiscussionUpdateCommentFrameEvent,
   LearningDiscussionUpdatedEvent,
+  LearningDiscussionUpdateDialogueSettingsEvent,
   LearningDiscussionUpdateEvent,
   LearningDiscussionUpdateStatusEvent,
 } from "../event/discussion";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
-import type { Discussion } from "../model/discussion";
+import type { DialogueSettings, Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-detail/discussion-detail";
 
@@ -58,15 +58,25 @@ export class LearningDiscussionDetailWidget extends LitElement {
   ) {
     if (!this.discussion || !this.workspace) return;
     try {
-      let commentFrame;
-      if (e.status === "public") {
-        commentFrame = deriveCommentFrame(this.comments);
+      let dialogueSettings: DialogueSettings | undefined;
+      if (e.status !== "private") {
+        dialogueSettings = {
+          commentFrame:
+            this.discussion.dialogueSettings?.commentFrame ??
+            deriveCommentFrame(this.comments),
+          commentPermission:
+            this.discussion.dialogueSettings?.commentPermission ??
+            "authenticated",
+          issuePermission:
+            this.discussion.dialogueSettings?.issuePermission ??
+            "authenticated",
+        };
       }
       const data = await discussionRepository.updateStatus(
         this.workspace.workspace.id,
         this.discussion.id,
         e.status,
-        commentFrame,
+        dialogueSettings,
       );
       this.discussion = data;
       const message =
@@ -81,8 +91,8 @@ export class LearningDiscussionDetailWidget extends LitElement {
     }
   }
 
-  private async _handleUpdateCommentFrame(
-    e: LearningDiscussionUpdateCommentFrameEvent,
+  private async _handleUpdateDialogueSettings(
+    e: LearningDiscussionUpdateDialogueSettingsEvent,
   ) {
     if (!this.discussion || !this.workspace) return;
     try {
@@ -90,10 +100,10 @@ export class LearningDiscussionDetailWidget extends LitElement {
         this.workspace.workspace.id,
         this.discussion.id,
         this.discussion.status,
-        e.commentFrame,
+        e.settings,
       );
       this.discussion = data;
-      showToast(this, "Comment frame updated.", "success", 2000);
+      showToast(this, "Dialogue settings updated.", "success", 2000);
       this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -148,8 +158,8 @@ export class LearningDiscussionDetailWidget extends LitElement {
         @learning-discussion-update=${this._handleUpdateDiscussion}
         @learning-discussion-form-close=${() => (this._isEditing = false)}
         @learning-discussion-update-status=${this._handleUpdateDiscussionStatus}
-        @learning-discussion-update-comment-frame=${this
-          ._handleUpdateCommentFrame}
+        @learning-discussion-update-dialogue-settings=${this
+          ._handleUpdateDialogueSettings}
         @learning-discussion-archive=${this._handleArchiveDiscussion}
         @learning-discussion-unarchive=${this._handleUnarchiveDiscussion}
       ></learning-discussion-detail>

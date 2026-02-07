@@ -3,8 +3,9 @@ import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import "../../../../shared/ui/popup/popup";
-import { LearningDiscussionUpdateCommentFrameEvent } from "../../event/discussion";
+import { LearningDiscussionUpdateDialogueSettingsEvent } from "../../event/discussion";
 import type { CommentFrame } from "../../model/comment-frame";
+import type { DialogueSettings } from "../../model/discussion";
 import "../comment-frame-form/comment-frame-form";
 import type { LearningCommentFrameForm } from "../comment-frame-form/comment-frame-form";
 
@@ -14,7 +15,7 @@ export class LearningCommentFramePopup extends LitElement {
   open = false;
 
   @property({ type: Object })
-  initialFrame?: CommentFrame;
+  initialSettings?: DialogueSettings;
 
   @property({ type: Object })
   usedFrame?: CommentFrame;
@@ -27,18 +28,20 @@ export class LearningCommentFramePopup extends LitElement {
   }
 
   private _handleSave() {
-    const frame = this._form.value;
-    this.dispatchEvent(new LearningDiscussionUpdateCommentFrameEvent(frame));
+    const settings = this._form.value;
+    this.dispatchEvent(
+      new LearningDiscussionUpdateDialogueSettingsEvent(settings),
+    );
     this._handleClose();
   }
 
   render() {
     return html`
       <ui-popup .open=${this.open} @popup-closed=${this._handleClose}>
-        <div slot="header">Edit Comment Frame</div>
+        <div slot="header">Edit Dialogue Settings</div>
         <div slot="main">
           <learning-comment-frame-form
-            .initialFrame=${this.initialFrame}
+            .initialSettings=${this.initialSettings}
             .usedFrame=${this.usedFrame}
           ></learning-comment-frame-form>
         </div>
