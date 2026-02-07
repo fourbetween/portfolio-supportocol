@@ -967,22 +967,12 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 		s.ArchivedAt.Encode(e, json.EncodeDateTime)
 	}
 	{
-		if s.DialogueSettings.Set {
-			e.FieldStart("dialogueSettings")
-			s.DialogueSettings.Encode(e)
-		}
-	}
-	{
-		e.FieldStart("proposedCommentsCount")
-		e.Int(s.ProposedCommentsCount)
-	}
-	{
-		e.FieldStart("issuesCount")
-		e.Int(s.IssuesCount)
+		e.FieldStart("dialogueSettings")
+		s.DialogueSettings.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfDiscussion = [9]string{
+var jsonFieldsNameOfDiscussion = [7]string{
 	0: "id",
 	1: "projectId",
 	2: "theme",
@@ -990,8 +980,6 @@ var jsonFieldsNameOfDiscussion = [9]string{
 	4: "status",
 	5: "archivedAt",
 	6: "dialogueSettings",
-	7: "proposedCommentsCount",
-	8: "issuesCount",
 }
 
 // Decode decodes Discussion from json.
@@ -999,7 +987,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode Discussion to nil")
 	}
-	var requiredBitSet [2]uint8
+	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
@@ -1064,38 +1052,14 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"archivedAt\"")
 			}
 		case "dialogueSettings":
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
-				s.DialogueSettings.Reset()
 				if err := s.DialogueSettings.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"dialogueSettings\"")
-			}
-		case "proposedCommentsCount":
-			requiredBitSet[0] |= 1 << 7
-			if err := func() error {
-				v, err := d.Int()
-				s.ProposedCommentsCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"proposedCommentsCount\"")
-			}
-		case "issuesCount":
-			requiredBitSet[1] |= 1 << 0
-			if err := func() error {
-				v, err := d.Int()
-				s.IssuesCount = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"issuesCount\"")
 			}
 		default:
 			return d.Skip()
@@ -1106,9 +1070,8 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
-	for i, mask := range [2]uint8{
-		0b10111111,
-		0b00000001,
+	for i, mask := range [1]uint8{
+		0b01111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1680,6 +1643,50 @@ func (s *NilDateTime) UnmarshalJSON(data []byte) error {
 	return s.Decode(d, json.DecodeDateTime)
 }
 
+// Encode encodes DialogueSettings as json.
+func (o NilDialogueSettings) Encode(e *jx.Encoder) {
+	if o.Null {
+		e.Null()
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes DialogueSettings from json.
+func (o *NilDialogueSettings) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode NilDialogueSettings to nil")
+	}
+	if d.Next() == jx.Null {
+		if err := d.Null(); err != nil {
+			return err
+		}
+
+		var v DialogueSettings
+		o.Value = v
+		o.Null = true
+		return nil
+	}
+	o.Null = false
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s NilDialogueSettings) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *NilDialogueSettings) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ID as json.
 func (o NilID) Encode(e *jx.Encoder) {
 	if o.Null {
@@ -1753,39 +1760,6 @@ func (s OptCommentFrame) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptCommentFrame) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes DialogueSettings as json.
-func (o OptDialogueSettings) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes DialogueSettings from json.
-func (o *OptDialogueSettings) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptDialogueSettings to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptDialogueSettings) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptDialogueSettings) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

@@ -226,8 +226,6 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 				Paths: paths,
 			},
 		},
-		ProposedCommentsCount: item.ProposedCommentsCount(),
-		IssuesCount:           item.IssuesCount(),
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())

@@ -356,8 +356,6 @@ export interface components {
             status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;
             dialogueSettings: components["schemas"]["DialogueSettings"];
-            proposedCommentsCount: number;
-            issuesCount: number;
         };
         Comment: {
             id: components["schemas"]["Id"];

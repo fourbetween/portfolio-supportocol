@@ -147,11 +147,9 @@ components:
               format: date-time
             - type: "null"
         dialogueSettings:
-          $ref: "#/components/schemas/DialogueSettings"
-        proposedCommentsCount:
-          type: integer
-        issuesCount:
-          type: integer
+          anyOf:
+            - type: "null"
+            - $ref: "#/components/schemas/DialogueSettings"
       required:
         - id
         - projectId
@@ -159,8 +157,7 @@ components:
         - conclusion
         - status
         - archivedAt
-        - proposedCommentsCount
-        - issuesCount
+        - dialogueSettings
     Comment:
       type: object
       properties:

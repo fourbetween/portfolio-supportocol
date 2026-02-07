@@ -147,10 +147,6 @@ components:
             - type: "null"
         dialogueSettings:
           $ref: "#/components/schemas/DialogueSettings"
-        proposedCommentsCount:
-          type: integer
-        issuesCount:
-          type: integer
       required:
         - id
         - workspaceId
@@ -159,8 +155,6 @@ components:
         - status
         - archivedAt
         - dialogueSettings
-        - proposedCommentsCount
-        - issuesCount
     Comment:
       type: object
       properties:

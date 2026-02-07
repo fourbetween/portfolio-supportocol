@@ -320,15 +320,13 @@ func (s *DialogueSettings) SetIssuePermission(val PermissionLevel) {
 
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID                    ID                   `json:"id"`
-	WorkspaceId           ID                   `json:"workspaceId"`
-	Theme                 DiscussionTheme      `json:"theme"`
-	Conclusion            DiscussionConclusion `json:"conclusion"`
-	Status                DiscussionStatus     `json:"status"`
-	ArchivedAt            NilDateTime          `json:"archivedAt"`
-	DialogueSettings      DialogueSettings     `json:"dialogueSettings"`
-	ProposedCommentsCount int                  `json:"proposedCommentsCount"`
-	IssuesCount           int                  `json:"issuesCount"`
+	ID               ID                   `json:"id"`
+	WorkspaceId      ID                   `json:"workspaceId"`
+	Theme            DiscussionTheme      `json:"theme"`
+	Conclusion       DiscussionConclusion `json:"conclusion"`
+	Status           DiscussionStatus     `json:"status"`
+	ArchivedAt       NilDateTime          `json:"archivedAt"`
+	DialogueSettings DialogueSettings     `json:"dialogueSettings"`
 }
 
 // GetID returns the value of ID.
@@ -366,16 +364,6 @@ func (s *Discussion) GetDialogueSettings() DialogueSettings {
 	return s.DialogueSettings
 }
 
-// GetProposedCommentsCount returns the value of ProposedCommentsCount.
-func (s *Discussion) GetProposedCommentsCount() int {
-	return s.ProposedCommentsCount
-}
-
-// GetIssuesCount returns the value of IssuesCount.
-func (s *Discussion) GetIssuesCount() int {
-	return s.IssuesCount
-}
-
 // SetID sets the value of ID.
 func (s *Discussion) SetID(val ID) {
 	s.ID = val
@@ -409,16 +397,6 @@ func (s *Discussion) SetArchivedAt(val NilDateTime) {
 // SetDialogueSettings sets the value of DialogueSettings.
 func (s *Discussion) SetDialogueSettings(val DialogueSettings) {
 	s.DialogueSettings = val
-}
-
-// SetProposedCommentsCount sets the value of ProposedCommentsCount.
-func (s *Discussion) SetProposedCommentsCount(val int) {
-	s.ProposedCommentsCount = val
-}
-
-// SetIssuesCount sets the value of IssuesCount.
-func (s *Discussion) SetIssuesCount(val int) {
-	s.IssuesCount = val
 }
 
 type DiscussionConclusion string

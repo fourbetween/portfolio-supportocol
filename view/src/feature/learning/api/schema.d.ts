@@ -852,9 +852,7 @@ export interface components {
             conclusion: components["schemas"]["DiscussionConclusion"];
             status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;
-            dialogueSettings?: components["schemas"]["DialogueSettings"];
-            proposedCommentsCount: number;
-            issuesCount: number;
+            dialogueSettings: null | components["schemas"]["DialogueSettings"];
         };
         Comment: {
             id: components["schemas"]["Id"];

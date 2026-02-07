@@ -320,15 +320,13 @@ func (s *DialogueSettings) SetIssuePermission(val PermissionLevel) {
 
 // Ref: #/components/schemas/Discussion
 type Discussion struct {
-	ID                    ID                   `json:"id"`
-	ProjectId             ID                   `json:"projectId"`
-	Theme                 DiscussionTheme      `json:"theme"`
-	Conclusion            DiscussionConclusion `json:"conclusion"`
-	Status                DiscussionStatus     `json:"status"`
-	ArchivedAt            NilDateTime          `json:"archivedAt"`
-	DialogueSettings      OptDialogueSettings  `json:"dialogueSettings"`
-	ProposedCommentsCount int                  `json:"proposedCommentsCount"`
-	IssuesCount           int                  `json:"issuesCount"`
+	ID               ID                   `json:"id"`
+	ProjectId        ID                   `json:"projectId"`
+	Theme            DiscussionTheme      `json:"theme"`
+	Conclusion       DiscussionConclusion `json:"conclusion"`
+	Status           DiscussionStatus     `json:"status"`
+	ArchivedAt       NilDateTime          `json:"archivedAt"`
+	DialogueSettings NilDialogueSettings  `json:"dialogueSettings"`
 }
 
 // GetID returns the value of ID.
@@ -362,18 +360,8 @@ func (s *Discussion) GetArchivedAt() NilDateTime {
 }
 
 // GetDialogueSettings returns the value of DialogueSettings.
-func (s *Discussion) GetDialogueSettings() OptDialogueSettings {
+func (s *Discussion) GetDialogueSettings() NilDialogueSettings {
 	return s.DialogueSettings
-}
-
-// GetProposedCommentsCount returns the value of ProposedCommentsCount.
-func (s *Discussion) GetProposedCommentsCount() int {
-	return s.ProposedCommentsCount
-}
-
-// GetIssuesCount returns the value of IssuesCount.
-func (s *Discussion) GetIssuesCount() int {
-	return s.IssuesCount
 }
 
 // SetID sets the value of ID.
@@ -407,18 +395,8 @@ func (s *Discussion) SetArchivedAt(val NilDateTime) {
 }
 
 // SetDialogueSettings sets the value of DialogueSettings.
-func (s *Discussion) SetDialogueSettings(val OptDialogueSettings) {
+func (s *Discussion) SetDialogueSettings(val NilDialogueSettings) {
 	s.DialogueSettings = val
-}
-
-// SetProposedCommentsCount sets the value of ProposedCommentsCount.
-func (s *Discussion) SetProposedCommentsCount(val int) {
-	s.ProposedCommentsCount = val
-}
-
-// SetIssuesCount sets the value of IssuesCount.
-func (s *Discussion) SetIssuesCount(val int) {
-	s.IssuesCount = val
 }
 
 type DiscussionConclusion string
@@ -665,6 +643,51 @@ func (o NilDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
+// NewNilDialogueSettings returns new NilDialogueSettings with value set to v.
+func NewNilDialogueSettings(v DialogueSettings) NilDialogueSettings {
+	return NilDialogueSettings{
+		Value: v,
+	}
+}
+
+// NilDialogueSettings is nullable DialogueSettings.
+type NilDialogueSettings struct {
+	Value DialogueSettings
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilDialogueSettings) SetTo(v DialogueSettings) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilDialogueSettings) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilDialogueSettings) SetToNull() {
+	o.Null = true
+	var v DialogueSettings
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilDialogueSettings) Get() (v DialogueSettings, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilDialogueSettings) Or(d DialogueSettings) DialogueSettings {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewNilID returns new NilID with value set to v.
 func NewNilID(v ID) NilID {
 	return NilID{
@@ -842,52 +865,6 @@ func (o OptDateTime) Get() (v time.Time, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptDateTime) Or(d time.Time) time.Time {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptDialogueSettings returns new OptDialogueSettings with value set to v.
-func NewOptDialogueSettings(v DialogueSettings) OptDialogueSettings {
-	return OptDialogueSettings{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptDialogueSettings is optional DialogueSettings.
-type OptDialogueSettings struct {
-	Value DialogueSettings
-	Set   bool
-}
-
-// IsSet returns true if OptDialogueSettings was set.
-func (o OptDialogueSettings) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptDialogueSettings) Reset() {
-	var v DialogueSettings
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptDialogueSettings) SetTo(v DialogueSettings) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptDialogueSettings) Get() (v DialogueSettings, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptDialogueSettings) Or(d DialogueSettings) DialogueSettings {
 	if v, ok := o.Get(); ok {
 		return v
 	}

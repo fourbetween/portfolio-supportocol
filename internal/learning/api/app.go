@@ -427,13 +427,11 @@ func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.
 
 func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 	res := oas.Discussion{
-		ID:                    oas.ID(uuid.MustParse(item.ID())),
-		ProjectId:             oas.ID(uuid.MustParse(item.ProjectID())),
-		Theme:                 oas.DiscussionTheme(item.Theme()),
-		Conclusion:            oas.DiscussionConclusion(item.Conclusion()),
-		Status:                oas.DiscussionStatus(item.Status()),
-		ProposedCommentsCount: item.ProposedCommentsCount(),
-		IssuesCount:           item.IssuesCount(),
+		ID:         oas.ID(uuid.MustParse(item.ID())),
+		ProjectId:  oas.ID(uuid.MustParse(item.ProjectID())),
+		Theme:      oas.DiscussionTheme(item.Theme()),
+		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
+		Status:     oas.DiscussionStatus(item.Status()),
 	}
 	if item.ArchivedAt() != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt())
@@ -460,6 +458,8 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 			CommentPermission: oas.PermissionLevel(ds.CommentPermission),
 			IssuePermission:   oas.PermissionLevel(ds.IssuePermission),
 		})
+	} else {
+		res.DialogueSettings.Null = true
 	}
 	return res
 }
