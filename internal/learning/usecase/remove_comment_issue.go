@@ -69,6 +69,11 @@ func (u *RemoveCommentIssueUsecase) Execute(ctx context.Context, input RemoveCom
 			return nil
 		}
 
+		discussion.RemoveCommentIssue()
+		if err := u.discussionRepo.Save(ctx, discussion); err != nil {
+			return err
+		}
+
 		return u.commentRepo.Update(ctx, comment)
 	})
 	if err != nil {

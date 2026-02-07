@@ -84,7 +84,7 @@ func NewAPIContainer(
 		ArchiveComment:           usecase.NewArchiveCommentUsecase(discussionRepo, commentRepo, permSv, txManager, clockSrv),
 		UnarchiveComment:         usecase.NewUnarchiveCommentUsecase(discussionRepo, commentRepo, permSv, txManager),
 		DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo, permSv, txManager),
-		UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo, permSv, txManager),
+		UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo, permSv, clockSrv, txManager),
 		RemoveCommentIssue:       usecase.NewRemoveCommentIssueUsecase(discussionRepo, commentRepo, permSv, txManager),
 		EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, permSv, commentGenerationQueue),
 	}, nil

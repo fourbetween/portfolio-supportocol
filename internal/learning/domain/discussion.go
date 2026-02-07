@@ -109,8 +109,22 @@ func (d *Discussion) AddComments(count int, now time.Time) {
 	d.lastCommentedAt = now
 }
 
+func (d *Discussion) ResolveProposedComment(now time.Time) {
+	if d.proposedCommentsCount > 0 {
+		d.proposedCommentsCount--
+		d.commentsCount++
+		d.lastCommentedAt = now
+	}
+}
+
 func (d *Discussion) AddCommentIssue() {
 	d.issuesCount++
+}
+
+func (d *Discussion) RemoveCommentIssue() {
+	if d.issuesCount > 0 {
+		d.issuesCount--
+	}
 }
 
 func (d *Discussion) SyncCommentsCount(count int) {

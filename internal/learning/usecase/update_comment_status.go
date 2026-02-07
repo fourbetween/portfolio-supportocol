@@ -6,6 +6,7 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
@@ -13,6 +14,7 @@ type UpdateCommentStatusUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
 	permSv         domain.PermissionService
+	clock          clock.Service
 	tx             dbtx.Manager
 }
 
@@ -20,12 +22,14 @@ func NewUpdateCommentStatusUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
 	permSv domain.PermissionService,
+	clock clock.Service,
 	tx dbtx.Manager,
 ) *UpdateCommentStatusUsecase {
 	return &UpdateCommentStatusUsecase{
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
 		permSv:         permSv,
+		clock:          clock,
 		tx:             tx,
 	}
 }
@@ -50,7 +54,7 @@ func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCo
 	var comment *domain.Comment
 	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// Verify discussion exists and user has access
-		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+		discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 			ID:          input.DiscussionID,
 			WorkspaceID: input.WorkspaceID,
 		})
@@ -68,9 +72,17 @@ func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCo
 			return err
 		}
 
+		oldStatus := comment.Status()
 		status := domain.CommentStatus(input.Status)
 		if err := comment.UpdateStatus(status); err != nil {
 			return err
+		}
+
+		if oldStatus == domain.CommentStatusProposed && status == domain.CommentStatusActive {
+			discussion.ResolveProposedComment(u.clock.Now())
+			if err := u.discussionRepo.Save(ctx, discussion); err != nil {
+				return err
+			}
 		}
 
 		if err := u.commentRepo.Update(ctx, comment); err != nil {
