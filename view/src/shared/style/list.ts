@@ -40,7 +40,7 @@ export const listStyles = css`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px;
+    padding: 12px;
     background-color: var(--color-canvas-default);
     cursor: pointer;
     border-radius: var(--item-border-top-left-radius, 0)

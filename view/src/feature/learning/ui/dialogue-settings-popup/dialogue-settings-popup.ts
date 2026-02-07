@@ -15,7 +15,7 @@ export class LearningDialogueSettingsPopup extends LitElement {
   open = false;
 
   @property({ type: Object })
-  initialSettings?: DialogueSettings;
+  initialSettings?: DialogueSettings | null;
 
   @property({ type: Object })
   usedFrame?: CommentFrame;

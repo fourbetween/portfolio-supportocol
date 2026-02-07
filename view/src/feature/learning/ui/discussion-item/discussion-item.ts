@@ -27,7 +27,8 @@ export class LearningDiscussionItem extends LitElement {
   }
 
   render() {
-    const { theme, status, archivedAt } = this.summary;
+    const { theme, status, archivedAt, proposedCommentsCount, issuesCount } =
+      this.summary;
     const classes = {
       item: true,
       "hover-container": true,
@@ -37,6 +38,16 @@ export class LearningDiscussionItem extends LitElement {
       <div class=${classMap(classes)} @click=${this.handleSelect}>
         <div class="info">
           <span class="theme">${theme}</span>
+          <div class="stats">
+            <div class="stat-item" title="Proposed comments">
+              <span class="material-symbols-outlined">chat_bubble</span>
+              <span class="count">${proposedCommentsCount}</span>
+            </div>
+            <div class="stat-item" title="Issues">
+              <span class="material-symbols-outlined">report</span>
+              <span class="count">${issuesCount}</span>
+            </div>
+          </div>
         </div>
         <learning-discussion-status-badge
           class="status-badge"
@@ -69,12 +80,28 @@ export class LearningDiscussionItem extends LitElement {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 4px;
+        gap: 8px;
         flex: 1;
       }
       .theme {
         font-size: 0.9rem;
         color: var(--color-accent-fg);
+      }
+      .stats {
+        display: flex;
+        gap: 12px;
+        color: var(--color-fg-muted);
+      }
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .stat-item .material-symbols-outlined {
+        font-size: 16px;
+      }
+      .count {
+        font-size: 0.8rem;
       }
       .status-badge {
         position: absolute;

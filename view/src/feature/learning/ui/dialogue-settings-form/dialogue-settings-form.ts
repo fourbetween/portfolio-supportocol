@@ -13,7 +13,7 @@ import type { DialogueSettings } from "../../model/discussion";
 @customElement("learning-dialogue-settings-form")
 export class LearningDialogueSettingsForm extends LitElement {
   @property({ type: Object })
-  initialSettings?: DialogueSettings;
+  initialSettings?: DialogueSettings | null;
 
   @property({ type: Object })
   usedFrame?: CommentFrame;

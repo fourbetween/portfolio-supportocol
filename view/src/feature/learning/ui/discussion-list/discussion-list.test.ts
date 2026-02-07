@@ -28,6 +28,8 @@ describe("learning-discussion-list", () => {
         status: "public" as const,
         archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
+        proposedCommentsCount: 0,
+        issuesCount: 0,
       },
       {
         id: "2",
@@ -36,6 +38,8 @@ describe("learning-discussion-list", () => {
         status: "public" as const,
         archivedAt: null,
         lastCommentedAt: "2023-01-02T00:00:00Z",
+        proposedCommentsCount: 0,
+        issuesCount: 0,
       },
     ];
     render(
@@ -72,6 +76,8 @@ describe("learning-discussion-list", () => {
         status: "public" as const,
         archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
+        proposedCommentsCount: 0,
+        issuesCount: 0,
       },
     ];
     render(
@@ -100,6 +106,8 @@ describe("learning-discussion-list", () => {
         status: "public" as const,
         archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
+        proposedCommentsCount: 0,
+        issuesCount: 0,
       },
     ];
     render(
@@ -129,6 +137,8 @@ describe("learning-discussion-list", () => {
         status: "public" as const,
         archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
+        proposedCommentsCount: 0,
+        issuesCount: 0,
       },
     ];
     render(
@@ -157,6 +167,8 @@ describe("learning-discussion-list", () => {
         status: "public" as const,
         archivedAt: null,
         lastCommentedAt: "2023-01-01T00:00:00Z",
+        proposedCommentsCount: 0,
+        issuesCount: 0,
       },
     ];
     render(

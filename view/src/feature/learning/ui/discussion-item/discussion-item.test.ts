@@ -26,6 +26,8 @@ describe("learning-discussion-item", () => {
     status: "public" as const,
     archivedAt: null,
     lastCommentedAt: "2023-01-01T00:00:00Z",
+    proposedCommentsCount: 5,
+    issuesCount: 2,
   };
 
   it("テーマが表示されること", async () => {
@@ -39,6 +41,8 @@ describe("learning-discussion-item", () => {
     );
 
     await expect.element(page.getByText("Test Theme")).toBeVisible();
+    await expect.element(page.getByText("5")).toBeVisible();
+    await expect.element(page.getByText("2")).toBeVisible();
   });
 
   it("クリックすると選択イベントが発火すること", async () => {
