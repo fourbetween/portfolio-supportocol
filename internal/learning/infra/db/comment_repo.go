@@ -180,20 +180,45 @@ func (r *CommentRepository) ListChildren(ctx context.Context, params domain.List
 	return r.toCommentDomains(dest)
 }
 
-func (r *CommentRepository) CountByDiscussionID(ctx context.Context, discussionID string) (int, error) {
+func (r *CommentRepository) CountsByDiscussionID(ctx context.Context, discussionID string) (domain.DiscussionCounts, error) {
+	commentsCountExpr := mysql.COUNT(mysql.DISTINCT(table.Comments.ID)).AS("counts.comments_count")
+	proposedCountExpr := mysql.COUNT(
+		mysql.DISTINCT(
+			mysql.CASE().
+				WHEN(table.Comments.Status.EQ(mysql.String(string(domain.CommentStatusProposed)))).
+				THEN(table.Comments.ID).
+				ELSE(mysql.NULL),
+		),
+	).AS("counts.proposed_comments_count")
+	issuesCountExpr := mysql.COUNT(table.CommentIssues.ID).AS("counts.issues_count")
+
 	stmt := mysql.
-		SELECT(mysql.COUNT(mysql.STAR).AS("Count")).
-		FROM(table.Comments).
+		SELECT(commentsCountExpr, proposedCountExpr, issuesCountExpr).
+		FROM(
+			table.Comments.
+				LEFT_JOIN(table.CommentIssues, table.CommentIssues.CommentID.EQ(table.Comments.ID)),
+		).
 		WHERE(table.Comments.DiscussionID.EQ(mysql.String(discussionID)))
 
 	var dest struct {
-		Count int64
+		CommentsCount         int64  `alias:"counts.comments_count"`
+		ProposedCommentsCount *int64 `alias:"counts.proposed_comments_count"`
+		IssuesCount           int64  `alias:"counts.issues_count"`
 	}
 	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
-		return 0, fmt.Errorf("failed to count comments: %w", err)
+		return domain.DiscussionCounts{}, fmt.Errorf("failed to count discussion stats: %w", err)
 	}
 
-	return int(dest.Count), nil
+	var proposedCount int
+	if dest.ProposedCommentsCount != nil {
+		proposedCount = int(*dest.ProposedCommentsCount)
+	}
+
+	return domain.DiscussionCounts{
+		CommentsCount:         int(dest.CommentsCount) - proposedCount,
+		ProposedCommentsCount: proposedCount,
+		IssuesCount:           int(dest.IssuesCount),
+	}, nil
 }
 
 func (r *CommentRepository) toCommentDomains(rows []commentModel) ([]*domain.Comment, error) {

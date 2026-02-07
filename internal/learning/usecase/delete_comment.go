@@ -69,11 +69,11 @@ func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentI
 			return err
 		}
 
-		count, err := u.commentRepo.CountByDiscussionID(ctx, input.DiscussionID)
+		counts, err := u.commentRepo.CountsByDiscussionID(ctx, input.DiscussionID)
 		if err != nil {
 			return err
 		}
-		discussion.SyncCommentsCount(count)
+		discussion.SyncCounts(counts)
 		return u.discussionRepo.Save(ctx, discussion)
 	})
 }

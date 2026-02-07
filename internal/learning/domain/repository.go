@@ -5,8 +5,6 @@ import (
 	"time"
 )
 
-//go:generate go tool mockgen -package domain -destination ./repository_mock.go . DiscussionRepository,CommentRepository
-
 type (
 	DiscussionRepository interface {
 		Load(ctx context.Context, params LoadDiscussionParams) (*Discussion, error)
@@ -29,7 +27,13 @@ type (
 		Delete(ctx context.Context, comment *Comment) error
 		GetPathToRoot(ctx context.Context, commentID string) ([]*Comment, error)
 		ListChildren(ctx context.Context, params ListCommentChildrenParams) ([]*Comment, error)
-		CountByDiscussionID(ctx context.Context, discussionID string) (int, error)
+		CountsByDiscussionID(ctx context.Context, discussionID string) (DiscussionCounts, error)
+	}
+
+	DiscussionCounts struct {
+		CommentsCount         int
+		ProposedCommentsCount int
+		IssuesCount           int
 	}
 
 	SearchCommentsParams struct {

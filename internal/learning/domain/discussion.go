@@ -131,6 +131,12 @@ func (d *Discussion) SyncCommentsCount(count int) {
 	d.commentsCount = count
 }
 
+func (d *Discussion) SyncCounts(counts DiscussionCounts) {
+	d.commentsCount = counts.CommentsCount
+	d.proposedCommentsCount = counts.ProposedCommentsCount
+	d.issuesCount = counts.IssuesCount
+}
+
 type UpdateParams struct {
 	Theme      string
 	Conclusion string

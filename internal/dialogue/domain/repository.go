@@ -5,8 +5,6 @@ import (
 	"time"
 )
 
-//go:generate go tool mockgen -package domain -destination ./repository_mock.go . DiscussionRepository,CommentRepository
-
 type (
 	DiscussionRepository interface {
 		Load(ctx context.Context, params LoadDiscussionParams) (*Discussion, error)
