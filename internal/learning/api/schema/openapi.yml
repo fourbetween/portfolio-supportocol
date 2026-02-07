@@ -29,13 +29,25 @@ components:
       enum:
         - active
         - proposed
+    PermissionLevel:
+      type: string
+      enum:
+        - everyone
+        - authenticated
+        - none
     DialogueSettings:
       type: object
       properties:
         commentFrame:
           $ref: "#/components/schemas/CommentFrame"
+        commentPermission:
+          $ref: "#/components/schemas/PermissionLevel"
+        issuePermission:
+          $ref: "#/components/schemas/PermissionLevel"
       required:
         - commentFrame
+        - commentPermission
+        - issuePermission
     CommentFrame:
       type: object
       properties:
@@ -360,6 +372,10 @@ paths:
                   $ref: "#/components/schemas/DiscussionStatus"
                 commentFrame:
                   $ref: "#/components/schemas/CommentFrame"
+                commentPermission:
+                  $ref: "#/components/schemas/PermissionLevel"
+                issuePermission:
+                  $ref: "#/components/schemas/PermissionLevel"
               required:
                 - status
       responses:

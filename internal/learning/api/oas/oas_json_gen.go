@@ -822,10 +822,20 @@ func (s *DialogueSettings) encodeFields(e *jx.Encoder) {
 		e.FieldStart("commentFrame")
 		s.CommentFrame.Encode(e)
 	}
+	{
+		e.FieldStart("commentPermission")
+		s.CommentPermission.Encode(e)
+	}
+	{
+		e.FieldStart("issuePermission")
+		s.IssuePermission.Encode(e)
+	}
 }
 
-var jsonFieldsNameOfDialogueSettings = [1]string{
+var jsonFieldsNameOfDialogueSettings = [3]string{
 	0: "commentFrame",
+	1: "commentPermission",
+	2: "issuePermission",
 }
 
 // Decode decodes DialogueSettings from json.
@@ -847,6 +857,26 @@ func (s *DialogueSettings) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"commentFrame\"")
 			}
+		case "commentPermission":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.CommentPermission.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"commentPermission\"")
+			}
+		case "issuePermission":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.IssuePermission.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"issuePermission\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -857,7 +887,7 @@ func (s *DialogueSettings) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1691,6 +1721,81 @@ func (s *OptDialogueSettings) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes PermissionLevel as json.
+func (o OptPermissionLevel) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes PermissionLevel from json.
+func (o *OptPermissionLevel) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptPermissionLevel to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptPermissionLevel) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptPermissionLevel) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes PermissionLevel as json.
+func (s PermissionLevel) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes PermissionLevel from json.
+func (s *PermissionLevel) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PermissionLevel to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch PermissionLevel(v) {
+	case PermissionLevelEveryone:
+		*s = PermissionLevelEveryone
+	case PermissionLevelAuthenticated:
+		*s = PermissionLevelAuthenticated
+	case PermissionLevelNone:
+		*s = PermissionLevelNone
+	default:
+		*s = PermissionLevel(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s PermissionLevel) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PermissionLevel) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -2270,11 +2375,25 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) enc
 			s.CommentFrame.Encode(e)
 		}
 	}
+	{
+		if s.CommentPermission.Set {
+			e.FieldStart("commentPermission")
+			s.CommentPermission.Encode(e)
+		}
+	}
+	{
+		if s.IssuePermission.Set {
+			e.FieldStart("issuePermission")
+			s.IssuePermission.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq = [2]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq = [4]string{
 	0: "status",
 	1: "commentFrame",
+	2: "commentPermission",
+	3: "issuePermission",
 }
 
 // Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq from json.
@@ -2305,6 +2424,26 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Dec
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"commentFrame\"")
+			}
+		case "commentPermission":
+			if err := func() error {
+				s.CommentPermission.Reset()
+				if err := s.CommentPermission.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"commentPermission\"")
+			}
+		case "issuePermission":
+			if err := func() error {
+				s.IssuePermission.Reset()
+				if err := s.IssuePermission.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"issuePermission\"")
 			}
 		default:
 			return d.Skip()

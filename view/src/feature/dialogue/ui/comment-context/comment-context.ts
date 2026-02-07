@@ -6,7 +6,7 @@ import { commentContextStyle } from "../../../../shared/style/comment-context";
 import { iconStyle } from "../../../../shared/style/icon";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { Comment } from "../../model/comment";
-import type { CommentFrame } from "../../model/comment-frame";
+import type { DialogueSettings } from "../../model/discussion";
 import "../comment-card/comment-card";
 import "../comment-item/comment-item";
 
@@ -19,10 +19,13 @@ export class DialogueCommentContext extends LitElement {
   childCounts = new Map<string, number>();
 
   @property({ type: Object })
-  frame?: CommentFrame;
+  settings?: DialogueSettings;
 
   @property({ type: Boolean })
   readonly = false;
+
+  @property({ type: Boolean })
+  isAuthenticated = false;
 
   private renderItem(comment: Comment, isLast: boolean, isArchived: boolean) {
     const childCount = this.childCounts.get(comment.id) || 0;
@@ -33,9 +36,10 @@ export class DialogueCommentContext extends LitElement {
             <dialogue-comment-item
               .comment=${comment}
               .activeChildrenCount=${childCount}
-              .frame=${this.frame}
+              .settings=${this.settings}
               .archived=${isArchived}
               .readonly=${this.readonly}
+              .isAuthenticated=${this.isAuthenticated}
             ></dialogue-comment-item>
           `
         : html`

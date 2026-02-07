@@ -243,6 +243,8 @@ export interface paths {
                     "application/json": {
                         status: components["schemas"]["DiscussionStatus"];
                         commentFrame?: components["schemas"]["CommentFrame"];
+                        commentPermission?: components["schemas"]["PermissionLevel"];
+                        issuePermission?: components["schemas"]["PermissionLevel"];
                     };
                 };
             };
@@ -809,8 +811,12 @@ export interface components {
         Id: string;
         /** @enum {string} */
         CommentStatus: "active" | "proposed";
+        /** @enum {string} */
+        PermissionLevel: "everyone" | "authenticated" | "none";
         DialogueSettings: {
             commentFrame: components["schemas"]["CommentFrame"];
+            commentPermission: components["schemas"]["PermissionLevel"];
+            issuePermission: components["schemas"]["PermissionLevel"];
         };
         CommentFrame: {
             types: components["schemas"]["CommentType"][];

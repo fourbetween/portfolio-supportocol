@@ -12,7 +12,7 @@ import { commentTreeStyle } from "../../../../shared/style/comment-tree";
 import { iconStyle } from "../../../../shared/style/icon";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { Comment } from "../../model/comment";
-import type { CommentFrame } from "../../model/comment-frame";
+import type { DialogueSettings } from "../../model/discussion";
 import "../comment-item/comment-item";
 
 @customElement("dialogue-comment-tree")
@@ -21,10 +21,13 @@ export class DialogueCommentTree extends LitElement {
   comments?: Comment[];
 
   @property({ type: Object })
-  frame?: CommentFrame;
+  settings?: DialogueSettings;
 
   @property({ type: Boolean })
   readonly = false;
+
+  @property({ type: Boolean })
+  isAuthenticated = false;
 
   @property({ type: Boolean })
   showArchived = false;
@@ -101,9 +104,10 @@ export class DialogueCommentTree extends LitElement {
         <dialogue-comment-item
           .comment=${comment}
           .activeChildrenCount=${activeChildrenCount}
-          .frame=${this.frame}
+          .settings=${this.settings}
           .archived=${isArchived}
           .readonly=${this.readonly}
+          .isAuthenticated=${this.isAuthenticated}
         ></dialogue-comment-item>
         ${!hideChildren ? this.renderChildren(comment.id, isArchived) : nothing}
       </div>

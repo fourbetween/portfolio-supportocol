@@ -283,13 +283,9 @@ func (s *CookieAuth) SetRoles(val []string) {
 
 // Ref: #/components/schemas/DialogueSettings
 type DialogueSettings struct {
-	DiscussionId ID           `json:"discussionId"`
-	CommentFrame CommentFrame `json:"commentFrame"`
-}
-
-// GetDiscussionId returns the value of DiscussionId.
-func (s *DialogueSettings) GetDiscussionId() ID {
-	return s.DiscussionId
+	CommentFrame      CommentFrame    `json:"commentFrame"`
+	CommentPermission PermissionLevel `json:"commentPermission"`
+	IssuePermission   PermissionLevel `json:"issuePermission"`
 }
 
 // GetCommentFrame returns the value of CommentFrame.
@@ -297,14 +293,29 @@ func (s *DialogueSettings) GetCommentFrame() CommentFrame {
 	return s.CommentFrame
 }
 
-// SetDiscussionId sets the value of DiscussionId.
-func (s *DialogueSettings) SetDiscussionId(val ID) {
-	s.DiscussionId = val
+// GetCommentPermission returns the value of CommentPermission.
+func (s *DialogueSettings) GetCommentPermission() PermissionLevel {
+	return s.CommentPermission
+}
+
+// GetIssuePermission returns the value of IssuePermission.
+func (s *DialogueSettings) GetIssuePermission() PermissionLevel {
+	return s.IssuePermission
 }
 
 // SetCommentFrame sets the value of CommentFrame.
 func (s *DialogueSettings) SetCommentFrame(val CommentFrame) {
 	s.CommentFrame = val
+}
+
+// SetCommentPermission sets the value of CommentPermission.
+func (s *DialogueSettings) SetCommentPermission(val PermissionLevel) {
+	s.CommentPermission = val
+}
+
+// SetIssuePermission sets the value of IssuePermission.
+func (s *DialogueSettings) SetIssuePermission(val PermissionLevel) {
+	s.IssuePermission = val
 }
 
 // Ref: #/components/schemas/Discussion
@@ -692,6 +703,55 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 		return v
 	}
 	return d
+}
+
+// Ref: #/components/schemas/PermissionLevel
+type PermissionLevel string
+
+const (
+	PermissionLevelEveryone      PermissionLevel = "everyone"
+	PermissionLevelAuthenticated PermissionLevel = "authenticated"
+	PermissionLevelNone          PermissionLevel = "none"
+)
+
+// AllValues returns all PermissionLevel values.
+func (PermissionLevel) AllValues() []PermissionLevel {
+	return []PermissionLevel{
+		PermissionLevelEveryone,
+		PermissionLevelAuthenticated,
+		PermissionLevelNone,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PermissionLevel) MarshalText() ([]byte, error) {
+	switch s {
+	case PermissionLevelEveryone:
+		return []byte(s), nil
+	case PermissionLevelAuthenticated:
+		return []byte(s), nil
+	case PermissionLevelNone:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PermissionLevel) UnmarshalText(data []byte) error {
+	switch PermissionLevel(data) {
+	case PermissionLevelEveryone:
+		*s = PermissionLevelEveryone
+		return nil
+	case PermissionLevelAuthenticated:
+		*s = PermissionLevelAuthenticated
+		return nil
+	case PermissionLevelNone:
+		*s = PermissionLevelNone
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq struct {

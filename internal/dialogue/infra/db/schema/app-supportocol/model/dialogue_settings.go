@@ -12,8 +12,10 @@ import (
 )
 
 type DialogueSettings struct {
-	DiscussionID string `sql:"primary_key"`
-	CommentFrame string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	DiscussionID      string `sql:"primary_key"`
+	CommentFrame      string
+	CommentPermission string
+	IssuePermission   string
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
 }

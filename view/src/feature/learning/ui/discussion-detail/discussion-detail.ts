@@ -14,8 +14,8 @@ import {
 import type { CommentFrame } from "../../model/comment-frame";
 import type { Discussion } from "../../model/discussion";
 import "../comment-frame-badge/comment-frame-badge";
-import "../comment-frame-popup/comment-frame-popup";
-import type { LearningCommentFramePopup } from "../comment-frame-popup/comment-frame-popup";
+import "../dialogue-settings-popup/dialogue-settings-popup";
+import type { LearningDialogueSettingsPopup } from "../dialogue-settings-popup/dialogue-settings-popup";
 import "../discussion-edit-form/discussion-edit-form";
 import "../discussion-status-badge/discussion-status-badge";
 import "../discussion-status-popup/discussion-status-popup";
@@ -35,8 +35,8 @@ export class LearningDiscussionDetail extends LitElement {
   @query("learning-discussion-status-popup")
   private statusPopup!: DiscussionStatusPopup;
 
-  @query("learning-comment-frame-popup")
-  private commentFramePopup!: LearningCommentFramePopup;
+  @query("learning-dialogue-settings-popup")
+  private dialogueSettingsPopup!: LearningDialogueSettingsPopup;
 
   render() {
     if (!this.discussion && !this.isEditing) {
@@ -52,10 +52,10 @@ export class LearningDiscussionDetail extends LitElement {
       <learning-discussion-status-popup
         .status=${this.discussion?.status ?? "private"}
       ></learning-discussion-status-popup>
-      <learning-comment-frame-popup
-        .initialFrame=${this.discussion?.dialogueSettings?.commentFrame}
+      <learning-dialogue-settings-popup
+        .initialSettings=${this.discussion?.dialogueSettings}
         .usedFrame=${this.usedFrame}
-      ></learning-comment-frame-popup>
+      ></learning-dialogue-settings-popup>
     `;
   }
 
@@ -127,7 +127,7 @@ export class LearningDiscussionDetail extends LitElement {
   }
 
   private _handleCommentFrameBadgeClick() {
-    this.commentFramePopup.open = true;
+    this.dialogueSettingsPopup.open = true;
   }
 
   private _handleArchiveClick() {

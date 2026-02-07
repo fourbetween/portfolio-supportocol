@@ -283,7 +283,9 @@ func (s *CookieAuth) SetRoles(val []string) {
 
 // Ref: #/components/schemas/DialogueSettings
 type DialogueSettings struct {
-	CommentFrame CommentFrame `json:"commentFrame"`
+	CommentFrame      CommentFrame    `json:"commentFrame"`
+	CommentPermission PermissionLevel `json:"commentPermission"`
+	IssuePermission   PermissionLevel `json:"issuePermission"`
 }
 
 // GetCommentFrame returns the value of CommentFrame.
@@ -291,9 +293,29 @@ func (s *DialogueSettings) GetCommentFrame() CommentFrame {
 	return s.CommentFrame
 }
 
+// GetCommentPermission returns the value of CommentPermission.
+func (s *DialogueSettings) GetCommentPermission() PermissionLevel {
+	return s.CommentPermission
+}
+
+// GetIssuePermission returns the value of IssuePermission.
+func (s *DialogueSettings) GetIssuePermission() PermissionLevel {
+	return s.IssuePermission
+}
+
 // SetCommentFrame sets the value of CommentFrame.
 func (s *DialogueSettings) SetCommentFrame(val CommentFrame) {
 	s.CommentFrame = val
+}
+
+// SetCommentPermission sets the value of CommentPermission.
+func (s *DialogueSettings) SetCommentPermission(val PermissionLevel) {
+	s.CommentPermission = val
+}
+
+// SetIssuePermission sets the value of IssuePermission.
+func (s *DialogueSettings) SetIssuePermission(val PermissionLevel) {
+	s.IssuePermission = val
 }
 
 // Ref: #/components/schemas/Discussion
@@ -828,6 +850,101 @@ func (o OptDialogueSettings) Or(d DialogueSettings) DialogueSettings {
 	return d
 }
 
+// NewOptPermissionLevel returns new OptPermissionLevel with value set to v.
+func NewOptPermissionLevel(v PermissionLevel) OptPermissionLevel {
+	return OptPermissionLevel{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPermissionLevel is optional PermissionLevel.
+type OptPermissionLevel struct {
+	Value PermissionLevel
+	Set   bool
+}
+
+// IsSet returns true if OptPermissionLevel was set.
+func (o OptPermissionLevel) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPermissionLevel) Reset() {
+	var v PermissionLevel
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPermissionLevel) SetTo(v PermissionLevel) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPermissionLevel) Get() (v PermissionLevel, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPermissionLevel) Or(d PermissionLevel) PermissionLevel {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// Ref: #/components/schemas/PermissionLevel
+type PermissionLevel string
+
+const (
+	PermissionLevelEveryone      PermissionLevel = "everyone"
+	PermissionLevelAuthenticated PermissionLevel = "authenticated"
+	PermissionLevelNone          PermissionLevel = "none"
+)
+
+// AllValues returns all PermissionLevel values.
+func (PermissionLevel) AllValues() []PermissionLevel {
+	return []PermissionLevel{
+		PermissionLevelEveryone,
+		PermissionLevelAuthenticated,
+		PermissionLevelNone,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s PermissionLevel) MarshalText() ([]byte, error) {
+	switch s {
+	case PermissionLevelEveryone:
+		return []byte(s), nil
+	case PermissionLevelAuthenticated:
+		return []byte(s), nil
+	case PermissionLevelNone:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *PermissionLevel) UnmarshalText(data []byte) error {
+	switch PermissionLevel(data) {
+	case PermissionLevelEveryone:
+		*s = PermissionLevelEveryone
+		return nil
+	case PermissionLevelAuthenticated:
+		*s = PermissionLevelAuthenticated
+		return nil
+	case PermissionLevelNone:
+		*s = PermissionLevelNone
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete operation.
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
 
@@ -974,8 +1091,10 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) SetConclu
 }
 
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq struct {
-	Status       DiscussionStatus `json:"status"`
-	CommentFrame OptCommentFrame  `json:"commentFrame"`
+	Status            DiscussionStatus   `json:"status"`
+	CommentFrame      OptCommentFrame    `json:"commentFrame"`
+	CommentPermission OptPermissionLevel `json:"commentPermission"`
+	IssuePermission   OptPermissionLevel `json:"issuePermission"`
 }
 
 // GetStatus returns the value of Status.
@@ -988,6 +1107,16 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Get
 	return s.CommentFrame
 }
 
+// GetCommentPermission returns the value of CommentPermission.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) GetCommentPermission() OptPermissionLevel {
+	return s.CommentPermission
+}
+
+// GetIssuePermission returns the value of IssuePermission.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) GetIssuePermission() OptPermissionLevel {
+	return s.IssuePermission
+}
+
 // SetStatus sets the value of Status.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) SetStatus(val DiscussionStatus) {
 	s.Status = val
@@ -996,6 +1125,16 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Set
 // SetCommentFrame sets the value of CommentFrame.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) SetCommentFrame(val OptCommentFrame) {
 	s.CommentFrame = val
+}
+
+// SetCommentPermission sets the value of CommentPermission.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) SetCommentPermission(val OptPermissionLevel) {
+	s.CommentPermission = val
+}
+
+// SetIssuePermission sets the value of IssuePermission.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) SetIssuePermission(val OptPermissionLevel) {
+	s.IssuePermission = val
 }
 
 type V1LearningWorkspacesWorkspaceIdDiscussionsPostReq struct {

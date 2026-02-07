@@ -107,7 +107,9 @@ func TestDiscussion_EnsureCommentFrameRequirement(t *testing.T) {
 			}
 			if tt.initialCF != nil {
 				d.dialogueSettings = &DialogueSettings{
-					CommentFrame: *tt.initialCF,
+					CommentFrame:      *tt.initialCF,
+					CommentPermission: PermissionEveryone,
+					IssuePermission:   PermissionNone,
 				}
 			}
 

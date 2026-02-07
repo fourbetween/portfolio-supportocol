@@ -66,6 +66,10 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 			return apperr.ErrPermissionDenied
 		}
 
+		if !discussion.Settings().CommentPermission.CanPerform(input.UserID) {
+			return fmt.Errorf("comment permission denied: %w", apperr.ErrPermissionDenied)
+		}
+
 		var parent *domain.Comment
 		if input.ParentCommentID != nil {
 			path, err := u.commentRepo.GetPathToRoot(ctx, *input.ParentCommentID)

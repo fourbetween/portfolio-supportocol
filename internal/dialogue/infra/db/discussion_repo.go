@@ -108,6 +108,8 @@ func (r *DiscussionRepository) toDialogueSettingsDomain(row *model.DialogueSetti
 	}
 
 	return domain.DiscussionSettings{
-		CommentFrame: commentFrame,
+		CommentFrame:      commentFrame,
+		CommentPermission: domain.PermissionLevel(row.CommentPermission),
+		IssuePermission:   domain.PermissionLevel(row.IssuePermission),
 	}, nil
 }

@@ -3,44 +3,47 @@ import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../../shared/style/base";
 import { buttonStyle } from "../../../../shared/style/button";
 import "../../../../shared/ui/popup/popup";
-import { LearningDiscussionUpdateCommentFrameEvent } from "../../event/discussion";
+import { LearningDiscussionUpdateDialogueSettingsEvent } from "../../event/discussion";
 import type { CommentFrame } from "../../model/comment-frame";
-import "../comment-frame-form/comment-frame-form";
-import type { LearningCommentFrameForm } from "../comment-frame-form/comment-frame-form";
+import type { DialogueSettings } from "../../model/discussion";
+import "../dialogue-settings-form/dialogue-settings-form";
+import type { LearningDialogueSettingsForm } from "../dialogue-settings-form/dialogue-settings-form";
 
-@customElement("learning-comment-frame-popup")
-export class LearningCommentFramePopup extends LitElement {
+@customElement("learning-dialogue-settings-popup")
+export class LearningDialogueSettingsPopup extends LitElement {
   @property({ type: Boolean })
   open = false;
 
   @property({ type: Object })
-  initialFrame?: CommentFrame;
+  initialSettings?: DialogueSettings;
 
   @property({ type: Object })
   usedFrame?: CommentFrame;
 
-  @query("learning-comment-frame-form")
-  private _form!: LearningCommentFrameForm;
+  @query("learning-dialogue-settings-form")
+  private _form!: LearningDialogueSettingsForm;
 
   private _handleClose() {
     this.open = false;
   }
 
   private _handleSave() {
-    const frame = this._form.value;
-    this.dispatchEvent(new LearningDiscussionUpdateCommentFrameEvent(frame));
+    const settings = this._form.value;
+    this.dispatchEvent(
+      new LearningDiscussionUpdateDialogueSettingsEvent(settings),
+    );
     this._handleClose();
   }
 
   render() {
     return html`
       <ui-popup .open=${this.open} @popup-closed=${this._handleClose}>
-        <div slot="header">Edit Comment Frame</div>
+        <div slot="header">Edit Dialogue Settings</div>
         <div slot="main">
-          <learning-comment-frame-form
-            .initialFrame=${this.initialFrame}
+          <learning-dialogue-settings-form
+            .initialSettings=${this.initialSettings}
             .usedFrame=${this.usedFrame}
-          ></learning-comment-frame-form>
+          ></learning-dialogue-settings-form>
         </div>
         <div slot="footer">
           <button class="btn" @click=${this._handleClose}>Cancel</button>

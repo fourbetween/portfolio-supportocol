@@ -17,10 +17,12 @@ type dialogueSettingsTable struct {
 	mysql.Table
 
 	// Columns
-	DiscussionID mysql.ColumnString
-	CommentFrame mysql.ColumnString
-	CreatedAt    mysql.ColumnTimestamp
-	UpdatedAt    mysql.ColumnTimestamp
+	DiscussionID      mysql.ColumnString
+	CommentFrame      mysql.ColumnString
+	CommentPermission mysql.ColumnString
+	IssuePermission   mysql.ColumnString
+	CreatedAt         mysql.ColumnTimestamp
+	UpdatedAt         mysql.ColumnTimestamp
 
 	AllColumns     mysql.ColumnList
 	MutableColumns mysql.ColumnList
@@ -62,23 +64,27 @@ func newDialogueSettingsTable(schemaName, tableName, alias string) *DialogueSett
 
 func newDialogueSettingsTableImpl(schemaName, tableName, alias string) dialogueSettingsTable {
 	var (
-		DiscussionIDColumn = mysql.StringColumn("discussion_id")
-		CommentFrameColumn = mysql.StringColumn("comment_frame")
-		CreatedAtColumn    = mysql.TimestampColumn("created_at")
-		UpdatedAtColumn    = mysql.TimestampColumn("updated_at")
-		allColumns         = mysql.ColumnList{DiscussionIDColumn, CommentFrameColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns     = mysql.ColumnList{CommentFrameColumn, CreatedAtColumn, UpdatedAtColumn}
-		defaultColumns     = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
+		DiscussionIDColumn      = mysql.StringColumn("discussion_id")
+		CommentFrameColumn      = mysql.StringColumn("comment_frame")
+		CommentPermissionColumn = mysql.StringColumn("comment_permission")
+		IssuePermissionColumn   = mysql.StringColumn("issue_permission")
+		CreatedAtColumn         = mysql.TimestampColumn("created_at")
+		UpdatedAtColumn         = mysql.TimestampColumn("updated_at")
+		allColumns              = mysql.ColumnList{DiscussionIDColumn, CommentFrameColumn, CommentPermissionColumn, IssuePermissionColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns          = mysql.ColumnList{CommentFrameColumn, CommentPermissionColumn, IssuePermissionColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns          = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return dialogueSettingsTable{
 		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
-		DiscussionID: DiscussionIDColumn,
-		CommentFrame: CommentFrameColumn,
-		CreatedAt:    CreatedAtColumn,
-		UpdatedAt:    UpdatedAtColumn,
+		DiscussionID:      DiscussionIDColumn,
+		CommentFrame:      CommentFrameColumn,
+		CommentPermission: CommentPermissionColumn,
+		IssuePermission:   IssuePermissionColumn,
+		CreatedAt:         CreatedAtColumn,
+		UpdatedAt:         UpdatedAtColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,

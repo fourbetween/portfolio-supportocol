@@ -8,11 +8,12 @@ import { inputStyle } from "../../../../shared/style/input";
 import { titleStyle } from "../../../../shared/style/title";
 import "../../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { CommentFrame } from "../../model/comment-frame";
+import type { DialogueSettings } from "../../model/discussion";
 
-@customElement("learning-comment-frame-form")
-export class LearningCommentFrameForm extends LitElement {
+@customElement("learning-dialogue-settings-form")
+export class LearningDialogueSettingsForm extends LitElement {
   @property({ type: Object })
-  initialFrame?: CommentFrame;
+  initialSettings?: DialogueSettings;
 
   @property({ type: Object })
   usedFrame?: CommentFrame;
@@ -32,10 +33,22 @@ export class LearningCommentFrameForm extends LitElement {
   @state()
   private _selectedChild: string = "";
 
-  get value(): CommentFrame {
+  @state()
+  private _commentPermission: DialogueSettings["commentPermission"] =
+    "authenticated";
+
+  @state()
+  private _issuePermission: DialogueSettings["issuePermission"] =
+    "authenticated";
+
+  get value(): DialogueSettings {
     return {
-      types: [...this._types],
-      paths: [...this._paths],
+      commentFrame: {
+        types: [...this._types],
+        paths: [...this._paths],
+      },
+      commentPermission: this._commentPermission,
+      issuePermission: this._issuePermission,
     };
   }
 
@@ -44,13 +57,17 @@ export class LearningCommentFrameForm extends LitElement {
   private _usedPaths: Set<string> = new Set();
 
   protected override willUpdate(changedProperties: PropertyValues<this>) {
-    if (changedProperties.has("initialFrame")) {
-      if (this.initialFrame) {
-        this._types = [...this.initialFrame.types];
-        this._paths = [...this.initialFrame.paths];
+    if (changedProperties.has("initialSettings")) {
+      if (this.initialSettings) {
+        this._types = [...this.initialSettings.commentFrame.types];
+        this._paths = [...this.initialSettings.commentFrame.paths];
+        this._commentPermission = this.initialSettings.commentPermission;
+        this._issuePermission = this.initialSettings.issuePermission;
       } else {
         this._types = [];
         this._paths = [];
+        this._commentPermission = "authenticated";
+        this._issuePermission = "authenticated";
       }
       this._newTypeName = "";
       this._selectedParent = "";
@@ -94,6 +111,39 @@ export class LearningCommentFrameForm extends LitElement {
   render() {
     return html`
       <div class="container">
+        <section aria-label="Permissions">
+          <div class="section-title">Permissions</div>
+          <div class="permission-grid">
+            <div class="permission-field">
+              <label for="comment-permission">Comments</label>
+              <select
+                id="comment-permission"
+                .value=${this._commentPermission}
+                @change=${(e: Event) =>
+                  (this._commentPermission = (e.target as HTMLSelectElement)
+                    .value as any)}
+              >
+                <option value="everyone">Everyone</option>
+                <option value="authenticated">Authenticated</option>
+                <option value="none">None</option>
+              </select>
+            </div>
+            <div class="permission-field">
+              <label for="issue-permission">Issues</label>
+              <select
+                id="issue-permission"
+                .value=${this._issuePermission}
+                @change=${(e: Event) =>
+                  (this._issuePermission = (e.target as HTMLSelectElement)
+                    .value as any)}
+              >
+                <option value="everyone">Everyone</option>
+                <option value="authenticated">Authenticated</option>
+                <option value="none">None</option>
+              </select>
+            </div>
+          </div>
+        </section>
         <section aria-label="Types">
           <div class="section-title">Types</div>
           <div class="types-form">
@@ -267,6 +317,22 @@ export class LearningCommentFrameForm extends LitElement {
     commentFrameDetail,
     iconStyle,
     css`
+      .permission-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      .permission-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .permission-field label {
+        font-size: 12px;
+        font-weight: bold;
+        color: var(--secondary-text-color, #666);
+      }
       .types-form {
         display: flex;
         gap: 8px;

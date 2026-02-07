@@ -326,6 +326,28 @@ func (s *DialogueSettings) Validate() error {
 			Error: err,
 		})
 	}
+	if err := func() error {
+		if err := s.CommentPermission.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "commentPermission",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.IssuePermission.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "issuePermission",
+			Error: err,
+		})
+	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}
@@ -527,6 +549,19 @@ func (s *ErrorStatusCode) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
+}
+
+func (s PermissionLevel) Validate() error {
+	switch s {
+	case "everyone":
+		return nil
+	case "authenticated":
+		return nil
+	case "none":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }
 
 func (s *V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostReq) Validate() error {

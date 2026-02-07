@@ -26,11 +26,13 @@ func NewUpdateDiscussionStatusUsecase(repo domain.DiscussionRepository, commentR
 }
 
 type UpdateDiscussionStatusInput struct {
-	ID           string
-	WorkspaceID  string
-	UserID       string
-	Status       string
-	CommentFrame *domain.CommentFrame
+	ID                string
+	WorkspaceID       string
+	UserID            string
+	Status            string
+	CommentFrame      *domain.CommentFrame
+	CommentPermission domain.PermissionLevel
+	IssuePermission   domain.PermissionLevel
 }
 
 func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input UpdateDiscussionStatusInput) (*domain.Discussion, error) {
@@ -64,8 +66,10 @@ func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input Updat
 		}
 
 		if err := discussion.UpdateStatus(domain.UpdateStatusParams{
-			Status:       status,
-			CommentFrame: commentFrame,
+			Status:            status,
+			CommentFrame:      commentFrame,
+			CommentPermission: input.CommentPermission,
+			IssuePermission:   input.IssuePermission,
 		}); err != nil {
 			return err
 		}
