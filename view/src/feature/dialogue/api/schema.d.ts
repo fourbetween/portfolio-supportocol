@@ -316,9 +316,12 @@ export interface components {
         CommentStatus: "active" | "proposed";
         /** @enum {string} */
         DiscussionStatus: "public" | "internal";
+        /** @enum {string} */
+        PermissionLevel: "everyone" | "authenticated" | "none";
         DialogueSettings: {
-            discussionId: components["schemas"]["Id"];
             commentFrame: components["schemas"]["CommentFrame"];
+            commentPermission: components["schemas"]["PermissionLevel"];
+            issuePermission: components["schemas"]["PermissionLevel"];
         };
         CommentFrame: {
             types: components["schemas"]["CommentType"][];

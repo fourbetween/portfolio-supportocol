@@ -217,7 +217,6 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 		Conclusion:  oas.DiscussionConclusion(item.Conclusion()),
 		Status:      oas.DiscussionStatus(item.Status()),
 		DialogueSettings: oas.DialogueSettings{
-			DiscussionId:      oas.ID(uuid.MustParse(item.ID())),
 			CommentPermission: oas.PermissionLevel(settings.CommentPermission),
 			IssuePermission:   oas.PermissionLevel(settings.IssuePermission),
 			CommentFrame: oas.CommentFrame{

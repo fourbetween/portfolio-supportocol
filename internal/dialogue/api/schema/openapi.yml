@@ -43,8 +43,6 @@ components:
     DialogueSettings:
       type: object
       properties:
-        discussionId:
-          $ref: "#/components/schemas/Id"
         commentFrame:
           $ref: "#/components/schemas/CommentFrame"
         commentPermission:
@@ -52,7 +50,6 @@ components:
         issuePermission:
           $ref: "#/components/schemas/PermissionLevel"
       required:
-        - discussionId
         - commentFrame
         - commentPermission
         - issuePermission
