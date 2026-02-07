@@ -109,6 +109,10 @@ func (d *Discussion) AddComments(count int, now time.Time) {
 	d.lastCommentedAt = now
 }
 
+func (d *Discussion) AddCommentIssue() {
+	d.issuesCount++
+}
+
 func (d *Discussion) SyncCommentsCount(count int) {
 	d.commentsCount = count
 }

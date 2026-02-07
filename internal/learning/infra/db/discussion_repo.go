@@ -27,29 +27,17 @@ func NewDiscussionRepository(db *sql.DB, fac *domain.DiscussionFactory) *Discuss
 
 type discussionWithSettings struct {
 	model.Discussions
-	DialogueSettings      *model.DialogueSettings
-	ProposedCommentsCount int64 `alias:"proposed_comments_count"`
-	IssuesCount           int64 `alias:"issues_count"`
+	DialogueSettings *model.DialogueSettings
 }
 
 func (r *DiscussionRepository) Load(ctx context.Context, params domain.LoadDiscussionParams) (*domain.Discussion, error) {
 	cond := table.Discussions.ID.EQ(mysql.String(params.ID)).
 		AND(table.Discussions.WorkspaceID.EQ(mysql.String(params.WorkspaceID)))
 
-	proposedCommentsCount := mysql.RawInt(
-		"(SELECT COUNT(*) FROM comments c WHERE c.discussion_id = discussions.id AND c.status = 'proposed')",
-	).AS("proposed_comments_count")
-
-	issuesCount := mysql.RawInt(
-		"(SELECT COUNT(*) FROM comment_issues ci INNER JOIN comments c ON ci.comment_id = c.id WHERE c.discussion_id = discussions.id)",
-	).AS("issues_count")
-
 	stmt := mysql.
 		SELECT(
 			table.Discussions.AllColumns,
 			table.DialogueSettings.AllColumns,
-			proposedCommentsCount,
-			issuesCount,
 		).
 		FROM(
 			table.Discussions.
@@ -84,6 +72,8 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 			table.Discussions.Conclusion.SET(table.Discussions.NEW.Conclusion),
 			table.Discussions.Status.SET(table.Discussions.NEW.Status),
 			table.Discussions.CommentsCount.SET(table.Discussions.NEW.CommentsCount),
+			table.Discussions.ProposedCommentsCount.SET(table.Discussions.NEW.ProposedCommentsCount),
+			table.Discussions.IssuesCount.SET(table.Discussions.NEW.IssuesCount),
 			table.Discussions.LastCommentedAt.SET(table.Discussions.NEW.LastCommentedAt),
 			table.Discussions.ArchivedAt.SET(table.Discussions.NEW.ArchivedAt),
 		)
@@ -198,17 +188,19 @@ func (r *DiscussionRepository) toDialogueSettingsDomain(row *model.DialogueSetti
 
 func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Discussions {
 	return model.Discussions{
-		ID:              d.ID(),
-		WorkspaceID:     d.WorkspaceID(),
-		ProjectID:       d.ProjectID(),
-		Theme:           d.Theme(),
-		Conclusion:      d.Conclusion(),
-		Status:          string(d.Status()),
-		CommentsCount:   int32(d.CommentsCount()),
-		LastCommentedAt: d.LastCommentedAt(),
-		ArchivedAt:      d.ArchivedAt(),
-		CreatedBy:       d.CreatedBy(),
-		CreatedAt:       d.CreatedAt(),
+		ID:                    d.ID(),
+		WorkspaceID:           d.WorkspaceID(),
+		ProjectID:             d.ProjectID(),
+		Theme:                 d.Theme(),
+		Conclusion:            d.Conclusion(),
+		Status:                string(d.Status()),
+		CommentsCount:         int32(d.CommentsCount()),
+		ProposedCommentsCount: int32(d.ProposedCommentsCount()),
+		IssuesCount:           int32(d.IssuesCount()),
+		LastCommentedAt:       d.LastCommentedAt(),
+		ArchivedAt:            d.ArchivedAt(),
+		CreatedBy:             d.CreatedBy(),
+		CreatedAt:             d.CreatedAt(),
 	}
 }
 

@@ -64,6 +64,8 @@ CREATE TABLE discussions (
 	conclusion TEXT NOT NULL,
 	status VARCHAR(20) NOT NULL DEFAULT 'private',
 	comments_count INT NOT NULL DEFAULT 0,
+	proposed_comments_count INT NOT NULL DEFAULT 0,
+	issues_count INT NOT NULL DEFAULT 0,
 	last_commented_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	archived_at DATETIME,
 	created_by CHAR(36) NOT NULL,

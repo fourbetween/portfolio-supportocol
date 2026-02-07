@@ -95,7 +95,12 @@ func (d *Discussion) CanAddComment() error {
 
 func (d *Discussion) AddComment(now time.Time) {
 	d.commentsCount++
+	d.proposedCommentsCount++
 	d.lastCommentedAt = now
+}
+
+func (d *Discussion) AddCommentIssue() {
+	d.issuesCount++
 }
 
 func (d *Discussion) ValidateComment(commentType string, parent *Comment) error {
