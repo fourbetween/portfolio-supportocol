@@ -67,3 +67,96 @@ func TestCommentFrame_ValidateComment(t *testing.T) {
 func ptr(s string) *string {
 	return &s
 }
+
+func TestPermissionLevel_Validate(t *testing.T) {
+	tests := []struct {
+		name    string
+		level   PermissionLevel
+		wantErr error
+	}{
+		{
+			name:    "everyoneが有効であること",
+			level:   PermissionEveryone,
+			wantErr: nil,
+		},
+		{
+			name:    "authenticatedが有効であること",
+			level:   PermissionAuthenticated,
+			wantErr: nil,
+		},
+		{
+			name:    "noneが有効であること",
+			level:   PermissionNone,
+			wantErr: nil,
+		},
+		{
+			name:    "不正な値ならエラーになること",
+			level:   PermissionLevel("invalid"),
+			wantErr: apperr.ErrInvalidArgument,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := tt.level.Validate()
+			if !errors.Is(err, tt.wantErr) {
+				t.Errorf("PermissionLevel.Validate() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestPermissionLevel_CanPerform(t *testing.T) {
+	tests := []struct {
+		name   string
+		level  PermissionLevel
+		userID string
+		want   bool
+	}{
+		{
+			name:   "everyoneなら未認証ユーザーも許可されること",
+			level:  PermissionEveryone,
+			userID: "",
+			want:   true,
+		},
+		{
+			name:   "everyoneなら認証ユーザーも許可されること",
+			level:  PermissionEveryone,
+			userID: "user-1",
+			want:   true,
+		},
+		{
+			name:   "authenticatedなら認証ユーザーが許可されること",
+			level:  PermissionAuthenticated,
+			userID: "user-1",
+			want:   true,
+		},
+		{
+			name:   "authenticatedなら未認証ユーザーが拒否されること",
+			level:  PermissionAuthenticated,
+			userID: "",
+			want:   false,
+		},
+		{
+			name:   "noneなら認証ユーザーも拒否されること",
+			level:  PermissionNone,
+			userID: "user-1",
+			want:   false,
+		},
+		{
+			name:   "noneなら未認証ユーザーも拒否されること",
+			level:  PermissionNone,
+			userID: "",
+			want:   false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.level.CanPerform(tt.userID)
+			if got != tt.want {
+				t.Errorf("PermissionLevel.CanPerform() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

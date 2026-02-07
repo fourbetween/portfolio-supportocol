@@ -62,6 +62,10 @@ func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIs
 			return apperr.ErrPermissionDenied
 		}
 
+		if !discussion.Settings().IssuePermission.CanPerform(input.UserID) {
+			return fmt.Errorf("issue permission denied: %w", apperr.ErrPermissionDenied)
+		}
+
 		comment, err = u.commentRepo.Load(ctx, input.CommentID)
 		if err != nil {
 			return err

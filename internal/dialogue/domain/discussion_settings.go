@@ -7,8 +7,41 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
+type PermissionLevel string
+
+const (
+	PermissionEveryone      PermissionLevel = "everyone"
+	PermissionAuthenticated PermissionLevel = "authenticated"
+	PermissionNone          PermissionLevel = "none"
+)
+
+func (p PermissionLevel) Validate() error {
+	switch p {
+	case PermissionEveryone, PermissionAuthenticated, PermissionNone:
+		return nil
+	default:
+		return fmt.Errorf("invalid permission level: %s: %w", p, apperr.ErrInvalidArgument)
+	}
+}
+
+// CanPerform checks if the given userID is allowed to perform an action based on the permission level.
+func (p PermissionLevel) CanPerform(userID string) bool {
+	switch p {
+	case PermissionEveryone:
+		return true
+	case PermissionAuthenticated:
+		return userID != ""
+	case PermissionNone:
+		return false
+	default:
+		return false
+	}
+}
+
 type DiscussionSettings struct {
-	CommentFrame CommentFrame
+	CommentFrame      CommentFrame
+	CommentPermission PermissionLevel
+	IssuePermission   PermissionLevel
 }
 
 type CommentFrame struct {

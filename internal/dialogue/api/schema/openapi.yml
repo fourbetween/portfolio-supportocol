@@ -34,6 +34,12 @@ components:
       enum:
         - public
         - internal
+    PermissionLevel:
+      type: string
+      enum:
+        - everyone
+        - authenticated
+        - none
     DialogueSettings:
       type: object
       properties:
@@ -41,9 +47,15 @@ components:
           $ref: "#/components/schemas/Id"
         commentFrame:
           $ref: "#/components/schemas/CommentFrame"
+        commentPermission:
+          $ref: "#/components/schemas/PermissionLevel"
+        issuePermission:
+          $ref: "#/components/schemas/PermissionLevel"
       required:
         - discussionId
         - commentFrame
+        - commentPermission
+        - issuePermission
     CommentFrame:
       type: object
       properties:
