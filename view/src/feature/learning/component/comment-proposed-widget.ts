@@ -4,7 +4,7 @@ import { TouchController } from "../../../app/controller/touch";
 import { baseStyle } from "../../../shared/style/base";
 import { titleStyle } from "../../../shared/style/title";
 import type { Comment } from "../model/comment";
-import "../ui/proposed-comment-list/proposed-comment-list";
+import "../ui/proposed-comment-list";
 
 @customElement("learning-comment-proposed-widget")
 export class LearningCommentProposedWidget extends LitElement {

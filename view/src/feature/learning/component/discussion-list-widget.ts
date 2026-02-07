@@ -14,9 +14,9 @@ import {
 } from "../event/discussion";
 import type { DiscussionSummary } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
-import "../ui/discussion-add-form/discussion-add-form";
-import "../ui/discussion-list/discussion-list";
-import "../ui/discussion-search-bar/discussion-search-bar";
+import "../ui/discussion-add-form";
+import "../ui/discussion-list";
+import "../ui/discussion-search-bar";
 
 @customElement("learning-discussion-list-widget")
 export class LearningDiscussionListWidget extends LitElement {

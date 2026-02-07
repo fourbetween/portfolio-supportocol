@@ -8,7 +8,7 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import type { Project } from "../model/project";
 import { projectRepository } from "../repository/project-repository";
-import "../ui/project-select/project-select";
+import "../ui/project-select";
 
 @customElement("workspace-project-select-widget")
 export class WorkspaceProjectSelectWidget extends LitElement {

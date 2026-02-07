@@ -11,10 +11,10 @@ import {
   LearningCommentTypeSelectEvent,
 } from "../event/comment";
 import { commentRepository } from "../repository/comment-repository";
-import "../ui/comment-add-button/comment-add-button";
-import "../ui/comment-edit-form/comment-edit-form";
-import "../ui/comment-type-popup/comment-type-popup";
-import type { LearningCommentTypePopup } from "../ui/comment-type-popup/comment-type-popup";
+import "../ui/comment-add-button";
+import "../ui/comment-edit-form";
+import "../ui/comment-type-popup";
+import type { LearningCommentTypePopup } from "../ui/comment-type-popup";
 
 @customElement("learning-comment-create-widget")
 export class LearningCommentCreateWidget extends LitElement {

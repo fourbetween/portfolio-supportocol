@@ -9,7 +9,7 @@ import type { WorkspaceWithMember } from "../../../app/model/workspace";
 import { showToast } from "../../../shared/event/toast";
 import { WorkspaceWorkspaceSelectEvent } from "../event/workspace";
 import { workspaceRepository } from "../repository/workspace-repository";
-import "../ui/workspace-select/workspace-workspace-select";
+import "../ui/workspace-workspace-select";
 
 @customElement("workspace-workspace-select-widget")
 export class WorkspaceSelectWidget extends LitElement {

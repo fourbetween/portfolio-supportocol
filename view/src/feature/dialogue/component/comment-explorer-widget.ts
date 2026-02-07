@@ -17,9 +17,9 @@ import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 import { canPerform } from "../model/permission";
 import { commentRepository } from "../repository/comment-repository";
-import "../ui/comment-context/comment-context";
-import "../ui/comment-tree/comment-tree";
-import "../ui/issue-create-popup/issue-create-popup";
+import "../ui/comment-context";
+import "../ui/comment-tree";
+import "../ui/issue-create-popup";
 import "./comment-create-widget";
 
 @customElement("dialogue-comment-explorer-widget")

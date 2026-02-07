@@ -17,7 +17,7 @@ import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
 import type { DialogueSettings, Discussion } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
-import "../ui/discussion-detail/discussion-detail";
+import "../ui/discussion-detail";
 
 @customElement("learning-discussion-detail-widget")
 export class LearningDiscussionDetailWidget extends LitElement {
