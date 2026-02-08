@@ -99,10 +99,12 @@ export class DialogueItemPage extends LitElement {
 
   private _renderRightSidebar(isTouch: boolean) {
     const list = html`
-      <dialogue-comment-list
-        .comments=${this._comments}
-        @dialogue-comment-select=${this._handleCommentSelect}
-      ></dialogue-comment-list>
+      <div class="right-sidebar-content">
+        <dialogue-comment-list
+          .comments=${this._comments}
+          @dialogue-comment-select=${this._handleCommentSelect}
+        ></dialogue-comment-list>
+      </div>
     `;
 
     if (isTouch) {
@@ -240,6 +242,9 @@ export class DialogueItemPage extends LitElement {
         gap: 16px;
         padding: 16px;
         border-radius: 6px;
+      }
+      .right-sidebar-content {
+        padding: 16px;
       }
       @media (hover: none) {
         .btn-hover {
