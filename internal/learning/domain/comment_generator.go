@@ -13,3 +13,7 @@ type GenerateCommentParams struct {
 type CommentGenerator interface {
 	Generate(ctx context.Context, params GenerateCommentParams) ([]*Comment, error)
 }
+
+type ProjectPremiseProvider interface {
+	GetProjectPremise(ctx context.Context, workspaceID, projectID string) (string, error)
+}

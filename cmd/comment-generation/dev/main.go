@@ -10,8 +10,11 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/learning"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/adapter"
 	"github.com/fourbetween/app-supportocol/internal/learning/usecase"
+	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbcon"
 	"github.com/fourbetween/app-supportocol/internal/pkg/env"
+	"github.com/fourbetween/app-supportocol/internal/pkg/id"
+	wsdomain "github.com/fourbetween/app-supportocol/internal/workspace/domain"
 	wsdb "github.com/fourbetween/app-supportocol/internal/workspace/infra/db"
 	"github.com/fourbetween/pkg-conf/conf"
 )
@@ -80,11 +83,16 @@ func newContainer() (*learning.CommentGenerationContainer, error) {
 	wsQueryService := wsdb.NewWorkspaceQueryService(dbCon)
 	permSv := adapter.NewWorkspacePermissionAdapter(wsQueryService)
 
+	projectFac := wsdomain.NewProjectFactory(id.NewUUIDService(), clock.NewRealService())
+	projectRepo := wsdb.NewProjectRepository(dbCon, projectFac)
+	projectPremiseProv := adapter.NewProjectPremiseAdapter(projectRepo)
+
 	return learning.NewCommentGenerationContainer(
 		dbCon,
 		appConf,
 		shareConf,
 		awscfg,
 		permSv,
+		projectPremiseProv,
 	)
 }
