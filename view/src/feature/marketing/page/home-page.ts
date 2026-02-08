@@ -19,7 +19,7 @@ export class MarketingHomePage extends LitElement {
     buttonStyle,
     css`
       .hero {
-        padding: 80px 24px;
+        padding: 80px 0px;
         text-align: center;
       }
 

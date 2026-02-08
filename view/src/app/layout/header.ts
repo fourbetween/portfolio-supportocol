@@ -28,12 +28,33 @@ export class AppHeader extends LitElement {
 
   render() {
     return html`
-      <header class="header">
+      <header class="header ${this.touch.isTouchDevice ? "touch" : ""}">
         <a href=${paths.marketing.home} class="header-logo">Supportocol</a>
         <nav class="header-nav">
-          <a href=${paths.learning.dashboard} class="nav-item">Learning</a>
-          <a href=${paths.dialogue.search} class="nav-item">Dialogue</a>
-          <a href=${paths.workspace.projects} class="nav-item">Projects</a>
+          <a href=${paths.learning.dashboard} class="nav-item">
+            ${this.touch.isTouchDevice
+              ? html`
+                  <span class="material-symbols-outlined">school</span>
+                `
+              : ""}
+            <span>Learning</span>
+          </a>
+          <a href=${paths.dialogue.search} class="nav-item">
+            ${this.touch.isTouchDevice
+              ? html`
+                  <span class="material-symbols-outlined">forum</span>
+                `
+              : ""}
+            <span>Dialogue</span>
+          </a>
+          <a href=${paths.workspace.projects} class="nav-item">
+            ${this.touch.isTouchDevice
+              ? html`
+                  <span class="material-symbols-outlined">folder</span>
+                `
+              : ""}
+            <span>Projects</span>
+          </a>
         </nav>
         <div class="header-actions">
           ${this.user
@@ -75,6 +96,7 @@ export class AppHeader extends LitElement {
         align-items: center;
         justify-content: space-between;
         gap: 24px;
+        width: 100vw;
       }
 
       .header-logo {
@@ -82,6 +104,10 @@ export class AppHeader extends LitElement {
         font-weight: bold;
         color: inherit;
         text-decoration: none;
+      }
+
+      .header.touch .header-logo {
+        font-size: 16px;
       }
 
       .header-nav {
@@ -98,10 +124,20 @@ export class AppHeader extends LitElement {
         padding: 4px 12px;
         border-radius: 4px;
         transition: background-color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 4px;
       }
 
       .nav-item:hover {
         background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .header.touch .nav-item {
+        flex-direction: column;
+        padding: 4px 8px;
+        font-size: 8px;
+        gap: 2px;
       }
 
       .header-actions {
