@@ -445,14 +445,13 @@ func (s *DiscussionStatus) UnmarshalText(data []byte) error {
 
 // Ref: #/components/schemas/DiscussionSummary
 type DiscussionSummary struct {
-	ID                    ID               `json:"id"`
-	WorkspaceId           ID               `json:"workspaceId"`
-	Theme                 DiscussionTheme  `json:"theme"`
-	Status                DiscussionStatus `json:"status"`
-	ArchivedAt            NilDateTime      `json:"archivedAt"`
-	LastCommentedAt       time.Time        `json:"lastCommentedAt"`
-	ProposedCommentsCount int              `json:"proposedCommentsCount"`
-	IssuesCount           int              `json:"issuesCount"`
+	ID              ID               `json:"id"`
+	WorkspaceId     ID               `json:"workspaceId"`
+	Theme           DiscussionTheme  `json:"theme"`
+	Status          DiscussionStatus `json:"status"`
+	ArchivedAt      NilDateTime      `json:"archivedAt"`
+	LastCommentedAt time.Time        `json:"lastCommentedAt"`
+	CommentsCount   int              `json:"commentsCount"`
 }
 
 // GetID returns the value of ID.
@@ -485,14 +484,9 @@ func (s *DiscussionSummary) GetLastCommentedAt() time.Time {
 	return s.LastCommentedAt
 }
 
-// GetProposedCommentsCount returns the value of ProposedCommentsCount.
-func (s *DiscussionSummary) GetProposedCommentsCount() int {
-	return s.ProposedCommentsCount
-}
-
-// GetIssuesCount returns the value of IssuesCount.
-func (s *DiscussionSummary) GetIssuesCount() int {
-	return s.IssuesCount
+// GetCommentsCount returns the value of CommentsCount.
+func (s *DiscussionSummary) GetCommentsCount() int {
+	return s.CommentsCount
 }
 
 // SetID sets the value of ID.
@@ -525,14 +519,9 @@ func (s *DiscussionSummary) SetLastCommentedAt(val time.Time) {
 	s.LastCommentedAt = val
 }
 
-// SetProposedCommentsCount sets the value of ProposedCommentsCount.
-func (s *DiscussionSummary) SetProposedCommentsCount(val int) {
-	s.ProposedCommentsCount = val
-}
-
-// SetIssuesCount sets the value of IssuesCount.
-func (s *DiscussionSummary) SetIssuesCount(val int) {
-	s.IssuesCount = val
+// SetCommentsCount sets the value of CommentsCount.
+func (s *DiscussionSummary) SetCommentsCount(val int) {
+	s.CommentsCount = val
 }
 
 type DiscussionTheme string

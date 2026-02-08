@@ -21,19 +21,15 @@ export class DialogueDiscussionItem extends LitElement {
   }
 
   render() {
-    const { theme, proposedCommentsCount, issuesCount } = this.summary;
+    const { theme, commentsCount } = this.summary;
     return html`
       <div class="item hover-container" @click=${this.handleClick}>
         <div class="info">
           <span class="theme">${theme}</span>
           <div class="stats">
-            <div class="stat-item" title="Proposed comments">
-              <span class="material-symbols-outlined">chat_bubble</span>
-              <span class="count">${proposedCommentsCount}</span>
-            </div>
-            <div class="stat-item" title="Issues">
-              <span class="material-symbols-outlined">report</span>
-              <span class="count">${issuesCount}</span>
+            <div class="stat-item" title="Comments">
+              <span class="material-symbols-outlined">chat</span>
+              <span class="count">${commentsCount}</span>
             </div>
           </div>
         </div>

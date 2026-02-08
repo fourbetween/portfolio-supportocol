@@ -114,9 +114,7 @@ components:
         lastCommentedAt:
           type: string
           format: date-time
-        proposedCommentsCount:
-          type: integer
-        issuesCount:
+        commentsCount:
           type: integer
       required:
         - id
@@ -125,8 +123,7 @@ components:
         - status
         - archivedAt
         - lastCommentedAt
-        - proposedCommentsCount
-        - issuesCount
+        - commentsCount
     Discussion:
       type: object
       properties:

@@ -1,4 +1,4 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -39,14 +39,22 @@ export class LearningDiscussionItem extends LitElement {
         <div class="info">
           <span class="theme">${theme}</span>
           <div class="stats">
-            <div class="stat-item" title="Proposed comments">
-              <span class="material-symbols-outlined">chat_bubble</span>
-              <span class="count">${proposedCommentsCount}</span>
-            </div>
-            <div class="stat-item" title="Issues">
-              <span class="material-symbols-outlined">report</span>
-              <span class="count">${issuesCount}</span>
-            </div>
+            ${proposedCommentsCount > 0
+              ? html`
+                  <div class="stat-item" title="Proposed comments">
+                    <span class="material-symbols-outlined">chat_bubble</span>
+                    <span class="count">${proposedCommentsCount}</span>
+                  </div>
+                `
+              : nothing}
+            ${issuesCount > 0
+              ? html`
+                  <div class="stat-item" title="Issues">
+                    <span class="material-symbols-outlined">report</span>
+                    <span class="count">${issuesCount}</span>
+                  </div>
+                `
+              : nothing}
           </div>
         </div>
         <learning-discussion-status-badge
