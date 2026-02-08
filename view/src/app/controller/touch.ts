@@ -7,7 +7,7 @@ export class TouchController implements ReactiveController {
 
   constructor(host: ReactiveControllerHost) {
     (this._host = host).addController(this);
-    this._mediaQuery = window.matchMedia("(pointer: coarse)");
+    this._mediaQuery = window.matchMedia("(hover: hover)");
     this._updateTouchStatus();
   }
 
@@ -18,7 +18,7 @@ export class TouchController implements ReactiveController {
   hostDisconnected() {
     this._mediaQuery.removeEventListener(
       "change",
-      this._handleMediaQueryChange
+      this._handleMediaQueryChange,
     );
   }
 
@@ -32,9 +32,6 @@ export class TouchController implements ReactiveController {
   };
 
   private _updateTouchStatus() {
-    this._isTouchDevice =
-      this._mediaQuery.matches ||
-      navigator.maxTouchPoints > 0 ||
-      "ontouchstart" in window;
+    this._isTouchDevice = this._mediaQuery.matches === false;
   }
 }
