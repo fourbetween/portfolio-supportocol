@@ -1,8 +1,6 @@
 package domain
 
 import (
-	"time"
-
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 )
@@ -34,17 +32,27 @@ type CreateCommentParams struct {
 func (f *CommentFactory) Create(params CreateCommentParams) (*Comment, error) {
 	id := f.idSrv.Generate()
 	return f.Reconstruct(ReconstructCommentParams{
-		ID:                  id,
-		CreateCommentParams: params,
-		CreatedAt:           f.clockSrv.Now(),
+		ID:              id,
+		DiscussionID:    params.DiscussionID,
+		ParentCommentID: params.ParentCommentID,
+		Body:            params.Body,
+		Status:          params.Status,
+		Audit: CommentAudit{
+			CreatedBy: params.CreatedBy,
+			CreatedAt: f.clockSrv.Now(),
+		},
+		Issues: params.Issues,
 	})
 }
 
 type ReconstructCommentParams struct {
-	ID string
-	CreateCommentParams
-	CreatedAt  time.Time
-	ArchivedAt *time.Time
+	ID              string
+	DiscussionID    string
+	ParentCommentID *string
+	Body            CommentBody
+	Status          CommentStatus
+	Audit           CommentAudit
+	Issues          []CommentIssue
 }
 
 func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment, error) {
@@ -54,12 +62,8 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 		parentCommentID: params.ParentCommentID,
 		body:            params.Body,
 		status:          params.Status,
-		audit: CommentAudit{
-			CreatedBy:  params.CreatedBy,
-			CreatedAt:  params.CreatedAt,
-			ArchivedAt: params.ArchivedAt,
-		},
-		issues: params.Issues,
+		audit:           params.Audit,
+		issues:          params.Issues,
 	}
 
 	if err := c.Validate(); err != nil {

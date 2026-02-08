@@ -13,7 +13,7 @@ type ReconstructDiscussionParams struct {
 	Status      DiscussionStatus
 	Settings    DiscussionSettings
 	Stats       DiscussionStats
-	Audit       DiscussionAudit
+	Activity    DiscussionActivity
 }
 
 func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Discussion, error) {
@@ -24,6 +24,6 @@ func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Di
 		status:      params.Status,
 		settings:    params.Settings,
 		stats:       params.Stats,
-		audit:       params.Audit,
+		activity:    params.Activity,
 	}, nil
 }

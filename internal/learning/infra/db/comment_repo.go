@@ -244,20 +244,20 @@ func (r *CommentRepository) toCommentDomain(row model.Comments, issueRows []mode
 		}
 	}
 	return r.fac.Reconstruct(domain.ReconstructCommentParams{
-		ID: row.ID,
-		CreateCommentParams: domain.CreateCommentParams{
-			DiscussionID:    row.DiscussionID,
-			ParentCommentID: row.ParentCommentID,
-			Body: domain.CommentBody{
-				Type:    row.Type,
-				Content: row.Content,
-			},
-			Status:    domain.CommentStatus(row.Status),
-			CreatedBy: row.CreatedBy,
-			Issues:    issues,
+		ID:              row.ID,
+		DiscussionID:    row.DiscussionID,
+		ParentCommentID: row.ParentCommentID,
+		Body: domain.CommentBody{
+			Type:    row.Type,
+			Content: row.Content,
 		},
-		CreatedAt:  row.CreatedAt,
-		ArchivedAt: row.ArchivedAt,
+		Status: domain.CommentStatus(row.Status),
+		Audit: domain.CommentAudit{
+			CreatedBy:  row.CreatedBy,
+			CreatedAt:  row.CreatedAt,
+			ArchivedAt: row.ArchivedAt,
+		},
+		Issues: issues,
 	})
 }
 

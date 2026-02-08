@@ -27,14 +27,18 @@ type CreateMemberParams struct {
 func (f *MemberFactory) Create(params CreateMemberParams) (*Member, error) {
 	now := f.clockSrv.Now()
 	return f.Reconstruct(ReconstructMemberParams{
-		CreateMemberParams: params,
-		CreatedAt:          now,
+		WorkspaceID: params.WorkspaceID,
+		UserID:      params.UserID,
+		Role:        params.Role,
+		CreatedAt:   now,
 	})
 }
 
 type ReconstructMemberParams struct {
-	CreateMemberParams
-	CreatedAt time.Time
+	WorkspaceID string
+	UserID      string
+	Role        MemberRole
+	CreatedAt   time.Time
 }
 
 func (f *MemberFactory) Reconstruct(params ReconstructMemberParams) (*Member, error) {

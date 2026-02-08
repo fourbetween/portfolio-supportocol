@@ -127,13 +127,11 @@ func (r *ProjectRepository) Delete(ctx context.Context, p *domain.Project) error
 
 func (r *ProjectRepository) toDomain(row model.Projects) (*domain.Project, error) {
 	return r.fac.Reconstruct(domain.ReconstructProjectParams{
-		ID: row.ID,
-		CreateProjectParams: domain.CreateProjectParams{
-			WorkspaceID: row.WorkspaceID,
-			Name:        row.Name,
-			IsDefault:   row.IsDefault,
-		},
-		Premise:   row.Premise,
-		CreatedAt: row.CreatedAt,
+		ID:          row.ID,
+		WorkspaceID: row.WorkspaceID,
+		Name:        row.Name,
+		IsDefault:   row.IsDefault,
+		Premise:     row.Premise,
+		CreatedAt:   row.CreatedAt,
 	})
 }

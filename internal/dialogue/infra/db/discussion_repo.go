@@ -82,7 +82,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 			ProposedCommentsCount: int(row.ProposedCommentsCount),
 			IssuesCount:           int(row.IssuesCount),
 		},
-		Audit: domain.DiscussionAudit{
+		Activity: domain.DiscussionActivity{
 			CreatedBy:       row.CreatedBy,
 			CreatedAt:       row.CreatedAt,
 			ArchivedAt:      row.ArchivedAt,

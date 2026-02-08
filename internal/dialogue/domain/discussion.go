@@ -23,7 +23,7 @@ type DiscussionStats struct {
 	IssuesCount           int
 }
 
-type DiscussionAudit struct {
+type DiscussionActivity struct {
 	CreatedBy       string
 	CreatedAt       time.Time
 	ArchivedAt      *time.Time
@@ -37,7 +37,7 @@ type Discussion struct {
 	status      DiscussionStatus
 	settings    DiscussionSettings
 	stats       DiscussionStats
-	audit       DiscussionAudit
+	activity    DiscussionActivity
 }
 
 func (d *Discussion) ID() string {
@@ -81,23 +81,23 @@ func (d *Discussion) IssuesCount() int {
 }
 
 func (d *Discussion) LastCommentedAt() time.Time {
-	return d.audit.LastCommentedAt
+	return d.activity.LastCommentedAt
 }
 
 func (d *Discussion) ArchivedAt() *time.Time {
-	return d.audit.ArchivedAt
+	return d.activity.ArchivedAt
 }
 
 func (d *Discussion) IsArchived() bool {
-	return d.audit.ArchivedAt != nil
+	return d.activity.ArchivedAt != nil
 }
 
 func (d *Discussion) CreatedBy() string {
-	return d.audit.CreatedBy
+	return d.activity.CreatedBy
 }
 
 func (d *Discussion) CreatedAt() time.Time {
-	return d.audit.CreatedAt
+	return d.activity.CreatedAt
 }
 
 func (d *Discussion) CanAddComment() error {
@@ -113,7 +113,7 @@ func (d *Discussion) CanAddComment() error {
 func (d *Discussion) AddComment(now time.Time) {
 	d.stats.CommentsCount++
 	d.stats.ProposedCommentsCount++
-	d.audit.LastCommentedAt = now
+	d.activity.LastCommentedAt = now
 }
 
 func (d *Discussion) AddCommentIssue() {

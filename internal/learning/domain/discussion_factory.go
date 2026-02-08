@@ -1,8 +1,6 @@
 package domain
 
 import (
-	"time"
-
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/id"
@@ -40,42 +38,42 @@ func (f *DiscussionFactory) Create(params CreateDiscussionParams, count int) (*D
 	id := f.idSrv.Generate()
 	now := f.clockSrv.Now()
 	return f.Reconstruct(ReconstructDiscussionParams{
-		ID:                     id,
-		CreateDiscussionParams: params,
-		LastCommentedAt:        now,
-		CreatedAt:              now,
+		ID:          id,
+		WorkspaceID: params.WorkspaceID,
+		ProjectID:   params.ProjectID,
+		Content: DiscussionContent{
+			Theme:   params.Theme,
+			Premise: params.Premise,
+		},
+		Status: params.Status,
+		Activity: DiscussionActivity{
+			CreatedBy:       params.CreatedBy,
+			CreatedAt:       now,
+			LastCommentedAt: now,
+		},
 	})
 }
 
 type ReconstructDiscussionParams struct {
-	ID string
-	CreateDiscussionParams
-	Conclusion       string
+	ID               string
+	WorkspaceID      string
+	ProjectID        string
+	Content          DiscussionContent
+	Status           DiscussionStatus
 	Stats            DiscussionStats
-	LastCommentedAt  time.Time
-	ArchivedAt       *time.Time
-	CreatedAt        time.Time
+	Activity         DiscussionActivity
 	DialogueSettings *DialogueSettings
 }
 
 func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Discussion, error) {
 	d := &Discussion{
-		id:          params.ID,
-		workspaceID: params.WorkspaceID,
-		projectID:   params.ProjectID,
-		content: DiscussionContent{
-			Theme:      params.Theme,
-			Premise:    params.Premise,
-			Conclusion: params.Conclusion,
-		},
-		status: params.Status,
-		stats:  params.Stats,
-		audit: DiscussionAudit{
-			CreatedBy:       params.CreatedBy,
-			CreatedAt:       params.CreatedAt,
-			ArchivedAt:      params.ArchivedAt,
-			LastCommentedAt: params.LastCommentedAt,
-		},
+		id:               params.ID,
+		workspaceID:      params.WorkspaceID,
+		projectID:        params.ProjectID,
+		content:          params.Content,
+		status:           params.Status,
+		stats:            params.Stats,
+		activity:         params.Activity,
 		dialogueSettings: params.DialogueSettings,
 	}
 

@@ -24,7 +24,7 @@ type DiscussionStats struct {
 	IssuesCount           int
 }
 
-type DiscussionAudit struct {
+type DiscussionActivity struct {
 	CreatedBy       string
 	CreatedAt       time.Time
 	ArchivedAt      *time.Time
@@ -38,7 +38,7 @@ type Discussion struct {
 	content          DiscussionContent
 	status           DiscussionStatus
 	stats            DiscussionStats
-	audit            DiscussionAudit
+	activity         DiscussionActivity
 	dialogueSettings *DialogueSettings
 }
 
@@ -83,15 +83,15 @@ func (d *Discussion) IssuesCount() int {
 }
 
 func (d *Discussion) LastCommentedAt() time.Time {
-	return d.audit.LastCommentedAt
+	return d.activity.LastCommentedAt
 }
 
 func (d *Discussion) CreatedBy() string {
-	return d.audit.CreatedBy
+	return d.activity.CreatedBy
 }
 
 func (d *Discussion) CreatedAt() time.Time {
-	return d.audit.CreatedAt
+	return d.activity.CreatedAt
 }
 
 func (d *Discussion) DialogueSettings() *DialogueSettings {
@@ -99,11 +99,11 @@ func (d *Discussion) DialogueSettings() *DialogueSettings {
 }
 
 func (d *Discussion) ArchivedAt() *time.Time {
-	return d.audit.ArchivedAt
+	return d.activity.ArchivedAt
 }
 
 func (d *Discussion) IsArchived() bool {
-	return d.audit.ArchivedAt != nil
+	return d.activity.ArchivedAt != nil
 }
 
 func (d *Discussion) CanAddComment() error {
@@ -123,14 +123,14 @@ func (d *Discussion) AddComment(now time.Time) {
 
 func (d *Discussion) AddComments(count int, now time.Time) {
 	d.stats.CommentsCount += count
-	d.audit.LastCommentedAt = now
+	d.activity.LastCommentedAt = now
 }
 
 func (d *Discussion) ResolveProposedComment(now time.Time) {
 	if d.stats.ProposedCommentsCount > 0 {
 		d.stats.ProposedCommentsCount--
 		d.stats.CommentsCount++
-		d.audit.LastCommentedAt = now
+		d.activity.LastCommentedAt = now
 	}
 }
 
@@ -218,7 +218,7 @@ func (d *Discussion) Archive(now time.Time) error {
 	if d.IsArchived() {
 		return fmt.Errorf("discussion is already archived: %w", apperr.ErrInvalidArgument)
 	}
-	d.audit.ArchivedAt = &now
+	d.activity.ArchivedAt = &now
 	return nil
 }
 
@@ -226,7 +226,7 @@ func (d *Discussion) Unarchive() error {
 	if !d.IsArchived() {
 		return fmt.Errorf("discussion is not archived: %w", apperr.ErrInvalidArgument)
 	}
-	d.audit.ArchivedAt = nil
+	d.activity.ArchivedAt = nil
 	return nil
 }
 

@@ -111,11 +111,9 @@ func (r *MemberRepository) Delete(ctx context.Context, m *domain.Member) error {
 
 func (r *MemberRepository) toDomain(row model.Members) (*domain.Member, error) {
 	return r.fac.Reconstruct(domain.ReconstructMemberParams{
-		CreateMemberParams: domain.CreateMemberParams{
-			WorkspaceID: row.WorkspaceID,
-			UserID:      row.UserID,
-			Role:        domain.MemberRole(row.Role),
-		},
-		CreatedAt: row.CreatedAt,
+		WorkspaceID: row.WorkspaceID,
+		UserID:      row.UserID,
+		Role:        domain.MemberRole(row.Role),
+		CreatedAt:   row.CreatedAt,
 	})
 }
