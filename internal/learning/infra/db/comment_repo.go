@@ -215,7 +215,7 @@ func (r *CommentRepository) CountsByDiscussionID(ctx context.Context, discussion
 	}
 
 	return domain.DiscussionCounts{
-		CommentsCount:         int(dest.CommentsCount) - proposedCount,
+		CommentsCount:         int(dest.CommentsCount),
 		ProposedCommentsCount: proposedCount,
 		IssuesCount:           int(dest.IssuesCount),
 	}, nil

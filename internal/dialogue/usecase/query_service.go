@@ -6,14 +6,13 @@ import (
 )
 
 type DiscussionSummary struct {
-	ID                    string
-	WorkspaceID           string
-	Theme                 string
-	Status                string
-	ArchivedAt            *time.Time
-	LastCommentedAt       time.Time
-	ProposedCommentsCount int
-	IssuesCount           int
+	ID              string
+	WorkspaceID     string
+	Theme           string
+	Status          string
+	ArchivedAt      *time.Time
+	LastCommentedAt time.Time
+	CommentsCount   int
 }
 
 type DiscussionQueryService interface {

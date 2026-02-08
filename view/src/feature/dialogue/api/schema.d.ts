@@ -345,8 +345,7 @@ export interface components {
             archivedAt: string | null;
             /** Format: date-time */
             lastCommentedAt: string;
-            proposedCommentsCount: number;
-            issuesCount: number;
+            commentsCount: number;
         };
         Discussion: {
             id: components["schemas"]["Id"];
