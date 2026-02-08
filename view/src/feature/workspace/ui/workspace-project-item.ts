@@ -32,7 +32,11 @@ export class WorkspaceProjectItem extends LitElement {
   private handleSave() {
     if (this.editName && this.editName !== this.project.name) {
       this.dispatchEvent(
-        new WorkspaceProjectUpdateEvent(this.project.id, this.editName),
+        new WorkspaceProjectUpdateEvent(
+          this.project.id,
+          this.editName,
+          this.project.premise,
+        ),
       );
     }
     this.isEditing = false;

@@ -68,6 +68,7 @@ export class DiscussionRepository {
     discussionId: string,
     projectId: string,
     theme: string,
+    premise: string,
     conclusion: string,
   ): Promise<Discussion> {
     const { data, error } = await client.PUT(
@@ -76,7 +77,7 @@ export class DiscussionRepository {
         params: {
           path: { workspaceId, discussionId },
         },
-        body: { projectId, theme, conclusion },
+        body: { projectId, theme, premise, conclusion },
       },
     );
     if (error) throw new Error(error.message);
