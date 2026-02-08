@@ -12,10 +12,11 @@ import (
 )
 
 type Projects struct {
-	ID          string `sql:"primary_key"`
-	WorkspaceID string
-	Name        string
-	IsDefault   bool
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	ID            string `sql:"primary_key"`
+	WorkspaceID   string
+	Name          string
+	Preconditions string
+	IsDefault     bool
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
 }
