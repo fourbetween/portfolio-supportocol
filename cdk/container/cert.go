@@ -40,12 +40,13 @@ func NewCertContainer(p CertContainerProps) *CertContainer {
 
 	return c
 }
+
 func (c *CertContainer) buildDNS() {
 	dns := awsroute53.HostedZone_FromLookup(
 		c.stack,
 		jsii.String("Dns"),
 		&awsroute53.HostedZoneProviderProps{
-			DomainName: jsii.String("hick-r.com"),
+			DomainName: jsii.String(getRootDomain()),
 		},
 	)
 	c.dns = dns

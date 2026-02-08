@@ -382,7 +382,7 @@ func (c *AppContainer) buildDNS() {
 		c.stack,
 		jsii.String("DnsHostZone"),
 		&awsroute53.HostedZoneProviderProps{
-			DomainName: jsii.String("hick-r.com"),
+			DomainName: jsii.String(getRootDomain()),
 		})
 	c.dns = dns
 }
