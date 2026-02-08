@@ -15,18 +15,25 @@ export class LearningDiscussionEditForm extends LitElement {
   theme = "";
 
   @property({ type: String })
+  premise = "";
+
+  @property({ type: String })
   conclusion = "";
 
   @query(".theme-input")
   private inputElement?: HTMLInputElement;
 
+  @query(".premise-input")
+  private premiseElement?: HTMLTextAreaElement;
+
   @query(".conclusion-input")
-  private conclusionElement?: HTMLInputElement;
+  private conclusionElement?: HTMLTextAreaElement;
 
   private handleSave() {
     this.dispatchEvent(
       new LearningDiscussionUpdateEvent(
         this.inputElement?.value ?? "",
+        this.premiseElement?.value ?? "",
         this.conclusionElement?.value ?? "",
       ),
     );
@@ -47,6 +54,15 @@ export class LearningDiscussionEditForm extends LitElement {
             .value=${this.theme}
             placeholder="Enter discussion theme"
           />
+        </div>
+        <div class="field">
+          <textarea
+            id="premise"
+            class="premise-input"
+            .value=${this.premise}
+            placeholder="Enter discussion premise"
+            rows="3"
+          ></textarea>
         </div>
         <div class="field">
           <textarea
@@ -110,6 +126,7 @@ export class LearningDiscussionEditForm extends LitElement {
       }
 
       .theme-input,
+      .premise-input,
       .conclusion-input {
         width: 100%;
       }

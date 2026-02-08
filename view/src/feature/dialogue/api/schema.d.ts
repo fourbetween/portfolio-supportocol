@@ -333,6 +333,7 @@ export interface components {
         };
         DiscussionTheme: string;
         DiscussionConclusion: string;
+        DiscussionPremise: string;
         CommentType: string;
         CommentContent: string;
         CommentIssueTitle: string;
@@ -351,6 +352,7 @@ export interface components {
             id: components["schemas"]["Id"];
             workspaceId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
+            premise: components["schemas"]["DiscussionPremise"];
             conclusion: components["schemas"]["DiscussionConclusion"];
             status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;

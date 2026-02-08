@@ -63,6 +63,7 @@ export class LearningDiscussionDetail extends LitElement {
     return html`
       <learning-discussion-edit-form
         .theme=${this.discussion?.theme ?? ""}
+        .premise=${this.discussion?.premise ?? ""}
         .conclusion=${this.discussion?.conclusion ?? ""}
       ></learning-discussion-edit-form>
     `;
@@ -110,6 +111,14 @@ export class LearningDiscussionDetail extends LitElement {
           <div class="section-title">Theme</div>
           <h1 class="theme">${this.discussion?.theme}</h1>
         </div>
+        ${this.discussion?.premise
+          ? html`
+              <div class="premise-row">
+                <div class="section-title">Premise</div>
+                <p class="premise">${this.discussion.premise}</p>
+              </div>
+            `
+          : html``}
         ${this.discussion?.conclusion
           ? html`
               <div class="conclusion-row">
@@ -154,18 +163,15 @@ export class LearningDiscussionDetail extends LitElement {
     discussionDetailStyle,
     css`
       .header {
-        display: flex;
-        align-items: center;
-      }
-
-      learning-discussion-edit-form,
-      .display {
         width: 100%;
       }
 
+      learning-discussion-edit-form {
+        display: block;
+      }
+
       .display {
-        display: flex;
-        flex-direction: column;
+        display: block;
       }
 
       .clickable {

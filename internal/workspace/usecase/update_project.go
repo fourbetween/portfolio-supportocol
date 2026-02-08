@@ -32,6 +32,7 @@ type UpdateProjectInput struct {
 	ProjectID   string
 	UserID      string
 	Name        string
+	Premise     string
 }
 
 func (u *UpdateProjectUsecase) Execute(ctx context.Context, input UpdateProjectInput) (*domain.Project, error) {
@@ -57,7 +58,8 @@ func (u *UpdateProjectUsecase) Execute(ctx context.Context, input UpdateProjectI
 
 		// プロジェクトの更新
 		if err := project.Update(domain.UpdateProjectParams{
-			Name: input.Name,
+			Name:    input.Name,
+			Premise: input.Premise,
 		}); err != nil {
 			return err
 		}

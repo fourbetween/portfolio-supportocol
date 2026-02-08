@@ -192,11 +192,12 @@ func (s *MemberRole) UnmarshalText(data []byte) error {
 
 // Ref: #/components/schemas/Project
 type Project struct {
-	ID          ID          `json:"id"`
-	WorkspaceId ID          `json:"workspaceId"`
-	Name        ProjectName `json:"name"`
-	IsDefault   bool        `json:"isDefault"`
-	CreatedAt   time.Time   `json:"createdAt"`
+	ID          ID             `json:"id"`
+	WorkspaceId ID             `json:"workspaceId"`
+	Name        ProjectName    `json:"name"`
+	Premise     ProjectPremise `json:"premise"`
+	IsDefault   bool           `json:"isDefault"`
+	CreatedAt   time.Time      `json:"createdAt"`
 }
 
 // GetID returns the value of ID.
@@ -212,6 +213,11 @@ func (s *Project) GetWorkspaceId() ID {
 // GetName returns the value of Name.
 func (s *Project) GetName() ProjectName {
 	return s.Name
+}
+
+// GetPremise returns the value of Premise.
+func (s *Project) GetPremise() ProjectPremise {
+	return s.Premise
 }
 
 // GetIsDefault returns the value of IsDefault.
@@ -239,6 +245,11 @@ func (s *Project) SetName(val ProjectName) {
 	s.Name = val
 }
 
+// SetPremise sets the value of Premise.
+func (s *Project) SetPremise(val ProjectPremise) {
+	s.Premise = val
+}
+
 // SetIsDefault sets the value of IsDefault.
 func (s *Project) SetIsDefault(val bool) {
 	s.IsDefault = val
@@ -250,6 +261,8 @@ func (s *Project) SetCreatedAt(val time.Time) {
 }
 
 type ProjectName string
+
+type ProjectPremise string
 
 type V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq struct {
 	Name ProjectName `json:"name"`
@@ -269,7 +282,8 @@ func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) SetName(val ProjectNam
 type V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteNoContent struct{}
 
 type V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq struct {
-	Name ProjectName `json:"name"`
+	Name    ProjectName    `json:"name"`
+	Premise ProjectPremise `json:"premise"`
 }
 
 // GetName returns the value of Name.
@@ -277,9 +291,19 @@ func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) GetName() Proj
 	return s.Name
 }
 
+// GetPremise returns the value of Premise.
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) GetPremise() ProjectPremise {
+	return s.Premise
+}
+
 // SetName sets the value of Name.
 func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) SetName(val ProjectName) {
 	s.Name = val
+}
+
+// SetPremise sets the value of Premise.
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) SetPremise(val ProjectPremise) {
+	s.Premise = val
 }
 
 // Ref: #/components/schemas/Workspace

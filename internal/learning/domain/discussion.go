@@ -17,6 +17,7 @@ type Discussion struct {
 	workspaceID           string
 	projectID             string
 	theme                 string
+	premise               string
 	conclusion            string
 	status                DiscussionStatus
 	commentsCount         int
@@ -43,6 +44,10 @@ func (d *Discussion) ProjectID() string {
 
 func (d *Discussion) Theme() string {
 	return d.theme
+}
+
+func (d *Discussion) Premise() string {
+	return d.premise
 }
 
 func (d *Discussion) Conclusion() string {
@@ -139,11 +144,13 @@ func (d *Discussion) SyncCounts(counts DiscussionCounts) {
 
 type UpdateParams struct {
 	Theme      string
+	Premise    string
 	Conclusion string
 }
 
 func (d *Discussion) Update(params UpdateParams) error {
 	d.theme = params.Theme
+	d.premise = params.Premise
 	d.conclusion = params.Conclusion
 	return nil
 }

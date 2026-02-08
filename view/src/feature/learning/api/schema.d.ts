@@ -64,6 +64,7 @@ export interface paths {
                     "application/json": {
                         projectId: components["schemas"]["Id"];
                         theme: components["schemas"]["DiscussionTheme"];
+                        premise?: components["schemas"]["DiscussionPremise"];
                         status: components["schemas"]["DiscussionStatus"];
                     };
                 };
@@ -154,6 +155,7 @@ export interface paths {
                     "application/json": {
                         projectId: components["schemas"]["Id"];
                         theme: components["schemas"]["DiscussionTheme"];
+                        premise: components["schemas"]["DiscussionPremise"];
                         conclusion: components["schemas"]["DiscussionConclusion"];
                     };
                 };
@@ -830,6 +832,7 @@ export interface components {
         DiscussionStatus: "private" | "public" | "internal";
         DiscussionTheme: string;
         DiscussionConclusion: string;
+        DiscussionPremise: string;
         CommentType: string;
         CommentContent: string;
         CommentIssueTitle: string;
@@ -849,6 +852,7 @@ export interface components {
             id: components["schemas"]["Id"];
             projectId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
+            premise: components["schemas"]["DiscussionPremise"];
             conclusion: components["schemas"]["DiscussionConclusion"];
             status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;

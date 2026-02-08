@@ -14,15 +14,17 @@ import (
 const defaultModel = "gemini-3-flash-preview"
 
 type CommentGenerator struct {
-	discussionRepo domain.DiscussionRepository
-	commentRepo    domain.CommentRepository
-	factory        *domain.CommentFactory
-	client         *genai.Client
+	discussionRepo     domain.DiscussionRepository
+	commentRepo        domain.CommentRepository
+	projectPremiseProv domain.ProjectPremiseProvider
+	factory            *domain.CommentFactory
+	client             *genai.Client
 }
 
 func NewCommentGenerator(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
+	projectPremiseProv domain.ProjectPremiseProvider,
 	factory *domain.CommentFactory,
 	apiKey string,
 ) (*CommentGenerator, error) {
@@ -35,20 +37,21 @@ func NewCommentGenerator(
 	}
 
 	return &CommentGenerator{
-		discussionRepo: discussionRepo,
-		commentRepo:    commentRepo,
-		factory:        factory,
-		client:         client,
+		discussionRepo:     discussionRepo,
+		commentRepo:        commentRepo,
+		projectPremiseProv: projectPremiseProv,
+		factory:            factory,
+		client:             client,
 	}, nil
 }
 
 func (cg *CommentGenerator) Generate(ctx context.Context, params domain.GenerateCommentParams) ([]*domain.Comment, error) {
-	discussion, path, children, err := cg.fetchContext(ctx, params)
+	discussion, projectPremise, path, children, err := cg.fetchContext(ctx, params)
 	if err != nil {
 		return nil, err
 	}
 
-	prompt := cg.buildPrompt(discussion, path, children, params.CommentType)
+	prompt := cg.buildPrompt(discussion, projectPremise, path, children, params.CommentType)
 
 	contents, err := cg.generateWithAI(ctx, prompt)
 	if err != nil {
@@ -61,20 +64,25 @@ func (cg *CommentGenerator) Generate(ctx context.Context, params domain.Generate
 func (cg *CommentGenerator) fetchContext(
 	ctx context.Context,
 	params domain.GenerateCommentParams,
-) (*domain.Discussion, []*domain.Comment, []*domain.Comment, error) {
+) (*domain.Discussion, string, []*domain.Comment, []*domain.Comment, error) {
 	discussion, err := cg.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:          params.DiscussionID,
 		WorkspaceID: params.WorkspaceID,
 	})
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, "", nil, nil, err
+	}
+
+	projectPremise, err := cg.projectPremiseProv.GetProjectPremise(ctx, params.WorkspaceID, discussion.ProjectID())
+	if err != nil {
+		return nil, "", nil, nil, err
 	}
 
 	var path []*domain.Comment
 	if params.ParentCommentID != nil {
 		p, err := cg.commentRepo.GetPathToRoot(ctx, *params.ParentCommentID)
 		if err != nil {
-			return nil, nil, nil, err
+			return nil, "", nil, nil, err
 		}
 		slices.Reverse(p)
 		path = p
@@ -86,10 +94,10 @@ func (cg *CommentGenerator) fetchContext(
 		CommentType:     params.CommentType,
 	})
 	if err != nil {
-		return nil, nil, nil, err
+		return nil, "", nil, nil, err
 	}
 
-	return discussion, path, children, nil
+	return discussion, projectPremise, path, children, nil
 }
 
 func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) ([]string, error) {
@@ -153,13 +161,23 @@ func (cg *CommentGenerator) createComments(params domain.GenerateCommentParams, 
 	return result, nil
 }
 
-func (cg *CommentGenerator) buildPrompt(discussion *domain.Discussion, path []*domain.Comment, children []*domain.Comment, commentType string) string {
+func (cg *CommentGenerator) buildPrompt(discussion *domain.Discussion, projectPremise string, path []*domain.Comment, children []*domain.Comment, commentType string) string {
 	var sb strings.Builder
+	cg.writePremises(&sb, projectPremise, discussion.Premise())
 	cg.writeDiscussionTheme(&sb, discussion)
 	cg.writeContext(&sb, path)
 	cg.writeChildren(&sb, children)
 	cg.writeInstructions(&sb, commentType)
 	return sb.String()
+}
+
+func (cg *CommentGenerator) writePremises(sb *strings.Builder, projectPremise, discussionPremise string) {
+	if projectPremise != "" {
+		fmt.Fprintf(sb, "Project Premise: %s\n", projectPremise)
+	}
+	if discussionPremise != "" {
+		fmt.Fprintf(sb, "Discussion Premise: %s\n", discussionPremise)
+	}
 }
 
 func (cg *CommentGenerator) writeDiscussionTheme(sb *strings.Builder, discussion *domain.Discussion) {

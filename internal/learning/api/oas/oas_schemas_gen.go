@@ -323,6 +323,7 @@ type Discussion struct {
 	ID               ID                   `json:"id"`
 	ProjectId        ID                   `json:"projectId"`
 	Theme            DiscussionTheme      `json:"theme"`
+	Premise          DiscussionPremise    `json:"premise"`
 	Conclusion       DiscussionConclusion `json:"conclusion"`
 	Status           DiscussionStatus     `json:"status"`
 	ArchivedAt       NilDateTime          `json:"archivedAt"`
@@ -342,6 +343,11 @@ func (s *Discussion) GetProjectId() ID {
 // GetTheme returns the value of Theme.
 func (s *Discussion) GetTheme() DiscussionTheme {
 	return s.Theme
+}
+
+// GetPremise returns the value of Premise.
+func (s *Discussion) GetPremise() DiscussionPremise {
+	return s.Premise
 }
 
 // GetConclusion returns the value of Conclusion.
@@ -379,6 +385,11 @@ func (s *Discussion) SetTheme(val DiscussionTheme) {
 	s.Theme = val
 }
 
+// SetPremise sets the value of Premise.
+func (s *Discussion) SetPremise(val DiscussionPremise) {
+	s.Premise = val
+}
+
 // SetConclusion sets the value of Conclusion.
 func (s *Discussion) SetConclusion(val DiscussionConclusion) {
 	s.Conclusion = val
@@ -400,6 +411,8 @@ func (s *Discussion) SetDialogueSettings(val NilDialogueSettings) {
 }
 
 type DiscussionConclusion string
+
+type DiscussionPremise string
 
 // Ref: #/components/schemas/DiscussionStatus
 type DiscussionStatus string
@@ -871,6 +884,52 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
+// NewOptDiscussionPremise returns new OptDiscussionPremise with value set to v.
+func NewOptDiscussionPremise(v DiscussionPremise) OptDiscussionPremise {
+	return OptDiscussionPremise{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionPremise is optional DiscussionPremise.
+type OptDiscussionPremise struct {
+	Value DiscussionPremise
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionPremise was set.
+func (o OptDiscussionPremise) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionPremise) Reset() {
+	var v DiscussionPremise
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionPremise) SetTo(v DiscussionPremise) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionPremise) Get() (v DiscussionPremise, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionPremise) Or(d DiscussionPremise) DiscussionPremise {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptPermissionLevel returns new OptPermissionLevel with value set to v.
 func NewOptPermissionLevel(v PermissionLevel) OptPermissionLevel {
 	return OptPermissionLevel{
@@ -1078,6 +1137,7 @@ type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteNoContent struc
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq struct {
 	ProjectId  ID                   `json:"projectId"`
 	Theme      DiscussionTheme      `json:"theme"`
+	Premise    DiscussionPremise    `json:"premise"`
 	Conclusion DiscussionConclusion `json:"conclusion"`
 }
 
@@ -1089,6 +1149,11 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) GetProjec
 // GetTheme returns the value of Theme.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) GetTheme() DiscussionTheme {
 	return s.Theme
+}
+
+// GetPremise returns the value of Premise.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) GetPremise() DiscussionPremise {
+	return s.Premise
 }
 
 // GetConclusion returns the value of Conclusion.
@@ -1104,6 +1169,11 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) SetProjec
 // SetTheme sets the value of Theme.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) SetTheme(val DiscussionTheme) {
 	s.Theme = val
+}
+
+// SetPremise sets the value of Premise.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) SetPremise(val DiscussionPremise) {
+	s.Premise = val
 }
 
 // SetConclusion sets the value of Conclusion.
@@ -1159,9 +1229,10 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Set
 }
 
 type V1LearningWorkspacesWorkspaceIdDiscussionsPostReq struct {
-	ProjectId ID               `json:"projectId"`
-	Theme     DiscussionTheme  `json:"theme"`
-	Status    DiscussionStatus `json:"status"`
+	ProjectId ID                   `json:"projectId"`
+	Theme     DiscussionTheme      `json:"theme"`
+	Premise   OptDiscussionPremise `json:"premise"`
+	Status    DiscussionStatus     `json:"status"`
 }
 
 // GetProjectId returns the value of ProjectId.
@@ -1172,6 +1243,11 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetProjectId() ID {
 // GetTheme returns the value of Theme.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetTheme() DiscussionTheme {
 	return s.Theme
+}
+
+// GetPremise returns the value of Premise.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetPremise() OptDiscussionPremise {
+	return s.Premise
 }
 
 // GetStatus returns the value of Status.
@@ -1187,6 +1263,11 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetProjectId(val ID)
 // SetTheme sets the value of Theme.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetTheme(val DiscussionTheme) {
 	s.Theme = val
+}
+
+// SetPremise sets the value of Premise.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetPremise(val OptDiscussionPremise) {
+	s.Premise = val
 }
 
 // SetStatus sets the value of Status.

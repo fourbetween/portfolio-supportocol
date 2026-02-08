@@ -10,27 +10,40 @@ export const discussionDetailStyle = css`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 24px;
   }
 
-  .theme-row {
-    padding-top: 8px;
+  .theme-row,
+  .premise-row,
+  .conclusion-row {
+    margin-bottom: 24px;
+  }
+
+  .badge-row:last-child,
+  .theme-row:last-child,
+  .premise-row:last-child,
+  .conclusion-row:last-child {
+    margin-bottom: 0;
   }
 
   .theme {
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 18px;
+    font-weight: 600;
     margin: 0;
+    line-height: 1.4;
+    color: var(--color-fg-default);
   }
 
-  .conclusion-row {
-    margin-top: 8px;
-    padding-top: 8px;
-  }
-
+  .premise,
   .conclusion {
     font-size: 14px;
     margin: 0;
     white-space: pre-wrap;
-    padding-bottom: 8px;
+    line-height: 1.6;
+    color: var(--color-fg-default);
+    background-color: var(--color-canvas-subtle);
+    padding: 12px;
+    border-radius: 4px;
+    border: 1px solid var(--color-border-muted);
   }
 `;

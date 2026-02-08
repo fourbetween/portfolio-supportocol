@@ -39,12 +39,13 @@ export class ProjectRepository {
     workspaceId: string,
     projectId: string,
     name: string,
+    premise: string,
   ): Promise<Project> {
     const { data, error } = await client.PUT(
       "/v1/workspace/workspaces/{workspaceId}/projects/{projectId}",
       {
         params: { path: { workspaceId, projectId } },
-        body: { name },
+        body: { name, premise },
       },
     );
     if (error) throw new Error(error.message);

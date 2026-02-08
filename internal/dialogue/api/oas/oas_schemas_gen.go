@@ -323,6 +323,7 @@ type Discussion struct {
 	ID               ID                   `json:"id"`
 	WorkspaceId      ID                   `json:"workspaceId"`
 	Theme            DiscussionTheme      `json:"theme"`
+	Premise          DiscussionPremise    `json:"premise"`
 	Conclusion       DiscussionConclusion `json:"conclusion"`
 	Status           DiscussionStatus     `json:"status"`
 	ArchivedAt       NilDateTime          `json:"archivedAt"`
@@ -342,6 +343,11 @@ func (s *Discussion) GetWorkspaceId() ID {
 // GetTheme returns the value of Theme.
 func (s *Discussion) GetTheme() DiscussionTheme {
 	return s.Theme
+}
+
+// GetPremise returns the value of Premise.
+func (s *Discussion) GetPremise() DiscussionPremise {
+	return s.Premise
 }
 
 // GetConclusion returns the value of Conclusion.
@@ -379,6 +385,11 @@ func (s *Discussion) SetTheme(val DiscussionTheme) {
 	s.Theme = val
 }
 
+// SetPremise sets the value of Premise.
+func (s *Discussion) SetPremise(val DiscussionPremise) {
+	s.Premise = val
+}
+
 // SetConclusion sets the value of Conclusion.
 func (s *Discussion) SetConclusion(val DiscussionConclusion) {
 	s.Conclusion = val
@@ -400,6 +411,8 @@ func (s *Discussion) SetDialogueSettings(val DialogueSettings) {
 }
 
 type DiscussionConclusion string
+
+type DiscussionPremise string
 
 // Ref: #/components/schemas/DiscussionStatus
 type DiscussionStatus string

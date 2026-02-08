@@ -11,6 +11,7 @@ type Project struct {
 	id          string
 	workspaceID string
 	name        string
+	premise     string
 	isDefault   bool
 	createdAt   time.Time
 }
@@ -27,6 +28,10 @@ func (p *Project) Name() string {
 	return p.name
 }
 
+func (p *Project) Premise() string {
+	return p.premise
+}
+
 func (p *Project) IsDefault() bool {
 	return p.isDefault
 }
@@ -36,7 +41,8 @@ func (p *Project) CreatedAt() time.Time {
 }
 
 type UpdateProjectParams struct {
-	Name string
+	Name    string
+	Premise string
 }
 
 func (p *Project) Update(params UpdateProjectParams) error {
@@ -47,6 +53,7 @@ func (p *Project) Update(params UpdateProjectParams) error {
 		return fmt.Errorf("project name is required: %w", apperr.ErrInvalidArgument)
 	}
 	p.name = params.Name
+	p.premise = params.Premise
 	return nil
 }
 

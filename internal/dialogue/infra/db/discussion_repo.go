@@ -71,6 +71,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 		ID:                    row.ID,
 		WorkspaceID:           row.WorkspaceID,
 		Theme:                 row.Theme,
+		Premise:               row.Premise,
 		Conclusion:            row.Conclusion,
 		Status:                domain.DiscussionStatus(row.Status),
 		Settings:              settings,

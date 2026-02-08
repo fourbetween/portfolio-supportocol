@@ -20,6 +20,7 @@ type projectsTable struct {
 	ID          mysql.ColumnString
 	WorkspaceID mysql.ColumnString
 	Name        mysql.ColumnString
+	Premise     mysql.ColumnString
 	IsDefault   mysql.ColumnBool
 	CreatedAt   mysql.ColumnTimestamp
 	UpdatedAt   mysql.ColumnTimestamp
@@ -67,11 +68,12 @@ func newProjectsTableImpl(schemaName, tableName, alias string) projectsTable {
 		IDColumn          = mysql.StringColumn("id")
 		WorkspaceIDColumn = mysql.StringColumn("workspace_id")
 		NameColumn        = mysql.StringColumn("name")
+		PremiseColumn     = mysql.StringColumn("premise")
 		IsDefaultColumn   = mysql.BoolColumn("is_default")
 		CreatedAtColumn   = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn   = mysql.TimestampColumn("updated_at")
-		allColumns        = mysql.ColumnList{IDColumn, WorkspaceIDColumn, NameColumn, IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns    = mysql.ColumnList{WorkspaceIDColumn, NameColumn, IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns        = mysql.ColumnList{IDColumn, WorkspaceIDColumn, NameColumn, PremiseColumn, IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns    = mysql.ColumnList{WorkspaceIDColumn, NameColumn, PremiseColumn, IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
 		defaultColumns    = mysql.ColumnList{IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
@@ -82,6 +84,7 @@ func newProjectsTableImpl(schemaName, tableName, alias string) projectsTable {
 		ID:          IDColumn,
 		WorkspaceID: WorkspaceIDColumn,
 		Name:        NameColumn,
+		Premise:     PremiseColumn,
 		IsDefault:   IsDefaultColumn,
 		CreatedAt:   CreatedAtColumn,
 		UpdatedAt:   UpdatedAtColumn,

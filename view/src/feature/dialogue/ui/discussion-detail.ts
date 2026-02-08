@@ -27,6 +27,14 @@ export class DialogueDiscussionDetail extends LitElement {
           <div class="section-title">Theme</div>
           <h1 class="theme">${this.discussion?.theme}</h1>
         </div>
+        ${this.discussion?.premise
+          ? html`
+              <div class="premise-row">
+                <div class="section-title">Premise</div>
+                <p class="premise">${this.discussion.premise}</p>
+              </div>
+            `
+          : html``}
         ${this.discussion?.conclusion
           ? html`
               <div class="conclusion-row">

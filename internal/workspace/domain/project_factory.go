@@ -41,6 +41,7 @@ func (f *ProjectFactory) Create(params CreateProjectParams) (*Project, error) {
 type ReconstructProjectParams struct {
 	ID string
 	CreateProjectParams
+	Premise   string
 	CreatedAt time.Time
 }
 
@@ -49,6 +50,7 @@ func (f *ProjectFactory) Reconstruct(params ReconstructProjectParams) (*Project,
 		id:          params.ID,
 		workspaceID: params.WorkspaceID,
 		name:        params.Name,
+		premise:     params.Premise,
 		isDefault:   params.IsDefault,
 		createdAt:   params.CreatedAt,
 	}

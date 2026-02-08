@@ -47,14 +47,16 @@ export class WorkspaceProjectCreatedEvent extends Event {
 export class WorkspaceProjectUpdateEvent extends Event {
   public readonly projectId: string;
   public readonly name: string;
+  public readonly premise: string;
 
-  constructor(projectId: string, name: string) {
+  constructor(projectId: string, name: string, premise: string) {
     super(WORKSPACE_PROJECT_UPDATE_EVENT_NAME, {
       bubbles: true,
       composed: true,
     });
     this.projectId = projectId;
     this.name = name;
+    this.premise = premise;
   }
 }
 

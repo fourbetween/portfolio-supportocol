@@ -371,6 +371,10 @@ func (s *Project) encodeFields(e *jx.Encoder) {
 		s.Name.Encode(e)
 	}
 	{
+		e.FieldStart("premise")
+		s.Premise.Encode(e)
+	}
+	{
 		e.FieldStart("isDefault")
 		e.Bool(s.IsDefault)
 	}
@@ -380,12 +384,13 @@ func (s *Project) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfProject = [5]string{
+var jsonFieldsNameOfProject = [6]string{
 	0: "id",
 	1: "workspaceId",
 	2: "name",
-	3: "isDefault",
-	4: "createdAt",
+	3: "premise",
+	4: "isDefault",
+	5: "createdAt",
 }
 
 // Decode decodes Project from json.
@@ -427,8 +432,18 @@ func (s *Project) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
-		case "isDefault":
+		case "premise":
 			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				if err := s.Premise.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"premise\"")
+			}
+		case "isDefault":
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Bool()
 				s.IsDefault = bool(v)
@@ -440,7 +455,7 @@ func (s *Project) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"isDefault\"")
 			}
 		case "createdAt":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreatedAt = v
@@ -461,7 +476,7 @@ func (s *Project) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011111,
+		0b00111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -543,6 +558,46 @@ func (s ProjectName) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *ProjectName) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes ProjectPremise as json.
+func (s ProjectPremise) Encode(e *jx.Encoder) {
+	unwrapped := string(s)
+
+	e.Str(unwrapped)
+}
+
+// Decode decodes ProjectPremise from json.
+func (s *ProjectPremise) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ProjectPremise to nil")
+	}
+	var unwrapped string
+	if err := func() error {
+		v, err := d.Str()
+		unwrapped = string(v)
+		if err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = ProjectPremise(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s ProjectPremise) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ProjectPremise) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -654,10 +709,15 @@ func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) encodeFields(e
 		e.FieldStart("name")
 		s.Name.Encode(e)
 	}
+	{
+		e.FieldStart("premise")
+		s.Premise.Encode(e)
+	}
 }
 
-var jsonFieldsNameOfV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq = [1]string{
+var jsonFieldsNameOfV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq = [2]string{
 	0: "name",
+	1: "premise",
 }
 
 // Decode decodes V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq from json.
@@ -679,6 +739,16 @@ func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.D
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
+		case "premise":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.Premise.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"premise\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -689,7 +759,7 @@ func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Decode(d *jx.D
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

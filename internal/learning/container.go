@@ -101,6 +101,7 @@ func NewCommentGenerationContainer(
 	shareConf conf.Service,
 	awscfg aws.Config,
 	permSv domain.PermissionService,
+	projectPremiseProv domain.ProjectPremiseProvider,
 ) (*CommentGenerationContainer, error) {
 	geminiAPIKey, err := shareConf.Get("google/gemini/apikey")
 	if err != nil {
@@ -125,6 +126,7 @@ func NewCommentGenerationContainer(
 	generator, err := ai.NewCommentGenerator(
 		discussionRepo,
 		commentRepo,
+		projectPremiseProv,
 		commentFac,
 		geminiAPIKey,
 	)

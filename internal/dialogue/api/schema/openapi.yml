@@ -83,6 +83,9 @@ components:
     DiscussionConclusion:
       type: string
       maxLength: 1000
+    DiscussionPremise:
+      type: string
+      maxLength: 1000
     CommentType:
       type: string
       maxLength: 20
@@ -133,6 +136,8 @@ components:
           $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
+        premise:
+          $ref: "#/components/schemas/DiscussionPremise"
         conclusion:
           $ref: "#/components/schemas/DiscussionConclusion"
         status:
@@ -148,6 +153,7 @@ components:
         - id
         - workspaceId
         - theme
+        - premise
         - conclusion
         - status
         - archivedAt

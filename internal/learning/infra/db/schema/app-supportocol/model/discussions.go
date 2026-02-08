@@ -16,6 +16,7 @@ type Discussions struct {
 	WorkspaceID           string
 	ProjectID             string
 	Theme                 string
+	Premise               string
 	Conclusion            string
 	Status                string
 	CommentsCount         int32

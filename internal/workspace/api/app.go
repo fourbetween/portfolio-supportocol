@@ -97,6 +97,7 @@ func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut(
 		ProjectID:   uuid.UUID(params.ProjectId).String(),
 		UserID:      uid,
 		Name:        string(req.Name),
+		Premise:     string(req.Premise),
 	})
 	if err != nil {
 		return nil, err
@@ -172,6 +173,7 @@ func (h *appHandler) toOasProject(p *domain.Project) oas.Project {
 		ID:          oas.ID(uuid.MustParse(p.ID())),
 		WorkspaceId: oas.ID(uuid.MustParse(p.WorkspaceID())),
 		Name:        oas.ProjectName(p.Name()),
+		Premise:     oas.ProjectPremise(p.Premise()),
 		IsDefault:   p.IsDefault(),
 		CreatedAt:   p.CreatedAt(),
 	}

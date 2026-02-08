@@ -45,6 +45,9 @@ components:
     ProjectName:
       type: string
       maxLength: 255
+    ProjectPremise:
+      type: string
+      maxLength: 1000
     Workspace:
       type: object
       properties:
@@ -101,6 +104,8 @@ components:
           $ref: "#/components/schemas/Id"
         name:
           $ref: "#/components/schemas/ProjectName"
+        premise:
+          $ref: "#/components/schemas/ProjectPremise"
         isDefault:
           type: boolean
         createdAt:
@@ -110,6 +115,7 @@ components:
         - id
         - workspaceId
         - name
+        - premise
         - isDefault
         - createdAt
 security:
@@ -212,8 +218,11 @@ paths:
               properties:
                 name:
                   $ref: "#/components/schemas/ProjectName"
+                premise:
+                  $ref: "#/components/schemas/ProjectPremise"
               required:
                 - name
+                - premise
       responses:
         "200":
           description: success response

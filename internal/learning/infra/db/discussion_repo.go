@@ -69,6 +69,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 		ON_DUPLICATE_KEY_UPDATE(
 			table.Discussions.ProjectID.SET(table.Discussions.NEW.ProjectID),
 			table.Discussions.Theme.SET(table.Discussions.NEW.Theme),
+			table.Discussions.Premise.SET(table.Discussions.NEW.Premise),
 			table.Discussions.Conclusion.SET(table.Discussions.NEW.Conclusion),
 			table.Discussions.Status.SET(table.Discussions.NEW.Status),
 			table.Discussions.CommentsCount.SET(table.Discussions.NEW.CommentsCount),
@@ -159,6 +160,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 			WorkspaceID: row.WorkspaceID,
 			ProjectID:   row.ProjectID,
 			Theme:       row.Theme,
+			Premise:     row.Premise,
 			Status:      domain.DiscussionStatus(row.Status),
 			CreatedBy:   row.CreatedBy,
 		},
@@ -192,6 +194,7 @@ func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Dis
 		WorkspaceID:           d.WorkspaceID(),
 		ProjectID:             d.ProjectID(),
 		Theme:                 d.Theme(),
+		Premise:               d.Premise(),
 		Conclusion:            d.Conclusion(),
 		Status:                string(d.Status()),
 		CommentsCount:         int32(d.CommentsCount()),

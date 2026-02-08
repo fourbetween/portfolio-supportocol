@@ -215,6 +215,7 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 		ID:          oas.ID(uuid.MustParse(item.ID())),
 		WorkspaceId: oas.ID(uuid.MustParse(item.WorkspaceID())),
 		Theme:       oas.DiscussionTheme(item.Theme()),
+		Premise:     oas.DiscussionPremise(item.Premise()),
 		Conclusion:  oas.DiscussionConclusion(item.Conclusion()),
 		Status:      oas.DiscussionStatus(item.Status()),
 		DialogueSettings: oas.DialogueSettings{

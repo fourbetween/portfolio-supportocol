@@ -70,6 +70,7 @@ export class WorkspaceProjectsWidget extends LitElement {
         this.workspace.workspace.id,
         e.projectId,
         e.name,
+        e.premise,
       );
       this.projects = this.projects.map((p) =>
         p.id === e.projectId ? updatedProject : p,
