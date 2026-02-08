@@ -17,13 +17,13 @@ type projectsTable struct {
 	mysql.Table
 
 	// Columns
-	ID            mysql.ColumnString
-	WorkspaceID   mysql.ColumnString
-	Name          mysql.ColumnString
-	Preconditions mysql.ColumnString
-	IsDefault     mysql.ColumnBool
-	CreatedAt     mysql.ColumnTimestamp
-	UpdatedAt     mysql.ColumnTimestamp
+	ID          mysql.ColumnString
+	WorkspaceID mysql.ColumnString
+	Name        mysql.ColumnString
+	Premise     mysql.ColumnString
+	IsDefault   mysql.ColumnBool
+	CreatedAt   mysql.ColumnTimestamp
+	UpdatedAt   mysql.ColumnTimestamp
 
 	AllColumns     mysql.ColumnList
 	MutableColumns mysql.ColumnList
@@ -65,29 +65,29 @@ func newProjectsTable(schemaName, tableName, alias string) *ProjectsTable {
 
 func newProjectsTableImpl(schemaName, tableName, alias string) projectsTable {
 	var (
-		IDColumn            = mysql.StringColumn("id")
-		WorkspaceIDColumn   = mysql.StringColumn("workspace_id")
-		NameColumn          = mysql.StringColumn("name")
-		PreconditionsColumn = mysql.StringColumn("preconditions")
-		IsDefaultColumn     = mysql.BoolColumn("is_default")
-		CreatedAtColumn     = mysql.TimestampColumn("created_at")
-		UpdatedAtColumn     = mysql.TimestampColumn("updated_at")
-		allColumns          = mysql.ColumnList{IDColumn, WorkspaceIDColumn, NameColumn, PreconditionsColumn, IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns      = mysql.ColumnList{WorkspaceIDColumn, NameColumn, PreconditionsColumn, IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
-		defaultColumns      = mysql.ColumnList{IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
+		IDColumn          = mysql.StringColumn("id")
+		WorkspaceIDColumn = mysql.StringColumn("workspace_id")
+		NameColumn        = mysql.StringColumn("name")
+		PremiseColumn     = mysql.StringColumn("premise")
+		IsDefaultColumn   = mysql.BoolColumn("is_default")
+		CreatedAtColumn   = mysql.TimestampColumn("created_at")
+		UpdatedAtColumn   = mysql.TimestampColumn("updated_at")
+		allColumns        = mysql.ColumnList{IDColumn, WorkspaceIDColumn, NameColumn, PremiseColumn, IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns    = mysql.ColumnList{WorkspaceIDColumn, NameColumn, PremiseColumn, IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns    = mysql.ColumnList{IsDefaultColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return projectsTable{
 		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
-		ID:            IDColumn,
-		WorkspaceID:   WorkspaceIDColumn,
-		Name:          NameColumn,
-		Preconditions: PreconditionsColumn,
-		IsDefault:     IsDefaultColumn,
-		CreatedAt:     CreatedAtColumn,
-		UpdatedAt:     UpdatedAtColumn,
+		ID:          IDColumn,
+		WorkspaceID: WorkspaceIDColumn,
+		Name:        NameColumn,
+		Premise:     PremiseColumn,
+		IsDefault:   IsDefaultColumn,
+		CreatedAt:   CreatedAtColumn,
+		UpdatedAt:   UpdatedAtColumn,
 
 		AllColumns:     allColumns,
 		MutableColumns: mutableColumns,
