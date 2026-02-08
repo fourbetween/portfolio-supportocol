@@ -15,6 +15,7 @@ type Discussion struct {
 	id                    string
 	workspaceID           string
 	theme                 string
+	premise               string
 	conclusion            string
 	status                DiscussionStatus
 	settings              DiscussionSettings
@@ -37,6 +38,10 @@ func (d *Discussion) WorkspaceID() string {
 
 func (d *Discussion) Theme() string {
 	return d.theme
+}
+
+func (d *Discussion) Premise() string {
+	return d.premise
 }
 
 func (d *Discussion) Conclusion() string {

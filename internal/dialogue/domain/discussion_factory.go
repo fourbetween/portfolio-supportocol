@@ -14,6 +14,7 @@ type ReconstructDiscussionParams struct {
 	ID                    string
 	WorkspaceID           string
 	Theme                 string
+	Premise               string
 	Conclusion            string
 	Status                DiscussionStatus
 	Settings              DiscussionSettings
@@ -31,6 +32,7 @@ func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Di
 		id:                    params.ID,
 		workspaceID:           params.WorkspaceID,
 		theme:                 params.Theme,
+		premise:               params.Premise,
 		conclusion:            params.Conclusion,
 		status:                params.Status,
 		settings:              params.Settings,

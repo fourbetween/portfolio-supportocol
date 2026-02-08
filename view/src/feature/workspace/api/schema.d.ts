@@ -156,6 +156,7 @@ export interface paths {
                 content: {
                     "application/json": {
                         name: components["schemas"]["ProjectName"];
+                        premise: components["schemas"]["ProjectPremise"];
                     };
                 };
             };
@@ -234,6 +235,7 @@ export interface components {
         /** @enum {string} */
         MemberRole: "owner" | "admin" | "member";
         ProjectName: string;
+        ProjectPremise: string;
         Workspace: {
             id: components["schemas"]["Id"];
             slug: components["schemas"]["WorkspaceSlug"];
@@ -257,6 +259,7 @@ export interface components {
             id: components["schemas"]["Id"];
             workspaceId: components["schemas"]["Id"];
             name: components["schemas"]["ProjectName"];
+            premise: components["schemas"]["ProjectPremise"];
             isDefault: boolean;
             /** Format: date-time */
             createdAt: string;

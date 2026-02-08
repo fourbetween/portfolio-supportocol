@@ -955,6 +955,10 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 		s.Theme.Encode(e)
 	}
 	{
+		e.FieldStart("premise")
+		s.Premise.Encode(e)
+	}
+	{
 		e.FieldStart("conclusion")
 		s.Conclusion.Encode(e)
 	}
@@ -972,14 +976,15 @@ func (s *Discussion) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfDiscussion = [7]string{
+var jsonFieldsNameOfDiscussion = [8]string{
 	0: "id",
 	1: "projectId",
 	2: "theme",
-	3: "conclusion",
-	4: "status",
-	5: "archivedAt",
-	6: "dialogueSettings",
+	3: "premise",
+	4: "conclusion",
+	5: "status",
+	6: "archivedAt",
+	7: "dialogueSettings",
 }
 
 // Decode decodes Discussion from json.
@@ -1021,8 +1026,18 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
-		case "conclusion":
+		case "premise":
 			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				if err := s.Premise.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"premise\"")
+			}
+		case "conclusion":
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				if err := s.Conclusion.Decode(d); err != nil {
 					return err
@@ -1032,7 +1047,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"conclusion\"")
 			}
 		case "status":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				if err := s.Status.Decode(d); err != nil {
 					return err
@@ -1042,7 +1057,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"status\"")
 			}
 		case "archivedAt":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				if err := s.ArchivedAt.Decode(d, json.DecodeDateTime); err != nil {
 					return err
@@ -1052,7 +1067,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"archivedAt\"")
 			}
 		case "dialogueSettings":
-			requiredBitSet[0] |= 1 << 6
+			requiredBitSet[0] |= 1 << 7
 			if err := func() error {
 				if err := s.DialogueSettings.Decode(d); err != nil {
 					return err
@@ -1071,7 +1086,7 @@ func (s *Discussion) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b01111111,
+		0b11111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1153,6 +1168,46 @@ func (s DiscussionConclusion) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *DiscussionConclusion) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes DiscussionPremise as json.
+func (s DiscussionPremise) Encode(e *jx.Encoder) {
+	unwrapped := string(s)
+
+	e.Str(unwrapped)
+}
+
+// Decode decodes DiscussionPremise from json.
+func (s *DiscussionPremise) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode DiscussionPremise to nil")
+	}
+	var unwrapped string
+	if err := func() error {
+		v, err := d.Str()
+		unwrapped = string(v)
+		if err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return errors.Wrap(err, "alias")
+	}
+	*s = DiscussionPremise(unwrapped)
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s DiscussionPremise) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *DiscussionPremise) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -1764,6 +1819,39 @@ func (s *OptCommentFrame) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes DiscussionPremise as json.
+func (o OptDiscussionPremise) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes DiscussionPremise from json.
+func (o *OptDiscussionPremise) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptDiscussionPremise to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptDiscussionPremise) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptDiscussionPremise) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes PermissionLevel as json.
 func (o OptPermissionLevel) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -2293,15 +2381,20 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) encodeFie
 		s.Theme.Encode(e)
 	}
 	{
+		e.FieldStart("premise")
+		s.Premise.Encode(e)
+	}
+	{
 		e.FieldStart("conclusion")
 		s.Conclusion.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq = [3]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq = [4]string{
 	0: "projectId",
 	1: "theme",
-	2: "conclusion",
+	2: "premise",
+	3: "conclusion",
 }
 
 // Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq from json.
@@ -2333,8 +2426,18 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) Decode(d 
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
-		case "conclusion":
+		case "premise":
 			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Premise.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"premise\"")
+			}
+		case "conclusion":
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				if err := s.Conclusion.Decode(d); err != nil {
 					return err
@@ -2353,7 +2456,7 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) Decode(d 
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2562,15 +2665,22 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) encodeFields(e *jx.E
 		s.Theme.Encode(e)
 	}
 	{
+		if s.Premise.Set {
+			e.FieldStart("premise")
+			s.Premise.Encode(e)
+		}
+	}
+	{
 		e.FieldStart("status")
 		s.Status.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsPostReq = [3]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsPostReq = [4]string{
 	0: "projectId",
 	1: "theme",
-	2: "status",
+	2: "premise",
+	3: "status",
 }
 
 // Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsPostReq from json.
@@ -2602,8 +2712,18 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Decode(d *jx.Decoder
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
+		case "premise":
+			if err := func() error {
+				s.Premise.Reset()
+				if err := s.Premise.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"premise\"")
+			}
 		case "status":
-			requiredBitSet[0] |= 1 << 2
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				if err := s.Status.Decode(d); err != nil {
 					return err
@@ -2622,7 +2742,7 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Decode(d *jx.Decoder
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000111,
+		0b00001011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

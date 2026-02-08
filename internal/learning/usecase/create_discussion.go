@@ -34,6 +34,7 @@ type CreateDiscussionInput struct {
 	WorkspaceID string
 	ProjectID   string
 	Theme       string
+	Premise     string
 	Status      domain.DiscussionStatus
 	UserID      string
 }
@@ -58,6 +59,7 @@ func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscu
 			WorkspaceID: input.WorkspaceID,
 			ProjectID:   input.ProjectID,
 			Theme:       input.Theme,
+			Premise:     input.Premise,
 			Status:      input.Status,
 			CreatedBy:   input.UserID,
 		}, count)

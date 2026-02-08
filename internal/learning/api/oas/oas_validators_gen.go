@@ -372,6 +372,17 @@ func (s *Discussion) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.Premise.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "premise",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.Conclusion.Validate(); err != nil {
 			return err
 		}
@@ -418,6 +429,26 @@ func (s *Discussion) Validate() error {
 }
 
 func (s DiscussionConclusion) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:     0,
+		MinLengthSet:  false,
+		MaxLength:     1000,
+		MaxLengthSet:  true,
+		Email:         false,
+		Hostname:      false,
+		Regex:         nil,
+		MinNumeric:    0,
+		MinNumericSet: false,
+		MaxNumeric:    0,
+		MaxNumericSet: false,
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s DiscussionPremise) Validate() error {
 	alias := (string)(s)
 	if err := (validate.String{
 		MinLength:     0,
@@ -705,6 +736,17 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutReq) Validate(
 		})
 	}
 	if err := func() error {
+		if err := s.Premise.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "premise",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.Conclusion.Validate(); err != nil {
 			return err
 		}
@@ -812,6 +854,24 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "theme",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if value, ok := s.Premise.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "premise",
 			Error: err,
 		})
 	}

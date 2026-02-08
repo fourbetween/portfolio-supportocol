@@ -28,6 +28,7 @@ type UpdateDiscussionInput struct {
 	WorkspaceID string
 	UserID      string
 	Theme       string
+	Premise     string
 	Conclusion  string
 }
 
@@ -53,6 +54,7 @@ func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscu
 
 		if err := discussion.Update(domain.UpdateParams{
 			Theme:      input.Theme,
+			Premise:    input.Premise,
 			Conclusion: input.Conclusion,
 		}); err != nil {
 			return err

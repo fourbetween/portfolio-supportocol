@@ -90,6 +90,7 @@ func (r *ProjectRepository) Save(ctx context.Context, p *domain.Project) error {
 		ID:          p.ID(),
 		WorkspaceID: p.WorkspaceID(),
 		Name:        p.Name(),
+		Premise:     p.Premise(),
 		IsDefault:   p.IsDefault(),
 		CreatedAt:   p.CreatedAt(),
 	}
@@ -102,6 +103,7 @@ func (r *ProjectRepository) Save(ctx context.Context, p *domain.Project) error {
 		AS_NEW().
 		ON_DUPLICATE_KEY_UPDATE(
 			table.Projects.Name.SET(table.Projects.NEW.Name),
+			table.Projects.Premise.SET(table.Projects.NEW.Premise),
 		)
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
@@ -131,6 +133,7 @@ func (r *ProjectRepository) toDomain(row model.Projects) (*domain.Project, error
 			Name:        row.Name,
 			IsDefault:   row.IsDefault,
 		},
+		Premise:   row.Premise,
 		CreatedAt: row.CreatedAt,
 	})
 }

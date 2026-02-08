@@ -55,6 +55,7 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsPost(
 		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
 		ProjectID:   uuid.UUID(req.ProjectId).String(),
 		Theme:       string(req.Theme),
+		Premise:     string(req.Premise.Or("")),
 		Status:      domain.DiscussionStatus(req.Status),
 		UserID:      httpctx.GetUserID(ctx),
 	})
@@ -93,6 +94,7 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPut(
 		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
 		UserID:      httpctx.GetUserID(ctx),
 		Theme:       string(req.Theme),
+		Premise:     string(req.Premise),
 		Conclusion:  string(req.Conclusion),
 	})
 	if err != nil {
@@ -430,6 +432,7 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 		ID:         oas.ID(uuid.MustParse(item.ID())),
 		ProjectId:  oas.ID(uuid.MustParse(item.ProjectID())),
 		Theme:      oas.DiscussionTheme(item.Theme()),
+		Premise:    oas.DiscussionPremise(item.Premise()),
 		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
 		Status:     oas.DiscussionStatus(item.Status()),
 	}
