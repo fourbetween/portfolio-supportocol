@@ -32,17 +32,21 @@ func (f *ProjectFactory) Create(params CreateProjectParams) (*Project, error) {
 	id := f.idSrv.Generate()
 	now := f.clockSrv.Now()
 	return f.Reconstruct(ReconstructProjectParams{
-		ID:                  id,
-		CreateProjectParams: params,
-		CreatedAt:           now,
+		ID:          id,
+		WorkspaceID: params.WorkspaceID,
+		Name:        params.Name,
+		IsDefault:   params.IsDefault,
+		CreatedAt:   now,
 	})
 }
 
 type ReconstructProjectParams struct {
-	ID string
-	CreateProjectParams
-	Premise   string
-	CreatedAt time.Time
+	ID          string
+	WorkspaceID string
+	Name        string
+	IsDefault   bool
+	Premise     string
+	CreatedAt   time.Time
 }
 
 func (f *ProjectFactory) Reconstruct(params ReconstructProjectParams) (*Project, error) {

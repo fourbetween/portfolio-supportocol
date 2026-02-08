@@ -127,12 +127,10 @@ func (r *WorkspaceRepository) Delete(ctx context.Context, w *domain.Workspace) e
 
 func (r *WorkspaceRepository) toDomain(row model.Workspaces) (*domain.Workspace, error) {
 	return r.fac.Reconstruct(domain.ReconstructWorkspaceParams{
-		ID: row.ID,
-		CreateWorkspaceParams: domain.CreateWorkspaceParams{
-			Slug: row.Slug,
-			Name: row.Name,
-			Type: domain.WorkspaceType(row.Type),
-		},
+		ID:        row.ID,
+		Slug:      row.Slug,
+		Name:      row.Name,
+		Type:      domain.WorkspaceType(row.Type),
 		CreatedAt: row.CreatedAt,
 	})
 }

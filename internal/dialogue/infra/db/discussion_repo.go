@@ -68,20 +68,26 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 	}
 
 	return r.fac.Reconstruct(domain.ReconstructDiscussionParams{
-		ID:                    row.ID,
-		WorkspaceID:           row.WorkspaceID,
-		Theme:                 row.Theme,
-		Premise:               row.Premise,
-		Conclusion:            row.Conclusion,
-		Status:                domain.DiscussionStatus(row.Status),
-		Settings:              settings,
-		CommentsCount:         int(row.CommentsCount),
-		ProposedCommentsCount: int(row.ProposedCommentsCount),
-		IssuesCount:           int(row.IssuesCount),
-		LastCommentedAt:       row.LastCommentedAt,
-		ArchivedAt:            row.ArchivedAt,
-		CreatedBy:             row.CreatedBy,
-		CreatedAt:             row.CreatedAt,
+		ID:          row.ID,
+		WorkspaceID: row.WorkspaceID,
+		Content: domain.DiscussionContent{
+			Theme:      row.Theme,
+			Premise:    row.Premise,
+			Conclusion: row.Conclusion,
+		},
+		Status:   domain.DiscussionStatus(row.Status),
+		Settings: settings,
+		Stats: domain.DiscussionStats{
+			CommentsCount:         int(row.CommentsCount),
+			ProposedCommentsCount: int(row.ProposedCommentsCount),
+			IssuesCount:           int(row.IssuesCount),
+		},
+		Activity: domain.DiscussionActivity{
+			CreatedBy:       row.CreatedBy,
+			CreatedAt:       row.CreatedAt,
+			ArchivedAt:      row.ArchivedAt,
+			LastCommentedAt: row.LastCommentedAt,
+		},
 	})
 }
 

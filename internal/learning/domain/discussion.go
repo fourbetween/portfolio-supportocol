@@ -12,22 +12,34 @@ const (
 	MaxDiscussionsPerProject = 100
 )
 
+type DiscussionContent struct {
+	Theme      string
+	Premise    string
+	Conclusion string
+}
+
+type DiscussionStats struct {
+	CommentsCount         int
+	ProposedCommentsCount int
+	IssuesCount           int
+}
+
+type DiscussionActivity struct {
+	CreatedBy       string
+	CreatedAt       time.Time
+	ArchivedAt      *time.Time
+	LastCommentedAt time.Time
+}
+
 type Discussion struct {
-	id                    string
-	workspaceID           string
-	projectID             string
-	theme                 string
-	premise               string
-	conclusion            string
-	status                DiscussionStatus
-	commentsCount         int
-	proposedCommentsCount int
-	issuesCount           int
-	lastCommentedAt       time.Time
-	archivedAt            *time.Time
-	createdBy             string
-	createdAt             time.Time
-	dialogueSettings      *DialogueSettings
+	id               string
+	workspaceID      string
+	projectID        string
+	content          DiscussionContent
+	status           DiscussionStatus
+	stats            DiscussionStats
+	activity         DiscussionActivity
+	dialogueSettings *DialogueSettings
 }
 
 func (d *Discussion) ID() string {
@@ -43,15 +55,15 @@ func (d *Discussion) ProjectID() string {
 }
 
 func (d *Discussion) Theme() string {
-	return d.theme
+	return d.content.Theme
 }
 
 func (d *Discussion) Premise() string {
-	return d.premise
+	return d.content.Premise
 }
 
 func (d *Discussion) Conclusion() string {
-	return d.conclusion
+	return d.content.Conclusion
 }
 
 func (d *Discussion) Status() DiscussionStatus {
@@ -59,27 +71,27 @@ func (d *Discussion) Status() DiscussionStatus {
 }
 
 func (d *Discussion) CommentsCount() int {
-	return d.commentsCount
+	return d.stats.CommentsCount
 }
 
 func (d *Discussion) ProposedCommentsCount() int {
-	return d.proposedCommentsCount
+	return d.stats.ProposedCommentsCount
 }
 
 func (d *Discussion) IssuesCount() int {
-	return d.issuesCount
+	return d.stats.IssuesCount
 }
 
 func (d *Discussion) LastCommentedAt() time.Time {
-	return d.lastCommentedAt
+	return d.activity.LastCommentedAt
 }
 
 func (d *Discussion) CreatedBy() string {
-	return d.createdBy
+	return d.activity.CreatedBy
 }
 
 func (d *Discussion) CreatedAt() time.Time {
-	return d.createdAt
+	return d.activity.CreatedAt
 }
 
 func (d *Discussion) DialogueSettings() *DialogueSettings {
@@ -87,15 +99,15 @@ func (d *Discussion) DialogueSettings() *DialogueSettings {
 }
 
 func (d *Discussion) ArchivedAt() *time.Time {
-	return d.archivedAt
+	return d.activity.ArchivedAt
 }
 
 func (d *Discussion) IsArchived() bool {
-	return d.archivedAt != nil
+	return d.activity.ArchivedAt != nil
 }
 
 func (d *Discussion) CanAddComment() error {
-	if d.commentsCount >= MaxCommentsPerDiscussion {
+	if d.stats.CommentsCount >= MaxCommentsPerDiscussion {
 		return fmt.Errorf(
 			"discussion has reached the limit of %d comments: %w",
 			MaxCommentsPerDiscussion,
@@ -110,36 +122,36 @@ func (d *Discussion) AddComment(now time.Time) {
 }
 
 func (d *Discussion) AddComments(count int, now time.Time) {
-	d.commentsCount += count
-	d.lastCommentedAt = now
+	d.stats.CommentsCount += count
+	d.activity.LastCommentedAt = now
 }
 
 func (d *Discussion) ResolveProposedComment(now time.Time) {
-	if d.proposedCommentsCount > 0 {
-		d.proposedCommentsCount--
-		d.commentsCount++
-		d.lastCommentedAt = now
+	if d.stats.ProposedCommentsCount > 0 {
+		d.stats.ProposedCommentsCount--
+		d.stats.CommentsCount++
+		d.activity.LastCommentedAt = now
 	}
 }
 
 func (d *Discussion) AddCommentIssue() {
-	d.issuesCount++
+	d.stats.IssuesCount++
 }
 
 func (d *Discussion) RemoveCommentIssue() {
-	if d.issuesCount > 0 {
-		d.issuesCount--
+	if d.stats.IssuesCount > 0 {
+		d.stats.IssuesCount--
 	}
 }
 
 func (d *Discussion) SyncCommentsCount(count int) {
-	d.commentsCount = count
+	d.stats.CommentsCount = count
 }
 
 func (d *Discussion) SyncCounts(counts DiscussionCounts) {
-	d.commentsCount = counts.CommentsCount
-	d.proposedCommentsCount = counts.ProposedCommentsCount
-	d.issuesCount = counts.IssuesCount
+	d.stats.CommentsCount = counts.CommentsCount
+	d.stats.ProposedCommentsCount = counts.ProposedCommentsCount
+	d.stats.IssuesCount = counts.IssuesCount
 }
 
 type UpdateParams struct {
@@ -149,9 +161,9 @@ type UpdateParams struct {
 }
 
 func (d *Discussion) Update(params UpdateParams) error {
-	d.theme = params.Theme
-	d.premise = params.Premise
-	d.conclusion = params.Conclusion
+	d.content.Theme = params.Theme
+	d.content.Premise = params.Premise
+	d.content.Conclusion = params.Conclusion
 	return nil
 }
 
@@ -206,7 +218,7 @@ func (d *Discussion) Archive(now time.Time) error {
 	if d.IsArchived() {
 		return fmt.Errorf("discussion is already archived: %w", apperr.ErrInvalidArgument)
 	}
-	d.archivedAt = &now
+	d.activity.ArchivedAt = &now
 	return nil
 }
 
@@ -214,7 +226,7 @@ func (d *Discussion) Unarchive() error {
 	if !d.IsArchived() {
 		return fmt.Errorf("discussion is not archived: %w", apperr.ErrInvalidArgument)
 	}
-	d.archivedAt = nil
+	d.activity.ArchivedAt = nil
 	return nil
 }
 

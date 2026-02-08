@@ -32,15 +32,19 @@ func (f *WorkspaceFactory) Create(params CreateWorkspaceParams) (*Workspace, err
 	id := f.idSrv.Generate()
 	now := f.clockSrv.Now()
 	return f.Reconstruct(ReconstructWorkspaceParams{
-		ID:                    id,
-		CreateWorkspaceParams: params,
-		CreatedAt:             now,
+		ID:        id,
+		Slug:      params.Slug,
+		Name:      params.Name,
+		Type:      params.Type,
+		CreatedAt: now,
 	})
 }
 
 type ReconstructWorkspaceParams struct {
-	ID string
-	CreateWorkspaceParams
+	ID        string
+	Slug      string
+	Name      string
+	Type      WorkspaceType
 	CreatedAt time.Time
 }
 

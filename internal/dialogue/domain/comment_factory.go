@@ -1,8 +1,6 @@
 package domain
 
 import (
-	"time"
-
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 )
@@ -25,8 +23,7 @@ func NewCommentFactory(
 type CreateCommentParams struct {
 	DiscussionID    string
 	ParentCommentID *string
-	CommentTypeID   string
-	Content         string
+	Body            CommentBody
 	Status          CommentStatus
 	CreatedBy       *string
 	Issues          []CommentIssue
@@ -35,17 +32,27 @@ type CreateCommentParams struct {
 func (f *CommentFactory) Create(params CreateCommentParams) (*Comment, error) {
 	id := f.idSrv.Generate()
 	return f.Reconstruct(ReconstructCommentParams{
-		ID:                  id,
-		CreateCommentParams: params,
-		CreatedAt:           f.clockSrv.Now(),
+		ID:              id,
+		DiscussionID:    params.DiscussionID,
+		ParentCommentID: params.ParentCommentID,
+		Body:            params.Body,
+		Status:          params.Status,
+		Activity: CommentActivity{
+			CreatedBy: params.CreatedBy,
+			CreatedAt: f.clockSrv.Now(),
+		},
+		Issues: params.Issues,
 	})
 }
 
 type ReconstructCommentParams struct {
-	ID string
-	CreateCommentParams
-	CreatedAt  time.Time
-	ArchivedAt *time.Time
+	ID              string
+	DiscussionID    string
+	ParentCommentID *string
+	Body            CommentBody
+	Status          CommentStatus
+	Activity        CommentActivity
+	Issues          []CommentIssue
 }
 
 func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment, error) {
@@ -53,12 +60,9 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 		id:              params.ID,
 		discussionID:    params.DiscussionID,
 		parentCommentID: params.ParentCommentID,
-		commentType:     params.CommentTypeID,
-		content:         params.Content,
+		body:            params.Body,
 		status:          params.Status,
-		archivedAt:      params.ArchivedAt,
-		createdBy:       params.CreatedBy,
-		createdAt:       params.CreatedAt,
+		activity:        params.Activity,
 		issues:          params.Issues,
 	}
 

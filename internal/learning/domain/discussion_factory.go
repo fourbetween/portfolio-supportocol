@@ -1,8 +1,6 @@
 package domain
 
 import (
-	"time"
-
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/id"
@@ -40,43 +38,43 @@ func (f *DiscussionFactory) Create(params CreateDiscussionParams, count int) (*D
 	id := f.idSrv.Generate()
 	now := f.clockSrv.Now()
 	return f.Reconstruct(ReconstructDiscussionParams{
-		ID:                     id,
-		CreateDiscussionParams: params,
-		LastCommentedAt:        now,
-		CreatedAt:              now,
+		ID:          id,
+		WorkspaceID: params.WorkspaceID,
+		ProjectID:   params.ProjectID,
+		Content: DiscussionContent{
+			Theme:   params.Theme,
+			Premise: params.Premise,
+		},
+		Status: params.Status,
+		Activity: DiscussionActivity{
+			CreatedBy:       params.CreatedBy,
+			CreatedAt:       now,
+			LastCommentedAt: now,
+		},
 	})
 }
 
 type ReconstructDiscussionParams struct {
-	ID string
-	CreateDiscussionParams
-	Conclusion            string
-	CommentsCount         int
-	ProposedCommentsCount int
-	IssuesCount           int
-	LastCommentedAt       time.Time
-	ArchivedAt            *time.Time
-	CreatedAt             time.Time
-	DialogueSettings      *DialogueSettings
+	ID               string
+	WorkspaceID      string
+	ProjectID        string
+	Content          DiscussionContent
+	Status           DiscussionStatus
+	Stats            DiscussionStats
+	Activity         DiscussionActivity
+	DialogueSettings *DialogueSettings
 }
 
 func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Discussion, error) {
 	d := &Discussion{
-		id:                    params.ID,
-		workspaceID:           params.WorkspaceID,
-		projectID:             params.ProjectID,
-		theme:                 params.Theme,
-		premise:               params.Premise,
-		conclusion:            params.Conclusion,
-		status:                params.Status,
-		commentsCount:         params.CommentsCount,
-		proposedCommentsCount: params.ProposedCommentsCount,
-		issuesCount:           params.IssuesCount,
-		lastCommentedAt:       params.LastCommentedAt,
-		archivedAt:            params.ArchivedAt,
-		createdBy:             params.CreatedBy,
-		createdAt:             params.CreatedAt,
-		dialogueSettings:      params.DialogueSettings,
+		id:               params.ID,
+		workspaceID:      params.WorkspaceID,
+		projectID:        params.ProjectID,
+		content:          params.Content,
+		status:           params.Status,
+		stats:            params.Stats,
+		activity:         params.Activity,
+		dialogueSettings: params.DialogueSettings,
 	}
 
 	if err := d.Validate(); err != nil {

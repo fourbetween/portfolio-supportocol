@@ -6,16 +6,24 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
+type CommentBody struct {
+	Type    string
+	Content string
+}
+
+type CommentActivity struct {
+	CreatedBy  *string
+	CreatedAt  time.Time
+	ArchivedAt *time.Time
+}
+
 type Comment struct {
 	id              string
 	discussionID    string
 	parentCommentID *string
-	commentType     string
-	content         string
+	body            CommentBody
 	status          CommentStatus
-	archivedAt      *time.Time
-	createdBy       *string
-	createdAt       time.Time
+	activity        CommentActivity
 	issues          []CommentIssue
 }
 
@@ -32,11 +40,11 @@ func (c *Comment) ParentCommentID() *string {
 }
 
 func (c *Comment) Type() string {
-	return c.commentType
+	return c.body.Type
 }
 
 func (c *Comment) Content() string {
-	return c.content
+	return c.body.Content
 }
 
 func (c *Comment) Status() CommentStatus {
@@ -44,19 +52,19 @@ func (c *Comment) Status() CommentStatus {
 }
 
 func (c *Comment) ArchivedAt() *time.Time {
-	return c.archivedAt
+	return c.activity.ArchivedAt
 }
 
 func (c *Comment) IsArchived() bool {
-	return c.archivedAt != nil
+	return c.activity.ArchivedAt != nil
 }
 
 func (c *Comment) CreatedBy() *string {
-	return c.createdBy
+	return c.activity.CreatedBy
 }
 
 func (c *Comment) CreatedAt() time.Time {
-	return c.createdAt
+	return c.activity.CreatedAt
 }
 
 func (c *Comment) Issues() []CommentIssue {
@@ -69,8 +77,8 @@ type UpdateCommentParams struct {
 }
 
 func (c *Comment) Update(params UpdateCommentParams) error {
-	c.commentType = params.CommentType
-	c.content = params.Content
+	c.body.Type = params.CommentType
+	c.body.Content = params.Content
 	return nil
 }
 
