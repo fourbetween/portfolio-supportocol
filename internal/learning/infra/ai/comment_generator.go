@@ -148,10 +148,12 @@ func (cg *CommentGenerator) createComments(params domain.GenerateCommentParams, 
 		c, err := cg.factory.Create(domain.CreateCommentParams{
 			DiscussionID:    params.DiscussionID,
 			ParentCommentID: params.ParentCommentID,
-			CommentTypeID:   params.CommentType,
-			Content:         content,
-			Status:          domain.CommentStatusProposed,
-			CreatedBy:       &params.UserID,
+			Body: domain.CommentBody{
+				Type:    params.CommentType,
+				Content: content,
+			},
+			Status:    domain.CommentStatusProposed,
+			CreatedBy: &params.UserID,
 		})
 		if err != nil {
 			return nil, err

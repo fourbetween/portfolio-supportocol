@@ -164,14 +164,16 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 			Status:      domain.DiscussionStatus(row.Status),
 			CreatedBy:   row.CreatedBy,
 		},
-		Conclusion:            row.Conclusion,
-		CommentsCount:         int(row.CommentsCount),
-		ProposedCommentsCount: int(row.ProposedCommentsCount),
-		IssuesCount:           int(row.IssuesCount),
-		LastCommentedAt:       row.LastCommentedAt,
-		ArchivedAt:            row.ArchivedAt,
-		CreatedAt:             row.CreatedAt,
-		DialogueSettings:      dialogueSettings,
+		Conclusion: row.Conclusion,
+		Stats: domain.DiscussionStats{
+			CommentsCount:         int(row.CommentsCount),
+			ProposedCommentsCount: int(row.ProposedCommentsCount),
+			IssuesCount:           int(row.IssuesCount),
+		},
+		LastCommentedAt:  row.LastCommentedAt,
+		ArchivedAt:       row.ArchivedAt,
+		CreatedAt:        row.CreatedAt,
+		DialogueSettings: dialogueSettings,
 	})
 }
 

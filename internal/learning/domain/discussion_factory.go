@@ -50,33 +50,33 @@ func (f *DiscussionFactory) Create(params CreateDiscussionParams, count int) (*D
 type ReconstructDiscussionParams struct {
 	ID string
 	CreateDiscussionParams
-	Conclusion            string
-	CommentsCount         int
-	ProposedCommentsCount int
-	IssuesCount           int
-	LastCommentedAt       time.Time
-	ArchivedAt            *time.Time
-	CreatedAt             time.Time
-	DialogueSettings      *DialogueSettings
+	Conclusion       string
+	Stats            DiscussionStats
+	LastCommentedAt  time.Time
+	ArchivedAt       *time.Time
+	CreatedAt        time.Time
+	DialogueSettings *DialogueSettings
 }
 
 func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Discussion, error) {
 	d := &Discussion{
-		id:                    params.ID,
-		workspaceID:           params.WorkspaceID,
-		projectID:             params.ProjectID,
-		theme:                 params.Theme,
-		premise:               params.Premise,
-		conclusion:            params.Conclusion,
-		status:                params.Status,
-		commentsCount:         params.CommentsCount,
-		proposedCommentsCount: params.ProposedCommentsCount,
-		issuesCount:           params.IssuesCount,
-		lastCommentedAt:       params.LastCommentedAt,
-		archivedAt:            params.ArchivedAt,
-		createdBy:             params.CreatedBy,
-		createdAt:             params.CreatedAt,
-		dialogueSettings:      params.DialogueSettings,
+		id:          params.ID,
+		workspaceID: params.WorkspaceID,
+		projectID:   params.ProjectID,
+		content: DiscussionContent{
+			Theme:      params.Theme,
+			Premise:    params.Premise,
+			Conclusion: params.Conclusion,
+		},
+		status: params.Status,
+		stats:  params.Stats,
+		audit: DiscussionAudit{
+			CreatedBy:       params.CreatedBy,
+			CreatedAt:       params.CreatedAt,
+			ArchivedAt:      params.ArchivedAt,
+			LastCommentedAt: params.LastCommentedAt,
+		},
+		dialogueSettings: params.DialogueSettings,
 	}
 
 	if err := d.Validate(); err != nil {

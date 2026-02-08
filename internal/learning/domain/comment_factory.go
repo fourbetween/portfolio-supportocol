@@ -25,8 +25,7 @@ func NewCommentFactory(
 type CreateCommentParams struct {
 	DiscussionID    string
 	ParentCommentID *string
-	CommentTypeID   string
-	Content         string
+	Body            CommentBody
 	Status          CommentStatus
 	CreatedBy       *string
 	Issues          []CommentIssue
@@ -53,13 +52,14 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 		id:              params.ID,
 		discussionID:    params.DiscussionID,
 		parentCommentID: params.ParentCommentID,
-		commentType:     params.CommentTypeID,
-		content:         params.Content,
+		body:            params.Body,
 		status:          params.Status,
-		createdBy:       params.CreatedBy,
-		createdAt:       params.CreatedAt,
-		archivedAt:      params.ArchivedAt,
-		issues:          params.Issues,
+		audit: CommentAudit{
+			CreatedBy:  params.CreatedBy,
+			CreatedAt:  params.CreatedAt,
+			ArchivedAt: params.ArchivedAt,
+		},
+		issues: params.Issues,
 	}
 
 	if err := c.Validate(); err != nil {

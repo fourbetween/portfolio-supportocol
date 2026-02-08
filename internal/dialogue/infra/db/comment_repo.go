@@ -151,11 +151,13 @@ func (r *CommentRepository) toCommentDomain(row model.Comments, issueRows []mode
 		CreateCommentParams: domain.CreateCommentParams{
 			DiscussionID:    row.DiscussionID,
 			ParentCommentID: row.ParentCommentID,
-			CommentTypeID:   row.Type,
-			Content:         row.Content,
-			Status:          domain.CommentStatus(row.Status),
-			CreatedBy:       row.CreatedBy,
-			Issues:          issues,
+			Body: domain.CommentBody{
+				Type:    row.Type,
+				Content: row.Content,
+			},
+			Status:    domain.CommentStatus(row.Status),
+			CreatedBy: row.CreatedBy,
+			Issues:    issues,
 		},
 		CreatedAt:  row.CreatedAt,
 		ArchivedAt: row.ArchivedAt,

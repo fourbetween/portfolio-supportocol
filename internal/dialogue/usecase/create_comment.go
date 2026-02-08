@@ -101,10 +101,12 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		comment, createErr = u.fac.Create(domain.CreateCommentParams{
 			DiscussionID:    input.DiscussionID,
 			ParentCommentID: input.ParentCommentID,
-			CommentTypeID:   input.CommentType,
-			Content:         input.Content,
-			Status:          domain.CommentStatusProposed,
-			CreatedBy:       createdBy,
+			Body: domain.CommentBody{
+				Type:    input.CommentType,
+				Content: input.Content,
+			},
+			Status:    domain.CommentStatusProposed,
+			CreatedBy: createdBy,
 		})
 		if createErr != nil {
 			return createErr
