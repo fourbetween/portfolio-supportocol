@@ -37,7 +37,7 @@ func (f *CommentFactory) Create(params CreateCommentParams) (*Comment, error) {
 		ParentCommentID: params.ParentCommentID,
 		Body:            params.Body,
 		Status:          params.Status,
-		Audit: CommentAudit{
+		Activity: CommentActivity{
 			CreatedBy: params.CreatedBy,
 			CreatedAt: f.clockSrv.Now(),
 		},
@@ -51,7 +51,7 @@ type ReconstructCommentParams struct {
 	ParentCommentID *string
 	Body            CommentBody
 	Status          CommentStatus
-	Audit           CommentAudit
+	Activity        CommentActivity
 	Issues          []CommentIssue
 }
 
@@ -62,7 +62,7 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 		parentCommentID: params.ParentCommentID,
 		body:            params.Body,
 		status:          params.Status,
-		audit:           params.Audit,
+		activity:        params.Activity,
 		issues:          params.Issues,
 	}
 

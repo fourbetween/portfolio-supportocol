@@ -155,7 +155,7 @@ func (r *CommentRepository) toCommentDomain(row model.Comments, issueRows []mode
 			Content: row.Content,
 		},
 		Status: domain.CommentStatus(row.Status),
-		Audit: domain.CommentAudit{
+		Activity: domain.CommentActivity{
 			CreatedBy:  row.CreatedBy,
 			CreatedAt:  row.CreatedAt,
 			ArchivedAt: row.ArchivedAt,

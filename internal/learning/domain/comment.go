@@ -11,7 +11,7 @@ type CommentBody struct {
 	Content string
 }
 
-type CommentAudit struct {
+type CommentActivity struct {
 	CreatedBy  *string
 	CreatedAt  time.Time
 	ArchivedAt *time.Time
@@ -23,7 +23,7 @@ type Comment struct {
 	parentCommentID *string
 	body            CommentBody
 	status          CommentStatus
-	audit           CommentAudit
+	activity        CommentActivity
 	issues          []CommentIssue
 }
 
@@ -52,11 +52,11 @@ func (c *Comment) Status() CommentStatus {
 }
 
 func (c *Comment) CreatedBy() *string {
-	return c.audit.CreatedBy
+	return c.activity.CreatedBy
 }
 
 func (c *Comment) CreatedAt() time.Time {
-	return c.audit.CreatedAt
+	return c.activity.CreatedAt
 }
 
 func (c *Comment) Issues() []CommentIssue {
@@ -64,11 +64,11 @@ func (c *Comment) Issues() []CommentIssue {
 }
 
 func (c *Comment) ArchivedAt() *time.Time {
-	return c.audit.ArchivedAt
+	return c.activity.ArchivedAt
 }
 
 func (c *Comment) IsArchived() bool {
-	return c.audit.ArchivedAt != nil
+	return c.activity.ArchivedAt != nil
 }
 
 type UpdateCommentParams struct {
@@ -125,7 +125,7 @@ func (c *Comment) Archive(now time.Time) error {
 	if c.IsArchived() {
 		return apperr.ErrInvalidArgument
 	}
-	c.audit.ArchivedAt = &now
+	c.activity.ArchivedAt = &now
 	return nil
 }
 
@@ -133,6 +133,6 @@ func (c *Comment) Unarchive() error {
 	if !c.IsArchived() {
 		return apperr.ErrInvalidArgument
 	}
-	c.audit.ArchivedAt = nil
+	c.activity.ArchivedAt = nil
 	return nil
 }
