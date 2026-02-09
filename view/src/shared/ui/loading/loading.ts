@@ -72,7 +72,6 @@ export class Loading extends LitElement {
 
       .progress-container {
         width: 80%;
-        max-width: 400px;
         background-color: var(--color-canvas-subtle);
         border-radius: 4px;
         overflow: hidden;

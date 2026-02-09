@@ -162,8 +162,6 @@ export class DialogueIssueCreatePopup extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 24px;
-        min-width: 400px;
-        max-width: 600px;
       }
       form {
         display: flex;
