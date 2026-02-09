@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -48,7 +49,7 @@ export class DialogueCommentCreateWidget extends LitElement {
     return html`
       <button class="btn add-button" @click=${this.handleStart}>
         <span class="material-symbols-outlined">add_comment</span>
-        <span>New Comment</span>
+        <span>${msg("New Comment")}</span>
       </button>
     `;
   }

@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -16,7 +17,7 @@ export class DialogueIssueListPopup extends LitElement {
   render() {
     return html`
       <ui-popup .open=${this.open}>
-        <div slot="header">Issues</div>
+        <div slot="header">${msg("Issues")}</div>
         <div slot="main">
           <dialogue-issue-list .issues=${this.issues}></dialogue-issue-list>
         </div>

@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -9,7 +10,7 @@ export class MarketingHomePage extends LitElement {
     return html`
       <main class="container container--narrow hero">
         <h1>Supportocol</h1>
-        <p class="description">A platform for logical discussion</p>
+        <p class="description">${msg("A platform for logical discussion")}</p>
       </main>
     `;
   }

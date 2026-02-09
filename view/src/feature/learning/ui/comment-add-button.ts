@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -13,7 +14,7 @@ export class LearningCommentAddButton extends LitElement {
     return html`
       <button class="btn">
         <span class="material-symbols-outlined">add_comment</span>
-        <span>${this.isReply ? "Reply" : "New Comment"}</span>
+        <span>${this.isReply ? msg("Reply") : msg("New Comment")}</span>
       </button>
     `;
   }

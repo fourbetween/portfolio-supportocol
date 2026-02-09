@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+<file target-language="ja" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+<body>
+<trans-unit id="s73ddfbc4477fef8b">
+  <source>Learning</source>
+  <target>学習</target>
+</trans-unit>
+<trans-unit id="s39d4f2792f83ec73">
+  <source>Dialogue</source>
+  <target>対話</target>
+</trans-unit>
+<trans-unit id="s67749057edb2586b">
+  <source>Logout</source>
+  <target>ログアウト</target>
+</trans-unit>
+<trans-unit id="sc8da3cc71de63832">
+  <source>Login</source>
+  <target>ログイン</target>
+</trans-unit>
+<trans-unit id="s208bbb91a2546344">
+  <source>New Comment</source>
+  <target>新しいコメント</target>
+</trans-unit>
+<trans-unit id="s8178b15430d8b410">
+  <source>Comment created.</source>
+  <target>コメントを作成しました。</target>
+</trans-unit>
+<trans-unit id="s27f647885d9a5e44">
+  <source>Issue added.</source>
+  <target>指摘を追加しました。</target>
+</trans-unit>
+<trans-unit id="s6eef72b19442f4df">
+  <source>Replies</source>
+  <target>返信</target>
+</trans-unit>
+<trans-unit id="sce187d8b075505ee">
+  <source>All Comments</source>
+  <target>すべてのコメント</target>
+</trans-unit>
+<trans-unit id="s63e03c70f67ebf9c">
+  <source>Context</source>
+  <target>コンテキスト</target>
+</trans-unit>
+<trans-unit id="s9348e76d0442e220">
+  <source>Clear Selection</source>
+  <target>選択を解除</target>
+</trans-unit>
+<trans-unit id="s4cd37072f5229dd8">
+  <source>Latest first</source>
+  <target>新着順</target>
+</trans-unit>
+<trans-unit id="sfa078adf9442c7a9">
+  <source>Public Discussions</source>
+  <target>公開議論</target>
+</trans-unit>
+<trans-unit id="sac29dd0100874b38">
+  <source>Explore and join structured dialogues with others.</source>
+  <target>他者との構造化された対話を探索し、参加しましょう。</target>
+</trans-unit>
+<trans-unit id="s7b3ab7561ced061a">
+  <source>Types</source>
+  <target>種類</target>
+</trans-unit>
+<trans-unit id="sfed17b0e30748cdf">
+  <source>Paths</source>
+  <target>経路</target>
+</trans-unit>
+<trans-unit id="sca7cfe2bef51b2a5">
+  <source>Root</source>
+  <target>ルート</target>
+</trans-unit>
+<trans-unit id="sf53601f2b1e97107">
+  <source>reply</source>
+  <target>返信</target>
+</trans-unit>
+<trans-unit id="sa9357dff134f4450">
+  <source>report problem</source>
+  <target>問題を報告</target>
+</trans-unit>
+<trans-unit id="s65366faf6a291813">
+  <source>focus</source>
+  <target>フォーカス</target>
+</trans-unit>
+<trans-unit id="s9eb18ca6c32465be">
+  <source>Enter your reply...</source>
+  <target>返信を入力...</target>
+</trans-unit>
+<trans-unit id="s2ceb11be2290bb1b">
+  <source>Cancel</source>
+  <target>キャンセル</target>
+</trans-unit>
+<trans-unit id="s33f85f24c0f5f008">
+  <source>Save</source>
+  <target>保存</target>
+</trans-unit>
+<trans-unit id="saab875d8cfcfe712">
+  <source>Theme</source>
+  <target>テーマ</target>
+</trans-unit>
+<trans-unit id="s11536e67861094ac">
+  <source>Premise</source>
+  <target>前提</target>
+</trans-unit>
+<trans-unit id="sc7b736bb94cf040e">
+  <source>Conclusion</source>
+  <target>結論</target>
+</trans-unit>
+<trans-unit id="sdc12d4d35420eeb7">
+  <source>Comments</source>
+  <target>コメント</target>
+</trans-unit>
+<trans-unit id="sa46e80853d6c921b">
+  <source>No discussions found.</source>
+  <target>議論が見つかりません。</target>
+</trans-unit>
+<trans-unit id="sfde43e1b6051b99c">
+  <source>Circular Reasoning</source>
+  <target>循環論法</target>
+</trans-unit>
+<trans-unit id="s45e812a6a85d5b83">
+  <source>The conclusion is included in the premise of the argument.</source>
+  <target>結論が論証の前提に含まれています。</target>
+</trans-unit>
+<trans-unit id="s8d8c5628654a7989">
+  <source>Ad Hominem</source>
+  <target>人身攻撃</target>
+</trans-unit>
+<trans-unit id="sffc608d183d88e22">
+  <source>Attacking the person making the argument rather than the argument itself.</source>
+  <target>論証そのものではなく、論証を行っている人を攻撃すること。</target>
+</trans-unit>
+<trans-unit id="s3f8dacc2396d2e60">
+  <source>Straw Man</source>
+  <target>藁人形論法</target>
+</trans-unit>
+<trans-unit id="sb41a234ff0ccdae1">
+  <source>Misrepresenting someone's argument to make it easier to attack.</source>
+  <target>相手の主張を歪曲して攻撃しやすくすること。</target>
+</trans-unit>
+<trans-unit id="sca7c130a1ef5cdf5">
+  <source>Red Herring</source>
+  <target>燻製ニシンの虚偽</target>
+</trans-unit>
+<trans-unit id="sabf49cc879548025">
+  <source>Introducing an irrelevant topic to divert attention from the original issue.</source>
+  <target>本来の論点から注意をそらすために無関係な話題を持ち出すこと。</target>
+</trans-unit>
+<trans-unit id="sd305a727fb4d962f">
+  <source>Add Issue</source>
+  <target>指摘を追加</target>
+</trans-unit>
+<trans-unit id="s50ba5c526cfd0496">
+  <source>Issue Details</source>
+  <target>指摘の詳細</target>
+</trans-unit>
+<trans-unit id="s0d652383378a4e65">
+  <source>Use Template (optional)</source>
+  <target>テンプレートを使用（任意）</target>
+</trans-unit>
+<trans-unit id="s9c92712d911f0cf4">
+  <source>Issue title...</source>
+  <target>指摘のタイトル...</target>
+</trans-unit>
+<trans-unit id="sd6a43eac05f0fbd8">
+  <source>Issue description...</source>
+  <target>指摘の説明...</target>
+</trans-unit>
+<trans-unit id="s65977098bc203dfe">
+  <source>Target Comment Context</source>
+  <target>対象コメントのコンテキスト</target>
+</trans-unit>
+<trans-unit id="sb7a30bbc1dcf6de9">
+  <source>Issues</source>
+  <target>指摘</target>
+</trans-unit>
+<trans-unit id="se9a0f553eeb15a74">
+  <source>No issues found.</source>
+  <target>指摘が見つかりません。</target>
+</trans-unit>
+<trans-unit id="scad07cc65ad2fb30">
+  <source>Don't have an account?</source>
+  <target>アカウントをお持ちでないですか？</target>
+</trans-unit>
+<trans-unit id="s5e6b698a2ec87331">
+  <source>Sign up</source>
+  <target>新規登録</target>
+</trans-unit>
+<trans-unit id="s205b3e04ad286caa">
+  <source>Already have an account?</source>
+  <target>すでにアカウントをお持ちですか？</target>
+</trans-unit>
+<trans-unit id="scb04435672ac5410">
+  <source>Log in</source>
+  <target>ログイン</target>
+</trans-unit>
+<trans-unit id="s53aeb14de19dd0f6">
+  <source>Passwords do not match</source>
+  <target>パスワードが一致しません</target>
+</trans-unit>
+<trans-unit id="sadeb71ff96f1bbe7">
+  <source>Password must include lowercase, uppercase, and numbers</source>
+  <target>パスワードには小文字、大文字、数字を含めてください</target>
+</trans-unit>
+<trans-unit id="s38887b94b3320533">
+  <source>Email address</source>
+  <target>メールアドレス</target>
+</trans-unit>
+<trans-unit id="s327f2b3268051c5d">
+  <source>Enter email address</source>
+  <target>メールアドレスを入力</target>
+</trans-unit>
+<trans-unit id="sf6e1665c7022a1f8">
+  <source>Password</source>
+  <target>パスワード</target>
+</trans-unit>
+<trans-unit id="se088b71e63d75cf3">
+  <source>Enter password (8 or more characters)</source>
+  <target>パスワードを入力（8文字以上）</target>
+</trans-unit>
+<trans-unit id="s41b1a3474cbc3bde">
+  <source>Enter password</source>
+  <target>パスワードを入力</target>
+</trans-unit>
+<trans-unit id="s08b05407b5565ca4">
+  <source>or</source>
+  <target>または</target>
+</trans-unit>
+<trans-unit id="s5515a136187c74c0">
+  <source>Confirm password</source>
+  <target>パスワードの確認</target>
+</trans-unit>
+<trans-unit id="s566f11a15a5ab974">
+  <source>Re-enter password</source>
+  <target>パスワードを再入力</target>
+</trans-unit>
+<trans-unit id="sf9bea7888c138581">
+  <source>Comment updated.</source>
+  <target>コメントを更新しました。</target>
+</trans-unit>
+<trans-unit id="sb9e29229fde28a3c">
+  <source>Are you sure you want to delete this comment?</source>
+  <target>このコメントを削除してもよろしいですか？</target>
+</trans-unit>
+<trans-unit id="s25be73cf9613c5a7">
+  <source>Comment deleted.</source>
+  <target>コメントを削除しました。</target>
+</trans-unit>
+<trans-unit id="s7a2c564de26520a6">
+  <source>Comment archived.</source>
+  <target>コメントをアーカイブしました。</target>
+</trans-unit>
+<trans-unit id="s32f273a443dff063">
+  <source>Comment unarchived.</source>
+  <target>コメントのアーカイブを解除しました。</target>
+</trans-unit>
+<trans-unit id="s9750de9a42e7b054">
+  <source>Comments generated.</source>
+  <target>コメントを生成しました。</target>
+</trans-unit>
+<trans-unit id="s6135fde72ce1fef9">
+  <source>Comment activated.</source>
+  <target>コメントを有効化しました。</target>
+</trans-unit>
+<trans-unit id="sc42cafcd26a35c9e">
+  <source>Issue removed.</source>
+  <target>指摘を削除しました。</target>
+</trans-unit>
+<trans-unit id="sa6d7dfd906f03193">
+  <source>Comments with Issues</source>
+  <target>指摘付きコメント</target>
+</trans-unit>
+<trans-unit id="s7ca90c3ca3ea153b">
+  <source>Proposed Comments</source>
+  <target>提案されたコメント</target>
+</trans-unit>
+<trans-unit id="s4f75b7a5023c5d54">
+  <source>Discussion updated.</source>
+  <target>議論を更新しました。</target>
+</trans-unit>
+<trans-unit id="s51b413404125dfe7">
+  <source>Discussion published.</source>
+  <target>議論を公開しました。</target>
+</trans-unit>
+<trans-unit id="s12b38f2893a5f538">
+  <source>Discussion unpublished.</source>
+  <target>議論を非公開にしました。</target>
+</trans-unit>
+<trans-unit id="scdbd690d2b8c8c4f">
+  <source>Dialogue settings updated.</source>
+  <target>対話設定を更新しました。</target>
+</trans-unit>
+<trans-unit id="s28e31a6c486a8ef9">
+  <source>Discussion archived.</source>
+  <target>議論をアーカイブしました。</target>
+</trans-unit>
+<trans-unit id="s57ea1998f1ea903c">
+  <source>Discussion unarchived.</source>
+  <target>議論のアーカイブを解除しました。</target>
+</trans-unit>
+<trans-unit id="sb1a4c9ac23d34cc5">
+  <source>Are you sure you want to delete "<x id="0" equiv-text="${discussion.theme}"/>"?</source>
+  <target>「<x id="0" equiv-text="${discussion.theme}"/>」を削除してもよろしいですか？</target>
+</trans-unit>
+<trans-unit id="s85e9d4bbecb57754">
+  <source>Succeeded.</source>
+  <target>成功しました。</target>
+</trans-unit>
+<trans-unit id="s55dc09864c0e33c6">
+  <source>Discussions</source>
+  <target>議論</target>
+</trans-unit>
+<trans-unit id="s7ed88cf7da0cf00a">
+  <source>Proposed / Issues</source>
+  <target>提案 / 指摘</target>
+</trans-unit>
+<trans-unit id="s0b7ae9543c001867">
+  <source>Reply</source>
+  <target>返信</target>
+</trans-unit>
+<trans-unit id="scf66c51d51b872f3">
+  <source>Comment content</source>
+  <target>コメント内容</target>
+</trans-unit>
+<trans-unit id="sff329d6e90ca964d">
+  <source>Enter your comment...</source>
+  <target>コメントを入力...</target>
+</trans-unit>
+<trans-unit id="sc7bb23ad8516c549">
+  <source>Other...</source>
+  <target>その他...</target>
+</trans-unit>
+<trans-unit id="s6afd9de4857dad65">
+  <source>Type here...</source>
+  <target>ここに入力...</target>
+</trans-unit>
+<trans-unit id="sc16e00a7a8b2fde2">
+  <source>Back</source>
+  <target>戻る</target>
+</trans-unit>
+<trans-unit id="s091d3d07b5b3076f">
+  <source>OK</source>
+  <target>OK</target>
+</trans-unit>
+<trans-unit id="seca79090aa8ed7a4">
+  <source>Enter Custom Type</source>
+  <target>カスタム種類を入力</target>
+</trans-unit>
+<trans-unit id="sa28c1a2088d14318">
+  <source>Select Comment Type</source>
+  <target>コメント種類を選択</target>
+</trans-unit>
+<trans-unit id="se8dca0132c66ae03">
+  <source>Permissions</source>
+  <target>権限</target>
+</trans-unit>
+<trans-unit id="s51a1dec7855d81f8">
+  <source>Everyone</source>
+  <target>全員</target>
+</trans-unit>
+<trans-unit id="s169a1a1dce3987b8">
+  <source>Authenticated</source>
+  <target>認証済み</target>
+</trans-unit>
+<trans-unit id="s669b18c6d2d9c95b">
+  <source>None</source>
+  <target>なし</target>
+</trans-unit>
+<trans-unit id="s20974fa678ad4507">
+  <source>New type...</source>
+  <target>新しい種類...</target>
+</trans-unit>
+<trans-unit id="s4457133a9977fc74">
+  <source>Add Type</source>
+  <target>種類を追加</target>
+</trans-unit>
+<trans-unit id="s34235dee73e4be8e">
+  <source>Delete Type: <x id="0" equiv-text="${t}"/></source>
+  <target>種類を削除: <x id="0" equiv-text="${t}"/></target>
+</trans-unit>
+<trans-unit id="se218d5d4803074c5">
+  <source>Parent Type Select</source>
+  <target>親種類を選択</target>
+</trans-unit>
+<trans-unit id="se0193e2c8cae2385">
+  <source>ROOT</source>
+  <target>ルート</target>
+</trans-unit>
+<trans-unit id="s9d4f99269cbae585">
+  <source>Child Type Select</source>
+  <target>子種類を選択</target>
+</trans-unit>
+<trans-unit id="s2869b210db9b9c8c">
+  <source>(Select Child)</source>
+  <target>（子を選択）</target>
+</trans-unit>
+<trans-unit id="sbd9d785da14b049b">
+  <source>Add Path</source>
+  <target>経路を追加</target>
+</trans-unit>
+<trans-unit id="sf626d40b51ebe81c">
+  <source>Delete Path: <x id="0" equiv-text="${parent}"/> -&gt; <x id="1" equiv-text="${child}"/></source>
+  <target>経路を削除: <x id="0" equiv-text="${parent}"/> → <x id="1" equiv-text="${child}"/></target>
+</trans-unit>
+<trans-unit id="s34a88cc5af6b2c2e">
+  <source>Edit Dialogue Settings</source>
+  <target>対話設定を編集</target>
+</trans-unit>
+<trans-unit id="s5fc1520a5b5a8832">
+  <source>New discussion theme</source>
+  <target>新しい議論テーマ</target>
+</trans-unit>
+<trans-unit id="s25ff03c1f284fb67">
+  <source>New discussion</source>
+  <target>新しい議論</target>
+</trans-unit>
+<trans-unit id="s63c594389dd2d606">
+  <source>Enter discussion theme</source>
+  <target>議論テーマを入力</target>
+</trans-unit>
+<trans-unit id="s8b6d34d4757ef628">
+  <source>Enter discussion premise</source>
+  <target>議論の前提を入力</target>
+</trans-unit>
+<trans-unit id="sf1435a176886a49a">
+  <source>Enter discussion conclusion</source>
+  <target>議論の結論を入力</target>
+</trans-unit>
+<trans-unit id="s312a210dd97fac1b">
+  <source>Proposed comments</source>
+  <target>提案されたコメント</target>
+</trans-unit>
+<trans-unit id="sf3fe6b5fdb85d50a">
+  <source>delete</source>
+  <target>削除</target>
+</trans-unit>
+<trans-unit id="sb3f55a548f39f34a">
+  <source>Search discussions...</source>
+  <target>議論を検索...</target>
+</trans-unit>
+<trans-unit id="s63474f58162e32d4">
+  <source>Search discussions</source>
+  <target>議論を検索</target>
+</trans-unit>
+<trans-unit id="sc43934d7bf124fe5">
+  <source>Confirm Publication</source>
+  <target>公開の確認</target>
+</trans-unit>
+<trans-unit id="s985489bcc8416cb0">
+  <source>Confirm Unpublication</source>
+  <target>非公開の確認</target>
+</trans-unit>
+<trans-unit id="s5b5a642e87e258e0">
+  <source>Do you want to publish this discussion?</source>
+  <target>この議論を公開しますか？</target>
+</trans-unit>
+<trans-unit id="s95230f9ee8269093">
+  <source>Do you want to unpublish this discussion?</source>
+  <target>この議論を非公開にしますか？</target>
+</trans-unit>
+<trans-unit id="s0843b2fcef33fcc8">
+  <source>Publish</source>
+  <target>公開</target>
+</trans-unit>
+<trans-unit id="sc58d17ed71982c31">
+  <source>Unpublish</source>
+  <target>非公開</target>
+</trans-unit>
+<trans-unit id="sc158da8f6d16391e">
+  <source>No comments with issues found.</source>
+  <target>指摘付きコメントが見つかりません。</target>
+</trans-unit>
+<trans-unit id="s1b8bf304e31b7c96">
+  <source>Remove Issue</source>
+  <target>指摘を削除</target>
+</trans-unit>
+<trans-unit id="sec8ebcfb16a98fe4">
+  <source>No proposed comments found.</source>
+  <target>提案されたコメントが見つかりません。</target>
+</trans-unit>
+<trans-unit id="s9a14652d6d1c936d">
+  <source>A platform for logical discussion</source>
+  <target>論理的な議論のためのプラットフォーム</target>
+</trans-unit>
+<trans-unit id="sb4e9a5c9d7c9bdcb">
+  <source>Project created successfully.</source>
+  <target>プロジェクトを作成しました。</target>
+</trans-unit>
+<trans-unit id="s393e4e6f119fb3e8">
+  <source>Project updated successfully.</source>
+  <target>プロジェクトを更新しました。</target>
+</trans-unit>
+<trans-unit id="sac1de8addfe1ed92">
+  <source>Project deleted successfully.</source>
+  <target>プロジェクトを削除しました。</target>
+</trans-unit>
+<trans-unit id="s199f5853f4e718f7">
+  <source>Projects</source>
+  <target>プロジェクト</target>
+</trans-unit>
+<trans-unit id="sa566c73698521740">
+  <source>Manage your workspace projects.</source>
+  <target>ワークスペースのプロジェクトを管理します。</target>
+</trans-unit>
+<trans-unit id="s5a16cd0c7f4bfd03">
+  <source>New project name</source>
+  <target>新しいプロジェクト名</target>
+</trans-unit>
+<trans-unit id="s986c268bae969411">
+  <source>Add Project</source>
+  <target>プロジェクトを追加</target>
+</trans-unit>
+<trans-unit id="s11326fd2590f4e5e">
+  <source>Default</source>
+  <target>デフォルト</target>
+</trans-unit>
+<trans-unit id="s963c46ae9f2b8a20">
+  <source>Edit project</source>
+  <target>プロジェクトを編集</target>
+</trans-unit>
+<trans-unit id="se84bf9df099e039f">
+  <source>Delete project</source>
+  <target>プロジェクトを削除</target>
+</trans-unit>
+<trans-unit id="s3750dace62fc147a">
+  <source>No projects found.</source>
+  <target>プロジェクトが見つかりません。</target>
+</trans-unit>
+<trans-unit id="s5e8250fb85d64c23">
+  <source>Close</source>
+  <target>閉じる</target>
+</trans-unit>
+</body>
+</file>
+</xliff>

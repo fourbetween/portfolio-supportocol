@@ -13,6 +13,8 @@
     "gen:learning": "npx openapi-typescript ../internal/learning/api/schema/openapi.yml -o ./src/feature/learning/api/schema.d.ts",
     "gen:dialogue": "npx openapi-typescript ../internal/dialogue/api/schema/openapi.yml -o ./src/feature/dialogue/api/schema.d.ts",
     "gen:workspace": "npx openapi-typescript ../internal/workspace/api/schema/openapi.yml -o ./src/feature/workspace/api/schema.d.ts",
+    "localize:extract": "lit-localize extract",
+    "localize:build": "lit-localize build",
     "storybook": "storybook dev --no-open",
     "build-storybook": "storybook build",
     "check:lit": "lit-analyzer \"src/**/*.ts\""

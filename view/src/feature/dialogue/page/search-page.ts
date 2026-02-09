@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -9,9 +10,9 @@ export class DialogueSearchPage extends LitElement {
     return html`
       <main class="container">
         <header class="header">
-          <h1>Public Discussions</h1>
+          <h1>${msg("Public Discussions")}</h1>
           <p class="description">
-            Explore and join structured dialogues with others.
+            ${msg("Explore and join structured dialogues with others.")}
           </p>
         </header>
         <section class="content">

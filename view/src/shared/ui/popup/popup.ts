@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, type PropertyValues, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { PopupClosedEvent } from "../../event/popup";
@@ -53,7 +54,7 @@ export class Popup extends LitElement {
           <button
             class="close-button btn"
             @click=${() => (this.open = false)}
-            aria-label="Close"
+            aria-label=${msg("Close")}
           >
             ×
           </button>

@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { TouchController } from "../../../app/controller/touch";
@@ -32,7 +33,7 @@ export class LearningCommentProposedWidget extends LitElement {
       <section>
         ${!this.touch.isTouchDevice
           ? html`
-              <div class="section-title">Proposed Comments</div>
+              <div class="section-title">${msg("Proposed Comments")}</div>
             `
           : nothing}
         <learning-proposed-comment-list

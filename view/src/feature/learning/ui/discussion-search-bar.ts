@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -25,8 +26,8 @@ export class LearningDiscussionSearchBar extends LitElement {
           type="text"
           .value=${this.value}
           @input=${this._handleInput}
-          placeholder="Search discussions..."
-          aria-label="Search discussions"
+          placeholder=${msg("Search discussions...")}
+          aria-label=${msg("Search discussions")}
         />
       </div>
     `;

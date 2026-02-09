@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, type PropertyValues, css, html } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -109,12 +110,14 @@ export class LearningCommentEditForm extends LitElement {
   private renderContentField() {
     return html`
       <div class="content-field">
-        <label for="content-textarea" class="sr-only">Comment content</label>
+        <label for="content-textarea" class="sr-only">
+          ${msg("Comment content")}
+        </label>
         <textarea
           id="content-textarea"
           .value=${this._content}
           @input=${this.handleInput}
-          placeholder="Enter your comment..."
+          placeholder=${msg("Enter your comment...")}
           maxlength=${MAX_CONTENT_LENGTH}
         ></textarea>
         <div class="char-counter ${this._isContentOverLimit ? "error" : ""}">
@@ -130,14 +133,14 @@ export class LearningCommentEditForm extends LitElement {
         <button
           class="btn cancel-button"
           @click=${this.handleCancel}
-          title="Cancel"
+          title=${msg("Cancel")}
         >
           <span class="material-symbols-outlined">close</span>
         </button>
         <button
           class="btn btn-primary save-button"
           @click=${this.handleSave}
-          title="Save"
+          title=${msg("Save")}
         >
           <span class="material-symbols-outlined">save</span>
         </button>

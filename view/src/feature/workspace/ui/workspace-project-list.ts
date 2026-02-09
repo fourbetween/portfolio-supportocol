@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -17,7 +18,7 @@ export class WorkspaceProjectList extends LitElement {
 
     if (displayProjects.length === 0) {
       return html`
-        <div class="empty">No projects found.</div>
+        <div class="empty">${msg("No projects found.")}</div>
       `;
     }
 

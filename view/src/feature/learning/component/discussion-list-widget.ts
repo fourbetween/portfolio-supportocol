@@ -1,4 +1,5 @@
 import { consume } from "@lit/context";
+import { msg, str } from "@lit/localize";
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { workspaceContext } from "../../../app/context/workspace";
@@ -58,7 +59,9 @@ export class LearningDiscussionListWidget extends LitElement {
     if (!discussion) {
       return;
     }
-    if (!confirm(`Are you sure you want to delete "${discussion.theme}"?`)) {
+    if (
+      !confirm(msg(str`Are you sure you want to delete "${discussion.theme}"?`))
+    ) {
       return;
     }
     try {
@@ -67,7 +70,7 @@ export class LearningDiscussionListWidget extends LitElement {
         discussionId,
       );
       this.dispatchEvent(new LearningDiscussionDeletedEvent(discussionId));
-      showToast(this, "Succeeded.", "success", 2000);
+      showToast(this, msg("Succeeded."), "success", 2000);
     } catch (error: any) {
       showToast(this, error.message, "error");
     }

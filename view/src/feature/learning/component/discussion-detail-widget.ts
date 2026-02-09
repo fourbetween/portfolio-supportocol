@@ -1,4 +1,5 @@
 import { consume } from "@lit/context";
+import { msg } from "@lit/localize";
 import { html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { workspaceContext } from "../../../app/context/workspace";
@@ -46,7 +47,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
       );
       this.discussion = data;
       this._isEditing = false;
-      showToast(this, "Discussion updated.", "success", 2000);
+      showToast(this, msg("Discussion updated."), "success", 2000);
 
       this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
     } catch (error: any) {
@@ -82,8 +83,8 @@ export class LearningDiscussionDetailWidget extends LitElement {
       this.discussion = data;
       const message =
         e.status === "public"
-          ? "Discussion published."
-          : "Discussion unpublished.";
+          ? msg("Discussion published.")
+          : msg("Discussion unpublished.");
       showToast(this, message, "success", 2000);
 
       this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
@@ -104,7 +105,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
         e.settings,
       );
       this.discussion = data;
-      showToast(this, "Dialogue settings updated.", "success", 2000);
+      showToast(this, msg("Dialogue settings updated."), "success", 2000);
       this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -119,7 +120,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
         e.discussionId,
       );
       this.discussion = data;
-      showToast(this, "Discussion archived.", "success", 2000);
+      showToast(this, msg("Discussion archived."), "success", 2000);
       this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -136,7 +137,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
         e.discussionId,
       );
       this.discussion = data;
-      showToast(this, "Discussion unarchived.", "success", 2000);
+      showToast(this, msg("Discussion unarchived."), "success", 2000);
       this.dispatchEvent(new LearningDiscussionUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");

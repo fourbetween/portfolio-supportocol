@@ -1,3 +1,4 @@
+import { msg, str } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -43,7 +44,9 @@ export class WorkspaceProjectItem extends LitElement {
   }
 
   private handleDelete() {
-    if (confirm(`Are you sure you want to delete "${this.project.name}"?`)) {
+    if (
+      confirm(msg(str`Are you sure you want to delete "${this.project.name}"?`))
+    ) {
       this.dispatchEvent(new WorkspaceProjectDeleteEvent(this.project.id));
     }
   }
@@ -77,20 +80,20 @@ export class WorkspaceProjectItem extends LitElement {
         <span class="name">${this.project.name}</span>
         ${this.project.isDefault
           ? html`
-              <span class="badge">Default</span>
+              <span class="badge">${msg("Default")}</span>
             `
           : html`
               <div class="actions">
                 <button
                   class="icon-button edit"
-                  aria-label="Edit project"
+                  aria-label=${msg("Edit project")}
                   @click=${this.handleEdit}
                 >
                   <span class="material-symbols-outlined">edit</span>
                 </button>
                 <button
                   class="icon-button delete"
-                  aria-label="Delete project"
+                  aria-label=${msg("Delete project")}
                   @click=${this.handleDelete}
                 >
                   <span class="material-symbols-outlined">delete</span>
