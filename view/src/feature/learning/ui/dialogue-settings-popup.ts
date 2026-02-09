@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -38,7 +39,7 @@ export class LearningDialogueSettingsPopup extends LitElement {
   render() {
     return html`
       <ui-popup .open=${this.open} @popup-closed=${this._handleClose}>
-        <div slot="header">Edit Dialogue Settings</div>
+        <div slot="header">${msg("Edit Dialogue Settings")}</div>
         <div slot="main">
           <learning-dialogue-settings-form
             .initialSettings=${this.initialSettings}
@@ -46,9 +47,11 @@ export class LearningDialogueSettingsPopup extends LitElement {
           ></learning-dialogue-settings-form>
         </div>
         <div slot="footer">
-          <button class="btn" @click=${this._handleClose}>Cancel</button>
+          <button class="btn" @click=${this._handleClose}>
+            ${msg("Cancel")}
+          </button>
           <button class="btn btn-primary" @click=${this._handleSave}>
-            Save
+            ${msg("Save")}
           </button>
         </div>
       </ui-popup>

@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
@@ -14,7 +15,7 @@ export class LearningDiscussionList extends LitElement {
   render() {
     if (this.summaries.length === 0) {
       return html`
-        <div class="empty">No discussions found.</div>
+        <div class="empty">${msg("No discussions found.")}</div>
       `;
     }
     return html`

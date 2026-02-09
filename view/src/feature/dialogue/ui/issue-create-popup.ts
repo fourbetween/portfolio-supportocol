@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -13,23 +14,28 @@ import "./comment-context";
 
 const TEMPLATES = [
   {
-    title: "Circular Reasoning",
-    description: "The conclusion is included in the premise of the argument.",
+    title: () => msg("Circular Reasoning"),
+    description: () =>
+      msg("The conclusion is included in the premise of the argument."),
   },
   {
-    title: "Ad Hominem",
-    description:
-      "Attacking the person making the argument rather than the argument itself.",
+    title: () => msg("Ad Hominem"),
+    description: () =>
+      msg(
+        "Attacking the person making the argument rather than the argument itself.",
+      ),
   },
   {
-    title: "Straw Man",
-    description:
-      "Misrepresenting someone's argument to make it easier to attack.",
+    title: () => msg("Straw Man"),
+    description: () =>
+      msg("Misrepresenting someone's argument to make it easier to attack."),
   },
   {
-    title: "Red Herring",
-    description:
-      "Introducing an irrelevant topic to divert attention from the original issue.",
+    title: () => msg("Red Herring"),
+    description: () =>
+      msg(
+        "Introducing an irrelevant topic to divert attention from the original issue.",
+      ),
   },
 ];
 
@@ -63,8 +69,8 @@ export class DialogueIssueCreatePopup extends LitElement {
     const index = parseInt(select.value);
     if (!isNaN(index)) {
       const template = TEMPLATES[index];
-      this._titleInput.value = template.title;
-      this._descriptionInput.value = template.description;
+      this._titleInput.value = template.title();
+      this._descriptionInput.value = template.description();
     }
   }
 
@@ -85,20 +91,20 @@ export class DialogueIssueCreatePopup extends LitElement {
   render() {
     return html`
       <ui-popup .open=${this.open}>
-        <div slot="header">Add Issue</div>
+        <div slot="header">${msg("Add Issue")}</div>
         <div slot="main">
           <div class="container">
             ${this.renderContextSection()}
             <div class="section">
-              <div class="section-title">Issue Details</div>
+              <div class="section-title">${msg("Issue Details")}</div>
               <form @submit=${this._handleSubmit}>
                 <select @change=${this._handleTemplateChange}>
                   <option value="" selected disabled>
-                    Use Template (optional)
+                    ${msg("Use Template (optional)")}
                   </option>
                   ${TEMPLATES.map(
                     (t, i) => html`
-                      <option value=${i}>${t.title}</option>
+                      <option value=${i}>${t.title()}</option>
                     `,
                   )}
                 </select>
@@ -106,24 +112,24 @@ export class DialogueIssueCreatePopup extends LitElement {
                   type="text"
                   id="title"
                   required
-                  placeholder="Issue title..."
+                  placeholder=${msg("Issue title...")}
                 />
                 <textarea
                   id="description"
-                  placeholder="Issue description..."
+                  placeholder=${msg("Issue description...")}
                 ></textarea>
               </form>
             </div>
           </div>
         </div>
         <div slot="footer">
-          <button type="button" class="btn close">Cancel</button>
+          <button type="button" class="btn close">${msg("Cancel")}</button>
           <button
             form="issue-form"
             class="btn btn-primary"
             @click=${this._handleSubmit}
           >
-            Add Issue
+            ${msg("Add Issue")}
           </button>
         </div>
       </ui-popup>
@@ -135,7 +141,7 @@ export class DialogueIssueCreatePopup extends LitElement {
 
     return html`
       <div class="section">
-        <div class="section-title">Target Comment Context</div>
+        <div class="section-title">${msg("Target Comment Context")}</div>
         <dialogue-comment-context
           .path=${this.path}
           .readonly=${true}
@@ -156,8 +162,6 @@ export class DialogueIssueCreatePopup extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 24px;
-        min-width: 400px;
-        max-width: 600px;
       }
       form {
         display: flex;

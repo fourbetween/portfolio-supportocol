@@ -1,4 +1,5 @@
 import { consume } from "@lit/context";
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { workspaceContext } from "../../../app/context/workspace";
@@ -99,7 +100,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         { commentType: e.commentType, content: e.content },
       );
 
-      showToast(this, "Comment updated.", "success", 2000);
+      showToast(this, msg("Comment updated."), "success", 2000);
       this.dispatchEvent(new LearningCommentUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -108,7 +109,7 @@ export class LearningCommentExplorerWidget extends LitElement {
 
   private async handleCommentDelete(e: LearningCommentDeleteEvent) {
     if (!this.discussionId || !this.workspace) return;
-    if (!confirm("Are you sure you want to delete this comment?")) return;
+    if (!confirm(msg("Are you sure you want to delete this comment?"))) return;
 
     try {
       await commentRepository.delete(
@@ -117,7 +118,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         e.commentId,
       );
 
-      showToast(this, "Comment deleted.", "success", 2000);
+      showToast(this, msg("Comment deleted."), "success", 2000);
       this.dispatchEvent(new LearningCommentDeletedEvent(e.commentId));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -133,7 +134,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         e.commentId,
       );
 
-      showToast(this, "Comment archived.", "success", 2000);
+      showToast(this, msg("Comment archived."), "success", 2000);
       this.dispatchEvent(new LearningCommentUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -149,7 +150,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         e.commentId,
       );
 
-      showToast(this, "Comment unarchived.", "success", 2000);
+      showToast(this, msg("Comment unarchived."), "success", 2000);
       this.dispatchEvent(new LearningCommentUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -174,7 +175,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         },
       );
 
-      showToast(this, "Comments generated.", "success", 2000);
+      showToast(this, msg("Comments generated."), "success", 2000);
       this.dispatchEvent(
         new LearningCommentGeneratedEvent(e.parentCommentId, e.commentType),
       );
@@ -196,7 +197,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         },
       );
 
-      showToast(this, "Comment created.", "success", 2000);
+      showToast(this, msg("Comment created."), "success", 2000);
       if (data) {
         this.dispatchEvent(new LearningCommentCreatedEvent(data));
       }
@@ -217,7 +218,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         "active",
       );
 
-      showToast(this, "Comment activated.", "success", 2000);
+      showToast(this, msg("Comment activated."), "success", 2000);
       this.dispatchEvent(new LearningCommentUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -234,7 +235,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         comment.id,
       );
 
-      showToast(this, "Comment deleted.", "success", 2000);
+      showToast(this, msg("Comment deleted."), "success", 2000);
       this.dispatchEvent(new LearningCommentDeletedEvent(comment.id));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -251,7 +252,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         e.issueId,
       );
 
-      showToast(this, "Issue removed.", "success", 2000);
+      showToast(this, msg("Issue removed."), "success", 2000);
       this.dispatchEvent(new LearningCommentUpdatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");
@@ -324,7 +325,7 @@ export class LearningCommentExplorerWidget extends LitElement {
             `}
         <div class="section">
           <div class="section-title">
-            ${this.selectedCommentId ? "Replies" : "All Comments"}
+            ${this.selectedCommentId ? msg("Replies") : msg("All Comments")}
           </div>
           <learning-comment-tree
             .comments=${descendants}
@@ -350,10 +351,10 @@ export class LearningCommentExplorerWidget extends LitElement {
     return html`
       <div class="section">
         <div class="section-header">
-          <div class="section-title">Context</div>
+          <div class="section-title">${msg("Context")}</div>
           <button class="clear-button" @click=${this.handleClearSelection}>
             <span class="material-symbols-outlined">close</span>
-            <span>Clear Selection</span>
+            <span>${msg("Clear Selection")}</span>
           </button>
         </div>
         <learning-comment-context

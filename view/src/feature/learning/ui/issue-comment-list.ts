@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
@@ -21,7 +22,7 @@ export class LearningIssueCommentList extends LitElement {
   render() {
     if (this.comments.length === 0) {
       return html`
-        <div class="empty">No comments with issues found.</div>
+        <div class="empty">${msg("No comments with issues found.")}</div>
       `;
     }
     return html`

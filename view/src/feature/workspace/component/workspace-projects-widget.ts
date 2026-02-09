@@ -1,4 +1,5 @@
 import { consume } from "@lit/context";
+import { msg } from "@lit/localize";
 import { Task } from "@lit/task";
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
@@ -56,7 +57,7 @@ export class WorkspaceProjectsWidget extends LitElement {
         e.name,
       );
       this.projects = [...this.projects, project];
-      showToast(this, "Project created successfully.", "success", 2000);
+      showToast(this, msg("Project created successfully."), "success", 2000);
       this.dispatchEvent(new WorkspaceProjectCreatedEvent(project));
     } catch (e: any) {
       showToast(this, e.message, "error");
@@ -75,7 +76,7 @@ export class WorkspaceProjectsWidget extends LitElement {
       this.projects = this.projects.map((p) =>
         p.id === e.projectId ? updatedProject : p,
       );
-      showToast(this, "Project updated successfully.", "success", 2000);
+      showToast(this, msg("Project updated successfully."), "success", 2000);
       this.dispatchEvent(new WorkspaceProjectUpdatedEvent(updatedProject));
     } catch (e: any) {
       showToast(this, e.message, "error");
@@ -87,7 +88,7 @@ export class WorkspaceProjectsWidget extends LitElement {
     try {
       await projectRepository.delete(this.workspace.workspace.id, e.projectId);
       this.projects = this.projects.filter((p) => p.id !== e.projectId);
-      showToast(this, "Project deleted successfully.", "success", 2000);
+      showToast(this, msg("Project deleted successfully."), "success", 2000);
       this.dispatchEvent(new WorkspaceProjectDeletedEvent(e.projectId));
     } catch (e: any) {
       showToast(this, e.message, "error");

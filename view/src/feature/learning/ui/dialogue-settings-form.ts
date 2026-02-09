@@ -1,3 +1,4 @@
+import { msg, str } from "@lit/localize";
 import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -111,11 +112,11 @@ export class LearningDialogueSettingsForm extends LitElement {
   render() {
     return html`
       <div class="container">
-        <section aria-label="Permissions">
-          <div class="section-title">Permissions</div>
+        <section aria-label=${msg("Permissions")}>
+          <div class="section-title">${msg("Permissions")}</div>
           <div class="permission-grid">
             <div class="permission-field">
-              <label for="comment-permission">Comments</label>
+              <label for="comment-permission">${msg("Comments")}</label>
               <select
                 id="comment-permission"
                 .value=${this._commentPermission}
@@ -123,13 +124,13 @@ export class LearningDialogueSettingsForm extends LitElement {
                   (this._commentPermission = (e.target as HTMLSelectElement)
                     .value as any)}
               >
-                <option value="everyone">Everyone</option>
-                <option value="authenticated">Authenticated</option>
-                <option value="none">None</option>
+                <option value="everyone">${msg("Everyone")}</option>
+                <option value="authenticated">${msg("Authenticated")}</option>
+                <option value="none">${msg("None")}</option>
               </select>
             </div>
             <div class="permission-field">
-              <label for="issue-permission">Issues</label>
+              <label for="issue-permission">${msg("Issues")}</label>
               <select
                 id="issue-permission"
                 .value=${this._issuePermission}
@@ -137,25 +138,25 @@ export class LearningDialogueSettingsForm extends LitElement {
                   (this._issuePermission = (e.target as HTMLSelectElement)
                     .value as any)}
               >
-                <option value="everyone">Everyone</option>
-                <option value="authenticated">Authenticated</option>
-                <option value="none">None</option>
+                <option value="everyone">${msg("Everyone")}</option>
+                <option value="authenticated">${msg("Authenticated")}</option>
+                <option value="none">${msg("None")}</option>
               </select>
             </div>
           </div>
         </section>
-        <section aria-label="Types">
-          <div class="section-title">Types</div>
+        <section aria-label=${msg("Types")}>
+          <div class="section-title">${msg("Types")}</div>
           <div class="types-form">
             <input
               type="text"
-              placeholder="New type..."
+              placeholder=${msg("New type...")}
               .value=${this._newTypeName}
               @input=${this._handleTypeNameInput}
             />
             <button
               class="btn btn-primary"
-              aria-label="Add Type"
+              aria-label=${msg("Add Type")}
               @click=${this._handleAddType}
             >
               <span class="material-symbols-outlined">add</span>
@@ -171,7 +172,7 @@ export class LearningDialogueSettingsForm extends LitElement {
                     : html`
                         <button
                           class="delete-button"
-                          aria-label=${`Delete Type: ${t}`}
+                          aria-label=${msg(str`Delete Type: ${t}`)}
                           @click=${() => this._handleRemoveType(t)}
                         >
                           <span class="material-symbols-outlined">delete</span>
@@ -182,8 +183,8 @@ export class LearningDialogueSettingsForm extends LitElement {
             )}
           </div>
         </section>
-        <section aria-label="Paths">
-          <div class="section-title">Paths</div>
+        <section aria-label=${msg("Paths")}>
+          <div class="section-title">${msg("Paths")}</div>
           <div class="paths-form">${this._renderPathsForm()}</div>
           <div class="paths">${this._renderPaths()}</div>
         </section>
@@ -226,12 +227,12 @@ export class LearningDialogueSettingsForm extends LitElement {
       <div class="paths-form-container">
         <select
           name="parent"
-          aria-label="Parent Type Select"
+          aria-label=${msg("Parent Type Select")}
           .value=${this._selectedParent}
           @change=${(e: Event) =>
             (this._selectedParent = (e.target as HTMLSelectElement).value)}
         >
-          <option value="">ROOT</option>
+          <option value="">${msg("ROOT")}</option>
           ${this._types.map(
             (t) => html`
               <option value=${t}>${t}</option>
@@ -241,12 +242,12 @@ export class LearningDialogueSettingsForm extends LitElement {
         <span class="material-symbols-outlined">arrow_back</span>
         <select
           name="child"
-          aria-label="Child Type Select"
+          aria-label=${msg("Child Type Select")}
           .value=${this._selectedChild}
           @change=${(e: Event) =>
             (this._selectedChild = (e.target as HTMLSelectElement).value)}
         >
-          <option value="">(Select Child)</option>
+          <option value="">${msg("(Select Child)")}</option>
           ${this._types.map(
             (t) => html`
               <option value=${t}>${t}</option>
@@ -255,7 +256,7 @@ export class LearningDialogueSettingsForm extends LitElement {
         </select>
         <button
           class="btn btn-primary"
-          aria-label="Add Path"
+          aria-label=${msg("Add Path")}
           ?disabled=${!this._selectedChild}
           @click=${this._handleAddPath}
         >
@@ -293,8 +294,10 @@ export class LearningDialogueSettingsForm extends LitElement {
                     : html`
                         <button
                           class="delete-button"
-                          title=${`Delete Path: ${parent} -> ${child}`}
-                          aria-label=${`Delete Path: ${parent} -> ${child}`}
+                          title=${msg(str`Delete Path: ${parent} -> ${child}`)}
+                          aria-label=${msg(
+                            str`Delete Path: ${parent} -> ${child}`,
+                          )}
                           @click=${() => this._handleRemovePath(child, parent)}
                         >
                           <span class="material-symbols-outlined">delete</span>

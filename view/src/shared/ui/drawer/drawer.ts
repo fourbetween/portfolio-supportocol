@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { DrawerCloseEvent } from "../../event/drawer";
@@ -45,7 +46,11 @@ export class Drawer extends LitElement {
       >
         <div class="drawer-header">
           <slot name="header"></slot>
-          <button class="close-button" @click=${this.close} aria-label="Close">
+          <button
+            class="close-button"
+            @click=${this.close}
+            aria-label=${msg("Close")}
+          >
             <span class="material-symbols-outlined">close</span>
           </button>
         </div>
@@ -73,7 +78,9 @@ export class Drawer extends LitElement {
         background-color: rgba(0, 0, 0, 0.5);
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
+        transition:
+          opacity 0.3s ease,
+          visibility 0.3s ease;
         z-index: 1000;
       }
 
@@ -88,7 +95,9 @@ export class Drawer extends LitElement {
         width: 340px;
         height: 100%;
         background-color: var(--color-canvas-default);
-        transition: transform 0.3s ease, visibility 0.3s ease;
+        transition:
+          transform 0.3s ease,
+          visibility 0.3s ease;
         visibility: hidden;
         z-index: 1001;
         display: flex;

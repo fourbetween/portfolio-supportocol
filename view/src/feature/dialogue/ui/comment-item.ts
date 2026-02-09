@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { TouchController } from "../../../app/controller/touch";
@@ -122,7 +123,7 @@ export class DialogueCommentItem extends LitElement {
               <button
                 class="btn-hover reply-button material-symbols-outlined"
                 @click=${this.handleReplyClick}
-                aria-label="reply"
+                aria-label=${msg("reply")}
               >
                 reply
               </button>
@@ -133,7 +134,7 @@ export class DialogueCommentItem extends LitElement {
               <button
                 class="btn-hover danger issue-button material-symbols-outlined"
                 @click=${this.handleIssueClick}
-                aria-label="report problem"
+                aria-label=${msg("report problem")}
               >
                 report_problem
               </button>
@@ -144,7 +145,7 @@ export class DialogueCommentItem extends LitElement {
               <button
                 class="btn-hover focus-button material-symbols-outlined"
                 @click=${this.handleFocusClick}
-                aria-label="focus"
+                aria-label=${msg("focus")}
               >
                 ads_click
               </button>

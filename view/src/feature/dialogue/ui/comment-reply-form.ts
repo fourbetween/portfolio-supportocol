@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -81,7 +82,7 @@ export class DialogueCommentReplyForm extends LitElement {
           )}
         </select>
         <textarea
-          placeholder="Enter your reply..."
+          placeholder=${msg("Enter your reply...")}
           .value=${this.replyContent}
           @input=${this.handleContentInput}
         ></textarea>
@@ -89,14 +90,14 @@ export class DialogueCommentReplyForm extends LitElement {
           <button
             class="btn cancel-button"
             @click=${this.handleCancel}
-            title="Cancel"
+            title=${msg("Cancel")}
           >
             <span class="material-symbols-outlined">close</span>
           </button>
           <button
             class="btn btn-primary save-button"
             @click=${this.handleSave}
-            title="Save"
+            title=${msg("Save")}
           >
             <span class="material-symbols-outlined">save</span>
           </button>

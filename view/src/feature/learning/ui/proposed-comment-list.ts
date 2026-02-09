@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
@@ -15,7 +16,7 @@ export class LearningProposedCommentList extends LitElement {
   render() {
     if (this.comments.length === 0) {
       return html`
-        <div class="empty">No proposed comments found.</div>
+        <div class="empty">${msg("No proposed comments found.")}</div>
       `;
     }
     return html`

@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
@@ -102,7 +103,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
         },
       );
 
-      showToast(this, "Comment created.", "success", 2000);
+      showToast(this, msg("Comment created."), "success", 2000);
       if (data) {
         this.dispatchEvent(new DialogueCommentCreatedEvent(data));
       }
@@ -153,7 +154,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
 
       this.isIssuePopupOpen = false;
       this.issueTargetCommentId = undefined;
-      showToast(this, "Issue added.", "success", 2000);
+      showToast(this, msg("Issue added."), "success", 2000);
 
       if (data) {
         this.dispatchEvent(new DialogueCommentUpdatedEvent(data));
@@ -244,7 +245,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
             `}
         <div class="section">
           <div class="section-title">
-            ${this.selectedCommentId ? "Replies" : "All Comments"}
+            ${this.selectedCommentId ? msg("Replies") : msg("All Comments")}
           </div>
           <dialogue-comment-tree
             .comments=${descendants}
@@ -270,10 +271,10 @@ export class DialogueCommentExplorerWidget extends LitElement {
     return html`
       <div class="section">
         <div class="section-header">
-          <div class="section-title">Context</div>
+          <div class="section-title">${msg("Context")}</div>
           <button class="clear-button" @click=${this.handleClearSelection}>
             <span class="material-symbols-outlined">close</span>
-            <span>Clear Selection</span>
+            <span>${msg("Clear Selection")}</span>
           </button>
         </div>
         <dialogue-comment-context

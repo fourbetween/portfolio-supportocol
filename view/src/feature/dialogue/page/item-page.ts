@@ -1,4 +1,5 @@
 import { consume } from "@lit/context";
+import { msg } from "@lit/localize";
 import { Task } from "@lit/task";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
@@ -112,7 +113,7 @@ export class DialogueItemPage extends LitElement {
           .open=${this._isRightDrawerOpen}
           @drawer-close=${() => (this._isRightDrawerOpen = false)}
         >
-          <span slot="header">Latest first</span>
+          <span slot="header">${msg("Latest first")}</span>
           <section>${list}</section>
         </ui-drawer>
       `;
@@ -121,7 +122,7 @@ export class DialogueItemPage extends LitElement {
     return html`
       <aside class="sidebar sidebar-right">
         <section>
-          <div class="section-title">Latest first</div>
+          <div class="section-title">${msg("Latest first")}</div>
           ${list}
         </section>
       </aside>

@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -49,16 +50,16 @@ export class IdentityAuthPopup extends LitElement {
     if (this.mode === "login") {
       if (!this.selfSignupEnabled) return "";
       return html`
-        Don't have an account?
+        ${msg("Don't have an account?")}
         <a href="#" class="switch-link" @click=${this._handleSwitchClick}>
-          Sign up
+          ${msg("Sign up")}
         </a>
       `;
     } else {
       return html`
-        Already have an account?
+        ${msg("Already have an account?")}
         <a href="#" class="switch-link" @click=${this._handleSwitchClick}>
-          Log in
+          ${msg("Log in")}
         </a>
       `;
     }
@@ -93,7 +94,7 @@ export class IdentityAuthPopup extends LitElement {
     passwordConfirm: string,
   ): string | null {
     if (password !== passwordConfirm) {
-      return "Passwords do not match";
+      return msg("Passwords do not match");
     }
 
     const hasLowerCase = /[a-z]/.test(password);
@@ -101,7 +102,7 @@ export class IdentityAuthPopup extends LitElement {
     const hasNumber = /[0-9]/.test(password);
 
     if (!hasLowerCase || !hasUpperCase || !hasNumber) {
-      return "Password must include lowercase, uppercase, and numbers";
+      return msg("Password must include lowercase, uppercase, and numbers");
     }
 
     return null;
@@ -113,34 +114,34 @@ export class IdentityAuthPopup extends LitElement {
     return html`
       <form class="auth-form" @submit=${this.handleSubmit}>
         <div class="form-group">
-          <label for="email">Email address</label>
+          <label for="email">${msg("Email address")}</label>
           <input
             type="email"
             name="email"
             id="email"
-            placeholder="Enter email address"
+            placeholder=${msg("Enter email address")}
             required
           />
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="password">${msg("Password")}</label>
           <input
             type="password"
             name="password"
             id="password"
-            placeholder="${this.mode === "signup"
-              ? "Enter password (8 or more characters)"
-              : "Enter password"}"
+            placeholder=${this.mode === "signup"
+              ? msg("Enter password (8 or more characters)")
+              : msg("Enter password")}
             required
           />
         </div>
         ${this.renderSignupFields()}
         <button type="submit" class="submit-button btn btn-primary">
-          ${this.mode === "login" ? "Log in" : "Sign up"}
+          ${this.mode === "login" ? msg("Log in") : msg("Sign up")}
         </button>
       </form>
       <div class="divider">
-        <span>or</span>
+        <span>${msg("or")}</span>
       </div>
     `;
   }
@@ -150,12 +151,12 @@ export class IdentityAuthPopup extends LitElement {
 
     return html`
       <div class="form-group">
-        <label for="passwordConfirm">Confirm password</label>
+        <label for="passwordConfirm">${msg("Confirm password")}</label>
         <input
           type="password"
           name="passwordConfirm"
           id="passwordConfirm"
-          placeholder="Re-enter password"
+          placeholder=${msg("Re-enter password")}
           minlength="8"
           required
         />
@@ -167,7 +168,7 @@ export class IdentityAuthPopup extends LitElement {
     return html`
       <ui-popup .open=${this.open} @popup-closed=${this._handlePopupClose}>
         <span slot="header" class="popup-title">
-          ${this.mode === "login" ? "Log in" : "Sign up"}
+          ${this.mode === "login" ? msg("Log in") : msg("Sign up")}
         </span>
         <div slot="main" class="popup-content">
           ${this.renderErrorMessage()} ${this.renderForm()}

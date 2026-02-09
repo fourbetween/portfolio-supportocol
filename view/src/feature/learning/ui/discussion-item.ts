@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
@@ -41,7 +42,7 @@ export class LearningDiscussionItem extends LitElement {
           <div class="stats">
             ${proposedCommentsCount > 0
               ? html`
-                  <div class="stat-item" title="Proposed comments">
+                  <div class="stat-item" title=${msg("Proposed comments")}>
                     <span class="material-symbols-outlined">chat_bubble</span>
                     <span class="count">${proposedCommentsCount}</span>
                   </div>
@@ -49,7 +50,7 @@ export class LearningDiscussionItem extends LitElement {
               : nothing}
             ${issuesCount > 0
               ? html`
-                  <div class="stat-item" title="Issues">
+                  <div class="stat-item" title=${msg("Issues")}>
                     <span class="material-symbols-outlined">report</span>
                     <span class="count">${issuesCount}</span>
                   </div>
@@ -63,7 +64,7 @@ export class LearningDiscussionItem extends LitElement {
         ></learning-discussion-status-badge>
         <button
           class="btn-hover danger delete-button"
-          aria-label="delete"
+          aria-label=${msg("delete")}
           @click=${this.handleDelete}
         >
           <span class="material-symbols-outlined">delete</span>

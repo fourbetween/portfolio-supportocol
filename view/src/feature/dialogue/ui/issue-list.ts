@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -14,7 +15,7 @@ export class DialogueIssueList extends LitElement {
     return html`
       ${this.issues.length === 0
         ? html`
-            <div class="empty">No issues found.</div>
+            <div class="empty">${msg("No issues found.")}</div>
           `
         : html`
             <ul class="issue-list">

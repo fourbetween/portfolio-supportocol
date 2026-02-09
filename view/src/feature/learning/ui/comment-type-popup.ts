@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -69,7 +70,7 @@ export class LearningCommentTypePopup extends LitElement {
           class="other-button btn btn-block btn-outline"
           @click=${this.handleOtherClick}
         >
-          Other...
+          ${msg("Other...")}
         </button>
       </div>
     `;
@@ -82,7 +83,7 @@ export class LearningCommentTypePopup extends LitElement {
         class="other-input form-control"
         .value=${this.otherValue}
         @input=${this.handleOtherInput}
-        placeholder="Type here..."
+        placeholder=${msg("Type here...")}
       />
     `;
   }
@@ -94,14 +95,14 @@ export class LearningCommentTypePopup extends LitElement {
       <div slot="footer" class="footer-content">
         <div class="other-actions">
           <button class="btn" @click=${() => (this.isOtherSelected = false)}>
-            Back
+            ${msg("Back")}
           </button>
           <button
             class="other-submit btn btn-primary"
             @click=${this.handleOtherSubmit}
             ?disabled=${!this.otherValue.trim()}
           >
-            OK
+            ${msg("OK")}
           </button>
         </div>
       </div>
@@ -112,7 +113,9 @@ export class LearningCommentTypePopup extends LitElement {
     return html`
       <ui-popup>
         <span slot="header">
-          ${this.isOtherSelected ? "Enter Custom Type" : "Select Comment Type"}
+          ${this.isOtherSelected
+            ? msg("Enter Custom Type")
+            : msg("Select Comment Type")}
         </span>
         <div slot="main">
           ${this.isOtherSelected

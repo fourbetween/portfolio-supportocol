@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { TouchController } from "../../../app/controller/touch";
@@ -26,7 +27,7 @@ export class LearningCommentIssueWidget extends LitElement {
       <section>
         ${!this.touch.isTouchDevice
           ? html`
-              <div class="section-title">Comments with Issues</div>
+              <div class="section-title">${msg("Comments with Issues")}</div>
             `
           : nothing}
         <learning-issue-comment-list

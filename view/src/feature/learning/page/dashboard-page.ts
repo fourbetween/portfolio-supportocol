@@ -1,4 +1,5 @@
 import { consume } from "@lit/context";
+import { msg } from "@lit/localize";
 import { Task } from "@lit/task";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
@@ -300,7 +301,7 @@ export class LearningDashboardPage extends LitElement {
           .open=${this._activeDrawer === "left"}
           @drawer-close=${() => (this._activeDrawer = undefined)}
         >
-          <span slot="header">Discussions</span>
+          <span slot="header">${msg("Discussions")}</span>
           ${projectSelect} ${list}
         </ui-drawer>
       `;
@@ -321,7 +322,7 @@ export class LearningDashboardPage extends LitElement {
           .open=${this._activeDrawer === "right"}
           @drawer-close=${() => (this._activeDrawer = undefined)}
         >
-          <span slot="header">Proposed / Issues</span>
+          <span slot="header">${msg("Proposed / Issues")}</span>
           ${content}
         </ui-drawer>
       `;

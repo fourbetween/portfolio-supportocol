@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -108,13 +109,13 @@ export class LearningDiscussionDetail extends LitElement {
           </div>
         </div>
         <div class="theme-row">
-          <div class="section-title">Theme</div>
+          <div class="section-title">${msg("Theme")}</div>
           <h1 class="theme">${this.discussion?.theme}</h1>
         </div>
         ${this.discussion?.premise
           ? html`
               <div class="premise-row">
-                <div class="section-title">Premise</div>
+                <div class="section-title">${msg("Premise")}</div>
                 <p class="premise">${this.discussion.premise}</p>
               </div>
             `
@@ -122,7 +123,7 @@ export class LearningDiscussionDetail extends LitElement {
         ${this.discussion?.conclusion
           ? html`
               <div class="conclusion-row">
-                <div class="section-title">Conclusion</div>
+                <div class="section-title">${msg("Conclusion")}</div>
                 <p class="conclusion">${this.discussion.conclusion}</p>
               </div>
             `

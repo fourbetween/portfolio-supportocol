@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -29,18 +30,22 @@ export class DiscussionStatusPopup extends LitElement {
 
   render() {
     const isPrivate = this.status === "private";
-    const title = isPrivate ? "Confirm Publication" : "Confirm Unpublication";
+    const title = isPrivate
+      ? msg("Confirm Publication")
+      : msg("Confirm Unpublication");
     const message = isPrivate
-      ? "Do you want to publish this discussion?"
-      : "Do you want to unpublish this discussion?";
-    const actionLabel = isPrivate ? "Publish" : "Unpublish";
+      ? msg("Do you want to publish this discussion?")
+      : msg("Do you want to unpublish this discussion?");
+    const actionLabel = isPrivate ? msg("Publish") : msg("Unpublish");
 
     return html`
       <ui-popup .open=${this.open} @popup-closed=${this._handleClose}>
         <div slot="header">${title}</div>
         <div slot="main">${message}</div>
         <div slot="footer">
-          <button class="btn" @click=${this._handleClose}>Cancel</button>
+          <button class="btn" @click=${this._handleClose}>
+            ${msg("Cancel")}
+          </button>
           <button class="btn btn-primary" @click=${this._handleAction}>
             ${actionLabel}
           </button>

@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { baseStyle } from "../../style/base";
@@ -55,7 +56,11 @@ export class Toast extends LitElement {
     return html`
       <div class="toast ${this.type}" role="alert">
         <span class="message">${this.message}</span>
-        <button class="close-button btn" @click=${this.hide} aria-label="Close">
+        <button
+          class="close-button btn"
+          @click=${this.hide}
+          aria-label=${msg("Close")}
+        >
           ×
         </button>
       </div>

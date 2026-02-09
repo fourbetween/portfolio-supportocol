@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { live } from "lit/directives/live.js";
@@ -38,14 +39,14 @@ export class LearningDiscussionAddForm extends LitElement {
           type="text"
           .value=${live(this._theme)}
           @input=${this._handleInput}
-          placeholder="New discussion theme"
-          aria-label="New discussion theme"
+          placeholder=${msg("New discussion theme")}
+          aria-label=${msg("New discussion theme")}
         />
         <button
           type="submit"
           class="btn btn-primary"
           ?disabled=${!this._canSubmit}
-          title="New discussion"
+          title=${msg("New discussion")}
         >
           <span class="material-symbols-outlined">add</span>
         </button>

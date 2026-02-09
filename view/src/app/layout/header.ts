@@ -1,4 +1,5 @@
 import { consume } from "@lit/context";
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { authService } from "../../feature/identity/model/auth-service";
@@ -37,7 +38,7 @@ export class AppHeader extends LitElement {
                   <span class="material-symbols-outlined">school</span>
                 `
               : ""}
-            <span>Learning</span>
+            <span>${msg("Learning")}</span>
           </a>
           <a href=${paths.dialogue.search} class="nav-item">
             ${this.touch.isTouchDevice
@@ -45,7 +46,7 @@ export class AppHeader extends LitElement {
                   <span class="material-symbols-outlined">forum</span>
                 `
               : ""}
-            <span>Dialogue</span>
+            <span>${msg("Dialogue")}</span>
           </a>
           <a href=${paths.workspace.projects} class="nav-item">
             ${this.touch.isTouchDevice
@@ -53,7 +54,7 @@ export class AppHeader extends LitElement {
                   <span class="material-symbols-outlined">folder</span>
                 `
               : ""}
-            <span>Projects</span>
+            <span>${msg("Projects")}</span>
           </a>
         </nav>
         <div class="header-actions">
@@ -62,20 +63,20 @@ export class AppHeader extends LitElement {
                 <button
                   class="logout-button"
                   @click=${this.handleLogout}
-                  aria-label="Logout"
+                  aria-label=${msg("Logout")}
                 >
                   <span class="material-symbols-outlined">logout</span>
-                  ${this.touch.isTouchDevice ? "" : "Logout"}
+                  ${this.touch.isTouchDevice ? "" : msg("Logout")}
                 </button>
               `
             : html`
                 <button
                   class="login-button"
                   @click=${this.handleLogin}
-                  aria-label="Login"
+                  aria-label=${msg("Login")}
                 >
                   <span class="material-symbols-outlined">login</span>
-                  ${this.touch.isTouchDevice ? "" : "Login"}
+                  ${this.touch.isTouchDevice ? "" : msg("Login")}
                 </button>
               `}
         </div>

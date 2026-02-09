@@ -1,5 +1,6 @@
 import { Router } from "@lit-labs/router";
 import { provide } from "@lit/context";
+import { localized } from "@lit/localize";
 import { Task } from "@lit/task";
 import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
@@ -21,6 +22,7 @@ import "./layout/layout";
 import type { User } from "./model/user";
 import type { WorkspaceWithMember } from "./model/workspace";
 
+@localized()
 @customElement("app-root")
 export class AppRoot extends LitElement {
   @provide({ context: routerContext })

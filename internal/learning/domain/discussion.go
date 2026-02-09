@@ -129,7 +129,6 @@ func (d *Discussion) AddComments(count int, now time.Time) {
 func (d *Discussion) ResolveProposedComment(now time.Time) {
 	if d.stats.ProposedCommentsCount > 0 {
 		d.stats.ProposedCommentsCount--
-		d.stats.CommentsCount++
 		d.activity.LastCommentedAt = now
 	}
 }

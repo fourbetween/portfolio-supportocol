@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -25,7 +26,7 @@ export class LearningIssueList extends LitElement {
     return html`
       ${this.issues.length === 0
         ? html`
-            <div class="empty">No issues found.</div>
+            <div class="empty">${msg("No issues found.")}</div>
           `
         : html`
             <ul class="issue-list">
@@ -53,7 +54,7 @@ export class LearningIssueList extends LitElement {
               <button
                 class="remove-button"
                 @click=${() => this._handleRemove(issue.id)}
-                title="Remove Issue"
+                title=${msg("Remove Issue")}
               >
                 <span class="material-symbols-outlined">delete</span>
               </button>

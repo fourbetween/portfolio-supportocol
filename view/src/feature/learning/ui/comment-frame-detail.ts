@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -31,11 +32,11 @@ export class LearningCommentFrameDetail extends LitElement {
     return html`
       <div class="container">
         <section>
-          <div class="section-title">Types</div>
+          <div class="section-title">${msg("Types")}</div>
           <div class="types">${this._renderTypes()}</div>
         </section>
         <section>
-          <div class="section-title">Paths</div>
+          <div class="section-title">${msg("Paths")}</div>
           <div class="paths">${this._renderPaths()}</div>
         </section>
       </div>
@@ -45,7 +46,9 @@ export class LearningCommentFrameDetail extends LitElement {
   private _renderTypes() {
     return this.frame!.types.map(
       (t) => html`
-        <ui-comment-type-badge .type=${t || "Root"}></ui-comment-type-badge>
+        <ui-comment-type-badge
+          .type=${t || msg("Root")}
+        ></ui-comment-type-badge>
       `,
     );
   }
@@ -61,7 +64,7 @@ export class LearningCommentFrameDetail extends LitElement {
       <div class="path-group">
         <div class="parent-node">
           <ui-comment-type-badge
-            .type=${parent || "Root"}
+            .type=${parent || msg("Root")}
           ></ui-comment-type-badge>
         </div>
         <div class="children-nodes">
@@ -69,7 +72,7 @@ export class LearningCommentFrameDetail extends LitElement {
             (child) => html`
               <div class="child-node">
                 <ui-comment-type-badge
-                  .type=${child || "Root"}
+                  .type=${child || msg("Root")}
                 ></ui-comment-type-badge>
               </div>
             `,

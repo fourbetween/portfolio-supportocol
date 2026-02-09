@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -27,7 +28,7 @@ export class DialogueDiscussionItem extends LitElement {
         <div class="info">
           <span class="theme">${theme}</span>
           <div class="stats">
-            <div class="stat-item" title="Comments">
+            <div class="stat-item" title=${msg("Comments")}>
               <span class="material-symbols-outlined">chat</span>
               <span class="count">${commentsCount}</span>
             </div>

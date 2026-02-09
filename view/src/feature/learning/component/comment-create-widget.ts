@@ -1,4 +1,5 @@
 import { consume } from "@lit/context";
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { workspaceContext } from "../../../app/context/workspace";
@@ -62,7 +63,7 @@ export class LearningCommentCreateWidget extends LitElement {
         },
       );
 
-      showToast(this, "Comment created.", "success", 2000);
+      showToast(this, msg("Comment created."), "success", 2000);
       this.handleCancel();
       if (data) {
         this.dispatchEvent(new LearningCommentCreatedEvent(data));

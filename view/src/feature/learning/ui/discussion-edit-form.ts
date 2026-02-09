@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -52,7 +53,7 @@ export class LearningDiscussionEditForm extends LitElement {
             type="text"
             class="theme-input"
             .value=${this.theme}
-            placeholder="Enter discussion theme"
+            placeholder=${msg("Enter discussion theme")}
           />
         </div>
         <div class="field">
@@ -60,7 +61,7 @@ export class LearningDiscussionEditForm extends LitElement {
             id="premise"
             class="premise-input"
             .value=${this.premise}
-            placeholder="Enter discussion premise"
+            placeholder=${msg("Enter discussion premise")}
             rows="3"
           ></textarea>
         </div>
@@ -69,18 +70,22 @@ export class LearningDiscussionEditForm extends LitElement {
             id="conclusion"
             class="conclusion-input"
             .value=${this.conclusion}
-            placeholder="Enter discussion conclusion"
+            placeholder=${msg("Enter discussion conclusion")}
             rows="3"
           ></textarea>
         </div>
         <div class="actions">
-          <button class="btn" @click=${this.handleCancel} title="Cancel">
+          <button
+            class="btn"
+            @click=${this.handleCancel}
+            title=${msg("Cancel")}
+          >
             <span class="material-symbols-outlined">close</span>
           </button>
           <button
             class="btn btn-primary"
             @click=${this.handleSave}
-            title="Save"
+            title=${msg("Save")}
           >
             <span class="material-symbols-outlined">save</span>
           </button>

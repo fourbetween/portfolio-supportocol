@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -24,7 +25,7 @@ export class WorkspaceProjectAddForm extends LitElement {
       <form @submit=${this.handleSubmit}>
         <input
           type="text"
-          placeholder="New project name"
+          placeholder=${msg("New project name")}
           .value=${this.name}
           @input=${(e: InputEvent) =>
             (this.name = (e.target as HTMLInputElement).value)}
@@ -35,7 +36,7 @@ export class WorkspaceProjectAddForm extends LitElement {
           ?disabled=${!this.name.trim()}
         >
           <span class="material-symbols-outlined">add</span>
-          Add Project
+          ${msg("Add Project")}
         </button>
       </form>
     `;
