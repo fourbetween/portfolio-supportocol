@@ -78,7 +78,7 @@ func getRDSDSN() (string, error) {
 		return "", err
 	}
 	app := env.AppName()
-	dsn := username + ":" + password + "@tcp(" + host + ":" + port + ")/" + app + "?tls=skip-verify&charset=utf8mb4&parseTime=true&multiStatements=true"
+	dsn := username + ":" + password + "@tcp(" + host + ":" + port + ")/" + app + "?tls=true&charset=utf8mb4&parseTime=true&multiStatements=true"
 	return dsn, nil
 }
 

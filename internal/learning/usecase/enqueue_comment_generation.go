@@ -27,11 +27,11 @@ func NewEnqueueCommentGenerationUsecase(
 }
 
 func (u *EnqueueCommentGenerationUsecase) Execute(ctx context.Context, input GenerateCommentInput) error {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	access, err := u.permSv.CheckWorkspaceAccess(ctx, input.UserID, input.WorkspaceID)
 	if err != nil {
 		return fmt.Errorf("failed to check workspace access: %w", err)
 	}
-	if !canAccess {
+	if !access.CanAccess {
 		return apperr.ErrPermissionDenied
 	}
 
@@ -42,6 +42,10 @@ func (u *EnqueueCommentGenerationUsecase) Execute(ctx context.Context, input Gen
 	})
 	if err != nil {
 		return err
+	}
+
+	if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
+		return apperr.ErrPermissionDenied
 	}
 
 	if err := discussion.CanAddComment(); err != nil {

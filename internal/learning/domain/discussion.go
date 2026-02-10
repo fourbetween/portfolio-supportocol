@@ -90,6 +90,10 @@ func (d *Discussion) CreatedBy() string {
 	return d.activity.CreatedBy
 }
 
+func (d *Discussion) IsCreatedBy(userID string) bool {
+	return d.activity.CreatedBy == userID
+}
+
 func (d *Discussion) CreatedAt() time.Time {
 	return d.activity.CreatedAt
 }

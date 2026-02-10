@@ -42,23 +42,27 @@ type ArchiveCommentInput struct {
 }
 
 func (u *ArchiveCommentUsecase) Execute(ctx context.Context, input ArchiveCommentInput) (*domain.Comment, error) {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	access, err := u.permSv.CheckWorkspaceAccess(ctx, input.UserID, input.WorkspaceID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check workspace access: %w", err)
 	}
-	if !canAccess {
+	if !access.CanAccess {
 		return nil, apperr.ErrPermissionDenied
 	}
 
 	var comment *domain.Comment
 	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// Verify discussion exists and user has access
-		_, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
+		discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 			ID:          input.DiscussionID,
 			WorkspaceID: input.WorkspaceID,
 		})
 		if err != nil {
 			return err
+		}
+
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
+			return apperr.ErrPermissionDenied
 		}
 
 		comment, err = u.commentRepo.Load(ctx, input.ID)

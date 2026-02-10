@@ -38,11 +38,11 @@ type RemoveCommentIssueInput struct {
 }
 
 func (u *RemoveCommentIssueUsecase) Execute(ctx context.Context, input RemoveCommentIssueInput) (*domain.Comment, error) {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	access, err := u.permSv.CheckWorkspaceAccess(ctx, input.UserID, input.WorkspaceID)
 	if err != nil {
 		return nil, err
 	}
-	if !canAccess {
+	if !access.CanAccess {
 		return nil, apperr.ErrPermissionDenied
 	}
 
@@ -54,6 +54,10 @@ func (u *RemoveCommentIssueUsecase) Execute(ctx context.Context, input RemoveCom
 		})
 		if err != nil {
 			return err
+		}
+
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
+			return apperr.ErrPermissionDenied
 		}
 
 		comment, err = u.commentRepo.Load(ctx, input.CommentID)

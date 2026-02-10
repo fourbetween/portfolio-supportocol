@@ -36,12 +36,24 @@ type UpdateDiscussionStatusInput struct {
 }
 
 func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input UpdateDiscussionStatusInput) (*domain.Discussion, error) {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	access, err := u.permSv.CheckWorkspaceAccess(ctx, input.UserID, input.WorkspaceID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check workspace access: %w", err)
 	}
-	if !canAccess {
+	if !access.CanAccess {
 		return nil, apperr.ErrPermissionDenied
+	}
+
+	isPersonal, err := u.permSv.IsPersonalWorkspace(ctx, input.WorkspaceID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check workspace type: %w", err)
+	}
+	status := domain.DiscussionStatus(input.Status)
+	if status.IsPublic() && !isPersonal {
+		return nil, fmt.Errorf("public status is only allowed for personal workspace: %w", apperr.ErrInvalidArgument)
+	}
+	if status.IsInternal() && isPersonal {
+		return nil, fmt.Errorf("internal status is only allowed for organization workspace: %w", apperr.ErrInvalidArgument)
 	}
 
 	var discussion *domain.Discussion
@@ -55,8 +67,11 @@ func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input Updat
 			return err
 		}
 
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
+			return apperr.ErrPermissionDenied
+		}
+
 		var commentFrame *domain.CommentFrame
-		status := domain.DiscussionStatus(input.Status)
 		if status.IsPublic() {
 			var err error
 			commentFrame, err = u.resolveCommentFrame(ctx, input.ID, input.CommentFrame)

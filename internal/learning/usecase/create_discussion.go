@@ -48,6 +48,17 @@ func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscu
 		return nil, apperr.ErrPermissionDenied
 	}
 
+	isPersonal, err := u.permSv.IsPersonalWorkspace(ctx, input.WorkspaceID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check workspace type: %w", err)
+	}
+	if input.Status.IsPublic() && !isPersonal {
+		return nil, fmt.Errorf("public status is only allowed for personal workspace: %w", apperr.ErrInvalidArgument)
+	}
+	if input.Status.IsInternal() && isPersonal {
+		return nil, fmt.Errorf("internal status is only allowed for organization workspace: %w", apperr.ErrInvalidArgument)
+	}
+
 	var discussion *domain.Discussion
 	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		count, err := u.repo.CountByProjectID(ctx, input.WorkspaceID, input.ProjectID)

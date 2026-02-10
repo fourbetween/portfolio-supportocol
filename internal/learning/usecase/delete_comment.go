@@ -38,11 +38,11 @@ type DeleteCommentInput struct {
 }
 
 func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentInput) error {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	access, err := u.permSv.CheckWorkspaceAccess(ctx, input.UserID, input.WorkspaceID)
 	if err != nil {
 		return fmt.Errorf("failed to check workspace access: %w", err)
 	}
-	if !canAccess {
+	if !access.CanAccess {
 		return apperr.ErrPermissionDenied
 	}
 
@@ -54,6 +54,10 @@ func (u *DeleteCommentUsecase) Execute(ctx context.Context, input DeleteCommentI
 		})
 		if err != nil {
 			return err
+		}
+
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
+			return apperr.ErrPermissionDenied
 		}
 
 		comment, err := u.commentRepo.Load(ctx, input.ID)

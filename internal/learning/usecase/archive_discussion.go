@@ -33,11 +33,11 @@ type ArchiveDiscussionInput struct {
 }
 
 func (u *ArchiveDiscussionUsecase) Execute(ctx context.Context, input ArchiveDiscussionInput) (*domain.Discussion, error) {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	access, err := u.permSv.CheckWorkspaceAccess(ctx, input.UserID, input.WorkspaceID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check workspace access: %w", err)
 	}
-	if !canAccess {
+	if !access.CanAccess {
 		return nil, apperr.ErrPermissionDenied
 	}
 
@@ -50,6 +50,10 @@ func (u *ArchiveDiscussionUsecase) Execute(ctx context.Context, input ArchiveDis
 		})
 		if err != nil {
 			return err
+		}
+
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
+			return apperr.ErrPermissionDenied
 		}
 
 		if err := discussion.Archive(u.clock.Now()); err != nil {
