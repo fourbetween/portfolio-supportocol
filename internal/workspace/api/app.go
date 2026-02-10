@@ -138,6 +138,7 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 		code = 400
 	} else if code == 500 {
 		slog.Error(err.Error())
+		msg = "internal server error"
 	}
 	return &oas.ErrorStatusCode{
 		StatusCode: code,
