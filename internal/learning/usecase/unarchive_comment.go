@@ -57,7 +57,7 @@ func (u *UnarchiveCommentUsecase) Execute(ctx context.Context, input UnarchiveCo
 			return err
 		}
 
-		if discussion.CreatedBy() != input.UserID && !access.CanManage {
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
 			return apperr.ErrPermissionDenied
 		}
 

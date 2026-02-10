@@ -59,7 +59,7 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 			return err
 		}
 
-		if discussion.CreatedBy() != input.UserID && !access.CanManage {
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
 			return apperr.ErrPermissionDenied
 		}
 

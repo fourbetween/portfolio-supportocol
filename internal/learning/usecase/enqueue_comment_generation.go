@@ -44,7 +44,7 @@ func (u *EnqueueCommentGenerationUsecase) Execute(ctx context.Context, input Gen
 		return err
 	}
 
-	if discussion.CreatedBy() != input.UserID && !access.CanManage {
+	if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
 		return apperr.ErrPermissionDenied
 	}
 

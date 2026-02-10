@@ -47,7 +47,7 @@ func (u *DeleteDiscussionUsecase) Execute(ctx context.Context, input DeleteDiscu
 			return err
 		}
 
-		if discussion.CreatedBy() != input.UserID && !access.CanManage {
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
 			return apperr.ErrPermissionDenied
 		}
 

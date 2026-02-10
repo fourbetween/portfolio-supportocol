@@ -67,7 +67,7 @@ func (u *UpdateDiscussionStatusUsecase) Execute(ctx context.Context, input Updat
 			return err
 		}
 
-		if discussion.CreatedBy() != input.UserID && !access.CanManage {
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
 			return apperr.ErrPermissionDenied
 		}
 

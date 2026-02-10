@@ -52,7 +52,7 @@ func (u *ArchiveDiscussionUsecase) Execute(ctx context.Context, input ArchiveDis
 			return err
 		}
 
-		if discussion.CreatedBy() != input.UserID && !access.CanManage {
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
 			return apperr.ErrPermissionDenied
 		}
 

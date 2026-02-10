@@ -56,7 +56,7 @@ func (u *RemoveCommentIssueUsecase) Execute(ctx context.Context, input RemoveCom
 			return err
 		}
 
-		if discussion.CreatedBy() != input.UserID && !access.CanManage {
+		if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
 			return apperr.ErrPermissionDenied
 		}
 

@@ -62,7 +62,7 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 		return nil, err
 	}
 
-	if discussion.CreatedBy() != input.UserID && !access.CanManage {
+	if !discussion.IsCreatedBy(input.UserID) && !access.CanManage {
 		return nil, apperr.ErrPermissionDenied
 	}
 
