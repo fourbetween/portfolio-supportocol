@@ -4,16 +4,22 @@ import (
 	"context"
 	"strings"
 	"testing"
+
+	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 )
 
 type mockPermissionService struct {
 	canAccess  bool
+	canManage  bool
 	isPersonal bool
 	err        error
 }
 
-func (m *mockPermissionService) CanAccessWorkspace(ctx context.Context, userID, workspaceID string) (bool, error) {
-	return m.canAccess, m.err
+func (m *mockPermissionService) CheckWorkspaceAccess(ctx context.Context, userID, workspaceID string) (domain.WorkspaceAccess, error) {
+	return domain.WorkspaceAccess{
+		CanAccess: m.canAccess,
+		CanManage: m.canManage,
+	}, m.err
 }
 
 func (m *mockPermissionService) CanAccessProject(ctx context.Context, userID, workspaceID, projectID string) (bool, error) {

@@ -43,11 +43,11 @@ type UpdateCommentStatusInput struct {
 }
 
 func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCommentStatusInput) (*domain.Comment, error) {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	access, err := u.permSv.CheckWorkspaceAccess(ctx, input.UserID, input.WorkspaceID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check workspace access: %w", err)
 	}
-	if !canAccess {
+	if !access.CanAccess {
 		return nil, apperr.ErrPermissionDenied
 	}
 
@@ -60,6 +60,10 @@ func (u *UpdateCommentStatusUsecase) Execute(ctx context.Context, input UpdateCo
 		})
 		if err != nil {
 			return err
+		}
+
+		if discussion.CreatedBy() != input.UserID && !access.CanManage {
+			return apperr.ErrPermissionDenied
 		}
 
 		var loadErr error

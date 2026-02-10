@@ -8,6 +8,7 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
+	"github.com/fourbetween/app-supportocol/internal/workspace/domain"
 	"github.com/fourbetween/app-supportocol/internal/workspace/infra/db/schema/app-supportocol/model"
 	"github.com/fourbetween/app-supportocol/internal/workspace/infra/db/schema/app-supportocol/table"
 	"github.com/fourbetween/app-supportocol/internal/workspace/usecase"
@@ -48,11 +49,26 @@ func (s *workspaceQueryService) ListMyWorkspaces(ctx context.Context, userID str
 }
 
 func (s *workspaceQueryService) CanAccessWorkspace(ctx context.Context, userID string, workspaceID string) (bool, error) {
-	w, err := s.loadMyWorkspaceByID(ctx, userID, workspaceID)
+	result, err := s.CheckWorkspaceAccess(ctx, userID, workspaceID)
 	if err != nil {
 		return false, err
 	}
-	return w.WorkspaceID == workspaceID, nil
+	return result.CanAccess, nil
+}
+
+func (s *workspaceQueryService) CheckWorkspaceAccess(ctx context.Context, userID string, workspaceID string) (usecase.WorkspaceAccessResult, error) {
+	w, err := s.loadMyWorkspaceByID(ctx, userID, workspaceID)
+	if err != nil {
+		if errors.Is(err, apperr.ErrNotFound) {
+			return usecase.WorkspaceAccessResult{}, nil
+		}
+		return usecase.WorkspaceAccessResult{}, fmt.Errorf("failed to check workspace access: %w", err)
+	}
+	role := domain.MemberRole(w.MemberRole)
+	return usecase.WorkspaceAccessResult{
+		CanAccess: true,
+		CanManage: role.CanManageWorkspace(),
+	}, nil
 }
 
 func (s *workspaceQueryService) CanAccessProject(ctx context.Context, userID string, workspaceID string, projectID string) (bool, error) {

@@ -30,11 +30,11 @@ type DeleteDiscussionInput struct {
 }
 
 func (u *DeleteDiscussionUsecase) Execute(ctx context.Context, input DeleteDiscussionInput) error {
-	canAccess, err := u.permSv.CanAccessWorkspace(ctx, input.UserID, input.WorkspaceID)
+	access, err := u.permSv.CheckWorkspaceAccess(ctx, input.UserID, input.WorkspaceID)
 	if err != nil {
 		return fmt.Errorf("failed to check workspace access: %w", err)
 	}
-	if !canAccess {
+	if !access.CanAccess {
 		return apperr.ErrPermissionDenied
 	}
 
@@ -45,6 +45,10 @@ func (u *DeleteDiscussionUsecase) Execute(ctx context.Context, input DeleteDiscu
 		})
 		if err != nil {
 			return err
+		}
+
+		if discussion.CreatedBy() != input.UserID && !access.CanManage {
+			return apperr.ErrPermissionDenied
 		}
 
 		return u.repo.Delete(ctx, discussion)
