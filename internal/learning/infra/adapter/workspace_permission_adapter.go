@@ -21,3 +21,7 @@ func (a *WorkspacePermissionAdapter) CanAccessWorkspace(ctx context.Context, use
 func (a *WorkspacePermissionAdapter) CanAccessProject(ctx context.Context, userID, workspaceID, projectID string) (bool, error) {
 	return a.qs.CanAccessProject(ctx, userID, workspaceID, projectID)
 }
+
+func (a *WorkspacePermissionAdapter) IsPersonalWorkspace(ctx context.Context, workspaceID string) (bool, error) {
+	return a.qs.IsPersonalWorkspace(ctx, workspaceID)
+}
