@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS favorite_discussions;
 DROP TABLE IF EXISTS dialogue_settings;
 DROP TABLE IF EXISTS comment_issues;
 DROP TABLE IF EXISTS issues;

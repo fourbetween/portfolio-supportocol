@@ -30,7 +30,7 @@ func main() {
 		con,
 		env.AppName(),
 		"../../../internal/workspace/infra/db/schema",
-		makeTmpl([]string{"workspaces", "members", "projects"}),
+		makeTmpl([]string{"workspaces", "members", "projects", "favorite_discussions"}),
 	); err != nil {
 		panic(err)
 	}

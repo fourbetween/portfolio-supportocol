@@ -126,3 +126,15 @@ CREATE TABLE dialogue_settings (
 	PRIMARY KEY (discussion_id),
 	CONSTRAINT dialogue_settings_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- お気に入り議論
+CREATE TABLE favorite_discussions (
+	member_id CHAR(36) NOT NULL,
+	discussion_id CHAR(36) NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (member_id, discussion_id),
+	CONSTRAINT favorite_discussions_members_fk FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
+	CONSTRAINT favorite_discussions_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE,
+	INDEX idx_favorite_discussions_member (member_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
