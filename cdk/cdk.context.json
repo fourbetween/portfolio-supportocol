@@ -27,5 +27,13 @@
   "hosted-zone:account=966392475035:domainName=hick-r.com:region=ap-northeast-1": {
     "Id": "/hostedzone/Z07807321CYKJCDMMD9PY",
     "Name": "hick-r.com."
+  },
+  "hosted-zone:account=966392475035:domainName=supportocol.com:region=us-east-1": {
+    "Id": "/hostedzone/Z0092955RYWUA5ULZU5Z",
+    "Name": "supportocol.com."
+  },
+  "hosted-zone:account=966392475035:domainName=supportocol.com:region=ap-northeast-1": {
+    "Id": "/hostedzone/Z0092955RYWUA5ULZU5Z",
+    "Name": "supportocol.com."
   }
 }

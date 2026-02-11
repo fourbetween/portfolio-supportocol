@@ -133,12 +133,10 @@ func (c *AppContainer) buildCommentGenFunction() {
 				jsii.String("../cmd/comment-generation/lambda/build"),
 				nil,
 			),
-			Environment: &map[string]*string{
-				"APP_NAME": jsii.String(c.appName),
-				"STAGE":    jsii.String(c.stage),
-			},
+			Environment:             c.lambdaEnv(),
 			Vpc:                     c.vpc,
 			Ipv6AllowedForDualStack: jsii.Bool(true),
+			AllowAllIpv6Outbound:    jsii.Bool(true),
 		})
 	f.AddEventSource(awslambdaeventsources.NewSqsEventSource(
 		c.commentGenQueue,
@@ -281,12 +279,10 @@ func (c *AppContainer) buildApiFunction() {
 				jsii.String("../cmd/api/lambda/build"),
 				nil,
 			),
-			Environment: &map[string]*string{
-				"APP_NAME": jsii.String(c.appName),
-				"STAGE":    jsii.String(c.stage),
-			},
+			Environment:             c.lambdaEnv(),
 			Vpc:                     c.vpc,
 			Ipv6AllowedForDualStack: jsii.Bool(true),
+			AllowAllIpv6Outbound:    jsii.Bool(true),
 		})
 	alias := awslambda.NewAlias(
 		c.stack,
@@ -427,4 +423,12 @@ func (c *AppContainer) setLambdaBasePermissions(f awslambda.Function) {
 	}))
 	c.secret.GrantRead(f, nil)
 	c.rds.Connections().AllowDefaultPortFrom(f, nil)
+}
+
+func (c *AppContainer) lambdaEnv() *map[string]*string {
+	env := map[string]*string{
+		"APP_NAME": jsii.String(c.appName),
+		"STAGE":    jsii.String(c.stage),
+	}
+	return &env
 }
