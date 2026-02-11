@@ -218,6 +218,129 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/workspace/workspaces/{workspaceId}/discussions/{discussionId}/favorite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description add discussion to favorites */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["schemas"]["Id"];
+                    discussionId: components["schemas"]["Id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        /** @description remove discussion from favorites */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["schemas"]["Id"];
+                    discussionId: components["schemas"]["Id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/workspace/workspaces/{workspaceId}/favorites": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description get favorite discussions */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["schemas"]["Id"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["FavoriteDiscussionSummary"][];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -236,6 +359,9 @@ export interface components {
         MemberRole: "owner" | "admin" | "member";
         ProjectName: string;
         ProjectPremise: string;
+        DiscussionTheme: string;
+        /** @enum {string} */
+        DiscussionStatus: "public" | "internal";
         Workspace: {
             id: components["schemas"]["Id"];
             slug: components["schemas"]["WorkspaceSlug"];
@@ -263,6 +389,17 @@ export interface components {
             isDefault: boolean;
             /** Format: date-time */
             createdAt: string;
+        };
+        FavoriteDiscussionSummary: {
+            id: components["schemas"]["Id"];
+            workspaceId: components["schemas"]["Id"];
+            theme: components["schemas"]["DiscussionTheme"];
+            status: components["schemas"]["DiscussionStatus"];
+            /** Format: date-time */
+            archivedAt?: string;
+            /** Format: date-time */
+            lastCommentedAt: string;
+            commentsCount: number;
         };
     };
     responses: never;

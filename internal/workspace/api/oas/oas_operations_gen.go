@@ -9,6 +9,7 @@ const (
 	V1WorkspaceMeGetOperation                                                      OperationName = "V1WorkspaceMeGet"
 	V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteOperation OperationName = "V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDelete"
 	V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutOperation    OperationName = "V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePut"
+	V1WorkspaceWorkspacesWorkspaceIdFavoritesGetOperation                          OperationName = "V1WorkspaceWorkspacesWorkspaceIdFavoritesGet"
 	V1WorkspaceWorkspacesWorkspaceIdProjectsGetOperation                           OperationName = "V1WorkspaceWorkspacesWorkspaceIdProjectsGet"
 	V1WorkspaceWorkspacesWorkspaceIdProjectsPostOperation                          OperationName = "V1WorkspaceWorkspacesWorkspaceIdProjectsPost"
 	V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteOperation               OperationName = "V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete"

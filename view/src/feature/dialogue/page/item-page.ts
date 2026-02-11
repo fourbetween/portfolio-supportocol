@@ -1,11 +1,14 @@
+import type { Router } from "@lit-labs/router";
 import { consume } from "@lit/context";
 import { msg } from "@lit/localize";
 import { Task } from "@lit/task";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { routerContext } from "../../../app/context/router";
 import { userContext } from "../../../app/context/user";
 import { TouchController } from "../../../app/controller/touch";
 import type { User } from "../../../app/model/user";
+import { navigate, paths } from "../../../app/paths";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
@@ -13,12 +16,15 @@ import { hoverButtonStyle } from "../../../shared/style/hover-button";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/drawer/drawer";
+import type { FavoriteDiscussionSummary } from "../../workspace/model/favorite-discussion";
+import { favoriteDiscussionRepository } from "../../workspace/repository/favorite-discussion-repository";
 import "../component/comment-explorer-widget";
 import {
   type DialogueCommentCreatedEvent,
   type DialogueCommentSelectEvent,
   type DialogueCommentUpdatedEvent,
 } from "../event/comment";
+import type { DialogueDiscussionSelectEvent } from "../event/discussion";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
@@ -26,6 +32,7 @@ import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/comment-frame-detail";
 import "../ui/comment-list";
 import "../ui/discussion-detail";
+import "../ui/favorite-list";
 
 @customElement("dialogue-item-page")
 export class DialogueItemPage extends LitElement {
@@ -41,6 +48,10 @@ export class DialogueItemPage extends LitElement {
   @state()
   private _user?: User;
 
+  @consume({ context: routerContext, subscribe: true })
+  @state()
+  private _router?: Router;
+
   @state()
   private _discussion?: Discussion;
 
@@ -48,10 +59,13 @@ export class DialogueItemPage extends LitElement {
   private _comments: Comment[] = [];
 
   @state()
+  private _favorites: FavoriteDiscussionSummary[] = [];
+
+  @state()
   private _selectedCommentId?: string;
 
   @state()
-  private _isRightDrawerOpen = false;
+  private _activeDrawer?: "left" | "right";
 
   constructor() {
     super();
@@ -82,6 +96,20 @@ export class DialogueItemPage extends LitElement {
       },
       args: () => [this.workspaceId, this.discussionId],
     });
+
+    new Task(this, {
+      task: async ([workspaceId, user]) => {
+        if (!workspaceId || !user) return [] as FavoriteDiscussionSummary[];
+        return favoriteDiscussionRepository.list(workspaceId);
+      },
+      onComplete: (favorites) => {
+        this._favorites = favorites;
+      },
+      onError: (e: unknown) => {
+        showToast(this, String(e), "error");
+      },
+      args: () => [this.workspaceId, this._user],
+    });
   }
 
   private _handleCommentSelect(e: DialogueCommentSelectEvent) {
@@ -98,6 +126,48 @@ export class DialogueItemPage extends LitElement {
     );
   }
 
+  private _handleFavoriteSelect(e: DialogueDiscussionSelectEvent) {
+    if (!this._router) return;
+    navigate(this._router, paths.dialogue.item, {
+      workspaceId: e.workspaceId,
+      discussionId: e.discussionId,
+    });
+  }
+
+  private _renderLeftSidebar(isTouch: boolean) {
+    if (this._favorites.length === 0) return nothing;
+
+    const list = html`
+      <dialogue-favorite-list
+        .favorites=${this._favorites}
+        .selectedDiscussionId=${this.discussionId}
+        @dialogue-discussion-select=${this._handleFavoriteSelect}
+      ></dialogue-favorite-list>
+    `;
+
+    if (isTouch) {
+      return html`
+        <ui-drawer
+          placement="left"
+          .open=${this._activeDrawer === "left"}
+          @drawer-close=${() => (this._activeDrawer = undefined)}
+        >
+          <span slot="header">${msg("Favorites")}</span>
+          <section>${list}</section>
+        </ui-drawer>
+      `;
+    }
+
+    return html`
+      <aside class="sidebar sidebar-left">
+        <section>
+          <div class="section-title">${msg("Favorites")}</div>
+          ${list}
+        </section>
+      </aside>
+    `;
+  }
+
   private _renderRightSidebar(isTouch: boolean) {
     const list = html`
       <dialogue-comment-list
@@ -110,8 +180,8 @@ export class DialogueItemPage extends LitElement {
       return html`
         <ui-drawer
           placement="right"
-          .open=${this._isRightDrawerOpen}
-          @drawer-close=${() => (this._isRightDrawerOpen = false)}
+          .open=${this._activeDrawer === "right"}
+          @drawer-close=${() => (this._activeDrawer = undefined)}
         >
           <span slot="header">${msg("Latest first")}</span>
           <section>${list}</section>
@@ -158,13 +228,23 @@ export class DialogueItemPage extends LitElement {
     `;
   }
 
-  private _renderFAB() {
+  private _renderFABs() {
     if (!this._touch.isTouchDevice) return nothing;
 
     return html`
+      ${this._favorites.length > 0
+        ? html`
+            <button
+              class="btn-hover btn-left"
+              @click=${() => (this._activeDrawer = "left")}
+            >
+              <span class="material-symbols-outlined">star</span>
+            </button>
+          `
+        : nothing}
       <button
         class="btn-hover btn-right"
-        @click=${() => (this._isRightDrawerOpen = true)}
+        @click=${() => (this._activeDrawer = "right")}
       >
         <span class="material-symbols-outlined">menu</span>
       </button>
@@ -178,8 +258,8 @@ export class DialogueItemPage extends LitElement {
 
     return html`
       <div class="dashboard hover-container">
-        ${this._renderMainContent()} ${this._renderRightSidebar(isTouch)}
-        ${this._renderFAB()}
+        ${this._renderLeftSidebar(isTouch)} ${this._renderMainContent()}
+        ${this._renderRightSidebar(isTouch)} ${this._renderFABs()}
       </div>
     `;
   }
@@ -208,6 +288,9 @@ export class DialogueItemPage extends LitElement {
       .sidebar-right {
         border-left: 1px solid var(--color-border-default);
       }
+      .sidebar-left {
+        border-right: 1px solid var(--color-border-default);
+      }
       .main {
         flex: 1;
         display: flex;
@@ -233,6 +316,10 @@ export class DialogueItemPage extends LitElement {
       }
       .btn-right {
         right: 16px;
+        bottom: 16px;
+      }
+      .btn-left {
+        left: 16px;
         bottom: 16px;
       }
       section {

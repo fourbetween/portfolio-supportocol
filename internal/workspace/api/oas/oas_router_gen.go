@@ -165,6 +165,28 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						}
 
+					case 'f': // Prefix: "favorites"
+
+						if l := len("favorites"); len(elem) >= l && elem[0:l] == "favorites" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1WorkspaceWorkspacesWorkspaceIdFavoritesGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
 					case 'p': // Prefix: "projects"
 
 						if l := len("projects"); len(elem) >= l && elem[0:l] == "projects" {
@@ -446,6 +468,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								}
 							}
 
+						}
+
+					case 'f': // Prefix: "favorites"
+
+						if l := len("favorites"); len(elem) >= l && elem[0:l] == "favorites" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = V1WorkspaceWorkspacesWorkspaceIdFavoritesGetOperation
+								r.summary = ""
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/v1/workspace/workspaces/{workspaceId}/favorites"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
 						}
 
 					case 'p': // Prefix: "projects"

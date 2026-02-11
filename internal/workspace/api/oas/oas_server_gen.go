@@ -26,6 +26,12 @@ type Handler interface {
 	//
 	// PUT /v1/workspace/workspaces/{workspaceId}/discussions/{discussionId}/favorite
 	V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePut(ctx context.Context, params V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutParams) error
+	// V1WorkspaceWorkspacesWorkspaceIdFavoritesGet implements GET /v1/workspace/workspaces/{workspaceId}/favorites operation.
+	//
+	// Get favorite discussions.
+	//
+	// GET /v1/workspace/workspaces/{workspaceId}/favorites
+	V1WorkspaceWorkspacesWorkspaceIdFavoritesGet(ctx context.Context, params V1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams) ([]FavoriteDiscussionSummary, error)
 	// V1WorkspaceWorkspacesWorkspaceIdProjectsGet implements GET /v1/workspace/workspaces/{workspaceId}/projects operation.
 	//
 	// Get projects.

@@ -36,6 +36,7 @@ var operationRolesCookieAuth = map[string][]string{
 	V1WorkspaceMeGetOperation: []string{},
 	V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteOperation: []string{},
 	V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutOperation:    []string{},
+	V1WorkspaceWorkspacesWorkspaceIdFavoritesGetOperation:                          []string{},
 	V1WorkspaceWorkspacesWorkspaceIdProjectsGetOperation:                           []string{},
 	V1WorkspaceWorkspacesWorkspaceIdProjectsPostOperation:                          []string{},
 	V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteOperation:               []string{},

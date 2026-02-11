@@ -48,6 +48,14 @@ components:
     ProjectPremise:
       type: string
       maxLength: 1000
+    DiscussionTheme:
+      type: string
+      maxLength: 255
+    DiscussionStatus:
+      type: string
+      enum:
+        - public
+        - internal
     Workspace:
       type: object
       properties:
@@ -118,6 +126,32 @@ components:
         - premise
         - isDefault
         - createdAt
+    FavoriteDiscussionSummary:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        workspaceId:
+          $ref: "#/components/schemas/Id"
+        theme:
+          $ref: "#/components/schemas/DiscussionTheme"
+        status:
+          $ref: "#/components/schemas/DiscussionStatus"
+        archivedAt:
+          type: string
+          format: date-time
+        lastCommentedAt:
+          type: string
+          format: date-time
+        commentsCount:
+          type: integer
+      required:
+        - id
+        - workspaceId
+        - theme
+        - status
+        - lastCommentedAt
+        - commentsCount
 security:
   - cookie_auth: []
 paths:
@@ -297,6 +331,30 @@ paths:
       responses:
         "204":
           description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/workspace/workspaces/{workspaceId}/favorites:
+    get:
+      description: get favorite discussions
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FavoriteDiscussionSummary"
         default:
           description: default error
           content:

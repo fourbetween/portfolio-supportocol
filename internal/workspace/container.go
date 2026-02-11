@@ -25,6 +25,7 @@ type APIContainer struct {
 	// Favorite Discussions
 	AddFavoriteDiscussion    *usecase.AddFavoriteDiscussionUsecase
 	RemoveFavoriteDiscussion *usecase.RemoveFavoriteDiscussionUsecase
+	ListFavoriteDiscussions  *usecase.ListFavoriteDiscussionsUsecase
 
 	// Hooks
 	UserCreatedHandler *usecase.UserCreatedHandler
@@ -65,6 +66,7 @@ func NewAPIContainer(
 		// Favorite Discussions
 		AddFavoriteDiscussion:    usecase.NewAddFavoriteDiscussionUsecase(memberRepo, favRepo, clockSrv),
 		RemoveFavoriteDiscussion: usecase.NewRemoveFavoriteDiscussionUsecase(memberRepo, favRepo),
+		ListFavoriteDiscussions:  usecase.NewListFavoriteDiscussionsUsecase(workspaceQuerySrv),
 
 		// Hooks
 		UserCreatedHandler: usecase.NewUserCreatedHandler(workspaceRepo, memberRepo, projectRepo, workspaceFac, memberFac, projectFac, txManager),

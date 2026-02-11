@@ -39,6 +39,50 @@ func (s *CookieAuth) SetRoles(val []string) {
 	s.Roles = val
 }
 
+// Ref: #/components/schemas/DiscussionStatus
+type DiscussionStatus string
+
+const (
+	DiscussionStatusPublic   DiscussionStatus = "public"
+	DiscussionStatusInternal DiscussionStatus = "internal"
+)
+
+// AllValues returns all DiscussionStatus values.
+func (DiscussionStatus) AllValues() []DiscussionStatus {
+	return []DiscussionStatus{
+		DiscussionStatusPublic,
+		DiscussionStatusInternal,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s DiscussionStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case DiscussionStatusPublic:
+		return []byte(s), nil
+	case DiscussionStatusInternal:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *DiscussionStatus) UnmarshalText(data []byte) error {
+	switch DiscussionStatus(data) {
+	case DiscussionStatusPublic:
+		*s = DiscussionStatusPublic
+		return nil
+	case DiscussionStatusInternal:
+		*s = DiscussionStatusInternal
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type DiscussionTheme string
+
 // Ref: #/components/schemas/Error
 type Error struct {
 	Code    int    `json:"code"`
@@ -89,6 +133,87 @@ func (s *ErrorStatusCode) SetStatusCode(val int) {
 // SetResponse sets the value of Response.
 func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
+}
+
+// Ref: #/components/schemas/FavoriteDiscussionSummary
+type FavoriteDiscussionSummary struct {
+	ID              ID               `json:"id"`
+	WorkspaceId     ID               `json:"workspaceId"`
+	Theme           DiscussionTheme  `json:"theme"`
+	Status          DiscussionStatus `json:"status"`
+	ArchivedAt      OptDateTime      `json:"archivedAt"`
+	LastCommentedAt time.Time        `json:"lastCommentedAt"`
+	CommentsCount   int              `json:"commentsCount"`
+}
+
+// GetID returns the value of ID.
+func (s *FavoriteDiscussionSummary) GetID() ID {
+	return s.ID
+}
+
+// GetWorkspaceId returns the value of WorkspaceId.
+func (s *FavoriteDiscussionSummary) GetWorkspaceId() ID {
+	return s.WorkspaceId
+}
+
+// GetTheme returns the value of Theme.
+func (s *FavoriteDiscussionSummary) GetTheme() DiscussionTheme {
+	return s.Theme
+}
+
+// GetStatus returns the value of Status.
+func (s *FavoriteDiscussionSummary) GetStatus() DiscussionStatus {
+	return s.Status
+}
+
+// GetArchivedAt returns the value of ArchivedAt.
+func (s *FavoriteDiscussionSummary) GetArchivedAt() OptDateTime {
+	return s.ArchivedAt
+}
+
+// GetLastCommentedAt returns the value of LastCommentedAt.
+func (s *FavoriteDiscussionSummary) GetLastCommentedAt() time.Time {
+	return s.LastCommentedAt
+}
+
+// GetCommentsCount returns the value of CommentsCount.
+func (s *FavoriteDiscussionSummary) GetCommentsCount() int {
+	return s.CommentsCount
+}
+
+// SetID sets the value of ID.
+func (s *FavoriteDiscussionSummary) SetID(val ID) {
+	s.ID = val
+}
+
+// SetWorkspaceId sets the value of WorkspaceId.
+func (s *FavoriteDiscussionSummary) SetWorkspaceId(val ID) {
+	s.WorkspaceId = val
+}
+
+// SetTheme sets the value of Theme.
+func (s *FavoriteDiscussionSummary) SetTheme(val DiscussionTheme) {
+	s.Theme = val
+}
+
+// SetStatus sets the value of Status.
+func (s *FavoriteDiscussionSummary) SetStatus(val DiscussionStatus) {
+	s.Status = val
+}
+
+// SetArchivedAt sets the value of ArchivedAt.
+func (s *FavoriteDiscussionSummary) SetArchivedAt(val OptDateTime) {
+	s.ArchivedAt = val
+}
+
+// SetLastCommentedAt sets the value of LastCommentedAt.
+func (s *FavoriteDiscussionSummary) SetLastCommentedAt(val time.Time) {
+	s.LastCommentedAt = val
+}
+
+// SetCommentsCount sets the value of CommentsCount.
+func (s *FavoriteDiscussionSummary) SetCommentsCount(val int) {
+	s.CommentsCount = val
 }
 
 type ID uuid.UUID
@@ -188,6 +313,52 @@ func (s *MemberRole) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+// NewOptDateTime returns new OptDateTime with value set to v.
+func NewOptDateTime(v time.Time) OptDateTime {
+	return OptDateTime{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDateTime is optional time.Time.
+type OptDateTime struct {
+	Value time.Time
+	Set   bool
+}
+
+// IsSet returns true if OptDateTime was set.
+func (o OptDateTime) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDateTime) Reset() {
+	var v time.Time
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDateTime) SetTo(v time.Time) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDateTime) Get() (v time.Time, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDateTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }
 
 // Ref: #/components/schemas/Project

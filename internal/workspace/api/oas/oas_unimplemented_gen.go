@@ -40,6 +40,15 @@ func (UnimplementedHandler) V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussio
 	return ht.ErrNotImplemented
 }
 
+// V1WorkspaceWorkspacesWorkspaceIdFavoritesGet implements GET /v1/workspace/workspaces/{workspaceId}/favorites operation.
+//
+// Get favorite discussions.
+//
+// GET /v1/workspace/workspaces/{workspaceId}/favorites
+func (UnimplementedHandler) V1WorkspaceWorkspacesWorkspaceIdFavoritesGet(ctx context.Context, params V1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams) (r []FavoriteDiscussionSummary, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1WorkspaceWorkspacesWorkspaceIdProjectsGet implements GET /v1/workspace/workspaces/{workspaceId}/projects operation.
 //
 // Get projects.

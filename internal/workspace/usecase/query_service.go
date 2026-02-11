@@ -20,10 +20,21 @@ type WorkspaceAccessResult struct {
 	CanManage bool
 }
 
+type FavoriteDiscussionSummary struct {
+	ID              string
+	WorkspaceID     string
+	Theme           string
+	Status          string
+	ArchivedAt      *time.Time
+	LastCommentedAt time.Time
+	CommentsCount   int
+}
+
 type WorkspaceQueryService interface {
 	ListMyWorkspaces(ctx context.Context, userID string) ([]WorkspaceWithMember, error)
 	CanAccessWorkspace(ctx context.Context, userID string, workspaceID string) (bool, error)
 	CheckWorkspaceAccess(ctx context.Context, userID string, workspaceID string) (WorkspaceAccessResult, error)
 	CanAccessProject(ctx context.Context, userID string, workspaceID string, projectID string) (bool, error)
 	IsPersonalWorkspace(ctx context.Context, workspaceID string) (bool, error)
+	ListFavoriteDiscussions(ctx context.Context, workspaceID string, userID string) ([]FavoriteDiscussionSummary, error)
 }

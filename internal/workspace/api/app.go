@@ -146,6 +146,28 @@ func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavo
 	})
 }
 
+func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdFavoritesGet(
+	ctx context.Context,
+	params oas.V1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams,
+) ([]oas.FavoriteDiscussionSummary, error) {
+	uid := httpctx.GetUserID(ctx)
+
+	summaries, err := h.con.ListFavoriteDiscussions.Execute(ctx, usecase.ListFavoriteDiscussionsInput{
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		UserID:      uid,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]oas.FavoriteDiscussionSummary, len(summaries))
+	for i, s := range summaries {
+		res[i] = h.toOasFavoriteDiscussionSummary(s)
+	}
+
+	return res, nil
+}
+
 // Error handling
 
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
@@ -204,4 +226,19 @@ func (h *appHandler) toOasProject(p *domain.Project) oas.Project {
 		IsDefault:   p.IsDefault(),
 		CreatedAt:   p.CreatedAt(),
 	}
+}
+
+func (h *appHandler) toOasFavoriteDiscussionSummary(s usecase.FavoriteDiscussionSummary) oas.FavoriteDiscussionSummary {
+	res := oas.FavoriteDiscussionSummary{
+		ID:              oas.ID(uuid.MustParse(s.ID)),
+		WorkspaceId:     oas.ID(uuid.MustParse(s.WorkspaceID)),
+		Theme:           oas.DiscussionTheme(s.Theme),
+		Status:          oas.DiscussionStatus(s.Status),
+		LastCommentedAt: s.LastCommentedAt,
+		CommentsCount:   s.CommentsCount,
+	}
+	if s.ArchivedAt != nil {
+		res.ArchivedAt = oas.NewOptDateTime(*s.ArchivedAt)
+	}
+	return res
 }
