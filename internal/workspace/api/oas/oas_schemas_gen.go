@@ -264,6 +264,12 @@ type ProjectName string
 
 type ProjectPremise string
 
+// V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteNoContent is response for V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDelete operation.
+type V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteNoContent struct{}
+
+// V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutNoContent is response for V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePut operation.
+type V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutNoContent struct{}
+
 type V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq struct {
 	Name ProjectName `json:"name"`
 }

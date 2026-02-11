@@ -258,3 +258,48 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /v1/workspace/workspaces/{workspaceId}/discussions/{discussionId}/favorite:
+    put:
+      description: add discussion to favorites
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+        - name: discussionId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      description: remove discussion from favorites
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+        - name: discussionId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"

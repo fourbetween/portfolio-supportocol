@@ -22,6 +22,10 @@ type APIContainer struct {
 	UpdateProject *usecase.UpdateProjectUsecase
 	DeleteProject *usecase.DeleteProjectUsecase
 
+	// Favorite Discussions
+	AddFavoriteDiscussion    *usecase.AddFavoriteDiscussionUsecase
+	RemoveFavoriteDiscussion *usecase.RemoveFavoriteDiscussionUsecase
+
 	// Hooks
 	UserCreatedHandler *usecase.UserCreatedHandler
 
@@ -43,6 +47,7 @@ func NewAPIContainer(
 	workspaceRepo := db.NewWorkspaceRepository(dbCon, workspaceFac)
 	memberRepo := db.NewMemberRepository(dbCon, memberFac)
 	projectRepo := db.NewProjectRepository(dbCon, projectFac)
+	favRepo := db.NewFavoriteDiscussionRepository(dbCon)
 
 	workspaceQuerySrv := db.NewWorkspaceQueryService(dbCon)
 
@@ -56,6 +61,10 @@ func NewAPIContainer(
 		ListProjects:  usecase.NewListProjectsUsecase(memberRepo, projectRepo),
 		UpdateProject: usecase.NewUpdateProjectUsecase(memberRepo, projectRepo, txManager),
 		DeleteProject: usecase.NewDeleteProjectUsecase(memberRepo, projectRepo, txManager),
+
+		// Favorite Discussions
+		AddFavoriteDiscussion:    usecase.NewAddFavoriteDiscussionUsecase(memberRepo, favRepo, clockSrv),
+		RemoveFavoriteDiscussion: usecase.NewRemoveFavoriteDiscussionUsecase(memberRepo, favRepo),
 
 		// Hooks
 		UserCreatedHandler: usecase.NewUserCreatedHandler(workspaceRepo, memberRepo, projectRepo, workspaceFac, memberFac, projectFac, txManager),

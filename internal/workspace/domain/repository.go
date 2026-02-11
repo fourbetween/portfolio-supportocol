@@ -2,8 +2,6 @@ package domain
 
 import "context"
 
-//go:generate go tool mockgen -package domain -destination ./repository_mock.go . WorkspaceRepository,MemberRepository,ProjectRepository
-
 type (
 	WorkspaceRepository interface {
 		Load(ctx context.Context, id string) (*Workspace, error)
@@ -43,5 +41,10 @@ type (
 
 	SearchProjectsParams struct {
 		WorkspaceID string
+	}
+
+	FavoriteDiscussionRepository interface {
+		Save(ctx context.Context, fav FavoriteDiscussion) error
+		Delete(ctx context.Context, memberID, discussionID string) error
 	}
 )

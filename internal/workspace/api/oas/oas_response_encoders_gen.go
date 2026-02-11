@@ -27,6 +27,18 @@ func encodeV1WorkspaceMeGetResponse(response []WorkspaceWithMember, w http.Respo
 	return nil
 }
 
+func encodeV1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteResponse(response *V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteNoContent, w http.ResponseWriter) error {
+	w.WriteHeader(204)
+
+	return nil
+}
+
+func encodeV1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutResponse(response *V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutNoContent, w http.ResponseWriter) error {
+	w.WriteHeader(204)
+
+	return nil
+}
+
 func encodeV1WorkspaceWorkspacesWorkspaceIdProjectsGetResponse(response []Project, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)

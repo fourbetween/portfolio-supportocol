@@ -120,6 +120,32 @@ func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete(
 	})
 }
 
+func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePut(
+	ctx context.Context,
+	params oas.V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutParams,
+) error {
+	uid := httpctx.GetUserID(ctx)
+
+	return h.con.AddFavoriteDiscussion.Execute(ctx, usecase.AddFavoriteDiscussionInput{
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		UserID:       uid,
+	})
+}
+
+func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDelete(
+	ctx context.Context,
+	params oas.V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteParams,
+) error {
+	uid := httpctx.GetUserID(ctx)
+
+	return h.con.RemoveFavoriteDiscussion.Execute(ctx, usecase.RemoveFavoriteDiscussionInput{
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		UserID:       uid,
+	})
+}
+
 // Error handling
 
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
