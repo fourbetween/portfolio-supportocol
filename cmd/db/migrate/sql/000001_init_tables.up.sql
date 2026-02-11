@@ -33,12 +33,14 @@ CREATE TABLE workspaces (
 
 -- ワークスペースメンバー
 CREATE TABLE members (
+	id CHAR(36) NOT NULL,
 	workspace_id CHAR(36) NOT NULL,
 	user_id CHAR(36) NOT NULL,
 	role VARCHAR(20) NOT NULL,
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	PRIMARY KEY (workspace_id, user_id),
+	PRIMARY KEY (id),
+	UNIQUE KEY (workspace_id, user_id),
 	CONSTRAINT members_workspaces_fk FOREIGN KEY (workspace_id) REFERENCES workspaces(id) ON DELETE CASCADE,
 	CONSTRAINT members_users_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

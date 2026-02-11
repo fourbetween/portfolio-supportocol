@@ -37,7 +37,7 @@ func NewAPIContainer(
 	txManager := dbtx.NewManager(dbCon)
 
 	workspaceFac := domain.NewWorkspaceFactory(idSrv, clockSrv)
-	memberFac := domain.NewMemberFactory(clockSrv)
+	memberFac := domain.NewMemberFactory(idSrv, clockSrv)
 	projectFac := domain.NewProjectFactory(idSrv, clockSrv)
 
 	workspaceRepo := db.NewWorkspaceRepository(dbCon, workspaceFac)

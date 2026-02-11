@@ -17,6 +17,7 @@ type membersTable struct {
 	mysql.Table
 
 	// Columns
+	ID          mysql.ColumnString
 	WorkspaceID mysql.ColumnString
 	UserID      mysql.ColumnString
 	Role        mysql.ColumnString
@@ -63,13 +64,14 @@ func newMembersTable(schemaName, tableName, alias string) *MembersTable {
 
 func newMembersTableImpl(schemaName, tableName, alias string) membersTable {
 	var (
+		IDColumn          = mysql.StringColumn("id")
 		WorkspaceIDColumn = mysql.StringColumn("workspace_id")
 		UserIDColumn      = mysql.StringColumn("user_id")
 		RoleColumn        = mysql.StringColumn("role")
 		CreatedAtColumn   = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn   = mysql.TimestampColumn("updated_at")
-		allColumns        = mysql.ColumnList{WorkspaceIDColumn, UserIDColumn, RoleColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns    = mysql.ColumnList{RoleColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns        = mysql.ColumnList{IDColumn, WorkspaceIDColumn, UserIDColumn, RoleColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns    = mysql.ColumnList{WorkspaceIDColumn, UserIDColumn, RoleColumn, CreatedAtColumn, UpdatedAtColumn}
 		defaultColumns    = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
 	)
 
@@ -77,6 +79,7 @@ func newMembersTableImpl(schemaName, tableName, alias string) membersTable {
 		Table: mysql.NewTable(schemaName, tableName, alias, allColumns...),
 
 		//Columns
+		ID:          IDColumn,
 		WorkspaceID: WorkspaceIDColumn,
 		UserID:      UserIDColumn,
 		Role:        RoleColumn,

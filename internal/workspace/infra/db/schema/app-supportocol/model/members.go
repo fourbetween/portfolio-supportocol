@@ -12,8 +12,9 @@ import (
 )
 
 type Members struct {
-	WorkspaceID string `sql:"primary_key"`
-	UserID      string `sql:"primary_key"`
+	ID          string `sql:"primary_key"`
+	WorkspaceID string
+	UserID      string
 	Role        string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time

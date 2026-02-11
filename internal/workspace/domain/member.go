@@ -8,10 +8,15 @@ import (
 )
 
 type Member struct {
+	id          string
 	workspaceID string
 	userID      string
 	role        MemberRole
 	createdAt   time.Time
+}
+
+func (m *Member) ID() string {
+	return m.id
 }
 
 func (m *Member) WorkspaceID() string {
@@ -67,6 +72,9 @@ func (m *Member) Update(params UpdateMemberParams) error {
 }
 
 func (m *Member) Validate() error {
+	if m.id == "" {
+		return fmt.Errorf("id is required: %w", apperr.ErrInvalidArgument)
+	}
 	if m.workspaceID == "" {
 		return fmt.Errorf("workspace id is required: %w", apperr.ErrInvalidArgument)
 	}
