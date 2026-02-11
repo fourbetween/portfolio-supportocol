@@ -1,6 +1,6 @@
 module github.com/fourbetween/app-supportocol
 
-go 1.25.0
+go 1.25.7
 
 tool (
 	github.com/air-verse/air
