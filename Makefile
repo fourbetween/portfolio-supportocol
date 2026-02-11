@@ -26,7 +26,7 @@ build-lambda:
 	cd ${BASE_DIR}/cmd/api/lambda && GOOS=linux GOARCH=arm64 go build -o build/bootstrap
 	cd ${BASE_DIR}/cmd/comment-generation/lambda && GOOS=linux GOARCH=arm64 go build -o build/bootstrap
 
-build-view:  setup-view
+build-view: view/env setup-view
 	cd ${VIEW_DIR} && npm run build --mode=${STAGE}
 
 build: deadcode vulncheck test-api build-lambda test-view build-view
