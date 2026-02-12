@@ -14,27 +14,83 @@ import "./comment-context";
 
 const TEMPLATES = [
   {
+    title: () => msg("Inconsistency"),
+    description: () =>
+      msg("Containing internal logical conflicts or self-contradictions."),
+  },
+  {
     title: () => msg("Circular Reasoning"),
     description: () =>
-      msg("The conclusion is included in the premise of the argument."),
+      msg(
+        "Assuming the truth of the conclusion as a premise instead of providing evidence.",
+      ),
   },
   {
     title: () => msg("Ad Hominem"),
     description: () =>
       msg(
-        "Attacking the person making the argument rather than the argument itself.",
+        "Attacking the person's character or personal traits instead of addressing the substance of their argument.",
       ),
   },
   {
     title: () => msg("Straw Man"),
     description: () =>
-      msg("Misrepresenting someone's argument to make it easier to attack."),
+      msg(
+        "Misrepresenting an opponent's argument to make it easier to attack.",
+      ),
   },
   {
     title: () => msg("Red Herring"),
     description: () =>
       msg(
-        "Introducing an irrelevant topic to divert attention from the original issue.",
+        "Introducing irrelevant information to distract from the issue at hand.",
+      ),
+  },
+  {
+    title: () => msg("False Dilemma"),
+    description: () =>
+      msg("Presenting only two options as if no other alternatives exist."),
+  },
+  {
+    title: () => msg("Hasty Generalization"),
+    description: () =>
+      msg(
+        "Drawing a broad conclusion based on insufficient or unrepresentative evidence.",
+      ),
+  },
+  {
+    title: () => msg("Moving the Goalposts"),
+    description: () =>
+      msg(
+        "Changing the criteria of the discussion after the initial requirements have been met.",
+      ),
+  },
+  {
+    title: () => msg("Appeal to Emotion"),
+    description: () =>
+      msg(
+        "Attempting to manipulate an emotional response instead of using valid, logical reasoning.",
+      ),
+  },
+  {
+    title: () => msg("Shifting the Burden of Proof"),
+    description: () =>
+      msg(
+        "Claiming that the opponent must disprove a statement rather than providing evidence to support it yourself.",
+      ),
+  },
+  {
+    title: () => msg("Slippery Slope"),
+    description: () =>
+      msg(
+        "Claiming that a small first step will inevitably lead to extreme consequences without sufficient proof.",
+      ),
+  },
+  {
+    title: () => msg("False Cause"),
+    description: () =>
+      msg(
+        "Assuming that because two things happened together, one must have caused the other.",
       ),
   },
 ];
