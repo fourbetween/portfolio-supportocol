@@ -31,7 +31,7 @@ func (r *FavoriteDiscussionRepository) Save(ctx context.Context, fav domain.Favo
 		INSERT(table.FavoriteDiscussions.AllColumns).
 		MODEL(record).
 		ON_DUPLICATE_KEY_UPDATE(
-			table.FavoriteDiscussions.MemberID.SET(table.FavoriteDiscussions.MemberID),
+			table.FavoriteDiscussions.CreatedAt.SET(table.FavoriteDiscussions.CreatedAt),
 		)
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
@@ -54,4 +54,24 @@ func (r *FavoriteDiscussionRepository) Delete(ctx context.Context, memberID, dis
 	}
 
 	return nil
+}
+
+func (r *FavoriteDiscussionRepository) CountByMemberID(ctx context.Context, memberID string) (int, error) {
+	stmt := mysql.SELECT(
+		mysql.COUNT(table.FavoriteDiscussions.MemberID).AS("count"),
+	).FROM(
+		table.FavoriteDiscussions,
+	).WHERE(
+		table.FavoriteDiscussions.MemberID.EQ(mysql.String(memberID)),
+	)
+
+	var dest struct {
+		Count int64 `alias:"count"`
+	}
+
+	if err := stmt.QueryContext(ctx, dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
+		return 0, fmt.Errorf("failed to count favorite discussions: %w", err)
+	}
+
+	return int(dest.Count), nil
 }

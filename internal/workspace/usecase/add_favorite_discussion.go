@@ -2,7 +2,9 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/workspace/domain"
 )
@@ -36,6 +38,14 @@ func (u *AddFavoriteDiscussionUsecase) Execute(ctx context.Context, input AddFav
 	member, err := u.memberRepo.Load(ctx, input.WorkspaceID, input.UserID)
 	if err != nil {
 		return err
+	}
+
+	count, err := u.favRepo.CountByMemberID(ctx, member.ID())
+	if err != nil {
+		return err
+	}
+	if count >= domain.MaxFavoriteCount {
+		return fmt.Errorf("number of favorites has reached the limit: %w", apperr.ErrLimitExceeded)
 	}
 
 	fav := domain.FavoriteDiscussion{

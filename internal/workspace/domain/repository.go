@@ -46,5 +46,6 @@ type (
 	FavoriteDiscussionRepository interface {
 		Save(ctx context.Context, fav FavoriteDiscussion) error
 		Delete(ctx context.Context, memberID, discussionID string) error
+		CountByMemberID(ctx context.Context, memberID string) (int, error)
 	}
 )
