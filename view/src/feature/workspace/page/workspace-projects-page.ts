@@ -11,7 +11,7 @@ export class WorkspaceProjectsPage extends LitElement {
       <main class="container">
         <header class="header">
           <h1>${msg("Projects")}</h1>
-          <p class="description">${msg("Manage your workspace projects.")}</p>
+          <p class="description">${msg("Manage your projects.")}</p>
         </header>
         <section class="content">
           <workspace-projects-widget></workspace-projects-widget>

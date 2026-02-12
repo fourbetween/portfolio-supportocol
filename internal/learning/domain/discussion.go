@@ -9,7 +9,7 @@ import (
 
 const (
 	MaxCommentsPerDiscussion = 200
-	MaxDiscussionsPerProject = 100
+	MaxDiscussionsPerProject = 50
 )
 
 type DiscussionContent struct {

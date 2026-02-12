@@ -32,6 +32,7 @@ export const commentTreeStyle = css`
     align-items: center;
     gap: 4px;
     font-size: 0.8rem;
+    color: var(--color-fg-muted);
     cursor: pointer;
     user-select: none;
   }

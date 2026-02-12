@@ -77,7 +77,11 @@ export class WorkspaceProjectItem extends LitElement {
 
     return html`
       <div class="item">
-        <span class="name">${this.project.name}</span>
+        <span class="name">
+          ${this.project.name === "Uncategorized"
+            ? msg("Uncategorized")
+            : this.project.name}
+        </span>
         ${this.project.isDefault
           ? html`
               <span class="badge">${msg("Default")}</span>

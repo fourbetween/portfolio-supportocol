@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, type PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -55,7 +56,9 @@ export class WorkspaceProjectSelect extends LitElement {
               value=${project.id}
               ?selected=${effectiveSelectedId === project.id}
             >
-              ${project.name}
+              ${project.name === "Uncategorized"
+                ? msg("Uncategorized")
+                : project.name}
             </option>
           `,
         )}
