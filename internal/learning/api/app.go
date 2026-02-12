@@ -28,7 +28,10 @@ func NewHandler(con *learning.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
-func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params oas.V1LearningWorkspacesWorkspaceIdDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsGet(
+	ctx context.Context,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsGetParams,
+) ([]oas.DiscussionSummary, error) {
 	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
 		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
 		ProjectID:   uuid.UUID(params.ProjectId).String(),

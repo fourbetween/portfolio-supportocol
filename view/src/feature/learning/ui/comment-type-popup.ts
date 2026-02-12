@@ -114,7 +114,7 @@ export class LearningCommentTypePopup extends LitElement {
       <ui-popup>
         <span slot="header">
           ${this.isOtherSelected
-            ? msg("Enter Custom Type")
+            ? msg("New Custom Type")
             : msg("Select Comment Type")}
         </span>
         <div slot="main">

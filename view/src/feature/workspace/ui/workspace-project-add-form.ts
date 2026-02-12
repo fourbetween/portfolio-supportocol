@@ -34,9 +34,9 @@ export class WorkspaceProjectAddForm extends LitElement {
           type="submit"
           class="btn btn-primary"
           ?disabled=${!this.name.trim()}
+          aria-label=${msg("Add Project")}
         >
           <span class="material-symbols-outlined">add</span>
-          ${msg("Add Project")}
         </button>
       </form>
     `;

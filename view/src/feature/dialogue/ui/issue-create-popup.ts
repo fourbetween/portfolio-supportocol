@@ -141,7 +141,7 @@ export class DialogueIssueCreatePopup extends LitElement {
 
     return html`
       <div class="section">
-        <div class="section-title">${msg("Target Comment Context")}</div>
+        <div class="section-title">${msg("Context")}</div>
         <dialogue-comment-context
           .path=${this.path}
           .readonly=${true}

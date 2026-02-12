@@ -54,10 +54,6 @@
   <source>Public Discussions</source>
   <target>公開議論</target>
 </trans-unit>
-<trans-unit id="sac29dd0100874b38">
-  <source>Explore and join structured dialogues with others.</source>
-  <target>他者との構造化された対話を探索し、参加しましょう。</target>
-</trans-unit>
 <trans-unit id="s7b3ab7561ced061a">
   <source>Types</source>
   <target>種類</target>
@@ -165,10 +161,6 @@
 <trans-unit id="sd6a43eac05f0fbd8">
   <source>Issue description...</source>
   <target>指摘の説明...</target>
-</trans-unit>
-<trans-unit id="s65977098bc203dfe">
-  <source>Target Comment Context</source>
-  <target>対象コメントのコンテキスト</target>
 </trans-unit>
 <trans-unit id="sb7a30bbc1dcf6de9">
   <source>Issues</source>
@@ -342,10 +334,6 @@
   <source>OK</source>
   <target>OK</target>
 </trans-unit>
-<trans-unit id="seca79090aa8ed7a4">
-  <source>Enter Custom Type</source>
-  <target>カスタム種類を入力</target>
-</trans-unit>
 <trans-unit id="sa28c1a2088d14318">
   <source>Select Comment Type</source>
   <target>コメント種類を選択</target>
@@ -498,10 +486,6 @@
   <source>Projects</source>
   <target>プロジェクト</target>
 </trans-unit>
-<trans-unit id="sa566c73698521740">
-  <source>Manage your workspace projects.</source>
-  <target>ワークスペースのプロジェクトを管理します。</target>
-</trans-unit>
 <trans-unit id="s5a16cd0c7f4bfd03">
   <source>New project name</source>
   <target>新しいプロジェクト名</target>
@@ -553,6 +537,26 @@
 <trans-unit id="sb5c8198a8ca84e1d">
   <source>No favorites yet.</source>
   <target>まだお気に入りがありません。</target>
+</trans-unit>
+<trans-unit id="sdb840eeac242d409">
+  <source>Uncategorized</source>
+  <target>未分類</target>
+</trans-unit>
+<trans-unit id="s5267cb489a10d1f8">
+  <source>New Custom Type</source>
+  <target>新しいコメント種類</target>
+</trans-unit>
+<trans-unit id="s8489d59fc1d382ea">
+  <source>Show archived</source>
+  <target>アーカイブ済みを表示</target>
+</trans-unit>
+<trans-unit id="se53622df81247c00">
+  <source>Explore and join discussions.</source>
+  <target>議論を探索・参加しましょう。</target>
+</trans-unit>
+<trans-unit id="s89e87d684bc0a021">
+  <source>Manage your projects.</source>
+  <target>プロジェクトを管理しましょう。</target>
 </trans-unit>
 </body>
 </file>

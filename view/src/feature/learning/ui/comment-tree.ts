@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import {
   LitElement,
   css,
@@ -80,7 +81,7 @@ export class LearningCommentTree extends LitElement {
             .checked=${this.showArchived}
             @change=${this.toggleShowArchived}
           />
-          Show archived
+          ${msg("Show archived")}
         </label>
       </div>
       <div class="tree">${this.renderChildren("root", false)}</div>

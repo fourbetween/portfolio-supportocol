@@ -11,9 +11,7 @@ export class DialogueSearchPage extends LitElement {
       <main class="container">
         <header class="header">
           <h1>${msg("Public Discussions")}</h1>
-          <p class="description">
-            ${msg("Explore and join structured dialogues with others.")}
-          </p>
+          <p class="description">${msg("Explore and join discussions.")}</p>
         </header>
         <section class="content">
           <dialogue-discussion-list-widget></dialogue-discussion-list-widget>
