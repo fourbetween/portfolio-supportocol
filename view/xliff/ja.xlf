@@ -562,6 +562,14 @@
   <source>Are you sure you want to delete "<x id="0" equiv-text="${this.project.name}"/>"? All discussions in this project will also be deleted.</source>
   <target>「<x id="0" equiv-text="${this.project.name}"/>」を削除してもよろしいですか？このプロジェクト内のすべての議論も削除されます。</target>
 </trans-unit>
+<trans-unit id="sb8994e42bbe28572">
+  <source>Contradiction</source>
+  <target>矛盾</target>
+</trans-unit>
+<trans-unit id="sc30277ac5f94f0bb">
+  <source>The argument contradicts the discussion theme or context.</source>
+  <target>その主張は議論のテーマやコンテキストと矛盾しています。</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
