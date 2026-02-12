@@ -10,6 +10,7 @@ import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
 import { iconStyle } from "../../../shared/style/icon";
+import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/drawer/drawer";
 import "../../workspace/component/project-select-widget";
 import { type WorkspaceProjectSelectEvent } from "../../workspace/event/project";
@@ -287,6 +288,7 @@ export class LearningDashboardPage extends LitElement {
   private _renderLeftSidebar(isTouch: boolean) {
     const projectSelect = html`
       <div class="sidebar-project-select">
+        <div class="section-title">${msg("Projects")}</div>
         <workspace-project-select-widget
           .selectedProjectId=${this._selectedProjectId ?? ""}
           @workspace-project-select=${this._handleProjectSelect}
@@ -402,6 +404,7 @@ export class LearningDashboardPage extends LitElement {
     buttonStyle,
     iconStyle,
     hoverButtonStyle,
+    titleStyle,
     css`
       :host {
         display: block;
