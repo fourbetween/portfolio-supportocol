@@ -530,6 +530,30 @@
   <source>Close</source>
   <target>閉じる</target>
 </trans-unit>
+<trans-unit id="s3fb92b08fa79c9a7">
+  <source>Added to favorites.</source>
+  <target>お気に入りに追加しました。</target>
+</trans-unit>
+<trans-unit id="sb722c3a640554b3a">
+  <source>Removed from favorites.</source>
+  <target>お気に入りから削除しました。</target>
+</trans-unit>
+<trans-unit id="s20a500234e838dda">
+  <source>Favorites</source>
+  <target>お気に入り</target>
+</trans-unit>
+<trans-unit id="s1a4ad5f48bf9f376">
+  <source>Unfavorite</source>
+  <target>お気に入り解除</target>
+</trans-unit>
+<trans-unit id="s51ba5321a04109cd">
+  <source>Favorite</source>
+  <target>お気に入り登録</target>
+</trans-unit>
+<trans-unit id="sb5c8198a8ca84e1d">
+  <source>No favorites yet.</source>
+  <target>まだお気に入りがありません。</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
