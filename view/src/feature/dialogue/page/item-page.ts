@@ -24,7 +24,11 @@ import {
   type DialogueCommentSelectEvent,
   type DialogueCommentUpdatedEvent,
 } from "../event/comment";
-import type { DialogueDiscussionSelectEvent } from "../event/discussion";
+import {
+  DialogueDiscussionSelectEvent,
+  DialogueFavoriteCreateEvent,
+  DialogueFavoriteDeleteEvent,
+} from "../event/discussion";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
@@ -134,6 +138,32 @@ export class DialogueItemPage extends LitElement {
     });
   }
 
+  private async _handleFavoriteCreate(e: DialogueFavoriteCreateEvent) {
+    try {
+      await favoriteDiscussionRepository.favorite(
+        e.workspaceId,
+        e.discussionId,
+      );
+      this._favorites = await favoriteDiscussionRepository.list(e.workspaceId);
+      showToast(this, msg("Added to favorites."), "success", 2000);
+    } catch (error) {
+      showToast(this, String(error), "error");
+    }
+  }
+
+  private async _handleFavoriteDelete(e: DialogueFavoriteDeleteEvent) {
+    try {
+      await favoriteDiscussionRepository.unfavorite(
+        e.workspaceId,
+        e.discussionId,
+      );
+      this._favorites = this._favorites.filter((f) => f.id !== e.discussionId);
+      showToast(this, msg("Removed from favorites."), "success", 2000);
+    } catch (error) {
+      showToast(this, String(error), "error");
+    }
+  }
+
   private _renderLeftSidebar(isTouch: boolean) {
     if (this._favorites.length === 0) return nothing;
 
@@ -142,6 +172,7 @@ export class DialogueItemPage extends LitElement {
         .favorites=${this._favorites}
         .selectedDiscussionId=${this.discussionId}
         @dialogue-discussion-select=${this._handleFavoriteSelect}
+        @dialogue-favorite-delete=${this._handleFavoriteDelete}
       ></dialogue-favorite-list>
     `;
 
@@ -200,11 +231,15 @@ export class DialogueItemPage extends LitElement {
   }
 
   private _renderMainContent() {
+    const isFavorited = this._favorites.some((f) => f.id === this.discussionId);
     return html`
       <main class="main">
         <div class="detail">
           <dialogue-discussion-detail
             .discussion=${this._discussion}
+            .favorited=${isFavorited}
+            @dialogue-favorite-create=${this._handleFavoriteCreate}
+            @dialogue-favorite-delete=${this._handleFavoriteDelete}
           ></dialogue-discussion-detail>
         </div>
         <div class="comment-frame">

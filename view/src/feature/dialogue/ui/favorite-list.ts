@@ -3,9 +3,13 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../shared/style/base";
+import { hoverButtonStyle } from "../../../shared/style/hover-button";
 import { iconStyle } from "../../../shared/style/icon";
 import { listStyles } from "../../../shared/style/list";
-import { DialogueDiscussionSelectEvent } from "../event/discussion";
+import {
+  DialogueDiscussionSelectEvent,
+  DialogueFavoriteDeleteEvent,
+} from "../event/discussion";
 
 export interface FavoriteItem {
   id: string;
@@ -21,6 +25,13 @@ export class DialogueFavoriteList extends LitElement {
 
   @property({ type: String })
   selectedDiscussionId?: string;
+
+  private handleDelete(e: Event, workspaceId: string, discussionId: string) {
+    e.stopPropagation();
+    this.dispatchEvent(
+      new DialogueFavoriteDeleteEvent(workspaceId, discussionId),
+    );
+  }
 
   render() {
     if (this.favorites.length === 0) {
@@ -52,6 +63,14 @@ export class DialogueFavoriteList extends LitElement {
                   </div>
                 </div>
               </div>
+              <button
+                class="btn-hover danger delete-button"
+                aria-label=${msg("delete")}
+                @click=${(e: Event) =>
+                  this.handleDelete(e, f.workspaceId, f.id)}
+              >
+                <span class="material-symbols-outlined">delete</span>
+              </button>
             </div>
           `,
         )}
@@ -62,6 +81,7 @@ export class DialogueFavoriteList extends LitElement {
   static styles = [
     baseStyle,
     iconStyle,
+    hoverButtonStyle,
     listStyles,
     css`
       .empty {
@@ -102,6 +122,11 @@ export class DialogueFavoriteList extends LitElement {
       }
       .count {
         font-size: 0.8rem;
+      }
+      .delete-button {
+        right: 0;
+        top: 50%;
+        transform: translate(50%, -50%);
       }
     `,
   ];
