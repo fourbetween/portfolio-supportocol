@@ -558,6 +558,10 @@
   <source>Manage your projects.</source>
   <target>プロジェクトを管理しましょう。</target>
 </trans-unit>
+<trans-unit id="s838f38a9c9e37172">
+  <source>Are you sure you want to delete "<x id="0" equiv-text="${this.project.name}"/>"? All discussions in this project will also be deleted.</source>
+  <target>「<x id="0" equiv-text="${this.project.name}"/>」を削除してもよろしいですか？このプロジェクト内のすべての議論も削除されます。</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

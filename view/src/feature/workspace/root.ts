@@ -12,7 +12,7 @@ export class WorkspaceRoot extends LitElement {
       {
         path: pathInFeature(paths.workspace.projects),
         enter: async () => {
-          await import("./page/workspace-projects-page");
+          await import("./page/projects-page");
           return authService.requireAuth();
         },
         render: () => html`
