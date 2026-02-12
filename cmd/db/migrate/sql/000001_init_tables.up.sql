@@ -135,6 +135,6 @@ CREATE TABLE favorite_discussions (
 	PRIMARY KEY (member_id, discussion_id),
 	CONSTRAINT favorite_discussions_members_fk FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
 	CONSTRAINT favorite_discussions_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE,
-	INDEX idx_favorite_discussions_member (member_id)
+	INDEX idx_favorite_discussions_discussion (discussion_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
