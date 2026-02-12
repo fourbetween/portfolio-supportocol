@@ -22,6 +22,33 @@ func (UnimplementedHandler) V1WorkspaceMeGet(ctx context.Context) (r []Workspace
 	return r, ht.ErrNotImplemented
 }
 
+// V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDelete implements DELETE /v1/workspace/workspaces/{workspaceId}/discussions/{discussionId}/favorite operation.
+//
+// Remove discussion from favorites.
+//
+// DELETE /v1/workspace/workspaces/{workspaceId}/discussions/{discussionId}/favorite
+func (UnimplementedHandler) V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDelete(ctx context.Context, params V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteParams) error {
+	return ht.ErrNotImplemented
+}
+
+// V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePut implements PUT /v1/workspace/workspaces/{workspaceId}/discussions/{discussionId}/favorite operation.
+//
+// Add discussion to favorites.
+//
+// PUT /v1/workspace/workspaces/{workspaceId}/discussions/{discussionId}/favorite
+func (UnimplementedHandler) V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePut(ctx context.Context, params V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutParams) error {
+	return ht.ErrNotImplemented
+}
+
+// V1WorkspaceWorkspacesWorkspaceIdFavoritesGet implements GET /v1/workspace/workspaces/{workspaceId}/favorites operation.
+//
+// Get favorite discussions.
+//
+// GET /v1/workspace/workspaces/{workspaceId}/favorites
+func (UnimplementedHandler) V1WorkspaceWorkspacesWorkspaceIdFavoritesGet(ctx context.Context, params V1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams) (r []FavoriteDiscussionSummary, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1WorkspaceWorkspacesWorkspaceIdProjectsGet implements GET /v1/workspace/workspaces/{workspaceId}/projects operation.
 //
 // Get projects.

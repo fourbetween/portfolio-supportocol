@@ -11,11 +11,8 @@ import (
 	"time"
 )
 
-type Members struct {
-	ID          string `sql:"primary_key"`
-	WorkspaceID string
-	UserID      string
-	Role        string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+type FavoriteDiscussions struct {
+	MemberID     string `sql:"primary_key"`
+	DiscussionID string `sql:"primary_key"`
+	CreatedAt    time.Time
 }

@@ -33,12 +33,14 @@ CREATE TABLE workspaces (
 
 -- ワークスペースメンバー
 CREATE TABLE members (
+	id CHAR(36) NOT NULL,
 	workspace_id CHAR(36) NOT NULL,
 	user_id CHAR(36) NOT NULL,
 	role VARCHAR(20) NOT NULL,
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	PRIMARY KEY (workspace_id, user_id),
+	PRIMARY KEY (id),
+	UNIQUE KEY (workspace_id, user_id),
 	CONSTRAINT members_workspaces_fk FOREIGN KEY (workspace_id) REFERENCES workspaces(id) ON DELETE CASCADE,
 	CONSTRAINT members_users_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -48,6 +50,7 @@ CREATE TABLE projects (
 	id CHAR(36) NOT NULL,
 	workspace_id CHAR(36) NOT NULL,
 	name VARCHAR(255) NOT NULL,
+	premise TEXT NOT NULL,
 	is_default BOOLEAN NOT NULL DEFAULT FALSE,
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -61,6 +64,7 @@ CREATE TABLE discussions (
 	workspace_id CHAR(36) NOT NULL,
 	project_id CHAR(36) NOT NULL,
 	theme VARCHAR(255) NOT NULL,
+	premise TEXT NOT NULL,
 	conclusion TEXT NOT NULL,
 	status VARCHAR(20) NOT NULL DEFAULT 'private',
 	comments_count INT NOT NULL DEFAULT 0,
@@ -122,3 +126,15 @@ CREATE TABLE dialogue_settings (
 	PRIMARY KEY (discussion_id),
 	CONSTRAINT dialogue_settings_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- お気に入り議論
+CREATE TABLE favorite_discussions (
+	member_id CHAR(36) NOT NULL,
+	discussion_id CHAR(36) NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (member_id, discussion_id),
+	CONSTRAINT favorite_discussions_members_fk FOREIGN KEY (member_id) REFERENCES members(id) ON DELETE CASCADE,
+	CONSTRAINT favorite_discussions_discussions_fk FOREIGN KEY (discussion_id) REFERENCES discussions(id) ON DELETE CASCADE,
+	INDEX idx_favorite_discussions_discussion (discussion_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+

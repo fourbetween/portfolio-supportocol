@@ -166,3 +166,46 @@ func (s *workspaceQueryService) IsPersonalWorkspace(ctx context.Context, workspa
 
 	return dest.Type == "personal", nil
 }
+
+func (s *workspaceQueryService) ListFavoriteDiscussions(ctx context.Context, workspaceID string, userID string) ([]usecase.FavoriteDiscussionSummary, error) {
+	stmt := mysql.
+		SELECT(
+			table.Discussions.ID,
+			table.Discussions.WorkspaceID,
+			table.Discussions.Theme,
+			table.Discussions.Status,
+			table.Discussions.ArchivedAt,
+			table.Discussions.LastCommentedAt,
+			table.Discussions.CommentsCount,
+		).
+		FROM(
+			table.FavoriteDiscussions.
+				INNER_JOIN(table.Discussions, table.FavoriteDiscussions.DiscussionID.EQ(table.Discussions.ID)).
+				INNER_JOIN(table.Members, table.FavoriteDiscussions.MemberID.EQ(table.Members.ID)),
+		).
+		WHERE(
+			table.Members.WorkspaceID.EQ(mysql.String(workspaceID)).
+				AND(table.Members.UserID.EQ(mysql.String(userID))),
+		).
+		ORDER_BY(table.FavoriteDiscussions.CreatedAt.DESC())
+
+	var dest []model.Discussions
+	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
+		return nil, fmt.Errorf("failed to list favorite discussions: %w", err)
+	}
+
+	res := make([]usecase.FavoriteDiscussionSummary, len(dest))
+	for i, d := range dest {
+		res[i] = usecase.FavoriteDiscussionSummary{
+			ID:              d.ID,
+			WorkspaceID:     d.WorkspaceID,
+			Theme:           d.Theme,
+			Status:          d.Status,
+			ArchivedAt:      d.ArchivedAt,
+			LastCommentedAt: d.LastCommentedAt,
+			CommentsCount:   int(d.CommentsCount),
+		}
+	}
+
+	return res, nil
+}

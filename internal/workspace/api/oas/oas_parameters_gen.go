@@ -15,6 +15,342 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+// V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteParams is parameters of DELETE /v1/workspace/workspaces/{workspaceId}/discussions/{discussionId}/favorite operation.
+type V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteParams struct {
+	WorkspaceId  ID
+	DiscussionId ID
+}
+
+func unpackV1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteParams(packed middleware.Parameters) (params V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "discussionId",
+			In:   "path",
+		}
+		params.DiscussionId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeV1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteParams(args [2]string, argsEscaped bool, r *http.Request) (params V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteParams, _ error) {
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: discussionId.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "discussionId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotDiscussionIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "discussionId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutParams is parameters of PUT /v1/workspace/workspaces/{workspaceId}/discussions/{discussionId}/favorite operation.
+type V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutParams struct {
+	WorkspaceId  ID
+	DiscussionId ID
+}
+
+func unpackV1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutParams(packed middleware.Parameters) (params V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "discussionId",
+			In:   "path",
+		}
+		params.DiscussionId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeV1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutParams(args [2]string, argsEscaped bool, r *http.Request) (params V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoritePutParams, _ error) {
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: discussionId.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "discussionId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotDiscussionIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotDiscussionIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.DiscussionId = ID(paramsDotDiscussionIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "discussionId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams is parameters of GET /v1/workspace/workspaces/{workspaceId}/favorites operation.
+type V1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams struct {
+	WorkspaceId ID
+}
+
+func unpackV1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams(packed middleware.Parameters) (params V1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "workspaceId",
+			In:   "path",
+		}
+		params.WorkspaceId = packed[key].(ID)
+	}
+	return params
+}
+
+func decodeV1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams, _ error) {
+	// Decode path: workspaceId.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "workspaceId",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				var paramsDotWorkspaceIdVal uuid.UUID
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToUUID(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotWorkspaceIdVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.WorkspaceId = ID(paramsDotWorkspaceIdVal)
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "workspaceId",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1WorkspaceWorkspacesWorkspaceIdProjectsGetParams is parameters of GET /v1/workspace/workspaces/{workspaceId}/projects operation.
 type V1WorkspaceWorkspacesWorkspaceIdProjectsGetParams struct {
 	WorkspaceId ID

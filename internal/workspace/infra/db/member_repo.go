@@ -71,6 +71,7 @@ func (r *MemberRepository) Search(ctx context.Context, params domain.SearchMembe
 
 func (r *MemberRepository) Save(ctx context.Context, m *domain.Member) error {
 	record := model.Members{
+		ID:          m.ID(),
 		WorkspaceID: m.WorkspaceID(),
 		UserID:      m.UserID(),
 		Role:        m.Role().String(),
@@ -98,8 +99,7 @@ func (r *MemberRepository) Delete(ctx context.Context, m *domain.Member) error {
 	stmt := table.Members.
 		DELETE().
 		WHERE(
-			table.Members.WorkspaceID.EQ(mysql.String(m.WorkspaceID())).
-				AND(table.Members.UserID.EQ(mysql.String(m.UserID()))),
+			table.Members.ID.EQ(mysql.String(m.ID())),
 		)
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
@@ -111,6 +111,7 @@ func (r *MemberRepository) Delete(ctx context.Context, m *domain.Member) error {
 
 func (r *MemberRepository) toDomain(row model.Members) (*domain.Member, error) {
 	return r.fac.Reconstruct(domain.ReconstructMemberParams{
+		ID:          row.ID,
 		WorkspaceID: row.WorkspaceID,
 		UserID:      row.UserID,
 		Role:        domain.MemberRole(row.Role),

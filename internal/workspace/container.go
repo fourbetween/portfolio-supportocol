@@ -22,6 +22,11 @@ type APIContainer struct {
 	UpdateProject *usecase.UpdateProjectUsecase
 	DeleteProject *usecase.DeleteProjectUsecase
 
+	// Favorite Discussions
+	AddFavoriteDiscussion    *usecase.AddFavoriteDiscussionUsecase
+	RemoveFavoriteDiscussion *usecase.RemoveFavoriteDiscussionUsecase
+	ListFavoriteDiscussions  *usecase.ListFavoriteDiscussionsUsecase
+
 	// Hooks
 	UserCreatedHandler *usecase.UserCreatedHandler
 
@@ -37,12 +42,13 @@ func NewAPIContainer(
 	txManager := dbtx.NewManager(dbCon)
 
 	workspaceFac := domain.NewWorkspaceFactory(idSrv, clockSrv)
-	memberFac := domain.NewMemberFactory(clockSrv)
+	memberFac := domain.NewMemberFactory(idSrv, clockSrv)
 	projectFac := domain.NewProjectFactory(idSrv, clockSrv)
 
 	workspaceRepo := db.NewWorkspaceRepository(dbCon, workspaceFac)
 	memberRepo := db.NewMemberRepository(dbCon, memberFac)
 	projectRepo := db.NewProjectRepository(dbCon, projectFac)
+	favRepo := db.NewFavoriteDiscussionRepository(dbCon)
 
 	workspaceQuerySrv := db.NewWorkspaceQueryService(dbCon)
 
@@ -56,6 +62,11 @@ func NewAPIContainer(
 		ListProjects:  usecase.NewListProjectsUsecase(memberRepo, projectRepo),
 		UpdateProject: usecase.NewUpdateProjectUsecase(memberRepo, projectRepo, txManager),
 		DeleteProject: usecase.NewDeleteProjectUsecase(memberRepo, projectRepo, txManager),
+
+		// Favorite Discussions
+		AddFavoriteDiscussion:    usecase.NewAddFavoriteDiscussionUsecase(memberRepo, favRepo, clockSrv),
+		RemoveFavoriteDiscussion: usecase.NewRemoveFavoriteDiscussionUsecase(memberRepo, favRepo),
+		ListFavoriteDiscussions:  usecase.NewListFavoriteDiscussionsUsecase(workspaceQuerySrv),
 
 		// Hooks
 		UserCreatedHandler: usecase.NewUserCreatedHandler(workspaceRepo, memberRepo, projectRepo, workspaceFac, memberFac, projectFac, txManager),
