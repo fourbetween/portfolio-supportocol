@@ -16,15 +16,13 @@ const TEMPLATES = [
   {
     title: () => msg("Inconsistency"),
     description: () =>
-      msg(
-        "The argument contains internal logical conflicts or self-contradictions.",
-      ),
+      msg("Containing internal logical conflicts or self-contradictions."),
   },
   {
     title: () => msg("Circular Reasoning"),
     description: () =>
       msg(
-        "The argument assumes the truth of the conclusion as a premise instead of providing evidence.",
+        "Assuming the truth of the conclusion as a premise instead of providing evidence.",
       ),
   },
   {
