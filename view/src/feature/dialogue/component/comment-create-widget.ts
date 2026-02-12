@@ -60,7 +60,6 @@ export class DialogueCommentCreateWidget extends LitElement {
     iconStyle,
     css`
       :host {
-        display: block;
         padding: 8px 0;
       }
       .add-button {
@@ -69,6 +68,7 @@ export class DialogueCommentCreateWidget extends LitElement {
         width: 100%;
         justify-content: flex-start;
         background: transparent;
+        font-weight: 400;
       }
       .add-button:hover {
         background-color: var(--color-canvas-subtle);

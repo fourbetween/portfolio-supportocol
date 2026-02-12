@@ -24,15 +24,13 @@ export class LearningCommentAddButton extends LitElement {
     buttonStyle,
     iconStyle,
     css`
-      :host {
-        display: block;
-      }
       .btn {
         color: var(--color-fg-muted);
         border: 1px dashed var(--color-border-default);
         width: 100%;
         justify-content: flex-start;
         background: transparent;
+        font-weight: 400;
       }
       .btn:hover {
         background-color: var(--color-canvas-subtle);
