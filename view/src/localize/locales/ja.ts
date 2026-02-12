@@ -148,5 +148,6 @@
 'sfed17b0e30748cdf': `経路`,
 'sff329d6e90ca964d': `コメントを入力...`,
 'sffc608d183d88e22': `論証そのものではなく、論証を行っている人を攻撃すること。`,
+'s838f38a9c9e37172': str`Are you sure you want to delete "${0}"? All discussions in this project will also be deleted.`,
     };
   

@@ -4,7 +4,7 @@ import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { listStyles } from "../../../shared/style/list";
 import type { Project } from "../model/project";
-import "./workspace-project-item";
+import "./project-item";
 
 @customElement("workspace-project-list")
 export class WorkspaceProjectList extends LitElement {

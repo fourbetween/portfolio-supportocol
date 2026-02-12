@@ -45,7 +45,11 @@ export class WorkspaceProjectItem extends LitElement {
 
   private handleDelete() {
     if (
-      confirm(msg(str`Are you sure you want to delete "${this.project.name}"?`))
+      confirm(
+        msg(
+          str`Are you sure you want to delete "${this.project.name}"? All discussions in this project will also be deleted.`,
+        ),
+      )
     ) {
       this.dispatchEvent(new WorkspaceProjectDeleteEvent(this.project.id));
     }

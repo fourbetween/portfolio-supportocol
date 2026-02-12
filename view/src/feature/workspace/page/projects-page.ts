@@ -2,7 +2,7 @@ import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
-import "../component/workspace-projects-widget";
+import "../component/projects-widget";
 
 @customElement("workspace-projects-page")
 export class WorkspaceProjectsPage extends LitElement {
