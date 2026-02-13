@@ -8,6 +8,8 @@ const LEARNING_DISCUSSION_UPDATED_EVENT_NAME = "learning-discussion-updated";
 const LEARNING_DISCUSSION_DELETE_EVENT_NAME = "learning-discussion-delete";
 const LEARNING_DISCUSSION_DELETED_EVENT_NAME = "learning-discussion-deleted";
 const LEARNING_DISCUSSION_SEARCH_EVENT_NAME = "learning-discussion-search";
+const LEARNING_DISCUSSION_ARCHIVE_FILTER_EVENT_NAME =
+  "learning-discussion-archive-filter";
 const LEARNING_DISCUSSION_UPDATE_STATUS_EVENT_NAME =
   "learning-discussion-update-status";
 const LEARNING_DISCUSSION_UPDATE_DIALOGUE_SETTINGS_EVENT_NAME =
@@ -121,7 +123,17 @@ export class LearningDiscussionSearchEvent extends Event {
     this.query = query;
   }
 }
+export class LearningDiscussionArchiveFilterEvent extends Event {
+  public readonly archived: boolean;
 
+  constructor(archived: boolean) {
+    super(LEARNING_DISCUSSION_ARCHIVE_FILTER_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+    this.archived = archived;
+  }
+}
 export class LearningDiscussionFormOpenEvent extends Event {
   constructor() {
     super(LEARNING_DISCUSSION_FORM_OPEN_EVENT_NAME, {
@@ -198,6 +210,7 @@ declare global {
     [LEARNING_DISCUSSION_DELETE_EVENT_NAME]: LearningDiscussionDeleteEvent;
     [LEARNING_DISCUSSION_DELETED_EVENT_NAME]: LearningDiscussionDeletedEvent;
     [LEARNING_DISCUSSION_SEARCH_EVENT_NAME]: LearningDiscussionSearchEvent;
+    [LEARNING_DISCUSSION_ARCHIVE_FILTER_EVENT_NAME]: LearningDiscussionArchiveFilterEvent;
     [LEARNING_DISCUSSION_UPDATE_STATUS_EVENT_NAME]: LearningDiscussionUpdateStatusEvent;
     [LEARNING_DISCUSSION_UPDATE_DIALOGUE_SETTINGS_EVENT_NAME]: LearningDiscussionUpdateDialogueSettingsEvent;
     [LEARNING_DISCUSSION_ARCHIVE_EVENT_NAME]: LearningDiscussionArchiveEvent;

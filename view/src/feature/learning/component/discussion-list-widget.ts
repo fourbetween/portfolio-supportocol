@@ -7,6 +7,7 @@ import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
+  LearningDiscussionArchiveFilterEvent,
   LearningDiscussionCreatedEvent,
   LearningDiscussionCreateEvent,
   LearningDiscussionDeletedEvent,
@@ -33,6 +34,9 @@ export class LearningDiscussionListWidget extends LitElement {
   @state()
   private _searchQuery = "";
 
+  @state()
+  private _archived = false;
+
   private async _handleAddDiscussion(e: LearningDiscussionCreateEvent) {
     if (!this.workspace || !this.projectId) return;
     try {
@@ -52,6 +56,13 @@ export class LearningDiscussionListWidget extends LitElement {
     this._searchQuery = e.query;
   }
 
+  private _handleToggleArchived(e: Event) {
+    this._archived = (e.target as HTMLInputElement).checked;
+    this.dispatchEvent(
+      new LearningDiscussionArchiveFilterEvent(this._archived),
+    );
+  }
+
   private async _handleDeleteDiscussion(e: LearningDiscussionDeleteEvent) {
     if (!this.workspace) return;
     const { discussionId } = e;
@@ -67,6 +78,7 @@ export class LearningDiscussionListWidget extends LitElement {
     try {
       await discussionRepository.delete(
         this.workspace.workspace.id,
+        discussion.projectId,
         discussionId,
       );
       this.dispatchEvent(new LearningDiscussionDeletedEvent(discussionId));
@@ -86,6 +98,16 @@ export class LearningDiscussionListWidget extends LitElement {
     return html`
       <div class="widget">
         <div class="header">
+          <div class="filters">
+            <label class="archived-filter">
+              <input
+                type="checkbox"
+                .checked=${this._archived}
+                @change=${this._handleToggleArchived}
+              />
+              ${msg("Show archived")}
+            </label>
+          </div>
           <learning-discussion-search-bar
             .value=${this._searchQuery}
             @learning-discussion-search=${this._handleSearch}
@@ -117,7 +139,22 @@ export class LearningDiscussionListWidget extends LitElement {
       }
       .header {
         display: flex;
+        flex-direction: column;
         gap: 8px;
+      }
+      .filters {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--color-fg-muted);
+      }
+      .archived-filter {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        cursor: pointer;
       }
       .content {
         flex: 1;
