@@ -28,6 +28,7 @@ import {
   type LearningCommentUpdatedEvent,
 } from "../event/comment";
 import {
+  type LearningDiscussionArchiveFilterEvent,
   type LearningDiscussionDeletedEvent,
   type LearningDiscussionSelectEvent,
   type LearningDiscussionUpdatedEvent,
@@ -65,12 +66,19 @@ export class LearningDashboardPage extends LitElement {
   private _selectedCommentId?: string;
 
   @state()
+  private _showArchived = false;
+
+  @state()
   private _activeDrawer?: "left" | "right";
 
   private summariesTask = new Task(this, {
-    task: async ([workspace, projectId]) => {
+    task: async ([workspace, projectId, showArchived]) => {
       if (!workspace || !projectId) return [] as DiscussionSummary[];
-      return discussionRepository.list(workspace.workspace.id, projectId);
+      return discussionRepository.list(
+        workspace.workspace.id,
+        projectId,
+        showArchived as boolean,
+      );
     },
     onComplete: (summaries) => {
       this._summaries = summaries as DiscussionSummary[];
@@ -78,7 +86,7 @@ export class LearningDashboardPage extends LitElement {
     onError: (e: unknown) => {
       showToast(this, String(e), "error");
     },
-    args: () => [this.workspace, this._selectedProjectId],
+    args: () => [this.workspace, this._selectedProjectId, this._showArchived],
   });
 
   constructor() {
@@ -162,6 +170,10 @@ export class LearningDashboardPage extends LitElement {
     url.searchParams.set("id", e.discussionId);
     window.history.pushState({}, "", url);
     this._activeDrawer = undefined;
+  }
+
+  private _handleArchiveFilter(e: LearningDiscussionArchiveFilterEvent) {
+    this._showArchived = e.archived;
   }
 
   private _handleDiscussionUpdated(e: LearningDiscussionUpdatedEvent) {
@@ -265,6 +277,7 @@ export class LearningDashboardPage extends LitElement {
         @learning-discussion-select=${this._handleDiscussionSelect}
         @learning-discussion-created=${this._handleDiscussionUpdated}
         @learning-discussion-deleted=${this._handleDiscussionDeleted}
+        @learning-discussion-archive-filter=${this._handleArchiveFilter}
       ></learning-discussion-list-widget>
     `;
   }

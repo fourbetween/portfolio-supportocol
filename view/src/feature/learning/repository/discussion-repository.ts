@@ -7,12 +7,32 @@ import type {
 
 export class DiscussionRepository {
   private _cache = new Map<string, Discussion>();
+  private _listCache = new Map<string, DiscussionSummary[]>();
+
+  private _getListCacheKey(
+    workspaceId: string,
+    projectId: string,
+    archived?: boolean,
+  ): string {
+    return `${workspaceId}:${projectId}:${!!archived}`;
+  }
+
+  private _clearListCache(workspaceId: string, projectId: string) {
+    this._listCache.delete(this._getListCacheKey(workspaceId, projectId, true));
+    this._listCache.delete(
+      this._getListCacheKey(workspaceId, projectId, false),
+    );
+  }
 
   async list(
     workspaceId: string,
     projectId: string,
     archived?: boolean,
   ): Promise<DiscussionSummary[]> {
+    const key = this._getListCacheKey(workspaceId, projectId, archived);
+    const cached = this._listCache.get(key);
+    if (cached) return cached;
+
     const { data, error } = await client.GET(
       "/v1/learning/workspaces/{workspaceId}/discussions",
       {
@@ -23,7 +43,9 @@ export class DiscussionRepository {
       },
     );
     if (error) throw new Error(error.message);
-    return data || [];
+    const result = data || [];
+    this._listCache.set(key, result);
+    return result;
   }
 
   async get(workspaceId: string, discussionId: string): Promise<Discussion> {
@@ -60,6 +82,7 @@ export class DiscussionRepository {
     );
     if (error) throw new Error(error.message);
     this._cache.set(data.id, data);
+    this._clearListCache(workspaceId, projectId);
     return data;
   }
 
@@ -82,6 +105,7 @@ export class DiscussionRepository {
     );
     if (error) throw new Error(error.message);
     this._cache.set(data.id, data);
+    this._clearListCache(workspaceId, projectId);
     return data;
   }
 
@@ -107,6 +131,7 @@ export class DiscussionRepository {
     );
     if (error) throw new Error(error.message);
     this._cache.set(data.id, data);
+    this._clearListCache(workspaceId, data.projectId);
     return data;
   }
 
@@ -124,6 +149,7 @@ export class DiscussionRepository {
     );
     if (error) throw new Error(error.message);
     this._cache.set(data.id, data);
+    this._clearListCache(workspaceId, data.projectId);
     return data;
   }
 
@@ -141,10 +167,15 @@ export class DiscussionRepository {
     );
     if (error) throw new Error(error.message);
     this._cache.set(data.id, data);
+    this._clearListCache(workspaceId, data.projectId);
     return data;
   }
 
-  async delete(workspaceId: string, discussionId: string): Promise<void> {
+  async delete(
+    workspaceId: string,
+    projectId: string,
+    discussionId: string,
+  ): Promise<void> {
     const { error } = await client.DELETE(
       "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}",
       {
@@ -155,6 +186,7 @@ export class DiscussionRepository {
     );
     if (error) throw new Error(error.message);
     this._cache.delete(discussionId);
+    this._clearListCache(workspaceId, projectId);
   }
 }
 
