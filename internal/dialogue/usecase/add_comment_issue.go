@@ -16,6 +16,7 @@ type AddCommentIssueUsecase struct {
 	idSrv          id.Service
 	tx             dbtx.Manager
 	permSv         domain.PermissionService
+	auditSv        domain.AuditService
 }
 
 func NewAddCommentIssueUsecase(
@@ -24,6 +25,7 @@ func NewAddCommentIssueUsecase(
 	idSrv id.Service,
 	tx dbtx.Manager,
 	permSv domain.PermissionService,
+	auditSv domain.AuditService,
 ) *AddCommentIssueUsecase {
 	return &AddCommentIssueUsecase{
 		discussionRepo: discussionRepo,
@@ -31,6 +33,7 @@ func NewAddCommentIssueUsecase(
 		idSrv:          idSrv,
 		tx:             tx,
 		permSv:         permSv,
+		auditSv:        auditSv,
 	}
 }
 
@@ -45,6 +48,7 @@ type AddCommentIssueInput struct {
 
 func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIssueInput) (*domain.Comment, error) {
 	var comment *domain.Comment
+	var addedIssue domain.CommentIssue
 	err := u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 			ID:          input.DiscussionID,
@@ -80,12 +84,13 @@ func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIs
 			createdBy = &input.UserID
 		}
 
-		comment.AddIssue(domain.CommentIssue{
+		addedIssue = domain.CommentIssue{
 			ID:          u.idSrv.Generate(),
 			Title:       input.Title,
 			Description: input.Description,
 			CreatedBy:   createdBy,
-		})
+		}
+		comment.AddIssue(addedIssue)
 
 		if err := u.commentRepo.Update(ctx, comment); err != nil {
 			return err
@@ -97,6 +102,8 @@ func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIs
 	if err != nil {
 		return nil, err
 	}
+
+	u.auditSv.LogCommentIssueAdded(ctx, comment, addedIssue)
 
 	return comment, nil
 }

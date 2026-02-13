@@ -17,6 +17,7 @@ type CreateCommentUsecase struct {
 	clock          clock.Service
 	tx             dbtx.Manager
 	permSv         domain.PermissionService
+	auditSv        domain.AuditService
 }
 
 func NewCreateCommentUsecase(
@@ -26,6 +27,7 @@ func NewCreateCommentUsecase(
 	clock clock.Service,
 	tx dbtx.Manager,
 	permSv domain.PermissionService,
+	auditSv domain.AuditService,
 ) *CreateCommentUsecase {
 	return &CreateCommentUsecase{
 		discussionRepo: discussionRepo,
@@ -34,6 +36,7 @@ func NewCreateCommentUsecase(
 		clock:          clock,
 		tx:             tx,
 		permSv:         permSv,
+		auditSv:        auditSv,
 	}
 }
 
@@ -122,6 +125,8 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 	if err != nil {
 		return nil, err
 	}
+
+	u.auditSv.LogCommentCreated(ctx, comment)
 
 	return comment, nil
 }

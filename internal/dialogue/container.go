@@ -5,6 +5,7 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal/dialogue/domain"
 	"github.com/fourbetween/app-supportocol/internal/dialogue/infra/db"
+	"github.com/fourbetween/app-supportocol/internal/dialogue/infra/logging"
 	"github.com/fourbetween/app-supportocol/internal/dialogue/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
@@ -35,12 +36,13 @@ func NewAPIContainer(
 	discussionRepo := db.NewDiscussionRepository(dbCon, discussionFac)
 	discussionQS := db.NewDiscussionQueryService(dbCon)
 	commentRepo := db.NewCommentRepository(dbCon, commentFac)
+	auditSv := logging.NewSlogAuditService()
 
 	return &APIContainer{
 		GetDiscussion:   usecase.NewGetDiscussionUsecase(discussionRepo, permSv),
 		ListDiscussions: usecase.NewListDiscussionsUsecase(discussionQS, permSv),
 		ListComments:    usecase.NewListCommentsUsecase(discussionRepo, commentRepo, permSv),
-		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, clockSrv, txManager, permSv),
-		AddCommentIssue: usecase.NewAddCommentIssueUsecase(discussionRepo, commentRepo, idSrv, txManager, permSv),
+		CreateComment:   usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, clockSrv, txManager, permSv, auditSv),
+		AddCommentIssue: usecase.NewAddCommentIssueUsecase(discussionRepo, commentRepo, idSrv, txManager, permSv, auditSv),
 	}, nil
 }
