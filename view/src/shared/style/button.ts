@@ -19,6 +19,7 @@ export const buttonStyle: CSSResultGroup = css`
     appearance: none;
     background-color: var(--color-btn-bg);
     color: var(--color-btn-text);
+    text-decoration: none;
     transition: background-color 0.2s ease;
   }
 

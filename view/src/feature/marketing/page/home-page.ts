@@ -1,6 +1,7 @@
 import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
+import { paths } from "../../../app/paths";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { iconStyle } from "../../../shared/style/icon";
@@ -12,6 +13,13 @@ export class MarketingHomePage extends LitElement {
       <main class="container container--narrow hero">
         <h1>Supportocol</h1>
         <p class="description">${msg("A platform for logical discussion")}</p>
+
+        <div class="actions">
+          <a href=${paths.dialogue.search} class="btn btn-primary btn-large">
+            <span class="material-symbols-outlined">search</span>
+            ${msg("Public Discussions")}
+          </a>
+        </div>
 
         <section class="features">
           <div class="feature">
