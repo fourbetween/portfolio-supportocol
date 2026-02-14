@@ -46,7 +46,8 @@ func (s *DiscussionQueryService) listDiscussionsByStatus(ctx context.Context, st
 		).
 		FROM(table.Discussions).
 		WHERE(cond).
-		ORDER_BY(table.Discussions.LastCommentedAt.DESC())
+		ORDER_BY(table.Discussions.LastCommentedAt.DESC()).
+		LIMIT(100)
 
 	var dest []model.Discussions
 	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {

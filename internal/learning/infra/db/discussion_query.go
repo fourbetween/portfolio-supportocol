@@ -43,7 +43,8 @@ func (s *discussionQueryService) ListDiscussions(ctx context.Context, params use
 		).
 		FROM(table.Discussions).
 		WHERE(condition).
-		ORDER_BY(table.Discussions.LastCommentedAt.DESC())
+		ORDER_BY(table.Discussions.LastCommentedAt.DESC()).
+		LIMIT(domain.MaxDiscussionsPerProject)
 
 	var dest []model.Discussions
 	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
