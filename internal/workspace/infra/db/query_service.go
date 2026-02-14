@@ -79,6 +79,67 @@ func (s *workspaceQueryService) CanAccessProject(ctx context.Context, userID str
 	return p.ID == projectID, nil
 }
 
+func (s *workspaceQueryService) IsPersonalWorkspace(ctx context.Context, workspaceID string) (bool, error) {
+	stmt := mysql.
+		SELECT(table.Workspaces.Type).
+		FROM(table.Workspaces).
+		WHERE(table.Workspaces.ID.EQ(mysql.String(workspaceID))).
+		LIMIT(1)
+
+	var dest model.Workspaces
+	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
+		if errors.Is(err, qrm.ErrNoRows) {
+			return false, apperr.ErrNotFound
+		}
+		return false, fmt.Errorf("failed to check workspace type: %w", err)
+	}
+
+	return dest.Type == "personal", nil
+}
+
+func (s *workspaceQueryService) ListFavoriteDiscussions(ctx context.Context, workspaceID string, userID string) ([]usecase.FavoriteDiscussionSummary, error) {
+	stmt := mysql.
+		SELECT(
+			table.Discussions.ID,
+			table.Discussions.WorkspaceID,
+			table.Discussions.Theme,
+			table.Discussions.Status,
+			table.Discussions.ArchivedAt,
+			table.Discussions.LastCommentedAt,
+			table.Discussions.CommentsCount,
+		).
+		FROM(
+			table.FavoriteDiscussions.
+				INNER_JOIN(table.Discussions, table.FavoriteDiscussions.DiscussionID.EQ(table.Discussions.ID)).
+				INNER_JOIN(table.Members, table.FavoriteDiscussions.MemberID.EQ(table.Members.ID)),
+		).
+		WHERE(
+			table.Members.WorkspaceID.EQ(mysql.String(workspaceID)).
+				AND(table.Members.UserID.EQ(mysql.String(userID))),
+		).
+		ORDER_BY(table.FavoriteDiscussions.CreatedAt.DESC())
+
+	var dest []model.Discussions
+	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
+		return nil, fmt.Errorf("failed to list favorite discussions: %w", err)
+	}
+
+	res := make([]usecase.FavoriteDiscussionSummary, len(dest))
+	for i, d := range dest {
+		res[i] = usecase.FavoriteDiscussionSummary{
+			ID:              d.ID,
+			WorkspaceID:     d.WorkspaceID,
+			Theme:           d.Theme,
+			Status:          d.Status,
+			ArchivedAt:      d.ArchivedAt,
+			LastCommentedAt: d.LastCommentedAt,
+			CommentsCount:   int(d.CommentsCount),
+		}
+	}
+
+	return res, nil
+}
+
 func (s *workspaceQueryService) loadMyWorkspaceByID(ctx context.Context, userID string, workspaceID string) (usecase.WorkspaceWithMember, error) {
 	stmt := s.selectWorkspaceWithMember().
 		WHERE(
@@ -147,65 +208,4 @@ func (s *workspaceQueryService) selectProjectWithMember() mysql.SelectStatement 
 			table.Projects.
 				INNER_JOIN(table.Members, table.Projects.WorkspaceID.EQ(table.Members.WorkspaceID)),
 		)
-}
-
-func (s *workspaceQueryService) IsPersonalWorkspace(ctx context.Context, workspaceID string) (bool, error) {
-	stmt := mysql.
-		SELECT(table.Workspaces.Type).
-		FROM(table.Workspaces).
-		WHERE(table.Workspaces.ID.EQ(mysql.String(workspaceID))).
-		LIMIT(1)
-
-	var dest model.Workspaces
-	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
-		if errors.Is(err, qrm.ErrNoRows) {
-			return false, apperr.ErrNotFound
-		}
-		return false, fmt.Errorf("failed to check workspace type: %w", err)
-	}
-
-	return dest.Type == "personal", nil
-}
-
-func (s *workspaceQueryService) ListFavoriteDiscussions(ctx context.Context, workspaceID string, userID string) ([]usecase.FavoriteDiscussionSummary, error) {
-	stmt := mysql.
-		SELECT(
-			table.Discussions.ID,
-			table.Discussions.WorkspaceID,
-			table.Discussions.Theme,
-			table.Discussions.Status,
-			table.Discussions.ArchivedAt,
-			table.Discussions.LastCommentedAt,
-			table.Discussions.CommentsCount,
-		).
-		FROM(
-			table.FavoriteDiscussions.
-				INNER_JOIN(table.Discussions, table.FavoriteDiscussions.DiscussionID.EQ(table.Discussions.ID)).
-				INNER_JOIN(table.Members, table.FavoriteDiscussions.MemberID.EQ(table.Members.ID)),
-		).
-		WHERE(
-			table.Members.WorkspaceID.EQ(mysql.String(workspaceID)).
-				AND(table.Members.UserID.EQ(mysql.String(userID))),
-		).
-		ORDER_BY(table.FavoriteDiscussions.CreatedAt.DESC())
-
-	var dest []model.Discussions
-	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
-		return nil, fmt.Errorf("failed to list favorite discussions: %w", err)
-	}
-
-	res := make([]usecase.FavoriteDiscussionSummary, len(dest))
-	for i, d := range dest {
-		res[i] = usecase.FavoriteDiscussionSummary{
-			ID:              d.ID,
-			WorkspaceID:     d.WorkspaceID,
-			Theme:           d.Theme,
-			Status:          d.Status,
-			ArchivedAt:      d.ArchivedAt,
-			LastCommentedAt: d.LastCommentedAt,
-			CommentsCount:   int(d.CommentsCount),
-		}
-	}
-
-	return res, nil
 }
