@@ -10,10 +10,11 @@ import (
 )
 
 type CreateDiscussionUsecase struct {
-	repo   domain.DiscussionRepository
-	fac    *domain.DiscussionFactory
-	permSv domain.PermissionService
-	tx     dbtx.Manager
+	repo    domain.DiscussionRepository
+	fac     *domain.DiscussionFactory
+	permSv  domain.PermissionService
+	tx      dbtx.Manager
+	auditSv domain.AuditService
 }
 
 func NewCreateDiscussionUsecase(
@@ -21,12 +22,14 @@ func NewCreateDiscussionUsecase(
 	fac *domain.DiscussionFactory,
 	permSv domain.PermissionService,
 	tx dbtx.Manager,
+	auditSv domain.AuditService,
 ) *CreateDiscussionUsecase {
 	return &CreateDiscussionUsecase{
-		repo:   repo,
-		fac:    fac,
-		permSv: permSv,
-		tx:     tx,
+		repo:    repo,
+		fac:     fac,
+		permSv:  permSv,
+		tx:      tx,
+		auditSv: auditSv,
 	}
 }
 
@@ -86,6 +89,8 @@ func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscu
 	if err != nil {
 		return nil, err
 	}
+
+	u.auditSv.LogDiscussionCreated(ctx, discussion)
 
 	return discussion, nil
 }

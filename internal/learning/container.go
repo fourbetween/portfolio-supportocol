@@ -8,6 +8,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/ai"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/db"
+	"github.com/fourbetween/app-supportocol/internal/learning/infra/logging"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/queue"
 	"github.com/fourbetween/app-supportocol/internal/learning/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
@@ -69,18 +70,20 @@ func NewAPIContainer(
 		sqs.NewDefaultQueue[domain.GenerateCommentParams](queueURL, awscfg),
 	)
 
+	auditSv := logging.NewSlogAuditService()
+
 	return &APIContainer{
-		CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac, permSv, txManager),
+		CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac, permSv, txManager, auditSv),
 		GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo, permSv),
 		ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionQS, permSv),
-		UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo, permSv, txManager),
+		UpdateDiscussion:         usecase.NewUpdateDiscussionUsecase(discussionRepo, permSv, txManager, auditSv),
 		UpdateDiscussionStatus:   usecase.NewUpdateDiscussionStatusUsecase(discussionRepo, commentRepo, permSv, txManager),
 		ArchiveDiscussion:        usecase.NewArchiveDiscussionUsecase(discussionRepo, permSv, txManager, clockSrv),
 		UnarchiveDiscussion:      usecase.NewUnarchiveDiscussionUsecase(discussionRepo, permSv, txManager),
 		DeleteDiscussion:         usecase.NewDeleteDiscussionUsecase(discussionRepo, permSv, txManager),
-		CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, permSv, clockSrv, txManager),
+		CreateComment:            usecase.NewCreateCommentUsecase(discussionRepo, commentRepo, commentFac, permSv, clockSrv, txManager, auditSv),
 		ListComments:             usecase.NewListCommentsUsecase(discussionRepo, commentRepo, permSv),
-		UpdateComment:            usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo, permSv, txManager),
+		UpdateComment:            usecase.NewUpdateCommentUsecase(discussionRepo, commentRepo, permSv, txManager, auditSv),
 		ArchiveComment:           usecase.NewArchiveCommentUsecase(discussionRepo, commentRepo, permSv, txManager, clockSrv),
 		UnarchiveComment:         usecase.NewUnarchiveCommentUsecase(discussionRepo, commentRepo, permSv, txManager),
 		DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo, permSv, txManager),

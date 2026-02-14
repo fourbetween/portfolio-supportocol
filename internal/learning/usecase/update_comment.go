@@ -14,6 +14,7 @@ type UpdateCommentUsecase struct {
 	commentRepo    domain.CommentRepository
 	permSv         domain.PermissionService
 	tx             dbtx.Manager
+	auditSv        domain.AuditService
 }
 
 func NewUpdateCommentUsecase(
@@ -21,12 +22,14 @@ func NewUpdateCommentUsecase(
 	commentRepo domain.CommentRepository,
 	permSv domain.PermissionService,
 	tx dbtx.Manager,
+	auditSv domain.AuditService,
 ) *UpdateCommentUsecase {
 	return &UpdateCommentUsecase{
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
 		permSv:         permSv,
 		tx:             tx,
+		auditSv:        auditSv,
 	}
 }
 
@@ -99,6 +102,8 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 	if err != nil {
 		return nil, err
 	}
+
+	u.auditSv.LogCommentUpdated(ctx, comment)
 
 	return comment, nil
 }

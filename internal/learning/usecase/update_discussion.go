@@ -10,16 +10,18 @@ import (
 )
 
 type UpdateDiscussionUsecase struct {
-	repo   domain.DiscussionRepository
-	permSv domain.PermissionService
-	tx     dbtx.Manager
+	repo    domain.DiscussionRepository
+	permSv  domain.PermissionService
+	tx      dbtx.Manager
+	auditSv domain.AuditService
 }
 
-func NewUpdateDiscussionUsecase(repo domain.DiscussionRepository, permSv domain.PermissionService, tx dbtx.Manager) *UpdateDiscussionUsecase {
+func NewUpdateDiscussionUsecase(repo domain.DiscussionRepository, permSv domain.PermissionService, tx dbtx.Manager, auditSv domain.AuditService) *UpdateDiscussionUsecase {
 	return &UpdateDiscussionUsecase{
-		repo:   repo,
-		permSv: permSv,
-		tx:     tx,
+		repo:    repo,
+		permSv:  permSv,
+		tx:      tx,
+		auditSv: auditSv,
 	}
 }
 
@@ -72,6 +74,8 @@ func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscu
 	if err != nil {
 		return nil, err
 	}
+
+	u.auditSv.LogDiscussionUpdated(ctx, discussion)
 
 	return discussion, nil
 }
