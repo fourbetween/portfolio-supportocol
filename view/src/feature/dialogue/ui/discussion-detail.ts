@@ -21,6 +21,9 @@ export class DialogueDiscussionDetail extends LitElement {
   @property({ type: Boolean })
   favorited = false;
 
+  @property({ type: Boolean })
+  isAuthenticated = false;
+
   private _handleFavoriteClick() {
     if (!this.discussion) return;
     if (this.favorited) {
@@ -54,19 +57,25 @@ export class DialogueDiscussionDetail extends LitElement {
             ></ui-discussion-archive-badge>
           </div>
           <div class="actions">
-            <button
-              class="btn"
-              @click=${this._handleFavoriteClick}
-              aria-label=${this.favorited ? msg("Unfavorite") : msg("Favorite")}
-            >
-              <span
-                class="material-symbols-outlined ${this.favorited
-                  ? "fill"
-                  : ""}"
-              >
-                star
-              </span>
-            </button>
+            ${this.isAuthenticated
+              ? html`
+                  <button
+                    class="btn"
+                    @click=${this._handleFavoriteClick}
+                    aria-label=${this.favorited
+                      ? msg("Unfavorite")
+                      : msg("Favorite")}
+                  >
+                    <span
+                      class="material-symbols-outlined ${this.favorited
+                        ? "fill"
+                        : ""}"
+                    >
+                      star
+                    </span>
+                  </button>
+                `
+              : html``}
           </div>
         </div>
         <div class="theme-row">

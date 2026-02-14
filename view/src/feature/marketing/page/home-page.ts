@@ -22,33 +22,27 @@ export class MarketingHomePage extends LitElement {
         </div>
 
         <section class="features">
-          <div class="feature">
+          <a href=${paths.learning.dashboard} class="feature">
             <span class="material-symbols-outlined feature-icon">school</span>
             <h3>${msg("Learning")}</h3>
             <p>
-              ${msg(
-                "Organize your thoughts and refine your logic through structured note-taking.",
-              )}
+              ${msg("Organize your thoughts through structured note-taking.")}
             </p>
-          </div>
-          <div class="feature">
+          </a>
+          <a href=${paths.dialogue.search} class="feature">
             <span class="material-symbols-outlined feature-icon">forum</span>
             <h3>${msg("Dialogue")}</h3>
             <p>
               ${msg(
-                "Engage in constructive and logical discussions with others using defined frameworks.",
+                "Engage in logical discussions with everyone using your own defined frameworks.",
               )}
             </p>
-          </div>
-          <div class="feature">
+          </a>
+          <a href=${paths.workspace.projects} class="feature">
             <span class="material-symbols-outlined feature-icon">folder</span>
             <h3>${msg("Projects")}</h3>
-            <p>
-              ${msg(
-                "Manage your discussions and collaborate efficiently within your workspace.",
-              )}
-            </p>
-          </div>
+            <p>${msg("Organize your discussions into projects.")}</p>
+          </a>
         </section>
       </main>
     `;
@@ -98,6 +92,8 @@ export class MarketingHomePage extends LitElement {
       }
 
       .feature {
+        display: block;
+        text-decoration: none;
         padding: 24px;
         border-radius: 12px;
         background-color: var(--color-canvas-subtle);
