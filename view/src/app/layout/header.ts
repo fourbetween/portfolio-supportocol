@@ -97,7 +97,7 @@ export class AppHeader extends LitElement {
         align-items: center;
         justify-content: space-between;
         gap: 24px;
-        width: 100vw;
+        width: 100%;
       }
 
       .header-logo {

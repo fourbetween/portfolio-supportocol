@@ -17,6 +17,9 @@ export class AppLayout extends LitElement {
 
   static styles = [
     css`
+      :host {
+        display: block;
+      }
       .layout {
         display: flex;
         flex-direction: column;
@@ -24,7 +27,7 @@ export class AppLayout extends LitElement {
       }
       main {
         flex: 1;
-        overflow: hidden;
+        overflow-y: auto;
       }
     `,
   ];
