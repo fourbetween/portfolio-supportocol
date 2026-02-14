@@ -626,17 +626,17 @@
   <source>Assuming that because two things happened together, one must have caused the other.</source>
   <target>同時に起きたというだけで、一方をもう一方の原因だと決めつけている。</target>
 </trans-unit>
-<trans-unit id="sacb225ccda1306e3">
-  <source>Organize your thoughts and refine your logic through structured note-taking.</source>
-  <target>構造化されたノートを用いて思考を整理し、論理を洗練させることができます。</target>
+<trans-unit id="sa5c64d0b90418828">
+  <source>Organize your thoughts through structured note-taking.</source>
+  <target>構造化されたノートを用いて思考を整理できます。</target>
 </trans-unit>
-<trans-unit id="sfaa3bb2d8667ac2e">
-  <source>Engage in constructive and logical discussions with others using defined frameworks.</source>
-  <target>定義されたフレームワークを活用し、他者と建設的で論理的な対話を行えます。</target>
+<trans-unit id="s54480243bb53a8c5">
+  <source>Engage in logical discussions with everyone using your own defined frameworks.</source>
+  <target>自分で定義したフレームワークを使って、みんなと論理的な対話を行えます。</target>
 </trans-unit>
-<trans-unit id="s1ed3897b66326354">
-  <source>Manage your discussions and collaborate efficiently within your workspace.</source>
-  <target>議論を整理し、ワークスペース内でメンバーと効率的に協力できます。</target>
+<trans-unit id="se32666a0c2dcee68">
+  <source>Organize your discussions into projects.</source>
+  <target>議論をプロジェクトごとに整理できます。</target>
 </trans-unit>
 </body>
 </file>

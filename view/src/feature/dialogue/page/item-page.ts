@@ -165,7 +165,7 @@ export class DialogueItemPage extends LitElement {
   }
 
   private _renderLeftSidebar(isTouch: boolean) {
-    if (this._favorites.length === 0) return nothing;
+    if (!this._user || this._favorites.length === 0) return nothing;
 
     const list = html`
       <dialogue-favorite-list
@@ -238,6 +238,7 @@ export class DialogueItemPage extends LitElement {
           <dialogue-discussion-detail
             .discussion=${this._discussion}
             .favorited=${isFavorited}
+            .isAuthenticated=${!!this._user}
             @dialogue-favorite-create=${this._handleFavoriteCreate}
             @dialogue-favorite-delete=${this._handleFavoriteDelete}
           ></dialogue-discussion-detail>
@@ -267,7 +268,7 @@ export class DialogueItemPage extends LitElement {
     if (!this._touch.isTouchDevice) return nothing;
 
     return html`
-      ${this._favorites.length > 0
+      ${this._user && this._favorites.length > 0
         ? html`
             <button
               class="btn-hover btn-left"
