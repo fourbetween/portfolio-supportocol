@@ -16,6 +16,7 @@ export interface FavoriteItem {
   workspaceId: string;
   theme: string;
   commentsCount: number;
+  favoritesCount: number;
 }
 
 @customElement("dialogue-favorite-list")
@@ -60,6 +61,10 @@ export class DialogueFavoriteList extends LitElement {
                   <div class="stat-item" title=${msg("Comments")}>
                     <span class="material-symbols-outlined">chat</span>
                     <span class="count">${f.commentsCount}</span>
+                  </div>
+                  <div class="stat-item" title=${msg("Favorites")}>
+                    <span class="material-symbols-outlined">star</span>
+                    <span class="count">${f.favoritesCount}</span>
                   </div>
                 </div>
               </div>
