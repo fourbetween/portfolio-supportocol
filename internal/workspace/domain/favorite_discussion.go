@@ -7,7 +7,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 )
 
-const MaxFavoriteCount = 50
+const MaxFavoriteCount = 100
 
 type FavoriteDiscussion struct {
 	MemberID     string

@@ -347,6 +347,7 @@ export interface components {
             /** Format: date-time */
             lastCommentedAt: string;
             commentsCount: number;
+            favoritesCount: number;
         };
         Discussion: {
             id: components["schemas"]["Id"];

@@ -119,6 +119,8 @@ components:
           format: date-time
         commentsCount:
           type: integer
+        favoritesCount:
+          type: integer
       required:
         - id
         - workspaceId
@@ -127,6 +129,7 @@ components:
         - archivedAt
         - lastCommentedAt
         - commentsCount
+        - favoritesCount
     Discussion:
       type: object
       properties:

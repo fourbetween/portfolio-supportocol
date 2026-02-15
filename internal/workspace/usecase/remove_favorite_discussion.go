@@ -9,15 +9,18 @@ import (
 type RemoveFavoriteDiscussionUsecase struct {
 	memberRepo domain.MemberRepository
 	favRepo    domain.FavoriteDiscussionRepository
+	favSvc     domain.DiscussionFavoritesService
 }
 
 func NewRemoveFavoriteDiscussionUsecase(
 	memberRepo domain.MemberRepository,
 	favRepo domain.FavoriteDiscussionRepository,
+	favSvc domain.DiscussionFavoritesService,
 ) *RemoveFavoriteDiscussionUsecase {
 	return &RemoveFavoriteDiscussionUsecase{
 		memberRepo: memberRepo,
 		favRepo:    favRepo,
+		favSvc:     favSvc,
 	}
 }
 
@@ -34,5 +37,9 @@ func (u *RemoveFavoriteDiscussionUsecase) Execute(ctx context.Context, input Rem
 		return err
 	}
 
-	return u.favRepo.Delete(ctx, member.ID(), input.DiscussionID)
+	if err := u.favRepo.Delete(ctx, member.ID(), input.DiscussionID); err != nil {
+		return err
+	}
+
+	return u.favSvc.DecrementFavoritesCount(ctx, input.DiscussionID)
 }

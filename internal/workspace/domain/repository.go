@@ -48,4 +48,9 @@ type (
 		Delete(ctx context.Context, memberID, discussionID string) error
 		CountByMemberID(ctx context.Context, memberID string) (int, error)
 	}
+
+	DiscussionFavoritesService interface {
+		IncrementFavoritesCount(ctx context.Context, discussionID string) error
+		DecrementFavoritesCount(ctx context.Context, discussionID string) error
+	}
 )

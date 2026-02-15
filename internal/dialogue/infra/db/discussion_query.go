@@ -43,10 +43,11 @@ func (s *DiscussionQueryService) listDiscussionsByStatus(ctx context.Context, st
 			table.Discussions.ArchivedAt,
 			table.Discussions.LastCommentedAt,
 			table.Discussions.CommentsCount,
+			table.Discussions.FavoritesCount,
 		).
 		FROM(table.Discussions).
 		WHERE(cond).
-		ORDER_BY(table.Discussions.LastCommentedAt.DESC()).
+		ORDER_BY(table.Discussions.FavoritesCount.DESC(), table.Discussions.LastCommentedAt.DESC()).
 		LIMIT(100)
 
 	var dest []model.Discussions
@@ -64,6 +65,7 @@ func (s *DiscussionQueryService) listDiscussionsByStatus(ctx context.Context, st
 			ArchivedAt:      d.ArchivedAt,
 			LastCommentedAt: d.LastCommentedAt,
 			CommentsCount:   int(d.CommentsCount),
+			FavoritesCount:  int(d.FavoritesCount),
 		}
 	}
 

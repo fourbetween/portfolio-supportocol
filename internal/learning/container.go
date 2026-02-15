@@ -14,7 +14,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 	"github.com/fourbetween/app-supportocol/internal/pkg/id"
-	"github.com/fourbetween/pkg-auth/jwt"
 	"github.com/fourbetween/pkg-conf/conf"
 	"github.com/fourbetween/pkg-queue/sqs"
 )
@@ -42,7 +41,6 @@ type APIContainer struct {
 func NewAPIContainer(
 	dbCon *sql.DB,
 	appConf conf.Service,
-	jwtSrv jwt.Service,
 	awscfg aws.Config,
 	permSv domain.PermissionService,
 ) (*APIContainer, error) {

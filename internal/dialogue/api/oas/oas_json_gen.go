@@ -1289,9 +1289,13 @@ func (s *DiscussionSummary) encodeFields(e *jx.Encoder) {
 		e.FieldStart("commentsCount")
 		e.Int(s.CommentsCount)
 	}
+	{
+		e.FieldStart("favoritesCount")
+		e.Int(s.FavoritesCount)
+	}
 }
 
-var jsonFieldsNameOfDiscussionSummary = [7]string{
+var jsonFieldsNameOfDiscussionSummary = [8]string{
 	0: "id",
 	1: "workspaceId",
 	2: "theme",
@@ -1299,6 +1303,7 @@ var jsonFieldsNameOfDiscussionSummary = [7]string{
 	4: "archivedAt",
 	5: "lastCommentedAt",
 	6: "commentsCount",
+	7: "favoritesCount",
 }
 
 // Decode decodes DiscussionSummary from json.
@@ -1384,6 +1389,18 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"commentsCount\"")
 			}
+		case "favoritesCount":
+			requiredBitSet[0] |= 1 << 7
+			if err := func() error {
+				v, err := d.Int()
+				s.FavoritesCount = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"favoritesCount\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1394,7 +1411,7 @@ func (s *DiscussionSummary) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b01111111,
+		0b11111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

@@ -107,6 +107,7 @@ func (s *workspaceQueryService) ListFavoriteDiscussions(ctx context.Context, wor
 			table.Discussions.ArchivedAt,
 			table.Discussions.LastCommentedAt,
 			table.Discussions.CommentsCount,
+			table.Discussions.FavoritesCount,
 		).
 		FROM(
 			table.FavoriteDiscussions.
@@ -134,6 +135,7 @@ func (s *workspaceQueryService) ListFavoriteDiscussions(ctx context.Context, wor
 			ArchivedAt:      d.ArchivedAt,
 			LastCommentedAt: d.LastCommentedAt,
 			CommentsCount:   int(d.CommentsCount),
+			FavoritesCount:  int(d.FavoritesCount),
 		}
 	}
 

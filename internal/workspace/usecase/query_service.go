@@ -28,6 +28,7 @@ type FavoriteDiscussionSummary struct {
 	ArchivedAt      *time.Time
 	LastCommentedAt time.Time
 	CommentsCount   int
+	FavoritesCount  int
 }
 
 type WorkspaceQueryService interface {
