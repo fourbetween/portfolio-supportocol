@@ -186,6 +186,7 @@ func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.
 		Status:          oas.DiscussionStatus(item.Status),
 		LastCommentedAt: item.LastCommentedAt,
 		CommentsCount:   item.CommentsCount,
+		FavoritesCount:  item.FavoritesCount,
 	}
 	if item.ArchivedAt != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt)

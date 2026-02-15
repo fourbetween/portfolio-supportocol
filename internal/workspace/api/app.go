@@ -236,6 +236,7 @@ func (h *appHandler) toOasFavoriteDiscussionSummary(s usecase.FavoriteDiscussion
 		Status:          oas.DiscussionStatus(s.Status),
 		LastCommentedAt: s.LastCommentedAt,
 		CommentsCount:   s.CommentsCount,
+		FavoritesCount:  s.FavoritesCount,
 	}
 	if s.ArchivedAt != nil {
 		res.ArchivedAt = oas.NewOptDateTime(*s.ArchivedAt)

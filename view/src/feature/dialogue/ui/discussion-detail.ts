@@ -1,6 +1,6 @@
 import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { discussionDetailStyle } from "../../../shared/style/discussion-detail";
@@ -24,8 +24,17 @@ export class DialogueDiscussionDetail extends LitElement {
   @property({ type: Boolean })
   isAuthenticated = false;
 
+  @state()
+  private _isFavoriteCooldown = false;
+
   private _handleFavoriteClick() {
-    if (!this.discussion) return;
+    if (!this.discussion || this._isFavoriteCooldown) return;
+
+    this._isFavoriteCooldown = true;
+    setTimeout(() => {
+      this._isFavoriteCooldown = false;
+    }, 3000);
+
     if (this.favorited) {
       this.dispatchEvent(
         new DialogueFavoriteDeleteEvent(
@@ -61,6 +70,7 @@ export class DialogueDiscussionDetail extends LitElement {
               ? html`
                   <button
                     class="btn"
+                    ?disabled=${this._isFavoriteCooldown}
                     @click=${this._handleFavoriteClick}
                     aria-label=${this.favorited
                       ? msg("Unfavorite")

@@ -22,6 +22,7 @@ type Discussions struct {
 	CommentsCount         int32
 	ProposedCommentsCount int32
 	IssuesCount           int32
+	FavoritesCount        int32
 	LastCommentedAt       time.Time
 	ArchivedAt            *time.Time
 	CreatedBy             string

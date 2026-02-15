@@ -36,6 +36,7 @@ type APIContainer struct {
 
 func NewAPIContainer(
 	dbCon *sql.DB,
+	favSvc domain.DiscussionFavoritesService,
 ) (*APIContainer, error) {
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
@@ -64,8 +65,8 @@ func NewAPIContainer(
 		DeleteProject: usecase.NewDeleteProjectUsecase(memberRepo, projectRepo, txManager),
 
 		// Favorite Discussions
-		AddFavoriteDiscussion:    usecase.NewAddFavoriteDiscussionUsecase(memberRepo, favRepo, clockSrv),
-		RemoveFavoriteDiscussion: usecase.NewRemoveFavoriteDiscussionUsecase(memberRepo, favRepo),
+		AddFavoriteDiscussion:    usecase.NewAddFavoriteDiscussionUsecase(memberRepo, favRepo, favSvc, clockSrv),
+		RemoveFavoriteDiscussion: usecase.NewRemoveFavoriteDiscussionUsecase(memberRepo, favRepo, favSvc),
 		ListFavoriteDiscussions:  usecase.NewListFavoriteDiscussionsUsecase(workspaceQuerySrv),
 
 		// Hooks

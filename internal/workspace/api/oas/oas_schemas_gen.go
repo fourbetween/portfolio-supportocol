@@ -144,6 +144,7 @@ type FavoriteDiscussionSummary struct {
 	ArchivedAt      OptDateTime      `json:"archivedAt"`
 	LastCommentedAt time.Time        `json:"lastCommentedAt"`
 	CommentsCount   int              `json:"commentsCount"`
+	FavoritesCount  int              `json:"favoritesCount"`
 }
 
 // GetID returns the value of ID.
@@ -181,6 +182,11 @@ func (s *FavoriteDiscussionSummary) GetCommentsCount() int {
 	return s.CommentsCount
 }
 
+// GetFavoritesCount returns the value of FavoritesCount.
+func (s *FavoriteDiscussionSummary) GetFavoritesCount() int {
+	return s.FavoritesCount
+}
+
 // SetID sets the value of ID.
 func (s *FavoriteDiscussionSummary) SetID(val ID) {
 	s.ID = val
@@ -214,6 +220,11 @@ func (s *FavoriteDiscussionSummary) SetLastCommentedAt(val time.Time) {
 // SetCommentsCount sets the value of CommentsCount.
 func (s *FavoriteDiscussionSummary) SetCommentsCount(val int) {
 	s.CommentsCount = val
+}
+
+// SetFavoritesCount sets the value of FavoritesCount.
+func (s *FavoriteDiscussionSummary) SetFavoritesCount(val int) {
+	s.FavoritesCount = val
 }
 
 type ID uuid.UUID

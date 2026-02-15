@@ -145,6 +145,8 @@ components:
           format: date-time
         commentsCount:
           type: integer
+        favoritesCount:
+          type: integer
       required:
         - id
         - workspaceId
@@ -152,6 +154,7 @@ components:
         - status
         - lastCommentedAt
         - commentsCount
+        - favoritesCount
 security:
   - cookie_auth: []
 paths:

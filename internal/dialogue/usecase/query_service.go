@@ -13,6 +13,7 @@ type DiscussionSummary struct {
 	ArchivedAt      *time.Time
 	LastCommentedAt time.Time
 	CommentsCount   int
+	FavoritesCount  int
 }
 
 type DiscussionQueryService interface {

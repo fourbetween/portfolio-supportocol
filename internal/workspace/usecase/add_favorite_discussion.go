@@ -12,17 +12,20 @@ import (
 type AddFavoriteDiscussionUsecase struct {
 	memberRepo domain.MemberRepository
 	favRepo    domain.FavoriteDiscussionRepository
+	favSvc     domain.DiscussionFavoritesService
 	clockSrv   clock.Service
 }
 
 func NewAddFavoriteDiscussionUsecase(
 	memberRepo domain.MemberRepository,
 	favRepo domain.FavoriteDiscussionRepository,
+	favSvc domain.DiscussionFavoritesService,
 	clockSrv clock.Service,
 ) *AddFavoriteDiscussionUsecase {
 	return &AddFavoriteDiscussionUsecase{
 		memberRepo: memberRepo,
 		favRepo:    favRepo,
+		favSvc:     favSvc,
 		clockSrv:   clockSrv,
 	}
 }
@@ -58,5 +61,9 @@ func (u *AddFavoriteDiscussionUsecase) Execute(ctx context.Context, input AddFav
 		return err
 	}
 
-	return u.favRepo.Save(ctx, fav)
+	if err := u.favRepo.Save(ctx, fav); err != nil {
+		return err
+	}
+
+	return u.favSvc.IncrementFavoritesCount(ctx, input.DiscussionID)
 }

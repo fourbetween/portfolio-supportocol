@@ -11,6 +11,7 @@ import (
 	dialogueapi "github.com/fourbetween/app-supportocol/internal/dialogue/api"
 	dialogueoas "github.com/fourbetween/app-supportocol/internal/dialogue/api/oas"
 	dialogueadapter "github.com/fourbetween/app-supportocol/internal/dialogue/infra/adapter"
+	dialoguedb "github.com/fourbetween/app-supportocol/internal/dialogue/infra/db"
 	"github.com/fourbetween/app-supportocol/internal/identity"
 	identityapi "github.com/fourbetween/app-supportocol/internal/identity/api"
 	identityoas "github.com/fourbetween/app-supportocol/internal/identity/api/oas"
@@ -48,7 +49,9 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 
 	jwtSrv := jwt.NewDefaultService(jwtSecret, httpcookie.CookieMaxAge)
 
-	workspaceCon, err := workspace.NewAPIContainer(dbCon)
+	dialogueFavSvc := dialoguedb.NewDiscussionFavoritesService(dbCon)
+
+	workspaceCon, err := workspace.NewAPIContainer(dbCon, dialogueFavSvc)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create workspace api container: %w", err)
 	}
@@ -138,7 +141,7 @@ func newLearningHandler(
 	awscfg aws.Config,
 	permSv *learningadapter.WorkspacePermissionAdapter,
 ) (http.Handler, error) {
-	con, err := learning.NewAPIContainer(dbCon, appConf, jwtSrv, awscfg, permSv)
+	con, err := learning.NewAPIContainer(dbCon, appConf, awscfg, permSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning api container: %w", err)
 	}

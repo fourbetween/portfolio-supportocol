@@ -22,7 +22,7 @@ export class DialogueDiscussionItem extends LitElement {
   }
 
   render() {
-    const { theme, commentsCount } = this.summary;
+    const { theme, commentsCount, favoritesCount } = this.summary;
     return html`
       <div class="item hover-container" @click=${this.handleClick}>
         <div class="info">
@@ -31,6 +31,10 @@ export class DialogueDiscussionItem extends LitElement {
             <div class="stat-item" title=${msg("Comments")}>
               <span class="material-symbols-outlined">chat</span>
               <span class="count">${commentsCount}</span>
+            </div>
+            <div class="stat-item" title=${msg("Favorites")}>
+              <span class="material-symbols-outlined">star</span>
+              <span class="count">${favoritesCount}</span>
             </div>
           </div>
         </div>

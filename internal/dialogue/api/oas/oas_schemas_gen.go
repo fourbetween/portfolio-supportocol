@@ -465,6 +465,7 @@ type DiscussionSummary struct {
 	ArchivedAt      NilDateTime      `json:"archivedAt"`
 	LastCommentedAt time.Time        `json:"lastCommentedAt"`
 	CommentsCount   int              `json:"commentsCount"`
+	FavoritesCount  int              `json:"favoritesCount"`
 }
 
 // GetID returns the value of ID.
@@ -502,6 +503,11 @@ func (s *DiscussionSummary) GetCommentsCount() int {
 	return s.CommentsCount
 }
 
+// GetFavoritesCount returns the value of FavoritesCount.
+func (s *DiscussionSummary) GetFavoritesCount() int {
+	return s.FavoritesCount
+}
+
 // SetID sets the value of ID.
 func (s *DiscussionSummary) SetID(val ID) {
 	s.ID = val
@@ -535,6 +541,11 @@ func (s *DiscussionSummary) SetLastCommentedAt(val time.Time) {
 // SetCommentsCount sets the value of CommentsCount.
 func (s *DiscussionSummary) SetCommentsCount(val int) {
 	s.CommentsCount = val
+}
+
+// SetFavoritesCount sets the value of FavoritesCount.
+func (s *DiscussionSummary) SetFavoritesCount(val int) {
+	s.FavoritesCount = val
 }
 
 type DiscussionTheme string
