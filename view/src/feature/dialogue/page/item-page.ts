@@ -6,6 +6,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { routerContext } from "../../../app/context/router";
 import { userContext } from "../../../app/context/user";
+import { TitleController } from "../../../app/controller/title";
 import { TouchController } from "../../../app/controller/touch";
 import type { User } from "../../../app/model/user";
 import { navigate, paths } from "../../../app/paths";
@@ -41,6 +42,7 @@ import "../ui/favorite-list";
 @customElement("dialogue-item-page")
 export class DialogueItemPage extends LitElement {
   private _touch = new TouchController(this);
+  private _title = new TitleController(this);
 
   @property({ type: String })
   workspaceId!: string;
@@ -80,6 +82,7 @@ export class DialogueItemPage extends LitElement {
       },
       onComplete: (discussion) => {
         this._discussion = discussion;
+        this._title.update(discussion?.theme);
       },
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
