@@ -4,4 +4,6 @@ export type Discussion = components["schemas"]["Discussion"];
 
 export type DiscussionSummary = components["schemas"]["DiscussionSummary"];
 
+export type DiscussionSort = components["schemas"]["DiscussionSort"];
+
 export type DialogueSettings = components["schemas"]["DialogueSettings"];

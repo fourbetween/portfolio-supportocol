@@ -638,6 +638,18 @@
   <source>Organize your discussions into projects.</source>
   <target>議論をプロジェクトごとに整理できます。</target>
 </trans-unit>
+<trans-unit id="s3606b9d856cdbafe">
+  <source>Sort by</source>
+  <target>並べ替え</target>
+</trans-unit>
+<trans-unit id="sca660f7bf809533d">
+  <source>Last commented</source>
+  <target>最新コメント順</target>
+</trans-unit>
+<trans-unit id="sd56442b0298a883a">
+  <source>Most favorited</source>
+  <target>お気に入り数順</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

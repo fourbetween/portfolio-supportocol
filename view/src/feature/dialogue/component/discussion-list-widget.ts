@@ -7,10 +7,14 @@ import { routerContext } from "../../../app/context/router";
 import { navigate, paths } from "../../../app/paths";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
-import type { DialogueDiscussionSelectEvent } from "../event/discussion";
-import type { DiscussionSummary } from "../model/discussion";
+import type {
+  DialogueDiscussionSelectEvent,
+  DialogueDiscussionSortChangeEvent,
+} from "../event/discussion";
+import type { DiscussionSort, DiscussionSummary } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-list";
+import "../ui/discussion-sort-selector";
 
 @customElement("dialogue-discussion-list-widget")
 export class DialogueDiscussionListWidget extends LitElement {
@@ -21,12 +25,15 @@ export class DialogueDiscussionListWidget extends LitElement {
   @property({ type: Array })
   summaries: DiscussionSummary[] = [];
 
+  @state()
+  private sort: DiscussionSort = "lastCommentedAt";
+
   constructor() {
     super();
 
     new Task(this, {
-      task: async () => {
-        return discussionRepository.list();
+      task: async ([sort]) => {
+        return discussionRepository.list(sort);
       },
       onComplete: (summaries) => {
         this.summaries = summaries;
@@ -34,7 +41,7 @@ export class DialogueDiscussionListWidget extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [],
+      args: () => [this.sort],
     });
   }
 
@@ -46,14 +53,40 @@ export class DialogueDiscussionListWidget extends LitElement {
     });
   }
 
+  private handleSortChange(event: DialogueDiscussionSortChangeEvent) {
+    this.sort = event.sort;
+  }
+
   render() {
     return html`
-      <dialogue-discussion-list
-        .summaries=${this.summaries}
-        @dialogue-discussion-select=${this.handleDiscussionSelect}
-      ></dialogue-discussion-list>
+      <div class="container">
+        <div class="toolbar">
+          <dialogue-discussion-sort-selector
+            .sort=${this.sort}
+            @dialogue-discussion-sort-change=${this.handleSortChange}
+          ></dialogue-discussion-sort-selector>
+        </div>
+        <dialogue-discussion-list
+          .summaries=${this.summaries}
+          @dialogue-discussion-select=${this.handleDiscussionSelect}
+        ></dialogue-discussion-list>
+      </div>
     `;
   }
 
-  static styles = [baseStyle, css``];
+  static styles = [
+    baseStyle,
+    css`
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .toolbar {
+        display: flex;
+        justify-content: flex-end;
+      }
+    `,
+  ];
 }
