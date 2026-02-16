@@ -461,6 +461,17 @@ func (s DiscussionPremise) Validate() error {
 	return nil
 }
 
+func (s DiscussionSort) Validate() error {
+	switch s {
+	case "lastCommentedAt":
+		return nil
+	case "favoritesCount":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s DiscussionStatus) Validate() error {
 	switch s {
 	case "public":

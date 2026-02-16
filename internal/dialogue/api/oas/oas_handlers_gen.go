@@ -92,6 +92,16 @@ func (s *Server) handleV1DialogueDiscussionsGetRequest(args [0]string, argsEscap
 			return
 		}
 	}
+	params, err := decodeV1DialogueDiscussionsGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
 
 	var rawBody []byte
 
@@ -104,13 +114,18 @@ func (s *Server) handleV1DialogueDiscussionsGetRequest(args [0]string, argsEscap
 			OperationID:      "",
 			Body:             nil,
 			RawBody:          rawBody,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Params: middleware.Parameters{
+				{
+					Name: "sort",
+					In:   "query",
+				}: params.Sort,
+			},
+			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = struct{}
+			Params   = V1DialogueDiscussionsGetParams
 			Response = []DiscussionSummary
 		)
 		response, err = middleware.HookMiddleware[
@@ -120,14 +135,14 @@ func (s *Server) handleV1DialogueDiscussionsGetRequest(args [0]string, argsEscap
 		](
 			m,
 			mreq,
-			nil,
+			unpackV1DialogueDiscussionsGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1DialogueDiscussionsGet(ctx)
+				response, err = s.h.V1DialogueDiscussionsGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.V1DialogueDiscussionsGet(ctx)
+		response, err = s.h.V1DialogueDiscussionsGet(ctx, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -864,6 +879,10 @@ func (s *Server) handleV1DialogueWorkspacesWorkspaceIdDiscussionsGetRequest(args
 			Body:             nil,
 			RawBody:          rawBody,
 			Params: middleware.Parameters{
+				{
+					Name: "sort",
+					In:   "query",
+				}: params.Sort,
 				{
 					Name: "workspaceId",
 					In:   "path",

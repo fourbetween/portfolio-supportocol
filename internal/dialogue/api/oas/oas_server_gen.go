@@ -13,7 +13,7 @@ type Handler interface {
 	// Get public discussions.
 	//
 	// GET /v1/dialogue/discussions
-	V1DialogueDiscussionsGet(ctx context.Context) ([]DiscussionSummary, error)
+	V1DialogueDiscussionsGet(ctx context.Context, params V1DialogueDiscussionsGetParams) ([]DiscussionSummary, error)
 	// V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost implements POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues operation.
 	//
 	// Add issue to comment.

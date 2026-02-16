@@ -414,6 +414,48 @@ type DiscussionConclusion string
 
 type DiscussionPremise string
 
+// Ref: #/components/schemas/DiscussionSort
+type DiscussionSort string
+
+const (
+	DiscussionSortLastCommentedAt DiscussionSort = "lastCommentedAt"
+	DiscussionSortFavoritesCount  DiscussionSort = "favoritesCount"
+)
+
+// AllValues returns all DiscussionSort values.
+func (DiscussionSort) AllValues() []DiscussionSort {
+	return []DiscussionSort{
+		DiscussionSortLastCommentedAt,
+		DiscussionSortFavoritesCount,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s DiscussionSort) MarshalText() ([]byte, error) {
+	switch s {
+	case DiscussionSortLastCommentedAt:
+		return []byte(s), nil
+	case DiscussionSortFavoritesCount:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *DiscussionSort) UnmarshalText(data []byte) error {
+	switch DiscussionSort(data) {
+	case DiscussionSortLastCommentedAt:
+		*s = DiscussionSortLastCommentedAt
+		return nil
+	case DiscussionSortFavoritesCount:
+		*s = DiscussionSortFavoritesCount
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/DiscussionStatus
 type DiscussionStatus string
 

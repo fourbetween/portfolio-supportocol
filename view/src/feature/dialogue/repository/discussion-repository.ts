@@ -1,9 +1,17 @@
 import { client } from "../api/client";
-import type { Discussion, DiscussionSummary } from "../model/discussion";
+import type {
+  Discussion,
+  DiscussionSort,
+  DiscussionSummary,
+} from "../model/discussion";
 
 export class DiscussionRepository {
-  async list(): Promise<DiscussionSummary[]> {
-    const { data, error } = await client.GET("/v1/dialogue/discussions");
+  async list(
+    sort: DiscussionSort = "lastCommentedAt",
+  ): Promise<DiscussionSummary[]> {
+    const { data, error } = await client.GET("/v1/dialogue/discussions", {
+      params: { query: { sort } },
+    });
     if (error) throw new Error(error.message);
     return data;
   }

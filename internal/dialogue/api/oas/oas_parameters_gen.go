@@ -16,6 +16,71 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+// V1DialogueDiscussionsGetParams is parameters of GET /v1/dialogue/discussions operation.
+type V1DialogueDiscussionsGetParams struct {
+	Sort DiscussionSort
+}
+
+func unpackV1DialogueDiscussionsGetParams(packed middleware.Parameters) (params V1DialogueDiscussionsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "sort",
+			In:   "query",
+		}
+		params.Sort = packed[key].(DiscussionSort)
+	}
+	return params
+}
+
+func decodeV1DialogueDiscussionsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1DialogueDiscussionsGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: sort.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "sort",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.Sort = DiscussionSort(c)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.Sort.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "sort",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams is parameters of POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues operation.
 type V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostParams struct {
 	WorkspaceId  ID
@@ -658,10 +723,18 @@ func decodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams(args 
 
 // V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams is parameters of GET /v1/dialogue/workspaces/{workspaceId}/discussions operation.
 type V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams struct {
+	Sort        DiscussionSort
 	WorkspaceId ID
 }
 
 func unpackV1DialogueWorkspacesWorkspaceIdDiscussionsGetParams(packed middleware.Parameters) (params V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "sort",
+			In:   "query",
+		}
+		params.Sort = packed[key].(DiscussionSort)
+	}
 	{
 		key := middleware.ParameterKey{
 			Name: "workspaceId",
@@ -673,6 +746,51 @@ func unpackV1DialogueWorkspacesWorkspaceIdDiscussionsGetParams(packed middleware
 }
 
 func decodeV1DialogueWorkspacesWorkspaceIdDiscussionsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: sort.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "sort",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.Sort = DiscussionSort(c)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.Sort.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "sort",
+			In:   "query",
+			Err:  err,
+		}
+	}
 	// Decode path: workspaceId.
 	if err := func() error {
 		param := args[0]

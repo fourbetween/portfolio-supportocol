@@ -14,7 +14,9 @@ export interface paths {
         /** @description get public discussions */
         get: {
             parameters: {
-                query?: never;
+                query: {
+                    sort: components["schemas"]["DiscussionSort"];
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -61,7 +63,9 @@ export interface paths {
         /** @description get internal discussions for a workspace */
         get: {
             parameters: {
-                query?: never;
+                query: {
+                    sort: components["schemas"]["DiscussionSort"];
+                };
                 header?: never;
                 path: {
                     workspaceId: components["parameters"]["workspaceId"];
@@ -338,6 +342,8 @@ export interface components {
         CommentContent: string;
         CommentIssueTitle: string;
         CommentIssueDescription: string;
+        /** @enum {string} */
+        DiscussionSort: "lastCommentedAt" | "favoritesCount";
         DiscussionSummary: {
             id: components["schemas"]["Id"];
             workspaceId: components["schemas"]["Id"];

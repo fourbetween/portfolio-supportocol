@@ -28,8 +28,10 @@ func NewHandler(con *dialogue.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
-func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context) ([]oas.DiscussionSummary, error) {
-	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{})
+func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context, params oas.V1DialogueDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
+	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
+		Sort: domain.DiscussionSort(params.Sort),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -48,6 +50,7 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsGet(
 	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
 		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
 		UserID:      httpctx.GetUserID(ctx),
+		Sort:        domain.DiscussionSort(params.Sort),
 	})
 	if err != nil {
 		return nil, err
