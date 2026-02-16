@@ -9,7 +9,8 @@
     /* eslint-disable @typescript-eslint/no-explicit-any */
 
     export const templates = {
-      's0843b2fcef33fcc8': `公開`,
+      's0374afb00a9737e3': `人気の議論`,
+'s0843b2fcef33fcc8': `公開`,
 's08b05407b5565ca4': `または`,
 's091d3d07b5b3076f': `OK`,
 's0b7ae9543c001867': `返信`,

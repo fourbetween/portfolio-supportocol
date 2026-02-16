@@ -650,6 +650,10 @@
   <source>Most favorited</source>
   <target>お気に入り数順</target>
 </trans-unit>
+<trans-unit id="s0374afb00a9737e3">
+  <source>Popular Discussions</source>
+  <target>人気の議論</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
