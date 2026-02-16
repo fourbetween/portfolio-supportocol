@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/fourbetween/app-supportocol/internal/dialogue/domain"
 	"github.com/fourbetween/app-supportocol/internal/dialogue/infra/db/schema/app-supportocol/model"
 	"github.com/fourbetween/app-supportocol/internal/dialogue/infra/db/schema/app-supportocol/table"
 	"github.com/fourbetween/app-supportocol/internal/dialogue/usecase"
@@ -20,15 +21,24 @@ func NewDiscussionQueryService(db *sql.DB) *DiscussionQueryService {
 	return &DiscussionQueryService{db: db}
 }
 
-func (s *DiscussionQueryService) ListPublicDiscussions(ctx context.Context) ([]usecase.DiscussionSummary, error) {
-	return s.listDiscussionsByStatus(ctx, "public", nil)
+func (s *DiscussionQueryService) ListPublicDiscussions(ctx context.Context, sort domain.DiscussionSort) ([]usecase.DiscussionSummary, error) {
+	return s.listDiscussionsByStatus(ctx, "public", nil, sort)
 }
 
-func (s *DiscussionQueryService) ListInternalDiscussions(ctx context.Context, workspaceID string) ([]usecase.DiscussionSummary, error) {
-	return s.listDiscussionsByStatus(ctx, "internal", &workspaceID)
+func (s *DiscussionQueryService) ListInternalDiscussions(ctx context.Context, workspaceID string, sort domain.DiscussionSort) ([]usecase.DiscussionSummary, error) {
+	return s.listDiscussionsByStatus(ctx, "internal", &workspaceID, sort)
 }
 
-func (s *DiscussionQueryService) listDiscussionsByStatus(ctx context.Context, status string, workspaceID *string) ([]usecase.DiscussionSummary, error) {
+func (s *DiscussionQueryService) orderBySort(sort domain.DiscussionSort) mysql.OrderByClause {
+	switch sort {
+	case domain.DiscussionSortLastCommentedAt:
+		return table.Discussions.LastCommentedAt.DESC()
+	default:
+		return table.Discussions.FavoritesCount.DESC()
+	}
+}
+
+func (s *DiscussionQueryService) listDiscussionsByStatus(ctx context.Context, status string, workspaceID *string, sort domain.DiscussionSort) ([]usecase.DiscussionSummary, error) {
 	cond := table.Discussions.Status.EQ(mysql.String(status))
 	if workspaceID != nil {
 		cond = cond.AND(table.Discussions.WorkspaceID.EQ(mysql.String(*workspaceID)))
@@ -47,7 +57,7 @@ func (s *DiscussionQueryService) listDiscussionsByStatus(ctx context.Context, st
 		).
 		FROM(table.Discussions).
 		WHERE(cond).
-		ORDER_BY(table.Discussions.FavoritesCount.DESC(), table.Discussions.LastCommentedAt.DESC()).
+		ORDER_BY(s.orderBySort(sort), table.Discussions.LastCommentedAt.DESC()).
 		LIMIT(100)
 
 	var dest []model.Discussions

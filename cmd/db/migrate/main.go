@@ -31,7 +31,7 @@ func main() {
 		panic(err)
 	}
 
-	// if err := m.Drop(); err != nil && err != migrate.ErrNoChange {
+	// if err := m.Down(); err != nil && err != migrate.ErrNoChange {
 	// 	panic(err)
 	// }
 

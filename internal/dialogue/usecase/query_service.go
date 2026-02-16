@@ -3,6 +3,8 @@ package usecase
 import (
 	"context"
 	"time"
+
+	"github.com/fourbetween/app-supportocol/internal/dialogue/domain"
 )
 
 type DiscussionSummary struct {
@@ -18,7 +20,7 @@ type DiscussionSummary struct {
 
 type DiscussionQueryService interface {
 	// ListPublicDiscussions lists all public discussions (accessible by everyone).
-	ListPublicDiscussions(ctx context.Context) ([]DiscussionSummary, error)
+	ListPublicDiscussions(ctx context.Context, sort domain.DiscussionSort) ([]DiscussionSummary, error)
 	// ListInternalDiscussions lists internal discussions for a specific workspace (accessible by members).
-	ListInternalDiscussions(ctx context.Context, workspaceID string) ([]DiscussionSummary, error)
+	ListInternalDiscussions(ctx context.Context, workspaceID string, sort domain.DiscussionSort) ([]DiscussionSummary, error)
 }

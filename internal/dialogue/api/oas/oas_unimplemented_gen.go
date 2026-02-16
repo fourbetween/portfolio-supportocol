@@ -18,7 +18,7 @@ var _ Handler = UnimplementedHandler{}
 // Get public discussions.
 //
 // GET /v1/dialogue/discussions
-func (UnimplementedHandler) V1DialogueDiscussionsGet(ctx context.Context) (r []DiscussionSummary, _ error) {
+func (UnimplementedHandler) V1DialogueDiscussionsGet(ctx context.Context, params V1DialogueDiscussionsGetParams) (r []DiscussionSummary, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

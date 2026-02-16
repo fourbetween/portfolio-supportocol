@@ -81,8 +81,10 @@ CREATE TABLE discussions (
 	CONSTRAINT discussions_projects_fk FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
 	CONSTRAINT discussions_users_fk FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE,
 	INDEX idx_discussions_workspace_project_activity (workspace_id, project_id, last_commented_at DESC),
-	INDEX idx_discussions_public_feed (status, favorites_count DESC, last_commented_at DESC),
-	INDEX idx_discussions_internal_feed (workspace_id, status, favorites_count DESC, last_commented_at DESC)
+	INDEX idx_discussions_public_feed_popular (status, favorites_count DESC, last_commented_at DESC),
+	INDEX idx_discussions_public_feed_recent (status, last_commented_at DESC),
+	INDEX idx_discussions_internal_feed_popular (workspace_id, status, favorites_count DESC, last_commented_at DESC),
+	INDEX idx_discussions_internal_feed_recent (workspace_id, status, last_commented_at DESC)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- コメント

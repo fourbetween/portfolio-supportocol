@@ -25,11 +25,16 @@ type ListDiscussionsInput struct {
 	// If empty, lists all public discussions.
 	WorkspaceID string
 	UserID      string
+	Sort        domain.DiscussionSort
 }
 
 func (u *ListDiscussionsUsecase) Execute(ctx context.Context, input ListDiscussionsInput) ([]DiscussionSummary, error) {
+	if err := input.Sort.Validate(); err != nil {
+		return nil, err
+	}
+
 	if input.WorkspaceID == "" {
-		return u.qs.ListPublicDiscussions(ctx)
+		return u.qs.ListPublicDiscussions(ctx, input.Sort)
 	}
 
 	canAccess, err := u.permSv.CanAccessDiscussion(ctx, input.UserID, input.WorkspaceID, domain.DiscussionStatusInternal)
@@ -40,5 +45,5 @@ func (u *ListDiscussionsUsecase) Execute(ctx context.Context, input ListDiscussi
 		return nil, apperr.ErrPermissionDenied
 	}
 
-	return u.qs.ListInternalDiscussions(ctx, input.WorkspaceID)
+	return u.qs.ListInternalDiscussions(ctx, input.WorkspaceID, input.Sort)
 }

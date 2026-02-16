@@ -98,6 +98,11 @@ components:
     CommentIssueDescription:
       type: string
       maxLength: 1000
+    DiscussionSort:
+      type: string
+      enum:
+        - lastCommentedAt
+        - favoritesCount
     DiscussionSummary:
       type: object
       properties:
@@ -239,6 +244,12 @@ paths:
   /v1/dialogue/discussions:
     get:
       description: get public discussions
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/DiscussionSort"
+          required: true
+          name: sort
+          in: query
       responses:
         "200":
           description: success response
@@ -259,6 +270,12 @@ paths:
       - $ref: "#/components/parameters/workspaceId"
     get:
       description: get internal discussions for a workspace
+      parameters:
+        - schema:
+            $ref: "#/components/schemas/DiscussionSort"
+          required: true
+          name: sort
+          in: query
       responses:
         "200":
           description: success response
