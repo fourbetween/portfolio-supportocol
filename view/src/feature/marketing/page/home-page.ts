@@ -1,13 +1,53 @@
+import { type Router } from "@lit-labs/router";
+import { consume } from "@lit/context";
 import { msg } from "@lit/localize";
+import { Task } from "@lit/task";
 import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import { paths } from "../../../app/paths";
+import { customElement, state } from "lit/decorators.js";
+import { routerContext } from "../../../app/context/router";
+import { navigate, paths } from "../../../app/paths";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { iconStyle } from "../../../shared/style/icon";
+import { DialogueDiscussionSelectEvent } from "../../dialogue/event/discussion";
+import type { DiscussionSummary } from "../../dialogue/model/discussion";
+import { discussionRepository } from "../../dialogue/repository/discussion-repository";
+import "../../dialogue/ui/discussion-list";
 
 @customElement("marketing-home-page")
 export class MarketingHomePage extends LitElement {
+  @consume({ context: routerContext, subscribe: true })
+  @state()
+  private _router?: Router;
+
+  @state()
+  private _popularDiscussions: DiscussionSummary[] = [];
+
+  constructor() {
+    super();
+
+    new Task(this, {
+      task: async () => {
+        return discussionRepository.list("favoritesCount");
+      },
+      onComplete: (discussions) => {
+        this._popularDiscussions = discussions;
+      },
+      onError: (e: unknown) => {
+        console.error(e);
+      },
+      args: () => [],
+    });
+  }
+
+  private _handleDiscussionSelect(e: DialogueDiscussionSelectEvent) {
+    if (!this._router) return;
+    navigate(this._router, paths.dialogue.item, {
+      workspaceId: e.workspaceId,
+      discussionId: e.discussionId,
+    });
+  }
+
   render() {
     return html`
       <main class="container container--narrow hero">
@@ -20,6 +60,14 @@ export class MarketingHomePage extends LitElement {
             ${msg("Public Discussions")}
           </a>
         </div>
+
+        <section class="popular">
+          <h2>${msg("Popular Discussions")}</h2>
+          <dialogue-discussion-list
+            .summaries=${this._popularDiscussions}
+            @dialogue-discussion-select=${this._handleDiscussionSelect}
+          ></dialogue-discussion-list>
+        </section>
 
         <section class="features">
           <a href=${paths.learning.dashboard} class="feature">
@@ -66,6 +114,18 @@ export class MarketingHomePage extends LitElement {
       .hero {
         padding: 80px 0px;
         text-align: center;
+      }
+
+      .popular {
+        margin-top: 60px;
+        padding: 0 48px;
+        text-align: left;
+      }
+
+      .popular h2 {
+        font-size: 24px;
+        margin-bottom: 24px;
+        color: var(--color-fg-default);
       }
 
       h1 {
