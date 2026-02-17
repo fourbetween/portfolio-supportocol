@@ -21,12 +21,21 @@ func NewDiscussionQueryService(db *sql.DB) *DiscussionQueryService {
 	return &DiscussionQueryService{db: db}
 }
 
-func (s *DiscussionQueryService) ListPublicDiscussions(ctx context.Context, sort domain.DiscussionSort) ([]usecase.DiscussionSummary, error) {
-	return s.listDiscussionsByStatus(ctx, "public", nil, sort)
+func (s *DiscussionQueryService) ListPublicDiscussions(
+	ctx context.Context,
+	sort domain.DiscussionSort,
+	paging domain.Paging,
+) (usecase.DiscussionListResult, error) {
+	return s.listDiscussionsByStatus(ctx, "public", nil, sort, paging)
 }
 
-func (s *DiscussionQueryService) ListInternalDiscussions(ctx context.Context, workspaceID string, sort domain.DiscussionSort) ([]usecase.DiscussionSummary, error) {
-	return s.listDiscussionsByStatus(ctx, "internal", &workspaceID, sort)
+func (s *DiscussionQueryService) ListInternalDiscussions(
+	ctx context.Context,
+	workspaceID string,
+	sort domain.DiscussionSort,
+	paging domain.Paging,
+) (usecase.DiscussionListResult, error) {
+	return s.listDiscussionsByStatus(ctx, "internal", &workspaceID, sort, paging)
 }
 
 func (s *DiscussionQueryService) orderBySort(sort domain.DiscussionSort) mysql.OrderByClause {
@@ -38,10 +47,30 @@ func (s *DiscussionQueryService) orderBySort(sort domain.DiscussionSort) mysql.O
 	}
 }
 
-func (s *DiscussionQueryService) listDiscussionsByStatus(ctx context.Context, status string, workspaceID *string, sort domain.DiscussionSort) ([]usecase.DiscussionSummary, error) {
+func (s *DiscussionQueryService) listDiscussionsByStatus(
+	ctx context.Context,
+	status string,
+	workspaceID *string,
+	sort domain.DiscussionSort,
+	paging domain.Paging,
+) (usecase.DiscussionListResult, error) {
 	cond := table.Discussions.Status.EQ(mysql.String(status))
 	if workspaceID != nil {
 		cond = cond.AND(table.Discussions.WorkspaceID.EQ(mysql.String(*workspaceID)))
+	}
+
+	executor := dbtx.GetExecutor(ctx, s.db)
+
+	countStmt := mysql.
+		SELECT(mysql.COUNT(table.Discussions.ID).AS("total_count")).
+		FROM(table.Discussions).
+		WHERE(cond)
+
+	var countDest struct {
+		TotalCount int `alias:"total_count"`
+	}
+	if err := countStmt.Query(executor, &countDest); err != nil {
+		return usecase.DiscussionListResult{}, err
 	}
 
 	stmt := mysql.
@@ -58,16 +87,17 @@ func (s *DiscussionQueryService) listDiscussionsByStatus(ctx context.Context, st
 		FROM(table.Discussions).
 		WHERE(cond).
 		ORDER_BY(s.orderBySort(sort), table.Discussions.LastCommentedAt.DESC()).
-		LIMIT(100)
+		LIMIT(int64(paging.Limit())).
+		OFFSET(int64(paging.Offset()))
 
 	var dest []model.Discussions
-	if err := stmt.Query(dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
-		return nil, err
+	if err := stmt.Query(executor, &dest); err != nil {
+		return usecase.DiscussionListResult{}, err
 	}
 
-	res := make([]usecase.DiscussionSummary, len(dest))
+	items := make([]usecase.DiscussionSummary, len(dest))
 	for i, d := range dest {
-		res[i] = usecase.DiscussionSummary{
+		items[i] = usecase.DiscussionSummary{
 			ID:              d.ID,
 			WorkspaceID:     d.WorkspaceID,
 			Theme:           d.Theme,
@@ -79,5 +109,8 @@ func (s *DiscussionQueryService) listDiscussionsByStatus(ctx context.Context, st
 		}
 	}
 
-	return res, nil
+	return usecase.DiscussionListResult{
+		Items:      items,
+		TotalCount: countDest.TotalCount,
+	}, nil
 }

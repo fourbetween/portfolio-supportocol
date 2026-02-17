@@ -26,24 +26,38 @@ type ListDiscussionsInput struct {
 	WorkspaceID string
 	UserID      string
 	Sort        domain.DiscussionSort
+	Paging      domain.Paging
 }
 
-func (u *ListDiscussionsUsecase) Execute(ctx context.Context, input ListDiscussionsInput) ([]DiscussionSummary, error) {
+type ListDiscussionsOutput struct {
+	Items      []DiscussionSummary
+	TotalCount int
+}
+
+func (u *ListDiscussionsUsecase) Execute(ctx context.Context, input ListDiscussionsInput) (ListDiscussionsOutput, error) {
 	if err := input.Sort.Validate(); err != nil {
-		return nil, err
+		return ListDiscussionsOutput{}, err
 	}
 
 	if input.WorkspaceID == "" {
-		return u.qs.ListPublicDiscussions(ctx, input.Sort)
+		result, err := u.qs.ListPublicDiscussions(ctx, input.Sort, input.Paging)
+		if err != nil {
+			return ListDiscussionsOutput{}, err
+		}
+		return ListDiscussionsOutput{Items: result.Items, TotalCount: result.TotalCount}, nil
 	}
 
 	canAccess, err := u.permSv.CanAccessDiscussion(ctx, input.UserID, input.WorkspaceID, domain.DiscussionStatusInternal)
 	if err != nil {
-		return nil, fmt.Errorf("failed to check workspace access: %w", err)
+		return ListDiscussionsOutput{}, fmt.Errorf("failed to check workspace access: %w", err)
 	}
 	if !canAccess {
-		return nil, apperr.ErrPermissionDenied
+		return ListDiscussionsOutput{}, apperr.ErrPermissionDenied
 	}
 
-	return u.qs.ListInternalDiscussions(ctx, input.WorkspaceID, input.Sort)
+	result, err := u.qs.ListInternalDiscussions(ctx, input.WorkspaceID, input.Sort, input.Paging)
+	if err != nil {
+		return ListDiscussionsOutput{}, err
+	}
+	return ListDiscussionsOutput{Items: result.Items, TotalCount: result.TotalCount}, nil
 }

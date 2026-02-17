@@ -18,7 +18,9 @@ import (
 
 // V1DialogueDiscussionsGetParams is parameters of GET /v1/dialogue/discussions operation.
 type V1DialogueDiscussionsGetParams struct {
-	Sort DiscussionSort
+	Sort     DiscussionSort
+	Page     OptPage     `json:",omitempty,omitzero"`
+	PageSize OptPageSize `json:",omitempty,omitzero"`
 }
 
 func unpackV1DialogueDiscussionsGetParams(packed middleware.Parameters) (params V1DialogueDiscussionsGetParams) {
@@ -28,6 +30,24 @@ func unpackV1DialogueDiscussionsGetParams(packed middleware.Parameters) (params 
 			In:   "query",
 		}
 		params.Sort = packed[key].(DiscussionSort)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptPage)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "pageSize",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.PageSize = v.(OptPageSize)
+		}
 	}
 	return params
 }
@@ -74,6 +94,142 @@ func decodeV1DialogueDiscussionsGetParams(args [0]string, argsEscaped bool, r *h
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "sort",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: page.
+	{
+		val := int(1)
+		params.Page.SetTo(Page(val))
+	}
+	// Decode query: page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPageVal Page
+				if err := func() error {
+					var paramsDotPageValVal int
+					if err := func() error {
+						val, err := d.DecodeValue()
+						if err != nil {
+							return err
+						}
+
+						c, err := conv.ToInt(val)
+						if err != nil {
+							return err
+						}
+
+						paramsDotPageValVal = c
+						return nil
+					}(); err != nil {
+						return err
+					}
+					paramsDotPageVal = Page(paramsDotPageValVal)
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Page.SetTo(paramsDotPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.Page.Get(); ok {
+					if err := func() error {
+						if err := value.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: pageSize.
+	{
+		val := int(20)
+		params.PageSize.SetTo(PageSize(val))
+	}
+	// Decode query: pageSize.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "pageSize",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPageSizeVal PageSize
+				if err := func() error {
+					var paramsDotPageSizeValVal int
+					if err := func() error {
+						val, err := d.DecodeValue()
+						if err != nil {
+							return err
+						}
+
+						c, err := conv.ToInt(val)
+						if err != nil {
+							return err
+						}
+
+						paramsDotPageSizeValVal = c
+						return nil
+					}(); err != nil {
+						return err
+					}
+					paramsDotPageSizeVal = PageSize(paramsDotPageSizeValVal)
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.PageSize.SetTo(paramsDotPageSizeVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.PageSize.Get(); ok {
+					if err := func() error {
+						if err := value.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "pageSize",
 			In:   "query",
 			Err:  err,
 		}
@@ -724,6 +880,8 @@ func decodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetParams(args 
 // V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams is parameters of GET /v1/dialogue/workspaces/{workspaceId}/discussions operation.
 type V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams struct {
 	Sort        DiscussionSort
+	Page        OptPage     `json:",omitempty,omitzero"`
+	PageSize    OptPageSize `json:",omitempty,omitzero"`
 	WorkspaceId ID
 }
 
@@ -734,6 +892,24 @@ func unpackV1DialogueWorkspacesWorkspaceIdDiscussionsGetParams(packed middleware
 			In:   "query",
 		}
 		params.Sort = packed[key].(DiscussionSort)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptPage)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "pageSize",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.PageSize = v.(OptPageSize)
+		}
 	}
 	{
 		key := middleware.ParameterKey{
@@ -787,6 +963,142 @@ func decodeV1DialogueWorkspacesWorkspaceIdDiscussionsGetParams(args [1]string, a
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "sort",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: page.
+	{
+		val := int(1)
+		params.Page.SetTo(Page(val))
+	}
+	// Decode query: page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPageVal Page
+				if err := func() error {
+					var paramsDotPageValVal int
+					if err := func() error {
+						val, err := d.DecodeValue()
+						if err != nil {
+							return err
+						}
+
+						c, err := conv.ToInt(val)
+						if err != nil {
+							return err
+						}
+
+						paramsDotPageValVal = c
+						return nil
+					}(); err != nil {
+						return err
+					}
+					paramsDotPageVal = Page(paramsDotPageValVal)
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Page.SetTo(paramsDotPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.Page.Get(); ok {
+					if err := func() error {
+						if err := value.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: pageSize.
+	{
+		val := int(20)
+		params.PageSize.SetTo(PageSize(val))
+	}
+	// Decode query: pageSize.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "pageSize",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPageSizeVal PageSize
+				if err := func() error {
+					var paramsDotPageSizeValVal int
+					if err := func() error {
+						val, err := d.DecodeValue()
+						if err != nil {
+							return err
+						}
+
+						c, err := conv.ToInt(val)
+						if err != nil {
+							return err
+						}
+
+						paramsDotPageSizeValVal = c
+						return nil
+					}(); err != nil {
+						return err
+					}
+					paramsDotPageSizeVal = PageSize(paramsDotPageSizeValVal)
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.PageSize.SetTo(paramsDotPageSizeVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.PageSize.Get(); ok {
+					if err := func() error {
+						if err := value.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "pageSize",
 			In:   "query",
 			Err:  err,
 		}

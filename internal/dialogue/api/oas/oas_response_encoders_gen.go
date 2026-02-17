@@ -10,16 +10,12 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeV1DialogueDiscussionsGetResponse(response []DiscussionSummary, w http.ResponseWriter) error {
+func encodeV1DialogueDiscussionsGetResponse(response *PaginatedDiscussionSummary, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
 	e := new(jx.Encoder)
-	e.ArrStart()
-	for _, elem := range response {
-		elem.Encode(e)
-	}
-	e.ArrEnd()
+	response.Encode(e)
 	if _, err := e.WriteTo(w); err != nil {
 		return errors.Wrap(err, "write")
 	}
@@ -83,16 +79,12 @@ func encodeV1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetResponse(res
 	return nil
 }
 
-func encodeV1DialogueWorkspacesWorkspaceIdDiscussionsGetResponse(response []DiscussionSummary, w http.ResponseWriter) error {
+func encodeV1DialogueWorkspacesWorkspaceIdDiscussionsGetResponse(response *PaginatedDiscussionSummary, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 
 	e := new(jx.Encoder)
-	e.ArrStart()
-	for _, elem := range response {
-		elem.Encode(e)
-	}
-	e.ArrEnd()
+	response.Encode(e)
 	if _, err := e.WriteTo(w); err != nil {
 		return errors.Wrap(err, "write")
 	}

@@ -16,6 +16,8 @@ export interface paths {
             parameters: {
                 query: {
                     sort: components["schemas"]["DiscussionSort"];
+                    page?: components["schemas"]["Page"];
+                    pageSize?: components["schemas"]["PageSize"];
                 };
                 header?: never;
                 path?: never;
@@ -29,7 +31,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["DiscussionSummary"][];
+                        "application/json": components["schemas"]["PaginatedDiscussionSummary"];
                     };
                 };
                 /** @description default error */
@@ -65,6 +67,8 @@ export interface paths {
             parameters: {
                 query: {
                     sort: components["schemas"]["DiscussionSort"];
+                    page?: components["schemas"]["Page"];
+                    pageSize?: components["schemas"]["PageSize"];
                 };
                 header?: never;
                 path: {
@@ -80,7 +84,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["DiscussionSummary"][];
+                        "application/json": components["schemas"]["PaginatedDiscussionSummary"];
                     };
                 };
                 /** @description default error */
@@ -344,6 +348,16 @@ export interface components {
         CommentIssueDescription: string;
         /** @enum {string} */
         DiscussionSort: "lastCommentedAt" | "favoritesCount";
+        /** @default 1 */
+        Page: number;
+        /** @default 20 */
+        PageSize: number;
+        PaginatedDiscussionSummary: {
+            items: components["schemas"]["DiscussionSummary"][];
+            totalCount: number;
+            page: components["schemas"]["Page"];
+            pageSize: components["schemas"]["PageSize"];
+        };
         DiscussionSummary: {
             id: components["schemas"]["Id"];
             workspaceId: components["schemas"]["Id"];

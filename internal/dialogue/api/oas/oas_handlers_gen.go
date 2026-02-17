@@ -105,7 +105,7 @@ func (s *Server) handleV1DialogueDiscussionsGetRequest(args [0]string, argsEscap
 
 	var rawBody []byte
 
-	var response []DiscussionSummary
+	var response *PaginatedDiscussionSummary
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -119,6 +119,14 @@ func (s *Server) handleV1DialogueDiscussionsGetRequest(args [0]string, argsEscap
 					Name: "sort",
 					In:   "query",
 				}: params.Sort,
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "pageSize",
+					In:   "query",
+				}: params.PageSize,
 			},
 			Raw: r,
 		}
@@ -126,7 +134,7 @@ func (s *Server) handleV1DialogueDiscussionsGetRequest(args [0]string, argsEscap
 		type (
 			Request  = struct{}
 			Params   = V1DialogueDiscussionsGetParams
-			Response = []DiscussionSummary
+			Response = *PaginatedDiscussionSummary
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -869,7 +877,7 @@ func (s *Server) handleV1DialogueWorkspacesWorkspaceIdDiscussionsGetRequest(args
 
 	var rawBody []byte
 
-	var response []DiscussionSummary
+	var response *PaginatedDiscussionSummary
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -884,6 +892,14 @@ func (s *Server) handleV1DialogueWorkspacesWorkspaceIdDiscussionsGetRequest(args
 					In:   "query",
 				}: params.Sort,
 				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "pageSize",
+					In:   "query",
+				}: params.PageSize,
+				{
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
@@ -894,7 +910,7 @@ func (s *Server) handleV1DialogueWorkspacesWorkspaceIdDiscussionsGetRequest(args
 		type (
 			Request  = struct{}
 			Params   = V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams
-			Response = []DiscussionSummary
+			Response = *PaginatedDiscussionSummary
 		)
 		response, err = middleware.HookMiddleware[
 			Request,

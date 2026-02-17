@@ -28,39 +28,49 @@ func NewHandler(con *dialogue.APIContainer) oas.Handler {
 	return &appHandler{con: con}
 }
 
-func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context, params oas.V1DialogueDiscussionsGetParams) ([]oas.DiscussionSummary, error) {
-	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
-		Sort: domain.DiscussionSort(params.Sort),
+func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context, params oas.V1DialogueDiscussionsGetParams) (*oas.PaginatedDiscussionSummary, error) {
+	paging, err := domain.NewPaging(
+		int(params.Page.Or(oas.Page(domain.DefaultPage))),
+		int(params.PageSize.Or(oas.PageSize(domain.DefaultPageSize))),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	output, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
+		Sort:   domain.DiscussionSort(params.Sort),
+		Paging: paging,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	res := make([]oas.DiscussionSummary, len(items))
-	for i, item := range items {
-		res[i] = h.toOasDiscussionSummary(item)
-	}
-	return res, nil
+	return h.toOasPaginatedDiscussionSummary(output, paging), nil
 }
 
 func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsGet(
 	ctx context.Context,
 	params oas.V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams,
-) ([]oas.DiscussionSummary, error) {
-	items, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
+) (*oas.PaginatedDiscussionSummary, error) {
+	paging, err := domain.NewPaging(
+		int(params.Page.Or(oas.Page(domain.DefaultPage))),
+		int(params.PageSize.Or(oas.PageSize(domain.DefaultPageSize))),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	output, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
 		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
 		UserID:      httpctx.GetUserID(ctx),
 		Sort:        domain.DiscussionSort(params.Sort),
+		Paging:      paging,
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	res := make([]oas.DiscussionSummary, len(items))
-	for i, item := range items {
-		res[i] = h.toOasDiscussionSummary(item)
-	}
-	return res, nil
+	return h.toOasPaginatedDiscussionSummary(output, paging), nil
 }
 
 func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(
@@ -165,6 +175,8 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 		code = 403
 	} else if errors.Is(err, apperr.ErrNotFound) {
 		code = 404
+	} else if errors.Is(err, apperr.ErrInvalidArgument) {
+		code = 400
 	} else if errors.Is(err, apperr.ErrAlreadyExists) ||
 		errors.Is(err, apperr.ErrLimitExceeded) {
 		code = 409
@@ -178,6 +190,19 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 			Code:    code,
 			Message: msg,
 		},
+	}
+}
+
+func (h *appHandler) toOasPaginatedDiscussionSummary(output usecase.ListDiscussionsOutput, paging domain.Paging) *oas.PaginatedDiscussionSummary {
+	items := make([]oas.DiscussionSummary, len(output.Items))
+	for i, item := range output.Items {
+		items[i] = h.toOasDiscussionSummary(item)
+	}
+	return &oas.PaginatedDiscussionSummary{
+		Items:      items,
+		TotalCount: output.TotalCount,
+		Page:       oas.Page(paging.Page),
+		PageSize:   oas.PageSize(paging.PageSize),
 	}
 }
 

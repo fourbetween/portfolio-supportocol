@@ -18,7 +18,7 @@ var _ Handler = UnimplementedHandler{}
 // Get public discussions.
 //
 // GET /v1/dialogue/discussions
-func (UnimplementedHandler) V1DialogueDiscussionsGet(ctx context.Context, params V1DialogueDiscussionsGetParams) (r []DiscussionSummary, _ error) {
+func (UnimplementedHandler) V1DialogueDiscussionsGet(ctx context.Context, params V1DialogueDiscussionsGetParams) (r *PaginatedDiscussionSummary, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -63,7 +63,7 @@ func (UnimplementedHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussion
 // Get internal discussions for a workspace.
 //
 // GET /v1/dialogue/workspaces/{workspaceId}/discussions
-func (UnimplementedHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams) (r []DiscussionSummary, _ error) {
+func (UnimplementedHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams) (r *PaginatedDiscussionSummary, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

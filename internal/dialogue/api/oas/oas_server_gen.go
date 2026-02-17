@@ -13,7 +13,7 @@ type Handler interface {
 	// Get public discussions.
 	//
 	// GET /v1/dialogue/discussions
-	V1DialogueDiscussionsGet(ctx context.Context, params V1DialogueDiscussionsGetParams) ([]DiscussionSummary, error)
+	V1DialogueDiscussionsGet(ctx context.Context, params V1DialogueDiscussionsGetParams) (*PaginatedDiscussionSummary, error)
 	// V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPost implements POST /v1/dialogue/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues operation.
 	//
 	// Add issue to comment.
@@ -43,7 +43,7 @@ type Handler interface {
 	// Get internal discussions for a workspace.
 	//
 	// GET /v1/dialogue/workspaces/{workspaceId}/discussions
-	V1DialogueWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams) ([]DiscussionSummary, error)
+	V1DialogueWorkspacesWorkspaceIdDiscussionsGet(ctx context.Context, params V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams) (*PaginatedDiscussionSummary, error)
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

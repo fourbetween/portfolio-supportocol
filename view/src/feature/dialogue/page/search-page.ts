@@ -14,7 +14,9 @@ export class DialogueSearchPage extends LitElement {
           <p class="description">${msg("Explore and join discussions.")}</p>
         </header>
         <section class="content">
-          <dialogue-discussion-list-widget></dialogue-discussion-list-widget>
+          <dialogue-discussion-list-widget
+            .pageSize=${50}
+          ></dialogue-discussion-list-widget>
         </section>
       </main>
     `;
