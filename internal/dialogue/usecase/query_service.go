@@ -18,9 +18,24 @@ type DiscussionSummary struct {
 	FavoritesCount  int
 }
 
+type DiscussionListResult struct {
+	Items      []DiscussionSummary
+	TotalCount int
+}
+
 type DiscussionQueryService interface {
 	// ListPublicDiscussions lists all public discussions (accessible by everyone).
-	ListPublicDiscussions(ctx context.Context, sort domain.DiscussionSort) ([]DiscussionSummary, error)
+	ListPublicDiscussions(
+		ctx context.Context,
+		sort domain.DiscussionSort,
+		paging domain.Paging,
+	) (DiscussionListResult, error)
+
 	// ListInternalDiscussions lists internal discussions for a specific workspace (accessible by members).
-	ListInternalDiscussions(ctx context.Context, workspaceID string, sort domain.DiscussionSort) ([]DiscussionSummary, error)
+	ListInternalDiscussions(
+		ctx context.Context,
+		workspaceID string,
+		sort domain.DiscussionSort,
+		paging domain.Paging,
+	) (DiscussionListResult, error)
 }

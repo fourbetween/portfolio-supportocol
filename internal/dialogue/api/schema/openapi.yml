@@ -103,6 +103,33 @@ components:
       enum:
         - lastCommentedAt
         - favoritesCount
+    Page:
+      type: integer
+      minimum: 1
+      default: 1
+    PageSize:
+      type: integer
+      minimum: 1
+      maximum: 100
+      default: 20
+    PaginatedDiscussionSummary:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/DiscussionSummary"
+        totalCount:
+          type: integer
+        page:
+          $ref: "#/components/schemas/Page"
+        pageSize:
+          $ref: "#/components/schemas/PageSize"
+      required:
+        - items
+        - totalCount
+        - page
+        - pageSize
     DiscussionSummary:
       type: object
       properties:
@@ -250,15 +277,23 @@ paths:
           required: true
           name: sort
           in: query
+        - schema:
+            $ref: "#/components/schemas/Page"
+          required: false
+          name: page
+          in: query
+        - schema:
+            $ref: "#/components/schemas/PageSize"
+          required: false
+          name: pageSize
+          in: query
       responses:
         "200":
           description: success response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/DiscussionSummary"
+                $ref: "#/components/schemas/PaginatedDiscussionSummary"
         default:
           description: default error
           content:
@@ -276,15 +311,23 @@ paths:
           required: true
           name: sort
           in: query
+        - schema:
+            $ref: "#/components/schemas/Page"
+          required: false
+          name: page
+          in: query
+        - schema:
+            $ref: "#/components/schemas/PageSize"
+          required: false
+          name: pageSize
+          in: query
       responses:
         "200":
           description: success response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/DiscussionSummary"
+                $ref: "#/components/schemas/PaginatedDiscussionSummary"
         default:
           description: default error
           content:

@@ -782,6 +782,150 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
+// NewOptPage returns new OptPage with value set to v.
+func NewOptPage(v Page) OptPage {
+	return OptPage{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPage is optional Page.
+type OptPage struct {
+	Value Page
+	Set   bool
+}
+
+// IsSet returns true if OptPage was set.
+func (o OptPage) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPage) Reset() {
+	var v Page
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPage) SetTo(v Page) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPage) Get() (v Page, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPage) Or(d Page) Page {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptPageSize returns new OptPageSize with value set to v.
+func NewOptPageSize(v PageSize) OptPageSize {
+	return OptPageSize{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPageSize is optional PageSize.
+type OptPageSize struct {
+	Value PageSize
+	Set   bool
+}
+
+// IsSet returns true if OptPageSize was set.
+func (o OptPageSize) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPageSize) Reset() {
+	var v PageSize
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPageSize) SetTo(v PageSize) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPageSize) Get() (v PageSize, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPageSize) Or(d PageSize) PageSize {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+type Page int
+
+type PageSize int
+
+// Ref: #/components/schemas/PaginatedDiscussionSummary
+type PaginatedDiscussionSummary struct {
+	Items      []DiscussionSummary `json:"items"`
+	TotalCount int                 `json:"totalCount"`
+	Page       Page                `json:"page"`
+	PageSize   PageSize            `json:"pageSize"`
+}
+
+// GetItems returns the value of Items.
+func (s *PaginatedDiscussionSummary) GetItems() []DiscussionSummary {
+	return s.Items
+}
+
+// GetTotalCount returns the value of TotalCount.
+func (s *PaginatedDiscussionSummary) GetTotalCount() int {
+	return s.TotalCount
+}
+
+// GetPage returns the value of Page.
+func (s *PaginatedDiscussionSummary) GetPage() Page {
+	return s.Page
+}
+
+// GetPageSize returns the value of PageSize.
+func (s *PaginatedDiscussionSummary) GetPageSize() PageSize {
+	return s.PageSize
+}
+
+// SetItems sets the value of Items.
+func (s *PaginatedDiscussionSummary) SetItems(val []DiscussionSummary) {
+	s.Items = val
+}
+
+// SetTotalCount sets the value of TotalCount.
+func (s *PaginatedDiscussionSummary) SetTotalCount(val int) {
+	s.TotalCount = val
+}
+
+// SetPage sets the value of Page.
+func (s *PaginatedDiscussionSummary) SetPage(val Page) {
+	s.Page = val
+}
+
+// SetPageSize sets the value of PageSize.
+func (s *PaginatedDiscussionSummary) SetPageSize(val PageSize) {
+	s.PageSize = val
+}
+
 // Ref: #/components/schemas/PermissionLevel
 type PermissionLevel string
 
