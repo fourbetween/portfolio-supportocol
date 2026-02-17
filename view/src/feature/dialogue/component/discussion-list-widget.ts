@@ -5,8 +5,10 @@ import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { routerContext } from "../../../app/context/router";
 import { navigate, paths } from "../../../app/paths";
+import type { PageChangeEvent } from "../../../shared/event/page";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import "../../../shared/ui/pagination/pagination";
 import type {
   DialogueDiscussionSelectEvent,
   DialogueDiscussionSortChangeEvent,
@@ -25,23 +27,37 @@ export class DialogueDiscussionListWidget extends LitElement {
   @property({ type: Array })
   summaries: DiscussionSummary[] = [];
 
+  @property({ type: Number })
+  pageSize = 20;
+
+  @property({ type: Boolean })
+  paginated = true;
+
   @state()
   private sort: DiscussionSort = "lastCommentedAt";
+
+  @state()
+  private page = 1;
+
+  @state()
+  private totalCount = 0;
 
   constructor() {
     super();
 
     new Task(this, {
-      task: async ([sort]) => {
-        return discussionRepository.list(sort);
+      task: async ([sort, page, pageSize]) => {
+        return discussionRepository.list(sort, page, pageSize);
       },
-      onComplete: (summaries) => {
-        this.summaries = summaries;
+      onComplete: (result) => {
+        this.summaries = result.items;
+        this.totalCount = result.totalCount;
+        this.page = result.page;
       },
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [this.sort],
+      args: () => [this.sort, this.page, this.pageSize] as const,
     });
   }
 
@@ -55,6 +71,11 @@ export class DialogueDiscussionListWidget extends LitElement {
 
   private handleSortChange(event: DialogueDiscussionSortChangeEvent) {
     this.sort = event.sort;
+    this.page = 1;
+  }
+
+  private handlePageChange(event: PageChangeEvent) {
+    this.page = event.page;
   }
 
   render() {
@@ -70,6 +91,16 @@ export class DialogueDiscussionListWidget extends LitElement {
           .summaries=${this.summaries}
           @dialogue-discussion-select=${this.handleDiscussionSelect}
         ></dialogue-discussion-list>
+        ${this.paginated
+          ? html`
+              <ui-pagination
+                .page=${this.page}
+                .pageSize=${this.pageSize}
+                .totalCount=${this.totalCount}
+                @page-change=${this.handlePageChange}
+              ></ui-pagination>
+            `
+          : ""}
       </div>
     `;
   }

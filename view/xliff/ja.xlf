@@ -654,6 +654,22 @@
   <source>Popular Discussions</source>
   <target>人気の議論</target>
 </trans-unit>
+<trans-unit id="s3dc14a4b8129f989">
+  <source>Pagination</source>
+  <target>ページネーション</target>
+</trans-unit>
+<trans-unit id="s5b6a1140834aa043">
+  <source>Previous page</source>
+  <target>前のページ</target>
+</trans-unit>
+<trans-unit id="s2e192b19ed15fcf6">
+  <source>Page</source>
+  <target>ページ</target>
+</trans-unit>
+<trans-unit id="s542ffff558768ea3">
+  <source>Next page</source>
+  <target>次のページ</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

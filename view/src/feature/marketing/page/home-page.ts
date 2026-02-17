@@ -14,6 +14,8 @@ import type { DiscussionSummary } from "../../dialogue/model/discussion";
 import { discussionRepository } from "../../dialogue/repository/discussion-repository";
 import "../../dialogue/ui/discussion-list";
 
+const HOME_PAGE_SIZE = 10;
+
 @customElement("marketing-home-page")
 export class MarketingHomePage extends LitElement {
   @consume({ context: routerContext, subscribe: true })
@@ -28,10 +30,10 @@ export class MarketingHomePage extends LitElement {
 
     new Task(this, {
       task: async () => {
-        return discussionRepository.list("favoritesCount");
+        return discussionRepository.list("favoritesCount", 1, HOME_PAGE_SIZE);
       },
-      onComplete: (discussions) => {
-        this._popularDiscussions = discussions;
+      onComplete: (result) => {
+        this._popularDiscussions = result.items;
       },
       onError: (e: unknown) => {
         console.error(e);
