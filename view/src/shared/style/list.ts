@@ -8,6 +8,7 @@ export const emptyStyle = css`
     border: 1px solid var(--color-border-default);
     border-radius: 6px;
     background-color: var(--color-canvas-subtle);
+    font-size: 14px;
   }
 `;
 
