@@ -8,7 +8,6 @@ import "../../feature/workspace/component/workspace-select-widget";
 import { baseStyle } from "../../shared/style/base";
 import { iconStyle } from "../../shared/style/icon";
 import { userContext } from "../context/user";
-import { TouchController } from "../controller/touch";
 import { paths } from "../paths";
 
 @customElement("app-header")
@@ -16,8 +15,6 @@ export class AppHeader extends LitElement {
   @consume({ context: userContext, subscribe: true })
   @state()
   private user?: User;
-
-  private touch = new TouchController(this);
 
   private handleLogin() {
     authService.login();
@@ -29,31 +26,19 @@ export class AppHeader extends LitElement {
 
   render() {
     return html`
-      <header class="header ${this.touch.isTouchDevice ? "touch" : ""}">
+      <header class="header">
         <a href=${paths.marketing.home} class="header-logo">Supportocol</a>
         <nav class="header-nav">
           <a href=${paths.learning.dashboard} class="nav-item">
-            ${this.touch.isTouchDevice
-              ? html`
-                  <span class="material-symbols-outlined">school</span>
-                `
-              : ""}
+            <span class="material-symbols-outlined">school</span>
             <span>${msg("Learning")}</span>
           </a>
           <a href=${paths.dialogue.search} class="nav-item">
-            ${this.touch.isTouchDevice
-              ? html`
-                  <span class="material-symbols-outlined">forum</span>
-                `
-              : ""}
+            <span class="material-symbols-outlined">forum</span>
             <span>${msg("Dialogue")}</span>
           </a>
           <a href=${paths.workspace.projects} class="nav-item">
-            ${this.touch.isTouchDevice
-              ? html`
-                  <span class="material-symbols-outlined">folder</span>
-                `
-              : ""}
+            <span class="material-symbols-outlined">folder</span>
             <span>${msg("Projects")}</span>
           </a>
         </nav>
@@ -66,7 +51,7 @@ export class AppHeader extends LitElement {
                   aria-label=${msg("Logout")}
                 >
                   <span class="material-symbols-outlined">logout</span>
-                  ${this.touch.isTouchDevice ? "" : msg("Logout")}
+                  <span class="button-text">${msg("Logout")}</span>
                 </button>
               `
             : html`
@@ -76,7 +61,7 @@ export class AppHeader extends LitElement {
                   aria-label=${msg("Login")}
                 >
                   <span class="material-symbols-outlined">login</span>
-                  ${this.touch.isTouchDevice ? "" : msg("Login")}
+                  <span class="button-text">${msg("Login")}</span>
                 </button>
               `}
         </div>
@@ -107,10 +92,6 @@ export class AppHeader extends LitElement {
         text-decoration: none;
       }
 
-      .header.touch .header-logo {
-        font-size: 16px;
-      }
-
       .header-nav {
         display: flex;
         align-items: center;
@@ -134,11 +115,8 @@ export class AppHeader extends LitElement {
         background-color: rgba(255, 255, 255, 0.1);
       }
 
-      .header.touch .nav-item {
-        flex-direction: column;
-        padding: 4px 8px;
-        font-size: 8px;
-        gap: 2px;
+      .nav-item .material-symbols-outlined {
+        display: none;
       }
 
       .header-actions {
@@ -166,6 +144,36 @@ export class AppHeader extends LitElement {
       .logout-button:hover {
         opacity: 0.8;
         background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      @media (max-width: 600px) {
+        .header {
+          gap: 12px;
+          padding: 8px;
+        }
+
+        .header-logo {
+          font-size: 16px;
+        }
+
+        .nav-item {
+          flex-direction: column;
+          padding: 4px 8px;
+          font-size: 8px;
+          gap: 2px;
+        }
+
+        .nav-item .material-symbols-outlined {
+          display: block;
+        }
+
+        .header-actions {
+          gap: 8px;
+        }
+
+        .header-actions .button-text {
+          display: none;
+        }
       }
     `,
   ];
