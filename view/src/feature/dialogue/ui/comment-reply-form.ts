@@ -53,6 +53,15 @@ export class DialogueCommentReplyForm extends LitElement {
     this.replyContent = target.value;
   }
 
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      this.handleCancel();
+    } else if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      e.preventDefault();
+      this.handleSave();
+    }
+  }
+
   private handleSave() {
     if (this.selectedType && this.replyContent) {
       this.dispatchEvent(
@@ -85,6 +94,7 @@ export class DialogueCommentReplyForm extends LitElement {
           placeholder=${msg("Enter your reply...")}
           .value=${this.replyContent}
           @input=${this.handleContentInput}
+          @keydown=${this.handleKeyDown}
         ></textarea>
         <div class="actions">
           <button

@@ -66,6 +66,15 @@ export class LearningCommentEditForm extends LitElement {
     this._content = target.value;
   }
 
+  private handleKeyDown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      this.handleCancel();
+    } else if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      e.preventDefault();
+      this.handleSave();
+    }
+  }
+
   private handleSave() {
     const { _commentType: type, _content: content } = this;
     if (this.commentId) {
@@ -117,6 +126,7 @@ export class LearningCommentEditForm extends LitElement {
           id="content-textarea"
           .value=${this._content}
           @input=${this.handleInput}
+          @keydown=${this.handleKeyDown}
           placeholder=${msg("Enter your comment...")}
           maxlength=${MAX_CONTENT_LENGTH}
         ></textarea>
