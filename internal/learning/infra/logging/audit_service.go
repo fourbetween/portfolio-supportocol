@@ -21,7 +21,8 @@ func (s *slogAuditService) LogCommentCreated(ctx context.Context, comment *domai
 		createdBy = *comment.CreatedBy()
 	}
 
-	slog.InfoContext(ctx, "comment created for audit",
+	slog.InfoContext(ctx, "comment created",
+		slog.String("category", "audit"),
 		slog.String("discussion_id", comment.DiscussionID()),
 		slog.String("comment_id", comment.ID()),
 		slog.String("type", comment.Type()),
@@ -39,7 +40,8 @@ func (s *slogAuditService) LogCommentUpdated(ctx context.Context, comment *domai
 		createdBy = *comment.CreatedBy()
 	}
 
-	slog.InfoContext(ctx, "comment updated for audit",
+	slog.InfoContext(ctx, "comment updated",
+		slog.String("category", "audit"),
 		slog.String("discussion_id", comment.DiscussionID()),
 		slog.String("comment_id", comment.ID()),
 		slog.String("type", comment.Type()),
@@ -49,7 +51,8 @@ func (s *slogAuditService) LogCommentUpdated(ctx context.Context, comment *domai
 }
 
 func (s *slogAuditService) LogDiscussionCreated(ctx context.Context, discussion *domain.Discussion) {
-	slog.InfoContext(ctx, "discussion created for audit",
+	slog.InfoContext(ctx, "discussion created",
+		slog.String("category", "audit"),
 		slog.String("discussion_id", discussion.ID()),
 		slog.String("workspace_id", discussion.WorkspaceID()),
 		slog.String("project_id", discussion.ProjectID()),
@@ -62,7 +65,8 @@ func (s *slogAuditService) LogDiscussionCreated(ctx context.Context, discussion 
 }
 
 func (s *slogAuditService) LogDiscussionUpdated(ctx context.Context, discussion *domain.Discussion) {
-	slog.InfoContext(ctx, "discussion updated for audit",
+	slog.InfoContext(ctx, "discussion updated",
+		slog.String("category", "audit"),
 		slog.String("discussion_id", discussion.ID()),
 		slog.String("workspace_id", discussion.WorkspaceID()),
 		slog.String("theme", discussion.Theme()),

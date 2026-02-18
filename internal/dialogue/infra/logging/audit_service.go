@@ -21,7 +21,8 @@ func (s *slogAuditService) LogCommentCreated(ctx context.Context, comment *domai
 		createdBy = *comment.CreatedBy()
 	}
 
-	slog.InfoContext(ctx, "comment created for audit",
+	slog.InfoContext(ctx, "comment created",
+		slog.String("category", "audit"),
 		slog.String("discussion_id", comment.DiscussionID()),
 		slog.String("comment_id", comment.ID()),
 		slog.String("type", comment.Type()),
@@ -39,7 +40,8 @@ func (s *slogAuditService) LogCommentIssueAdded(ctx context.Context, comment *do
 		createdBy = *issue.CreatedBy
 	}
 
-	slog.InfoContext(ctx, "comment issue added for audit",
+	slog.InfoContext(ctx, "comment issue added ",
+		slog.String("category", "audit"),
 		slog.String("discussion_id", comment.DiscussionID()),
 		slog.String("comment_id", comment.ID()),
 		slog.String("issue_id", issue.ID),
