@@ -141,8 +141,8 @@ func (c *AppContainer) buildCommentGenFunction() {
 	f.AddEventSource(awslambdaeventsources.NewSqsEventSource(
 		c.commentGenQueue,
 		&awslambdaeventsources.SqsEventSourceProps{
-			BatchSize:               jsii.Number(10),
-			MaxConcurrency:          jsii.Number(2),
+			BatchSize:               jsii.Number(1),
+			MaxConcurrency:          jsii.Number(5),
 			ReportBatchItemFailures: jsii.Bool(true),
 		},
 	))
