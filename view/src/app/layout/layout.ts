@@ -23,7 +23,8 @@ export class AppLayout extends LitElement {
       .layout {
         display: flex;
         flex-direction: column;
-        height: 100vh;
+        height: 100vh; /* fallback */
+        height: 100svh;
       }
       main {
         flex: 1;

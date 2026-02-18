@@ -355,11 +355,13 @@ export class DialogueItemPage extends LitElement {
       }
       .btn-right {
         right: 16px;
-        bottom: 16px;
+        bottom: 16px; /* fallback */
+        bottom: calc(16px + env(safe-area-inset-bottom));
       }
       .btn-left {
         left: 16px;
-        bottom: 16px;
+        bottom: 16px; /* fallback */
+        bottom: calc(16px + env(safe-area-inset-bottom));
       }
       section {
         display: flex;

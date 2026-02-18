@@ -470,11 +470,13 @@ export class LearningDashboardPage extends LitElement {
       }
       .btn-left {
         left: 16px;
-        bottom: 16px;
+        bottom: 16px; /* fallback */
+        bottom: calc(16px + env(safe-area-inset-bottom));
       }
       .btn-right {
         right: 16px;
-        bottom: 16px;
+        bottom: 16px; /* fallback */
+        bottom: calc(16px + env(safe-area-inset-bottom));
       }
       @media (hover: none) {
         .btn-hover {
