@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"slices"
 	"strings"
 
@@ -28,7 +29,12 @@ func NewCommentGenerator(
 	factory *domain.CommentFactory,
 	apiKey string,
 ) (*CommentGenerator, error) {
-	client, err := genai.NewClient(context.TODO(), &genai.ClientConfig{
+	apiKey = strings.TrimSpace(apiKey)
+	if apiKey == "" {
+		return nil, fmt.Errorf("gemini api key is required")
+	}
+
+	client, err := genai.NewClient(context.Background(), &genai.ClientConfig{
 		APIKey:  apiKey,
 		Backend: genai.BackendGeminiAPI,
 	})
@@ -117,6 +123,8 @@ func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) (
 		},
 	}
 
+	slog.Info("debug", slog.Any("prompt", prompt))
+
 	resp, err := cg.client.Models.GenerateContent(
 		ctx,
 		defaultModel,
@@ -124,7 +132,7 @@ func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) (
 		config,
 	)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to generate content: %w", err)
 	}
 
 	var generated []struct {
