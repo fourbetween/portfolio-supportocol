@@ -1,11 +1,4 @@
 services:
-  web:
-    image: 008544129142.dkr.ecr.ap-northeast-1.amazonaws.com/web-dev:0.0.2
-    environment:
-      - VIRTUAL_HOST=${VIRTUAL_HOST}
-    ports:
-      - ${IP}:80:80
-      - ${IP}:443:443
   app:
     build:
       context: ./app
@@ -15,17 +8,39 @@ services:
       - sources:/sources
       - ~/.aws:/root/.aws
     tty: true
+    networks:
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.api-router.entrypoints=supportocol-api"
+      - "traefik.http.routers.api-router.rule=Host(`hikaru.local`)"
+      - "traefik.http.routers.api-router.tls=true"
+      - "traefik.http.routers.api-router.service=api-svc"
+      - "traefik.http.services.api-svc.loadbalancer.server.port=9000"
+
+      - "traefik.http.routers.view-router.entrypoints=supportocol-view"
+      - "traefik.http.routers.view-router.rule=Host(`hikaru.local`)"
+      - "traefik.http.routers.view-router.tls=true"
+      - "traefik.http.routers.view-router.service=view-svc"
+      - "traefik.http.services.view-svc.loadbalancer.server.port=3000"
+
   mysql:
     image: mysql:8.4
     command: --performance_schema=0
     ports:
-      - ${IP}:3306:3306
+      - 33061:3306
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=${APP_NAME}
     volumes:
       - db_data:/var/lib/mysql
+
 volumes:
   sources:
     external: true
   db_data:
+
+networks:
+  traefik-public:
+    external: true

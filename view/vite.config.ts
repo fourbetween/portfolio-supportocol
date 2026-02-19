@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 3000,
       host: true,
-      allowedHosts: [".hick-r.com"],
+      allowedHosts: ["hikaru.local"],
     },
     plugins: [
       pwaPlugin(mode),
