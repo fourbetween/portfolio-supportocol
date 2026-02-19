@@ -10,6 +10,7 @@ services:
     tty: true
     networks:
       - traefik-public
+      - internal
     labels:
       - "traefik.enable=true"
 
@@ -35,6 +36,8 @@ services:
       - MYSQL_DATABASE=${APP_NAME}
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - internal
 
 volumes:
   sources:
@@ -44,3 +47,4 @@ volumes:
 networks:
   traefik-public:
     external: true
+  internal:
