@@ -13,16 +13,19 @@ services:
       - internal
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=traefik-public"
 
-      - "traefik.http.routers.api-router.entrypoints=supportocol-api"
-      - "traefik.http.routers.api-router.rule=Host(`hikaru.local`)"
+      - "traefik.http.routers.api-router.entrypoints=websecure"
+      - "traefik.http.routers.api-router.rule=Host(`api-supportocol.dev.hick-r.com`)"
       - "traefik.http.routers.api-router.tls=true"
+      - "traefik.http.routers.api-router.tls.certresolver=myresolver"
       - "traefik.http.routers.api-router.service=api-svc"
       - "traefik.http.services.api-svc.loadbalancer.server.port=9000"
 
-      - "traefik.http.routers.view-router.entrypoints=supportocol-view"
-      - "traefik.http.routers.view-router.rule=Host(`hikaru.local`)"
+      - "traefik.http.routers.view-router.entrypoints=websecure"
+      - "traefik.http.routers.view-router.rule=Host(`supportocol.dev.hick-r.com`)"
       - "traefik.http.routers.view-router.tls=true"
+      - "traefik.http.routers.view-router.tls.certresolver=myresolver"
       - "traefik.http.routers.view-router.service=view-svc"
       - "traefik.http.services.view-svc.loadbalancer.server.port=3000"
 
