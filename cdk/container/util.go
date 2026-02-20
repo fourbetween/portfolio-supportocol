@@ -21,6 +21,7 @@ func getDomain(app, stage string) string {
 	if stage == "prod" {
 		return base
 	}
+	app = strings.TrimPrefix(app, "app-")
 	return fmt.Sprintf("%s.%s.%s", app, stage, base)
 }
 
