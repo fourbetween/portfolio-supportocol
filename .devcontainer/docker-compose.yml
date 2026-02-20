@@ -14,7 +14,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-public"
-
+      # api
       - "traefik.http.routers.api-router.entrypoints=websecure"
       - "traefik.http.routers.api-router.rule=Host(`supportocol.dev.hick-r.com`) && PathPrefix(`/api`)"
       - "traefik.http.routers.api-router.tls=true"
@@ -24,7 +24,7 @@ services:
       - "traefik.http.routers.api-router.middlewares=api-strip"
       - "traefik.http.middlewares.api-strip.stripprefix.prefixes=/api"
       - "traefik.http.services.api-svc.loadbalancer.server.port=9000"
-
+      # view
       - "traefik.http.routers.view-router.entrypoints=websecure"
       - "traefik.http.routers.view-router.rule=Host(`supportocol.dev.hick-r.com`)"
       - "traefik.http.routers.view-router.tls=true"
