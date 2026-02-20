@@ -15,29 +15,29 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-public"
       # api
-      - "traefik.http.routers.api-router.entrypoints=websecure"
-      - "traefik.http.routers.api-router.rule=Host(`${APP_DOMAIN}`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.api-router.tls=true"
-      - "traefik.http.routers.api-router.tls.certresolver=myresolver"
-      - "traefik.http.routers.api-router.service=api-svc"
-      - "traefik.http.routers.api-router.priority=20"
-      - "traefik.http.routers.api-router.middlewares=api-strip"
-      - "traefik.http.middlewares.api-strip.stripprefix.prefixes=/api"
-      - "traefik.http.services.api-svc.loadbalancer.server.port=9000"
+      - "traefik.http.routers.${APP_NAME}-api.entrypoints=websecure"
+      - "traefik.http.routers.${APP_NAME}-api.rule=Host(`${APP_DOMAIN}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.${APP_NAME}-api.tls=true"
+      - "traefik.http.routers.${APP_NAME}-api.tls.certresolver=myresolver"
+      - "traefik.http.routers.${APP_NAME}-api.service=${APP_NAME}-api-svc"
+      - "traefik.http.routers.${APP_NAME}-api.priority=20"
+      - "traefik.http.routers.${APP_NAME}-api.middlewares=${APP_NAME}-api-strip"
+      - "traefik.http.middlewares.${APP_NAME}-api-strip.stripprefix.prefixes=/api"
+      - "traefik.http.services.${APP_NAME}-api-svc.loadbalancer.server.port=9000"
       # view
-      - "traefik.http.routers.view-router.entrypoints=websecure"
-      - "traefik.http.routers.view-router.rule=Host(`${APP_DOMAIN}`)"
-      - "traefik.http.routers.view-router.tls=true"
-      - "traefik.http.routers.view-router.tls.certresolver=myresolver"
-      - "traefik.http.routers.view-router.service=view-svc"
-      - "traefik.http.routers.view-router.priority=10"
-      - "traefik.http.services.view-svc.loadbalancer.server.port=3000"
+      - "traefik.http.routers.${APP_NAME}-view.entrypoints=websecure"
+      - "traefik.http.routers.${APP_NAME}-view.rule=Host(`${APP_DOMAIN}`)"
+      - "traefik.http.routers.${APP_NAME}-view.tls=true"
+      - "traefik.http.routers.${APP_NAME}-view.tls.certresolver=myresolver"
+      - "traefik.http.routers.${APP_NAME}-view.service=${APP_NAME}-view-svc"
+      - "traefik.http.routers.${APP_NAME}-view.priority=10"
+      - "traefik.http.services.${APP_NAME}-view-svc.loadbalancer.server.port=3000"
 
   mysql:
     image: mysql:8.4
     command: --performance_schema=0
     ports:
-      - 33061:3306
+      - ${DB_PORT}:3306
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=${APP_NAME}
