@@ -30,7 +30,16 @@ func main() {
 		con,
 		env.AppName(),
 		"../../../internal/workspace/infra/db/schema",
-		makeTmpl([]string{"workspaces", "members", "projects", "favorite_discussions", "discussions"}),
+		makeTmpl([]string{
+			"workspaces",
+			"members",
+			"projects",
+			"favorite_discussions",
+			"discussions",
+			"plans",
+			"subscriptions",
+			"ai_usage_logs",
+		}),
 	); err != nil {
 		panic(err)
 	}
@@ -39,7 +48,12 @@ func main() {
 		con,
 		env.AppName(),
 		"../../../internal/learning/infra/db/schema",
-		makeTmpl([]string{"discussions", "comments", "comment_issues", "dialogue_settings"}),
+		makeTmpl([]string{
+			"discussions",
+			"comments",
+			"comment_issues",
+			"dialogue_settings",
+		}),
 	); err != nil {
 		panic(err)
 	}
@@ -48,7 +62,12 @@ func main() {
 		con,
 		env.AppName(),
 		"../../../internal/dialogue/infra/db/schema",
-		makeTmpl([]string{"discussions", "comments", "comment_issues", "dialogue_settings"}),
+		makeTmpl([]string{
+			"discussions",
+			"comments",
+			"comment_issues",
+			"dialogue_settings",
+		}),
 	); err != nil {
 		panic(err)
 	}
