@@ -12,6 +12,7 @@ type UserCreatedHandler struct {
 	workspaceRepo domain.WorkspaceRepository
 	memberRepo    domain.MemberRepository
 	projectRepo   domain.ProjectRepository
+	planRepo      domain.PlanRepository
 	workspaceFac  *domain.WorkspaceFactory
 	memberFac     *domain.MemberFactory
 	projectFac    *domain.ProjectFactory
@@ -22,6 +23,7 @@ func NewUserCreatedHandler(
 	workspaceRepo domain.WorkspaceRepository,
 	memberRepo domain.MemberRepository,
 	projectRepo domain.ProjectRepository,
+	planRepo domain.PlanRepository,
 	workspaceFac *domain.WorkspaceFactory,
 	memberFac *domain.MemberFactory,
 	projectFac *domain.ProjectFactory,
@@ -31,6 +33,7 @@ func NewUserCreatedHandler(
 		workspaceRepo: workspaceRepo,
 		memberRepo:    memberRepo,
 		projectRepo:   projectRepo,
+		planRepo:      planRepo,
 		workspaceFac:  workspaceFac,
 		memberFac:     memberFac,
 		projectFac:    projectFac,
@@ -39,12 +42,20 @@ func NewUserCreatedHandler(
 }
 
 func (h *UserCreatedHandler) OnUserCreated(ctx context.Context, userID string) error {
+	// デフォルトプランの取得
+	plan, err := h.planRepo.LoadDefault(ctx)
+	if err != nil {
+		slog.Error("failed to load default plan", "error", err)
+		return err
+	}
+
 	if err := h.tx.RunInTx(ctx, func(ctx context.Context) error {
 		// 1. パーソナルワークスペースの作成
 		workspace, err := h.workspaceFac.Create(domain.CreateWorkspaceParams{
 			Slug: domain.NewPersonalWorkspaceID(userID),
 			Name: "Personal Workspace",
 			Type: domain.WorkspaceTypePersonal,
+			Plan: plan,
 		})
 		if err != nil {
 			return err

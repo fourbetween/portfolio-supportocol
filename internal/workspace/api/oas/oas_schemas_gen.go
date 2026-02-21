@@ -372,6 +372,43 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
+// Ref: #/components/schemas/Plan
+type Plan struct {
+	ID             ID     `json:"id"`
+	Name           string `json:"name"`
+	MonthlyAiLimit int    `json:"monthlyAiLimit"`
+}
+
+// GetID returns the value of ID.
+func (s *Plan) GetID() ID {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *Plan) GetName() string {
+	return s.Name
+}
+
+// GetMonthlyAiLimit returns the value of MonthlyAiLimit.
+func (s *Plan) GetMonthlyAiLimit() int {
+	return s.MonthlyAiLimit
+}
+
+// SetID sets the value of ID.
+func (s *Plan) SetID(val ID) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *Plan) SetName(val string) {
+	s.Name = val
+}
+
+// SetMonthlyAiLimit sets the value of MonthlyAiLimit.
+func (s *Plan) SetMonthlyAiLimit(val int) {
+	s.MonthlyAiLimit = val
+}
+
 // Ref: #/components/schemas/Project
 type Project struct {
 	ID          ID             `json:"id"`
@@ -446,6 +483,103 @@ type ProjectName string
 
 type ProjectPremise string
 
+// Ref: #/components/schemas/Subscription
+type Subscription struct {
+	Plan               Plan               `json:"plan"`
+	Status             SubscriptionStatus `json:"status"`
+	CurrentPeriodStart time.Time          `json:"currentPeriodStart"`
+	CurrentPeriodEnd   time.Time          `json:"currentPeriodEnd"`
+}
+
+// GetPlan returns the value of Plan.
+func (s *Subscription) GetPlan() Plan {
+	return s.Plan
+}
+
+// GetStatus returns the value of Status.
+func (s *Subscription) GetStatus() SubscriptionStatus {
+	return s.Status
+}
+
+// GetCurrentPeriodStart returns the value of CurrentPeriodStart.
+func (s *Subscription) GetCurrentPeriodStart() time.Time {
+	return s.CurrentPeriodStart
+}
+
+// GetCurrentPeriodEnd returns the value of CurrentPeriodEnd.
+func (s *Subscription) GetCurrentPeriodEnd() time.Time {
+	return s.CurrentPeriodEnd
+}
+
+// SetPlan sets the value of Plan.
+func (s *Subscription) SetPlan(val Plan) {
+	s.Plan = val
+}
+
+// SetStatus sets the value of Status.
+func (s *Subscription) SetStatus(val SubscriptionStatus) {
+	s.Status = val
+}
+
+// SetCurrentPeriodStart sets the value of CurrentPeriodStart.
+func (s *Subscription) SetCurrentPeriodStart(val time.Time) {
+	s.CurrentPeriodStart = val
+}
+
+// SetCurrentPeriodEnd sets the value of CurrentPeriodEnd.
+func (s *Subscription) SetCurrentPeriodEnd(val time.Time) {
+	s.CurrentPeriodEnd = val
+}
+
+// Ref: #/components/schemas/SubscriptionStatus
+type SubscriptionStatus string
+
+const (
+	SubscriptionStatusActive   SubscriptionStatus = "active"
+	SubscriptionStatusCanceled SubscriptionStatus = "canceled"
+	SubscriptionStatusPastDue  SubscriptionStatus = "past_due"
+)
+
+// AllValues returns all SubscriptionStatus values.
+func (SubscriptionStatus) AllValues() []SubscriptionStatus {
+	return []SubscriptionStatus{
+		SubscriptionStatusActive,
+		SubscriptionStatusCanceled,
+		SubscriptionStatusPastDue,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s SubscriptionStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case SubscriptionStatusActive:
+		return []byte(s), nil
+	case SubscriptionStatusCanceled:
+		return []byte(s), nil
+	case SubscriptionStatusPastDue:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *SubscriptionStatus) UnmarshalText(data []byte) error {
+	switch SubscriptionStatus(data) {
+	case SubscriptionStatusActive:
+		*s = SubscriptionStatusActive
+		return nil
+	case SubscriptionStatusCanceled:
+		*s = SubscriptionStatusCanceled
+		return nil
+	case SubscriptionStatusPastDue:
+		*s = SubscriptionStatusPastDue
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteNoContent is response for V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDelete operation.
 type V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavoriteDeleteNoContent struct{}
 
@@ -496,11 +630,12 @@ func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) SetPremise(val
 
 // Ref: #/components/schemas/Workspace
 type Workspace struct {
-	ID        ID            `json:"id"`
-	Slug      WorkspaceSlug `json:"slug"`
-	Name      WorkspaceName `json:"name"`
-	Type      WorkspaceType `json:"type"`
-	CreatedAt time.Time     `json:"createdAt"`
+	ID           ID            `json:"id"`
+	Slug         WorkspaceSlug `json:"slug"`
+	Name         WorkspaceName `json:"name"`
+	Type         WorkspaceType `json:"type"`
+	Subscription Subscription  `json:"subscription"`
+	CreatedAt    time.Time     `json:"createdAt"`
 }
 
 // GetID returns the value of ID.
@@ -521,6 +656,11 @@ func (s *Workspace) GetName() WorkspaceName {
 // GetType returns the value of Type.
 func (s *Workspace) GetType() WorkspaceType {
 	return s.Type
+}
+
+// GetSubscription returns the value of Subscription.
+func (s *Workspace) GetSubscription() Subscription {
+	return s.Subscription
 }
 
 // GetCreatedAt returns the value of CreatedAt.
@@ -546,6 +686,11 @@ func (s *Workspace) SetName(val WorkspaceName) {
 // SetType sets the value of Type.
 func (s *Workspace) SetType(val WorkspaceType) {
 	s.Type = val
+}
+
+// SetSubscription sets the value of Subscription.
+func (s *Workspace) SetSubscription(val Subscription) {
+	s.Subscription = val
 }
 
 // SetCreatedAt sets the value of CreatedAt.

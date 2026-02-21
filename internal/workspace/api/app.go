@@ -202,10 +202,20 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 func (h *appHandler) toOasWorkspaceWithMember(w usecase.WorkspaceWithMember, userID string) oas.WorkspaceWithMember {
 	return oas.WorkspaceWithMember{
 		Workspace: oas.Workspace{
-			ID:        oas.ID(uuid.MustParse(w.WorkspaceID)),
-			Slug:      oas.WorkspaceSlug(w.WorkspaceSlug),
-			Name:      oas.WorkspaceName(w.WorkspaceName),
-			Type:      oas.WorkspaceType(w.WorkspaceType),
+			ID:   oas.ID(uuid.MustParse(w.WorkspaceID)),
+			Slug: oas.WorkspaceSlug(w.WorkspaceSlug),
+			Name: oas.WorkspaceName(w.WorkspaceName),
+			Type: oas.WorkspaceType(w.WorkspaceType),
+			Subscription: oas.Subscription{
+				Plan: oas.Plan{
+					ID:             oas.ID(uuid.MustParse(w.PlanID)),
+					Name:           w.PlanName,
+					MonthlyAiLimit: w.MonthlyAILimit,
+				},
+				Status:             oas.SubscriptionStatus(w.SubscriptionStatus),
+				CurrentPeriodStart: w.CurrentPeriodStart,
+				CurrentPeriodEnd:   w.CurrentPeriodEnd,
+			},
 			CreatedAt: w.WorkspaceCreatedAt,
 		},
 		Member: oas.Member{

@@ -28,6 +28,8 @@ func NewWorkspaceQueryService(db *sql.DB) usecase.WorkspaceQueryService {
 type workspaceWithMemberModel struct {
 	model.Workspaces
 	model.Members
+	model.Subscriptions
+	model.Plans
 }
 
 func (s *workspaceQueryService) ListMyWorkspaces(ctx context.Context, userID string) ([]usecase.WorkspaceWithMember, error) {
@@ -186,6 +188,12 @@ func (m workspaceWithMemberModel) toUseCase() usecase.WorkspaceWithMember {
 		WorkspaceCreatedAt: m.Workspaces.CreatedAt,
 		MemberRole:         m.Members.Role,
 		MemberCreatedAt:    m.Members.CreatedAt,
+		PlanID:             m.Plans.ID,
+		PlanName:           m.Plans.Name,
+		MonthlyAILimit:     int(m.Plans.MonthlyAiLimit),
+		SubscriptionStatus: m.Subscriptions.Status,
+		CurrentPeriodStart: m.Subscriptions.CurrentPeriodStart,
+		CurrentPeriodEnd:   m.Subscriptions.CurrentPeriodEnd,
 	}
 }
 
@@ -194,10 +202,14 @@ func (s *workspaceQueryService) selectWorkspaceWithMember() mysql.SelectStatemen
 		SELECT(
 			table.Workspaces.AllColumns,
 			table.Members.AllColumns,
+			table.Subscriptions.AllColumns,
+			table.Plans.AllColumns,
 		).
 		FROM(
 			table.Workspaces.
-				INNER_JOIN(table.Members, table.Workspaces.ID.EQ(table.Members.WorkspaceID)),
+				INNER_JOIN(table.Members, table.Workspaces.ID.EQ(table.Members.WorkspaceID)).
+				INNER_JOIN(table.Subscriptions, table.Workspaces.ID.EQ(table.Subscriptions.WorkspaceID)).
+				INNER_JOIN(table.Plans, table.Subscriptions.PlanID.EQ(table.Plans.ID)),
 		)
 }
 

@@ -50,6 +50,7 @@ func NewAPIContainer(
 	memberRepo := db.NewMemberRepository(dbCon, memberFac)
 	projectRepo := db.NewProjectRepository(dbCon, projectFac)
 	favRepo := db.NewFavoriteDiscussionRepository(dbCon)
+	planRepo := db.NewPlanRepository(dbCon)
 
 	workspaceQuerySrv := db.NewWorkspaceQueryService(dbCon)
 
@@ -70,7 +71,7 @@ func NewAPIContainer(
 		ListFavoriteDiscussions:  usecase.NewListFavoriteDiscussionsUsecase(workspaceQuerySrv),
 
 		// Hooks
-		UserCreatedHandler: usecase.NewUserCreatedHandler(workspaceRepo, memberRepo, projectRepo, workspaceFac, memberFac, projectFac, txManager),
+		UserCreatedHandler: usecase.NewUserCreatedHandler(workspaceRepo, memberRepo, projectRepo, planRepo, workspaceFac, memberFac, projectFac, txManager),
 
 		// Services
 		WorkspaceQueryService: workspaceQuerySrv,

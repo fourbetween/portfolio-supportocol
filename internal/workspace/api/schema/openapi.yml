@@ -56,6 +56,43 @@ components:
       enum:
         - public
         - internal
+    SubscriptionStatus:
+      type: string
+      enum:
+        - active
+        - canceled
+        - past_due
+    Plan:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        name:
+          type: string
+        monthlyAiLimit:
+          type: integer
+      required:
+        - id
+        - name
+        - monthlyAiLimit
+    Subscription:
+      type: object
+      properties:
+        plan:
+          $ref: "#/components/schemas/Plan"
+        status:
+          $ref: "#/components/schemas/SubscriptionStatus"
+        currentPeriodStart:
+          type: string
+          format: date-time
+        currentPeriodEnd:
+          type: string
+          format: date-time
+      required:
+        - plan
+        - status
+        - currentPeriodStart
+        - currentPeriodEnd
     Workspace:
       type: object
       properties:
@@ -67,6 +104,8 @@ components:
           $ref: "#/components/schemas/WorkspaceName"
         type:
           $ref: "#/components/schemas/WorkspaceType"
+        subscription:
+          $ref: "#/components/schemas/Subscription"
         createdAt:
           type: string
           format: date-time
@@ -75,6 +114,7 @@ components:
         - slug
         - name
         - type
+        - subscription
         - createdAt
     WorkspaceWithMember:
       type: object

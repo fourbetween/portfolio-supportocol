@@ -13,6 +13,13 @@ type WorkspaceWithMember struct {
 	WorkspaceCreatedAt time.Time
 	MemberRole         string
 	MemberCreatedAt    time.Time
+	// Subscription
+	PlanID             string
+	PlanName           string
+	MonthlyAILimit     int
+	SubscriptionStatus string
+	CurrentPeriodStart time.Time
+	CurrentPeriodEnd   time.Time
 }
 
 type WorkspaceAccessResult struct {

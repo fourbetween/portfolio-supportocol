@@ -8,11 +8,12 @@ import (
 )
 
 type Workspace struct {
-	id        string
-	slug      string
-	name      string
-	wsType    WorkspaceType
-	createdAt time.Time
+	id           string
+	slug         string
+	name         string
+	wsType       WorkspaceType
+	subscription Subscription
+	createdAt    time.Time
 }
 
 func (w *Workspace) ID() string {
@@ -41,6 +42,10 @@ func (w *Workspace) IsPersonal() bool {
 
 func (w *Workspace) IsOrganization() bool {
 	return w.wsType.IsOrganization()
+}
+
+func (w *Workspace) Subscription() Subscription {
+	return w.subscription
 }
 
 const MaxProjectsForPersonalWorkspace = 20
@@ -76,6 +81,9 @@ func (w *Workspace) Validate() error {
 		return fmt.Errorf("workspace name is required: %w", apperr.ErrInvalidArgument)
 	}
 	if err := w.wsType.Validate(); err != nil {
+		return err
+	}
+	if err := w.subscription.Validate(); err != nil {
 		return err
 	}
 	return nil
