@@ -44,6 +44,9 @@ export class LearningCommentEditForm extends LitElement {
   @query("learning-comment-type-popup")
   private popup!: LearningCommentTypePopup;
 
+  @query("textarea")
+  private textarea!: HTMLTextAreaElement;
+
   willUpdate(changedProperties: PropertyValues) {
     if (changedProperties.has("initialType")) {
       this._commentType = this.initialType;
@@ -51,6 +54,11 @@ export class LearningCommentEditForm extends LitElement {
     if (changedProperties.has("initialContent")) {
       this._content = this.initialContent;
     }
+  }
+
+  protected firstUpdated() {
+    this.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    this.textarea?.focus();
   }
 
   private handleBadgeClick() {
