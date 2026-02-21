@@ -8,6 +8,7 @@ import {
   type PropertyValues,
 } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../shared/style/base";
 import { commentTreeStyle } from "../../../shared/style/comment-tree";
 import { iconStyle } from "../../../shared/style/icon";
@@ -56,12 +57,8 @@ export class LearningCommentTree extends LitElement {
 
     if (this.comments) {
       this.availableTypes = deriveCommentFrame(this.comments).types;
-      const commentIds = new Set(this.comments.map((c) => c.id));
       for (const comment of this.comments) {
-        const parentId =
-          comment.parentCommentId && commentIds.has(comment.parentCommentId)
-            ? comment.parentCommentId
-            : "root";
+        const parentId = comment.parentCommentId || "root";
 
         const children = this.childrenMap.get(parentId) || [];
         children.push(comment);
@@ -130,8 +127,11 @@ export class LearningCommentTree extends LitElement {
 
     return html`
       <div class="children">
-        ${Object.entries(groupedChildren).map(([type, typeChildren]) =>
-          this.renderGroup(type, typeChildren, isArchived, parentId),
+        ${repeat(
+          Object.entries(groupedChildren),
+          ([type]) => type,
+          ([type, typeChildren]) =>
+            this.renderGroup(type, typeChildren, isArchived, parentId),
         )}
       </div>
     `;
@@ -158,8 +158,10 @@ export class LearningCommentTree extends LitElement {
           ></ui-comment-type-badge>
         </div>
         <div class="group-content">
-          ${comments.map((comment) =>
-            this.renderComment(comment, isFocused, isArchived),
+          ${repeat(
+            comments,
+            (comment) => comment.id,
+            (comment) => this.renderComment(comment, isFocused, isArchived),
           )}
         </div>
       </div>
