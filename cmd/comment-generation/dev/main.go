@@ -40,7 +40,7 @@ func exec(con *learning.CommentGenerationContainer) error {
 	}
 
 	if len(items) > 0 {
-		fmt.Printf("[%s] dequeued %d items\n", time.Now().Format(time.RFC3339), len(items))
+		fmt.Printf("dequeued %d items\n", len(items))
 	}
 
 	for _, item := range items {

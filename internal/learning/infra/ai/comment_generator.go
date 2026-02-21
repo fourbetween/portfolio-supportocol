@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log/slog"
 	"slices"
 	"strings"
 
@@ -122,8 +121,6 @@ func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) (
 			},
 		},
 	}
-
-	slog.Info("debug", slog.Any("prompt", prompt))
 
 	resp, err := cg.client.Models.GenerateContent(
 		ctx,
