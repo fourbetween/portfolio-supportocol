@@ -17,7 +17,7 @@ type Subscriptions struct {
 	Status               string
 	CurrentPeriodStart   time.Time
 	CurrentPeriodEnd     time.Time
-	StripeSubscriptionID string
+	StripeSubscriptionID *string
 	CreatedAt            time.Time
 	UpdatedAt            time.Time
 }

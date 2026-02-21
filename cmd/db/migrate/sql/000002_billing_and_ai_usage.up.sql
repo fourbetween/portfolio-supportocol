@@ -16,7 +16,7 @@ CREATE TABLE subscriptions (
 	status VARCHAR(20) NOT NULL,
 	current_period_start DATETIME NOT NULL,
 	current_period_end DATETIME NOT NULL,
-    stripe_subscription_id VARCHAR(255) NOT NULL,
+    stripe_subscription_id VARCHAR(255),
 	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (workspace_id),
