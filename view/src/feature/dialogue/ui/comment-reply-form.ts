@@ -1,6 +1,6 @@
 import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { iconStyle } from "../../../shared/style/icon";
@@ -28,6 +28,9 @@ export class DialogueCommentReplyForm extends LitElement {
   @state()
   private replyContent = "";
 
+  @query("textarea")
+  private textarea!: HTMLTextAreaElement;
+
   private get allowedTypes() {
     if (!this.frame) return [];
     return this.frame.paths
@@ -41,6 +44,11 @@ export class DialogueCommentReplyForm extends LitElement {
     if (types.length) {
       this.selectedType = types[0];
     }
+  }
+
+  protected firstUpdated() {
+    this.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    this.textarea?.focus();
   }
 
   private handleTypeChange(e: Event) {

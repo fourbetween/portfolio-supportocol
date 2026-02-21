@@ -112,11 +112,13 @@ export class DialogueIssueCreatePopup extends LitElement {
   @query("select")
   private _templateSelect!: HTMLSelectElement;
 
-  protected updated(changedProperties: PropertyValues) {
+  protected async updated(changedProperties: PropertyValues) {
     if (changedProperties.has("open") && this.open) {
       if (this._titleInput) this._titleInput.value = "";
       if (this._descriptionInput) this._descriptionInput.value = "";
       if (this._templateSelect) this._templateSelect.value = "";
+      await this.updateComplete;
+      this._titleInput?.focus();
     }
   }
 

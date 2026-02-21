@@ -30,6 +30,11 @@ export class LearningDiscussionEditForm extends LitElement {
   @query(".conclusion-input")
   private conclusionElement?: HTMLTextAreaElement;
 
+  protected firstUpdated() {
+    this.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    this.inputElement?.focus();
+  }
+
   private handleSave() {
     this.dispatchEvent(
       new LearningDiscussionUpdateEvent(
