@@ -12,13 +12,13 @@ import (
 
 var plans = []domain.Plan{
 	{
-		ID:             "plan_free",
+		ID:             "4c4ca77d-4a51-463e-9345-da27010cb450",
 		Name:           "Free",
 		Description:    "Free plan for personal use.",
 		MonthlyAILimit: 0,
 	},
 	{
-		ID:             "plan_standard",
+		ID:             "cbe0d635-c20c-4c06-9933-1979fac9f5af",
 		Name:           "Standard",
 		Description:    "Standard plan. 300 AI credits per month.",
 		MonthlyAILimit: 300,
