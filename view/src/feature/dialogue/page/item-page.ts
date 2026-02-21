@@ -336,6 +336,7 @@ export class DialogueItemPage extends LitElement {
         gap: 16px;
         flex-direction: column;
         overflow-y: auto;
+        padding-bottom: 24px;
       }
       .detail,
       .comment-frame,
