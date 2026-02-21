@@ -11,17 +11,20 @@ import (
 type EnqueueCommentGenerationUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	permSv         domain.PermissionService
+	aiUsageSv      domain.AIUsageService
 	queue          domain.CommentGenerationQueue
 }
 
 func NewEnqueueCommentGenerationUsecase(
 	discussionRepo domain.DiscussionRepository,
 	permSv domain.PermissionService,
+	aiUsageSv domain.AIUsageService,
 	queue domain.CommentGenerationQueue,
 ) *EnqueueCommentGenerationUsecase {
 	return &EnqueueCommentGenerationUsecase{
 		discussionRepo: discussionRepo,
 		permSv:         permSv,
+		aiUsageSv:      aiUsageSv,
 		queue:          queue,
 	}
 }
@@ -49,6 +52,10 @@ func (u *EnqueueCommentGenerationUsecase) Execute(ctx context.Context, input Gen
 	}
 
 	if err := discussion.CanAddComment(); err != nil {
+		return err
+	}
+
+	if err := u.aiUsageSv.CheckCommentGenerationLimit(ctx, input.WorkspaceID); err != nil {
 		return err
 	}
 

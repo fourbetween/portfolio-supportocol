@@ -53,4 +53,10 @@ type (
 		IncrementFavoritesCount(ctx context.Context, discussionID string) error
 		DecrementFavoritesCount(ctx context.Context, discussionID string) error
 	}
+
+	PlanRepository interface {
+		Load(ctx context.Context, id string) (Plan, error)
+		LoadDefault(ctx context.Context) (Plan, error)
+		Save(ctx context.Context, plan Plan) error
+	}
 )

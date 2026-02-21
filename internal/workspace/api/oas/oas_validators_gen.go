@@ -238,6 +238,42 @@ func (s ProjectPremise) Validate() error {
 	return nil
 }
 
+func (s *Subscription) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Status.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "status",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s SubscriptionStatus) Validate() error {
+	switch s {
+	case "active":
+		return nil
+	case "canceled":
+		return nil
+	case "past_due":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -331,6 +367,17 @@ func (s *Workspace) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "type",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Subscription.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "subscription",
 			Error: err,
 		})
 	}

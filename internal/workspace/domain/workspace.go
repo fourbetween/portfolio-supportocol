@@ -8,11 +8,12 @@ import (
 )
 
 type Workspace struct {
-	id        string
-	slug      string
-	name      string
-	wsType    WorkspaceType
-	createdAt time.Time
+	id           string
+	slug         string
+	name         string
+	wsType       WorkspaceType
+	subscription Subscription
+	createdAt    time.Time
 }
 
 func (w *Workspace) ID() string {
@@ -43,6 +44,10 @@ func (w *Workspace) IsOrganization() bool {
 	return w.wsType.IsOrganization()
 }
 
+func (w *Workspace) Subscription() Subscription {
+	return w.subscription
+}
+
 const MaxProjectsForPersonalWorkspace = 20
 
 func (w *Workspace) CanAddProject(currentCount int) error {
@@ -52,7 +57,14 @@ func (w *Workspace) CanAddProject(currentCount int) error {
 	return nil
 }
 
-// UpdateParams はワークスペースの更新パラメータ
+func (w *Workspace) CanUseAI(currentUsageCount int) error {
+	limit := w.subscription.Plan.MonthlyAILimit
+	if currentUsageCount >= limit {
+		return fmt.Errorf("monthly AI usage limit exceeded (%d/%d): %w", currentUsageCount, limit, apperr.ErrLimitExceeded)
+	}
+	return nil
+}
+
 type UpdateWorkspaceParams struct {
 	Name string
 }
@@ -76,6 +88,9 @@ func (w *Workspace) Validate() error {
 		return fmt.Errorf("workspace name is required: %w", apperr.ErrInvalidArgument)
 	}
 	if err := w.wsType.Validate(); err != nil {
+		return err
+	}
+	if err := w.subscription.Validate(); err != nil {
 		return err
 	}
 	return nil

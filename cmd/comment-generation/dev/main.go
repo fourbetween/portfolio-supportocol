@@ -83,7 +83,14 @@ func newContainer() (*learning.CommentGenerationContainer, error) {
 	wsQueryService := wsdb.NewWorkspaceQueryService(dbCon)
 	permSv := adapter.NewWorkspacePermissionAdapter(wsQueryService)
 
-	projectFac := wsdomain.NewProjectFactory(id.NewUUIDService(), clock.NewRealService())
+	idSrv := id.NewUUIDService()
+	clockSrv := clock.NewRealService()
+
+	wsFac := wsdomain.NewWorkspaceFactory(idSrv, clockSrv)
+	wsRepo := wsdb.NewWorkspaceRepository(dbCon, wsFac)
+	aiUsageSv := adapter.NewAIUsageAdapter(wsdb.NewAIUsageService(dbCon, wsRepo, idSrv))
+
+	projectFac := wsdomain.NewProjectFactory(idSrv, clockSrv)
 	projectRepo := wsdb.NewProjectRepository(dbCon, projectFac)
 	projectPremiseProv := adapter.NewProjectPremiseAdapter(projectRepo)
 
@@ -93,6 +100,7 @@ func newContainer() (*learning.CommentGenerationContainer, error) {
 		shareConf,
 		awscfg,
 		permSv,
+		aiUsageSv,
 		projectPremiseProv,
 	)
 }

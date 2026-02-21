@@ -67,7 +67,8 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 	}
 
 	learningPermSv := learningadapter.NewWorkspacePermissionAdapter(workspaceCon.WorkspaceQueryService)
-	learningHandler, err := newLearningHandler(dbCon, appConf, jwtSrv, awscfg, learningPermSv)
+	learningAIUsageSv := learningadapter.NewAIUsageAdapter(workspaceCon.AIUsageService)
+	learningHandler, err := newLearningHandler(dbCon, appConf, jwtSrv, awscfg, learningPermSv, learningAIUsageSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning handler: %w", err)
 	}
@@ -140,8 +141,9 @@ func newLearningHandler(
 	jwtSrv jwt.Service,
 	awscfg aws.Config,
 	permSv *learningadapter.WorkspacePermissionAdapter,
+	aiUsageSv *learningadapter.AIUsageAdapter,
 ) (http.Handler, error) {
-	con, err := learning.NewAPIContainer(dbCon, appConf, awscfg, permSv)
+	con, err := learning.NewAPIContainer(dbCon, appConf, awscfg, permSv, aiUsageSv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning api container: %w", err)
 	}
