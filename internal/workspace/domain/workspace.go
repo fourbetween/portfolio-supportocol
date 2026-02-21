@@ -57,7 +57,14 @@ func (w *Workspace) CanAddProject(currentCount int) error {
 	return nil
 }
 
-// UpdateParams はワークスペースの更新パラメータ
+func (w *Workspace) CanUseAI(currentUsageCount int) error {
+	limit := w.subscription.Plan.MonthlyAILimit
+	if currentUsageCount >= limit {
+		return fmt.Errorf("monthly AI usage limit exceeded (%d/%d): %w", currentUsageCount, limit, apperr.ErrLimitExceeded)
+	}
+	return nil
+}
+
 type UpdateWorkspaceParams struct {
 	Name string
 }

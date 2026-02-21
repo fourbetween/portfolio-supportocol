@@ -15,6 +15,7 @@ type GenerateCommentUsecase struct {
 	commentRepo    domain.CommentRepository
 	generator      domain.CommentGenerator
 	permSv         domain.PermissionService
+	aiUsageSv      domain.AIUsageService
 	clock          clock.Service
 	tx             dbtx.Manager
 }
@@ -24,6 +25,7 @@ func NewGenerateCommentUsecase(
 	commentRepo domain.CommentRepository,
 	generator domain.CommentGenerator,
 	permSv domain.PermissionService,
+	aiUsageSv domain.AIUsageService,
 	clock clock.Service,
 	tx dbtx.Manager,
 ) *GenerateCommentUsecase {
@@ -32,6 +34,7 @@ func NewGenerateCommentUsecase(
 		commentRepo:    commentRepo,
 		generator:      generator,
 		permSv:         permSv,
+		aiUsageSv:      aiUsageSv,
 		clock:          clock,
 		tx:             tx,
 	}
@@ -70,6 +73,10 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 		return nil, err
 	}
 
+	if err := u.aiUsageSv.CheckCommentGenerationLimit(ctx, input.WorkspaceID); err != nil {
+		return nil, err
+	}
+
 	comments, err := u.generator.Generate(ctx, domain.GenerateCommentParams{
 		DiscussionID:    input.DiscussionID,
 		WorkspaceID:     input.WorkspaceID,
@@ -87,7 +94,11 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 		}
 
 		discussion.AddComments(len(comments), u.clock.Now())
-		return u.discussionRepo.Save(ctx, discussion)
+		if err := u.discussionRepo.Save(ctx, discussion); err != nil {
+			return err
+		}
+
+		return u.aiUsageSv.RecordCommentGeneration(ctx, input.WorkspaceID, input.DiscussionID)
 	})
 	if err != nil {
 		return nil, err

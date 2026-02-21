@@ -43,6 +43,7 @@ func NewAPIContainer(
 	appConf conf.Service,
 	awscfg aws.Config,
 	permSv domain.PermissionService,
+	aiUsageSv domain.AIUsageService,
 ) (*APIContainer, error) {
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
@@ -87,7 +88,7 @@ func NewAPIContainer(
 		DeleteComment:            usecase.NewDeleteCommentUsecase(discussionRepo, commentRepo, permSv, txManager),
 		UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo, permSv, clockSrv, txManager),
 		RemoveCommentIssue:       usecase.NewRemoveCommentIssueUsecase(discussionRepo, commentRepo, permSv, txManager),
-		EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, permSv, commentGenerationQueue),
+		EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, permSv, aiUsageSv, commentGenerationQueue),
 	}, nil
 }
 
@@ -102,6 +103,7 @@ func NewCommentGenerationContainer(
 	shareConf conf.Service,
 	awscfg aws.Config,
 	permSv domain.PermissionService,
+	aiUsageSv domain.AIUsageService,
 	projectPremiseProv domain.ProjectPremiseProvider,
 ) (*CommentGenerationContainer, error) {
 	geminiAPIKey, err := shareConf.Get("google/gemini/apikey")
@@ -141,7 +143,7 @@ func NewCommentGenerationContainer(
 	}
 
 	return &CommentGenerationContainer{
-		GenerateComment: usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator, permSv, clockSrv, txManager),
+		GenerateComment: usecase.NewGenerateCommentUsecase(discussionRepo, commentRepo, generator, permSv, aiUsageSv, clockSrv, txManager),
 		Queue:           sqs.NewDefaultQueue[domain.GenerateCommentParams](queueURL, awscfg),
 	}, nil
 }

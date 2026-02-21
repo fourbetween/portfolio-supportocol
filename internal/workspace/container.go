@@ -32,6 +32,7 @@ type APIContainer struct {
 
 	// Services
 	WorkspaceQueryService usecase.WorkspaceQueryService
+	AIUsageService        usecase.AIUsageService
 }
 
 func NewAPIContainer(
@@ -53,6 +54,7 @@ func NewAPIContainer(
 	planRepo := db.NewPlanRepository(dbCon)
 
 	workspaceQuerySrv := db.NewWorkspaceQueryService(dbCon)
+	aiUsageSrv := db.NewAIUsageService(dbCon, workspaceRepo, idSrv)
 
 	return &APIContainer{
 		// Workspaces
@@ -75,5 +77,6 @@ func NewAPIContainer(
 
 		// Services
 		WorkspaceQueryService: workspaceQuerySrv,
+		AIUsageService:        aiUsageSrv,
 	}, nil
 }
