@@ -131,10 +131,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					// Leaf node.
 					switch r.Method {
+					case "DELETE":
+						s.handleV1IdentityMeDeleteRequest([0]string{}, elemIsEscaped, w, r)
 					case "GET":
 						s.handleV1IdentityMeGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "GET")
+						s.notAllowed(w, r, "DELETE,GET")
 					}
 
 					return
@@ -326,6 +328,15 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					// Leaf node.
 					switch method {
+					case "DELETE":
+						r.name = V1IdentityMeDeleteOperation
+						r.summary = ""
+						r.operationID = ""
+						r.operationGroup = ""
+						r.pathPattern = "/v1/identity/me"
+						r.args = args
+						r.count = 0
+						return r, true
 					case "GET":
 						r.name = V1IdentityMeGetOperation
 						r.summary = ""

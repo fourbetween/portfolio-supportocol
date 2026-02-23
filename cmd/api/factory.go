@@ -56,7 +56,7 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 		return nil, fmt.Errorf("failed to create workspace api container: %w", err)
 	}
 
-	identityHandler, err := newIdentityHandler(dbCon, appConf, jwtSrv, workspaceCon.UserCreatedHandler)
+	identityHandler, err := newIdentityHandler(dbCon, appConf, jwtSrv, workspaceCon.UserCreatedHandler, workspaceCon.UserDeletedHandler)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create identity handler: %w", err)
 	}
@@ -93,8 +93,9 @@ func newIdentityHandler(
 	appConf conf.Service,
 	jwtSrv jwt.Service,
 	userCreatedHandler identityusecase.UserCreatedHandler,
+	userDeletedHandler identityusecase.UserDeletedHandler,
 ) (http.Handler, error) {
-	con, err := identity.NewAPIContainer(dbCon, appConf, jwtSrv, userCreatedHandler)
+	con, err := identity.NewAPIContainer(dbCon, appConf, jwtSrv, userCreatedHandler, userDeletedHandler)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create identity api container: %w", err)
 	}

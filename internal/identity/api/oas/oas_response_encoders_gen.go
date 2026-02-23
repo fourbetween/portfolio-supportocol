@@ -28,6 +28,12 @@ func encodeV1IdentityLogoutPostResponse(response *V1IdentityLogoutPostOK, w http
 	return nil
 }
 
+func encodeV1IdentityMeDeleteResponse(response *V1IdentityMeDeleteOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
 func encodeV1IdentityMeGetResponse(response *User, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)

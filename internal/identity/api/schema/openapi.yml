@@ -91,6 +91,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    delete:
+      description: delete current user account
+      security:
+        - cookie_auth: []
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/identity/errors:
     post:
       description: post an error
