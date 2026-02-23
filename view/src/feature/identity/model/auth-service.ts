@@ -33,6 +33,19 @@ class AuthService {
   }
 
   /**
+   * アカウントを削除（退会）し、トップページへ遷移します。
+   */
+  async deleteAccount(): Promise<void> {
+    const { error } = await client.DELETE("/v1/identity/me", {});
+    if (error) {
+      throw new Error(error.message);
+    }
+    this._user = undefined;
+    this._initialized = false;
+    window.location.href = "/";
+  }
+
+  /**
    * 認証が必要な操作を行う前に呼び出します。
    * 未認証の場合はログイン画面を表示します。
    */

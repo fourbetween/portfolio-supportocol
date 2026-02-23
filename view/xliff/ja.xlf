@@ -670,6 +670,50 @@
   <source>Next page</source>
   <target>次のページ</target>
 </trans-unit>
+<trans-unit id="sd03ac20f93055ed8">
+  <source>My Account</source>
+  <target>マイアカウント</target>
+</trans-unit>
+<trans-unit id="s6860c6c1dc9ffb77">
+  <source>Manage your account settings.</source>
+  <target>アカウント設定を管理します。</target>
+</trans-unit>
+<trans-unit id="s81284fe5b73b63f2">
+  <source>No user information available.</source>
+  <target>ユーザー情報がありません。</target>
+</trans-unit>
+<trans-unit id="s17fc59d42b9bc362">
+  <source>Account Information</source>
+  <target>アカウント情報</target>
+</trans-unit>
+<trans-unit id="sef49aec68fd1dc66">
+  <source>Name</source>
+  <target>名前</target>
+</trans-unit>
+<trans-unit id="sd1f44f1a8bc20e67">
+  <source>Email</source>
+  <target>メールアドレス</target>
+</trans-unit>
+<trans-unit id="sdaf3d13c3b1ec474">
+  <source>Danger Zone</source>
+  <target>危険な操作</target>
+</trans-unit>
+<trans-unit id="s7d00063d92ed2821">
+  <source>Delete Account</source>
+  <target>アカウントの削除</target>
+</trans-unit>
+<trans-unit id="s8369ccdac72d0d17">
+  <source>Once you delete your account, there is no going back. Please be certain.</source>
+  <target>アカウントを削除すると元に戻せません。ご注意ください。</target>
+</trans-unit>
+<trans-unit id="s268ecd1cef45a9a8">
+  <source>Are you sure?</source>
+  <target>本当に削除しますか？</target>
+</trans-unit>
+<trans-unit id="s9d90a2da681b2641">
+  <source>This action cannot be undone. All your data will be permanently deleted.</source>
+  <target>この操作は取り消せません。すべてのデータが永久に削除されます。</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
