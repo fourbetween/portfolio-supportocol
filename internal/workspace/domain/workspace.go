@@ -134,6 +134,16 @@ func (w *Workspace) Subscription() Subscription {
 	return w.subscription
 }
 
+func (w *Workspace) RenewSubscription(plan Plan, now time.Time) {
+	periodEnd := now.AddDate(0, 1, 0)
+	w.subscription = Subscription{
+		Plan:               plan,
+		Status:             SubscriptionStatusActive,
+		CurrentPeriodStart: now,
+		CurrentPeriodEnd:   periodEnd,
+	}
+}
+
 const MaxProjectsForPersonalWorkspace = 20
 
 func (w *Workspace) CanAddProject(currentCount int) error {
@@ -261,4 +271,8 @@ func (s Subscription) Validate() error {
 
 func (s Subscription) IsActive() bool {
 	return s.Status == SubscriptionStatusActive
+}
+
+func (s Subscription) IsExpired(now time.Time) bool {
+	return now.After(s.CurrentPeriodEnd)
 }

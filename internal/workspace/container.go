@@ -27,6 +27,9 @@ type APIContainer struct {
 	RemoveFavoriteDiscussion *usecase.RemoveFavoriteDiscussionUsecase
 	ListFavoriteDiscussions  *usecase.ListFavoriteDiscussionsUsecase
 
+	// Subscriptions
+	RenewSubscription *usecase.RenewSubscriptionUsecase
+
 	// Hooks
 	UserCreatedHandler *usecase.UserCreatedHandler
 
@@ -56,9 +59,11 @@ func NewAPIContainer(
 	workspaceQuerySrv := db.NewWorkspaceQueryService(dbCon)
 	aiUsageSrv := db.NewAIUsageService(dbCon, workspaceRepo, idSrv)
 
+	renewSubscriptionUsc := usecase.NewRenewSubscriptionUsecase(workspaceRepo, planRepo, clockSrv, txManager)
+
 	return &APIContainer{
 		// Workspaces
-		ListMyWorkspaces: usecase.NewListMyWorkspacesUsecase(workspaceQuerySrv),
+		ListMyWorkspaces: usecase.NewListMyWorkspacesUsecase(workspaceQuerySrv, renewSubscriptionUsc, clockSrv),
 
 		// Projects
 		CreateProject: usecase.NewCreateProjectUsecase(workspaceRepo, memberRepo, projectRepo, projectFac, txManager),
@@ -71,6 +76,9 @@ func NewAPIContainer(
 		AddFavoriteDiscussion:    usecase.NewAddFavoriteDiscussionUsecase(memberRepo, favRepo, favSvc, clockSrv),
 		RemoveFavoriteDiscussion: usecase.NewRemoveFavoriteDiscussionUsecase(memberRepo, favRepo, favSvc),
 		ListFavoriteDiscussions:  usecase.NewListFavoriteDiscussionsUsecase(workspaceQuerySrv),
+
+		// Subscriptions
+		RenewSubscription: renewSubscriptionUsc,
 
 		// Hooks
 		UserCreatedHandler: usecase.NewUserCreatedHandler(workspaceRepo, memberRepo, projectRepo, planRepo, workspaceFac, memberFac, projectFac, txManager),
