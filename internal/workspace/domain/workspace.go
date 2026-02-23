@@ -144,11 +144,18 @@ func (w *Workspace) RenewSubscription(plan Plan, now time.Time) {
 	}
 }
 
-const MaxProjectsForPersonalWorkspace = 20
-
 func (w *Workspace) CanAddProject(currentCount int) error {
-	if w.IsPersonal() && currentCount >= MaxProjectsForPersonalWorkspace {
-		return fmt.Errorf("project limit exceeded for personal workspace: %w", apperr.ErrLimitExceeded)
+	limit := w.subscription.Plan.MaxProjects
+	if limit > 0 && currentCount >= limit {
+		return fmt.Errorf("project limit exceeded (%d/%d): %w", currentCount, limit, apperr.ErrLimitExceeded)
+	}
+	return nil
+}
+
+func (w *Workspace) CanAddFavorite(currentCount int) error {
+	limit := w.subscription.Plan.MaxFavorites
+	if limit > 0 && currentCount >= limit {
+		return fmt.Errorf("favorite limit exceeded (%d/%d): %w", currentCount, limit, apperr.ErrLimitExceeded)
 	}
 	return nil
 }

@@ -20,6 +20,8 @@ type Plan struct {
 	Name           string
 	Description    string
 	MonthlyAILimit int
+	MaxProjects    int
+	MaxFavorites   int
 }
 
 func (p Plan) Validate() error {
@@ -31,6 +33,12 @@ func (p Plan) Validate() error {
 	}
 	if p.MonthlyAILimit < 0 {
 		return fmt.Errorf("monthly AI limit must be non-negative: %w", apperr.ErrInvalidArgument)
+	}
+	if p.MaxProjects < 0 {
+		return fmt.Errorf("max projects must be non-negative: %w", apperr.ErrInvalidArgument)
+	}
+	if p.MaxFavorites < 0 {
+		return fmt.Errorf("max favorites must be non-negative: %w", apperr.ErrInvalidArgument)
 	}
 	return nil
 }

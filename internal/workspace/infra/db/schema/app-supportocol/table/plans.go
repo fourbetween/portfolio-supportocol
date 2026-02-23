@@ -21,6 +21,8 @@ type plansTable struct {
 	Name           mysql.ColumnString
 	Description    mysql.ColumnString
 	MonthlyAiLimit mysql.ColumnInteger
+	MaxProjects    mysql.ColumnInteger
+	MaxFavorites   mysql.ColumnInteger
 	CreatedAt      mysql.ColumnTimestamp
 	UpdatedAt      mysql.ColumnTimestamp
 
@@ -68,11 +70,13 @@ func newPlansTableImpl(schemaName, tableName, alias string) plansTable {
 		NameColumn           = mysql.StringColumn("name")
 		DescriptionColumn    = mysql.StringColumn("description")
 		MonthlyAiLimitColumn = mysql.IntegerColumn("monthly_ai_limit")
+		MaxProjectsColumn    = mysql.IntegerColumn("max_projects")
+		MaxFavoritesColumn   = mysql.IntegerColumn("max_favorites")
 		CreatedAtColumn      = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn      = mysql.TimestampColumn("updated_at")
-		allColumns           = mysql.ColumnList{IDColumn, NameColumn, DescriptionColumn, MonthlyAiLimitColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns       = mysql.ColumnList{NameColumn, DescriptionColumn, MonthlyAiLimitColumn, CreatedAtColumn, UpdatedAtColumn}
-		defaultColumns       = mysql.ColumnList{CreatedAtColumn, UpdatedAtColumn}
+		allColumns           = mysql.ColumnList{IDColumn, NameColumn, DescriptionColumn, MonthlyAiLimitColumn, MaxProjectsColumn, MaxFavoritesColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns       = mysql.ColumnList{NameColumn, DescriptionColumn, MonthlyAiLimitColumn, MaxProjectsColumn, MaxFavoritesColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns       = mysql.ColumnList{MaxProjectsColumn, MaxFavoritesColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return plansTable{
@@ -83,6 +87,8 @@ func newPlansTableImpl(schemaName, tableName, alias string) plansTable {
 		Name:           NameColumn,
 		Description:    DescriptionColumn,
 		MonthlyAiLimit: MonthlyAiLimitColumn,
+		MaxProjects:    MaxProjectsColumn,
+		MaxFavorites:   MaxFavoritesColumn,
 		CreatedAt:      CreatedAtColumn,
 		UpdatedAt:      UpdatedAtColumn,
 

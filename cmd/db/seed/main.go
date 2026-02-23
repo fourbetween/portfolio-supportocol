@@ -16,12 +16,16 @@ var plans = []domain.Plan{
 		Name:           "Free",
 		Description:    "Free plan for personal use.",
 		MonthlyAILimit: 20,
+		MaxProjects:    20,
+		MaxFavorites:   100,
 	},
 	{
 		ID:             "cbe0d635-c20c-4c06-9933-1979fac9f5af",
 		Name:           "Standard",
 		Description:    "Standard plan. 300 AI credits per month.",
 		MonthlyAILimit: 300,
+		MaxProjects:    100,
+		MaxFavorites:   100,
 	},
 }
 

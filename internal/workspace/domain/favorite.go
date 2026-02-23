@@ -21,8 +21,6 @@ type (
 	}
 )
 
-const MaxFavoriteCount = 100
-
 type FavoriteDiscussion struct {
 	MemberID     string
 	DiscussionID string
