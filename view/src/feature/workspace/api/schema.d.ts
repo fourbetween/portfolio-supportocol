@@ -362,11 +362,29 @@ export interface components {
         DiscussionTheme: string;
         /** @enum {string} */
         DiscussionStatus: "public" | "internal";
+        /** @enum {string} */
+        SubscriptionStatus: "active" | "canceled" | "past_due";
+        Plan: {
+            id: components["schemas"]["Id"];
+            name: string;
+            monthlyAiLimit: number;
+            maxProjects: number;
+            maxFavorites: number;
+        };
+        Subscription: {
+            plan: components["schemas"]["Plan"];
+            status: components["schemas"]["SubscriptionStatus"];
+            /** Format: date-time */
+            currentPeriodStart: string;
+            /** Format: date-time */
+            currentPeriodEnd: string;
+        };
         Workspace: {
             id: components["schemas"]["Id"];
             slug: components["schemas"]["WorkspaceSlug"];
             name: components["schemas"]["WorkspaceName"];
             type: components["schemas"]["WorkspaceType"];
+            subscription: components["schemas"]["Subscription"];
             /** Format: date-time */
             createdAt: string;
         };

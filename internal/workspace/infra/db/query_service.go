@@ -191,6 +191,8 @@ func (m workspaceWithMemberModel) toUseCase() usecase.WorkspaceWithMember {
 		PlanID:             m.Plans.ID,
 		PlanName:           m.Plans.Name,
 		MonthlyAILimit:     int(m.Plans.MonthlyAiLimit),
+		MaxProjects:        int(m.Plans.MaxProjects),
+		MaxFavorites:       int(m.Plans.MaxFavorites),
 		SubscriptionStatus: m.Subscriptions.Status,
 		CurrentPeriodStart: m.Subscriptions.CurrentPeriodStart,
 		CurrentPeriodEnd:   m.Subscriptions.CurrentPeriodEnd,
