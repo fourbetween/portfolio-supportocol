@@ -1,11 +1,94 @@
 package domain
 
 import (
+	"context"
 	"fmt"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
+	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 )
+
+type (
+	ProjectRepository interface {
+		Load(ctx context.Context, params LoadProjectParams) (*Project, error)
+		Search(ctx context.Context, params SearchProjectsParams) ([]*Project, error)
+		CountByWorkspaceID(ctx context.Context, workspaceID string) (int, error)
+		Save(ctx context.Context, project *Project) error
+		Delete(ctx context.Context, project *Project) error
+	}
+
+	LoadProjectParams struct {
+		ID          string
+		WorkspaceID string
+	}
+
+	SearchProjectsParams struct {
+		WorkspaceID string
+	}
+)
+
+type (
+	ProjectFactory struct {
+		idSrv    id.Service
+		clockSrv clock.Service
+	}
+
+	CreateProjectParams struct {
+		WorkspaceID string
+		Name        string
+		IsDefault   bool
+	}
+
+	ReconstructProjectParams struct {
+		ID          string
+		WorkspaceID string
+		Name        string
+		IsDefault   bool
+		Premise     string
+		CreatedAt   time.Time
+	}
+)
+
+func NewProjectFactory(
+	idSrv id.Service,
+	clockSrv clock.Service,
+) *ProjectFactory {
+	return &ProjectFactory{
+		idSrv:    idSrv,
+		clockSrv: clockSrv,
+	}
+}
+
+func (f *ProjectFactory) Create(params CreateProjectParams) (*Project, error) {
+	id := f.idSrv.Generate()
+	now := f.clockSrv.Now()
+	return f.Reconstruct(ReconstructProjectParams{
+		ID:          id,
+		WorkspaceID: params.WorkspaceID,
+		Name:        params.Name,
+		IsDefault:   params.IsDefault,
+		CreatedAt:   now,
+	})
+}
+
+func (f *ProjectFactory) Reconstruct(params ReconstructProjectParams) (*Project, error) {
+	p := &Project{
+		id:          params.ID,
+		workspaceID: params.WorkspaceID,
+		name:        params.Name,
+		premise:     params.Premise,
+		isDefault:   params.IsDefault,
+		createdAt:   params.CreatedAt,
+	}
+
+	if err := p.Validate(); err != nil {
+		return nil, err
+	}
+
+	return p, nil
+}
 
 type Project struct {
 	id          string

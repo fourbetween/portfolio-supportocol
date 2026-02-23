@@ -1,10 +1,15 @@
 package domain
 
 import (
+	"context"
 	"fmt"
+	"slices"
+	"sort"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
+	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 )
 
 const (
@@ -12,23 +17,104 @@ const (
 	MaxDiscussionsPerProject = 50
 )
 
-type DiscussionContent struct {
-	Theme      string
-	Premise    string
-	Conclusion string
+type (
+	DiscussionRepository interface {
+		Load(ctx context.Context, params LoadDiscussionParams) (*Discussion, error)
+		Save(ctx context.Context, discussion *Discussion) error
+		Delete(ctx context.Context, discussion *Discussion) error
+		CountByProjectID(ctx context.Context, workspaceID, projectID string) (int, error)
+	}
+
+	LoadDiscussionParams struct {
+		ID          string
+		WorkspaceID string
+	}
+
+	DiscussionCounts struct {
+		CommentsCount         int
+		ProposedCommentsCount int
+		IssuesCount           int
+	}
+)
+
+type (
+	DiscussionFactory struct {
+		idSrv    id.Service
+		clockSrv clock.Service
+	}
+
+	CreateDiscussionParams struct {
+		WorkspaceID string
+		ProjectID   string
+		Theme       string
+		Premise     string
+		Status      DiscussionStatus
+		CreatedBy   string
+	}
+
+	ReconstructDiscussionParams struct {
+		ID               string
+		WorkspaceID      string
+		ProjectID        string
+		Content          DiscussionContent
+		Status           DiscussionStatus
+		Stats            DiscussionStats
+		Activity         DiscussionActivity
+		DialogueSettings *DialogueSettings
+	}
+)
+
+func NewDiscussionFactory(
+	idSrv id.Service,
+	clockSrv clock.Service,
+) *DiscussionFactory {
+	return &DiscussionFactory{
+		idSrv:    idSrv,
+		clockSrv: clockSrv,
+	}
 }
 
-type DiscussionStats struct {
-	CommentsCount         int
-	ProposedCommentsCount int
-	IssuesCount           int
+func (f *DiscussionFactory) Create(params CreateDiscussionParams, count int) (*Discussion, error) {
+	if count >= MaxDiscussionsPerProject {
+		return nil, apperr.ErrLimitExceeded
+	}
+
+	id := f.idSrv.Generate()
+	now := f.clockSrv.Now()
+	return f.Reconstruct(ReconstructDiscussionParams{
+		ID:          id,
+		WorkspaceID: params.WorkspaceID,
+		ProjectID:   params.ProjectID,
+		Content: DiscussionContent{
+			Theme:   params.Theme,
+			Premise: params.Premise,
+		},
+		Status: params.Status,
+		Activity: DiscussionActivity{
+			CreatedBy:       params.CreatedBy,
+			CreatedAt:       now,
+			LastCommentedAt: now,
+		},
+	})
 }
 
-type DiscussionActivity struct {
-	CreatedBy       string
-	CreatedAt       time.Time
-	ArchivedAt      *time.Time
-	LastCommentedAt time.Time
+func (f *DiscussionFactory) Reconstruct(params ReconstructDiscussionParams) (*Discussion, error) {
+	d := &Discussion{
+		id:               params.ID,
+		workspaceID:      params.WorkspaceID,
+		projectID:        params.ProjectID,
+		content:          params.Content,
+		status:           params.Status,
+		stats:            params.Stats,
+		activity:         params.Activity,
+		dialogueSettings: params.DialogueSettings,
+	}
+
+	if err := d.Validate(); err != nil {
+		return nil, err
+	}
+
+	return d, nil
 }
 
 type Discussion struct {
@@ -239,4 +325,221 @@ func (d *Discussion) EnsureCommentFrameRequirement(commentType string, parentTyp
 	}
 
 	d.dialogueSettings.CommentFrame = d.dialogueSettings.CommentFrame.Add(commentType, parentType)
+}
+
+type DiscussionContent struct {
+	Theme      string
+	Premise    string
+	Conclusion string
+}
+
+type DiscussionStats struct {
+	CommentsCount         int
+	ProposedCommentsCount int
+	IssuesCount           int
+}
+
+type DiscussionActivity struct {
+	CreatedBy       string
+	CreatedAt       time.Time
+	ArchivedAt      *time.Time
+	LastCommentedAt time.Time
+}
+
+type DiscussionStatus string
+
+const (
+	DiscussionStatusPrivate  DiscussionStatus = "private"
+	DiscussionStatusPublic   DiscussionStatus = "public"
+	DiscussionStatusInternal DiscussionStatus = "internal"
+)
+
+func (s DiscussionStatus) Validate() error {
+	switch s {
+	case DiscussionStatusPrivate, DiscussionStatusPublic, DiscussionStatusInternal:
+		return nil
+	default:
+		return apperr.ErrInvalidArgument
+	}
+}
+
+func (s DiscussionStatus) IsPrivate() bool {
+	return s == DiscussionStatusPrivate
+}
+
+func (s DiscussionStatus) IsPublic() bool {
+	return s == DiscussionStatusPublic
+}
+
+func (s DiscussionStatus) IsInternal() bool {
+	return s == DiscussionStatusInternal
+}
+
+func (s DiscussionStatus) RequiresDialogueSettings() bool {
+	return s.IsPublic() || s.IsInternal()
+}
+
+type PermissionLevel string
+
+const (
+	PermissionEveryone      PermissionLevel = "everyone"
+	PermissionAuthenticated PermissionLevel = "authenticated"
+	PermissionNone          PermissionLevel = "none"
+)
+
+func (p PermissionLevel) Validate() error {
+	switch p {
+	case PermissionEveryone, PermissionAuthenticated, PermissionNone:
+		return nil
+	default:
+		return fmt.Errorf("invalid permission level: %s: %w", p, apperr.ErrInvalidArgument)
+	}
+}
+
+type DialogueSettings struct {
+	CommentFrame      CommentFrame
+	CommentPermission PermissionLevel
+	IssuePermission   PermissionLevel
+}
+
+func (s DialogueSettings) Validate() error {
+	if err := s.CommentFrame.Validate(); err != nil {
+		return err
+	}
+	if err := s.CommentPermission.Validate(); err != nil {
+		return err
+	}
+	if err := s.IssuePermission.Validate(); err != nil {
+		return err
+	}
+	return nil
+}
+
+type CommentFrame struct {
+	Types []string
+	Paths []CommentPath
+}
+
+func (cf CommentFrame) Sorted() CommentFrame {
+	sortedTypes := append([]string{}, cf.Types...)
+	sort.Strings(sortedTypes)
+
+	sortedPaths := append([]CommentPath{}, cf.Paths...)
+	sort.Slice(sortedPaths, func(i, j int) bool {
+		if sortedPaths[i].Parent != sortedPaths[j].Parent {
+			return sortedPaths[i].Parent < sortedPaths[j].Parent
+		}
+		return sortedPaths[i].Child < sortedPaths[j].Child
+	})
+
+	return CommentFrame{
+		Types: sortedTypes,
+		Paths: sortedPaths,
+	}
+}
+
+func (cf CommentFrame) Add(child, parent string) CommentFrame {
+	newCF := cf
+	typeExists := slices.Contains(newCF.Types, child)
+	if !typeExists {
+		newCF.Types = append(newCF.Types, child)
+	}
+
+	pathExists := false
+	for _, p := range newCF.Paths {
+		if p.Child == child && p.Parent == parent {
+			pathExists = true
+			break
+		}
+	}
+
+	if !pathExists {
+		newCF.Paths = append(newCF.Paths, CommentPath{
+			Child:  child,
+			Parent: parent,
+		})
+	}
+
+	if !typeExists || !pathExists {
+		return newCF.Sorted()
+	}
+	return cf
+}
+
+func (cf CommentFrame) Validate() error {
+	if len(cf.Types) == 0 {
+		return fmt.Errorf("comment frame types must not be empty: %w", apperr.ErrInvalidArgument)
+	}
+
+	typeMap := make(map[string]struct{}, len(cf.Types))
+	for _, t := range cf.Types {
+		if _, ok := typeMap[t]; ok {
+			return fmt.Errorf("comment frame type %q is duplicated: %w", t, apperr.ErrInvalidArgument)
+		}
+		typeMap[t] = struct{}{}
+	}
+
+	for _, p := range cf.Paths {
+		if _, ok := typeMap[p.Child]; !ok {
+			return fmt.Errorf("comment path child %q is not in types: %w", p.Child, apperr.ErrInvalidArgument)
+		}
+		if p.Parent != "" {
+			if _, ok := typeMap[p.Parent]; !ok {
+				return fmt.Errorf("comment path parent %q is not in types: %w", p.Parent, apperr.ErrInvalidArgument)
+			}
+		}
+	}
+	return nil
+}
+
+type CommentPath struct {
+	Child  string
+	Parent string
+}
+
+func (cf CommentFrame) Supplement(comments []*Comment) CommentFrame {
+	newCF := CommentFrame{
+		Types: append([]string{}, cf.Types...),
+		Paths: append([]CommentPath{}, cf.Paths...),
+	}
+
+	typeMap := make(map[string]struct{}, len(newCF.Types))
+	for _, t := range newCF.Types {
+		typeMap[t] = struct{}{}
+	}
+
+	pathMap := make(map[CommentPath]struct{}, len(newCF.Paths))
+	for _, p := range newCF.Paths {
+		pathMap[p] = struct{}{}
+	}
+
+	commentMap := make(map[string]*Comment, len(comments))
+	for _, c := range comments {
+		commentMap[c.ID()] = c
+	}
+
+	for _, c := range comments {
+		if _, ok := typeMap[c.Type()]; !ok {
+			newCF.Types = append(newCF.Types, c.Type())
+			typeMap[c.Type()] = struct{}{}
+		}
+
+		var parentType string
+		if c.ParentCommentID() != nil {
+			if parent, ok := commentMap[*c.ParentCommentID()]; ok {
+				parentType = parent.Type()
+			}
+		}
+
+		path := CommentPath{
+			Child:  c.Type(),
+			Parent: parentType,
+		}
+		if _, ok := pathMap[path]; !ok {
+			newCF.Paths = append(newCF.Paths, path)
+			pathMap[path] = struct{}{}
+		}
+	}
+
+	return newCF.Sorted()
 }
