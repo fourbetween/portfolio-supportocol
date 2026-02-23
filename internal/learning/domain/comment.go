@@ -1,20 +1,127 @@
 package domain
 
 import (
+	"context"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
+	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 )
 
-type CommentBody struct {
-	Type    string
-	Content string
+type (
+	CommentRepository interface {
+		Load(ctx context.Context, id string) (*Comment, error)
+		Search(ctx context.Context, params SearchCommentsParams) ([]*Comment, error)
+		Create(ctx context.Context, comment *Comment) error
+		Update(ctx context.Context, comment *Comment) error
+		BatchCreate(ctx context.Context, comments []*Comment) error
+		Delete(ctx context.Context, comment *Comment) error
+		GetPathToRoot(ctx context.Context, commentID string) ([]*Comment, error)
+		ListChildren(ctx context.Context, params ListCommentChildrenParams) ([]*Comment, error)
+		CountsByDiscussionID(ctx context.Context, discussionID string) (DiscussionCounts, error)
+	}
+
+	SearchCommentsParams struct {
+		DiscussionID string
+		Since        *time.Time
+	}
+
+	ListCommentChildrenParams struct {
+		DiscussionID    string
+		ParentCommentID *string
+		CommentType     string
+	}
+)
+
+type CommentGenerationQueue interface {
+	Enqueue(params []GenerateCommentParams) error
 }
 
-type CommentActivity struct {
-	CreatedBy  *string
-	CreatedAt  time.Time
-	ArchivedAt *time.Time
+type GenerateCommentParams struct {
+	DiscussionID    string
+	WorkspaceID     string
+	ParentCommentID *string
+	CommentType     string
+	UserID          string
+}
+
+type CommentGenerator interface {
+	Generate(ctx context.Context, params GenerateCommentParams) ([]*Comment, error)
+}
+
+type ProjectPremiseProvider interface {
+	GetProjectPremise(ctx context.Context, workspaceID, projectID string) (string, error)
+}
+
+type (
+	CommentFactory struct {
+		idSrv    id.Service
+		clockSrv clock.Service
+	}
+
+	CreateCommentParams struct {
+		DiscussionID    string
+		ParentCommentID *string
+		Body            CommentBody
+		Status          CommentStatus
+		CreatedBy       *string
+		Issues          []CommentIssue
+	}
+
+	ReconstructCommentParams struct {
+		ID              string
+		DiscussionID    string
+		ParentCommentID *string
+		Body            CommentBody
+		Status          CommentStatus
+		Activity        CommentActivity
+		Issues          []CommentIssue
+	}
+)
+
+func NewCommentFactory(
+	idSrv id.Service,
+	clockSrv clock.Service,
+) *CommentFactory {
+	return &CommentFactory{
+		idSrv:    idSrv,
+		clockSrv: clockSrv,
+	}
+}
+
+func (f *CommentFactory) Create(params CreateCommentParams) (*Comment, error) {
+	id := f.idSrv.Generate()
+	return f.Reconstruct(ReconstructCommentParams{
+		ID:              id,
+		DiscussionID:    params.DiscussionID,
+		ParentCommentID: params.ParentCommentID,
+		Body:            params.Body,
+		Status:          params.Status,
+		Activity: CommentActivity{
+			CreatedBy: params.CreatedBy,
+			CreatedAt: f.clockSrv.Now(),
+		},
+		Issues: params.Issues,
+	})
+}
+
+func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment, error) {
+	c := &Comment{
+		id:              params.ID,
+		discussionID:    params.DiscussionID,
+		parentCommentID: params.ParentCommentID,
+		body:            params.Body,
+		status:          params.Status,
+		activity:        params.Activity,
+		issues:          params.Issues,
+	}
+
+	if err := c.Validate(); err != nil {
+		return nil, err
+	}
+
+	return c, nil
 }
 
 type Comment struct {
@@ -135,4 +242,38 @@ func (c *Comment) Unarchive() error {
 	}
 	c.activity.ArchivedAt = nil
 	return nil
+}
+
+type CommentBody struct {
+	Type    string
+	Content string
+}
+
+type CommentActivity struct {
+	CreatedBy  *string
+	CreatedAt  time.Time
+	ArchivedAt *time.Time
+}
+
+type CommentStatus string
+
+const (
+	CommentStatusActive   CommentStatus = "active"
+	CommentStatusProposed CommentStatus = "proposed"
+)
+
+func (s CommentStatus) Validate() error {
+	switch s {
+	case CommentStatusActive, CommentStatusProposed:
+		return nil
+	default:
+		return apperr.ErrInvalidArgument
+	}
+}
+
+type CommentIssue struct {
+	ID          string
+	Title       string
+	Description string
+	CreatedBy   *string
 }

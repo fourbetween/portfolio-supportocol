@@ -1,9 +1,18 @@
 package domain
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+)
+
+type (
+	PlanRepository interface {
+		Load(ctx context.Context, id string) (Plan, error)
+		LoadDefault(ctx context.Context) (Plan, error)
+		Save(ctx context.Context, plan Plan) error
+	}
 )
 
 type Plan struct {

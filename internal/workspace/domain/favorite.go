@@ -1,10 +1,24 @@
 package domain
 
 import (
+	"context"
 	"fmt"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+)
+
+type (
+	FavoriteDiscussionRepository interface {
+		Save(ctx context.Context, fav FavoriteDiscussion) error
+		Delete(ctx context.Context, memberID, discussionID string) error
+		CountByMemberID(ctx context.Context, memberID string) (int, error)
+	}
+
+	DiscussionFavoritesService interface {
+		IncrementFavoritesCount(ctx context.Context, discussionID string) error
+		DecrementFavoritesCount(ctx context.Context, discussionID string) error
+	}
 )
 
 const MaxFavoriteCount = 100

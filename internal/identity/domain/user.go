@@ -1,8 +1,65 @@
 package domain
 
 import (
+	"context"
 	"time"
 )
+
+type (
+	Repository interface {
+		Save(ctx context.Context, u *User) error
+		FindByID(ctx context.Context, id string) (*User, error)
+		FindByEmail(ctx context.Context, email string) (*User, error)
+		FindByGoogleSub(ctx context.Context, googleSub string) (*User, error)
+		FindByEmailVerifyTokenHash(ctx context.Context, tokenHash string) (*User, error)
+		FindByPasswordResetTokenHash(ctx context.Context, tokenHash string) (*User, error)
+	}
+
+	LoadParams struct {
+		ID string
+	}
+
+	SearchParams struct {
+		Email     string
+		GoogleSub string
+	}
+)
+
+type (
+	Factory struct{}
+
+	ReconstructParams struct {
+		ID                          string
+		Email                       string
+		Name                        string
+		PasswordHash                string
+		GoogleSub                   string
+		EmailVerifiedAt             *time.Time
+		EmailVerifyTokenHash        string
+		EmailVerifyTokenExpiresAt   *time.Time
+		PasswordResetTokenHash      string
+		PasswordResetTokenExpiresAt *time.Time
+	}
+)
+
+func NewFactory() *Factory {
+	return &Factory{}
+}
+
+func (f *Factory) Reconstruct(params ReconstructParams) *User {
+	return &User{
+		id:                          params.ID,
+		email:                       params.Email,
+		name:                        params.Name,
+		passwordHash:                params.PasswordHash,
+		googleSub:                   params.GoogleSub,
+		emailVerifiedAt:             params.EmailVerifiedAt,
+		emailVerifyTokenHash:        params.EmailVerifyTokenHash,
+		emailVerifyTokenExpiresAt:   params.EmailVerifyTokenExpiresAt,
+		passwordResetTokenHash:      params.PasswordResetTokenHash,
+		passwordResetTokenExpiresAt: params.PasswordResetTokenExpiresAt,
+	}
+}
 
 type User struct {
 	id                          string

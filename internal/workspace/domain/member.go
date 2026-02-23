@@ -1,11 +1,86 @@
 package domain
 
 import (
+	"context"
 	"fmt"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
+	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 )
+
+type (
+	MemberRepository interface {
+		Load(ctx context.Context, workspaceID, userID string) (*Member, error)
+		Search(ctx context.Context, params SearchMembersParams) ([]*Member, error)
+		Save(ctx context.Context, member *Member) error
+		Delete(ctx context.Context, member *Member) error
+	}
+
+	SearchMembersParams struct {
+		WorkspaceID string
+	}
+)
+
+type (
+	MemberFactory struct {
+		idSrv    id.Service
+		clockSrv clock.Service
+	}
+
+	CreateMemberParams struct {
+		WorkspaceID string
+		UserID      string
+		Role        MemberRole
+	}
+
+	ReconstructMemberParams struct {
+		ID          string
+		WorkspaceID string
+		UserID      string
+		Role        MemberRole
+		CreatedAt   time.Time
+	}
+)
+
+func NewMemberFactory(
+	idSrv id.Service,
+	clockSrv clock.Service,
+) *MemberFactory {
+	return &MemberFactory{
+		idSrv:    idSrv,
+		clockSrv: clockSrv,
+	}
+}
+
+func (f *MemberFactory) Create(params CreateMemberParams) (*Member, error) {
+	id := f.idSrv.Generate()
+	now := f.clockSrv.Now()
+	return f.Reconstruct(ReconstructMemberParams{
+		ID:          id,
+		WorkspaceID: params.WorkspaceID,
+		UserID:      params.UserID,
+		Role:        params.Role,
+		CreatedAt:   now,
+	})
+}
+
+func (f *MemberFactory) Reconstruct(params ReconstructMemberParams) (*Member, error) {
+	m := &Member{
+		id:          params.ID,
+		workspaceID: params.WorkspaceID,
+		userID:      params.UserID,
+		role:        params.Role,
+		createdAt:   params.CreatedAt,
+	}
+
+	if err := m.Validate(); err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
 
 type Member struct {
 	id          string
@@ -85,4 +160,49 @@ func (m *Member) Validate() error {
 		return err
 	}
 	return nil
+}
+
+type MemberRole string
+
+const (
+	MemberRoleOwner  MemberRole = "owner"
+	MemberRoleAdmin  MemberRole = "admin"
+	MemberRoleMember MemberRole = "member"
+)
+
+func (r MemberRole) String() string {
+	return string(r)
+}
+
+func (r MemberRole) Validate() error {
+	switch r {
+	case MemberRoleOwner, MemberRoleAdmin, MemberRoleMember:
+		return nil
+	default:
+		return fmt.Errorf("invalid member role: %s: %w", r, apperr.ErrInvalidArgument)
+	}
+}
+
+func (r MemberRole) IsOwner() bool {
+	return r == MemberRoleOwner
+}
+
+func (r MemberRole) IsAdmin() bool {
+	return r == MemberRoleAdmin
+}
+
+func (r MemberRole) IsMember() bool {
+	return r == MemberRoleMember
+}
+
+func (r MemberRole) CanManageWorkspace() bool {
+	return r.IsOwner() || r.IsAdmin()
+}
+
+func (r MemberRole) CanManageMembers() bool {
+	return r.IsOwner() || r.IsAdmin()
+}
+
+func (r MemberRole) CanManageProjects() bool {
+	return r.IsOwner() || r.IsAdmin()
 }
