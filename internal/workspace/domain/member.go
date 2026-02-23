@@ -16,10 +16,12 @@ type (
 		Search(ctx context.Context, params SearchMembersParams) ([]*Member, error)
 		Save(ctx context.Context, member *Member) error
 		Delete(ctx context.Context, member *Member) error
+		CountByWorkspaceID(ctx context.Context, workspaceID string) (int, error)
 	}
 
 	SearchMembersParams struct {
 		WorkspaceID string
+		UserID      string
 	}
 )
 

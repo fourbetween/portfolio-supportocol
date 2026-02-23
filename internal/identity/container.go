@@ -17,6 +17,7 @@ import (
 type APIContainer struct {
 	LoginWithGoogle *usecase.LoginWithGoogleUsecase
 	GetUser         *usecase.GetUserUsecase
+	DeleteUser      *usecase.DeleteUserUsecase
 }
 
 func NewAPIContainer(
@@ -24,6 +25,7 @@ func NewAPIContainer(
 	appConf conf.Service,
 	jwtSrv jwt.Service,
 	userCreatedHandler usecase.UserCreatedHandler,
+	userDeletedHandler usecase.UserDeletedHandler,
 ) (*APIContainer, error) {
 	googleClientID, err := appConf.Get("google/client/id")
 	if err != nil {
@@ -60,5 +62,6 @@ func NewAPIContainer(
 	return &APIContainer{
 		LoginWithGoogle: usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv, userCreatedHandler, txManager),
 		GetUser:         usecase.NewGetUserUsecase(userRepo),
+		DeleteUser:      usecase.NewDeleteUserUsecase(userRepo, userDeletedHandler, txManager),
 	}, nil
 }

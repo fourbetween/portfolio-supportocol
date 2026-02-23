@@ -46,10 +46,26 @@ func (r *MemberRepository) Load(ctx context.Context, workspaceID, userID string)
 }
 
 func (r *MemberRepository) Search(ctx context.Context, params domain.SearchMembersParams) ([]*domain.Member, error) {
+	conds := make([]mysql.BoolExpression, 0)
+	if params.WorkspaceID != "" {
+		conds = append(conds, table.Members.WorkspaceID.EQ(mysql.String(params.WorkspaceID)))
+	}
+	if params.UserID != "" {
+		conds = append(conds, table.Members.UserID.EQ(mysql.String(params.UserID)))
+	}
+
+	where := mysql.Bool(true)
+	if len(conds) > 0 {
+		where = conds[0]
+		for _, c := range conds[1:] {
+			where = where.AND(c)
+		}
+	}
+
 	stmt := mysql.
 		SELECT(table.Members.AllColumns).
 		FROM(table.Members).
-		WHERE(table.Members.WorkspaceID.EQ(mysql.String(params.WorkspaceID))).
+		WHERE(where).
 		ORDER_BY(table.Members.CreatedAt.ASC())
 
 	var dest []model.Members
@@ -107,6 +123,22 @@ func (r *MemberRepository) Delete(ctx context.Context, m *domain.Member) error {
 	}
 
 	return nil
+}
+
+func (r *MemberRepository) CountByWorkspaceID(ctx context.Context, workspaceID string) (int, error) {
+	stmt := mysql.
+		SELECT(mysql.COUNT(table.Members.ID).AS("count")).
+		FROM(table.Members).
+		WHERE(table.Members.WorkspaceID.EQ(mysql.String(workspaceID)))
+
+	var dest struct {
+		Count int64 `alias:"count"`
+	}
+	if err := stmt.Query(dbtx.GetExecutor(ctx, r.db), &dest); err != nil {
+		return 0, fmt.Errorf("failed to count members: %w", err)
+	}
+
+	return int(dest.Count), nil
 }
 
 func (r *MemberRepository) toDomain(row model.Members) (*domain.Member, error) {

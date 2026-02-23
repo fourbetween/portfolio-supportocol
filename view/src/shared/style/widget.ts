@@ -6,6 +6,16 @@ export const widgetStyle = css`
     flex-direction: column;
     gap: 24px;
   }
+  .container-tight {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .toolbar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
   .section {
     display: flex;
     flex-direction: column;
@@ -19,6 +29,11 @@ export const widgetStyle = css`
   }
   .section-header .section-title {
     margin-bottom: 0;
+  }
+  .loading {
+    padding: 24px;
+    text-align: center;
+    color: var(--color-fg-muted);
   }
   .clear-button {
     background: none;

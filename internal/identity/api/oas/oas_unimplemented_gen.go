@@ -40,6 +40,15 @@ func (UnimplementedHandler) V1IdentityLogoutPost(ctx context.Context) error {
 	return ht.ErrNotImplemented
 }
 
+// V1IdentityMeDelete implements DELETE /v1/identity/me operation.
+//
+// Delete current user account.
+//
+// DELETE /v1/identity/me
+func (UnimplementedHandler) V1IdentityMeDelete(ctx context.Context) error {
+	return ht.ErrNotImplemented
+}
+
 // V1IdentityMeGet implements GET /v1/identity/me operation.
 //
 // Get current user.

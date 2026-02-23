@@ -26,6 +26,12 @@ type Handler interface {
 	//
 	// POST /v1/identity/logout
 	V1IdentityLogoutPost(ctx context.Context) error
+	// V1IdentityMeDelete implements DELETE /v1/identity/me operation.
+	//
+	// Delete current user account.
+	//
+	// DELETE /v1/identity/me
+	V1IdentityMeDelete(ctx context.Context) error
 	// V1IdentityMeGet implements GET /v1/identity/me operation.
 	//
 	// Get current user.

@@ -14,6 +14,9 @@ export const paths = {
   workspace: {
     projects: "/workspace/projects",
   },
+  identity: {
+    account: "/identity/account",
+  },
 };
 
 export const buildPath = (
@@ -43,7 +46,7 @@ export const navigate = async (
 };
 
 export const pathInFeature = (path: string): string => {
-  const features = ["learning", "dialogue", "workspace"];
+  const features = ["learning", "dialogue", "workspace", "identity"];
   for (const feature of features) {
     const prefix = "/" + feature + "/";
     if (path.startsWith(prefix)) {

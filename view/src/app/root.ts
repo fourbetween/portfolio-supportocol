@@ -8,6 +8,7 @@ import "urlpattern-polyfill";
 import "../feature/dialogue/root";
 import "../feature/identity/component/auth-widget";
 import { authService } from "../feature/identity/model/auth-service";
+import "../feature/identity/root";
 import "../feature/learning/root";
 import "../feature/marketing/root";
 import type { WorkspaceWorkspaceSelectEvent } from "../feature/workspace/event/workspace";
@@ -43,6 +44,12 @@ export class AppRoot extends LitElement {
       path: "/workspace/*",
       render: () => html`
         <workspace-root></workspace-root>
+      `,
+    },
+    {
+      path: "/identity/*",
+      render: () => html`
+        <identity-root></identity-root>
       `,
     },
     {

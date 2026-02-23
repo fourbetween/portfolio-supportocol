@@ -42,30 +42,12 @@ func (h *appHandler) V1IdentityGooglePost(ctx context.Context, req *oas.GoogleLo
 		return err
 	}
 
-	w := httpctx.GetResponseWriter(ctx)
-	http.SetCookie(w, &http.Cookie{
-		Name:     httpcookie.AuthCookieName,
-		Value:    token,
-		Path:     "/",
-		MaxAge:   int(httpcookie.CookieMaxAge.Seconds()),
-		HttpOnly: true,
-		Secure:   true,
-		SameSite: http.SameSiteLaxMode,
-	})
+	h.setAuthCookie(ctx, token)
 	return nil
 }
 
 func (h *appHandler) V1IdentityLogoutPost(ctx context.Context) error {
-	w := httpctx.GetResponseWriter(ctx)
-	http.SetCookie(w, &http.Cookie{
-		Name:     httpcookie.AuthCookieName,
-		Value:    "",
-		Path:     "/",
-		MaxAge:   -1,
-		HttpOnly: true,
-		Secure:   true,
-		SameSite: http.SameSiteLaxMode,
-	})
+	h.clearAuthCookie(ctx)
 	return nil
 }
 
@@ -78,6 +60,16 @@ func (h *appHandler) V1IdentityMeGet(ctx context.Context) (*oas.User, error) {
 
 	res := h.toOasUser(u)
 	return &res, nil
+}
+
+func (h *appHandler) V1IdentityMeDelete(ctx context.Context) error {
+	uid := httpctx.GetUserID(ctx)
+	if err := h.con.DeleteUser.Execute(ctx, uid); err != nil {
+		return err
+	}
+
+	h.clearAuthCookie(ctx)
+	return nil
 }
 
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
@@ -104,6 +96,32 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 			Message: msg,
 		},
 	}
+}
+
+func (h *appHandler) setAuthCookie(ctx context.Context, token string) {
+	w := httpctx.GetResponseWriter(ctx)
+	http.SetCookie(w, &http.Cookie{
+		Name:     httpcookie.AuthCookieName,
+		Value:    token,
+		Path:     "/",
+		MaxAge:   int(httpcookie.CookieMaxAge.Seconds()),
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+	})
+}
+
+func (h *appHandler) clearAuthCookie(ctx context.Context) {
+	w := httpctx.GetResponseWriter(ctx)
+	http.SetCookie(w, &http.Cookie{
+		Name:     httpcookie.AuthCookieName,
+		Value:    "",
+		Path:     "/",
+		MaxAge:   -1,
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+	})
 }
 
 func (h *appHandler) toOasUser(u *domain.User) oas.User {

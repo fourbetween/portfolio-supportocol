@@ -1,5 +1,5 @@
 import { msg } from "@lit/localize";
-import { LitElement, css, html, nothing, type PropertyValues } from "lit";
+import { LitElement, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
@@ -289,18 +289,5 @@ export class DialogueCommentExplorerWidget extends LitElement {
     `;
   }
 
-  static styles = [
-    baseStyle,
-    iconStyle,
-    titleStyle,
-    widgetStyle,
-    css`
-      :host {
-        display: block;
-      }
-      .section-header .section-title {
-        margin-bottom: 0;
-      }
-    `,
-  ];
+  static styles = [baseStyle, iconStyle, titleStyle, widgetStyle];
 }

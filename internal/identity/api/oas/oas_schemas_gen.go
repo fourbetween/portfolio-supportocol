@@ -161,3 +161,6 @@ type V1IdentityGooglePostOK struct{}
 
 // V1IdentityLogoutPostOK is response for V1IdentityLogoutPost operation.
 type V1IdentityLogoutPostOK struct{}
+
+// V1IdentityMeDeleteOK is response for V1IdentityMeDelete operation.
+type V1IdentityMeDeleteOK struct{}

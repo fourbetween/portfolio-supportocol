@@ -382,12 +382,6 @@ export class LearningCommentExplorerWidget extends LitElement {
     titleStyle,
     widgetStyle,
     css`
-      :host {
-        display: block;
-      }
-      .section-header .section-title {
-        margin-bottom: 0;
-      }
       .archived-info {
         display: flex;
         align-items: center;

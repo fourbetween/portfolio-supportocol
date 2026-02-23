@@ -13,6 +13,7 @@ import { navigate, paths } from "../../../app/paths";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
+import { dashboardStyle } from "../../../shared/style/dashboard";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
@@ -309,72 +310,14 @@ export class DialogueItemPage extends LitElement {
     buttonStyle,
     iconStyle,
     hoverButtonStyle,
+    dashboardStyle,
     css`
-      :host {
-        display: block;
-        height: 100%;
-      }
-      .dashboard {
-        display: flex;
-        height: 100%;
-        overflow: hidden;
-        position: relative;
-      }
-      .sidebar {
-        width: 300px;
-        overflow-y: auto;
-      }
-      .sidebar-right {
-        border-left: 1px solid var(--color-border-default);
-      }
-      .sidebar-left {
-        border-right: 1px solid var(--color-border-default);
-      }
-      .main {
-        flex: 1;
-        display: flex;
-        gap: 16px;
-        flex-direction: column;
-        overflow-y: auto;
-        padding-bottom: 24px;
-      }
-      .detail,
-      .comment-frame,
-      .comment-explorer {
-        padding: 0 16px;
-      }
-      .detail {
-        border-bottom: 1px solid var(--color-border-default);
-      }
-      .btn-hover {
-        width: 48px;
-        height: 48px;
-        position: absolute;
-      }
-      .btn-hover .material-symbols-outlined {
-        font-size: 24px;
-      }
-      .btn-right {
-        right: 16px;
-        bottom: 16px; /* fallback */
-        bottom: calc(16px + env(safe-area-inset-bottom));
-      }
-      .btn-left {
-        left: 16px;
-        bottom: 16px; /* fallback */
-        bottom: calc(16px + env(safe-area-inset-bottom));
-      }
       section {
         display: flex;
         flex-direction: column;
         gap: 16px;
         padding: 16px;
         border-radius: 6px;
-      }
-      @media (hover: none) {
-        .btn-hover {
-          opacity: 1;
-        }
       }
     `,
   ];

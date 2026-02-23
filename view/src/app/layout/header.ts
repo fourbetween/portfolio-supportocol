@@ -45,6 +45,14 @@ export class AppHeader extends LitElement {
         <div class="header-actions">
           ${this.user
             ? html`
+                <a
+                  href=${paths.identity.account}
+                  class="nav-item account-link"
+                  aria-label=${msg("My Account")}
+                >
+                  <span class="material-symbols-outlined">person</span>
+                  <span class="button-text">${msg("My Account")}</span>
+                </a>
                 <button
                   class="logout-button"
                   @click=${this.handleLogout}
@@ -143,6 +151,17 @@ export class AppHeader extends LitElement {
       .login-button:hover,
       .logout-button:hover {
         opacity: 0.8;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .account-link {
+        color: inherit;
+        text-decoration: none;
+        border: none;
+        padding: 4px 8px;
+      }
+
+      .account-link:hover {
         background-color: rgba(255, 255, 255, 0.1);
       }
 

@@ -1,13 +1,14 @@
 import type { Router } from "@lit-labs/router";
 import { consume } from "@lit/context";
 import { Task } from "@lit/task";
-import { css, html, LitElement } from "lit";
+import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { routerContext } from "../../../app/context/router";
 import { navigate, paths } from "../../../app/paths";
 import type { PageChangeEvent } from "../../../shared/event/page";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import { widgetStyle } from "../../../shared/style/widget";
 import "../../../shared/ui/pagination/pagination";
 import type {
   DialogueDiscussionSelectEvent,
@@ -80,7 +81,10 @@ export class DialogueDiscussionListWidget extends LitElement {
 
   render() {
     return html`
-      <div class="container">
+      <div
+        class="container-tight"
+        @dialogue-discussion-select=${this.handleDiscussionSelect}
+      >
         <div class="toolbar">
           <dialogue-discussion-sort-selector
             .sort=${this.sort}
@@ -89,7 +93,6 @@ export class DialogueDiscussionListWidget extends LitElement {
         </div>
         <dialogue-discussion-list
           .summaries=${this.summaries}
-          @dialogue-discussion-select=${this.handleDiscussionSelect}
         ></dialogue-discussion-list>
         ${this.paginated
           ? html`
@@ -105,19 +108,5 @@ export class DialogueDiscussionListWidget extends LitElement {
     `;
   }
 
-  static styles = [
-    baseStyle,
-    css`
-      .container {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
-      .toolbar {
-        display: flex;
-        justify-content: flex-end;
-      }
-    `,
-  ];
+  static styles = [baseStyle, widgetStyle];
 }
