@@ -71,10 +71,16 @@ components:
           type: string
         monthlyAiLimit:
           type: integer
+        maxProjects:
+          type: integer
+        maxFavorites:
+          type: integer
       required:
         - id
         - name
         - monthlyAiLimit
+        - maxProjects
+        - maxFavorites
     Subscription:
       type: object
       properties:

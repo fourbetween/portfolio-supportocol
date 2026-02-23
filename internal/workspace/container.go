@@ -73,7 +73,7 @@ func NewAPIContainer(
 		DeleteProject: usecase.NewDeleteProjectUsecase(memberRepo, projectRepo, txManager),
 
 		// Favorite Discussions
-		AddFavoriteDiscussion:    usecase.NewAddFavoriteDiscussionUsecase(memberRepo, favRepo, favSvc, clockSrv),
+		AddFavoriteDiscussion:    usecase.NewAddFavoriteDiscussionUsecase(workspaceRepo, memberRepo, favRepo, favSvc, clockSrv),
 		RemoveFavoriteDiscussion: usecase.NewRemoveFavoriteDiscussionUsecase(memberRepo, favRepo, favSvc),
 		ListFavoriteDiscussions:  usecase.NewListFavoriteDiscussionsUsecase(workspaceQuerySrv),
 

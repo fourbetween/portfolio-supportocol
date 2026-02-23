@@ -17,6 +17,8 @@ type WorkspaceWithMember struct {
 	PlanID             string
 	PlanName           string
 	MonthlyAILimit     int
+	MaxProjects        int
+	MaxFavorites       int
 	SubscriptionStatus string
 	CurrentPeriodStart time.Time
 	CurrentPeriodEnd   time.Time

@@ -16,6 +16,8 @@ type Plans struct {
 	Name           string
 	Description    string
 	MonthlyAiLimit int32
+	MaxProjects    int32
+	MaxFavorites   int32
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 }

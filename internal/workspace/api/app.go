@@ -211,6 +211,8 @@ func (h *appHandler) toOasWorkspaceWithMember(w usecase.WorkspaceWithMember, use
 					ID:             oas.ID(uuid.MustParse(w.PlanID)),
 					Name:           w.PlanName,
 					MonthlyAiLimit: w.MonthlyAILimit,
+					MaxProjects:    w.MaxProjects,
+					MaxFavorites:   w.MaxFavorites,
 				},
 				Status:             oas.SubscriptionStatus(w.SubscriptionStatus),
 				CurrentPeriodStart: w.CurrentPeriodStart,

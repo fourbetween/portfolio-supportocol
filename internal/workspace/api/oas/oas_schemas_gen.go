@@ -377,6 +377,8 @@ type Plan struct {
 	ID             ID     `json:"id"`
 	Name           string `json:"name"`
 	MonthlyAiLimit int    `json:"monthlyAiLimit"`
+	MaxProjects    int    `json:"maxProjects"`
+	MaxFavorites   int    `json:"maxFavorites"`
 }
 
 // GetID returns the value of ID.
@@ -394,6 +396,16 @@ func (s *Plan) GetMonthlyAiLimit() int {
 	return s.MonthlyAiLimit
 }
 
+// GetMaxProjects returns the value of MaxProjects.
+func (s *Plan) GetMaxProjects() int {
+	return s.MaxProjects
+}
+
+// GetMaxFavorites returns the value of MaxFavorites.
+func (s *Plan) GetMaxFavorites() int {
+	return s.MaxFavorites
+}
+
 // SetID sets the value of ID.
 func (s *Plan) SetID(val ID) {
 	s.ID = val
@@ -407,6 +419,16 @@ func (s *Plan) SetName(val string) {
 // SetMonthlyAiLimit sets the value of MonthlyAiLimit.
 func (s *Plan) SetMonthlyAiLimit(val int) {
 	s.MonthlyAiLimit = val
+}
+
+// SetMaxProjects sets the value of MaxProjects.
+func (s *Plan) SetMaxProjects(val int) {
+	s.MaxProjects = val
+}
+
+// SetMaxFavorites sets the value of MaxFavorites.
+func (s *Plan) SetMaxFavorites(val int) {
+	s.MaxFavorites = val
 }
 
 // Ref: #/components/schemas/Project

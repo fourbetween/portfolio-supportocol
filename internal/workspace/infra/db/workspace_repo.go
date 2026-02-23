@@ -190,6 +190,8 @@ func (r *WorkspaceRepository) toDomain(row workspaceWithSubscriptionModel) (*dom
 				Name:           row.Plans.Name,
 				Description:    row.Plans.Description,
 				MonthlyAILimit: int(row.Plans.MonthlyAiLimit),
+				MaxProjects:    int(row.Plans.MaxProjects),
+				MaxFavorites:   int(row.Plans.MaxFavorites),
 			},
 			Status:               domain.SubscriptionStatus(row.Subscriptions.Status),
 			CurrentPeriodStart:   row.Subscriptions.CurrentPeriodStart,

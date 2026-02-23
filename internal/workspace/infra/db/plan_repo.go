@@ -65,6 +65,8 @@ func (r *PlanRepository) Save(ctx context.Context, plan domain.Plan) error {
 		Name:           plan.Name,
 		Description:    plan.Description,
 		MonthlyAiLimit: int32(plan.MonthlyAILimit),
+		MaxProjects:    int32(plan.MaxProjects),
+		MaxFavorites:   int32(plan.MaxFavorites),
 	}
 
 	stmt := table.Plans.
@@ -78,6 +80,8 @@ func (r *PlanRepository) Save(ctx context.Context, plan domain.Plan) error {
 			table.Plans.Name.SET(table.Plans.NEW.Name),
 			table.Plans.Description.SET(table.Plans.NEW.Description),
 			table.Plans.MonthlyAiLimit.SET(table.Plans.NEW.MonthlyAiLimit),
+			table.Plans.MaxProjects.SET(table.Plans.NEW.MaxProjects),
+			table.Plans.MaxFavorites.SET(table.Plans.NEW.MaxFavorites),
 		)
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
@@ -93,5 +97,7 @@ func (r *PlanRepository) toDomain(row model.Plans) domain.Plan {
 		Name:           row.Name,
 		Description:    row.Description,
 		MonthlyAILimit: int(row.MonthlyAiLimit),
+		MaxProjects:    int(row.MaxProjects),
+		MaxFavorites:   int(row.MaxFavorites),
 	}
 }
