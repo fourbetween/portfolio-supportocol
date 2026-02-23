@@ -22,12 +22,6 @@ type (
 	SearchWorkspacesParams struct {
 		UserID string
 	}
-
-	PlanRepository interface {
-		Load(ctx context.Context, id string) (Plan, error)
-		LoadDefault(ctx context.Context) (Plan, error)
-		Save(ctx context.Context, plan Plan) error
-	}
 )
 
 type (
@@ -267,24 +261,4 @@ func (s Subscription) Validate() error {
 
 func (s Subscription) IsActive() bool {
 	return s.Status == SubscriptionStatusActive
-}
-
-type Plan struct {
-	ID             string
-	Name           string
-	Description    string
-	MonthlyAILimit int
-}
-
-func (p Plan) Validate() error {
-	if p.ID == "" {
-		return fmt.Errorf("plan id is required: %w", apperr.ErrInvalidArgument)
-	}
-	if p.Name == "" {
-		return fmt.Errorf("plan name is required: %w", apperr.ErrInvalidArgument)
-	}
-	if p.MonthlyAILimit < 0 {
-		return fmt.Errorf("monthly AI limit must be non-negative: %w", apperr.ErrInvalidArgument)
-	}
-	return nil
 }

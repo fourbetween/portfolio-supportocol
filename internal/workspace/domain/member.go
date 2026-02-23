@@ -21,17 +21,6 @@ type (
 	SearchMembersParams struct {
 		WorkspaceID string
 	}
-
-	FavoriteDiscussionRepository interface {
-		Save(ctx context.Context, fav FavoriteDiscussion) error
-		Delete(ctx context.Context, memberID, discussionID string) error
-		CountByMemberID(ctx context.Context, memberID string) (int, error)
-	}
-
-	DiscussionFavoritesService interface {
-		IncrementFavoritesCount(ctx context.Context, discussionID string) error
-		DecrementFavoritesCount(ctx context.Context, discussionID string) error
-	}
 )
 
 type (
@@ -216,22 +205,4 @@ func (r MemberRole) CanManageMembers() bool {
 
 func (r MemberRole) CanManageProjects() bool {
 	return r.IsOwner() || r.IsAdmin()
-}
-
-const MaxFavoriteCount = 100
-
-type FavoriteDiscussion struct {
-	MemberID     string
-	DiscussionID string
-	CreatedAt    time.Time
-}
-
-func (f FavoriteDiscussion) Validate() error {
-	if f.MemberID == "" {
-		return fmt.Errorf("member id is required: %w", apperr.ErrInvalidArgument)
-	}
-	if f.DiscussionID == "" {
-		return fmt.Errorf("discussion id is required: %w", apperr.ErrInvalidArgument)
-	}
-	return nil
 }
