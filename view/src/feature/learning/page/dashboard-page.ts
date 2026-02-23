@@ -8,6 +8,7 @@ import { TouchController } from "../../../app/controller/touch";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
+import { dashboardStyle } from "../../../shared/style/dashboard";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
 import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
@@ -418,71 +419,11 @@ export class LearningDashboardPage extends LitElement {
     iconStyle,
     hoverButtonStyle,
     titleStyle,
+    dashboardStyle,
     css`
-      :host {
-        display: block;
-        height: 100%;
-      }
-      .dashboard {
-        display: flex;
-        height: 100%;
-        overflow: hidden;
-        position: relative;
-      }
-      .sidebar {
-        width: 300px;
-        overflow-y: auto;
-      }
-      .sidebar-left {
-        border-right: 1px solid var(--color-border-default);
-      }
-      .sidebar-right {
-        border-left: 1px solid var(--color-border-default);
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
       .sidebar-project-select {
         padding: 16px;
         border-bottom: 1px solid var(--color-border-default);
-      }
-      .main {
-        flex: 1;
-        display: flex;
-        gap: 16px;
-        flex-direction: column;
-        overflow-y: auto;
-        padding-bottom: 24px;
-      }
-      .detail,
-      .comment-frame,
-      .comment-explorer {
-        padding: 0 16px;
-      }
-      .detail {
-        border-bottom: 1px solid var(--color-border-default);
-      }
-      .btn-hover {
-        width: 48px;
-        height: 48px;
-      }
-      .btn-hover .material-symbols-outlined {
-        font-size: 24px;
-      }
-      .btn-left {
-        left: 16px;
-        bottom: 16px; /* fallback */
-        bottom: calc(16px + env(safe-area-inset-bottom));
-      }
-      .btn-right {
-        right: 16px;
-        bottom: 16px; /* fallback */
-        bottom: calc(16px + env(safe-area-inset-bottom));
-      }
-      @media (hover: none) {
-        .btn-hover {
-          opacity: 1;
-        }
       }
     `,
   ];

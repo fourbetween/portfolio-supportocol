@@ -7,6 +7,7 @@ import { workspaceContext } from "../../../app/context/workspace";
 import type { WorkspaceWithMember } from "../../../app/model/workspace";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import { widgetStyle } from "../../../shared/style/widget";
 import {
   WorkspaceProjectCreateEvent,
   WorkspaceProjectCreatedEvent,
@@ -97,7 +98,7 @@ export class WorkspaceProjectsWidget extends LitElement {
 
   render() {
     return html`
-      <div class="container">
+      <div class="container-tight">
         <workspace-project-add-form
           class="add-form"
           @workspace-project-create=${(e: WorkspaceProjectCreateEvent) =>
@@ -116,17 +117,8 @@ export class WorkspaceProjectsWidget extends LitElement {
 
   static styles = [
     baseStyle,
+    widgetStyle,
     css`
-      .container {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-      .loading {
-        padding: 24px;
-        text-align: center;
-        color: var(--color-fg-muted);
-      }
       .add-form {
         margin-bottom: 8px;
       }
