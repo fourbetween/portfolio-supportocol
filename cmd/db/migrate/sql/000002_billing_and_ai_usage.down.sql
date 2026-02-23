@@ -1,3 +1,0 @@
-DROP TABLE IF EXISTS ai_usage_logs;
-DROP TABLE IF EXISTS subscriptions;
-DROP TABLE IF EXISTS plans;

@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS ai_usage_logs;
+DROP TABLE IF EXISTS subscriptions;
+DROP TABLE IF EXISTS plans;
 DROP TABLE IF EXISTS favorite_discussions;
 DROP TABLE IF EXISTS dialogue_settings;
 DROP TABLE IF EXISTS comment_issues;
