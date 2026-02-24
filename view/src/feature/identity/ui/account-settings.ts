@@ -5,7 +5,10 @@ import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { iconStyle } from "../../../shared/style/icon";
 import "../../../shared/ui/popup/popup";
-import { IdentityAccountDeleteEvent } from "../event/account";
+import {
+  IdentityAccountDeleteEvent,
+  IdentityLogoutEvent,
+} from "../event/account";
 import type { User } from "../model/user";
 
 @customElement("identity-account-settings")
@@ -18,6 +21,10 @@ export class IdentityAccountSettings extends LitElement {
 
   @state()
   private _confirmOpen = false;
+
+  private _handleLogoutClick() {
+    this.dispatchEvent(new IdentityLogoutEvent());
+  }
 
   private _handleDeleteClick() {
     this._confirmOpen = true;
@@ -44,17 +51,22 @@ export class IdentityAccountSettings extends LitElement {
 
     return html`
       <div class="account-info">
-        <h2>${msg("Account Information")}</h2>
         <dl class="info-list">
-          <div class="info-item">
-            <dt>${msg("Name")}</dt>
-            <dd>${this.user.name}</dd>
-          </div>
           <div class="info-item">
             <dt>${msg("Email")}</dt>
             <dd>${this.user.email}</dd>
           </div>
         </dl>
+        <div class="account-actions">
+          <button
+            class="btn"
+            @click=${this._handleLogoutClick}
+            ?disabled=${this.loading}
+          >
+            <span class="material-symbols-outlined">logout</span>
+            ${msg("Logout")}
+          </button>
+        </div>
       </div>
 
       <div class="danger-zone">
@@ -149,6 +161,30 @@ export class IdentityAccountSettings extends LitElement {
         color: var(--color-fg-default);
       }
 
+      @media (max-width: 600px) {
+        .info-item {
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .info-item dt {
+          width: auto;
+        }
+      }
+
+      .account-actions {
+        margin-top: 24px;
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      @media (max-width: 600px) {
+        .account-actions .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
       .danger-zone {
         border: 1px solid var(--color-danger-fg);
         border-radius: 6px;
@@ -164,6 +200,19 @@ export class IdentityAccountSettings extends LitElement {
         align-items: center;
         justify-content: space-between;
         gap: 16px;
+      }
+
+      @media (max-width: 600px) {
+        .danger-zone-content {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        .danger-zone-content .btn-danger {
+          width: 100%;
+          justify-content: center;
+        }
       }
 
       .danger-zone-description p {

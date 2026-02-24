@@ -20,10 +20,6 @@ export class AppHeader extends LitElement {
     authService.login();
   }
 
-  private handleLogout() {
-    authService.logout();
-  }
-
   render() {
     return html`
       <header class="header">
@@ -48,19 +44,10 @@ export class AppHeader extends LitElement {
                 <a
                   href=${paths.identity.account}
                   class="nav-item account-link"
-                  aria-label=${msg("My Account")}
+                  aria-label=${msg("Account Information")}
                 >
-                  <span class="material-symbols-outlined">person</span>
-                  <span class="button-text">${msg("My Account")}</span>
+                  <span class="material-symbols-outlined">settings</span>
                 </a>
-                <button
-                  class="logout-button"
-                  @click=${this.handleLogout}
-                  aria-label=${msg("Logout")}
-                >
-                  <span class="material-symbols-outlined">logout</span>
-                  <span class="button-text">${msg("Logout")}</span>
-                </button>
               `
             : html`
                 <button
@@ -127,14 +114,18 @@ export class AppHeader extends LitElement {
         display: none;
       }
 
+      .account-link .material-symbols-outlined {
+        display: block;
+        font-size: 20px;
+      }
+
       .header-actions {
         display: flex;
         align-items: center;
         gap: 16px;
       }
 
-      .login-button,
-      .logout-button {
+      .login-button {
         display: flex;
         align-items: center;
         gap: 4px;
@@ -148,8 +139,7 @@ export class AppHeader extends LitElement {
         transition: opacity 0.2s;
       }
 
-      .login-button:hover,
-      .logout-button:hover {
+      .login-button:hover {
         opacity: 0.8;
         background-color: rgba(255, 255, 255, 0.1);
       }

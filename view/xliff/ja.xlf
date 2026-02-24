@@ -670,10 +670,6 @@
   <source>Next page</source>
   <target>次のページ</target>
 </trans-unit>
-<trans-unit id="sd03ac20f93055ed8">
-  <source>My Account</source>
-  <target>マイアカウント</target>
-</trans-unit>
 <trans-unit id="s6860c6c1dc9ffb77">
   <source>Manage your account settings.</source>
   <target>アカウント設定を管理します。</target>
@@ -685,10 +681,6 @@
 <trans-unit id="s17fc59d42b9bc362">
   <source>Account Information</source>
   <target>アカウント情報</target>
-</trans-unit>
-<trans-unit id="sef49aec68fd1dc66">
-  <source>Name</source>
-  <target>名前</target>
 </trans-unit>
 <trans-unit id="sd1f44f1a8bc20e67">
   <source>Email</source>
