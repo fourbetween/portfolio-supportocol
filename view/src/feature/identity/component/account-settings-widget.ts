@@ -3,7 +3,10 @@ import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { userContext } from "../../../app/context/user";
 import { showToast } from "../../../shared/event/toast";
-import type { IdentityAccountDeleteEvent } from "../event/account";
+import type {
+  IdentityAccountDeleteEvent,
+  IdentityLogoutEvent,
+} from "../event/account";
 import { authService } from "../model/auth-service";
 import type { User } from "../model/user";
 import "../ui/account-settings";
@@ -16,6 +19,10 @@ export class IdentityAccountSettingsWidget extends LitElement {
 
   @state()
   private loading = false;
+
+  private _handleLogout(_e: IdentityLogoutEvent) {
+    authService.logout();
+  }
 
   private async _handleDeleteAccount(_e: IdentityAccountDeleteEvent) {
     this.loading = true;
@@ -33,6 +40,7 @@ export class IdentityAccountSettingsWidget extends LitElement {
       <identity-account-settings
         .user=${this.user}
         .loading=${this.loading}
+        @identity-logout=${this._handleLogout}
         @identity-account-delete=${this._handleDeleteAccount}
       ></identity-account-settings>
     `;

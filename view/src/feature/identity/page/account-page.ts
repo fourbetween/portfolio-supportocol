@@ -11,7 +11,7 @@ export class IdentityAccountPage extends LitElement {
     return html`
       <main class="container">
         <header class="header">
-          <h1>${msg("My Account")}</h1>
+          <h1>${msg("Account Information")}</h1>
           <p class="description">${msg("Manage your account settings.")}</p>
         </header>
         <section class="content">
