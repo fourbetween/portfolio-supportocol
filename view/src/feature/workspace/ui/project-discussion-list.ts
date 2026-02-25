@@ -3,8 +3,9 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../shared/style/base";
-import { iconStyle } from "../../../shared/style/icon";
 import { listStyles } from "../../../shared/style/list";
+import "../../../shared/ui/icons/icon-chevron-right";
+import "../../../shared/ui/icons/icon-expand-more";
 import {
   WorkspaceDiscussionSelectAllEvent,
   WorkspaceDiscussionSelectToggleEvent,
@@ -80,9 +81,13 @@ export class WorkspaceProjectDiscussionList extends LitElement {
           })}
           @click=${() => this._toggleExpand(pd.projectId)}
         >
-          <span class="material-symbols-outlined expand-icon">
-            ${isExpanded ? "expand_more" : "chevron_right"}
-          </span>
+          ${isExpanded
+            ? html`
+                <ui-icon-expand-more></ui-icon-expand-more>
+              `
+            : html`
+                <ui-icon-chevron-right></ui-icon-chevron-right>
+              `}
           <span class="project-name">${projectName}</span>
           <span class="discussion-count">(${pd.discussions.length})</span>
           ${selectedCount > 0
@@ -141,7 +146,6 @@ export class WorkspaceProjectDiscussionList extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     listStyles,
     css`
       :host {
@@ -178,12 +182,6 @@ export class WorkspaceProjectDiscussionList extends LitElement {
 
       .project-header:hover {
         background-color: var(--color-canvas-inset);
-      }
-
-      .expand-icon {
-        font-size: 20px;
-        color: var(--color-fg-muted);
-        transition: transform 0.15s;
       }
 
       .project-name {

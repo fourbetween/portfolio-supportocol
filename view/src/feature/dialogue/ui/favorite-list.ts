@@ -4,8 +4,10 @@ import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../shared/style/base";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
-import { iconStyle } from "../../../shared/style/icon";
 import { listStyles } from "../../../shared/style/list";
+import "../../../shared/ui/icons/icon-chat";
+import "../../../shared/ui/icons/icon-delete";
+import "../../../shared/ui/icons/icon-star";
 import {
   DialogueDiscussionSelectEvent,
   DialogueFavoriteDeleteEvent,
@@ -59,11 +61,11 @@ export class DialogueFavoriteList extends LitElement {
                 <span class="theme">${f.theme}</span>
                 <div class="stats">
                   <div class="stat-item" title=${msg("Comments")}>
-                    <span class="material-symbols-outlined">chat</span>
+                    <ui-icon-chat .size=${16}></ui-icon-chat>
                     <span class="count">${f.commentsCount}</span>
                   </div>
                   <div class="stat-item" title=${msg("Favorites")}>
-                    <span class="material-symbols-outlined">star</span>
+                    <ui-icon-star .size=${16}></ui-icon-star>
                     <span class="count">${f.favoritesCount}</span>
                   </div>
                 </div>
@@ -74,7 +76,7 @@ export class DialogueFavoriteList extends LitElement {
                 @click=${(e: Event) =>
                   this.handleDelete(e, f.workspaceId, f.id)}
               >
-                <span class="material-symbols-outlined">delete</span>
+                <ui-icon-delete></ui-icon-delete>
               </button>
             </div>
           `,
@@ -85,7 +87,6 @@ export class DialogueFavoriteList extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     hoverButtonStyle,
     listStyles,
     css`
@@ -121,9 +122,6 @@ export class DialogueFavoriteList extends LitElement {
         display: flex;
         align-items: center;
         gap: 4px;
-      }
-      .stat-item .material-symbols-outlined {
-        font-size: 16px;
       }
       .count {
         font-size: 0.8rem;

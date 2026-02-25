@@ -1,7 +1,7 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../style/base";
-import { iconStyle } from "../../style/icon";
+import "../icons/icon-archive";
 
 @customElement("ui-discussion-archive-badge")
 export class DiscussionArchiveBadge extends LitElement {
@@ -15,14 +15,13 @@ export class DiscussionArchiveBadge extends LitElement {
 
     return html`
       <div class="archive-badge">
-        <span class="material-symbols-outlined">archive</span>
+        <ui-icon-archive .size=${16}></ui-icon-archive>
       </div>
     `;
   }
 
   static styles = [
     baseStyle,
-    iconStyle,
     css`
       :host {
         display: inline-block;
@@ -40,9 +39,6 @@ export class DiscussionArchiveBadge extends LitElement {
         color: var(--color-fg-muted);
         background-color: var(--color-neutral-subtle);
         border: 1px solid var(--color-border-default);
-      }
-      .material-symbols-outlined {
-        font-size: 16px;
       }
     `,
   ];

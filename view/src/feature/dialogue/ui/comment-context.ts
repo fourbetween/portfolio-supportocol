@@ -3,8 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 import { join } from "lit/directives/join.js";
 import { baseStyle } from "../../../shared/style/base";
 import { commentContextStyle } from "../../../shared/style/comment-context";
-import { iconStyle } from "../../../shared/style/icon";
 import "../../../shared/ui/comment-type-badge/comment-type-badge";
+import "../../../shared/ui/icons/icon-north";
 import type { Comment } from "../model/comment";
 import type { DialogueSettings } from "../model/discussion";
 import "./comment-card";
@@ -56,7 +56,7 @@ export class DialogueCommentContext extends LitElement {
   private renderSeparator() {
     return html`
       <div class="separator">
-        <span class="material-symbols-outlined">north</span>
+        <ui-icon-north .size=${20}></ui-icon-north>
       </div>
     `;
   }
@@ -82,5 +82,5 @@ export class DialogueCommentContext extends LitElement {
     `;
   }
 
-  static styles = [baseStyle, iconStyle, commentContextStyle, css``];
+  static styles = [baseStyle, commentContextStyle, css``];
 }

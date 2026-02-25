@@ -8,7 +8,10 @@ import { routerContext } from "../../../app/context/router";
 import { navigate, paths } from "../../../app/paths";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/icons/icon-folder";
+import "../../../shared/ui/icons/icon-forum";
+import "../../../shared/ui/icons/icon-school";
+import "../../../shared/ui/icons/icon-search";
 import { DialogueDiscussionSelectEvent } from "../../dialogue/event/discussion";
 import type { DiscussionSummary } from "../../dialogue/model/discussion";
 import { discussionRepository } from "../../dialogue/repository/discussion-repository";
@@ -58,7 +61,7 @@ export class MarketingHomePage extends LitElement {
 
         <div class="actions">
           <a href=${paths.dialogue.search} class="btn btn-primary btn-large">
-            <span class="material-symbols-outlined">search</span>
+            <ui-icon-search></ui-icon-search>
             ${msg("Public Discussions")}
           </a>
         </div>
@@ -73,14 +76,14 @@ export class MarketingHomePage extends LitElement {
 
         <section class="features">
           <a href=${paths.learning.dashboard} class="feature">
-            <span class="material-symbols-outlined feature-icon">school</span>
+            <ui-icon-school class="feature-icon" .size=${40}></ui-icon-school>
             <h3>${msg("Learning")}</h3>
             <p>
               ${msg("Organize your thoughts through structured note-taking.")}
             </p>
           </a>
           <a href=${paths.dialogue.search} class="feature">
-            <span class="material-symbols-outlined feature-icon">forum</span>
+            <ui-icon-forum class="feature-icon" .size=${40}></ui-icon-forum>
             <h3>${msg("Dialogue")}</h3>
             <p>
               ${msg(
@@ -89,7 +92,7 @@ export class MarketingHomePage extends LitElement {
             </p>
           </a>
           <a href=${paths.workspace.projects} class="feature">
-            <span class="material-symbols-outlined feature-icon">folder</span>
+            <ui-icon-folder class="feature-icon" .size=${40}></ui-icon-folder>
             <h3>${msg("Projects")}</h3>
             <p>${msg("Organize your discussions into projects.")}</p>
           </a>
@@ -101,7 +104,6 @@ export class MarketingHomePage extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     css`
       .container {
         max-width: 1200px;
@@ -171,7 +173,6 @@ export class MarketingHomePage extends LitElement {
       }
 
       .feature-icon {
-        font-size: 40px;
         color: var(--color-accent-fg);
         margin-bottom: 16px;
         display: block;

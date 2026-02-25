@@ -3,7 +3,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../shared/style/base";
 import { commentCardStyle } from "../../../shared/style/comment-card";
-import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/icons/icon-archive";
+import "../../../shared/ui/icons/icon-warning";
 import { DialogueCommentSelectEvent } from "../event/comment";
 import type { Comment } from "../model/comment";
 import "./issue-list-popup";
@@ -53,9 +54,10 @@ export class DialogueCommentCard extends LitElement {
         <div class="footer">
           ${isSelfArchived
             ? html`
-                <span class="material-symbols-outlined archived-icon">
-                  archive
-                </span>
+                <ui-icon-archive
+                  class="archived-icon"
+                  .size=${16}
+                ></ui-icon-archive>
               `
             : nothing}
           ${this.activeChildrenCount > 0
@@ -68,12 +70,11 @@ export class DialogueCommentCard extends LitElement {
           </div>
           ${this.comment.issues && this.comment.issues.length > 0
             ? html`
-                <span
-                  class="material-symbols-outlined issue-icon"
+                <ui-icon-warning
+                  class="issue-icon"
+                  .size=${16}
                   @click=${this._handleIssueClick}
-                >
-                  warning
-                </span>
+                ></ui-icon-warning>
               `
             : nothing}
         </div>
@@ -106,7 +107,6 @@ export class DialogueCommentCard extends LitElement {
   static styles = [
     baseStyle,
     commentCardStyle,
-    iconStyle,
     css`
       .card-body {
         cursor: pointer;
@@ -115,7 +115,6 @@ export class DialogueCommentCard extends LitElement {
         cursor: default;
       }
       .issue-icon {
-        font-size: 16px;
         color: var(--color-error, #d32f2f);
         cursor: pointer;
       }

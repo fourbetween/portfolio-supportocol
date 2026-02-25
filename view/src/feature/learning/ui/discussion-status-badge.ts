@@ -1,7 +1,8 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
-import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/icons/icon-lock";
+import "../../../shared/ui/icons/icon-public";
 import type { DiscussionStatus } from "../model/discussion";
 
 @customElement("learning-discussion-status-badge")
@@ -12,18 +13,21 @@ export class LearningDiscussionStatusBadge extends LitElement {
   render() {
     if (!this.status) return nothing;
 
-    const icon = this.status === "public" ? "public" : "lock";
-
     return html`
       <div class="status-badge ${this.status}">
-        <span class="material-symbols-outlined">${icon}</span>
+        ${this.status === "public"
+          ? html`
+              <ui-icon-public></ui-icon-public>
+            `
+          : html`
+              <ui-icon-lock></ui-icon-lock>
+            `}
       </div>
     `;
   }
 
   static styles = [
     baseStyle,
-    iconStyle,
     css`
       :host {
         display: inline-block;
@@ -39,9 +43,6 @@ export class LearningDiscussionStatusBadge extends LitElement {
         border-radius: 2em;
         white-space: nowrap;
         border: 1px solid transparent;
-      }
-      .material-symbols-outlined {
-        font-size: 16px;
       }
       .public {
         color: var(--color-success-fg);

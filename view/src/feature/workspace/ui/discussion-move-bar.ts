@@ -3,8 +3,9 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import { iconStyle } from "../../../shared/style/icon";
 import { inputStyle } from "../../../shared/style/input";
+import "../../../shared/ui/icons/icon-close";
+import "../../../shared/ui/icons/icon-drive-file-move";
 import {
   WorkspaceDiscussionClearSelectionEvent,
   WorkspaceDiscussionMoveEvent,
@@ -54,7 +55,7 @@ export class WorkspaceDiscussionMoveBar extends LitElement {
             @click=${this._handleClear}
             aria-label=${msg("Clear selection")}
           >
-            <span class="material-symbols-outlined">close</span>
+            <ui-icon-close></ui-icon-close>
           </button>
         </div>
         <div class="actions">
@@ -76,7 +77,7 @@ export class WorkspaceDiscussionMoveBar extends LitElement {
             ?disabled=${!this._targetProjectId || this.loading}
             @click=${this._handleMove}
           >
-            <span class="material-symbols-outlined">drive_file_move</span>
+            <ui-icon-drive-file-move></ui-icon-drive-file-move>
             ${msg("Move")}
           </button>
         </div>
@@ -87,7 +88,6 @@ export class WorkspaceDiscussionMoveBar extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     inputStyle,
     css`
       :host {
@@ -151,10 +151,6 @@ export class WorkspaceDiscussionMoveBar extends LitElement {
         color: var(--color-fg-default);
       }
 
-      .clear-button .material-symbols-outlined {
-        font-size: 18px;
-      }
-
       .actions {
         display: flex;
         align-items: center;
@@ -164,10 +160,6 @@ export class WorkspaceDiscussionMoveBar extends LitElement {
       select {
         min-width: 140px;
         max-width: 200px;
-      }
-
-      .btn .material-symbols-outlined {
-        font-size: 18px;
       }
 
       /* Responsive: stack vertically on small screens */

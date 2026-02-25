@@ -4,8 +4,8 @@ import { customElement, state } from "lit/decorators.js";
 import { live } from "lit/directives/live.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import { iconStyle } from "../../../shared/style/icon";
 import { inputStyle } from "../../../shared/style/input";
+import "../../../shared/ui/icons/icon-add";
 import { LearningDiscussionCreateEvent } from "../event/discussion";
 
 @customElement("learning-discussion-add-form")
@@ -48,7 +48,7 @@ export class LearningDiscussionAddForm extends LitElement {
           ?disabled=${!this._canSubmit}
           title=${msg("New discussion")}
         >
-          <span class="material-symbols-outlined">add</span>
+          <ui-icon-add></ui-icon-add>
         </button>
       </form>
     `;
@@ -57,7 +57,6 @@ export class LearningDiscussionAddForm extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     inputStyle,
     css`
       form {

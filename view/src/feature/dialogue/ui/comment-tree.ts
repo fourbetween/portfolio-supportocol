@@ -10,7 +10,6 @@ import {
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { commentTreeStyle } from "../../../shared/style/comment-tree";
-import { iconStyle } from "../../../shared/style/icon";
 import "../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { Comment } from "../model/comment";
 import type { DialogueSettings } from "../model/discussion";
@@ -182,5 +181,5 @@ export class DialogueCommentTree extends LitElement {
     );
   }
 
-  static styles = [baseStyle, iconStyle, commentTreeStyle, css``];
+  static styles = [baseStyle, commentTreeStyle, css``];
 }

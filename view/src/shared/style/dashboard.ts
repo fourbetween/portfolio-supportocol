@@ -53,10 +53,6 @@ export const dashboardStyle = css`
     height: 48px;
   }
 
-  .btn-hover .material-symbols-outlined {
-    font-size: 24px;
-  }
-
   .btn-left {
     left: 16px;
     bottom: 16px; /* fallback */

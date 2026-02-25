@@ -10,9 +10,10 @@ import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { dashboardStyle } from "../../../shared/style/dashboard";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
-import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/drawer/drawer";
+import "../../../shared/ui/icons/icon-menu";
+import "../../../shared/ui/icons/icon-reviews";
 import "../../workspace/component/project-select-widget";
 import { type WorkspaceProjectSelectEvent } from "../../workspace/event/project";
 import type { WorkspaceWithMember } from "../../workspace/model/workspace";
@@ -387,7 +388,7 @@ export class LearningDashboardPage extends LitElement {
         class="btn-hover btn-left"
         @click=${() => (this._activeDrawer = "left")}
       >
-        <span class="material-symbols-outlined">menu</span>
+        <ui-icon-menu></ui-icon-menu>
       </button>
       ${this._hasRightSidebarContent
         ? html`
@@ -395,7 +396,7 @@ export class LearningDashboardPage extends LitElement {
               class="btn-hover btn-right"
               @click=${() => (this._activeDrawer = "right")}
             >
-              <span class="material-symbols-outlined">reviews</span>
+              <ui-icon-reviews></ui-icon-reviews>
             </button>
           `
         : nothing}
@@ -416,7 +417,6 @@ export class LearningDashboardPage extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     hoverButtonStyle,
     titleStyle,
     dashboardStyle,

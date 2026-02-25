@@ -1,10 +1,18 @@
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html, nothing, type TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { TouchController } from "../../../app/controller/touch";
 import { actionStyle } from "../../../shared/style/action";
 import { baseStyle } from "../../../shared/style/base";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
-import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/icons/icon-ads-click";
+import "../../../shared/ui/icons/icon-archive";
+import "../../../shared/ui/icons/icon-check";
+import "../../../shared/ui/icons/icon-close";
+import "../../../shared/ui/icons/icon-delete";
+import "../../../shared/ui/icons/icon-edit";
+import "../../../shared/ui/icons/icon-psychology";
+import "../../../shared/ui/icons/icon-reply";
+import "../../../shared/ui/icons/icon-unarchive";
 import {
   LearningCommentArchiveEvent,
   LearningCommentDeleteEvent,
@@ -160,8 +168,12 @@ export class LearningCommentItem extends LitElement {
   private renderActions() {
     const isTouch = this.touch.isTouchDevice;
     const focusButton = isTouch
-      ? this.renderIconButton("ads_click", "focus", (e) =>
-          this.handleFocusClick(e),
+      ? this.renderIconButton(
+          html`
+            <ui-icon-ads-click></ui-icon-ads-click>
+          `,
+          "focus",
+          (e) => this.handleFocusClick(e),
         )
       : nothing;
 
@@ -175,13 +187,17 @@ export class LearningCommentItem extends LitElement {
     if (isProposed) {
       return html`
         ${this.renderIconButton(
-          "check",
+          html`
+            <ui-icon-check></ui-icon-check>
+          `,
           "accept",
           this.handleAcceptClick,
           "success accept-button",
         )}
         ${this.renderIconButton(
-          "close",
+          html`
+            <ui-icon-close></ui-icon-close>
+          `,
           "reject",
           this.handleRejectClick,
           "danger reject-button",
@@ -192,37 +208,51 @@ export class LearningCommentItem extends LitElement {
 
     const archiveUnarchiveButton = isExplicitlyArchived
       ? this.renderIconButton(
-          "unarchive",
+          html`
+            <ui-icon-unarchive></ui-icon-unarchive>
+          `,
           "unarchive",
           this.handleUnarchiveClick,
           "unarchive-button",
         )
       : this.renderIconButton(
-          "archive",
+          html`
+            <ui-icon-archive></ui-icon-archive>
+          `,
           "archive",
           this.handleArchiveClick,
           "archive-button",
         );
 
     return html`
-      ${this.renderIconButton("reply", "reply", (e) =>
-        this.handleOpenTypePopup(e, "reply"),
+      ${this.renderIconButton(
+        html`
+          <ui-icon-reply></ui-icon-reply>
+        `,
+        "reply",
+        (e) => this.handleOpenTypePopup(e, "reply"),
       )}
       ${this.renderIconButton(
-        "edit",
+        html`
+          <ui-icon-edit></ui-icon-edit>
+        `,
         "edit",
         this.handleEditClick,
         "edit-button",
       )}
       ${this.renderIconButton(
-        "psychology",
+        html`
+          <ui-icon-psychology></ui-icon-psychology>
+        `,
         "generate",
         (e) => this.handleOpenTypePopup(e, "generate"),
         "primary generate-button",
       )}
       ${archiveUnarchiveButton}
       ${this.renderIconButton(
-        "delete",
+        html`
+          <ui-icon-delete></ui-icon-delete>
+        `,
         "delete",
         this.handleDeleteClick,
         "danger delete-button",
@@ -232,7 +262,7 @@ export class LearningCommentItem extends LitElement {
   }
 
   private renderIconButton(
-    icon: string,
+    icon: TemplateResult,
     label: string,
     handler: (e: Event) => void,
     extraClass = "",
@@ -242,7 +272,7 @@ export class LearningCommentItem extends LitElement {
       : `${label}-button ${extraClass}`;
     return html`
       <button
-        class="btn-hover ${className} material-symbols-outlined"
+        class="btn-hover ${className}"
         @click=${handler}
         aria-label=${label}
       >
@@ -288,7 +318,6 @@ export class LearningCommentItem extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     hoverButtonStyle,
     actionStyle,
     css`

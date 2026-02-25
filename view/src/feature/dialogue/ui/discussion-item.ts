@@ -2,8 +2,9 @@ import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
-import { iconStyle } from "../../../shared/style/icon";
 import { listStyles } from "../../../shared/style/list";
+import "../../../shared/ui/icons/icon-chat";
+import "../../../shared/ui/icons/icon-star";
 import { DialogueDiscussionSelectEvent } from "../event/discussion";
 import type { DiscussionSummary } from "../model/discussion";
 
@@ -29,11 +30,11 @@ export class DialogueDiscussionItem extends LitElement {
           <span class="theme">${theme}</span>
           <div class="stats">
             <div class="stat-item" title=${msg("Comments")}>
-              <span class="material-symbols-outlined">chat</span>
+              <ui-icon-chat .size=${16}></ui-icon-chat>
               <span class="count">${commentsCount}</span>
             </div>
             <div class="stat-item" title=${msg("Favorites")}>
-              <span class="material-symbols-outlined">star</span>
+              <ui-icon-star .size=${16}></ui-icon-star>
               <span class="count">${favoritesCount}</span>
             </div>
           </div>
@@ -44,7 +45,6 @@ export class DialogueDiscussionItem extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     listStyles,
     css`
       .info {
@@ -67,9 +67,6 @@ export class DialogueDiscussionItem extends LitElement {
         display: flex;
         align-items: center;
         gap: 4px;
-      }
-      .stat-item .material-symbols-outlined {
-        font-size: 16px;
       }
       .count {
         font-size: 0.8rem;

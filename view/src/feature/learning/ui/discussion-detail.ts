@@ -4,9 +4,11 @@ import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { discussionDetailStyle } from "../../../shared/style/discussion-detail";
-import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/discussion-archive-badge/discussion-archive-badge";
+import "../../../shared/ui/icons/icon-archive";
+import "../../../shared/ui/icons/icon-edit";
+import "../../../shared/ui/icons/icon-unarchive";
 import {
   LearningDiscussionArchiveEvent,
   LearningDiscussionFormOpenEvent,
@@ -95,16 +97,16 @@ export class LearningDiscussionDetail extends LitElement {
             ${this.discussion?.archivedAt
               ? html`
                   <button class="btn" @click=${this._handleUnarchiveClick}>
-                    <span class="material-symbols-outlined">unarchive</span>
+                    <ui-icon-unarchive></ui-icon-unarchive>
                   </button>
                 `
               : html`
                   <button class="btn" @click=${this._handleArchiveClick}>
-                    <span class="material-symbols-outlined">archive</span>
+                    <ui-icon-archive></ui-icon-archive>
                   </button>
                 `}
             <button class="btn" @click=${this._handleEditClick}>
-              <span class="material-symbols-outlined">edit</span>
+              <ui-icon-edit></ui-icon-edit>
             </button>
           </div>
         </div>
@@ -159,7 +161,6 @@ export class LearningDiscussionDetail extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     titleStyle,
     discussionDetailStyle,
     css`
@@ -188,10 +189,6 @@ export class LearningDiscussionDetail extends LitElement {
       .actions {
         display: flex;
         gap: 8px;
-      }
-
-      .material-symbols-outlined {
-        font-size: 16px;
       }
     `,
   ];
