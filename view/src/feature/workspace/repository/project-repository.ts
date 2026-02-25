@@ -75,6 +75,21 @@ export class ProjectRepository {
       );
     }
   }
+
+  async moveDiscussions(
+    workspaceId: string,
+    targetProjectId: string,
+    discussionIds: string[],
+  ): Promise<void> {
+    const { error } = await client.POST(
+      "/v1/workspace/workspaces/{workspaceId}/projects/{projectId}/discussions/move",
+      {
+        params: { path: { workspaceId, projectId: targetProjectId } },
+        body: { discussionIds },
+      },
+    );
+    if (error) throw new Error(error.message);
+  }
 }
 
 export const projectRepository = new ProjectRepository();

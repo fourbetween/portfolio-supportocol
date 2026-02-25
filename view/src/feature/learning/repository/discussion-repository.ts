@@ -24,6 +24,10 @@ export class DiscussionRepository {
     );
   }
 
+  clearAllListCache() {
+    this._listCache.clear();
+  }
+
   async list(
     workspaceId: string,
     projectId: string,
