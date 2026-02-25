@@ -76,6 +76,15 @@ func (UnimplementedHandler) V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDel
 	return ht.ErrNotImplemented
 }
 
+// V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePost implements POST /v1/workspace/workspaces/{workspaceId}/projects/{projectId}/discussions/move operation.
+//
+// Move multiple discussions to a project.
+//
+// POST /v1/workspace/workspaces/{workspaceId}/projects/{projectId}/discussions/move
+func (UnimplementedHandler) V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePost(ctx context.Context, req *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostReq, params V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostParams) error {
+	return ht.ErrNotImplemented
+}
+
 // V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut implements PUT /v1/workspace/workspaces/{workspaceId}/projects/{projectId} operation.
 //
 // Update project.

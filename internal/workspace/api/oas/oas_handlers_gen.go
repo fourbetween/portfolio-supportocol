@@ -1027,6 +1027,166 @@ func (s *Server) handleV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteRe
 	}
 }
 
+// handleV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostRequest handles POST /v1/workspace/workspaces/{workspaceId}/projects/{projectId}/discussions/move operation.
+//
+// Move multiple discussions to a project.
+//
+// POST /v1/workspace/workspaces/{workspaceId}/projects/{projectId}/discussions/move
+func (s *Server) handleV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostOperation,
+			ID:   "",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityCookieAuth(ctx, V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostOperation, r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "CookieAuth",
+					Err:              err,
+				}
+				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
+					defer recordError("Security:CookieAuth", err)
+				}
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
+				defer recordError("Security", err)
+			}
+			return
+		}
+	}
+	params, err := decodeV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostNoContent
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             request,
+			RawBody:          rawBody,
+			Params: middleware.Parameters{
+				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
+					Name: "projectId",
+					In:   "path",
+				}: params.ProjectId,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostReq
+			Params   = V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostParams
+			Response = *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostNoContent
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				err = s.h.V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePost(ctx, request, params)
+				return response, err
+			},
+		)
+	} else {
+		err = s.h.V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePost(ctx, request, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutRequest handles PUT /v1/workspace/workspaces/{workspaceId}/projects/{projectId} operation.
 //
 // Update project.

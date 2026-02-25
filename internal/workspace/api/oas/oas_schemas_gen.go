@@ -625,6 +625,23 @@ func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) SetName(val ProjectNam
 // V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteNoContent is response for V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete operation.
 type V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteNoContent struct{}
 
+// V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostNoContent is response for V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePost operation.
+type V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostNoContent struct{}
+
+type V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostReq struct {
+	DiscussionIds []ID `json:"discussionIds"`
+}
+
+// GetDiscussionIds returns the value of DiscussionIds.
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostReq) GetDiscussionIds() []ID {
+	return s.DiscussionIds
+}
+
+// SetDiscussionIds sets the value of DiscussionIds.
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostReq) SetDiscussionIds(val []ID) {
+	s.DiscussionIds = val
+}
+
 type V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq struct {
 	Name    ProjectName    `json:"name"`
 	Premise ProjectPremise `json:"premise"`

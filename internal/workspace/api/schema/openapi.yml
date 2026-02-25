@@ -386,6 +386,44 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /v1/workspace/workspaces/{workspaceId}/projects/{projectId}/discussions/move:
+    post:
+      description: move multiple discussions to a project
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/Id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                discussionIds:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Id"
+                  minItems: 1
+                  maxItems: 100
+              required:
+                - discussionIds
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/workspace/workspaces/{workspaceId}/favorites:
     get:
       description: get favorite discussions

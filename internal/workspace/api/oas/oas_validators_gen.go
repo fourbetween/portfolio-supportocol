@@ -297,6 +297,37 @@ func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsPostReq) Validate() error {
 	return nil
 }
 
+func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostReq) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if s.DiscussionIds == nil {
+			return errors.New("nil is invalid value")
+		}
+		if err := (validate.Array{
+			MinLength:    1,
+			MinLengthSet: true,
+			MaxLength:    100,
+			MaxLengthSet: true,
+		}).ValidateLength(len(s.DiscussionIds)); err != nil {
+			return errors.Wrap(err, "array")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "discussionIds",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
 func (s *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer

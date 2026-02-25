@@ -50,6 +50,12 @@ type Handler interface {
 	//
 	// DELETE /v1/workspace/workspaces/{workspaceId}/projects/{projectId}
 	V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete(ctx context.Context, params V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteParams) error
+	// V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePost implements POST /v1/workspace/workspaces/{workspaceId}/projects/{projectId}/discussions/move operation.
+	//
+	// Move multiple discussions to a project.
+	//
+	// POST /v1/workspace/workspaces/{workspaceId}/projects/{projectId}/discussions/move
+	V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePost(ctx context.Context, req *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostReq, params V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostParams) error
 	// V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut implements PUT /v1/workspace/workspaces/{workspaceId}/projects/{projectId} operation.
 	//
 	// Update project.
