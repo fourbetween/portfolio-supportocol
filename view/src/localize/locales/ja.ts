@@ -185,5 +185,15 @@
 'sfde43e1b6051b99c': `循環論法`,
 'sfed17b0e30748cdf': `経路`,
 'sff329d6e90ca964d': `コメントを入力...`,
+'s58bfb494feb8eb02': str`${0} selected`,
+'s8f18916860db5d80': `Clear selection`,
+'sa6091f9cfbb31d29': `Move to...`,
+'s379c18aec5654894': `Move`,
+'sf762194c9472565b': `No discussions in this project.`,
+'sd0b6082239185272': `Select all`,
+'sf1a1e349c2848d1c': `Discussions moved successfully.`,
+'s49730f3d5751a433': `Loading...`,
+'s09028f88ac1f152d': `Move Discussions`,
+'s43ec92e9d8b616e3': `Select discussions and move them to another project.`,
     };
   

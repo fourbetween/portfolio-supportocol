@@ -13,5 +13,6 @@ const (
 	V1WorkspaceWorkspacesWorkspaceIdProjectsGetOperation                           OperationName = "V1WorkspaceWorkspacesWorkspaceIdProjectsGet"
 	V1WorkspaceWorkspacesWorkspaceIdProjectsPostOperation                          OperationName = "V1WorkspaceWorkspacesWorkspaceIdProjectsPost"
 	V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteOperation               OperationName = "V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDelete"
+	V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostOperation  OperationName = "V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePost"
 	V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutOperation                  OperationName = "V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPut"
 )

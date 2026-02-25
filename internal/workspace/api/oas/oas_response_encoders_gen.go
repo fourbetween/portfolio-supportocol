@@ -92,6 +92,12 @@ func encodeV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDeleteResponse(respo
 	return nil
 }
 
+func encodeV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostResponse(response *V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostNoContent, w http.ResponseWriter) error {
+	w.WriteHeader(204)
+
+	return nil
+}
+
 func encodeV1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdPutResponse(response *Project, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)

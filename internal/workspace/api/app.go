@@ -146,6 +146,26 @@ func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdDiscussionsDiscussionIdFavo
 	})
 }
 
+func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePost(
+	ctx context.Context,
+	req *oas.V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostReq,
+	params oas.V1WorkspaceWorkspacesWorkspaceIdProjectsProjectIdDiscussionsMovePostParams,
+) error {
+	uid := httpctx.GetUserID(ctx)
+
+	discussionIDs := make([]string, len(req.DiscussionIds))
+	for i, id := range req.DiscussionIds {
+		discussionIDs[i] = uuid.UUID(id).String()
+	}
+
+	return h.con.MoveDiscussions.Execute(ctx, usecase.MoveDiscussionsInput{
+		WorkspaceID:   uuid.UUID(params.WorkspaceId).String(),
+		ProjectID:     uuid.UUID(params.ProjectId).String(),
+		DiscussionIDs: discussionIDs,
+		UserID:        uid,
+	})
+}
+
 func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdFavoritesGet(
 	ctx context.Context,
 	params oas.V1WorkspaceWorkspacesWorkspaceIdFavoritesGetParams,
