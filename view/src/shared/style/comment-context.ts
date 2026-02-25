@@ -15,7 +15,4 @@ export const commentContextStyle = css`
     color: var(--color-fg-muted);
     margin: 4px 0;
   }
-  .material-symbols-outlined {
-    font-size: 20px;
-  }
 `;

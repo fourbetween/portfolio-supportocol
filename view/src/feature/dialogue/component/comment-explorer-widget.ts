@@ -3,9 +3,9 @@ import { LitElement, html, nothing, type PropertyValues } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
-import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import { widgetStyle } from "../../../shared/style/widget";
+import "../../../shared/ui/icons/icon-close";
 import {
   DialogueCommentCreatedEvent,
   DialogueCommentSelectEvent,
@@ -273,7 +273,7 @@ export class DialogueCommentExplorerWidget extends LitElement {
         <div class="section-header">
           <div class="section-title">${msg("Context")}</div>
           <button class="clear-button" @click=${this.handleClearSelection}>
-            <span class="material-symbols-outlined">close</span>
+            <ui-icon-close></ui-icon-close>
             <span>${msg("Clear Selection")}</span>
           </button>
         </div>
@@ -289,5 +289,5 @@ export class DialogueCommentExplorerWidget extends LitElement {
     `;
   }
 
-  static styles = [baseStyle, iconStyle, titleStyle, widgetStyle];
+  static styles = [baseStyle, titleStyle, widgetStyle];
 }

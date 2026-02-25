@@ -3,7 +3,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/icons/icon-add-comment";
 
 @customElement("learning-comment-add-button")
 export class LearningCommentAddButton extends LitElement {
@@ -13,7 +13,7 @@ export class LearningCommentAddButton extends LitElement {
   render() {
     return html`
       <button class="btn">
-        <span class="material-symbols-outlined">add_comment</span>
+        <ui-icon-add-comment></ui-icon-add-comment>
         <span>${this.isReply ? msg("Reply") : msg("New Comment")}</span>
       </button>
     `;
@@ -22,7 +22,6 @@ export class LearningCommentAddButton extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     css`
       .btn {
         color: var(--color-fg-muted);

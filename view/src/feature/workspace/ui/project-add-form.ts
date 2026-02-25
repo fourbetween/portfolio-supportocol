@@ -3,8 +3,8 @@ import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import { iconStyle } from "../../../shared/style/icon";
 import { inputStyle } from "../../../shared/style/input";
+import "../../../shared/ui/icons/icon-add";
 import { WorkspaceProjectCreateEvent } from "../event/project";
 
 @customElement("workspace-project-add-form")
@@ -36,7 +36,7 @@ export class WorkspaceProjectAddForm extends LitElement {
           ?disabled=${!this.name.trim()}
           aria-label=${msg("Add Project")}
         >
-          <span class="material-symbols-outlined">add</span>
+          <ui-icon-add></ui-icon-add>
         </button>
       </form>
     `;
@@ -45,7 +45,6 @@ export class WorkspaceProjectAddForm extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     inputStyle,
     css`
       form {

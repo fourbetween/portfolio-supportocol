@@ -3,7 +3,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/icons/icon-add-comment";
 import type { CommentFrame } from "../model/comment-frame";
 import "../ui/comment-reply-form";
 
@@ -48,7 +48,7 @@ export class DialogueCommentCreateWidget extends LitElement {
 
     return html`
       <button class="btn add-button" @click=${this.handleStart}>
-        <span class="material-symbols-outlined">add_comment</span>
+        <ui-icon-add-comment></ui-icon-add-comment>
         <span>${msg("New Comment")}</span>
       </button>
     `;
@@ -57,7 +57,6 @@ export class DialogueCommentCreateWidget extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     css`
       :host {
         padding: 8px 0;

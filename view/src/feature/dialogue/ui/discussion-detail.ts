@@ -4,9 +4,9 @@ import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { discussionDetailStyle } from "../../../shared/style/discussion-detail";
-import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/discussion-archive-badge/discussion-archive-badge";
+import "../../../shared/ui/icons/icon-star";
 import {
   DialogueFavoriteCreateEvent,
   DialogueFavoriteDeleteEvent,
@@ -76,13 +76,10 @@ export class DialogueDiscussionDetail extends LitElement {
                       ? msg("Unfavorite")
                       : msg("Favorite")}
                   >
-                    <span
-                      class="material-symbols-outlined ${this.favorited
-                        ? "fill"
-                        : ""}"
-                    >
-                      star
-                    </span>
+                    <ui-icon-star
+                      .size=${16}
+                      class=${this.favorited ? "fill" : ""}
+                    ></ui-icon-star>
                   </button>
                 `
               : html``}
@@ -115,7 +112,6 @@ export class DialogueDiscussionDetail extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     titleStyle,
     discussionDetailStyle,
     css`
@@ -130,12 +126,7 @@ export class DialogueDiscussionDetail extends LitElement {
         gap: 8px;
       }
 
-      .material-symbols-outlined {
-        font-size: 16px;
-      }
-
-      .material-symbols-outlined.fill {
-        font-variation-settings: "FILL" 1;
+      .fill {
         color: var(--color-attention-fg);
       }
 

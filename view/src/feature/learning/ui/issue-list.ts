@@ -2,8 +2,9 @@ import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
-import { iconStyle } from "../../../shared/style/icon";
 import { emptyStyle } from "../../../shared/style/list";
+import "../../../shared/ui/icons/icon-delete";
+import "../../../shared/ui/icons/icon-warning";
 import { LearningIssueRemoveEvent } from "../event/issue";
 import type { CommentIssue } from "../model/comment";
 
@@ -39,7 +40,7 @@ export class LearningIssueList extends LitElement {
   private _renderIssue(issue: CommentIssue) {
     return html`
       <li class="issue-item">
-        <span class="material-symbols-outlined icon">warning</span>
+        <ui-icon-warning class="icon"></ui-icon-warning>
         <div class="content">
           <div class="title">${issue.title}</div>
           ${issue.description
@@ -56,7 +57,7 @@ export class LearningIssueList extends LitElement {
                 @click=${() => this._handleRemove(issue.id)}
                 title=${msg("Remove Issue")}
               >
-                <span class="material-symbols-outlined">delete</span>
+                <ui-icon-delete></ui-icon-delete>
               </button>
             `}
       </li>
@@ -65,7 +66,6 @@ export class LearningIssueList extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     emptyStyle,
     css`
       .issue-list {
@@ -119,7 +119,7 @@ export class LearningIssueList extends LitElement {
         background-color: var(--color-canvas-subtle);
         color: var(--color-danger-fg);
       }
-      .remove-button .material-symbols-outlined {
+      .remove-button ui-icon-delete {
         font-size: 20px;
       }
     `,

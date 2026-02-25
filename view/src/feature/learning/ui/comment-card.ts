@@ -3,7 +3,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../shared/style/base";
 import { commentCardStyle } from "../../../shared/style/comment-card";
-import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/icons/icon-archive";
+import "../../../shared/ui/icons/icon-warning";
 import { LearningCommentSelectEvent } from "../event/comment";
 import type { Comment } from "../model/comment";
 import "./issue-list-popup";
@@ -51,9 +52,7 @@ export class LearningCommentCard extends LitElement {
         <div class="footer">
           ${isSelfArchived
             ? html`
-                <span class="material-symbols-outlined archived-icon">
-                  archive
-                </span>
+                <ui-icon-archive class="archived-icon"></ui-icon-archive>
               `
             : nothing}
           ${this.activeChildrenCount > 0
@@ -66,12 +65,10 @@ export class LearningCommentCard extends LitElement {
           </div>
           ${this.comment.issues && this.comment.issues.length > 0
             ? html`
-                <span
-                  class="material-symbols-outlined issue-icon"
+                <ui-icon-warning
+                  class="issue-icon"
                   @click=${this._handleIssueClick}
-                >
-                  warning
-                </span>
+                ></ui-icon-warning>
               `
             : nothing}
         </div>
@@ -106,7 +103,6 @@ export class LearningCommentCard extends LitElement {
   static styles = [
     baseStyle,
     commentCardStyle,
-    iconStyle,
     css`
       :host {
         cursor: pointer;

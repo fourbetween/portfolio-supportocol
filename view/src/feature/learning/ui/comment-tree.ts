@@ -11,7 +11,6 @@ import { customElement, property, state } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../shared/style/base";
 import { commentTreeStyle } from "../../../shared/style/comment-tree";
-import { iconStyle } from "../../../shared/style/icon";
 import "../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
@@ -185,5 +184,5 @@ export class LearningCommentTree extends LitElement {
     );
   }
 
-  static styles = [baseStyle, iconStyle, commentTreeStyle, css``];
+  static styles = [baseStyle, commentTreeStyle, css``];
 }

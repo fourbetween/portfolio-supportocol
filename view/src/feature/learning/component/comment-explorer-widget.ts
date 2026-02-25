@@ -5,9 +5,9 @@ import { customElement, property, state } from "lit/decorators.js";
 import { workspaceContext } from "../../../app/context/workspace";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
-import { iconStyle } from "../../../shared/style/icon";
 import { titleStyle } from "../../../shared/style/title";
 import { widgetStyle } from "../../../shared/style/widget";
+import "../../../shared/ui/icons/icon-close";
 import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
   LearningCommentArchiveEvent,
@@ -353,7 +353,7 @@ export class LearningCommentExplorerWidget extends LitElement {
         <div class="section-header">
           <div class="section-title">${msg("Context")}</div>
           <button class="clear-button" @click=${this.handleClearSelection}>
-            <span class="material-symbols-outlined">close</span>
+            <ui-icon-close></ui-icon-close>
             <span>${msg("Clear Selection")}</span>
           </button>
         </div>
@@ -378,7 +378,6 @@ export class LearningCommentExplorerWidget extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     titleStyle,
     widgetStyle,
     css`
@@ -391,9 +390,6 @@ export class LearningCommentExplorerWidget extends LitElement {
         border: 1px solid var(--color-border-default);
         border-radius: 6px;
         color: var(--color-fg-muted);
-      }
-      .archived-info .material-symbols-outlined {
-        font-size: 20px;
       }
     `,
   ];

@@ -4,7 +4,6 @@ import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { formStyle } from "../../../shared/style/form";
-import { iconStyle } from "../../../shared/style/icon";
 import { inputStyle } from "../../../shared/style/input";
 import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/popup/popup";
@@ -211,7 +210,6 @@ export class DialogueIssueCreatePopup extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     titleStyle,
     inputStyle,
     formStyle,

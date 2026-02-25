@@ -3,7 +3,8 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/icons/icon-delete-forever";
+import "../../../shared/ui/icons/icon-logout";
 import "../../../shared/ui/popup/popup";
 import {
   IdentityAccountDeleteEvent,
@@ -63,7 +64,7 @@ export class IdentityAccountSettings extends LitElement {
             @click=${this._handleLogoutClick}
             ?disabled=${this.loading}
           >
-            <span class="material-symbols-outlined">logout</span>
+            <ui-icon-logout></ui-icon-logout>
             ${msg("Logout")}
           </button>
         </div>
@@ -85,7 +86,7 @@ export class IdentityAccountSettings extends LitElement {
             @click=${this._handleDeleteClick}
             ?disabled=${this.loading}
           >
-            <span class="material-symbols-outlined">delete_forever</span>
+            <ui-icon-delete-forever></ui-icon-delete-forever>
             ${msg("Delete Account")}
           </button>
         </div>
@@ -116,7 +117,7 @@ export class IdentityAccountSettings extends LitElement {
             @click=${this._handleConfirmDelete}
             ?disabled=${this.loading}
           >
-            <span class="material-symbols-outlined">delete_forever</span>
+            <ui-icon-delete-forever></ui-icon-delete-forever>
             ${msg("Delete Account")}
           </button>
         </div>
@@ -127,7 +128,6 @@ export class IdentityAccountSettings extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
-    iconStyle,
     css`
       .no-user {
         color: var(--color-fg-muted);

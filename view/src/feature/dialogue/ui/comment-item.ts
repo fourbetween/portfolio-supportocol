@@ -5,7 +5,9 @@ import { TouchController } from "../../../app/controller/touch";
 import { actionStyle } from "../../../shared/style/action";
 import { baseStyle } from "../../../shared/style/base";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
-import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/icons/icon-ads-click";
+import "../../../shared/ui/icons/icon-reply";
+import "../../../shared/ui/icons/icon-report-problem";
 import {
   DialogueCommentIssueRequestEvent,
   DialogueCommentSelectEvent,
@@ -121,33 +123,33 @@ export class DialogueCommentItem extends LitElement {
         ${this.canReply
           ? html`
               <button
-                class="btn-hover reply-button material-symbols-outlined"
+                class="btn-hover reply-button"
                 @click=${this.handleReplyClick}
                 aria-label=${msg("reply")}
               >
-                reply
+                <ui-icon-reply></ui-icon-reply>
               </button>
             `
           : nothing}
         ${this.canIssue
           ? html`
               <button
-                class="btn-hover danger issue-button material-symbols-outlined"
+                class="btn-hover danger issue-button"
                 @click=${this.handleIssueClick}
                 aria-label=${msg("report problem")}
               >
-                report_problem
+                <ui-icon-report-problem></ui-icon-report-problem>
               </button>
             `
           : nothing}
         ${this.touch.isTouchDevice
           ? html`
               <button
-                class="btn-hover focus-button material-symbols-outlined"
+                class="btn-hover focus-button"
                 @click=${this.handleFocusClick}
                 aria-label=${msg("focus")}
               >
-                ads_click
+                <ui-icon-ads-click></ui-icon-ads-click>
               </button>
             `
           : nothing}
@@ -157,7 +159,6 @@ export class DialogueCommentItem extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     hoverButtonStyle,
     actionStyle,
     css`

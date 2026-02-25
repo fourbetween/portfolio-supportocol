@@ -4,10 +4,12 @@ import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { commentFrameDetail } from "../../../shared/style/comment-frame-detail";
-import { iconStyle } from "../../../shared/style/icon";
 import { inputStyle } from "../../../shared/style/input";
 import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/comment-type-badge/comment-type-badge";
+import "../../../shared/ui/icons/icon-add";
+import "../../../shared/ui/icons/icon-arrow-back";
+import "../../../shared/ui/icons/icon-delete";
 import type { CommentFrame } from "../model/comment-frame";
 import type { DialogueSettings } from "../model/discussion";
 
@@ -159,7 +161,7 @@ export class LearningDialogueSettingsForm extends LitElement {
               aria-label=${msg("Add Type")}
               @click=${this._handleAddType}
             >
-              <span class="material-symbols-outlined">add</span>
+              <ui-icon-add></ui-icon-add>
             </button>
           </div>
           <div class="types">
@@ -175,7 +177,7 @@ export class LearningDialogueSettingsForm extends LitElement {
                           aria-label=${msg(str`Delete Type: ${t}`)}
                           @click=${() => this._handleRemoveType(t)}
                         >
-                          <span class="material-symbols-outlined">delete</span>
+                          <ui-icon-delete></ui-icon-delete>
                         </button>
                       `}
                 </div>
@@ -239,7 +241,7 @@ export class LearningDialogueSettingsForm extends LitElement {
             `,
           )}
         </select>
-        <span class="material-symbols-outlined">arrow_back</span>
+        <ui-icon-arrow-back></ui-icon-arrow-back>
         <select
           name="child"
           aria-label=${msg("Child Type Select")}
@@ -260,7 +262,7 @@ export class LearningDialogueSettingsForm extends LitElement {
           ?disabled=${!this._selectedChild}
           @click=${this._handleAddPath}
         >
-          <span class="material-symbols-outlined">add</span>
+          <ui-icon-add></ui-icon-add>
         </button>
       </div>
     `;
@@ -300,7 +302,7 @@ export class LearningDialogueSettingsForm extends LitElement {
                           )}
                           @click=${() => this._handleRemovePath(child, parent)}
                         >
-                          <span class="material-symbols-outlined">delete</span>
+                          <ui-icon-delete></ui-icon-delete>
                         </button>
                       `}
                 </div>
@@ -318,7 +320,6 @@ export class LearningDialogueSettingsForm extends LitElement {
     inputStyle,
     titleStyle,
     commentFrameDetail,
-    iconStyle,
     css`
       .permission-grid {
         display: grid;
@@ -377,9 +378,6 @@ export class LearningDialogueSettingsForm extends LitElement {
       }
       .delete-button:hover {
         opacity: 1;
-      }
-      .delete-button .material-symbols-outlined {
-        font-size: 18px;
       }
     `,
   ];

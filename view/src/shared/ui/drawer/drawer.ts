@@ -3,7 +3,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { DrawerCloseEvent } from "../../event/drawer";
 import { baseStyle } from "../../style/base";
-import { iconStyle } from "../../style/icon";
+import "../icons/icon-close";
 
 @customElement("ui-drawer")
 export class Drawer extends LitElement {
@@ -51,7 +51,7 @@ export class Drawer extends LitElement {
             @click=${this.close}
             aria-label=${msg("Close")}
           >
-            <span class="material-symbols-outlined">close</span>
+            <ui-icon-close></ui-icon-close>
           </button>
         </div>
         <div class="drawer-body">
@@ -63,7 +63,6 @@ export class Drawer extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     css`
       :host {
         display: block;

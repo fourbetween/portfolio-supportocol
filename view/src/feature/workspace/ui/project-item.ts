@@ -2,8 +2,11 @@ import { msg, str } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
-import { iconStyle } from "../../../shared/style/icon";
 import { listStyles } from "../../../shared/style/list";
+import "../../../shared/ui/icons/icon-check";
+import "../../../shared/ui/icons/icon-close";
+import "../../../shared/ui/icons/icon-delete";
+import "../../../shared/ui/icons/icon-edit";
 import {
   WorkspaceProjectDeleteEvent,
   WorkspaceProjectUpdateEvent,
@@ -70,10 +73,10 @@ export class WorkspaceProjectItem extends LitElement {
             }}
           />
           <button class="icon-button save" @click=${this.handleSave}>
-            <span class="material-symbols-outlined">check</span>
+            <ui-icon-check></ui-icon-check>
           </button>
           <button class="icon-button cancel" @click=${this.handleCancel}>
-            <span class="material-symbols-outlined">close</span>
+            <ui-icon-close></ui-icon-close>
           </button>
         </div>
       `;
@@ -97,14 +100,14 @@ export class WorkspaceProjectItem extends LitElement {
                   aria-label=${msg("Edit project")}
                   @click=${this.handleEdit}
                 >
-                  <span class="material-symbols-outlined">edit</span>
+                  <ui-icon-edit></ui-icon-edit>
                 </button>
                 <button
                   class="icon-button delete"
                   aria-label=${msg("Delete project")}
                   @click=${this.handleDelete}
                 >
-                  <span class="material-symbols-outlined">delete</span>
+                  <ui-icon-delete></ui-icon-delete>
                 </button>
               </div>
             `}
@@ -114,7 +117,6 @@ export class WorkspaceProjectItem extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     listStyles,
     css`
       :host {

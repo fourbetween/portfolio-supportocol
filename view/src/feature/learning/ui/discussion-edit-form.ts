@@ -3,8 +3,9 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import { iconStyle } from "../../../shared/style/icon";
 import { inputStyle } from "../../../shared/style/input";
+import "../../../shared/ui/icons/icon-close";
+import "../../../shared/ui/icons/icon-save";
 import {
   LearningDiscussionFormCloseEvent,
   LearningDiscussionUpdateEvent,
@@ -85,14 +86,14 @@ export class LearningDiscussionEditForm extends LitElement {
             @click=${this.handleCancel}
             title=${msg("Cancel")}
           >
-            <span class="material-symbols-outlined">close</span>
+            <ui-icon-close></ui-icon-close>
           </button>
           <button
             class="btn btn-primary"
             @click=${this.handleSave}
             title=${msg("Save")}
           >
-            <span class="material-symbols-outlined">save</span>
+            <ui-icon-save></ui-icon-save>
           </button>
         </div>
       </div>
@@ -103,7 +104,6 @@ export class LearningDiscussionEditForm extends LitElement {
     baseStyle,
     buttonStyle,
     inputStyle,
-    iconStyle,
     css`
       :host {
         display: block;

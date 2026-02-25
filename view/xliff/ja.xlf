@@ -718,10 +718,6 @@
   <source>Move Discussions</source>
   <target>議論を移動</target>
 </trans-unit>
-<trans-unit id="s43ec92e9d8b616e3">
-  <source>Select discussions and move them to another project.</source>
-  <target>議論を選択して別のプロジェクトに移動します。</target>
-</trans-unit>
 <trans-unit id="s58bfb494feb8eb02">
   <source><x id="0" equiv-text="${this.selectedCount}"/> selected</source>
   <target><x id="0" equiv-text="${this.selectedCount}"/> 件を選択中</target>

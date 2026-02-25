@@ -6,7 +6,11 @@ import { authService } from "../../feature/identity/model/auth-service";
 import type { User } from "../../feature/identity/model/user";
 import "../../feature/workspace/component/workspace-select-widget";
 import { baseStyle } from "../../shared/style/base";
-import { iconStyle } from "../../shared/style/icon";
+import "../../shared/ui/icons/icon-folder";
+import "../../shared/ui/icons/icon-forum";
+import "../../shared/ui/icons/icon-login";
+import "../../shared/ui/icons/icon-school";
+import "../../shared/ui/icons/icon-settings";
 import { userContext } from "../context/user";
 import { paths } from "../paths";
 
@@ -26,15 +30,15 @@ export class AppHeader extends LitElement {
         <a href=${paths.marketing.home} class="header-logo">Supportocol</a>
         <nav class="header-nav">
           <a href=${paths.learning.dashboard} class="nav-item">
-            <span class="material-symbols-outlined">school</span>
+            <ui-icon-school class="nav-icon"></ui-icon-school>
             <span>${msg("Learning")}</span>
           </a>
           <a href=${paths.dialogue.search} class="nav-item">
-            <span class="material-symbols-outlined">forum</span>
+            <ui-icon-forum class="nav-icon"></ui-icon-forum>
             <span>${msg("Dialogue")}</span>
           </a>
           <a href=${paths.workspace.projects} class="nav-item">
-            <span class="material-symbols-outlined">folder</span>
+            <ui-icon-folder class="nav-icon"></ui-icon-folder>
             <span>${msg("Projects")}</span>
           </a>
         </nav>
@@ -46,7 +50,7 @@ export class AppHeader extends LitElement {
                   class="nav-item account-link"
                   aria-label=${msg("Account Information")}
                 >
-                  <span class="material-symbols-outlined">settings</span>
+                  <ui-icon-settings .size=${20}></ui-icon-settings>
                 </a>
               `
             : html`
@@ -55,7 +59,7 @@ export class AppHeader extends LitElement {
                   @click=${this.handleLogin}
                   aria-label=${msg("Login")}
                 >
-                  <span class="material-symbols-outlined">login</span>
+                  <ui-icon-login></ui-icon-login>
                   <span class="button-text">${msg("Login")}</span>
                 </button>
               `}
@@ -67,7 +71,6 @@ export class AppHeader extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     css`
       .header {
         background-color: var(--color-header-bg);
@@ -110,13 +113,8 @@ export class AppHeader extends LitElement {
         background-color: rgba(255, 255, 255, 0.1);
       }
 
-      .nav-item .material-symbols-outlined {
+      .nav-item .nav-icon {
         display: none;
-      }
-
-      .account-link .material-symbols-outlined {
-        display: block;
-        font-size: 20px;
       }
 
       .header-actions {
@@ -172,7 +170,7 @@ export class AppHeader extends LitElement {
           gap: 2px;
         }
 
-        .nav-item .material-symbols-outlined {
+        .nav-item .nav-icon {
           display: block;
         }
 

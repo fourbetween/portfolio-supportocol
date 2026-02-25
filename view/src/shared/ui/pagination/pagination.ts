@@ -3,8 +3,9 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { PageChangeEvent } from "../../event/page";
 import { baseStyle } from "../../style/base";
-import { iconStyle } from "../../style/icon";
 import { paginationStyle } from "../../style/pagination";
+import "../icons/icon-chevron-left";
+import "../icons/icon-chevron-right";
 
 @customElement("ui-pagination")
 export class Pagination extends LitElement {
@@ -69,7 +70,7 @@ export class Pagination extends LitElement {
           @click=${() => this._handlePageClick(this.page - 1)}
           aria-label=${msg("Previous page")}
         >
-          <span class="material-symbols-outlined">chevron_left</span>
+          <ui-icon-chevron-left></ui-icon-chevron-left>
         </button>
 
         ${pages.map((p) =>
@@ -96,11 +97,11 @@ export class Pagination extends LitElement {
           @click=${() => this._handlePageClick(this.page + 1)}
           aria-label=${msg("Next page")}
         >
-          <span class="material-symbols-outlined">chevron_right</span>
+          <ui-icon-chevron-right></ui-icon-chevron-right>
         </button>
       </nav>
     `;
   }
 
-  static styles = [baseStyle, iconStyle, paginationStyle, css``];
+  static styles = [baseStyle, paginationStyle, css``];
 }

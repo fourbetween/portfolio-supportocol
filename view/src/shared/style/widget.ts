@@ -51,7 +51,4 @@ export const widgetStyle = css`
     background-color: var(--color-canvas-subtle);
     color: var(--color-fg-default);
   }
-  .clear-button .material-symbols-outlined {
-    font-size: 16px;
-  }
 `;

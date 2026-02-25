@@ -1,21 +1,20 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
-import { iconStyle } from "../../../shared/style/icon";
+import "../../../shared/ui/icons/icon-account-tree";
 
 @customElement("learning-comment-frame-badge")
 export class LearningCommentFrameBadge extends LitElement {
   render() {
     return html`
       <div class="frame-badge">
-        <span class="material-symbols-outlined">account_tree</span>
+        <ui-icon-account-tree></ui-icon-account-tree>
       </div>
     `;
   }
 
   static styles = [
     baseStyle,
-    iconStyle,
     css`
       :host {
         display: inline-block;
@@ -37,9 +36,6 @@ export class LearningCommentFrameBadge extends LitElement {
       }
       .frame-badge:hover {
         background-color: var(--color-canvas-default);
-      }
-      .material-symbols-outlined {
-        font-size: 16px;
       }
     `,
   ];

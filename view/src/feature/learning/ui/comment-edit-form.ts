@@ -4,9 +4,10 @@ import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { formStyle } from "../../../shared/style/form";
-import { iconStyle } from "../../../shared/style/icon";
 import { inputStyle } from "../../../shared/style/input";
 import "../../../shared/ui/comment-type-badge/comment-type-badge";
+import "../../../shared/ui/icons/icon-close";
+import "../../../shared/ui/icons/icon-save";
 import {
   LearningCommentCreateEvent,
   LearningCommentFormCloseEvent,
@@ -153,14 +154,14 @@ export class LearningCommentEditForm extends LitElement {
           @click=${this.handleCancel}
           title=${msg("Cancel")}
         >
-          <span class="material-symbols-outlined">close</span>
+          <ui-icon-close></ui-icon-close>
         </button>
         <button
           class="btn btn-primary save-button"
           @click=${this.handleSave}
           title=${msg("Save")}
         >
-          <span class="material-symbols-outlined">save</span>
+          <ui-icon-save></ui-icon-save>
         </button>
       </div>
     `;
@@ -177,7 +178,6 @@ export class LearningCommentEditForm extends LitElement {
     baseStyle,
     buttonStyle,
     inputStyle,
-    iconStyle,
     formStyle,
     css`
       :host {

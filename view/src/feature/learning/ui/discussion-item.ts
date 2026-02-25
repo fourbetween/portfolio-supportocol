@@ -4,8 +4,10 @@ import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../shared/style/base";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
-import { iconStyle } from "../../../shared/style/icon";
 import { listStyles } from "../../../shared/style/list";
+import "../../../shared/ui/icons/icon-chat-bubble";
+import "../../../shared/ui/icons/icon-delete";
+import "../../../shared/ui/icons/icon-report";
 import {
   LearningDiscussionDeleteEvent,
   LearningDiscussionSelectEvent,
@@ -43,7 +45,7 @@ export class LearningDiscussionItem extends LitElement {
             ${proposedCommentsCount > 0
               ? html`
                   <div class="stat-item" title=${msg("Proposed comments")}>
-                    <span class="material-symbols-outlined">chat_bubble</span>
+                    <ui-icon-chat-bubble></ui-icon-chat-bubble>
                     <span class="count">${proposedCommentsCount}</span>
                   </div>
                 `
@@ -51,7 +53,7 @@ export class LearningDiscussionItem extends LitElement {
             ${issuesCount > 0
               ? html`
                   <div class="stat-item" title=${msg("Issues")}>
-                    <span class="material-symbols-outlined">report</span>
+                    <ui-icon-report></ui-icon-report>
                     <span class="count">${issuesCount}</span>
                   </div>
                 `
@@ -67,7 +69,7 @@ export class LearningDiscussionItem extends LitElement {
           aria-label=${msg("delete")}
           @click=${this.handleDelete}
         >
-          <span class="material-symbols-outlined">delete</span>
+          <ui-icon-delete></ui-icon-delete>
         </button>
       </div>
     `;
@@ -75,7 +77,6 @@ export class LearningDiscussionItem extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     hoverButtonStyle,
     listStyles,
     css`
@@ -105,9 +106,6 @@ export class LearningDiscussionItem extends LitElement {
         display: flex;
         align-items: center;
         gap: 4px;
-      }
-      .stat-item .material-symbols-outlined {
-        font-size: 16px;
       }
       .count {
         font-size: 0.8rem;

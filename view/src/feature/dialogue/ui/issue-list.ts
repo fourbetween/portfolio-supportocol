@@ -2,8 +2,8 @@ import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
-import { iconStyle } from "../../../shared/style/icon";
 import { emptyStyle } from "../../../shared/style/list";
+import "../../../shared/ui/icons/icon-warning";
 import type { CommentIssue } from "../model/comment";
 
 @customElement("dialogue-issue-list")
@@ -28,7 +28,7 @@ export class DialogueIssueList extends LitElement {
   private _renderIssue(issue: CommentIssue) {
     return html`
       <li class="issue-item">
-        <span class="material-symbols-outlined icon">warning</span>
+        <ui-icon-warning class="icon"></ui-icon-warning>
         <div class="content">
           <div class="title">${issue.title}</div>
           ${issue.description
@@ -43,7 +43,6 @@ export class DialogueIssueList extends LitElement {
 
   static styles = [
     baseStyle,
-    iconStyle,
     emptyStyle,
     css`
       .issue-list {
