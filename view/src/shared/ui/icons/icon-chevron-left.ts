@@ -1,20 +1,9 @@
-import { LitElement, css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement } from "lit/decorators.js";
+import { IconBase, svg } from "./icon-base.js";
 
 @customElement("ui-icon-chevron-left")
-export class IconChevronLeft extends LitElement {
-  @property({ type: Number })
-  size = 18;
-
-  render() {
-    return html`<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="${this.size}" viewBox="0 -960 960 960" width="${this.size}"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg>`;
+export class IconChevronLeft extends IconBase {
+  protected icon() {
+    return svg`<path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/>`;
   }
-
-  static styles = css`
-    :host {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-  `;
 }
