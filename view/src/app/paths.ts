@@ -13,6 +13,7 @@ export const paths = {
   },
   workspace: {
     projects: "/workspace/projects",
+    project: "/workspace/projects/:projectId",
   },
   identity: {
     account: "/identity/account",

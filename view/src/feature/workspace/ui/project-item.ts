@@ -1,16 +1,10 @@
-import { msg, str } from "@lit/localize";
+import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
+import { buildPath, paths } from "../../../app/paths";
 import { baseStyle } from "../../../shared/style/base";
 import { listStyles } from "../../../shared/style/list";
-import "../../../shared/ui/icons/icon-check";
-import "../../../shared/ui/icons/icon-close";
-import "../../../shared/ui/icons/icon-delete";
-import "../../../shared/ui/icons/icon-edit";
-import {
-  WorkspaceProjectDeleteEvent,
-  WorkspaceProjectUpdateEvent,
-} from "../event/project";
+import "../../../shared/ui/icons/icon-chevron-right";
 import type { Project } from "../model/project";
 
 @customElement("workspace-project-item")
@@ -18,100 +12,23 @@ export class WorkspaceProjectItem extends LitElement {
   @property({ type: Object })
   project!: Project;
 
-  @state()
-  private isEditing = false;
-
-  @state()
-  private editName = "";
-
-  private handleEdit() {
-    this.editName = this.project.name;
-    this.isEditing = true;
-  }
-
-  private handleCancel() {
-    this.isEditing = false;
-  }
-
-  private handleSave() {
-    if (this.editName && this.editName !== this.project.name) {
-      this.dispatchEvent(
-        new WorkspaceProjectUpdateEvent(
-          this.project.id,
-          this.editName,
-          this.project.premise,
-        ),
-      );
-    }
-    this.isEditing = false;
-  }
-
-  private handleDelete() {
-    if (
-      confirm(
-        msg(
-          str`Are you sure you want to delete "${this.project.name}"? All discussions in this project will also be deleted.`,
-        ),
-      )
-    ) {
-      this.dispatchEvent(new WorkspaceProjectDeleteEvent(this.project.id));
-    }
-  }
-
   render() {
-    if (this.isEditing) {
-      return html`
-        <div class="item editing">
-          <input
-            type="text"
-            .value=${this.editName}
-            @input=${(e: InputEvent) =>
-              (this.editName = (e.target as HTMLInputElement).value)}
-            @keydown=${(e: KeyboardEvent) => {
-              if (e.key === "Enter") this.handleSave();
-              if (e.key === "Escape") this.handleCancel();
-            }}
-          />
-          <button class="icon-button save" @click=${this.handleSave}>
-            <ui-icon-check></ui-icon-check>
-          </button>
-          <button class="icon-button cancel" @click=${this.handleCancel}>
-            <ui-icon-close></ui-icon-close>
-          </button>
-        </div>
-      `;
-    }
+    const href = buildPath(paths.workspace.project, {
+      projectId: this.project.id,
+    });
 
     return html`
-      <div class="item">
+      <a class="item" href=${href}>
         <span class="name">
-          ${this.project.name === "Uncategorized"
-            ? msg("Uncategorized")
-            : this.project.name}
+          ${this.project.isDefault ? msg("Uncategorized") : this.project.name}
         </span>
         ${this.project.isDefault
           ? html`
               <span class="badge">${msg("Default")}</span>
             `
-          : html`
-              <div class="actions">
-                <button
-                  class="icon-button edit"
-                  aria-label=${msg("Edit project")}
-                  @click=${this.handleEdit}
-                >
-                  <ui-icon-edit></ui-icon-edit>
-                </button>
-                <button
-                  class="icon-button delete"
-                  aria-label=${msg("Delete project")}
-                  @click=${this.handleDelete}
-                >
-                  <ui-icon-delete></ui-icon-delete>
-                </button>
-              </div>
-            `}
-      </div>
+          : html``}
+        <ui-icon-chevron-right></ui-icon-chevron-right>
+      </a>
     `;
   }
 
@@ -124,10 +41,8 @@ export class WorkspaceProjectItem extends LitElement {
       }
       .item {
         gap: 8px;
-        cursor: default;
-      }
-      .item.editing {
-        cursor: default;
+        text-decoration: none;
+        color: inherit;
       }
       .name {
         flex: 1;
@@ -138,47 +53,6 @@ export class WorkspaceProjectItem extends LitElement {
         background-color: var(--color-neutral-muted);
         border-radius: 12px;
         color: var(--color-fg-muted);
-      }
-      .actions {
-        display: flex;
-        gap: 4px;
-        opacity: 0;
-      }
-      .item:hover .actions {
-        opacity: 1;
-      }
-      .icon-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 4px;
-        border: none;
-        background: none;
-        cursor: pointer;
-        border-radius: 4px;
-        color: var(--color-fg-muted);
-      }
-      .icon-button:hover {
-        background-color: var(--color-neutral-muted);
-      }
-      .icon-button.delete:hover {
-        color: var(--color-danger-fg);
-      }
-      .icon-button.save:hover {
-        color: var(--color-success-fg);
-      }
-
-      input {
-        flex: 1;
-        padding: 4px 8px;
-        border: 1px solid var(--color-border-default);
-        border-radius: 4px;
-        font-size: 1rem;
-      }
-      input:focus {
-        outline: none;
-        border-color: var(--color-accent-fg);
-        box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
       }
     `,
   ];

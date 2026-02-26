@@ -10,6 +10,18 @@ export class WorkspaceRoot extends LitElement {
     this,
     [
       {
+        path: pathInFeature(paths.workspace.project),
+        enter: async () => {
+          await import("./page/project-page");
+          return authService.requireAuth();
+        },
+        render: ({ projectId }) => html`
+          <workspace-project-page
+            .projectId=${projectId as string}
+          ></workspace-project-page>
+        `,
+      },
+      {
         path: pathInFeature(paths.workspace.projects),
         enter: async () => {
           await import("./page/projects-page");

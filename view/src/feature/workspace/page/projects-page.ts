@@ -3,7 +3,6 @@ import { LitElement, html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { pageStyle } from "../../../shared/style/page";
-import "../component/discussion-move-widget";
 import "../component/projects-widget";
 
 @customElement("workspace-projects-page")
@@ -17,10 +16,6 @@ export class WorkspaceProjectsPage extends LitElement {
         </header>
         <section class="content">
           <workspace-projects-widget></workspace-projects-widget>
-        </section>
-        <section class="content">
-          <h2>${msg("Move Discussions")}</h2>
-          <workspace-discussion-move-widget></workspace-discussion-move-widget>
         </section>
       </main>
     `;

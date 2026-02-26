@@ -12,11 +12,7 @@ export class WorkspaceProjectList extends LitElement {
   projects: Project[] = [];
 
   render() {
-    const displayProjects = this.projects.filter(
-      (project) => !project.isDefault,
-    );
-
-    if (displayProjects.length === 0) {
+    if (this.projects.length === 0) {
       return html`
         <div class="empty">${msg("No projects found.")}</div>
       `;
@@ -24,7 +20,7 @@ export class WorkspaceProjectList extends LitElement {
 
     return html`
       <div class="list">
-        ${displayProjects.map(
+        ${this.projects.map(
           (project) => html`
             <workspace-project-item
               .project=${project}
