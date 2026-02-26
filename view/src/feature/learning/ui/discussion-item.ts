@@ -3,15 +3,10 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { classMap } from "lit/directives/class-map.js";
 import { baseStyle } from "../../../shared/style/base";
-import { hoverButtonStyle } from "../../../shared/style/hover-button";
 import { listStyles } from "../../../shared/style/list";
 import "../../../shared/ui/icons/icon-chat-bubble";
-import "../../../shared/ui/icons/icon-delete";
 import "../../../shared/ui/icons/icon-report";
-import {
-  LearningDiscussionDeleteEvent,
-  LearningDiscussionSelectEvent,
-} from "../event/discussion";
+import { LearningDiscussionSelectEvent } from "../event/discussion";
 import type { DiscussionSummary } from "../model/discussion";
 import "./discussion-status-badge";
 
@@ -22,11 +17,6 @@ export class LearningDiscussionItem extends LitElement {
 
   private handleSelect() {
     this.dispatchEvent(new LearningDiscussionSelectEvent(this.summary.id));
-  }
-
-  private handleDelete(e: Event) {
-    e.stopPropagation();
-    this.dispatchEvent(new LearningDiscussionDeleteEvent(this.summary.id));
   }
 
   render() {
@@ -64,20 +54,12 @@ export class LearningDiscussionItem extends LitElement {
           class="status-badge"
           .status=${status}
         ></learning-discussion-status-badge>
-        <button
-          class="btn-hover danger delete-button"
-          aria-label=${msg("delete")}
-          @click=${this.handleDelete}
-        >
-          <ui-icon-delete></ui-icon-delete>
-        </button>
       </div>
     `;
   }
 
   static styles = [
     baseStyle,
-    hoverButtonStyle,
     listStyles,
     css`
       .item.archived {
@@ -114,11 +96,6 @@ export class LearningDiscussionItem extends LitElement {
         position: absolute;
         bottom: 8px;
         right: 8px;
-      }
-      .delete-button {
-        right: 0;
-        top: 50%;
-        transform: translate(50%, -50%);
       }
     `,
   ];

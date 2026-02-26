@@ -278,7 +278,6 @@ export class LearningDashboardPage extends LitElement {
         .projectId=${this._selectedProjectId}
         @learning-discussion-select=${this._handleDiscussionSelect}
         @learning-discussion-created=${this._handleDiscussionUpdated}
-        @learning-discussion-deleted=${this._handleDiscussionDeleted}
         @learning-discussion-archive-filter=${this._handleArchiveFilter}
       ></learning-discussion-list-widget>
     `;
@@ -357,6 +356,7 @@ export class LearningDashboardPage extends LitElement {
             .discussion=${this._selectedDiscussion}
             .comments=${this._comments}
             @learning-discussion-updated=${this._handleDiscussionUpdated}
+            @learning-discussion-deleted=${this._handleDiscussionDeleted}
           ></learning-discussion-detail-widget>
         </div>
         <div class="comment-frame">

@@ -1,5 +1,5 @@
 import { consume } from "@lit/context";
-import { msg, str } from "@lit/localize";
+import { msg } from "@lit/localize";
 import { css, html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { workspaceContext } from "../../../app/context/workspace";
@@ -10,8 +10,6 @@ import {
   LearningDiscussionArchiveFilterEvent,
   LearningDiscussionCreatedEvent,
   LearningDiscussionCreateEvent,
-  LearningDiscussionDeletedEvent,
-  LearningDiscussionDeleteEvent,
   LearningDiscussionSearchEvent,
 } from "../event/discussion";
 import type { DiscussionSummary } from "../model/discussion";
@@ -63,31 +61,6 @@ export class LearningDiscussionListWidget extends LitElement {
     );
   }
 
-  private async _handleDeleteDiscussion(e: LearningDiscussionDeleteEvent) {
-    if (!this.workspace) return;
-    const { discussionId } = e;
-    const discussion = this.summaries.find((d) => d.id === discussionId);
-    if (!discussion) {
-      return;
-    }
-    if (
-      !confirm(msg(str`Are you sure you want to delete "${discussion.theme}"?`))
-    ) {
-      return;
-    }
-    try {
-      await discussionRepository.delete(
-        this.workspace.workspace.id,
-        discussion.projectId,
-        discussionId,
-      );
-      this.dispatchEvent(new LearningDiscussionDeletedEvent(discussionId));
-      showToast(this, msg("Succeeded."), "success", 2000);
-    } catch (error: any) {
-      showToast(this, error.message, "error");
-    }
-  }
-
   private get _filteredSummaries() {
     return this.summaries.filter((d) =>
       d.theme.toLowerCase().includes(this._searchQuery.toLowerCase()),
@@ -121,7 +94,6 @@ export class LearningDiscussionListWidget extends LitElement {
         <div class="content">
           <learning-discussion-list
             .summaries=${this._filteredSummaries}
-            @learning-discussion-delete=${this._handleDeleteDiscussion}
           ></learning-discussion-list>
         </div>
       </div>
