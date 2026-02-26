@@ -7,10 +7,12 @@ import { discussionDetailStyle } from "../../../shared/style/discussion-detail";
 import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/discussion-archive-badge/discussion-archive-badge";
 import "../../../shared/ui/icons/icon-archive";
+import "../../../shared/ui/icons/icon-delete";
 import "../../../shared/ui/icons/icon-edit";
 import "../../../shared/ui/icons/icon-unarchive";
 import {
   LearningDiscussionArchiveEvent,
+  LearningDiscussionDeleteEvent,
   LearningDiscussionFormOpenEvent,
   LearningDiscussionUnarchiveEvent,
 } from "../event/discussion";
@@ -94,6 +96,9 @@ export class LearningDiscussionDetail extends LitElement {
             ></ui-discussion-archive-badge>
           </div>
           <div class="actions">
+            <button class="btn danger" @click=${this._handleDeleteClick}>
+              <ui-icon-delete></ui-icon-delete>
+            </button>
             ${this.discussion?.archivedAt
               ? html`
                   <button class="btn" @click=${this._handleUnarchiveClick}>
@@ -152,6 +157,11 @@ export class LearningDiscussionDetail extends LitElement {
     this.dispatchEvent(
       new LearningDiscussionUnarchiveEvent(this.discussion.id),
     );
+  }
+
+  private _handleDeleteClick() {
+    if (!this.discussion) return;
+    this.dispatchEvent(new LearningDiscussionDeleteEvent(this.discussion.id));
   }
 
   private _handleEditClick() {

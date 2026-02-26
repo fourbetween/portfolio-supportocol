@@ -3,15 +3,10 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { repeat } from "lit/directives/repeat.js";
 import { baseStyle } from "../../../shared/style/base";
-import { hoverButtonStyle } from "../../../shared/style/hover-button";
 import { listStyles } from "../../../shared/style/list";
 import "../../../shared/ui/icons/icon-chat";
-import "../../../shared/ui/icons/icon-delete";
 import "../../../shared/ui/icons/icon-star";
-import {
-  DialogueDiscussionSelectEvent,
-  DialogueFavoriteDeleteEvent,
-} from "../event/discussion";
+import { DialogueDiscussionSelectEvent } from "../event/discussion";
 
 export interface FavoriteItem {
   id: string;
@@ -28,13 +23,6 @@ export class DialogueFavoriteList extends LitElement {
 
   @property({ type: String })
   selectedDiscussionId?: string;
-
-  private handleDelete(e: Event, workspaceId: string, discussionId: string) {
-    e.stopPropagation();
-    this.dispatchEvent(
-      new DialogueFavoriteDeleteEvent(workspaceId, discussionId),
-    );
-  }
 
   render() {
     if (this.favorites.length === 0) {
@@ -70,14 +58,6 @@ export class DialogueFavoriteList extends LitElement {
                   </div>
                 </div>
               </div>
-              <button
-                class="btn-hover danger delete-button"
-                aria-label=${msg("delete")}
-                @click=${(e: Event) =>
-                  this.handleDelete(e, f.workspaceId, f.id)}
-              >
-                <ui-icon-delete></ui-icon-delete>
-              </button>
             </div>
           `,
         )}
@@ -87,7 +67,6 @@ export class DialogueFavoriteList extends LitElement {
 
   static styles = [
     baseStyle,
-    hoverButtonStyle,
     listStyles,
     css`
       .empty {
@@ -125,11 +104,6 @@ export class DialogueFavoriteList extends LitElement {
       }
       .count {
         font-size: 0.8rem;
-      }
-      .delete-button {
-        right: 0;
-        top: 50%;
-        transform: translate(50%, -50%);
       }
     `,
   ];

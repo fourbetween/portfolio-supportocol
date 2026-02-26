@@ -177,7 +177,6 @@ export class DialogueItemPage extends LitElement {
         .favorites=${this._favorites}
         .selectedDiscussionId=${this.discussionId}
         @dialogue-discussion-select=${this._handleFavoriteSelect}
-        @dialogue-favorite-delete=${this._handleFavoriteDelete}
       ></dialogue-favorite-list>
     `;
 

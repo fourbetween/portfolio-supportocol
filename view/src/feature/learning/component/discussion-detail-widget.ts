@@ -1,5 +1,5 @@
 import { consume } from "@lit/context";
-import { msg } from "@lit/localize";
+import { msg, str } from "@lit/localize";
 import { html, LitElement, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { workspaceContext } from "../../../app/context/workspace";
@@ -8,6 +8,8 @@ import { baseStyle } from "../../../shared/style/base";
 import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
   LearningDiscussionArchiveEvent,
+  LearningDiscussionDeletedEvent,
+  LearningDiscussionDeleteEvent,
   LearningDiscussionUnarchiveEvent,
   LearningDiscussionUpdatedEvent,
   LearningDiscussionUpdateDialogueSettingsEvent,
@@ -144,6 +146,28 @@ export class LearningDiscussionDetailWidget extends LitElement {
     }
   }
 
+  private async _handleDeleteDiscussion(e: LearningDiscussionDeleteEvent) {
+    if (!this.discussion || !this.workspace) return;
+    if (
+      !confirm(
+        msg(str`Are you sure you want to delete "${this.discussion.theme}"?`),
+      )
+    ) {
+      return;
+    }
+    try {
+      await discussionRepository.delete(
+        this.workspace.workspace.id,
+        this.discussion.projectId,
+        e.discussionId,
+      );
+      showToast(this, msg("Succeeded."), "success", 2000);
+      this.dispatchEvent(new LearningDiscussionDeletedEvent(e.discussionId));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
   private get _usedFrame() {
     return deriveCommentFrame(this.comments);
   }
@@ -164,6 +188,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
           ._handleUpdateDialogueSettings}
         @learning-discussion-archive=${this._handleArchiveDiscussion}
         @learning-discussion-unarchive=${this._handleUnarchiveDiscussion}
+        @learning-discussion-delete=${this._handleDeleteDiscussion}
       ></learning-discussion-detail>
     `;
   }

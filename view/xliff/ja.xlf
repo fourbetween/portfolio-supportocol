@@ -275,7 +275,7 @@
   <target>議論のアーカイブを解除しました。</target>
 </trans-unit>
 <trans-unit id="sb1a4c9ac23d34cc5">
-  <source>Are you sure you want to delete "<x id="0" equiv-text="${discussion.theme}"/>"?</source>
+  <source>Are you sure you want to delete "<x id="0" equiv-text="${this.discussion.theme}"/>"?</source>
   <target>「<x id="0" equiv-text="${discussion.theme}"/>」を削除してもよろしいですか？</target>
 </trans-unit>
 <trans-unit id="s85e9d4bbecb57754">
@@ -401,10 +401,6 @@
 <trans-unit id="s312a210dd97fac1b">
   <source>Proposed comments</source>
   <target>提案されたコメント</target>
-</trans-unit>
-<trans-unit id="sf3fe6b5fdb85d50a">
-  <source>delete</source>
-  <target>削除</target>
 </trans-unit>
 <trans-unit id="sb3f55a548f39f34a">
   <source>Search discussions...</source>
