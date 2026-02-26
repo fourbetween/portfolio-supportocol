@@ -10,7 +10,7 @@ import {
   WorkspaceDiscussionClearSelectionEvent,
   WorkspaceDiscussionMoveEvent,
 } from "../event/discussion-move";
-import type { Project } from "../model/project";
+import { type Project, sortProjects } from "../model/project";
 
 @customElement("workspace-discussion-move-bar")
 export class WorkspaceDiscussionMoveBar extends LitElement {
@@ -64,7 +64,7 @@ export class WorkspaceDiscussionMoveBar extends LitElement {
             @change=${this._handleProjectChange}
           >
             <option value="" disabled selected>${msg("Move to...")}</option>
-            ${this.projects.map(
+            ${sortProjects(this.projects).map(
               (p) => html`
                 <option value=${p.id}>
                   ${p.isDefault ? msg("Uncategorized") : p.name}

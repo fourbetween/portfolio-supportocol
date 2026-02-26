@@ -3,7 +3,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { listStyles } from "../../../shared/style/list";
-import type { Project } from "../model/project";
+import { type Project, sortProjects } from "../model/project";
 import "./project-item";
 
 @customElement("workspace-project-list")
@@ -12,7 +12,9 @@ export class WorkspaceProjectList extends LitElement {
   projects: Project[] = [];
 
   render() {
-    if (this.projects.length === 0) {
+    const sortedProjects = sortProjects(this.projects);
+
+    if (sortedProjects.length === 0) {
       return html`
         <div class="empty">${msg("No projects found.")}</div>
       `;
@@ -20,7 +22,7 @@ export class WorkspaceProjectList extends LitElement {
 
     return html`
       <div class="list">
-        ${this.projects.map(
+        ${sortedProjects.map(
           (project) => html`
             <workspace-project-item
               .project=${project}
