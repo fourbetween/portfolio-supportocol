@@ -4,7 +4,7 @@ import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { inputStyle } from "../../../shared/style/input";
 import { WorkspaceProjectSelectEvent } from "../event/project";
-import type { Project } from "../model/project";
+import { sortProjects, type Project } from "../model/project";
 
 @customElement("workspace-project-select")
 export class WorkspaceProjectSelect extends LitElement {
@@ -46,19 +46,19 @@ export class WorkspaceProjectSelect extends LitElement {
   }
 
   render() {
+    const sortedProjects = sortProjects(this.projects);
+
     const effectiveSelectedId = this.effectiveSelectedId;
 
     return html`
       <select .value=${effectiveSelectedId} @change=${this.onChange}>
-        ${this.projects.map(
+        ${sortedProjects.map(
           (project) => html`
             <option
               value=${project.id}
               ?selected=${effectiveSelectedId === project.id}
             >
-              ${project.name === "Uncategorized"
-                ? msg("Uncategorized")
-                : project.name}
+              ${project.isDefault ? msg("Uncategorized") : project.name}
             </option>
           `,
         )}
