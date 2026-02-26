@@ -3,8 +3,6 @@ export const WORKSPACE_DISCUSSION_MOVED_EVENT_NAME =
   "workspace-discussion-moved";
 export const WORKSPACE_DISCUSSION_SELECT_TOGGLE_EVENT_NAME =
   "workspace-discussion-select-toggle";
-export const WORKSPACE_DISCUSSION_SELECT_ALL_EVENT_NAME =
-  "workspace-discussion-select-all";
 export const WORKSPACE_DISCUSSION_CLEAR_SELECTION_EVENT_NAME =
   "workspace-discussion-clear-selection";
 
@@ -48,18 +46,6 @@ export class WorkspaceDiscussionSelectToggleEvent extends Event {
   }
 }
 
-export class WorkspaceDiscussionSelectAllEvent extends Event {
-  public readonly projectId: string;
-
-  constructor(projectId: string) {
-    super(WORKSPACE_DISCUSSION_SELECT_ALL_EVENT_NAME, {
-      bubbles: true,
-      composed: true,
-    });
-    this.projectId = projectId;
-  }
-}
-
 export class WorkspaceDiscussionClearSelectionEvent extends Event {
   constructor() {
     super(WORKSPACE_DISCUSSION_CLEAR_SELECTION_EVENT_NAME, {
@@ -74,7 +60,6 @@ declare global {
     [WORKSPACE_DISCUSSION_MOVE_EVENT_NAME]: WorkspaceDiscussionMoveEvent;
     [WORKSPACE_DISCUSSION_MOVED_EVENT_NAME]: WorkspaceDiscussionMovedEvent;
     [WORKSPACE_DISCUSSION_SELECT_TOGGLE_EVENT_NAME]: WorkspaceDiscussionSelectToggleEvent;
-    [WORKSPACE_DISCUSSION_SELECT_ALL_EVENT_NAME]: WorkspaceDiscussionSelectAllEvent;
     [WORKSPACE_DISCUSSION_CLEAR_SELECTION_EVENT_NAME]: WorkspaceDiscussionClearSelectionEvent;
   }
 }

@@ -3,10 +3,3 @@ export interface DiscussionSummaryForMove {
   projectId: string;
   theme: string;
 }
-
-export interface ProjectWithDiscussions {
-  projectId: string;
-  projectName: string;
-  isDefault: boolean;
-  discussions: DiscussionSummaryForMove[];
-}

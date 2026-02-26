@@ -11,10 +11,6 @@ import { widgetStyle } from "../../../shared/style/widget";
 import {
   WorkspaceProjectCreateEvent,
   WorkspaceProjectCreatedEvent,
-  WorkspaceProjectDeleteEvent,
-  WorkspaceProjectDeletedEvent,
-  WorkspaceProjectUpdateEvent,
-  WorkspaceProjectUpdatedEvent,
 } from "../event/project";
 import type { Project } from "../model/project";
 import { projectRepository } from "../repository/project-repository";
@@ -65,37 +61,6 @@ export class WorkspaceProjectsWidget extends LitElement {
     }
   }
 
-  private async handleUpdate(e: WorkspaceProjectUpdateEvent) {
-    if (!this.workspace) return;
-    try {
-      const updatedProject = await projectRepository.update(
-        this.workspace.workspace.id,
-        e.projectId,
-        e.name,
-        e.premise,
-      );
-      this.projects = this.projects.map((p) =>
-        p.id === e.projectId ? updatedProject : p,
-      );
-      showToast(this, msg("Project updated successfully."), "success", 2000);
-      this.dispatchEvent(new WorkspaceProjectUpdatedEvent(updatedProject));
-    } catch (e: any) {
-      showToast(this, e.message, "error");
-    }
-  }
-
-  private async handleDelete(e: WorkspaceProjectDeleteEvent) {
-    if (!this.workspace) return;
-    try {
-      await projectRepository.delete(this.workspace.workspace.id, e.projectId);
-      this.projects = this.projects.filter((p) => p.id !== e.projectId);
-      showToast(this, msg("Project deleted successfully."), "success", 2000);
-      this.dispatchEvent(new WorkspaceProjectDeletedEvent(e.projectId));
-    } catch (e: any) {
-      showToast(this, e.message, "error");
-    }
-  }
-
   render() {
     return html`
       <div class="container-tight">
@@ -106,10 +71,6 @@ export class WorkspaceProjectsWidget extends LitElement {
         ></workspace-project-add-form>
         <workspace-project-list
           .projects=${this.projects}
-          @workspace-project-update=${(e: WorkspaceProjectUpdateEvent) =>
-            this.handleUpdate(e)}
-          @workspace-project-delete=${(e: WorkspaceProjectDeleteEvent) =>
-            this.handleDelete(e)}
         ></workspace-project-list>
       </div>
     `;
