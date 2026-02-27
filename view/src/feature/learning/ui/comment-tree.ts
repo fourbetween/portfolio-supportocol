@@ -56,8 +56,12 @@ export class LearningCommentTree extends LitElement {
 
     if (this.comments) {
       this.availableTypes = deriveCommentFrame(this.comments).types;
+      const commentIds = new Set(this.comments.map((c) => c.id));
       for (const comment of this.comments) {
-        const parentId = comment.parentCommentId || "root";
+        const parentId =
+          comment.parentCommentId && commentIds.has(comment.parentCommentId)
+            ? comment.parentCommentId
+            : "root";
 
         const children = this.childrenMap.get(parentId) || [];
         children.push(comment);
