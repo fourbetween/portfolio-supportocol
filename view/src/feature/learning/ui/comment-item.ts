@@ -1,6 +1,5 @@
-import { LitElement, css, html, nothing, type TemplateResult } from "lit";
+import { LitElement, css, html, type TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
-import { TouchController } from "../../../app/controller/touch";
 import { actionStyle } from "../../../shared/style/action";
 import { baseStyle } from "../../../shared/style/base";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
@@ -55,13 +54,8 @@ export class LearningCommentItem extends LitElement {
   @query("learning-comment-type-popup")
   private typePopup!: LearningCommentTypePopup;
 
-  private touch = new TouchController(this);
-
   private handleCommentSelect(e: LearningCommentSelectEvent) {
     e.stopPropagation();
-    if (this.comment && !this.touch.isTouchDevice) {
-      this.dispatchEvent(new LearningCommentSelectEvent(this.comment.id));
-    }
   }
 
   private handleFocusClick(e: Event) {
@@ -166,16 +160,13 @@ export class LearningCommentItem extends LitElement {
   }
 
   private renderActions() {
-    const isTouch = this.touch.isTouchDevice;
-    const focusButton = isTouch
-      ? this.renderIconButton(
-          html`
-            <ui-icon-ads-click></ui-icon-ads-click>
-          `,
-          "focus",
-          (e) => this.handleFocusClick(e),
-        )
-      : nothing;
+    const focusButton = this.renderIconButton(
+      html`
+        <ui-icon-ads-click></ui-icon-ads-click>
+      `,
+      "focus",
+      (e) => this.handleFocusClick(e),
+    );
 
     if (this.readonly) {
       return focusButton;

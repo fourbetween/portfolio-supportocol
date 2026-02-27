@@ -1,7 +1,6 @@
 import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { TouchController } from "../../../app/controller/touch";
 import { actionStyle } from "../../../shared/style/action";
 import { baseStyle } from "../../../shared/style/base";
 import { hoverButtonStyle } from "../../../shared/style/hover-button";
@@ -41,8 +40,6 @@ export class DialogueCommentItem extends LitElement {
   @state()
   private mode: "view" | "reply" = "view";
 
-  private touch = new TouchController(this);
-
   private get canReply() {
     if (this.readonly) return false;
     if (this.archived || this.comment?.archivedAt) return false;
@@ -66,9 +63,6 @@ export class DialogueCommentItem extends LitElement {
 
   private handleCommentSelect(e: DialogueCommentSelectEvent) {
     e.stopPropagation();
-    if (this.comment && !this.touch.isTouchDevice) {
-      this.dispatchEvent(new DialogueCommentSelectEvent(this.comment.id));
-    }
   }
 
   private handleFocusClick(e: Event) {
@@ -142,17 +136,13 @@ export class DialogueCommentItem extends LitElement {
               </button>
             `
           : nothing}
-        ${this.touch.isTouchDevice
-          ? html`
-              <button
-                class="btn-hover focus-button"
-                @click=${this.handleFocusClick}
-                aria-label=${msg("focus")}
-              >
-                <ui-icon-ads-click></ui-icon-ads-click>
-              </button>
-            `
-          : nothing}
+        <button
+          class="btn-hover focus-button"
+          @click=${this.handleFocusClick}
+          aria-label=${msg("focus")}
+        >
+          <ui-icon-ads-click></ui-icon-ads-click>
+        </button>
       </div>
     `;
   }
