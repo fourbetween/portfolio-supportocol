@@ -3,11 +3,12 @@ import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
+import { formStyle } from "../../../shared/style/form";
 import { inputStyle } from "../../../shared/style/input";
-import "../../../shared/ui/icons/icon-check";
 import "../../../shared/ui/icons/icon-close";
 import "../../../shared/ui/icons/icon-delete";
 import "../../../shared/ui/icons/icon-edit";
+import "../../../shared/ui/icons/icon-save";
 import {
   WorkspaceProjectDeleteEvent,
   WorkspaceProjectUpdateEvent,
@@ -79,13 +80,11 @@ export class WorkspaceProjectDetail extends LitElement {
           ${!this.project.isDefault
             ? html`
                 <div class="actions">
-                  <button class="btn" @click=${this._handleEdit}>
-                    <ui-icon-edit></ui-icon-edit>
-                    ${msg("Edit")}
-                  </button>
                   <button class="btn btn-delete" @click=${this._handleDelete}>
                     <ui-icon-delete></ui-icon-delete>
-                    ${msg("Delete")}
+                  </button>
+                  <button class="btn" @click=${this._handleEdit}>
+                    <ui-icon-edit></ui-icon-edit>
                   </button>
                 </div>
               `
@@ -127,18 +126,21 @@ export class WorkspaceProjectDetail extends LitElement {
               (this._editPremise = (e.target as HTMLTextAreaElement).value)}
           ></textarea>
         </div>
-        <div class="form-actions">
+        <div class="actions">
           <button
-            class="btn btn-primary"
+            class="btn cancel-button"
+            @click=${this._handleCancel}
+            title=${msg("Cancel")}
+          >
+            <ui-icon-close></ui-icon-close>
+          </button>
+          <button
+            class="btn btn-primary save-button"
             ?disabled=${!this._editName.trim()}
             @click=${this._handleSave}
+            title=${msg("Save")}
           >
-            <ui-icon-check></ui-icon-check>
-            ${msg("Save")}
-          </button>
-          <button class="btn btn-secondary" @click=${this._handleCancel}>
-            <ui-icon-close></ui-icon-close>
-            ${msg("Cancel")}
+            <ui-icon-save></ui-icon-save>
           </button>
         </div>
       </div>
@@ -149,6 +151,7 @@ export class WorkspaceProjectDetail extends LitElement {
     baseStyle,
     buttonStyle,
     inputStyle,
+    formStyle,
     css`
       :host {
         display: block;
@@ -236,11 +239,6 @@ export class WorkspaceProjectDetail extends LitElement {
         outline: none;
         border-color: var(--color-accent-fg);
         box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
-      }
-
-      .form-actions {
-        display: flex;
-        gap: 8px;
       }
     `,
   ];
