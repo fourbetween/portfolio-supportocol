@@ -23,11 +23,15 @@ export class LearningCommentCard extends LitElement {
   @property({ type: Boolean })
   readonly = false;
 
+  @property({ type: Boolean })
+  clickable = false;
+
   @state()
   private _isIssuePopupOpen = false;
 
   private _handleClick() {
     if (this.readonly) return;
+    if (!this.clickable) return;
     this.dispatchEvent(new LearningCommentSelectEvent(this.comment?.id));
   }
 
@@ -90,6 +94,7 @@ export class LearningCommentCard extends LitElement {
   private _cardClasses(isArchived: boolean) {
     return {
       "card-body": true,
+      clickable: this.clickable,
       proposed: this.comment?.status === "proposed",
       archived: isArchived,
       readonly: this.readonly,
@@ -105,6 +110,9 @@ export class LearningCommentCard extends LitElement {
     commentCardStyle,
     css`
       :host {
+        cursor: default;
+      }
+      .card-body.clickable {
         cursor: pointer;
       }
       .card-body.readonly {

@@ -150,8 +150,8 @@ export class LearningCommentItem extends LitElement {
         .comment=${this.comment}
         .activeChildrenCount=${this.activeChildrenCount}
         .archived=${this.archived}
+        .clickable=${false}
         @learning-comment-select=${this.handleCommentSelect}
-        style="cursor: pointer;"
       ></learning-comment-card>
       <div class="actions" role="group" aria-label="Actions">
         ${this.renderActions()}

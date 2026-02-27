@@ -111,6 +111,7 @@ export class DialogueCommentItem extends LitElement {
         .comment=${this.comment}
         .activeChildrenCount=${this.activeChildrenCount}
         .archived=${this.archived || !!this.comment?.archivedAt}
+        .clickable=${false}
         @dialogue-comment-select=${this.handleCommentSelect}
       ></dialogue-comment-card>
       <div class="actions" role="group" aria-label="Actions">
