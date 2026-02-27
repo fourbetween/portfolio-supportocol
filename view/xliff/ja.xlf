@@ -734,14 +734,6 @@
   <source>Back to Projects</source>
   <target>プロジェクト一覧に戻る</target>
 </trans-unit>
-<trans-unit id="s64ef2a6c2dd1d3d1">
-  <source>Edit</source>
-  <target>編集</target>
-</trans-unit>
-<trans-unit id="sdc673e73b5c13aea">
-  <source>Delete</source>
-  <target>削除</target>
-</trans-unit>
 <trans-unit id="s1d4545b063b13501">
   <source>Project Name</source>
   <target>プロジェクト名</target>
