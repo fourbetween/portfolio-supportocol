@@ -179,19 +179,19 @@ export class LearningCommentItem extends LitElement {
       return html`
         ${this.renderIconButton(
           html`
-            <ui-icon-check></ui-icon-check>
-          `,
-          "accept",
-          this.handleAcceptClick,
-          "success accept-button",
-        )}
-        ${this.renderIconButton(
-          html`
             <ui-icon-close></ui-icon-close>
           `,
           "reject",
           this.handleRejectClick,
           "danger reject-button",
+        )}
+        ${this.renderIconButton(
+          html`
+            <ui-icon-check></ui-icon-check>
+          `,
+          "accept",
+          this.handleAcceptClick,
+          "success accept-button",
         )}
         ${focusButton}
       `;
@@ -218,18 +218,11 @@ export class LearningCommentItem extends LitElement {
     return html`
       ${this.renderIconButton(
         html`
-          <ui-icon-reply></ui-icon-reply>
+          <ui-icon-delete></ui-icon-delete>
         `,
-        "reply",
-        (e) => this.handleOpenTypePopup(e, "reply"),
-      )}
-      ${this.renderIconButton(
-        html`
-          <ui-icon-edit></ui-icon-edit>
-        `,
-        "edit",
-        this.handleEditClick,
-        "edit-button",
+        "delete",
+        this.handleDeleteClick,
+        "danger delete-button",
       )}
       ${this.renderIconButton(
         html`
@@ -242,11 +235,18 @@ export class LearningCommentItem extends LitElement {
       ${archiveUnarchiveButton}
       ${this.renderIconButton(
         html`
-          <ui-icon-delete></ui-icon-delete>
+          <ui-icon-edit></ui-icon-edit>
         `,
-        "delete",
-        this.handleDeleteClick,
-        "danger delete-button",
+        "edit",
+        this.handleEditClick,
+        "edit-button",
+      )}
+      ${this.renderIconButton(
+        html`
+          <ui-icon-reply></ui-icon-reply>
+        `,
+        "reply",
+        (e) => this.handleOpenTypePopup(e, "reply"),
       )}
       ${focusButton}
     `;

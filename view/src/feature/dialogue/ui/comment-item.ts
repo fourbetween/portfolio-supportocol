@@ -114,17 +114,6 @@ export class DialogueCommentItem extends LitElement {
         @dialogue-comment-select=${this.handleCommentSelect}
       ></dialogue-comment-card>
       <div class="actions" role="group" aria-label="Actions">
-        ${this.canReply
-          ? html`
-              <button
-                class="btn-hover reply-button"
-                @click=${this.handleReplyClick}
-                aria-label=${msg("reply")}
-              >
-                <ui-icon-reply></ui-icon-reply>
-              </button>
-            `
-          : nothing}
         ${this.canIssue
           ? html`
               <button
@@ -133,6 +122,17 @@ export class DialogueCommentItem extends LitElement {
                 aria-label=${msg("report problem")}
               >
                 <ui-icon-report-problem></ui-icon-report-problem>
+              </button>
+            `
+          : nothing}
+        ${this.canReply
+          ? html`
+              <button
+                class="btn-hover reply-button"
+                @click=${this.handleReplyClick}
+                aria-label=${msg("reply")}
+              >
+                <ui-icon-reply></ui-icon-reply>
               </button>
             `
           : nothing}
