@@ -64,6 +64,30 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
+  updated(changedProperties: PropertyValues<this>) {
+    if (changedProperties.has("selectedCommentId") && this.selectedCommentId) {
+      requestAnimationFrame(() => {
+        this.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener("keydown", this._handleKeyDown);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener("keydown", this._handleKeyDown);
+  }
+
+  private _handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape" && this.selectedCommentId) {
+      this.handleClearSelection();
+    }
+  };
+
   private updateDerivedData() {
     this.commentMap.clear();
     this.childrenMap.clear();
