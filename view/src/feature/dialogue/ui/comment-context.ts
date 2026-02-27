@@ -48,6 +48,7 @@ export class DialogueCommentContext extends LitElement {
               .activeChildrenCount=${childCount}
               .archived=${isArchived}
               .readonly=${this.readonly}
+              .clickable=${true}
             ></dialogue-comment-card>
           `}
     `;

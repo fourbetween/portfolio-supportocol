@@ -42,6 +42,7 @@ export class LearningCommentContext extends LitElement {
               .comment=${comment}
               .activeChildrenCount=${childCount}
               .archived=${isArchived}
+              .clickable=${true}
             ></learning-comment-card>
           `}
     `;

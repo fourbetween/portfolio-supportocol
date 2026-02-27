@@ -28,6 +28,7 @@ export class DialogueCommentList extends LitElement {
               ></ui-comment-type-badge>
               <dialogue-comment-card
                 .comment=${comment}
+                .clickable=${true}
               ></dialogue-comment-card>
             </div>
           `,
