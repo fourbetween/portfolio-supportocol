@@ -7,19 +7,16 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/fourbetween/app-supportocol/cmd/api/middleware"
+	"github.com/fourbetween/app-supportocol/internal/app"
 	"github.com/fourbetween/app-supportocol/internal/dialogue"
 	dialogueapi "github.com/fourbetween/app-supportocol/internal/dialogue/api"
 	dialogueoas "github.com/fourbetween/app-supportocol/internal/dialogue/api/oas"
-	dialogueadapter "github.com/fourbetween/app-supportocol/internal/dialogue/infra/adapter"
-	dialoguedb "github.com/fourbetween/app-supportocol/internal/dialogue/infra/db"
 	"github.com/fourbetween/app-supportocol/internal/identity"
 	identityapi "github.com/fourbetween/app-supportocol/internal/identity/api"
 	identityoas "github.com/fourbetween/app-supportocol/internal/identity/api/oas"
-	identityusecase "github.com/fourbetween/app-supportocol/internal/identity/usecase"
 	"github.com/fourbetween/app-supportocol/internal/learning"
 	learningapi "github.com/fourbetween/app-supportocol/internal/learning/api"
 	learningoas "github.com/fourbetween/app-supportocol/internal/learning/api/oas"
-	learningadapter "github.com/fourbetween/app-supportocol/internal/learning/infra/adapter"
 	"github.com/fourbetween/app-supportocol/internal/pkg/env"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
@@ -49,32 +46,27 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 
 	jwtSrv := jwt.NewDefaultService(jwtSecret, httpcookie.CookieMaxAge)
 
-	dialogueFavSvc := dialoguedb.NewDiscussionFavoritesService(dbCon)
-
-	workspaceCon, err := workspace.NewAPIContainer(dbCon, dialogueFavSvc)
+	cons, err := app.NewContainers(dbCon, appConf, awscfg, jwtSrv)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create workspace api container: %w", err)
+		return nil, err
 	}
 
-	identityHandler, err := newIdentityHandler(dbCon, appConf, jwtSrv, workspaceCon.UserCreatedHandler, workspaceCon.UserDeletedHandler)
+	identityHandler, err := newIdentityHandler(jwtSrv, cons.Identity)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create identity handler: %w", err)
 	}
 
-	workspaceHandler, err := newWorkspaceHandler(workspaceCon, jwtSrv)
+	workspaceHandler, err := newWorkspaceHandler(jwtSrv, cons.Workspace)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create workspace handler: %w", err)
 	}
 
-	learningPermSv := learningadapter.NewWorkspacePermissionAdapter(workspaceCon.WorkspaceQueryService)
-	learningAIUsageSv := learningadapter.NewAIUsageAdapter(workspaceCon.AIUsageService)
-	learningHandler, err := newLearningHandler(dbCon, appConf, jwtSrv, awscfg, learningPermSv, learningAIUsageSv)
+	learningHandler, err := newLearningHandler(jwtSrv, cons.Learning)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning handler: %w", err)
 	}
 
-	dialoguePermSv := dialogueadapter.NewWorkspacePermissionAdapter(workspaceCon.WorkspaceQueryService)
-	dialogueHandler, err := newDialogueHandler(dbCon, jwtSrv, dialoguePermSv)
+	dialogueHandler, err := newDialogueHandler(jwtSrv, cons.Dialogue)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create dialogue handler: %w", err)
 	}
@@ -89,17 +81,9 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 }
 
 func newIdentityHandler(
-	dbCon *sql.DB,
-	appConf conf.Service,
 	jwtSrv jwt.Service,
-	userCreatedHandler identityusecase.UserCreatedHandler,
-	userDeletedHandler identityusecase.UserDeletedHandler,
+	con *identity.Container,
 ) (http.Handler, error) {
-	con, err := identity.NewAPIContainer(dbCon, appConf, jwtSrv, userCreatedHandler, userDeletedHandler)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create identity api container: %w", err)
-	}
-
 	server, err := identityoas.NewServer(
 		identityapi.NewHandler(con),
 		identityapi.NewSecurityHandler(jwtSrv),
@@ -117,8 +101,8 @@ func newIdentityHandler(
 }
 
 func newWorkspaceHandler(
-	con *workspace.APIContainer,
 	jwtSrv jwt.Service,
+	con *workspace.Container,
 ) (http.Handler, error) {
 	server, err := workspaceoas.NewServer(
 		workspaceapi.NewHandler(con),
@@ -137,18 +121,9 @@ func newWorkspaceHandler(
 }
 
 func newLearningHandler(
-	dbCon *sql.DB,
-	appConf conf.Service,
 	jwtSrv jwt.Service,
-	awscfg aws.Config,
-	permSv *learningadapter.WorkspacePermissionAdapter,
-	aiUsageSv *learningadapter.AIUsageAdapter,
+	con *learning.Container,
 ) (http.Handler, error) {
-	con, err := learning.NewAPIContainer(dbCon, appConf, awscfg, permSv, aiUsageSv)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create learning api container: %w", err)
-	}
-
 	server, err := learningoas.NewServer(
 		learningapi.NewHandler(con),
 		learningapi.NewSecurityHandler(jwtSrv),
@@ -165,12 +140,7 @@ func newLearningHandler(
 	return handler, nil
 }
 
-func newDialogueHandler(dbCon *sql.DB, jwtSrv jwt.Service, permSv *dialogueadapter.WorkspacePermissionAdapter) (http.Handler, error) {
-	con, err := dialogue.NewAPIContainer(dbCon, permSv)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create dialogue api container: %w", err)
-	}
-
+func newDialogueHandler(jwtSrv jwt.Service, con *dialogue.Container) (http.Handler, error) {
 	server, err := dialogueoas.NewServer(
 		dialogueapi.NewHandler(con),
 		dialogueapi.NewSecurityHandler(jwtSrv),

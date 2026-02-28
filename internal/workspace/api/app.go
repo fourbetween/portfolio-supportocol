@@ -18,10 +18,10 @@ import (
 )
 
 type appHandler struct {
-	con *workspace.APIContainer
+	con *workspace.Container
 }
 
-func NewHandler(con *workspace.APIContainer) oas.Handler {
+func NewHandler(con *workspace.Container) oas.Handler {
 	return &appHandler{
 		con: con,
 	}

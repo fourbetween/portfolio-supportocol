@@ -21,10 +21,10 @@ import (
 )
 
 type appHandler struct {
-	con *learning.APIContainer
+	con *learning.Container
 }
 
-func NewHandler(con *learning.APIContainer) oas.Handler {
+func NewHandler(con *learning.Container) oas.Handler {
 	return &appHandler{con: con}
 }
 

@@ -19,10 +19,10 @@ import (
 )
 
 type appHandler struct {
-	con *identity.APIContainer
+	con *identity.Container
 }
 
-func NewHandler(con *identity.APIContainer) oas.Handler {
+func NewHandler(con *identity.Container) oas.Handler {
 	return &appHandler{
 		con: con,
 	}

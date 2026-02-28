@@ -14,19 +14,19 @@ import (
 	"github.com/fourbetween/pkg-conf/conf"
 )
 
-type APIContainer struct {
+type Container struct {
 	LoginWithGoogle *usecase.LoginWithGoogleUsecase
 	GetUser         *usecase.GetUserUsecase
 	DeleteUser      *usecase.DeleteUserUsecase
 }
 
-func NewAPIContainer(
+func NewContainer(
 	dbCon *sql.DB,
 	appConf conf.Service,
 	jwtSrv jwt.Service,
 	userCreatedHandler usecase.UserCreatedHandler,
 	userDeletedHandler usecase.UserDeletedHandler,
-) (*APIContainer, error) {
+) (*Container, error) {
 	googleClientID, err := appConf.Get("google/client/id")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get Google client ID from config: %w", err)
@@ -59,7 +59,7 @@ func NewAPIContainer(
 		googleClientID,
 	)
 
-	return &APIContainer{
+	return &Container{
 		LoginWithGoogle: usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv, userCreatedHandler, txManager),
 		GetUser:         usecase.NewGetUserUsecase(userRepo),
 		DeleteUser:      usecase.NewDeleteUserUsecase(userRepo, userDeletedHandler, txManager),

@@ -12,7 +12,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 )
 
-type APIContainer struct {
+type Container struct {
 	GetDiscussion   *usecase.GetDiscussionUsecase
 	ListDiscussions *usecase.ListDiscussionsUsecase
 	ListComments    *usecase.ListCommentsUsecase
@@ -20,10 +20,10 @@ type APIContainer struct {
 	AddCommentIssue *usecase.AddCommentIssueUsecase
 }
 
-func NewAPIContainer(
+func NewContainer(
 	dbCon *sql.DB,
 	permSv domain.PermissionService,
-) (*APIContainer, error) {
+) (*Container, error) {
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
 	txManager := dbtx.NewManager(dbCon)
@@ -38,7 +38,7 @@ func NewAPIContainer(
 	commentRepo := db.NewCommentRepository(dbCon, commentFac)
 	auditSv := logging.NewSlogAuditService()
 
-	return &APIContainer{
+	return &Container{
 		GetDiscussion:   usecase.NewGetDiscussionUsecase(discussionRepo, permSv),
 		ListDiscussions: usecase.NewListDiscussionsUsecase(discussionQS, permSv),
 		ListComments:    usecase.NewListCommentsUsecase(discussionRepo, commentRepo, permSv),

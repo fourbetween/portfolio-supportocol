@@ -11,7 +11,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/workspace/usecase"
 )
 
-type APIContainer struct {
+type Container struct {
 	// Workspaces
 	ListMyWorkspaces *usecase.ListMyWorkspacesUsecase
 
@@ -42,10 +42,10 @@ type APIContainer struct {
 	AIUsageService        usecase.AIUsageService
 }
 
-func NewAPIContainer(
+func NewContainer(
 	dbCon *sql.DB,
 	favSvc domain.DiscussionFavoritesService,
-) (*APIContainer, error) {
+) (*Container, error) {
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
 	txManager := dbtx.NewManager(dbCon)
@@ -66,7 +66,7 @@ func NewAPIContainer(
 
 	renewSubscriptionUsc := usecase.NewRenewSubscriptionUsecase(workspaceRepo, planRepo, clockSrv, txManager)
 
-	return &APIContainer{
+	return &Container{
 		// Workspaces
 		ListMyWorkspaces: usecase.NewListMyWorkspacesUsecase(workspaceQuerySrv, renewSubscriptionUsc, clockSrv),
 

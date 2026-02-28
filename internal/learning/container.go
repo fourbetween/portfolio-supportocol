@@ -18,7 +18,7 @@ import (
 	"github.com/fourbetween/pkg-queue/sqs"
 )
 
-type APIContainer struct {
+type Container struct {
 	CreateDiscussion         *usecase.CreateDiscussionUsecase
 	GetDiscussion            *usecase.GetDiscussionUsecase
 	ListDiscussions          *usecase.ListDiscussionsUsecase
@@ -39,13 +39,13 @@ type APIContainer struct {
 	EnqueueCommentGeneration *usecase.EnqueueCommentGenerationUsecase
 }
 
-func NewAPIContainer(
+func NewContainer(
 	dbCon *sql.DB,
 	appConf conf.Service,
 	awscfg aws.Config,
 	permSv domain.PermissionService,
 	aiUsageSv domain.AIUsageService,
-) (*APIContainer, error) {
+) (*Container, error) {
 	idSrv := id.NewUUIDService()
 	clockSrv := clock.NewRealService()
 	txManager := dbtx.NewManager(dbCon)
@@ -72,7 +72,7 @@ func NewAPIContainer(
 
 	auditSv := logging.NewSlogAuditService()
 
-	return &APIContainer{
+	return &Container{
 		CreateDiscussion:         usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac, permSv, txManager, auditSv),
 		GetDiscussion:            usecase.NewGetDiscussionUsecase(discussionRepo, permSv),
 		ListDiscussions:          usecase.NewListDiscussionsUsecase(discussionQS, permSv),
