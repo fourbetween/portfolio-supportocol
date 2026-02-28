@@ -125,6 +125,18 @@ func (r *CommentRepository) Delete(ctx context.Context, c *domain.Comment) error
 	return nil
 }
 
+func (r *CommentRepository) DeleteByDiscussionID(ctx context.Context, discussionID string) error {
+	stmt := table.Comments.
+		DELETE().
+		WHERE(table.Comments.DiscussionID.EQ(mysql.String(discussionID)))
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to delete comments by discussion ID: %w", err)
+	}
+
+	return nil
+}
+
 func (r *CommentRepository) GetPathToRoot(ctx context.Context, commentID string) ([]*domain.Comment, error) {
 	ancestors := mysql.CTE("ancestors")
 

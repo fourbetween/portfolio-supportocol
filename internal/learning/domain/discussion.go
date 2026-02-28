@@ -319,6 +319,43 @@ func (d *Discussion) Unarchive() error {
 	return nil
 }
 
+func (d *Discussion) CanReplaceComments(count int) error {
+	if count > MaxCommentsPerDiscussion {
+		return fmt.Errorf(
+			"comments count %d exceeds the limit of %d: %w",
+			count,
+			MaxCommentsPerDiscussion,
+			apperr.ErrLimitExceeded,
+		)
+	}
+	return nil
+}
+
+func (d *Discussion) ReplaceComments(newComments []*Comment, now time.Time) {
+	proposedCount := 0
+	issuesCount := 0
+	for _, c := range newComments {
+		if c.Status() == CommentStatusProposed {
+			proposedCount++
+		}
+		issuesCount += len(c.Issues())
+	}
+
+	d.stats = DiscussionStats{
+		CommentsCount:         len(newComments),
+		ProposedCommentsCount: proposedCount,
+		IssuesCount:           issuesCount,
+	}
+
+	if len(newComments) > 0 {
+		d.activity.LastCommentedAt = now
+	}
+
+	if d.dialogueSettings != nil {
+		d.dialogueSettings.CommentFrame = d.dialogueSettings.CommentFrame.Supplement(newComments)
+	}
+}
+
 func (d *Discussion) EnsureCommentFrameRequirement(commentType string, parentType string) {
 	if !d.status.RequiresDialogueSettings() || d.dialogueSettings == nil {
 		return
@@ -415,10 +452,17 @@ func (s DialogueSettings) Validate() error {
 	return nil
 }
 
-type CommentFrame struct {
-	Types []string
-	Paths []CommentPath
-}
+type (
+	CommentFrame struct {
+		Types []string
+		Paths []CommentPath
+	}
+
+	CommentPath struct {
+		Child  string
+		Parent string
+	}
+)
 
 func (cf CommentFrame) Sorted() CommentFrame {
 	sortedTypes := append([]string{}, cf.Types...)
@@ -490,11 +534,6 @@ func (cf CommentFrame) Validate() error {
 		}
 	}
 	return nil
-}
-
-type CommentPath struct {
-	Child  string
-	Parent string
 }
 
 func (cf CommentFrame) Supplement(comments []*Comment) CommentFrame {

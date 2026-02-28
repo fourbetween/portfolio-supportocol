@@ -746,6 +746,51 @@ func (o NilID) Or(d ID) ID {
 	return d
 }
 
+// NewNilInt returns new NilInt with value set to v.
+func NewNilInt(v int) NilInt {
+	return NilInt{
+		Value: v,
+	}
+}
+
+// NilInt is nullable int.
+type NilInt struct {
+	Value int
+	Null  bool
+}
+
+// SetTo sets value to v.
+func (o *NilInt) SetTo(v int) {
+	o.Null = false
+	o.Value = v
+}
+
+// IsNull returns true if value is Null.
+func (o NilInt) IsNull() bool { return o.Null }
+
+// SetToNull sets value to null.
+func (o *NilInt) SetToNull() {
+	o.Null = true
+	var v int
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o NilInt) Get() (v int, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o NilInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptBool returns new OptBool with value set to v.
 func NewOptBool(v bool) OptBool {
 	return OptBool{
@@ -1128,6 +1173,56 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) 
 
 // SetContent sets the value of Content.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) SetContent(val CommentContent) {
+	s.Content = val
+}
+
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReq struct {
+	Comments []V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReqCommentsItem `json:"comments"`
+}
+
+// GetComments returns the value of Comments.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReq) GetComments() []V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReqCommentsItem {
+	return s.Comments
+}
+
+// SetComments sets the value of Comments.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReq) SetComments(val []V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReqCommentsItem) {
+	s.Comments = val
+}
+
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReqCommentsItem struct {
+	ParentIndex NilInt         `json:"parentIndex"`
+	CommentType CommentType    `json:"commentType"`
+	Content     CommentContent `json:"content"`
+}
+
+// GetParentIndex returns the value of ParentIndex.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReqCommentsItem) GetParentIndex() NilInt {
+	return s.ParentIndex
+}
+
+// GetCommentType returns the value of CommentType.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReqCommentsItem) GetCommentType() CommentType {
+	return s.CommentType
+}
+
+// GetContent returns the value of Content.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReqCommentsItem) GetContent() CommentContent {
+	return s.Content
+}
+
+// SetParentIndex sets the value of ParentIndex.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReqCommentsItem) SetParentIndex(val NilInt) {
+	s.ParentIndex = val
+}
+
+// SetCommentType sets the value of CommentType.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReqCommentsItem) SetCommentType(val CommentType) {
+	s.CommentType = val
+}
+
+// SetContent sets the value of Content.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReqCommentsItem) SetContent(val CommentContent) {
 	s.Content = val
 }
 
