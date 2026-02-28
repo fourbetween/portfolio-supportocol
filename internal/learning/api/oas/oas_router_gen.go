@@ -196,8 +196,13 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										args[0],
 										args[1],
 									}, elemIsEscaped, w, r)
+								case "PUT":
+									s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutRequest([2]string{
+										args[0],
+										args[1],
+									}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "GET,POST")
+									s.notAllowed(w, r, "GET,POST,PUT")
 								}
 
 								return
@@ -665,6 +670,15 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									return r, true
 								case "POST":
 									r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation
+									r.summary = ""
+									r.operationID = ""
+									r.operationGroup = ""
+									r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments"
+									r.args = args
+									r.count = 2
+									return r, true
+								case "PUT":
+									r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutOperation
 									r.summary = ""
 									r.operationID = ""
 									r.operationGroup = ""

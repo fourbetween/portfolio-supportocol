@@ -17,6 +17,7 @@ const (
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation                 OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetOperation                          OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation                         OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost"
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutOperation                          OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPut"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteOperation                               OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDelete"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetOperation                                  OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGet"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutOperation                                  OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPut"

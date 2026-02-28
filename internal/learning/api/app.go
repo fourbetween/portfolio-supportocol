@@ -231,6 +231,41 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	return res, nil
 }
 
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPut(
+	ctx context.Context,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutParams,
+) ([]oas.Comment, error) {
+	items := make([]usecase.ReplaceCommentItem, len(req.Comments))
+	for i, c := range req.Comments {
+		var parentIndex *int
+		if v, ok := c.ParentIndex.Get(); ok {
+			parentIndex = &v
+		}
+		items[i] = usecase.ReplaceCommentItem{
+			ParentIndex: parentIndex,
+			CommentType: string(c.CommentType),
+			Content:     string(c.Content),
+		}
+	}
+
+	comments, err := h.con.ReplaceComments.Execute(ctx, usecase.ReplaceCommentsInput{
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		UserID:       httpctx.GetUserID(ctx),
+		Comments:     items,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]oas.Comment, len(comments))
+	for i, item := range comments {
+		res[i] = h.toOasComment(item)
+	}
+	return res, nil
+}
+
 func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(
 	ctx context.Context,
 	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq,

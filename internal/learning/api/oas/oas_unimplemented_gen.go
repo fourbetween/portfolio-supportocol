@@ -112,6 +112,15 @@ func (UnimplementedHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussion
 	return r, ht.ErrNotImplemented
 }
 
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
+//
+// Replace all comments in a discussion.
+//
+// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments
+func (UnimplementedHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutParams) (r []Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId} operation.
 //
 // Delete discussion.

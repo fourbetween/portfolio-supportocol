@@ -74,6 +74,12 @@ type Handler interface {
 	//
 	// POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams) (*Comment, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
+	//
+	// Replace all comments in a discussion.
+	//
+	// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutParams) ([]Comment, error)
 	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId} operation.
 	//
 	// Delete discussion.

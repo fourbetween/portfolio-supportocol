@@ -473,6 +473,50 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    put:
+      description: replace all comments in a discussion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      parentIndex:
+                        anyOf:
+                          - type: integer
+                            minimum: 0
+                          - type: "null"
+                      commentType:
+                        $ref: "#/components/schemas/CommentType"
+                      content:
+                        $ref: "#/components/schemas/CommentContent"
+                    required:
+                      - parentIndex
+                      - commentType
+                      - content
+              required:
+                - comments
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
     post:
       description: create comment
       requestBody:
