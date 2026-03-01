@@ -55,7 +55,9 @@ export class MarketingHomePage extends LitElement {
     return html`
       <main class="container container--narrow hero">
         <h1>Supportocol</h1>
-        <p class="description">${msg("A platform for logical discussion")}</p>
+        <p class="description">
+          ${msg("A platform for systematic discussion")}
+        </p>
 
         <div class="actions">
           <a href=${paths.dialogue.search} class="btn btn-primary btn-large">

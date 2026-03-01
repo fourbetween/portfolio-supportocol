@@ -42,7 +42,7 @@ export class MarketingHowToUsePage extends LitElement {
           <h1>${msg("How to Use")}</h1>
           <p class="description">
             ${msg(
-              "Supportocol is a platform that supports logical discussion. Here is a guide to help you get started.",
+              "Supportocol is a platform that supports systematic discussion. Here is a guide to help you get started.",
             )}
           </p>
         </header>
@@ -94,7 +94,7 @@ export class MarketingHowToUsePage extends LitElement {
               </div>
               <p>
                 ${msg(
-                  "All comments are organized in a tree structure. Each comment inherits its ancestral comments as logical premises, which helps focus the reasoning.",
+                  "All comments are organized in a tree structure. Each comment inherits its ancestral comments as premises, which helps focus the reasoning.",
                 )}
               </p>
             </div>

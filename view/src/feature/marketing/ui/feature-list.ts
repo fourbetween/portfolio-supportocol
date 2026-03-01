@@ -16,7 +16,7 @@ export class MarketingFeatureList extends LitElement {
         <marketing-feature-card
           .title=${msg("Dialogue")}
           .description=${msg(
-            "A feature for discussing with everyone. It promotes logical discussion by following comment frames.",
+            "A feature for discussing with everyone. It promotes systematic discussion by following comment frames.",
           )}
           .href=${paths.dialogue.search}
         >

@@ -37,7 +37,7 @@ export const pwaPlugin = (mode: string) => {
       ],
       name: "Supportocol",
       short_name: "Supportocol",
-      description: "A platform for logical discussion",
+      description: "A platform for systematic discussion",
       start_url: paths.learning.dashboard,
       theme_color: "#000000",
     },
