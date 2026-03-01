@@ -110,10 +110,6 @@
   <source>No discussions found.</source>
   <target>議論が見つかりません。</target>
 </trans-unit>
-<trans-unit id="sfde43e1b6051b99c">
-  <source>Circular Reasoning</source>
-  <target>循環論法</target>
-</trans-unit>
 <trans-unit id="s8d8c5628654a7989">
   <source>Ad Hominem</source>
   <target>人身攻撃</target>
@@ -121,10 +117,6 @@
 <trans-unit id="s3f8dacc2396d2e60">
   <source>Straw Man</source>
   <target>藁人形論法</target>
-</trans-unit>
-<trans-unit id="sca7c130a1ef5cdf5">
-  <source>Red Herring</source>
-  <target>燻製ニシンの虚偽</target>
 </trans-unit>
 <trans-unit id="sd305a727fb4d962f">
   <source>Add Issue</source>
@@ -538,10 +530,6 @@
   <source>Containing internal logical conflicts or self-contradictions.</source>
   <target>論理的な食い違いや、自己矛盾を含んでいる。</target>
 </trans-unit>
-<trans-unit id="se0d25c239124306b">
-  <source>Assuming the truth of the conclusion as a premise instead of providing evidence.</source>
-  <target>証拠を示さず、結論そのものを前提として話を進めている（循環論法）。</target>
-</trans-unit>
 <trans-unit id="s7d1fe9833d40d292">
   <source>Attacking the person's character or personal traits instead of addressing the substance of their argument.</source>
   <target>議論の中身ではなく、相手の人格や性格を攻撃している（対人論証）。</target>
@@ -549,58 +537,6 @@
 <trans-unit id="s51603b59b1c11999">
   <source>Misrepresenting an opponent's argument to make it easier to attack.</source>
   <target>相手の主張をわざと歪めて解釈し、攻撃しやすい形にすり替えている（ストローマン論法）。</target>
-</trans-unit>
-<trans-unit id="s8570d0aff6443052">
-  <source>Introducing irrelevant information to distract from the issue at hand.</source>
-  <target>無関係な話題を持ち出して、本来の論点から注意をそらしている（燻製ニシンの虚偽）。</target>
-</trans-unit>
-<trans-unit id="s5fed5d7a9fbacb81">
-  <source>False Dilemma</source>
-  <target>誤った二分法</target>
-</trans-unit>
-<trans-unit id="s50cdbfeafd34e975">
-  <source>Presenting only two options as if no other alternatives exist.</source>
-  <target>他にも選択肢があるのに、極端な二者択一であるかのように提示している。</target>
-</trans-unit>
-<trans-unit id="s3c5e84fabeecf9bc">
-  <source>Hasty Generalization</source>
-  <target>早まった一般化</target>
-</trans-unit>
-<trans-unit id="s76efe0d26b301f4e">
-  <source>Drawing a broad conclusion based on insufficient or unrepresentative evidence.</source>
-  <target>ごく一部の事例や不十分な証拠だけで、全体を断定している。</target>
-</trans-unit>
-<trans-unit id="s218197dec743d826">
-  <source>Moving the Goalposts</source>
-  <target>ゴールポストを動かす</target>
-</trans-unit>
-<trans-unit id="s1ab7230191187f49">
-  <source>Changing the criteria of the discussion after the initial requirements have been met.</source>
-  <target>反論されたり条件が満たされたりした後で、議論の基準や要求を勝手に変更している。</target>
-</trans-unit>
-<trans-unit id="s5af8b1b73f0dd092">
-  <source>Appeal to Emotion</source>
-  <target>感情への訴えかけ</target>
-</trans-unit>
-<trans-unit id="s9ad8844ff008fa7f">
-  <source>Attempting to manipulate an emotional response instead of using valid, logical reasoning.</source>
-  <target>論理的な根拠ではなく、感情に訴えかけて同意を得ようとしている。</target>
-</trans-unit>
-<trans-unit id="s2c99d2a2f81ecc25">
-  <source>Shifting the Burden of Proof</source>
-  <target>立証責任の転嫁</target>
-</trans-unit>
-<trans-unit id="s9de03798aa258301">
-  <source>Claiming that the opponent must disprove a statement rather than providing evidence to support it yourself.</source>
-  <target>自ら根拠を示すのではなく、「間違っているなら証明してみろ」と相手に反証を求めている。</target>
-</trans-unit>
-<trans-unit id="se0dc6fec8fed259a">
-  <source>Slippery Slope</source>
-  <target>滑り坂論法</target>
-</trans-unit>
-<trans-unit id="sc712f6fee875bc1e">
-  <source>Claiming that a small first step will inevitably lead to extreme consequences without sufficient proof.</source>
-  <target>根拠もなく、「それを認めると、ドミノ倒しに極端な結果になる」と主張している。</target>
 </trans-unit>
 <trans-unit id="s7fe77c35be49b613">
   <source>False Cause</source>
@@ -889,6 +825,14 @@
 <trans-unit id="sbcbbaac19c23719f">
   <source>A feature for discussing with everyone. It promotes systematic discussion by following comment frames.</source>
   <target>みんなで議論するための機能です。コメントフレームに従うことで体系的な議論を促進します。</target>
+</trans-unit>
+<trans-unit id="s21345127ca0ca30c">
+  <source>Mismatched Type and Content</source>
+  <target>コメント種類と内容の不一致</target>
+</trans-unit>
+<trans-unit id="sbdf38c1d26e7030c">
+  <source>The selected comment type does not accurately reflect the actual content.</source>
+  <target>選択されたコメントの種類が、実際の内容を正確に反映していません。</target>
 </trans-unit>
 </body>
 </file>
