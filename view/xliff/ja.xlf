@@ -614,18 +614,6 @@
   <source>Assuming that because two things happened together, one must have caused the other.</source>
   <target>同時に起きたというだけで、一方をもう一方の原因だと決めつけている。</target>
 </trans-unit>
-<trans-unit id="sa5c64d0b90418828">
-  <source>Organize your thoughts through structured note-taking.</source>
-  <target>構造化されたノートを用いて思考を整理できます。</target>
-</trans-unit>
-<trans-unit id="s54480243bb53a8c5">
-  <source>Engage in logical discussions with everyone using your own defined frameworks.</source>
-  <target>自分で定義したフレームワークを使って、みんなと論理的な対話を行えます。</target>
-</trans-unit>
-<trans-unit id="se32666a0c2dcee68">
-  <source>Organize your discussions into projects.</source>
-  <target>議論をプロジェクトごとに整理できます。</target>
-</trans-unit>
 <trans-unit id="s3606b9d856cdbafe">
   <source>Sort by</source>
   <target>並べ替え</target>
@@ -737,6 +725,170 @@
 <trans-unit id="s1d4545b063b13501">
   <source>Project Name</source>
   <target>プロジェクト名</target>
+</trans-unit>
+<trans-unit id="sa0ce4ef7ce6f1191">
+  <source>How to Use</source>
+  <target>使用方法</target>
+</trans-unit>
+<trans-unit id="s155d57c09a5a656c">
+  <source>Supportocol is a platform that supports logical discussion. Here is a guide to help you get started.</source>
+  <target>Supportocolは論理的な議論を支援するプラットフォームです。以下のガイドで使い方を確認しましょう。</target>
+</trans-unit>
+<trans-unit id="s0330c151a844c01e">
+  <source>Getting Started</source>
+  <target>はじめに</target>
+</trans-unit>
+<trans-unit id="sadee6e64fc5b19ff">
+  <source>Main Features</source>
+  <target>主な機能</target>
+</trans-unit>
+<trans-unit id="sb1df8a2f6df0d9e8">
+  <source>Icon Guide</source>
+  <target>アイコンガイド</target>
+</trans-unit>
+<trans-unit id="s21054eefc0a6da33">
+  <source>This app uses icon buttons throughout the interface. Here is what each icon means.</source>
+  <target>このアプリはインターフェース全体でアイコンボタンを多用しています。各アイコンの意味は以下の通りです。</target>
+</trans-unit>
+<trans-unit id="s07e6118e838b2e23">
+  <source>Navigation</source>
+  <target>ナビゲーション</target>
+</trans-unit>
+<trans-unit id="s5d929ff1619ac0c9">
+  <source>Search</source>
+  <target>検索</target>
+</trans-unit>
+<trans-unit id="s9d8b8aa2b404c2c8">
+  <source>Settings</source>
+  <target>設定</target>
+</trans-unit>
+<trans-unit id="s81ec7a6847534d5e">
+  <source>Go Back</source>
+  <target>戻る</target>
+</trans-unit>
+<trans-unit id="s8af61807443f32a4">
+  <source>Actions</source>
+  <target>アクション</target>
+</trans-unit>
+<trans-unit id="s4ec58dc6a75753da">
+  <source>Add New</source>
+  <target>新規追加</target>
+</trans-unit>
+<trans-unit id="s9bdd49ff895b8d39">
+  <source>Add Comment</source>
+  <target>コメントを追加</target>
+</trans-unit>
+<trans-unit id="s64ef2a6c2dd1d3d1">
+  <source>Edit</source>
+  <target>編集</target>
+</trans-unit>
+<trans-unit id="sdc673e73b5c13aea">
+  <source>Delete</source>
+  <target>削除</target>
+</trans-unit>
+<trans-unit id="sb85774dc5d18ff0f">
+  <source>Confirm</source>
+  <target>確認</target>
+</trans-unit>
+<trans-unit id="sd468b8144fcf97ff">
+  <source>Discussion &amp; Comments</source>
+  <target>議論とコメント</target>
+</trans-unit>
+<trans-unit id="s4b2eb5f0de44ec5a">
+  <source>Tree View</source>
+  <target>ツリー表示</target>
+</trans-unit>
+<trans-unit id="s440af0f6a385e466">
+  <source>AI Assist</source>
+  <target>AIアシスト</target>
+</trans-unit>
+<trans-unit id="s3b151ca64eb26ec1">
+  <source>Expand</source>
+  <target>展開</target>
+</trans-unit>
+<trans-unit id="s24761a0cc8d9c0aa">
+  <source>Organization</source>
+  <target>整理</target>
+</trans-unit>
+<trans-unit id="sa0ca791d0f13f0e5">
+  <source>Archive</source>
+  <target>アーカイブ</target>
+</trans-unit>
+<trans-unit id="sf71a90bc017f1e80">
+  <source>Unarchive</source>
+  <target>アーカイブ解除</target>
+</trans-unit>
+<trans-unit id="sdd1ff479d04ac140">
+  <source>Public</source>
+  <target>公開</target>
+</trans-unit>
+<trans-unit id="s846b3790b6e25c1c">
+  <source>Account</source>
+  <target>アカウント</target>
+</trans-unit>
+<trans-unit id="sb45f4f28591a163b">
+  <source>Join Ongoing Dialogues</source>
+  <target>公開中の対話に参加してみよう</target>
+</trans-unit>
+<trans-unit id="s1ec4638cd23b556e">
+  <source>Read public discussions of interest and contribute your opinions.</source>
+  <target>公開中の興味のある議論を読み、コメントしてください。</target>
+</trans-unit>
+<trans-unit id="s3b420a31fd294bc4">
+  <source>Create Your Own Discussion</source>
+  <target>自分の議論を作成してみよう</target>
+</trans-unit>
+<trans-unit id="sedd69c8e46822e59">
+  <source>Organize your thoughts with structured notes.</source>
+  <target>構造化されたノートで思考を整理できます。</target>
+</trans-unit>
+<trans-unit id="s421b5afbcfc114b5">
+  <source>Publish Your Discussion</source>
+  <target>自分の議論を公開しよう</target>
+</trans-unit>
+<trans-unit id="sb7751d59f10a0d5f">
+  <source>By publishing your discussion, you might receive ideas from readers.</source>
+  <target>議論を公開することで、読んでくれた人からアイデアをもらえるかもしれません。</target>
+</trans-unit>
+<trans-unit id="sac019b604600e3a4">
+  <source>A feature for discussing with everyone. It promotes logical discussion by following comment frames.</source>
+  <target>みんなで議論するための機能です。コメントフレームに従うことで論理的な議論を促進します。</target>
+</trans-unit>
+<trans-unit id="safe81811914dda33">
+  <source>A feature for organizing your thoughts. It helps you find which structure is suitable for the discussion topic.</source>
+  <target>自分の考えを整理するための機能です。どういった構造がその議論テーマに適しているのかを見つけるのに役立ちます。</target>
+</trans-unit>
+<trans-unit id="s35b2aa8797565b4d">
+  <source>Organize discussions by project. You can easily move discussions between projects.</source>
+  <target>プロジェクト毎に議論を整理できます。議論をプロジェクト間で簡単に移動できます。</target>
+</trans-unit>
+<trans-unit id="s7a159e4b0113992b">
+  <source>Core Concepts</source>
+  <target>主要なコンセプト</target>
+</trans-unit>
+<trans-unit id="sf8cc7c88778cd8e3">
+  <source>Tree-Structured Comments</source>
+  <target>木構造のコメント</target>
+</trans-unit>
+<trans-unit id="s90c99015bf165177">
+  <source>All comments are organized in a tree structure. Each comment inherits all its ancestral comments as logical premises, ensuring a clear flow of reasoning.</source>
+  <target>すべてのコメントは木構造で管理されます。各コメントはその祖先にあたるすべてのコメントを論理的な前提として引き継ぐため、思考の正確な流れを維持できます。</target>
+</trans-unit>
+<trans-unit id="sf4be51bceb3e0bc8">
+  <source>Comment Frames</source>
+  <target>コメントフレーム</target>
+</trans-unit>
+<trans-unit id="sb5d93ef6a3c6004f">
+  <source>A Comment Frame defines available comment types and allowed transition paths. It guides the discussion by determining which type of response can follow a specific comment.</source>
+  <target>コメントフレームは、利用可能なコメントの種類と、それらの間の許容される遷移経路を定義したものです。特定のコメントに対してどのような返信が機能的に有効かを決定し、議論を導きます。</target>
+</trans-unit>
+<trans-unit id="sb12c58495bc9b62a">
+  <source>Flexibility vs Structure</source>
+  <target>柔軟性と制約</target>
+</trans-unit>
+<trans-unit id="s5e135a1fc0963323">
+  <source>In the Learning context, Comment Frames are dynamic and flexible for personal thought organization. In the Dialogue context, predefined Comment Frames are enforced to ensure logical and constructive public discussions.</source>
+  <target>「学習」コンテキストでは、個人の思考整理のためにコメントフレームを動的かつ自由に変更できます。一方、「対話」コンテキストでは、論理的で建設的な公の議論を保証するために、定義済みのコメントフレームによる制約が適用されます。</target>
 </trans-unit>
 </body>
 </file>

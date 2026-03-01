@@ -3,6 +3,7 @@ import type { Router } from "@lit-labs/router";
 export const paths = {
   marketing: {
     home: "/",
+    howToUse: "/how-to-use",
   },
   learning: {
     dashboard: "/learning/discussions",

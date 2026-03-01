@@ -18,12 +18,22 @@ export class MarketingRoot extends LitElement {
           <marketing-home-page></marketing-home-page>
         `,
       },
+      {
+        path: pathInFeature(paths.marketing.howToUse),
+        enter: async () => {
+          await import("./page/how-to-use-page");
+          return true;
+        },
+        render: () => html`
+          <marketing-how-to-use-page></marketing-how-to-use-page>
+        `,
+      },
     ],
     {
       fallback: {
         render: () => nothing,
       },
-    }
+    },
   );
 
   render() {

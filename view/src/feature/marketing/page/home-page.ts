@@ -8,14 +8,12 @@ import { routerContext } from "../../../app/context/router";
 import { navigate, paths } from "../../../app/paths";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
-import "../../../shared/ui/icons/icon-folder";
-import "../../../shared/ui/icons/icon-forum";
-import "../../../shared/ui/icons/icon-school";
 import "../../../shared/ui/icons/icon-search";
 import { DialogueDiscussionSelectEvent } from "../../dialogue/event/discussion";
 import type { DiscussionSummary } from "../../dialogue/model/discussion";
 import { discussionRepository } from "../../dialogue/repository/discussion-repository";
 import "../../dialogue/ui/discussion-list";
+import "../ui/feature-list";
 
 const HOME_PAGE_SIZE = 10;
 
@@ -64,6 +62,9 @@ export class MarketingHomePage extends LitElement {
             <ui-icon-search></ui-icon-search>
             ${msg("Public Discussions")}
           </a>
+          <a href=${paths.marketing.howToUse} class="link">
+            ${msg("How to Use")}
+          </a>
         </div>
 
         <section class="popular">
@@ -75,27 +76,7 @@ export class MarketingHomePage extends LitElement {
         </section>
 
         <section class="features">
-          <a href=${paths.learning.dashboard} class="feature">
-            <ui-icon-school class="feature-icon" .size=${40}></ui-icon-school>
-            <h3>${msg("Learning")}</h3>
-            <p>
-              ${msg("Organize your thoughts through structured note-taking.")}
-            </p>
-          </a>
-          <a href=${paths.dialogue.search} class="feature">
-            <ui-icon-forum class="feature-icon" .size=${40}></ui-icon-forum>
-            <h3>${msg("Dialogue")}</h3>
-            <p>
-              ${msg(
-                "Engage in logical discussions with everyone using your own defined frameworks.",
-              )}
-            </p>
-          </a>
-          <a href=${paths.workspace.projects} class="feature">
-            <ui-icon-folder class="feature-icon" .size=${40}></ui-icon-folder>
-            <h3>${msg("Projects")}</h3>
-            <p>${msg("Organize your discussions into projects.")}</p>
-          </a>
+          <marketing-feature-list></marketing-feature-list>
         </section>
       </main>
     `;
@@ -155,47 +136,12 @@ export class MarketingHomePage extends LitElement {
         text-align: left;
       }
 
-      .feature {
-        display: block;
-        text-decoration: none;
-        padding: 24px;
-        border-radius: 12px;
-        background-color: var(--color-canvas-subtle);
-        border: 1px solid var(--color-border-default);
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s;
-      }
-
-      .feature:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-medium);
-      }
-
-      .feature-icon {
-        color: var(--color-accent-fg);
-        margin-bottom: 16px;
-        display: block;
-      }
-
-      .feature h3 {
-        font-size: 24px;
-        margin: 0 0 12px 0;
-        color: var(--color-fg-default);
-      }
-
-      .feature p {
-        font-size: 16px;
-        color: var(--color-fg-muted);
-        margin: 0;
-        line-height: 1.6;
-      }
-
       .actions {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 16px;
+        gap: 24px;
         flex-wrap: wrap;
       }
 

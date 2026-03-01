@@ -8,6 +8,7 @@ import "../../feature/workspace/component/workspace-select-widget";
 import { baseStyle } from "../../shared/style/base";
 import "../../shared/ui/icons/icon-folder";
 import "../../shared/ui/icons/icon-forum";
+import "../../shared/ui/icons/icon-help";
 import "../../shared/ui/icons/icon-login";
 import "../../shared/ui/icons/icon-school";
 import "../../shared/ui/icons/icon-settings";
@@ -43,6 +44,13 @@ export class AppHeader extends LitElement {
           </a>
         </nav>
         <div class="header-actions">
+          <a
+            href=${paths.marketing.howToUse}
+            class="nav-item account-link"
+            aria-label=${msg("How to Use")}
+          >
+            <ui-icon-help .size=${20}></ui-icon-help>
+          </a>
           ${this.user
             ? html`
                 <a
