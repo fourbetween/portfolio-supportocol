@@ -94,7 +94,7 @@ export class MarketingHowToUsePage extends LitElement {
               </div>
               <p>
                 ${msg(
-                  "All comments are organized in a tree structure. Each comment inherits all its ancestral comments as logical premises, ensuring a clear flow of reasoning.",
+                  "All comments are organized in a tree structure. Each comment inherits its ancestral comments as logical premises, which helps focus the reasoning.",
                 )}
               </p>
             </div>
@@ -106,7 +106,7 @@ export class MarketingHowToUsePage extends LitElement {
               </div>
               <p>
                 ${msg(
-                  "A Comment Frame defines available comment types and allowed transition paths. It guides the discussion by determining which type of response can follow a specific comment.",
+                  "A Comment Frame defines available comment types and allowed transition paths. It indicates which type of response can follow a specific comment.",
                 )}
               </p>
             </div>
@@ -121,7 +121,7 @@ export class MarketingHowToUsePage extends LitElement {
               </div>
               <p>
                 ${msg(
-                  "In the Learning context, Comment Frames are dynamic and flexible for personal thought organization. In the Dialogue context, predefined Comment Frames are enforced to ensure logical and constructive public discussions.",
+                  "In the Learning context, Comment Frames are dynamic and flexible for personal thought organization. In the Dialogue context, predefined Comment Frames are enforced to ensure systematic discussions.",
                 )}
               </p>
             </div>
