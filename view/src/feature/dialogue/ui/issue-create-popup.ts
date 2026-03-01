@@ -13,16 +13,16 @@ import "./comment-context";
 
 const TEMPLATES = [
   {
+    title: () => msg("Mismatched Type and Content"),
+    description: () =>
+      msg(
+        "The selected comment type does not accurately reflect the actual content.",
+      ),
+  },
+  {
     title: () => msg("Inconsistency"),
     description: () =>
       msg("Containing internal logical conflicts or self-contradictions."),
-  },
-  {
-    title: () => msg("Circular Reasoning"),
-    description: () =>
-      msg(
-        "Assuming the truth of the conclusion as a premise instead of providing evidence.",
-      ),
   },
   {
     title: () => msg("Ad Hominem"),
@@ -36,53 +36,6 @@ const TEMPLATES = [
     description: () =>
       msg(
         "Misrepresenting an opponent's argument to make it easier to attack.",
-      ),
-  },
-  {
-    title: () => msg("Red Herring"),
-    description: () =>
-      msg(
-        "Introducing irrelevant information to distract from the issue at hand.",
-      ),
-  },
-  {
-    title: () => msg("False Dilemma"),
-    description: () =>
-      msg("Presenting only two options as if no other alternatives exist."),
-  },
-  {
-    title: () => msg("Hasty Generalization"),
-    description: () =>
-      msg(
-        "Drawing a broad conclusion based on insufficient or unrepresentative evidence.",
-      ),
-  },
-  {
-    title: () => msg("Moving the Goalposts"),
-    description: () =>
-      msg(
-        "Changing the criteria of the discussion after the initial requirements have been met.",
-      ),
-  },
-  {
-    title: () => msg("Appeal to Emotion"),
-    description: () =>
-      msg(
-        "Attempting to manipulate an emotional response instead of using valid, logical reasoning.",
-      ),
-  },
-  {
-    title: () => msg("Shifting the Burden of Proof"),
-    description: () =>
-      msg(
-        "Claiming that the opponent must disprove a statement rather than providing evidence to support it yourself.",
-      ),
-  },
-  {
-    title: () => msg("Slippery Slope"),
-    description: () =>
-      msg(
-        "Claiming that a small first step will inevitably lead to extreme consequences without sufficient proof.",
       ),
   },
   {
