@@ -116,9 +116,6 @@ export class LearningCommentCreateWidget extends LitElement {
   static styles = [
     baseStyle,
     css`
-      :host {
-        display: block;
-      }
       .container {
         padding: 8px 0;
       }

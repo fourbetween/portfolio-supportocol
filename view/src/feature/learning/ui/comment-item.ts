@@ -312,9 +312,6 @@ export class LearningCommentItem extends LitElement {
     hoverButtonStyle,
     actionStyle,
     css`
-      :host {
-        display: block;
-      }
       .reply-form {
         margin-left: 8px;
         padding-left: 8px;

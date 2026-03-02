@@ -153,9 +153,6 @@ export class DialogueCommentItem extends LitElement {
     hoverButtonStyle,
     actionStyle,
     css`
-      :host {
-        display: block;
-      }
       .reply-form-wrapper {
         margin-left: 8px;
         padding-left: 8px;

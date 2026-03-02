@@ -1,5 +1,5 @@
 import { msg } from "@lit/localize";
-import { LitElement, css, html } from "lit";
+import { LitElement, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { listStyles } from "../../../shared/style/list";
@@ -33,13 +33,5 @@ export class WorkspaceProjectList extends LitElement {
     `;
   }
 
-  static styles = [
-    baseStyle,
-    listStyles,
-    css`
-      :host {
-        display: block;
-      }
-    `,
-  ];
+  static styles = [baseStyle, listStyles];
 }

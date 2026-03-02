@@ -99,10 +99,6 @@ export class WorkspaceProjectDiscussionSelectList extends LitElement {
   static styles = [
     baseStyle,
     css`
-      :host {
-        display: block;
-      }
-
       .empty {
         padding: 16px;
         text-align: center;
