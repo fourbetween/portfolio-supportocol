@@ -12,7 +12,7 @@ export const actionStyle = css`
     gap: 8px;
     position: absolute;
     bottom: -16px;
-    left: 8px;
+    right: 8px;
   }
   .actions .btn-hover {
     position: static;
