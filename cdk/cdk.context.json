@@ -35,5 +35,18 @@
   "hosted-zone:account=966392475035:domainName=supportocol.com:region=ap-northeast-1": {
     "Id": "/hostedzone/Z0092955RYWUA5ULZU5Z",
     "Name": "supportocol.com."
-  }
+  },
+  "cc-api-provider:account=966392475035:exactIdentifier=share-rds34d05673-su86rbzo4izr:propertiesToReturn.0=DBInstanceArn:propertiesToReturn.1=Endpoint.Address:propertiesToReturn.2=Endpoint.Port:propertiesToReturn.3=DbiResourceId:propertiesToReturn.4=DBSecurityGroups:propertiesToReturn.5=VPCSecurityGroups:region=ap-northeast-1:typeName=AWS$:$:RDS$:$:DBInstance": [
+    {
+      "DBInstanceArn": "arn:aws:rds:ap-northeast-1:966392475035:db:share-rds34d05673-su86rbzo4izr",
+      "Endpoint.Address": "share-rds34d05673-su86rbzo4izr.cxc6s8w24jlm.ap-northeast-1.rds.amazonaws.com",
+      "Endpoint.Port": "3306",
+      "DbiResourceId": "db-K6SXSWWZZKV5CPBBCSHYPEHYME",
+      "DBSecurityGroups": [],
+      "VPCSecurityGroups": [
+        "sg-052c20f1ba93ffae1"
+      ],
+      "Identifier": "share-rds34d05673-su86rbzo4izr"
+    }
+  ]
 }
