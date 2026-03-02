@@ -12,7 +12,7 @@ export const actionStyle = css`
     gap: 8px;
     position: absolute;
     bottom: -16px;
-    right: 8px;
+    left: 8px;
   }
   .actions .btn-hover {
     position: static;
@@ -30,6 +30,6 @@ export const actionStyle = css`
     pointer-events: none;
   }
   .hover-container:hover ::slotted([slot="type-badge"]) {
-    opacity: 1;
+    opacity: 0.6;
   }
 `;
