@@ -92,6 +92,7 @@ export class LearningCommentTree extends LitElement {
     comment: Comment,
     hideChildren: boolean = false,
     isArchived: boolean = false,
+    isFirstInGroup: boolean = false,
   ): HTMLTemplateResult {
     const children = this.childrenMap.get(comment.id) || [];
     const activeChildrenCount = children.filter(
@@ -103,12 +104,22 @@ export class LearningCommentTree extends LitElement {
     return html`
       <div class="comment-node">
         <learning-comment-item
+          class="comment-item"
           .comment=${comment}
           .activeChildrenCount=${activeChildrenCount}
           .availableTypes=${this.availableTypes}
           .readonly=${this.readonly}
           .archived=${currentArchived}
-        ></learning-comment-item>
+        >
+          ${!isFirstInGroup
+            ? html`
+                <ui-comment-type-badge
+                  slot="type-badge"
+                  .type=${comment.type}
+                ></ui-comment-type-badge>
+              `
+            : nothing}
+        </learning-comment-item>
         ${!hideChildren
           ? this.renderChildren(comment.id, currentArchived)
           : nothing}
@@ -164,7 +175,8 @@ export class LearningCommentTree extends LitElement {
           ${repeat(
             comments,
             (comment) => comment.id,
-            (comment) => this.renderComment(comment, isFocused, isArchived),
+            (comment, index) =>
+              this.renderComment(comment, isFocused, isArchived, index === 0),
           )}
         </div>
       </div>

@@ -88,7 +88,10 @@ export class DialogueCommentItem extends LitElement {
     if (!this.comment) return html``;
 
     return html`
-      <div class="hover-container">${this.renderCommentContent()}</div>
+      <div class="hover-container">
+        <slot name="type-badge"></slot>
+        ${this.renderCommentContent()}
+      </div>
       ${this.mode === "reply"
         ? html`
             <div class="reply-form-wrapper">
@@ -153,6 +156,10 @@ export class DialogueCommentItem extends LitElement {
     hoverButtonStyle,
     actionStyle,
     css`
+      :host {
+        display: block;
+        position: relative;
+      }
       .reply-form-wrapper {
         margin-left: 8px;
         padding-left: 8px;
