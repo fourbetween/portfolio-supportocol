@@ -17,9 +17,6 @@ export class AppLayout extends LitElement {
 
   static styles = [
     css`
-      :host {
-        display: block;
-      }
       .layout {
         display: flex;
         flex-direction: column;

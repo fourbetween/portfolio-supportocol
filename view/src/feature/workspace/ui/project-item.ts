@@ -36,9 +36,6 @@ export class WorkspaceProjectItem extends LitElement {
     baseStyle,
     listStyles,
     css`
-      :host {
-        display: block;
-      }
       .item {
         gap: 8px;
         text-decoration: none;

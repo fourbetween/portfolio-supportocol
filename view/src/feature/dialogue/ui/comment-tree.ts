@@ -92,6 +92,7 @@ export class DialogueCommentTree extends LitElement {
     comment: Comment,
     hideChildren: boolean = false,
     isParentArchived: boolean = false,
+    isFirstInGroup: boolean = false,
   ): HTMLTemplateResult {
     const isArchived = isParentArchived || !!comment.archivedAt;
     const children = this.childrenMap.get(comment.id) || [];
@@ -108,7 +109,16 @@ export class DialogueCommentTree extends LitElement {
           .archived=${isArchived}
           .readonly=${this.readonly}
           .isAuthenticated=${this.isAuthenticated}
-        ></dialogue-comment-item>
+        >
+          ${!isFirstInGroup
+            ? html`
+                <ui-comment-type-badge
+                  slot="type-badge"
+                  .type=${comment.type}
+                ></ui-comment-type-badge>
+              `
+            : nothing}
+        </dialogue-comment-item>
         ${!hideChildren ? this.renderChildren(comment.id, isArchived) : nothing}
       </div>
     `;
@@ -156,8 +166,13 @@ export class DialogueCommentTree extends LitElement {
           ></ui-comment-type-badge>
         </div>
         <div class="group-content">
-          ${comments.map((comment) =>
-            this.renderComment(comment, isFocused, isParentArchived),
+          ${comments.map((comment, index) =>
+            this.renderComment(
+              comment,
+              isFocused,
+              isParentArchived,
+              index === 0,
+            ),
           )}
         </div>
       </div>

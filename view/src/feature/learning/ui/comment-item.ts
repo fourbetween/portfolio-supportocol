@@ -139,7 +139,10 @@ export class LearningCommentItem extends LitElement {
     }
 
     return html`
-      <div class="hover-container">${this.renderCommentContent()}</div>
+      <div class="hover-container">
+        <slot name="type-badge"></slot>
+        ${this.renderCommentContent()}
+      </div>
       ${this.renderReplyFormOrPopup()}
     `;
   }
@@ -314,6 +317,7 @@ export class LearningCommentItem extends LitElement {
     css`
       :host {
         display: block;
+        position: relative;
       }
       .reply-form {
         margin-left: 8px;

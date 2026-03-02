@@ -153,10 +153,6 @@ export class WorkspaceProjectDetail extends LitElement {
     inputStyle,
     formStyle,
     css`
-      :host {
-        display: block;
-      }
-
       .detail {
         display: flex;
         flex-direction: column;

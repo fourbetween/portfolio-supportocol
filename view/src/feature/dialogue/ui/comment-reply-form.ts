@@ -130,9 +130,6 @@ export class DialogueCommentReplyForm extends LitElement {
     buttonStyle,
     inputStyle,
     css`
-      :host {
-        display: block;
-      }
       .reply-form {
         display: flex;
         flex-direction: column;

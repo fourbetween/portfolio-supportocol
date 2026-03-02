@@ -64,10 +64,6 @@ export class Drawer extends LitElement {
   static styles = [
     baseStyle,
     css`
-      :host {
-        display: block;
-      }
-
       .drawer-backdrop {
         position: fixed;
         top: 0;
