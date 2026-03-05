@@ -5,16 +5,27 @@ import { baseStyle } from "../../../shared/style/base";
 import { commentFrameDetail } from "../../../shared/style/comment-frame-detail";
 import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/comment-type-badge/comment-type-badge";
-import type { CommentFrame } from "../model/comment-frame";
+import type { Comment } from "../model/comment";
+import { type CommentFrame, sortCommentFrame } from "../model/comment-frame";
 
 @customElement("dialogue-comment-frame-detail")
 export class DialogueCommentFrameDetail extends LitElement {
   @property({ type: Object })
   frame?: CommentFrame;
 
+  @property({ type: Array })
+  comments: Comment[] = [];
+
+  private get _sortedFrame() {
+    if (!this.frame) return undefined;
+    if (this.comments.length === 0) return this.frame;
+    return sortCommentFrame(this.frame, this.comments);
+  }
+
   private get _groupedPaths() {
-    if (!this.frame) return {};
-    return this.frame.paths.reduce(
+    const frame = this._sortedFrame;
+    if (!frame) return {};
+    return frame.paths.reduce(
       (acc, p) => {
         if (!acc[p.parent]) {
           acc[p.parent] = [];
@@ -27,13 +38,14 @@ export class DialogueCommentFrameDetail extends LitElement {
   }
 
   render() {
-    if (!this.frame) return html``;
+    const frame = this._sortedFrame;
+    if (!frame) return html``;
 
     return html`
       <div class="container">
         <section>
           <div class="section-title">${msg("Types")}</div>
-          <div class="types">${this._renderTypes()}</div>
+          <div class="types">${this._renderTypes(frame)}</div>
         </section>
         <section>
           <div class="section-title">${msg("Paths")}</div>
@@ -43,8 +55,8 @@ export class DialogueCommentFrameDetail extends LitElement {
     `;
   }
 
-  private _renderTypes() {
-    return this.frame!.types.map(
+  private _renderTypes(frame: CommentFrame) {
+    return frame.types.map(
       (t) => html`
         <ui-comment-type-badge
           .type=${t || msg("Root")}
