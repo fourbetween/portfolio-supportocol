@@ -1112,6 +1112,34 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentId
 	s.Status = val
 }
 
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutNoContent is response for V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePut operation.
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutNoContent struct{}
+
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq struct {
+	OldType CommentType `json:"oldType"`
+	NewType CommentType `json:"newType"`
+}
+
+// GetOldType returns the value of OldType.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq) GetOldType() CommentType {
+	return s.OldType
+}
+
+// GetNewType returns the value of NewType.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq) GetNewType() CommentType {
+	return s.NewType
+}
+
+// SetOldType sets the value of OldType.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq) SetOldType(val CommentType) {
+	s.OldType = val
+}
+
+// SetNewType sets the value of NewType.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq) SetNewType(val CommentType) {
+	s.NewType = val
+}
+
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostAccepted is response for V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost operation.
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostAccepted struct{}
 

@@ -233,6 +233,22 @@ func (r *CommentRepository) CountsByDiscussionID(ctx context.Context, discussion
 	}, nil
 }
 
+func (r *CommentRepository) RenameCommentType(ctx context.Context, discussionID, oldType, newType string) error {
+	stmt := table.Comments.
+		UPDATE(table.Comments.Type).
+		SET(newType).
+		WHERE(
+			table.Comments.DiscussionID.EQ(mysql.String(discussionID)).
+				AND(table.Comments.Type.EQ(mysql.String(oldType))),
+		)
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to rename comment type: %w", err)
+	}
+
+	return nil
+}
+
 func (r *CommentRepository) toCommentDomains(rows []commentModel) ([]*domain.Comment, error) {
 	comments := make([]*domain.Comment, len(rows))
 	for i, row := range rows {

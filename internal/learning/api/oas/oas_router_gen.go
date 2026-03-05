@@ -220,6 +220,30 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									break
 								}
 								switch elem[0] {
+								case 'c': // Prefix: "comment-type"
+									origElem := elem
+									if l := len("comment-type"); len(elem) >= l && elem[0:l] == "comment-type" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "PUT":
+											s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutRequest([2]string{
+												args[0],
+												args[1],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "PUT")
+										}
+
+										return
+									}
+
+									elem = origElem
 								case 'g': // Prefix: "generate"
 									origElem := elem
 									if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
@@ -703,6 +727,32 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									break
 								}
 								switch elem[0] {
+								case 'c': // Prefix: "comment-type"
+									origElem := elem
+									if l := len("comment-type"); len(elem) >= l && elem[0:l] == "comment-type" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch method {
+										case "PUT":
+											r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutOperation
+											r.summary = ""
+											r.operationID = ""
+											r.operationGroup = ""
+											r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type"
+											r.args = args
+											r.count = 2
+											return r, true
+										default:
+											return
+										}
+									}
+
+									elem = origElem
 								case 'g': // Prefix: "generate"
 									origElem := elem
 									if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {

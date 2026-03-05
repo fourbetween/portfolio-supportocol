@@ -41,6 +41,7 @@ var operationRolesCookieAuth = map[string][]string{
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteOperation: []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutOperation:                 []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation:           []string{},
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutOperation:               []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation:                 []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetOperation:                          []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation:                         []string{},

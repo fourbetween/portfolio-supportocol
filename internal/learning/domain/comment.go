@@ -21,6 +21,7 @@ type (
 		GetPathToRoot(ctx context.Context, commentID string) ([]*Comment, error)
 		ListChildren(ctx context.Context, params ListCommentChildrenParams) ([]*Comment, error)
 		CountsByDiscussionID(ctx context.Context, discussionID string) (DiscussionCounts, error)
+		RenameCommentType(ctx context.Context, discussionID, oldType, newType string) error
 	}
 
 	SearchCommentsParams struct {

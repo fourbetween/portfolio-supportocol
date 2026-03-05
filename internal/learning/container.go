@@ -36,6 +36,7 @@ type Container struct {
 	UpdateCommentStatus      *usecase.UpdateCommentStatusUsecase
 	RemoveCommentIssue       *usecase.RemoveCommentIssueUsecase
 	ReplaceComments          *usecase.ReplaceCommentsUsecase
+	RenameCommentType        *usecase.RenameCommentTypeUsecase
 	EnqueueCommentGeneration *usecase.EnqueueCommentGenerationUsecase
 }
 
@@ -90,6 +91,7 @@ func NewContainer(
 		UpdateCommentStatus:      usecase.NewUpdateCommentStatusUsecase(discussionRepo, commentRepo, permSv, clockSrv, txManager),
 		RemoveCommentIssue:       usecase.NewRemoveCommentIssueUsecase(discussionRepo, commentRepo, permSv, txManager),
 		ReplaceComments:          usecase.NewReplaceCommentsUsecase(discussionRepo, commentRepo, commentFac, permSv, clockSrv, txManager, auditSv),
+		RenameCommentType:        usecase.NewRenameCommentTypeUsecase(discussionRepo, commentRepo, permSv, txManager, auditSv),
 		EnqueueCommentGeneration: usecase.NewEnqueueCommentGenerationUsecase(discussionRepo, permSv, aiUsageSv, commentGenerationQueue),
 	}, nil
 }
