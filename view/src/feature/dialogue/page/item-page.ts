@@ -250,6 +250,7 @@ export class DialogueItemPage extends LitElement {
         <div class="comment-frame">
           <dialogue-comment-frame-detail
             .frame=${this._discussion?.dialogueSettings.commentFrame}
+            .comments=${this._comments}
           ></dialogue-comment-frame-detail>
         </div>
         <div class="comment-explorer">
