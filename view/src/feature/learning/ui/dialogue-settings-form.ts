@@ -229,7 +229,7 @@ export class LearningDialogueSettingsForm extends LitElement {
       <div class="paths-form-container">
         <select
           name="parent"
-          aria-label=${msg("Parent Type Select")}
+          aria-label=${msg("Select Parent Type")}
           .value=${this._selectedParent}
           @change=${(e: Event) =>
             (this._selectedParent = (e.target as HTMLSelectElement).value)}
@@ -244,7 +244,7 @@ export class LearningDialogueSettingsForm extends LitElement {
         <ui-icon-arrow-back></ui-icon-arrow-back>
         <select
           name="child"
-          aria-label=${msg("Child Type Select")}
+          aria-label=${msg("Select Child Type")}
           .value=${this._selectedChild}
           @change=${(e: Event) =>
             (this._selectedChild = (e.target as HTMLSelectElement).value)}

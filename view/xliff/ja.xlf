@@ -270,10 +270,6 @@
   <source>Are you sure you want to delete "<x id="0" equiv-text="${this.discussion.theme}"/>"?</source>
   <target>「<x id="0" equiv-text="${discussion.theme}"/>」を削除してもよろしいですか？</target>
 </trans-unit>
-<trans-unit id="s85e9d4bbecb57754">
-  <source>Succeeded.</source>
-  <target>成功しました。</target>
-</trans-unit>
 <trans-unit id="s55dc09864c0e33c6">
   <source>Discussions</source>
   <target>議論</target>
@@ -342,17 +338,9 @@
   <source>Delete Type: <x id="0" equiv-text="${t}"/></source>
   <target>種類を削除: <x id="0" equiv-text="${t}"/></target>
 </trans-unit>
-<trans-unit id="se218d5d4803074c5">
-  <source>Parent Type Select</source>
-  <target>親種類を選択</target>
-</trans-unit>
 <trans-unit id="se0193e2c8cae2385">
   <source>ROOT</source>
   <target>ルート</target>
-</trans-unit>
-<trans-unit id="s9d4f99269cbae585">
-  <source>Child Type Select</source>
-  <target>子種類を選択</target>
 </trans-unit>
 <trans-unit id="s2869b210db9b9c8c">
   <source>(Select Child)</source>
@@ -501,10 +489,6 @@
 <trans-unit id="sdb840eeac242d409">
   <source>Uncategorized</source>
   <target>未分類</target>
-</trans-unit>
-<trans-unit id="s5267cb489a10d1f8">
-  <source>New Custom Type</source>
-  <target>新しいコメント種類</target>
 </trans-unit>
 <trans-unit id="s8489d59fc1d382ea">
   <source>Show archived</source>
@@ -844,7 +828,7 @@
 </trans-unit>
 <trans-unit id="s7cd0f58532f9a122">
   <source>Rename "<x id="0" equiv-text="${this.oldType}"/>" to</source>
-  <target>「<x id="0" equiv-text="${this.oldType}"/>」を次へ変更</target>
+  <target>「<x id="0" equiv-text="${this.oldType}"/>」の新しい名前</target>
 </trans-unit>
 <trans-unit id="s70a8d80470e9185a">
   <source>New type name</source>
@@ -917,6 +901,22 @@
 <trans-unit id="sd374c80e17e18808">
   <source>Paste</source>
   <target>貼り付け</target>
+</trans-unit>
+<trans-unit id="s7808e128fcb74e26">
+  <source>Discussion deleted.</source>
+  <target>議論を削除しました。</target>
+</trans-unit>
+<trans-unit id="s08b761d27e6e9384">
+  <source>New Comment Type</source>
+  <target>新しいコメント種類</target>
+</trans-unit>
+<trans-unit id="sa44b691e7763d93d">
+  <source>Select Parent Type</source>
+  <target>親種類を選択</target>
+</trans-unit>
+<trans-unit id="s6980ce210bd51b4d">
+  <source>Select Child Type</source>
+  <target>子種類を選択</target>
 </trans-unit>
 </body>
 </file>

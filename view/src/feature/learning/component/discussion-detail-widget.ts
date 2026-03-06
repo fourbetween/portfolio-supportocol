@@ -161,7 +161,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
         this.discussion.projectId,
         e.discussionId,
       );
-      showToast(this, msg("Succeeded."), "success", 2000);
+      showToast(this, msg("Discussion deleted."), "success", 2000);
       this.dispatchEvent(new LearningDiscussionDeletedEvent(e.discussionId));
     } catch (error: any) {
       showToast(this, error.message, "error");
