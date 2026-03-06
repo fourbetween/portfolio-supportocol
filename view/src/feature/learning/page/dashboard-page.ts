@@ -32,10 +32,12 @@ import {
 import {
   type LearningDiscussionArchiveFilterEvent,
   type LearningDiscussionDeletedEvent,
+  type LearningDiscussionRenameCommentTypeEvent,
   type LearningDiscussionSelectEvent,
   type LearningDiscussionUpdatedEvent,
 } from "../event/discussion";
 import type { Comment } from "../model/comment";
+import { renameCommentFrameType } from "../model/comment-frame";
 import type { Discussion, DiscussionSummary } from "../model/discussion";
 import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
@@ -225,6 +227,43 @@ export class LearningDashboardPage extends LitElement {
     this._selectedCommentId = e.commentId;
   }
 
+  private async _handleRenameCommentType(
+    e: LearningDiscussionRenameCommentTypeEvent,
+  ) {
+    if (!this.workspace || !this._selectedDiscussionId) return;
+
+    try {
+      await discussionRepository.renameCommentType(
+        this.workspace.workspace.id,
+        this._selectedDiscussionId,
+        e.oldType,
+        e.newType,
+      );
+
+      this._comments = this._comments.map((comment) =>
+        comment.type === e.oldType ? { ...comment, type: e.newType } : comment,
+      );
+
+      if (this._selectedDiscussion?.dialogueSettings?.commentFrame) {
+        this._selectedDiscussion = {
+          ...this._selectedDiscussion,
+          dialogueSettings: {
+            ...this._selectedDiscussion.dialogueSettings,
+            commentFrame: renameCommentFrameType(
+              this._selectedDiscussion.dialogueSettings.commentFrame,
+              e.oldType,
+              e.newType,
+            ),
+          },
+        };
+      }
+
+      showToast(this, msg("Comment type renamed."), "success", 2000);
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
   private get _hasProposedComments() {
     return this._comments.some((c) => c.status === "proposed");
   }
@@ -362,6 +401,8 @@ export class LearningDashboardPage extends LitElement {
         <div class="comment-frame">
           <learning-comment-frame-widget
             .comments=${this._comments}
+            @learning-discussion-rename-comment-type=${this
+              ._handleRenameCommentType}
           ></learning-comment-frame-widget>
         </div>
         <div class="comment-explorer">

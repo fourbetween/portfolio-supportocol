@@ -834,6 +834,22 @@
   <source>The selected comment type does not accurately reflect the actual content.</source>
   <target>選択されたコメントの種類が、実際の内容を正確に反映していません。</target>
 </trans-unit>
+<trans-unit id="sf0e7b7384cf777fe">
+  <source>Comment type renamed.</source>
+  <target>コメントの種類を変更しました。</target>
+</trans-unit>
+<trans-unit id="s89c760d8d834588e">
+  <source>Rename Comment Type</source>
+  <target>コメント種類を変更</target>
+</trans-unit>
+<trans-unit id="s7cd0f58532f9a122">
+  <source>Rename "<x id="0" equiv-text="${this.oldType}"/>" to</source>
+  <target>「<x id="0" equiv-text="${this.oldType}"/>」を次へ変更</target>
+</trans-unit>
+<trans-unit id="s70a8d80470e9185a">
+  <source>New type name</source>
+  <target>新しい種類名</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

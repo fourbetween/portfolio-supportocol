@@ -14,6 +14,8 @@ const LEARNING_DISCUSSION_UPDATE_STATUS_EVENT_NAME =
   "learning-discussion-update-status";
 const LEARNING_DISCUSSION_UPDATE_DIALOGUE_SETTINGS_EVENT_NAME =
   "learning-discussion-update-dialogue-settings";
+const LEARNING_DISCUSSION_RENAME_COMMENT_TYPE_EVENT_NAME =
+  "learning-discussion-rename-comment-type";
 const LEARNING_DISCUSSION_ARCHIVE_EVENT_NAME = "learning-discussion-archive";
 const LEARNING_DISCUSSION_UNARCHIVE_EVENT_NAME =
   "learning-discussion-unarchive";
@@ -176,6 +178,20 @@ export class LearningDiscussionUpdateDialogueSettingsEvent extends Event {
   }
 }
 
+export class LearningDiscussionRenameCommentTypeEvent extends Event {
+  public readonly oldType: string;
+  public readonly newType: string;
+
+  constructor(oldType: string, newType: string) {
+    super(LEARNING_DISCUSSION_RENAME_COMMENT_TYPE_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+    this.oldType = oldType;
+    this.newType = newType;
+  }
+}
+
 export class LearningDiscussionArchiveEvent extends Event {
   public readonly discussionId: string;
 
@@ -213,6 +229,7 @@ declare global {
     [LEARNING_DISCUSSION_ARCHIVE_FILTER_EVENT_NAME]: LearningDiscussionArchiveFilterEvent;
     [LEARNING_DISCUSSION_UPDATE_STATUS_EVENT_NAME]: LearningDiscussionUpdateStatusEvent;
     [LEARNING_DISCUSSION_UPDATE_DIALOGUE_SETTINGS_EVENT_NAME]: LearningDiscussionUpdateDialogueSettingsEvent;
+    [LEARNING_DISCUSSION_RENAME_COMMENT_TYPE_EVENT_NAME]: LearningDiscussionRenameCommentTypeEvent;
     [LEARNING_DISCUSSION_ARCHIVE_EVENT_NAME]: LearningDiscussionArchiveEvent;
     [LEARNING_DISCUSSION_UNARCHIVE_EVENT_NAME]: LearningDiscussionUnarchiveEvent;
     [LEARNING_DISCUSSION_FORM_OPEN_EVENT_NAME]: LearningDiscussionFormOpenEvent;

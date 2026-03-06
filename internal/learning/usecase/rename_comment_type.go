@@ -75,7 +75,6 @@ func (u *RenameCommentTypeUsecase) Execute(ctx context.Context, input RenameComm
 			return err
 		}
 
-		u.auditSv.LogDiscussionUpdated(ctx, discussion)
 		return nil
 	})
 }
