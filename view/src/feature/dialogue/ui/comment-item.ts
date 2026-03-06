@@ -1,9 +1,8 @@
 import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { actionStyle } from "../../../shared/style/action";
 import { baseStyle } from "../../../shared/style/base";
-import { hoverButtonStyle } from "../../../shared/style/hover-button";
+import { commentItemStyle } from "../../../shared/style/comment-item";
 import "../../../shared/ui/icons/icon-ads-click";
 import "../../../shared/ui/icons/icon-reply";
 import "../../../shared/ui/icons/icon-report-problem";
@@ -88,9 +87,40 @@ export class DialogueCommentItem extends LitElement {
     if (!this.comment) return html``;
 
     return html`
-      <div class="hover-container">
+      <div class="card-wrapper">
         <slot name="type-badge"></slot>
         ${this.renderCommentContent()}
+        <div class="toolbar" role="group" aria-label="Actions">
+          ${this.canIssue
+            ? html`
+                <button
+                  class="toolbar-btn danger"
+                  @click=${this.handleIssueClick}
+                  aria-label=${msg("report problem")}
+                >
+                  <ui-icon-report-problem></ui-icon-report-problem>
+                </button>
+              `
+            : nothing}
+          ${this.canReply
+            ? html`
+                <button
+                  class="toolbar-btn"
+                  @click=${this.handleReplyClick}
+                  aria-label=${msg("reply")}
+                >
+                  <ui-icon-reply></ui-icon-reply>
+                </button>
+              `
+            : nothing}
+          <button
+            class="toolbar-btn"
+            @click=${this.handleFocusClick}
+            aria-label=${msg("focus")}
+          >
+            <ui-icon-ads-click></ui-icon-ads-click>
+          </button>
+        </div>
       </div>
       ${this.mode === "reply"
         ? html`
@@ -117,49 +147,13 @@ export class DialogueCommentItem extends LitElement {
         .clickable=${false}
         @dialogue-comment-select=${this.handleCommentSelect}
       ></dialogue-comment-card>
-      <div class="actions" role="group" aria-label="Actions">
-        ${this.canIssue
-          ? html`
-              <button
-                class="btn-hover danger issue-button"
-                @click=${this.handleIssueClick}
-                aria-label=${msg("report problem")}
-              >
-                <ui-icon-report-problem></ui-icon-report-problem>
-              </button>
-            `
-          : nothing}
-        ${this.canReply
-          ? html`
-              <button
-                class="btn-hover reply-button"
-                @click=${this.handleReplyClick}
-                aria-label=${msg("reply")}
-              >
-                <ui-icon-reply></ui-icon-reply>
-              </button>
-            `
-          : nothing}
-        <button
-          class="btn-hover focus-button"
-          @click=${this.handleFocusClick}
-          aria-label=${msg("focus")}
-        >
-          <ui-icon-ads-click></ui-icon-ads-click>
-        </button>
-      </div>
     `;
   }
 
   static styles = [
     baseStyle,
-    hoverButtonStyle,
-    actionStyle,
+    commentItemStyle,
     css`
-      :host {
-        display: block;
-        position: relative;
-      }
       .reply-form-wrapper {
         margin-left: 8px;
         padding-left: 8px;
