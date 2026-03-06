@@ -191,6 +191,14 @@ func (c *Comment) Update(params UpdateCommentParams) error {
 	return nil
 }
 
+func (c *Comment) ChangeParent(parentCommentID *string) error {
+	if parentCommentID != nil && *parentCommentID == c.id {
+		return apperr.ErrInvalidArgument
+	}
+	c.parentCommentID = parentCommentID
+	return nil
+}
+
 func (c *Comment) UpdateStatus(status CommentStatus) error {
 	if err := status.Validate(); err != nil {
 		return err

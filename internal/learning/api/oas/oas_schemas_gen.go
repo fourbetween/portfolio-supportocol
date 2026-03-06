@@ -1073,6 +1073,20 @@ func (s *PermissionLevel) UnmarshalText(data []byte) error {
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete operation.
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
 
+type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutReq struct {
+	ParentCommentId NilID `json:"parentCommentId"`
+}
+
+// GetParentCommentId returns the value of ParentCommentId.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutReq) GetParentCommentId() NilID {
+	return s.ParentCommentId
+}
+
+// SetParentCommentId sets the value of ParentCommentId.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutReq) SetParentCommentId(val NilID) {
+	s.ParentCommentId = val
+}
+
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq struct {
 	CommentType CommentType    `json:"commentType"`
 	Content     CommentContent `json:"content"`
