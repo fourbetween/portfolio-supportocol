@@ -27,6 +27,12 @@ export class LearningCommentTree extends LitElement {
   @property({ type: Boolean })
   showArchived = false;
 
+  @property({ type: String })
+  cutCommentId?: string;
+
+  @property({ type: Array })
+  invalidPasteTargetIds: string[] = [];
+
   @state()
   private childrenMap = new Map<string, Comment[]>();
 
@@ -110,6 +116,8 @@ export class LearningCommentTree extends LitElement {
           .availableTypes=${this.availableTypes}
           .readonly=${this.readonly}
           .archived=${currentArchived}
+          .cutCommentId=${this.cutCommentId}
+          .invalidPasteTargetIds=${this.invalidPasteTargetIds}
         >
           ${!isFirstInGroup
             ? html`

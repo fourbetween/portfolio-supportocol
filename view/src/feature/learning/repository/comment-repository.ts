@@ -194,6 +194,34 @@ export class CommentRepository {
     return data;
   }
 
+  async updateParent(
+    workspaceId: string,
+    discussionId: string,
+    commentId: string,
+    parentCommentId: string | null,
+  ): Promise<Comment> {
+    const { data, error } = await client.PUT(
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/parent",
+      {
+        params: {
+          path: { workspaceId, discussionId, commentId },
+        },
+        body: { parentCommentId },
+      },
+    );
+    if (error) throw new Error(error.message);
+
+    const cached = this._cache.get(discussionId);
+    if (cached) {
+      this._cache.set(
+        discussionId,
+        cached.map((c) => (c.id === data.id ? data : c)),
+      );
+    }
+
+    return data;
+  }
+
   async updateStatus(
     workspaceId: string,
     discussionId: string,

@@ -850,6 +850,18 @@
   <source>New type name</source>
   <target>新しい種類名</target>
 </trans-unit>
+<trans-unit id="s37094483c6be04d3">
+  <source>Cannot move a comment to its descendant.</source>
+  <target>コメントをその子孫に移動することはできません。</target>
+</trans-unit>
+<trans-unit id="sc50786c754ba8445">
+  <source>Comment moved.</source>
+  <target>コメントを移動しました。</target>
+</trans-unit>
+<trans-unit id="sf8d6bfb91ba98d60">
+  <source>Paste as root</source>
+  <target>ルートとして貼り付け</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

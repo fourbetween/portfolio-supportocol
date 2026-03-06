@@ -15,6 +15,8 @@ const LEARNING_COMMENT_GENERATE_EVENT_NAME = "learning-comment-generate";
 const LEARNING_COMMENT_GENERATED_EVENT_NAME = "learning-comment-generated";
 const LEARNING_COMMENT_ARCHIVE_EVENT_NAME = "learning-comment-archive";
 const LEARNING_COMMENT_UNARCHIVE_EVENT_NAME = "learning-comment-unarchive";
+const LEARNING_COMMENT_CUT_EVENT_NAME = "learning-comment-cut";
+const LEARNING_COMMENT_MOVE_EVENT_NAME = "learning-comment-move";
 const LEARNING_COMMENT_FORM_CLOSE_EVENT_NAME = "learning-comment-form-close";
 const LEARNING_COMMENT_TYPE_SELECT_EVENT_NAME = "learning-comment-type-select";
 
@@ -211,6 +213,32 @@ export class LearningCommentUnarchiveEvent extends Event {
   }
 }
 
+export class LearningCommentCutEvent extends Event {
+  public readonly commentId?: string;
+
+  constructor(commentId?: string) {
+    super(LEARNING_COMMENT_CUT_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+    this.commentId = commentId;
+  }
+}
+
+export class LearningCommentMoveEvent extends Event {
+  public readonly commentId: string;
+  public readonly parentCommentId: string | null;
+
+  constructor(commentId: string, parentCommentId: string | null) {
+    super(LEARNING_COMMENT_MOVE_EVENT_NAME, {
+      bubbles: true,
+      composed: true,
+    });
+    this.commentId = commentId;
+    this.parentCommentId = parentCommentId;
+  }
+}
+
 declare global {
   interface HTMLElementEventMap {
     [LEARNING_COMMENT_SELECT_EVENT_NAME]: LearningCommentSelectEvent;
@@ -226,6 +254,8 @@ declare global {
     [LEARNING_COMMENT_GENERATED_EVENT_NAME]: LearningCommentGeneratedEvent;
     [LEARNING_COMMENT_ARCHIVE_EVENT_NAME]: LearningCommentArchiveEvent;
     [LEARNING_COMMENT_UNARCHIVE_EVENT_NAME]: LearningCommentUnarchiveEvent;
+    [LEARNING_COMMENT_CUT_EVENT_NAME]: LearningCommentCutEvent;
+    [LEARNING_COMMENT_MOVE_EVENT_NAME]: LearningCommentMoveEvent;
     [LEARNING_COMMENT_FORM_CLOSE_EVENT_NAME]: LearningCommentFormCloseEvent;
     [LEARNING_COMMENT_TYPE_SELECT_EVENT_NAME]: LearningCommentTypeSelectEvent;
   }

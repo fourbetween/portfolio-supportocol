@@ -23,6 +23,12 @@ export class LearningCommentContext extends LitElement {
   @property({ type: Boolean })
   readonly = false;
 
+  @property({ type: String })
+  cutCommentId?: string;
+
+  @property({ type: Array })
+  invalidPasteTargetIds: string[] = [];
+
   private renderItem(comment: Comment, isLast: boolean, isArchived: boolean) {
     const childCount = this.childCounts.get(comment.id) || 0;
     return html`
@@ -35,6 +41,8 @@ export class LearningCommentContext extends LitElement {
               .availableTypes=${this.availableTypes}
               .readonly=${this.readonly}
               .archived=${isArchived}
+              .cutCommentId=${this.cutCommentId}
+              .invalidPasteTargetIds=${this.invalidPasteTargetIds}
             ></learning-comment-item>
           `
         : html`
