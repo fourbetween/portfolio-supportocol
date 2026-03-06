@@ -596,6 +596,39 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/parent:
+    parameters:
+      - $ref: "#/components/parameters/workspaceId"
+      - $ref: "#/components/parameters/discussionId"
+      - $ref: "#/components/parameters/commentId"
+    put:
+      description: update comment parent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parentCommentId:
+                  anyOf:
+                    - $ref: "#/components/schemas/Id"
+                    - type: "null"
+              required:
+                - parentCommentId
+      responses:
+        "200":
+          description: success response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/status:
     parameters:
       - $ref: "#/components/parameters/workspaceId"

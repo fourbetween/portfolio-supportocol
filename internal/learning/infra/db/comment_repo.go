@@ -73,6 +73,7 @@ func (r *CommentRepository) Update(ctx context.Context, c *domain.Comment) error
 	m := r.toCommentModel(c)
 	stmt := table.Comments.
 		UPDATE(
+			table.Comments.ParentCommentID,
 			table.Comments.Type,
 			table.Comments.Content,
 			table.Comments.Status,

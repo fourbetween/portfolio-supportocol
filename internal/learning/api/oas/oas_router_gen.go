@@ -375,6 +375,30 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											return
 										}
 
+									case 'p': // Prefix: "parent"
+
+										if l := len("parent"); len(elem) >= l && elem[0:l] == "parent" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											// Leaf node.
+											switch r.Method {
+											case "PUT":
+												s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutRequest([3]string{
+													args[0],
+													args[1],
+													args[2],
+												}, elemIsEscaped, w, r)
+											default:
+												s.notAllowed(w, r, "PUT")
+											}
+
+											return
+										}
+
 									case 's': // Prefix: "status"
 
 										if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
@@ -888,6 +912,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 												r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}"
 												r.args = args
 												r.count = 4
+												return r, true
+											default:
+												return
+											}
+										}
+
+									case 'p': // Prefix: "parent"
+
+										if l := len("parent"); len(elem) >= l && elem[0:l] == "parent" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											// Leaf node.
+											switch method {
+											case "PUT":
+												r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutOperation
+												r.summary = ""
+												r.operationID = ""
+												r.operationGroup = ""
+												r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/parent"
+												r.args = args
+												r.count = 3
 												return r, true
 											default:
 												return

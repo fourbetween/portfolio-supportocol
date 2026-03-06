@@ -7,6 +7,8 @@ import "../../../shared/ui/icons/icon-ads-click";
 import "../../../shared/ui/icons/icon-archive";
 import "../../../shared/ui/icons/icon-check";
 import "../../../shared/ui/icons/icon-close";
+import "../../../shared/ui/icons/icon-content-cut";
+import "../../../shared/ui/icons/icon-content-paste";
 import "../../../shared/ui/icons/icon-delete";
 import "../../../shared/ui/icons/icon-edit";
 import "../../../shared/ui/icons/icon-psychology";
@@ -14,8 +16,10 @@ import "../../../shared/ui/icons/icon-reply";
 import "../../../shared/ui/icons/icon-unarchive";
 import {
   LearningCommentArchiveEvent,
+  LearningCommentCutEvent,
   LearningCommentDeleteEvent,
   LearningCommentGenerateEvent,
+  LearningCommentMoveEvent,
   LearningCommentSelectEvent,
   LearningCommentTypeSelectEvent,
   LearningCommentUnarchiveEvent,
@@ -44,6 +48,12 @@ export class LearningCommentItem extends LitElement {
 
   @property({ type: Boolean })
   archived = false;
+
+  @property({ type: String })
+  cutCommentId?: string;
+
+  @property({ type: Array })
+  invalidPasteTargetIds: string[] = [];
 
   @state()
   private mode: "view" | "edit" | "reply" | "generate" = "view";
@@ -109,6 +119,22 @@ export class LearningCommentItem extends LitElement {
     e.stopPropagation();
     if (this.comment) {
       this.dispatchEvent(new LearningProposedCommentRejectEvent(this.comment));
+    }
+  }
+
+  private handleCutClick(e: Event) {
+    e.stopPropagation();
+    const nextCutCommentId =
+      this.cutCommentId === this.comment?.id ? undefined : this.comment?.id;
+    this.dispatchEvent(new LearningCommentCutEvent(nextCutCommentId));
+  }
+
+  private handlePasteClick(e: Event) {
+    e.stopPropagation();
+    if (this.cutCommentId && this.comment) {
+      this.dispatchEvent(
+        new LearningCommentMoveEvent(this.cutCommentId, this.comment.id),
+      );
     }
   }
 
@@ -200,6 +226,8 @@ export class LearningCommentItem extends LitElement {
       `;
     }
 
+    const moveButton = this.renderMoveButton();
+
     const archiveUnarchiveButton = isExplicitlyArchived
       ? this.renderIconButton(
           html`
@@ -235,7 +263,7 @@ export class LearningCommentItem extends LitElement {
         (e) => this.handleOpenTypePopup(e, "generate"),
         "primary generate-button",
       )}
-      ${archiveUnarchiveButton}
+      ${moveButton} ${archiveUnarchiveButton}
       ${this.renderIconButton(
         html`
           <ui-icon-edit></ui-icon-edit>
@@ -253,6 +281,47 @@ export class LearningCommentItem extends LitElement {
       )}
       ${focusButton}
     `;
+  }
+
+  private renderMoveButton() {
+    if (!this.comment) {
+      return html``;
+    }
+
+    if (!this.cutCommentId) {
+      return this.renderIconButton(
+        html`
+          <ui-icon-content-cut></ui-icon-content-cut>
+        `,
+        "cut",
+        this.handleCutClick,
+        "cut-button",
+      );
+    }
+
+    if (this.cutCommentId === this.comment.id) {
+      return this.renderIconButton(
+        html`
+          <ui-icon-content-cut></ui-icon-content-cut>
+        `,
+        "cancel-cut",
+        this.handleCutClick,
+        "primary cut-button is-active",
+      );
+    }
+
+    if (this.invalidPasteTargetIds.includes(this.comment.id)) {
+      return html``;
+    }
+
+    return this.renderIconButton(
+      html`
+        <ui-icon-content-paste></ui-icon-content-paste>
+      `,
+      "paste",
+      this.handlePasteClick,
+      "primary paste-button",
+    );
   }
 
   private renderIconButton(
@@ -323,6 +392,11 @@ export class LearningCommentItem extends LitElement {
         margin-left: 8px;
         padding-left: 8px;
         margin-top: 8px;
+      }
+      .btn-hover.is-active {
+        opacity: 1;
+        color: var(--color-btn-primary-bg);
+        border-color: var(--color-btn-primary-bg);
       }
     `,
   ];

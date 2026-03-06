@@ -5,18 +5,22 @@ import { customElement, property, state } from "lit/decorators.js";
 import { workspaceContext } from "../../../app/context/workspace";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import { buttonStyle } from "../../../shared/style/button";
 import { titleStyle } from "../../../shared/style/title";
 import { widgetStyle } from "../../../shared/style/widget";
 import "../../../shared/ui/icons/icon-close";
+import "../../../shared/ui/icons/icon-content-paste";
 import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
   LearningCommentArchiveEvent,
   LearningCommentCreateEvent,
   LearningCommentCreatedEvent,
+  LearningCommentCutEvent,
   LearningCommentDeleteEvent,
   LearningCommentDeletedEvent,
   LearningCommentGenerateEvent,
   LearningCommentGeneratedEvent,
+  LearningCommentMoveEvent,
   LearningCommentSelectEvent,
   LearningCommentUnarchiveEvent,
   LearningCommentUpdateEvent,
@@ -55,12 +59,18 @@ export class LearningCommentExplorerWidget extends LitElement {
   @state()
   private childCounts = new Map<string, number>();
 
+  @state()
+  private cutCommentId?: string;
+
   private commentMap = new Map<string, Comment>();
   private childrenMap = new Map<string, Comment[]>();
 
   willUpdate(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("comments")) {
       this.updateDerivedData();
+    }
+    if (changedProperties.has("selectedCommentId")) {
+      this.cutCommentId = undefined;
     }
   }
 
@@ -83,8 +93,13 @@ export class LearningCommentExplorerWidget extends LitElement {
   }
 
   private _handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Escape" && this.selectedCommentId) {
-      this.handleClearSelection();
+    if (e.key === "Escape") {
+      if (this.selectedCommentId) {
+        this.handleClearSelection();
+      }
+      if (this.cutCommentId) {
+        this.cutCommentId = undefined;
+      }
     }
   };
 
@@ -111,6 +126,10 @@ export class LearningCommentExplorerWidget extends LitElement {
           children.filter((c) => c.status === "active" && !c.archivedAt).length,
         );
       }
+    }
+
+    if (this.cutCommentId && !this.commentMap.has(this.cutCommentId)) {
+      this.cutCommentId = undefined;
     }
   }
 
@@ -208,6 +227,48 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
+  private handleCommentCut(e: LearningCommentCutEvent) {
+    this.cutCommentId = e.commentId;
+  }
+
+  private async handleCommentMove(e: LearningCommentMoveEvent) {
+    if (!this.discussionId || !this.workspace) return;
+
+    const sourceComment = this.commentMap.get(e.commentId);
+    if (!sourceComment) {
+      this.cutCommentId = undefined;
+      return;
+    }
+
+    if (sourceComment.parentCommentId === e.parentCommentId) {
+      this.cutCommentId = undefined;
+      return;
+    }
+
+    if (
+      e.parentCommentId &&
+      this.getInvalidPasteTargetIds(e.commentId).includes(e.parentCommentId)
+    ) {
+      showToast(this, msg("Cannot move a comment to its descendant."), "error");
+      return;
+    }
+
+    try {
+      const data = await commentRepository.updateParent(
+        this.workspace.workspace.id,
+        this.discussionId,
+        e.commentId,
+        e.parentCommentId,
+      );
+
+      this.cutCommentId = undefined;
+      showToast(this, msg("Comment moved."), "success", 2000);
+      this.dispatchEvent(new LearningCommentUpdatedEvent(data));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
   private async handleCommentCreate(e: LearningCommentCreateEvent) {
     if (!this.discussionId || !this.workspace) return;
     try {
@@ -285,6 +346,28 @@ export class LearningCommentExplorerWidget extends LitElement {
 
   private handleClearSelection() {
     this.dispatchEvent(new LearningCommentSelectEvent(undefined));
+    this.cutCommentId = undefined;
+  }
+
+  private handlePasteToRoot() {
+    if (!this.cutCommentId) {
+      return;
+    }
+
+    this.handleCommentMove(
+      new LearningCommentMoveEvent(this.cutCommentId, null),
+    );
+  }
+
+  private getInvalidPasteTargetIds(commentId?: string): string[] {
+    if (!commentId) {
+      return [];
+    }
+
+    return [
+      commentId,
+      ...this.getDescendants(commentId).map((comment) => comment.id),
+    ];
   }
 
   private get _path(): Comment[] {
@@ -334,9 +417,20 @@ export class LearningCommentExplorerWidget extends LitElement {
   render() {
     const path = this._path;
     const descendants = this._descendants;
+    const invalidPasteTargetIds = this.getInvalidPasteTargetIds(
+      this.cutCommentId,
+    );
 
     return html`
       <div class="container">
+        ${this.cutCommentId
+          ? html`
+              <button class="btn paste-button" @click=${this.handlePasteToRoot}>
+                <ui-icon-content-paste .size=${18}></ui-icon-content-paste>
+                <span>${msg("Paste as root")}</span>
+              </button>
+            `
+          : nothing}
         ${this.renderContextSection(path)}
         ${this.selectedCommentId || this.readonly
           ? nothing
@@ -348,18 +442,24 @@ export class LearningCommentExplorerWidget extends LitElement {
               ></learning-comment-create-widget>
             `}
         <div class="section">
-          <div class="section-title">
-            ${this.selectedCommentId ? msg("Replies") : msg("All Comments")}
+          <div class="section-header">
+            <div class="section-title">
+              ${this.selectedCommentId ? msg("Replies") : msg("All Comments")}
+            </div>
           </div>
           <learning-comment-tree
             .comments=${descendants}
             .readonly=${this.readonly}
+            .cutCommentId=${this.cutCommentId}
+            .invalidPasteTargetIds=${invalidPasteTargetIds}
             @learning-comment-create=${this.handleCommentCreate}
             @learning-comment-update=${this.handleCommentUpdate}
             @learning-comment-delete=${this.handleCommentDelete}
             @learning-comment-archive=${this.handleCommentArchive}
             @learning-comment-unarchive=${this.handleCommentUnarchive}
             @learning-comment-generate=${this.handleCommentGenerate}
+            @learning-comment-cut=${this.handleCommentCut}
+            @learning-comment-move=${this.handleCommentMove}
             @learning-proposed-comment-accept=${this.handleAccept}
             @learning-proposed-comment-reject=${this.handleReject}
             @learning-issue-remove=${this.handleIssueRemove}
@@ -371,6 +471,10 @@ export class LearningCommentExplorerWidget extends LitElement {
 
   private renderContextSection(path: Comment[]) {
     if (path.length === 0) return nothing;
+
+    const invalidPasteTargetIds = this.getInvalidPasteTargetIds(
+      this.cutCommentId,
+    );
 
     return html`
       <div class="section">
@@ -386,12 +490,16 @@ export class LearningCommentExplorerWidget extends LitElement {
           .childCounts=${this.childCounts}
           .availableTypes=${this.availableTypes}
           .readonly=${this.readonly}
+          .cutCommentId=${this.cutCommentId}
+          .invalidPasteTargetIds=${invalidPasteTargetIds}
           @learning-comment-create=${this.handleCommentCreate}
           @learning-comment-update=${this.handleCommentUpdate}
           @learning-comment-delete=${this.handleCommentDelete}
           @learning-comment-archive=${this.handleCommentArchive}
           @learning-comment-unarchive=${this.handleCommentUnarchive}
           @learning-comment-generate=${this.handleCommentGenerate}
+          @learning-comment-cut=${this.handleCommentCut}
+          @learning-comment-move=${this.handleCommentMove}
           @learning-proposed-comment-accept=${this.handleAccept}
           @learning-proposed-comment-reject=${this.handleReject}
           @learning-issue-remove=${this.handleIssueRemove}
@@ -402,9 +510,27 @@ export class LearningCommentExplorerWidget extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
     titleStyle,
     widgetStyle,
     css`
+      .container {
+        padding-top: 24px;
+      }
+      .paste-button {
+        color: var(--color-fg-muted);
+        border: 1px dashed var(--color-border-default);
+        width: 100%;
+        justify-content: flex-start;
+        background: transparent;
+        font-weight: 400;
+        margin-bottom: 8px;
+        box-sizing: border-box;
+      }
+      .paste-button:hover {
+        background-color: var(--color-canvas-subtle);
+        border-style: solid;
+      }
       .archived-info {
         display: flex;
         align-items: center;

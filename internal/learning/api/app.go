@@ -314,6 +314,32 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	return &res, nil
 }
 
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPut(
+	ctx context.Context,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutParams,
+) (*oas.Comment, error) {
+	var parentCommentID *string
+	if !req.ParentCommentId.Null {
+		s := uuid.UUID(req.ParentCommentId.Value).String()
+		parentCommentID = &s
+	}
+
+	item, err := h.con.MoveComment.Execute(ctx, usecase.MoveCommentInput{
+		ID:              uuid.UUID(params.CommentId).String(),
+		DiscussionID:    uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:     uuid.UUID(params.WorkspaceId).String(),
+		ParentCommentID: parentCommentID,
+		UserID:          httpctx.GetUserID(ctx),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := h.toOasComment(item)
+	return &res, nil
+}
+
 func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete(
 	ctx context.Context,
 	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams,
