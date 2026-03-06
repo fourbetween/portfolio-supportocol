@@ -6,30 +6,44 @@ import { pageStyle } from "../../../shared/style/page";
 import "../../../shared/ui/icons/icon-account-tree";
 import "../../../shared/ui/icons/icon-add";
 import "../../../shared/ui/icons/icon-add-comment";
+import "../../../shared/ui/icons/icon-ads-click";
 import "../../../shared/ui/icons/icon-archive";
 import "../../../shared/ui/icons/icon-arrow-back";
 import "../../../shared/ui/icons/icon-chat";
 import "../../../shared/ui/icons/icon-chat-bubble";
 import "../../../shared/ui/icons/icon-check";
+import "../../../shared/ui/icons/icon-chevron-left";
+import "../../../shared/ui/icons/icon-chevron-right";
 import "../../../shared/ui/icons/icon-close";
+import "../../../shared/ui/icons/icon-content-cut";
+import "../../../shared/ui/icons/icon-content-paste";
 import "../../../shared/ui/icons/icon-delete";
+import "../../../shared/ui/icons/icon-delete-forever";
 import "../../../shared/ui/icons/icon-drive-file-move";
 import "../../../shared/ui/icons/icon-edit";
 import "../../../shared/ui/icons/icon-expand-more";
 import "../../../shared/ui/icons/icon-folder";
 import "../../../shared/ui/icons/icon-forum";
+import "../../../shared/ui/icons/icon-help";
+import "../../../shared/ui/icons/icon-lock";
 import "../../../shared/ui/icons/icon-login";
 import "../../../shared/ui/icons/icon-logout";
+import "../../../shared/ui/icons/icon-menu";
+import "../../../shared/ui/icons/icon-more-horiz";
+import "../../../shared/ui/icons/icon-north";
 import "../../../shared/ui/icons/icon-psychology";
 import "../../../shared/ui/icons/icon-public";
 import "../../../shared/ui/icons/icon-reply";
 import "../../../shared/ui/icons/icon-report";
+import "../../../shared/ui/icons/icon-report-problem";
+import "../../../shared/ui/icons/icon-reviews";
 import "../../../shared/ui/icons/icon-save";
 import "../../../shared/ui/icons/icon-school";
 import "../../../shared/ui/icons/icon-search";
 import "../../../shared/ui/icons/icon-settings";
 import "../../../shared/ui/icons/icon-star";
 import "../../../shared/ui/icons/icon-unarchive";
+import "../../../shared/ui/icons/icon-warning";
 import "../ui/feature-card";
 import "../ui/feature-list";
 
@@ -166,8 +180,28 @@ export class MarketingHowToUsePage extends LitElement {
               <span>${msg("Settings")}</span>
             </div>
             <div class="icon-item">
+              <ui-icon-help .size=${24}></ui-icon-help>
+              <span>${msg("Help")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-menu .size=${24}></ui-icon-menu>
+              <span>${msg("Open Menu")}</span>
+            </div>
+            <div class="icon-item">
               <ui-icon-arrow-back .size=${24}></ui-icon-arrow-back>
               <span>${msg("Go Back")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-chevron-left .size=${24}></ui-icon-chevron-left>
+              <span>${msg("Previous")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-chevron-right .size=${24}></ui-icon-chevron-right>
+              <span>${msg("Next")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-north .size=${24}></ui-icon-north>
+              <span>${msg("Context Path")}</span>
             </div>
           </div>
 
@@ -205,6 +239,10 @@ export class MarketingHowToUsePage extends LitElement {
               <ui-icon-close .size=${24}></ui-icon-close>
               <span>${msg("Close")}</span>
             </div>
+            <div class="icon-item">
+              <ui-icon-more-horiz .size=${24}></ui-icon-more-horiz>
+              <span>${msg("More Actions")}</span>
+            </div>
           </div>
 
           <h3>${msg("Discussion & Comments")}</h3>
@@ -218,6 +256,14 @@ export class MarketingHowToUsePage extends LitElement {
               <span>${msg("Comments")}</span>
             </div>
             <div class="icon-item">
+              <ui-icon-chat-bubble .size=${24}></ui-icon-chat-bubble>
+              <span>${msg("Comment Frame")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-ads-click .size=${24}></ui-icon-ads-click>
+              <span>${msg("Focus")}</span>
+            </div>
+            <div class="icon-item">
               <ui-icon-psychology .size=${24}></ui-icon-psychology>
               <span>${msg("AI Assist")}</span>
             </div>
@@ -228,6 +274,18 @@ export class MarketingHowToUsePage extends LitElement {
             <div class="icon-item">
               <ui-icon-expand-more .size=${24}></ui-icon-expand-more>
               <span>${msg("Expand")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-reviews .size=${24}></ui-icon-reviews>
+              <span>${msg("Open Side Panel")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-report-problem .size=${24}></ui-icon-report-problem>
+              <span>${msg("Report Problem")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-warning .size=${24}></ui-icon-warning>
+              <span>${msg("Warning")}</span>
             </div>
           </div>
 
@@ -250,8 +308,20 @@ export class MarketingHowToUsePage extends LitElement {
               <span>${msg("Public")}</span>
             </div>
             <div class="icon-item">
+              <ui-icon-lock .size=${24}></ui-icon-lock>
+              <span>${msg("Internal")}</span>
+            </div>
+            <div class="icon-item">
               <ui-icon-drive-file-move .size=${24}></ui-icon-drive-file-move>
               <span>${msg("Move")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-content-cut .size=${24}></ui-icon-content-cut>
+              <span>${msg("Cut")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-content-paste .size=${24}></ui-icon-content-paste>
+              <span>${msg("Paste")}</span>
             </div>
           </div>
 
@@ -264,6 +334,10 @@ export class MarketingHowToUsePage extends LitElement {
             <div class="icon-item">
               <ui-icon-logout .size=${24}></ui-icon-logout>
               <span>${msg("Logout")}</span>
+            </div>
+            <div class="icon-item">
+              <ui-icon-delete-forever .size=${24}></ui-icon-delete-forever>
+              <span>${msg("Delete Account")}</span>
             </div>
           </div>
         </section>

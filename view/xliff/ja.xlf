@@ -824,7 +824,7 @@
 </trans-unit>
 <trans-unit id="sbcbbaac19c23719f">
   <source>A feature for discussing with everyone. It promotes systematic discussion by following comment frames.</source>
-  <target>みんなで議論するための機能です。コメントフレームに従うことで体系的な議論を促進します。</target>
+  <target>みんなで議論するための機能です。コメントフレームに従うことで体系的な議論が促進されます。</target>
 </trans-unit>
 <trans-unit id="s21345127ca0ca30c">
   <source>Mismatched Type and Content</source>
@@ -861,6 +861,62 @@
 <trans-unit id="sf8d6bfb91ba98d60">
   <source>Paste as root</source>
   <target>ルートとして貼り付け</target>
+</trans-unit>
+<trans-unit id="s352719d86112de9a">
+  <source>Help</source>
+  <target>ヘルプ</target>
+</trans-unit>
+<trans-unit id="sb81f35175e1aa13c">
+  <source>Open Menu</source>
+  <target>メニューを開く</target>
+</trans-unit>
+<trans-unit id="sf3ff78cc329d3528">
+  <source>Previous</source>
+  <target>前へ</target>
+</trans-unit>
+<trans-unit id="s0fbf6dc6a1966408">
+  <source>Next</source>
+  <target>次へ</target>
+</trans-unit>
+<trans-unit id="s5d5f3bb975f20f63">
+  <source>Context Path</source>
+  <target>コンテキストパス</target>
+</trans-unit>
+<trans-unit id="sef40501c60aa916b">
+  <source>More Actions</source>
+  <target>その他の操作</target>
+</trans-unit>
+<trans-unit id="s3a5233552ddb116b">
+  <source>Comment Frame</source>
+  <target>コメントフレーム</target>
+</trans-unit>
+<trans-unit id="s21905715d95b4173">
+  <source>Focus</source>
+  <target>フォーカス</target>
+</trans-unit>
+<trans-unit id="s1df952c60f77423e">
+  <source>Open Side Panel</source>
+  <target>サイドパネルを開く</target>
+</trans-unit>
+<trans-unit id="sa10a1bec4ef90310">
+  <source>Report Problem</source>
+  <target>問題を報告</target>
+</trans-unit>
+<trans-unit id="s34be76c6b1eadbef">
+  <source>Warning</source>
+  <target>警告</target>
+</trans-unit>
+<trans-unit id="se2d65e13768468e0">
+  <source>Internal</source>
+  <target>内部公開</target>
+</trans-unit>
+<trans-unit id="s0bc31719aa7a8f43">
+  <source>Cut</source>
+  <target>切り取り</target>
+</trans-unit>
+<trans-unit id="sd374c80e17e18808">
+  <source>Paste</source>
+  <target>貼り付け</target>
 </trans-unit>
 </body>
 </file>
