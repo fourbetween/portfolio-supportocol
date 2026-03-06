@@ -56,6 +56,12 @@ type Handler interface {
 	//
 	// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/status
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutParams) (*Comment, error)
+	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type operation.
+	//
+	// Rename comment type in a discussion.
+	//
+	// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type
+	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutParams) error
 	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
 	//
 	// Generate comments using AI.

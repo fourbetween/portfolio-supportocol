@@ -1,4 +1,5 @@
 import { client } from "../api/client";
+import { renameCommentFrameType } from "../model/comment-frame";
 import type {
   DialogueSettings,
   Discussion,
@@ -137,6 +138,39 @@ export class DiscussionRepository {
     this._cache.set(data.id, data);
     this._clearListCache(workspaceId, data.projectId);
     return data;
+  }
+
+  async renameCommentType(
+    workspaceId: string,
+    discussionId: string,
+    oldType: string,
+    newType: string,
+  ): Promise<void> {
+    const { error } = await client.PUT(
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type",
+      {
+        params: {
+          path: { workspaceId, discussionId },
+        },
+        body: { oldType, newType },
+      },
+    );
+    if (error) throw new Error(error.message);
+
+    const cached = this._cache.get(discussionId);
+    if (!cached?.dialogueSettings?.commentFrame) return;
+
+    this._cache.set(discussionId, {
+      ...cached,
+      dialogueSettings: {
+        ...cached.dialogueSettings,
+        commentFrame: renameCommentFrameType(
+          cached.dialogueSettings.commentFrame,
+          oldType,
+          newType,
+        ),
+      },
+    });
   }
 
   async archive(

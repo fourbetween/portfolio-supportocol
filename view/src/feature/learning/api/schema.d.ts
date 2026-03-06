@@ -406,7 +406,49 @@ export interface paths {
                 };
             };
         };
-        put?: never;
+        /** @description replace all comments in a discussion */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        comments: {
+                            parentIndex: number | null;
+                            commentType: components["schemas"]["CommentType"];
+                            content: components["schemas"]["CommentContent"];
+                        }[];
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"][];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
         /** @description create comment */
         post: {
             parameters: {
@@ -740,6 +782,62 @@ export interface paths {
                 };
             };
         };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        /** @description rename comment type in a discussion */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        oldType: components["schemas"]["CommentType"];
+                        newType: components["schemas"]["CommentType"];
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;

@@ -401,6 +401,20 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	return &res, nil
 }
 
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePut(
+	ctx context.Context,
+	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutParams,
+) error {
+	return h.con.RenameCommentType.Execute(ctx, usecase.RenameCommentTypeInput{
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		UserID:       httpctx.GetUserID(ctx),
+		OldType:      string(req.OldType),
+		NewType:      string(req.NewType),
+	})
+}
+
 func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(
 	ctx context.Context,
 	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq,

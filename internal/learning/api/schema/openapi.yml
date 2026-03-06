@@ -683,6 +683,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type:
+    parameters:
+      - $ref: "#/components/parameters/workspaceId"
+      - $ref: "#/components/parameters/discussionId"
+    put:
+      description: rename comment type in a discussion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldType:
+                  $ref: "#/components/schemas/CommentType"
+                newType:
+                  $ref: "#/components/schemas/CommentType"
+              required:
+                - oldType
+                - newType
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate:
     parameters:
       - $ref: "#/components/parameters/workspaceId"

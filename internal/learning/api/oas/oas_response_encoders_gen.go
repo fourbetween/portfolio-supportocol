@@ -107,6 +107,12 @@ func encodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsComment
 	return nil
 }
 
+func encodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutResponse(response *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutNoContent, w http.ResponseWriter) error {
+	w.WriteHeader(204)
+
+	return nil
+}
+
 func encodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostResponse(response *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostAccepted, w http.ResponseWriter) error {
 	w.WriteHeader(202)
 

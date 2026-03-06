@@ -3,6 +3,40 @@ import type { Comment } from "./comment";
 
 export type CommentFrame = components["schemas"]["CommentFrame"];
 
+export function renameCommentFrameType(
+  frame: CommentFrame,
+  oldType: string,
+  newType: string,
+): CommentFrame {
+  const types: string[] = [];
+  const seenTypes = new Set<string>();
+
+  for (const type of frame.types) {
+    const replaced = type === oldType ? newType : type;
+    if (!seenTypes.has(replaced)) {
+      seenTypes.add(replaced);
+      types.push(replaced);
+    }
+  }
+
+  const paths: CommentFrame["paths"] = [];
+  const seenPaths = new Set<string>();
+
+  for (const path of frame.paths) {
+    const replacedPath = {
+      child: path.child === oldType ? newType : path.child,
+      parent: path.parent === oldType ? newType : path.parent,
+    };
+    const key = `${replacedPath.parent}->${replacedPath.child}`;
+    if (!seenPaths.has(key)) {
+      seenPaths.add(key);
+      paths.push(replacedPath);
+    }
+  }
+
+  return { types, paths };
+}
+
 export function deriveCommentFrame(comments: Comment[]): CommentFrame {
   const types = new Set<string>();
   const paths = new Set<string>();

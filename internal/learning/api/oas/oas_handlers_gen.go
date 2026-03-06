@@ -1246,6 +1246,166 @@ func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 	}
 }
 
+// handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutRequest handles PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type operation.
+//
+// Rename comment type in a discussion.
+//
+// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type
+func (s *Server) handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutOperation,
+			ID:   "",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityCookieAuth(ctx, V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutOperation, r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "CookieAuth",
+					Err:              err,
+				}
+				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
+					defer recordError("Security:CookieAuth", err)
+				}
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w); encodeErr != nil {
+				defer recordError("Security", err)
+			}
+			return
+		}
+	}
+	params, err := decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutNoContent
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             request,
+			RawBody:          rawBody,
+			Params: middleware.Parameters{
+				{
+					Name: "workspaceId",
+					In:   "path",
+				}: params.WorkspaceId,
+				{
+					Name: "discussionId",
+					In:   "path",
+				}: params.DiscussionId,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq
+			Params   = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutParams
+			Response = *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutNoContent
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				err = s.h.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePut(ctx, request, params)
+				return response, err
+			},
+		)
+	} else {
+		err = s.h.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePut(ctx, request, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostRequest handles POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
 //
 // Generate comments using AI.

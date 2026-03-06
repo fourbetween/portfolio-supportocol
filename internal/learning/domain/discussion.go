@@ -364,6 +364,22 @@ func (d *Discussion) EnsureCommentFrameRequirement(commentType string, parentTyp
 	d.dialogueSettings.CommentFrame = d.dialogueSettings.CommentFrame.Add(commentType, parentType)
 }
 
+func (d *Discussion) RenameCommentType(oldType, newType string) error {
+	if oldType == newType {
+		return nil
+	}
+
+	if d.dialogueSettings != nil {
+		renamed, err := d.dialogueSettings.CommentFrame.RenameType(oldType, newType)
+		if err != nil {
+			return err
+		}
+		d.dialogueSettings.CommentFrame = renamed
+	}
+
+	return nil
+}
+
 type DiscussionContent struct {
 	Theme      string
 	Premise    string
@@ -508,6 +524,44 @@ func (cf CommentFrame) Add(child, parent string) CommentFrame {
 		return newCF.Sorted()
 	}
 	return cf
+}
+
+func (cf CommentFrame) RenameType(oldType, newType string) (CommentFrame, error) {
+	if oldType == newType {
+		return cf, nil
+	}
+
+	if !slices.Contains(cf.Types, oldType) {
+		return cf, fmt.Errorf("comment type %q not found in frame: %w", oldType, apperr.ErrNotFound)
+	}
+	if slices.Contains(cf.Types, newType) {
+		return cf, fmt.Errorf("comment type %q already exists in frame: %w", newType, apperr.ErrAlreadyExists)
+	}
+
+	newTypes := make([]string, len(cf.Types))
+	for i, t := range cf.Types {
+		if t == oldType {
+			newTypes[i] = newType
+		} else {
+			newTypes[i] = t
+		}
+	}
+
+	newPaths := make([]CommentPath, len(cf.Paths))
+	for i, p := range cf.Paths {
+		child := p.Child
+		parent := p.Parent
+		if child == oldType {
+			child = newType
+		}
+		if parent == oldType {
+			parent = newType
+		}
+		newPaths[i] = CommentPath{Child: child, Parent: parent}
+	}
+
+	renamed := CommentFrame{Types: newTypes, Paths: newPaths}
+	return renamed.Sorted(), nil
 }
 
 func (cf CommentFrame) Validate() error {

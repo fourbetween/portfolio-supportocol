@@ -85,6 +85,15 @@ func (UnimplementedHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussion
 	return r, ht.ErrNotImplemented
 }
 
+// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePut implements PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type operation.
+//
+// Rename comment type in a discussion.
+//
+// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type
+func (UnimplementedHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutParams) error {
+	return ht.ErrNotImplemented
+}
+
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
 //
 // Generate comments using AI.
