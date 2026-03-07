@@ -238,6 +238,5 @@
 'sfa078adf9442c7a9': `公開議論`,
 'sfed17b0e30748cdf': `経路`,
 'sff329d6e90ca964d': `コメントを入力...`,
-'s28fc16bb42e50e6b': `more actions`,
     };
   
