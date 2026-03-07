@@ -453,11 +453,6 @@ export class LearningCommentItem extends LitElement {
     baseStyle,
     commentItemStyle,
     css`
-      .toolbar.is-open {
-        opacity: 1;
-        z-index: 50;
-      }
-
       .toolbar-btn.primary {
         color: var(--color-btn-primary-bg);
       }
@@ -469,53 +464,6 @@ export class LearningCommentItem extends LitElement {
       }
       .toolbar-btn.success:hover {
         border-color: var(--color-success-fg);
-      }
-
-      /* More button wrapper */
-      .more-wrapper {
-        position: relative;
-      }
-
-      /* Backdrop to close menu on outside click */
-      .menu-backdrop {
-        position: fixed;
-        inset: 0;
-        z-index: 99;
-      }
-
-      /* Dropdown action menu */
-      .action-menu {
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 0;
-        z-index: 100;
-        background: var(--color-canvas-default);
-        border: 1px solid var(--color-border-default);
-        border-radius: 8px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-        min-width: 160px;
-        padding: 4px 0;
-        display: flex;
-        flex-direction: column;
-      }
-
-      /* Menu item */
-      .menu-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border: none;
-        background: none;
-        color: var(--color-fg-default);
-        font-size: 13px;
-        cursor: pointer;
-        white-space: nowrap;
-        text-align: left;
-        transition: background 0.1s;
-      }
-      .menu-item:hover {
-        background: var(--color-canvas-subtle);
       }
       .menu-item.danger {
         color: var(--color-danger-fg);

@@ -1,9 +1,10 @@
 import { msg } from "@lit/localize";
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, css, html, nothing, type TemplateResult } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { commentItemStyle } from "../../../shared/style/comment-item";
 import "../../../shared/ui/icons/icon-ads-click";
+import "../../../shared/ui/icons/icon-more-horiz";
 import "../../../shared/ui/icons/icon-reply";
 import "../../../shared/ui/icons/icon-report-problem";
 import {
@@ -39,6 +40,9 @@ export class DialogueCommentItem extends LitElement {
   @state()
   private mode: "view" | "reply" = "view";
 
+  @state()
+  private menuOpen = false;
+
   private get canReply() {
     if (this.readonly) return false;
     if (this.archived || this.comment?.archivedAt) return false;
@@ -64,8 +68,18 @@ export class DialogueCommentItem extends LitElement {
     e.stopPropagation();
   }
 
+  private closeMenu() {
+    this.menuOpen = false;
+  }
+
+  private toggleMenu(e: Event) {
+    e.stopPropagation();
+    this.menuOpen = !this.menuOpen;
+  }
+
   private handleFocusClick(e: Event) {
     e.stopPropagation();
+    this.closeMenu();
     if (this.comment) {
       this.dispatchEvent(new DialogueCommentSelectEvent(this.comment.id));
     }
@@ -73,11 +87,13 @@ export class DialogueCommentItem extends LitElement {
 
   private handleReplyClick(e: Event) {
     e.stopPropagation();
+    this.closeMenu();
     this.mode = "reply";
   }
 
   private handleIssueClick(e: Event) {
     e.stopPropagation();
+    this.closeMenu();
     if (this.comment) {
       this.dispatchEvent(new DialogueCommentIssueRequestEvent(this.comment.id));
     }
@@ -88,38 +104,7 @@ export class DialogueCommentItem extends LitElement {
 
     return html`
       <div class="card-wrapper">
-        ${this.renderCommentContent()}
-        <div class="toolbar" role="group" aria-label="Actions">
-          ${this.canIssue
-            ? html`
-                <button
-                  class="toolbar-btn danger"
-                  @click=${this.handleIssueClick}
-                  aria-label=${msg("report problem")}
-                >
-                  <ui-icon-report-problem></ui-icon-report-problem>
-                </button>
-              `
-            : nothing}
-          ${this.canReply
-            ? html`
-                <button
-                  class="toolbar-btn"
-                  @click=${this.handleReplyClick}
-                  aria-label=${msg("reply")}
-                >
-                  <ui-icon-reply></ui-icon-reply>
-                </button>
-              `
-            : nothing}
-          <button
-            class="toolbar-btn"
-            @click=${this.handleFocusClick}
-            aria-label=${msg("focus")}
-          >
-            <ui-icon-ads-click></ui-icon-ads-click>
-          </button>
-        </div>
+        ${this.renderCommentContent()} ${this.renderToolbar()}
       </div>
       ${this.mode === "reply"
         ? html`
@@ -146,6 +131,91 @@ export class DialogueCommentItem extends LitElement {
         .clickable=${false}
         @dialogue-comment-select=${this.handleCommentSelect}
       ></dialogue-comment-card>
+    `;
+  }
+
+  private renderToolbar() {
+    return html`
+      <div
+        class="toolbar ${this.menuOpen ? "is-open" : ""}"
+        role="group"
+        aria-label="Actions"
+      >
+        ${this.canReply
+          ? html`
+              <button
+                class="toolbar-btn"
+                @click=${this.handleReplyClick}
+                aria-label=${msg("reply")}
+              >
+                <ui-icon-reply></ui-icon-reply>
+              </button>
+            `
+          : nothing}
+        ${this.renderMoreButton(this.buildMenuItems())}
+      </div>
+    `;
+  }
+
+  private buildMenuItems(): TemplateResult[] {
+    const items = [
+      this.menuItem(
+        html`
+          <ui-icon-ads-click></ui-icon-ads-click>
+        `,
+        msg("focus"),
+        (e) => this.handleFocusClick(e),
+      ),
+    ];
+
+    if (this.canIssue) {
+      items.push(
+        this.menuItem(
+          html`
+            <ui-icon-report-problem></ui-icon-report-problem>
+          `,
+          msg("report problem"),
+          (e) => this.handleIssueClick(e),
+          "danger",
+        ),
+      );
+    }
+
+    return items;
+  }
+
+  private menuItem(
+    icon: TemplateResult,
+    label: string,
+    handler: (e: Event) => void,
+    variant = "",
+  ): TemplateResult {
+    return html`
+      <button class="menu-item ${variant}" @click=${handler}>
+        ${icon}
+        <span>${label}</span>
+      </button>
+    `;
+  }
+
+  private renderMoreButton(items: TemplateResult[]) {
+    return html`
+      <div class="more-wrapper">
+        <button
+          class="toolbar-btn"
+          @click=${(e: Event) => this.toggleMenu(e)}
+          aria-label="more actions"
+          aria-expanded=${this.menuOpen}
+        >
+          <ui-icon-more-horiz></ui-icon-more-horiz>
+        </button>
+        ${this.menuOpen
+          ? html`
+              <div class="menu-backdrop" @click=${() => this.closeMenu()}></div>
+              <div class="action-menu" role="menu">${items}</div>
+            `
+          : nothing}
+      </div>
     `;
   }
 
