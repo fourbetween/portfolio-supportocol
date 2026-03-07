@@ -21,8 +21,8 @@ export const commentTreeStyle = css`
     padding: 4px 0;
   }
   .group-content {
-    margin-left: 8px;
-    padding-left: 12px;
+    margin-left: 6px;
+    padding-left: 6px;
     border-left: 2px solid var(--color-accent-fg);
   }
   .controls {
