@@ -10,19 +10,6 @@ export const commentItemStyle = css`
     position: relative;
   }
 
-  ::slotted([slot="type-badge"]) {
-    position: absolute;
-    top: -16px;
-    left: -16px;
-    z-index: 10;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s;
-  }
-  .card-wrapper:hover ::slotted([slot="type-badge"]) {
-    opacity: 0.6;
-  }
-
   .toolbar {
     position: absolute;
     top: -14px;
@@ -39,9 +26,6 @@ export const commentItemStyle = css`
   @media (hover: none) {
     .toolbar {
       opacity: 1;
-    }
-    ::slotted([slot="type-badge"]) {
-      opacity: 0.6;
     }
   }
 

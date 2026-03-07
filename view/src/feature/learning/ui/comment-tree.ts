@@ -90,7 +90,7 @@ export class LearningCommentTree extends LitElement {
           ${msg("Show archived")}
         </label>
       </div>
-      <div class="tree">${this.renderChildren("root", false)}</div>
+      <div class="tree">${this.renderChildren("root", false, 0)}</div>
     `;
   }
 
@@ -98,7 +98,7 @@ export class LearningCommentTree extends LitElement {
     comment: Comment,
     hideChildren: boolean = false,
     isArchived: boolean = false,
-    isFirstInGroup: boolean = false,
+    depth: number = 0,
   ): HTMLTemplateResult {
     const children = this.childrenMap.get(comment.id) || [];
     const activeChildrenCount = children.filter(
@@ -118,24 +118,15 @@ export class LearningCommentTree extends LitElement {
           .archived=${currentArchived}
           .cutCommentId=${this.cutCommentId}
           .invalidPasteTargetIds=${this.invalidPasteTargetIds}
-        >
-          ${!isFirstInGroup
-            ? html`
-                <ui-comment-type-badge
-                  slot="type-badge"
-                  .type=${comment.type}
-                ></ui-comment-type-badge>
-              `
-            : nothing}
-        </learning-comment-item>
+        ></learning-comment-item>
         ${!hideChildren
-          ? this.renderChildren(comment.id, currentArchived)
+          ? this.renderChildren(comment.id, currentArchived, depth)
           : nothing}
       </div>
     `;
   }
 
-  private renderChildren(parentId: string, isArchived: boolean) {
+  private renderChildren(parentId: string, isArchived: boolean, depth: number) {
     const children = this.childrenMap.get(parentId) || [];
     if (children.length === 0) return nothing;
 
@@ -153,7 +144,7 @@ export class LearningCommentTree extends LitElement {
           Object.entries(groupedChildren),
           ([type]) => type,
           ([type, typeChildren]) =>
-            this.renderGroup(type, typeChildren, isArchived, parentId),
+            this.renderGroup(type, typeChildren, isArchived, parentId, depth),
         )}
       </div>
     `;
@@ -163,14 +154,19 @@ export class LearningCommentTree extends LitElement {
     type: string,
     comments: Comment[],
     isArchived: boolean,
-    parentCommentId?: string,
+    parentCommentId: string | undefined,
+    depth: number,
   ): HTMLTemplateResult {
     const groupId = this.getGroupId(type, parentCommentId);
     const isFocused = this.focusedGroupId === groupId;
+    const headerTop = depth * 28;
 
     return html`
       <div class="child-group">
-        <div class="group-header">
+        <div
+          class="group-header"
+          style="top: ${headerTop}px; z-index: ${10 - depth}"
+        >
           <ui-comment-type-badge
             .type=${type}
             .active=${isFocused}
@@ -183,8 +179,8 @@ export class LearningCommentTree extends LitElement {
           ${repeat(
             comments,
             (comment) => comment.id,
-            (comment, index) =>
-              this.renderComment(comment, isFocused, isArchived, index === 0),
+            (comment) =>
+              this.renderComment(comment, isFocused, isArchived, depth + 1),
           )}
         </div>
       </div>

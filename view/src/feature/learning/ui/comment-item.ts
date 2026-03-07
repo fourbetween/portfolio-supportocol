@@ -185,7 +185,6 @@ export class LearningCommentItem extends LitElement {
 
     return html`
       <div class="card-wrapper">
-        <slot name="type-badge"></slot>
         ${this.renderCommentContent()} ${this.renderToolbar()}
       </div>
       ${this.renderReplyFormOrPopup()}

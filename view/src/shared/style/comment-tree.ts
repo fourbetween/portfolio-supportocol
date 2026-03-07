@@ -15,12 +15,15 @@ export const commentTreeStyle = css`
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 8px;
+    margin-bottom: 0;
+    position: sticky;
+    background: var(--color-canvas-default);
+    padding: 4px 0;
   }
   .group-content {
     margin-left: 8px;
-    padding-left: 8px;
-    border-left: 1px dashed var(--color-border-muted);
+    padding-left: 12px;
+    border-left: 2px solid var(--color-accent-fg);
   }
   .controls {
     margin-bottom: 16px;

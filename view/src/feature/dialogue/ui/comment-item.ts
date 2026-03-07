@@ -88,7 +88,6 @@ export class DialogueCommentItem extends LitElement {
 
     return html`
       <div class="card-wrapper">
-        <slot name="type-badge"></slot>
         ${this.renderCommentContent()}
         <div class="toolbar" role="group" aria-label="Actions">
           ${this.canIssue
