@@ -158,6 +158,7 @@ export class LearningCommentTree extends LitElement {
       (c) => c.status === "active",
     ).length;
 
+    // sticky要素の上にアクションボタンが表示されるのは妥協している
     return html`
       <div class="child-group">
         <div class="sticky-sentinel"></div>
