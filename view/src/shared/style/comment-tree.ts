@@ -19,6 +19,28 @@ export const commentTreeStyle = css`
     position: sticky;
     background: var(--color-canvas-default);
     padding: 4px 0;
+    overflow: hidden;
+  }
+  .sticky-sentinel {
+    height: 1px;
+    visibility: hidden;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+  }
+  .parent-content {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    color: var(--color-fg-muted);
+    line-height: 1.4;
+    opacity: 0;
+  }
+  .group-header.stuck .parent-content {
+    opacity: 1;
   }
   .group-content {
     margin-left: 6px;
