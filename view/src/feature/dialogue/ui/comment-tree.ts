@@ -35,15 +35,27 @@ export class DialogueCommentTree extends LitElement {
   @state()
   private childrenMap = new Map<string, Comment[]>();
 
-  @state()
-  private focusedGroupId?: string;
+  private _stickyObserver?: IntersectionObserver;
 
-  private toggleFocus(groupId: string) {
-    this.focusedGroupId = this.focusedGroupId === groupId ? undefined : groupId;
+  connectedCallback() {
+    super.connectedCallback();
+    this._stickyObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const header = (entry.target as HTMLElement).nextElementSibling;
+          if (header?.classList.contains("group-header")) {
+            header.classList.toggle("stuck", !entry.isIntersecting);
+          }
+        }
+      },
+      { threshold: [0] },
+    );
   }
 
-  private toggleShowArchived() {
-    this.showArchived = !this.showArchived;
+  disconnectedCallback() {
+    this._stickyObserver?.disconnect();
+    this._stickyObserver = undefined;
+    super.disconnectedCallback();
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {
@@ -70,6 +82,26 @@ export class DialogueCommentTree extends LitElement {
     }
   }
 
+  updated(changedProperties: PropertyValues<this>) {
+    if (
+      changedProperties.has("comments") ||
+      changedProperties.has("showArchived")
+    ) {
+      this.observeSentinels();
+    }
+  }
+
+  private observeSentinels() {
+    if (!this._stickyObserver) return;
+    this._stickyObserver.disconnect();
+    const sentinels = this.renderRoot.querySelectorAll(".sticky-sentinel");
+    sentinels.forEach((s) => this._stickyObserver!.observe(s));
+  }
+
+  private toggleShowArchived() {
+    this.showArchived = !this.showArchived;
+  }
+
   render() {
     if (!this.comments) return nothing;
 
@@ -88,35 +120,6 @@ export class DialogueCommentTree extends LitElement {
     `;
   }
 
-  private renderComment(
-    comment: Comment,
-    hideChildren: boolean = false,
-    isParentArchived: boolean = false,
-    depth: number = 0,
-  ): HTMLTemplateResult {
-    const isArchived = isParentArchived || !!comment.archivedAt;
-    const children = this.childrenMap.get(comment.id) || [];
-    const activeChildrenCount = children.filter(
-      (c) => c.status === "active",
-    ).length;
-
-    return html`
-      <div class="comment-node">
-        <dialogue-comment-item
-          .comment=${comment}
-          .activeChildrenCount=${activeChildrenCount}
-          .settings=${this.settings}
-          .archived=${isArchived}
-          .readonly=${this.readonly}
-          .isAuthenticated=${this.isAuthenticated}
-        ></dialogue-comment-item>
-        ${!hideChildren
-          ? this.renderChildren(comment.id, isArchived, depth)
-          : nothing}
-      </div>
-    `;
-  }
-
   private renderChildren(
     parentId: string,
     isParentArchived: boolean,
@@ -125,78 +128,59 @@ export class DialogueCommentTree extends LitElement {
     const children = this.childrenMap.get(parentId) || [];
     if (children.length === 0) return nothing;
 
-    const filteredChildren = this.showArchived
+    const filtered = this.showArchived
       ? children
       : children.filter((c) => !c.archivedAt);
 
-    if (filteredChildren.length === 0) return nothing;
-
-    const groupedChildren = this.groupCommentsByType(filteredChildren);
+    if (filtered.length === 0) return nothing;
 
     return html`
       <div class="children">
-        ${Object.entries(groupedChildren).map(([type, typeChildren]) =>
-          this.renderGroup(
-            type,
-            typeChildren,
-            isParentArchived,
-            parentId,
-            depth,
-          ),
+        ${filtered.map((c) =>
+          this.renderCommentEntry(c, isParentArchived, depth),
         )}
       </div>
     `;
   }
 
-  private renderGroup(
-    type: string,
-    comments: Comment[],
+  private renderCommentEntry(
+    comment: Comment,
     isParentArchived: boolean,
-    parentCommentId: string | undefined,
     depth: number,
   ): HTMLTemplateResult {
-    const groupId = this.getGroupId(type, parentCommentId);
-    const isFocused = this.focusedGroupId === groupId;
-    const headerTop = depth * 28;
+    const isArchived = isParentArchived || !!comment.archivedAt;
+    const children = this.childrenMap.get(comment.id) || [];
+    const activeChildrenCount = children.filter(
+      (c) => c.status === "active",
+    ).length;
 
     return html`
       <div class="child-group">
+        <div class="sticky-sentinel"></div>
         <div
           class="group-header"
-          style="top: ${headerTop}px; z-index: ${10 - depth}"
+          style="top: ${depth * 28}px; z-index: ${10 - depth}"
         >
-          <ui-comment-type-badge
-            .type=${type}
-            .active=${isFocused}
-            .clickable=${true}
-            @click=${() => this.toggleFocus(groupId)}
-            title="Click to focus on this group"
-          ></ui-comment-type-badge>
+          <ui-comment-type-badge .type=${comment.type}></ui-comment-type-badge>
+          <span class="parent-content" title=${comment.content}>
+            ${comment.content}
+          </span>
         </div>
         <div class="group-content">
-          ${comments.map((comment) =>
-            this.renderComment(comment, isFocused, isParentArchived, depth + 1),
-          )}
+          <div class="comment-node">
+            <dialogue-comment-item
+              .comment=${comment}
+              .activeChildrenCount=${activeChildrenCount}
+              .settings=${this.settings}
+              .archived=${isArchived}
+              .readonly=${this.readonly}
+              .isAuthenticated=${this.isAuthenticated}
+            ></dialogue-comment-item>
+            ${this.renderChildren(comment.id, isArchived, depth + 1)}
+          </div>
         </div>
       </div>
     `;
-  }
-
-  private getGroupId(type: string, parentCommentId?: string): string {
-    return `${parentCommentId ?? "root"}-${type}`;
-  }
-
-  private groupCommentsByType(comments: Comment[]): Record<string, Comment[]> {
-    return comments.reduce(
-      (acc, comment) => {
-        if (!acc[comment.type]) {
-          acc[comment.type] = [];
-        }
-        acc[comment.type].push(comment);
-        return acc;
-      },
-      {} as Record<string, Comment[]>,
-    );
   }
 
   static styles = [baseStyle, commentTreeStyle, css``];
