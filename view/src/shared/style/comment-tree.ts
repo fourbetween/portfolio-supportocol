@@ -20,6 +20,11 @@ export const commentTreeStyle = css`
     background: var(--color-canvas-default);
     padding: 4px 0;
     overflow: hidden;
+    cursor: pointer;
+  }
+  .group-header:focus-visible {
+    outline: 2px solid var(--color-accent-fg);
+    outline-offset: 2px;
   }
   .sticky-sentinel {
     height: 1px;

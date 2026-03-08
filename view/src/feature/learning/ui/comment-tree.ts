@@ -108,6 +108,27 @@ export class LearningCommentTree extends LitElement {
     this.showArchived = !this.showArchived;
   }
 
+  private getCommentAnchorId(commentId: string) {
+    return `comment-anchor-${commentId}`;
+  }
+
+  private scrollToComment(commentId: string) {
+    const target = this.renderRoot.querySelector<HTMLElement>(
+      `#${this.getCommentAnchorId(commentId)}`,
+    );
+    target?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  private handleStickyHeaderClick(commentId: string) {
+    this.scrollToComment(commentId);
+  }
+
+  private handleStickyHeaderKeydown(e: KeyboardEvent, commentId: string) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    e.preventDefault();
+    this.scrollToComment(commentId);
+  }
+
   render() {
     if (!this.comments) return nothing;
 
@@ -164,7 +185,12 @@ export class LearningCommentTree extends LitElement {
         <div class="sticky-sentinel"></div>
         <div
           class="group-header"
+          role="button"
+          tabindex="0"
           style="top: ${depth * 28}px; z-index: ${10 - depth}"
+          @click=${() => this.handleStickyHeaderClick(comment.id)}
+          @keydown=${(e: KeyboardEvent) =>
+            this.handleStickyHeaderKeydown(e, comment.id)}
         >
           <ui-comment-type-badge .type=${comment.type}></ui-comment-type-badge>
           <span class="parent-content" title=${comment.content}>
@@ -172,7 +198,7 @@ export class LearningCommentTree extends LitElement {
           </span>
         </div>
         <div class="group-content">
-          <div class="comment-node">
+          <div id=${this.getCommentAnchorId(comment.id)} class="comment-node">
             <learning-comment-item
               class="comment-item"
               .comment=${comment}
