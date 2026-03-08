@@ -23,14 +23,16 @@ const seedUserID = "019c8fab-a62c-7203-8210-633df0a30bed"
 type discussionSeed struct {
 	Theme    string
 	Premise  string
-	Comments []usecase.ReplaceCommentItem
+	Comments []CommentItem
 }
+
+type CommentItem usecase.ReplaceCommentItem
 
 var seeds = []discussionSeed{
 	{
 		Theme:   "映画やアニメをn倍速で視聴する行為は、作品に対するリスペクトに欠ける悪習か？",
 		Premise: "近年、動画配信サービスにおいて倍速視聴機能が一般化し、日常的に利用する視聴者が増加している。",
-		Comments: []usecase.ReplaceCommentItem{
+		Comments: []CommentItem{
 			{
 				ParentIndex: nil,
 				CommentType: "主張",
@@ -163,7 +165,7 @@ var seeds = []discussionSeed{
 	{
 		Theme:   "マンガやアニメの実写化において、原作のストーリーや設定を改変することは許容されるべきか？",
 		Premise: "多くの作品が実写化される中で、原作に忠実な作品がある一方で、実写向けに大きく展開が変更される作品もあり、度々ファンの間で議論を呼んでいる。",
-		Comments: []usecase.ReplaceCommentItem{
+		Comments: []CommentItem{
 			{
 				ParentIndex: nil,
 				CommentType: "主張",
@@ -299,6 +301,119 @@ var seeds = []discussionSeed{
 			},
 		},
 	},
+	{
+		Theme:   "ゾンビパンデミックが起きた時の「最初の3日間」の最適行",
+		Premise: "もし明日ゾンビが街に溢れたら...。生存率の最も高い行動を議論する。",
+		Comments: []CommentItem{
+			{
+				ParentIndex: nil,
+				CommentType: "方針",
+				Content:     "最初の3日間は自宅に籠城するべきだ。",
+			},
+			{
+				ParentIndex: new(0),
+				CommentType: "利点",
+				Content:     "移動中の遭遇を避けられる。",
+			},
+			{
+				ParentIndex: new(1),
+				CommentType: "懸念",
+				Content:     "食料が少ない家は3日も持たない。",
+			},
+			{
+				ParentIndex: new(2),
+				CommentType: "対処",
+				Content:     "3日分ない家だけ短時間の近隣調達を検討する。",
+			},
+			{
+				ParentIndex: new(0),
+				CommentType: "利点",
+				Content:     "自宅は地形と物資の場所を把握している。",
+			},
+			{
+				ParentIndex: new(4),
+				CommentType: "懸念",
+				Content:     "集合住宅は侵入経路が多い。",
+			},
+			{
+				ParentIndex: new(5),
+				CommentType: "対処",
+				Content:     "出入口が少ない区画だけ防衛地点にする。",
+			},
+
+			{
+				ParentIndex: nil,
+				CommentType: "方針",
+				Content:     "初日のうちに郊外へ移動するべきだ。",
+			},
+			{
+				ParentIndex: new(7),
+				CommentType: "利点",
+				Content:     "人口密度が低い地域は接触数が減る。",
+			},
+			{
+				ParentIndex: new(8),
+				CommentType: "懸念",
+				Content:     "主要道路は渋滞で止まりやすい。",
+			},
+			{
+				ParentIndex: new(9),
+				CommentType: "対処",
+				Content:     "車より自転車と徒歩の経路を優先する。",
+			},
+			{
+				ParentIndex: new(7),
+				CommentType: "利点",
+				Content:     "農地や井戸に近づきやすい。",
+			},
+			{
+				ParentIndex: new(11),
+				CommentType: "懸念",
+				Content:     "不案内な土地では補給地点を見失う。",
+			},
+			{
+				ParentIndex: new(12),
+				CommentType: "対処",
+				Content:     "行き先を知る人とだけ同行する。",
+			},
+
+			{
+				ParentIndex: nil,
+				CommentType: "方針",
+				Content:     "72時間は小規模な信頼集団で行動するべきだ。",
+			},
+			{
+				ParentIndex: new(14),
+				CommentType: "利点",
+				Content:     "見張りを交代できる。",
+			},
+			{
+				ParentIndex: new(15),
+				CommentType: "懸念",
+				Content:     "人数が増えるほど意思決定が遅くなる。",
+			},
+			{
+				ParentIndex: new(16),
+				CommentType: "対処",
+				Content:     "初日に指揮役を1人だけ決める。",
+			},
+			{
+				ParentIndex: new(14),
+				CommentType: "利点",
+				Content:     "けが人を補助できる。",
+			},
+			{
+				ParentIndex: new(18),
+				CommentType: "懸念",
+				Content:     "未確認者の受け入れは感染を持ち込む。",
+			},
+			{
+				ParentIndex: new(19),
+				CommentType: "対処",
+				Content:     "合流前に隔離確認を行う。",
+			},
+		},
+	},
 }
 
 func main() {
@@ -351,11 +466,15 @@ func main() {
 			log.Fatalf("failed to create discussion %d: %v", i+1, err)
 		}
 
+		commentItems := make([]usecase.ReplaceCommentItem, len(seed.Comments))
+		for j, c := range seed.Comments {
+			commentItems[j] = usecase.ReplaceCommentItem(c)
+		}
 		comments, err := containers.Learning.ReplaceComments.Execute(ctx, usecase.ReplaceCommentsInput{
 			DiscussionID: discussion.ID(),
 			WorkspaceID:  seedWorkspaceID,
 			UserID:       seedUserID,
-			Comments:     seed.Comments,
+			Comments:     commentItems,
 		})
 		if err != nil {
 			log.Fatalf("failed to replace comments for discussion %s: %v", discussion.ID(), err)
