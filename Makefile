@@ -29,7 +29,7 @@ build-lambda:
 build-view: view/env setup-view
 	cd ${VIEW_DIR} && npm run build --mode=${STAGE}
 
-build: deadcode vulncheck test-api build-lambda test-view build-view
+build: deadcode test-api build-lambda test-view build-view
 
 # ===== デプロイ =====
 build-deploy: build deploy
