@@ -91,7 +91,10 @@ export class LearningCommentTree extends LitElement {
     if (this.comments) {
       this.availableTypes = deriveCommentFrame(this.comments).types;
       const commentIds = new Set(this.comments.map((c) => c.id));
-      for (const comment of this.comments) {
+      const sortedComments = [...this.comments].sort((a, b) =>
+        a.type.localeCompare(b.type),
+      );
+      for (const comment of sortedComments) {
         const parentId =
           comment.parentCommentId && commentIds.has(comment.parentCommentId)
             ? comment.parentCommentId
