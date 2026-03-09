@@ -72,11 +72,14 @@ export class DialogueIssueList extends LitElement {
       .title {
         font-weight: bold;
         color: var(--color-danger-fg);
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
       }
       .description {
         font-size: 0.9rem;
         color: var(--color-fg-muted);
         white-space: pre-wrap;
+        overflow-wrap: anywhere;
       }
     `,
   ];

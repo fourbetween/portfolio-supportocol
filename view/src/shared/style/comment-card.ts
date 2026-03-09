@@ -25,6 +25,8 @@ export const commentCardStyle = css`
     font-size: 14px;
     line-height: 1.5;
     color: var(--color-fg-default);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
   }
 
   .footer {
