@@ -9,7 +9,10 @@ import {
 } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
-import { commentTreeStyle } from "../../../shared/style/comment-tree";
+import {
+  commentTreeStickyHeaderHeightPx,
+  commentTreeStyle,
+} from "../../../shared/style/comment-tree";
 import "../../../shared/ui/comment-type-badge/comment-type-badge";
 import type { Comment } from "../model/comment";
 import type { DialogueSettings } from "../model/discussion";
@@ -105,15 +108,73 @@ export class DialogueCommentTree extends LitElement {
     this.showArchived = !this.showArchived;
   }
 
-  private getCommentAnchorId(commentId: string) {
-    return `comment-anchor-${commentId}`;
+  private getStickySentinelId(commentId: string) {
+    return `comment-sticky-sentinel-${commentId}`;
   }
 
   private scrollToComment(commentId: string) {
     const target = this.renderRoot.querySelector<HTMLElement>(
-      `#${this.getCommentAnchorId(commentId)}`,
+      `#${this.getStickySentinelId(commentId)}`,
     );
-    target?.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (!target) return;
+
+    const depth = Number(target.dataset.depth ?? "0");
+    const offsetTop = depth * commentTreeStickyHeaderHeightPx;
+    const scrollContainer = this.findScrollContainer(target);
+
+    if (!scrollContainer) {
+      const top =
+        window.scrollY + target.getBoundingClientRect().top - offsetTop;
+      window.scrollTo({ top, behavior: "smooth" });
+      return;
+    }
+
+    const targetRect = target.getBoundingClientRect();
+    const scrollContainerRect = scrollContainer.getBoundingClientRect();
+    const top =
+      scrollContainer.scrollTop +
+      targetRect.top -
+      scrollContainerRect.top -
+      offsetTop;
+
+    scrollContainer.scrollTo({
+      top: Math.max(0, top),
+      behavior: "smooth",
+    });
+  }
+
+  private findScrollContainer(target: HTMLElement) {
+    let current: Node | null = target;
+
+    while (current) {
+      current = this.getComposedParent(current);
+      if (!(current instanceof HTMLElement)) continue;
+
+      const style = window.getComputedStyle(current);
+      const isScrollable = /(auto|scroll)/.test(style.overflowY);
+      if (isScrollable && current.scrollHeight > current.clientHeight) {
+        return current;
+      }
+    }
+
+    return null;
+  }
+
+  private getComposedParent(node: Node) {
+    if (node instanceof ShadowRoot) {
+      return node.host;
+    }
+
+    if (node instanceof HTMLElement && node.assignedSlot) {
+      return node.assignedSlot;
+    }
+
+    if (node.parentNode) {
+      return node.parentNode;
+    }
+
+    const root = node.getRootNode();
+    return root instanceof ShadowRoot ? root.host : null;
   }
 
   private handleStickyHeaderClick(commentId: string) {
@@ -180,12 +241,17 @@ export class DialogueCommentTree extends LitElement {
 
     return html`
       <div class="child-group">
-        <div class="sticky-sentinel"></div>
+        <div
+          id=${this.getStickySentinelId(comment.id)}
+          class="sticky-sentinel"
+          data-depth=${String(depth)}
+        ></div>
         <div
           class="group-header"
           role="button"
           tabindex="0"
-          style="top: ${depth * 28}px; z-index: ${10 - depth}"
+          style="top: ${depth *
+          commentTreeStickyHeaderHeightPx}px; z-index: ${10 - depth}"
           @click=${() => this.handleStickyHeaderClick(comment.id)}
           @keydown=${(e: KeyboardEvent) =>
             this.handleStickyHeaderKeydown(e, comment.id)}
@@ -196,7 +262,7 @@ export class DialogueCommentTree extends LitElement {
           </span>
         </div>
         <div class="group-content">
-          <div id=${this.getCommentAnchorId(comment.id)} class="comment-node">
+          <div class="comment-node">
             <dialogue-comment-item
               .comment=${comment}
               .activeChildrenCount=${activeChildrenCount}
