@@ -414,6 +414,119 @@ var seeds = []discussionSeed{
 			},
 		},
 	},
+	{
+		Theme:   "地球外の知的生命体（宇宙人）からコンタクトがあった場合、人類が最初にとるべき態度は「徹底的な友好的アピール」か「適度な警戒と軍事力の誇示」か？",
+		Premise: "相手の意図（侵略目的か、純粋な友好的交流か）は全く不明であり、相手の科学レベルも未知数である。",
+		Comments: []CommentItem{
+			{
+				ParentIndex: nil,
+				CommentType: "態度",
+				Content:     "人類は最初に徹底的な友好的アピールを示すべきだ。",
+			},
+			{
+				ParentIndex: new(0),
+				CommentType: "狙い",
+				Content:     "誤解による先制攻撃の連鎖を避けやすい。",
+			},
+			{
+				ParentIndex: new(1),
+				CommentType: "危険",
+				Content:     "弱さの表明として解釈される可能性がある。",
+			},
+			{
+				ParentIndex: new(2),
+				CommentType: "備え",
+				Content:     "友好表明と同時に退避計画だけは水面下で整える。",
+			},
+			{
+				ParentIndex: new(0),
+				CommentType: "狙い",
+				Content:     "交渉の窓口を早く作れる。",
+			},
+			{
+				ParentIndex: new(4),
+				CommentType: "危険",
+				Content:     "窓口担当者が地球側の情報を与えすぎるおそれがある。",
+			},
+			{
+				ParentIndex: new(5),
+				CommentType: "備え",
+				Content:     "最初に開示する情報を言語サンプルと儀礼的表現だけに限定する。",
+			},
+
+			{
+				ParentIndex: nil,
+				CommentType: "態度",
+				Content:     "人類は最初に適度な警戒と軍事力の誇示を示すべきだ。",
+			},
+			{
+				ParentIndex: new(7),
+				CommentType: "狙い",
+				Content:     "無防備ではないと明確に伝えられる。",
+			},
+			{
+				ParentIndex: new(8),
+				CommentType: "危険",
+				Content:     "威嚇そのものが敵意として受け取られる可能性がある。",
+			},
+			{
+				ParentIndex: new(9),
+				CommentType: "備え",
+				Content:     "兵器の照準ではなく防衛配備だけを可視化する。",
+			},
+			{
+				ParentIndex: new(7),
+				CommentType: "狙い",
+				Content:     "各国が国内の治安維持を優先しやすい。",
+			},
+			{
+				ParentIndex: new(11),
+				CommentType: "危険",
+				Content:     "国内向けの強硬演出が外交判断を硬直させる。",
+			},
+			{
+				ParentIndex: new(12),
+				CommentType: "備え",
+				Content:     "軍の発信を文民政府の単一声明に統一する。",
+			},
+
+			{
+				ParentIndex: nil,
+				CommentType: "態度",
+				Content:     "人類は最初の態度を固定せず観測と防御準備を優先するべきだ。",
+			},
+			{
+				ParentIndex: new(14),
+				CommentType: "狙い",
+				Content:     "相手の通信様式と行動規則を測る時間を確保できる。",
+			},
+			{
+				ParentIndex: new(15),
+				CommentType: "危険",
+				Content:     "曖昧な沈黙が拒絶として受け取られるかもしれない。",
+			},
+			{
+				ParentIndex: new(16),
+				CommentType: "備え",
+				Content:     "観測期間の長さだけは先に簡潔に通告する。",
+			},
+			{
+				ParentIndex: new(14),
+				CommentType: "狙い",
+				Content:     "拙速に地球代表を自称する失敗を避けられる。",
+			},
+			{
+				ParentIndex: new(18),
+				CommentType: "危険",
+				Content:     "判断保留の間に現場が独断で接触する可能性がある。",
+			},
+			{
+				ParentIndex: new(19),
+				CommentType: "備え",
+				Content:     "接触権限を国際機関の暫定指揮所に集約する。",
+			},
+		},
+	},
 }
 
 func main() {
