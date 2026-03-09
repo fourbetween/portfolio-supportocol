@@ -1,5 +1,7 @@
 import { css } from "lit";
 
+export const commentTreeStickyHeaderHeightPx = 32;
+
 export const commentTreeStyle = css`
   .comment-node {
     margin-bottom: 16px;
@@ -19,6 +21,8 @@ export const commentTreeStyle = css`
     position: sticky;
     background: var(--color-canvas-default);
     padding: 4px 0;
+    min-height: ${commentTreeStickyHeaderHeightPx}px;
+    box-sizing: border-box;
     overflow: hidden;
     cursor: pointer;
   }
