@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
       allowedHosts: [".dev.hick-r.com"],
     },
     plugins: [
-      pwaPlugin(mode),
+      pwaPlugin(),
       // visualizer({
       //   open: false,
       //   filename: "stats.html",

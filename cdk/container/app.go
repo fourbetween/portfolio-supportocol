@@ -17,6 +17,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsroute53"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsroute53targets"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awss3assets"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3deployment"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awssecretsmanager"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
@@ -84,7 +85,7 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 		c.buildApiFunction()
 		c.buildMainAPI()
 		c.buildCDN()
-		c.buildViewCacheClearFunction()
+		c.deployView()
 		c.buildMainRecord()
 	}
 
@@ -209,22 +210,23 @@ func (c *AppContainer) buildCDN() {
 					nil,
 				),
 				ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
-				FunctionAssociations: &[]*awscloudfront.FunctionAssociation{
-					{
-						EventType: awscloudfront.FunctionEventType_VIEWER_REQUEST,
-						Function: awscloudfront.NewFunction(
-							c.stack,
-							jsii.String("RewritePathFunctionForSpa"),
-							&awscloudfront.FunctionProps{
-								Code: awscloudfront.FunctionCode_FromFile(&awscloudfront.FileCodeOptions{
-									FilePath: jsii.String("/sources/cdk-share/lambda/cloudfront_rewrite_path_for_spa/main.js"),
-								}),
-							},
-						),
-					},
-				},
+				CachePolicy:          awscloudfront.CachePolicy_CACHING_OPTIMIZED(),
 			},
 			DomainNames: jsii.Strings(c.domain()),
+			ErrorResponses: &[]*awscloudfront.ErrorResponse{
+				{
+					HttpStatus:         jsii.Number(403),
+					ResponseHttpStatus: jsii.Number(200),
+					ResponsePagePath:   jsii.String("/index.html"),
+					Ttl:                awscdk.Duration_Seconds(jsii.Number(0)),
+				},
+				{
+					HttpStatus:         jsii.Number(404),
+					ResponseHttpStatus: jsii.Number(200),
+					ResponsePagePath:   jsii.String("/index.html"),
+					Ttl:                awscdk.Duration_Seconds(jsii.Number(0)),
+				},
+			},
 		})
 
 	apigDomain := fmt.Sprintf("%s.execute-api.%s.amazonaws.com", *c.mainApi.ApiId(), *c.stack.Region())
@@ -302,75 +304,77 @@ func (c *AppContainer) buildViewBucket() {
 	bucket := awss3.NewBucket(c.stack, jsii.String("ViewBucket"), &awss3.BucketProps{
 		AutoDeleteObjects: jsii.Bool(true),
 		RemovalPolicy:     awscdk.RemovalPolicy_DESTROY,
+		BlockPublicAccess: awss3.BlockPublicAccess_BLOCK_ALL(),
 	})
-	awss3deployment.NewBucketDeployment(
-		c.stack,
-		jsii.String("ViewBucketDeployment"),
-		&awss3deployment.BucketDeploymentProps{
-			DestinationBucket: bucket,
-			Sources: &[]awss3deployment.ISource{
-				awss3deployment.Source_Asset(
-					jsii.String("../view/dist"),
-					nil,
-				),
-			},
-		})
 	c.viewBucket = bucket
 }
 
-func (c *AppContainer) buildViewCacheClearFunction() {
-	f := awslambda.NewFunction(
+func (c *AppContainer) deployView() {
+	awss3deployment.NewBucketDeployment(
 		c.stack,
-		jsii.String("ViewCacheClearFunc"),
-		&awslambda.FunctionProps{
-			Architecture:  awslambda.Architecture_ARM_64(),
-			LogGroup:      c.logGroup,
-			LoggingFormat: awslambda.LoggingFormat_JSON,
-			Timeout:       awscdk.Duration_Seconds(jsii.Number(30)),
-			Handler:       jsii.String("bootstrap"),
-			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
-			Code: awslambda.AssetCode_FromAsset(
-				jsii.String("/sources/cdk-share/lambda/cloudfront_create_invalidation/build"),
-				nil,
-			),
-			Environment: &map[string]*string{
-				"CLOUDFRONT_DISTRIBUTION_ID": jsii.String(*c.cdn.DistributionId()),
+		jsii.String("ViewBucketImmutableAssetDeployment"),
+		&awss3deployment.BucketDeploymentProps{
+			DestinationBucket: c.viewBucket,
+			Sources: &[]awss3deployment.ISource{
+				awss3deployment.Source_Asset(
+					jsii.String("../view/dist"),
+					&awss3assets.AssetOptions{
+						Exclude: jsii.Strings("*", "!assets", "!assets/**/*", "!workbox-*.js"),
+					},
+				),
 			},
+			CacheControl: &[]awss3deployment.CacheControl{
+				awss3deployment.CacheControl_SetPublic(),
+				awss3deployment.CacheControl_Immutable(),
+				awss3deployment.CacheControl_MaxAge(awscdk.Duration_Days(jsii.Number(365))),
+			},
+			Prune: jsii.Bool(false),
 		})
-	c.cdn.GrantCreateInvalidation(f)
-	f.AddEventSource(awslambdaeventsources.NewS3EventSource(
-		c.viewBucket,
-		&awslambdaeventsources.S3EventSourceProps{
-			Events: &[]awss3.EventType{
-				awss3.EventType_OBJECT_CREATED,
+	awss3deployment.NewBucketDeployment(
+		c.stack,
+		jsii.String("ViewBucketStaticDeployment"),
+		&awss3deployment.BucketDeploymentProps{
+			DestinationBucket: c.viewBucket,
+			Sources: &[]awss3deployment.ISource{
+				awss3deployment.Source_Asset(
+					jsii.String("../view/dist"),
+					&awss3assets.AssetOptions{
+						Exclude: jsii.Strings("assets/**/*", "workbox-*.js", "index.html", "sw.js", "registerSW.js", "manifest.webmanifest"),
+					},
+				),
 			},
-			Filters: &[]*awss3.NotificationKeyFilter{
-				{Suffix: jsii.String("index.html")},
+			CacheControl: &[]awss3deployment.CacheControl{
+				awss3deployment.CacheControl_SetPublic(),
+				awss3deployment.CacheControl_MaxAge(awscdk.Duration_Days(jsii.Number(1))),
+				awss3deployment.CacheControl_StaleWhileRevalidate(awscdk.Duration_Days(jsii.Number(7))),
 			},
-		},
-	))
-	f.AddEventSource(awslambdaeventsources.NewS3EventSource(
-		c.viewBucket,
-		&awslambdaeventsources.S3EventSourceProps{
-			Events: &[]awss3.EventType{
-				awss3.EventType_OBJECT_CREATED,
+			Distribution:      c.cdn,
+			DistributionPaths: jsii.Strings("/favicon.ico", "/images/*"),
+			Prune:             jsii.Bool(false),
+		})
+	awss3deployment.NewBucketDeployment(
+		c.stack,
+		jsii.String("ViewBucketEntryDeployment"),
+		&awss3deployment.BucketDeploymentProps{
+			DestinationBucket: c.viewBucket,
+			Sources: &[]awss3deployment.ISource{
+				awss3deployment.Source_Asset(
+					jsii.String("../view/dist"),
+					&awss3assets.AssetOptions{
+						Exclude: jsii.Strings("*", "!index.html", "!sw.js", "!registerSW.js", "!manifest.webmanifest"),
+					},
+				),
 			},
-			Filters: &[]*awss3.NotificationKeyFilter{
-				{Suffix: jsii.String("sw.js")},
+			CacheControl: &[]awss3deployment.CacheControl{
+				awss3deployment.CacheControl_NoCache(),
+				awss3deployment.CacheControl_NoStore(),
+				awss3deployment.CacheControl_MustRevalidate(),
+				awss3deployment.CacheControl_MaxAge(awscdk.Duration_Seconds(jsii.Number(0))),
 			},
-		},
-	))
-	f.AddEventSource(awslambdaeventsources.NewS3EventSource(
-		c.viewBucket,
-		&awslambdaeventsources.S3EventSourceProps{
-			Events: &[]awss3.EventType{
-				awss3.EventType_OBJECT_CREATED,
-			},
-			Filters: &[]*awss3.NotificationKeyFilter{
-				{Suffix: jsii.String("manifest.webmanifest")},
-			},
-		},
-	))
+			Distribution:      c.cdn,
+			DistributionPaths: jsii.Strings("/", "/index.html", "/sw.js", "/registerSW.js", "/manifest.webmanifest"),
+			Prune:             jsii.Bool(false),
+		})
 }
 
 func (c *AppContainer) buildDNS() {

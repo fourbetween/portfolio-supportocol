@@ -87,7 +87,7 @@ func fetchConfig() (*envConfig, error) {
 		SiteTitle:       siteName,
 		SiteURL:         "https://" + domain,
 		SiteLogo:        "/images/logo.webp",
-		SiteFavicon:     "/images/favicon.ico",
+		SiteFavicon:     "/favicon.ico",
 		GoogleClientID:  googleClientID,
 	}, nil
 }

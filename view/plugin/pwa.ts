@@ -1,20 +1,17 @@
 import { VitePWA } from "vite-plugin-pwa";
 import { paths } from "../src/app/paths";
 
-export const pwaPlugin = (mode: string) => {
-  const globPatterns = ["*.js"];
-  if (["prod", "demo"].includes(mode)) {
-    globPatterns.push("assets/**/*", "images/**/*", "index.html");
-  }
+export const pwaPlugin = () => {
+  const globPatterns = ["assets/**/*.js"];
   return VitePWA({
     devOptions: { enabled: true },
     registerType: "autoUpdate",
     injectRegister: "auto",
     includeAssets: [],
-    includeManifestIcons: false,
     workbox: {
       globPatterns: globPatterns,
-      importScripts: [],
+      skipWaiting: true,
+      clientsClaim: true,
     },
     manifest: {
       icons: [
