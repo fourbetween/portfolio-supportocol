@@ -24,7 +24,12 @@ export const commentTreeStyle = css`
     min-height: ${commentTreeStickyHeaderHeightPx}px;
     box-sizing: border-box;
     overflow: hidden;
+    cursor: default;
+    pointer-events: none;
+  }
+  .group-header.stuck {
     cursor: pointer;
+    pointer-events: auto;
   }
   .group-header:focus-visible {
     outline: 2px solid var(--color-accent-fg);

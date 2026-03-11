@@ -51,7 +51,10 @@ export class LearningCommentTree extends LitElement {
         for (const entry of entries) {
           const header = (entry.target as HTMLElement).nextElementSibling;
           if (header?.classList.contains("group-header")) {
-            header.classList.toggle("stuck", !entry.isIntersecting);
+            this.updateStickyHeaderState(
+              header as HTMLElement,
+              !entry.isIntersecting,
+            );
           }
         }
       },
@@ -85,6 +88,19 @@ export class LearningCommentTree extends LitElement {
     this._stickyObserver.disconnect();
     const sentinels = this.renderRoot.querySelectorAll(".sticky-sentinel");
     sentinels.forEach((s) => this._stickyObserver!.observe(s));
+  }
+
+  private updateStickyHeaderState(header: HTMLElement, isStuck: boolean) {
+    header.classList.toggle("stuck", isStuck);
+
+    if (isStuck) {
+      header.setAttribute("role", "button");
+      header.tabIndex = 0;
+      return;
+    }
+
+    header.removeAttribute("role");
+    header.removeAttribute("tabindex");
   }
 
   private updateTreeData() {
@@ -253,8 +269,6 @@ export class LearningCommentTree extends LitElement {
         ></div>
         <div
           class="group-header"
-          role="button"
-          tabindex="0"
           style="top: ${depth *
           commentTreeStickyHeaderHeightPx}px; z-index: ${10 - depth}"
           @click=${() => this.handleStickyHeaderClick(comment.id)}
