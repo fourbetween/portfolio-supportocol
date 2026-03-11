@@ -2,7 +2,7 @@ import { VitePWA } from "vite-plugin-pwa";
 import { paths } from "../src/app/paths";
 
 export const pwaPlugin = (mode: string) => {
-  const globPatterns = ["*.js"];
+  const globPatterns = ["**/*.{js,css,html}"];
   if (["prod", "demo"].includes(mode)) {
     globPatterns.push("assets/**/*", "images/**/*");
   }
