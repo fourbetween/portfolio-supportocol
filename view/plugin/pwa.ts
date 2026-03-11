@@ -1,8 +1,11 @@
 import { VitePWA } from "vite-plugin-pwa";
 import { paths } from "../src/app/paths";
 
-export const pwaPlugin = () => {
-  const globPatterns = ["assets/**/*.js"];
+export const pwaPlugin = (mode: string) => {
+  const globPatterns = ["*.js"];
+  if (["prod", "demo"].includes(mode)) {
+    globPatterns.push("assets/**/*", "images/**/*");
+  }
   return VitePWA({
     devOptions: { enabled: true },
     registerType: "autoUpdate",
