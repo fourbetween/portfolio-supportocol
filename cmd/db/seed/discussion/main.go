@@ -17,8 +17,8 @@ import (
 	"github.com/fourbetween/pkg-conf/conf"
 )
 
-const seedWorkspaceID = "019c8fab-a633-7e0a-9861-f5c68ef05020"
-const seedUserID = "019c8fab-a62c-7203-8210-633df0a30bed"
+const seedWorkspaceID = "019c8d7e-f6f8-7be9-8864-795622d4c846"
+const seedUserID = "019c8d7e-f6d4-7522-8503-2f2f9a78390f"
 
 type discussionSeed struct {
 	Theme    string
@@ -195,6 +195,11 @@ var seeds = []discussionSeed{
 				ParentIndex: new(4),
 				CommentType: "懸念",
 				Content:     "集合住宅は侵入経路が多い。",
+			},
+			{
+				ParentIndex: new(5),
+				CommentType: "対処",
+				Content:     "出入口が少ない区画だけ防衛地点にする。",
 			},
 
 			{
