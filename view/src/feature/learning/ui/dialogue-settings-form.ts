@@ -38,11 +38,10 @@ export class LearningDialogueSettingsForm extends LitElement {
 
   @state()
   private _commentPermission: DialogueSettings["commentPermission"] =
-    "authenticated";
+    "everyone";
 
   @state()
-  private _issuePermission: DialogueSettings["issuePermission"] =
-    "authenticated";
+  private _issuePermission: DialogueSettings["issuePermission"] = "everyone";
 
   get value(): DialogueSettings {
     return {
@@ -69,8 +68,8 @@ export class LearningDialogueSettingsForm extends LitElement {
       } else {
         this._types = [];
         this._paths = [];
-        this._commentPermission = "authenticated";
-        this._issuePermission = "authenticated";
+        this._commentPermission = "everyone";
+        this._issuePermission = "everyone";
       }
       this._newTypeName = "";
       this._selectedParent = "";

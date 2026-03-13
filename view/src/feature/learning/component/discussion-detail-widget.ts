@@ -69,11 +69,9 @@ export class LearningDiscussionDetailWidget extends LitElement {
             this.discussion.dialogueSettings?.commentFrame ??
             deriveCommentFrame(this.comments),
           commentPermission:
-            this.discussion.dialogueSettings?.commentPermission ??
-            "authenticated",
+            this.discussion.dialogueSettings?.commentPermission ?? "everyone",
           issuePermission:
-            this.discussion.dialogueSettings?.issuePermission ??
-            "authenticated",
+            this.discussion.dialogueSettings?.issuePermission ?? "everyone",
         };
       }
       const data = await discussionRepository.updateStatus(
