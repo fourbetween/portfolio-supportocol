@@ -34,7 +34,12 @@ type ListCommentsInput struct {
 	Since        *time.Time
 }
 
-func (u *ListCommentsUsecase) Execute(ctx context.Context, input ListCommentsInput) ([]*domain.Comment, error) {
+type ListCommentsOutput struct {
+	Items []*domain.Comment
+	ReadCachePolicy
+}
+
+func (u *ListCommentsUsecase) Execute(ctx context.Context, input ListCommentsInput) (*ListCommentsOutput, error) {
 	discussion, err := u.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:          input.DiscussionID,
 		WorkspaceID: input.WorkspaceID,
@@ -51,8 +56,16 @@ func (u *ListCommentsUsecase) Execute(ctx context.Context, input ListCommentsInp
 		return nil, apperr.ErrPermissionDenied
 	}
 
-	return u.commentRepo.Search(ctx, domain.SearchCommentsParams{
+	items, err := u.commentRepo.Search(ctx, domain.SearchCommentsParams{
 		DiscussionID: input.DiscussionID,
 		Since:        input.Since,
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &ListCommentsOutput{
+		Items:           items,
+		ReadCachePolicy: ReadCachePolicy{Cacheable: discussion.Status().IsPublic()},
+	}, nil
 }

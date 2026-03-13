@@ -32,6 +32,7 @@ type ListDiscussionsInput struct {
 type ListDiscussionsOutput struct {
 	Items      []DiscussionSummary
 	TotalCount int
+	ReadCachePolicy
 }
 
 func (u *ListDiscussionsUsecase) Execute(ctx context.Context, input ListDiscussionsInput) (ListDiscussionsOutput, error) {
@@ -44,7 +45,11 @@ func (u *ListDiscussionsUsecase) Execute(ctx context.Context, input ListDiscussi
 		if err != nil {
 			return ListDiscussionsOutput{}, err
 		}
-		return ListDiscussionsOutput{Items: result.Items, TotalCount: result.TotalCount}, nil
+		return ListDiscussionsOutput{
+			Items:           result.Items,
+			TotalCount:      result.TotalCount,
+			ReadCachePolicy: ReadCachePolicy{Cacheable: true},
+		}, nil
 	}
 
 	canAccess, err := u.permSv.CanAccessDiscussion(ctx, input.UserID, input.WorkspaceID, domain.DiscussionStatusInternal)
@@ -59,5 +64,9 @@ func (u *ListDiscussionsUsecase) Execute(ctx context.Context, input ListDiscussi
 	if err != nil {
 		return ListDiscussionsOutput{}, err
 	}
-	return ListDiscussionsOutput{Items: result.Items, TotalCount: result.TotalCount}, nil
+	return ListDiscussionsOutput{
+		Items:           result.Items,
+		TotalCount:      result.TotalCount,
+		ReadCachePolicy: ReadCachePolicy{Cacheable: false},
+	}, nil
 }

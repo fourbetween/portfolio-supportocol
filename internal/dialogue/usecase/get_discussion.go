@@ -26,7 +26,12 @@ type GetDiscussionInput struct {
 	UserID      string
 }
 
-func (u *GetDiscussionUsecase) Execute(ctx context.Context, input GetDiscussionInput) (*domain.Discussion, error) {
+type GetDiscussionOutput struct {
+	Discussion *domain.Discussion
+	ReadCachePolicy
+}
+
+func (u *GetDiscussionUsecase) Execute(ctx context.Context, input GetDiscussionInput) (*GetDiscussionOutput, error) {
 	discussion, err := u.repo.Load(ctx, domain.LoadDiscussionParams{
 		ID:          input.ID,
 		WorkspaceID: input.WorkspaceID,
@@ -43,5 +48,8 @@ func (u *GetDiscussionUsecase) Execute(ctx context.Context, input GetDiscussionI
 		return nil, apperr.ErrPermissionDenied
 	}
 
-	return discussion, nil
+	return &GetDiscussionOutput{
+		Discussion:      discussion,
+		ReadCachePolicy: ReadCachePolicy{Cacheable: discussion.Status().IsPublic()},
+	}, nil
 }
