@@ -23,6 +23,10 @@ type DiscussionListResult struct {
 	TotalCount int
 }
 
+type ReadCachePolicy struct {
+	Cacheable bool
+}
+
 type DiscussionQueryService interface {
 	// ListPublicDiscussions lists all public discussions (accessible by everyone).
 	ListPublicDiscussions(
