@@ -7,6 +7,7 @@ import { discussionDetailStyle } from "../../../shared/style/discussion-detail";
 import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/discussion-archive-badge/discussion-archive-badge";
 import "../../../shared/ui/icons/icon-star";
+import "../../../shared/ui/icons/icon-star-filled";
 import {
   DialogueFavoriteCreateEvent,
   DialogueFavoriteDeleteEvent,
@@ -76,10 +77,16 @@ export class DialogueDiscussionDetail extends LitElement {
                       ? msg("Unfavorite")
                       : msg("Favorite")}
                   >
-                    <ui-icon-star
-                      .size=${16}
-                      class=${this.favorited ? "fill" : ""}
-                    ></ui-icon-star>
+                    ${this.favorited
+                      ? html`
+                          <ui-icon-star-filled
+                            .size=${16}
+                            class="fill"
+                          ></ui-icon-star-filled>
+                        `
+                      : html`
+                          <ui-icon-star .size=${16}></ui-icon-star>
+                        `}
                   </button>
                 `
               : html``}
