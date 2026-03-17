@@ -1,7 +1,7 @@
 ---
 name: Plan Architect
 description: 計画を既存コードベースの構造と照合する内部専用アーキテクト
-tools: [read, search, web]
+tools: [read, search, web, "dbhub/*"]
 agents: []
 model: Claude Opus 4.6 (copilot)
 user-invocable: false

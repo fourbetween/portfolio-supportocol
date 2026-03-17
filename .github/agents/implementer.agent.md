@@ -1,7 +1,7 @@
 ---
 name: Implementer
 description: 合意済みタスクを実装する内部専用エージェント
-tools: ["read", "search", "edit", "web"]
+tools: [read, edit, search, web, "dbhub/*"]
 agents: []
 model: Claude Opus 4.6 (copilot)
 user-invocable: false
@@ -18,6 +18,7 @@ disable-model-invocation: true
 
 実装ルール:
 
+- 実装はドメイン駆動設計に従う。
 - 変更範囲は最小限に保つ。
 - 既存 API や既存設計を、必要がない限り変えない。
 - 迷った場合は新規実装より既存パターンの再利用を優先する。
