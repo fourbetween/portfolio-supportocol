@@ -1,7 +1,7 @@
 ---
 name: Implementer
 description: 合意済みタスクを実装する内部専用エージェント
-tools: [read, edit, search, web, "dbhub/*"]
+tools: [execute, read, edit, search, web, "dbhub/*"]
 agents: []
 model: Claude Opus 4.6 (copilot)
 user-invocable: false
