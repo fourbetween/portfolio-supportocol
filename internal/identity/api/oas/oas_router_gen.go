@@ -100,24 +100,58 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
-			case 'l': // Prefix: "logout"
+			case 'l': // Prefix: "log"
 
-				if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
+				if l := len("log"); len(elem) >= l && elem[0:l] == "log" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleV1IdentityLogoutPostRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
+					break
+				}
+				switch elem[0] {
+				case 'i': // Prefix: "in"
+
+					if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+						elem = elem[l:]
+					} else {
+						break
 					}
 
-					return
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1IdentityLoginPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+				case 'o': // Prefix: "out"
+
+					if l := len("out"); len(elem) >= l && elem[0:l] == "out" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1IdentityLogoutPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
 				}
 
 			case 'm': // Prefix: "me"
@@ -137,6 +171,46 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						s.handleV1IdentityMeGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "DELETE,GET")
+					}
+
+					return
+				}
+
+			case 's': // Prefix: "signup"
+
+				if l := len("signup"); len(elem) >= l && elem[0:l] == "signup" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleV1IdentitySignupPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
+					}
+
+					return
+				}
+
+			case 'v': // Prefix: "verify-email"
+
+				if l := len("verify-email"); len(elem) >= l && elem[0:l] == "verify-email" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleV1IdentityVerifyEmailPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
 					}
 
 					return
@@ -292,29 +366,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 				}
 
-			case 'l': // Prefix: "logout"
+			case 'l': // Prefix: "log"
 
-				if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
+				if l := len("log"); len(elem) >= l && elem[0:l] == "log" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "POST":
-						r.name = V1IdentityLogoutPostOperation
-						r.summary = ""
-						r.operationID = ""
-						r.operationGroup = ""
-						r.pathPattern = "/v1/identity/logout"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
+					break
+				}
+				switch elem[0] {
+				case 'i': // Prefix: "in"
+
+					if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+						elem = elem[l:]
+					} else {
+						break
 					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = V1IdentityLoginPostOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/v1/identity/login"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				case 'o': // Prefix: "out"
+
+					if l := len("out"); len(elem) >= l && elem[0:l] == "out" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = V1IdentityLogoutPostOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/v1/identity/logout"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
 				}
 
 			case 'm': // Prefix: "me"
@@ -343,6 +456,56 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.operationID = ""
 						r.operationGroup = ""
 						r.pathPattern = "/v1/identity/me"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
+			case 's': // Prefix: "signup"
+
+				if l := len("signup"); len(elem) >= l && elem[0:l] == "signup" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = V1IdentitySignupPostOperation
+						r.summary = ""
+						r.operationID = ""
+						r.operationGroup = ""
+						r.pathPattern = "/v1/identity/signup"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
+			case 'v': // Prefix: "verify-email"
+
+				if l := len("verify-email"); len(elem) >= l && elem[0:l] == "verify-email" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = V1IdentityVerifyEmailPostOperation
+						r.summary = ""
+						r.operationID = ""
+						r.operationGroup = ""
+						r.pathPattern = "/v1/identity/verify-email"
 						r.args = args
 						r.count = 0
 						return r, true

@@ -31,6 +31,15 @@ func (UnimplementedHandler) V1IdentityGooglePost(ctx context.Context, req *Googl
 	return ht.ErrNotImplemented
 }
 
+// V1IdentityLoginPost implements POST /v1/identity/login operation.
+//
+// Login with email and password.
+//
+// POST /v1/identity/login
+func (UnimplementedHandler) V1IdentityLoginPost(ctx context.Context, req *LoginWithEmailRequest) error {
+	return ht.ErrNotImplemented
+}
+
 // V1IdentityLogoutPost implements POST /v1/identity/logout operation.
 //
 // Logout.
@@ -56,6 +65,24 @@ func (UnimplementedHandler) V1IdentityMeDelete(ctx context.Context) error {
 // GET /v1/identity/me
 func (UnimplementedHandler) V1IdentityMeGet(ctx context.Context) (r *User, _ error) {
 	return r, ht.ErrNotImplemented
+}
+
+// V1IdentitySignupPost implements POST /v1/identity/signup operation.
+//
+// Signup with email and password.
+//
+// POST /v1/identity/signup
+func (UnimplementedHandler) V1IdentitySignupPost(ctx context.Context, req *SignupWithEmailRequest) error {
+	return ht.ErrNotImplemented
+}
+
+// V1IdentityVerifyEmailPost implements POST /v1/identity/verify-email operation.
+//
+// Verify email address.
+//
+// POST /v1/identity/verify-email
+func (UnimplementedHandler) V1IdentityVerifyEmailPost(ctx context.Context, req *VerifyEmailRequest) error {
+	return ht.ErrNotImplemented
 }
 
 // NewError creates *ErrorStatusCode from error returned by handler.

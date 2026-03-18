@@ -6,9 +6,12 @@ package oas
 type OperationName = string
 
 const (
-	V1IdentityErrorsPostOperation OperationName = "V1IdentityErrorsPost"
-	V1IdentityGooglePostOperation OperationName = "V1IdentityGooglePost"
-	V1IdentityLogoutPostOperation OperationName = "V1IdentityLogoutPost"
-	V1IdentityMeDeleteOperation   OperationName = "V1IdentityMeDelete"
-	V1IdentityMeGetOperation      OperationName = "V1IdentityMeGet"
+	V1IdentityErrorsPostOperation      OperationName = "V1IdentityErrorsPost"
+	V1IdentityGooglePostOperation      OperationName = "V1IdentityGooglePost"
+	V1IdentityLoginPostOperation       OperationName = "V1IdentityLoginPost"
+	V1IdentityLogoutPostOperation      OperationName = "V1IdentityLogoutPost"
+	V1IdentityMeDeleteOperation        OperationName = "V1IdentityMeDelete"
+	V1IdentityMeGetOperation           OperationName = "V1IdentityMeGet"
+	V1IdentitySignupPostOperation      OperationName = "V1IdentitySignupPost"
+	V1IdentityVerifyEmailPostOperation OperationName = "V1IdentityVerifyEmailPost"
 )

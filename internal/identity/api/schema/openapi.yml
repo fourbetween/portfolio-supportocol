@@ -42,6 +42,35 @@ components:
         - id
         - email
         - name
+    SignupWithEmailRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+    LoginWithEmailRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+    VerifyEmailRequest:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+        - token
 paths:
   /v1/identity/google:
     post:
@@ -120,6 +149,60 @@ paths:
                   type: string
               required:
                 - message
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/signup:
+    post:
+      description: signup with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupWithEmailRequest"
+      responses:
+        "200":
+          description: success response (email verification required)
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/login:
+    post:
+      description: login with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginWithEmailRequest"
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/verify-email:
+    post:
+      description: verify email address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyEmailRequest"
       responses:
         "200":
           description: success response

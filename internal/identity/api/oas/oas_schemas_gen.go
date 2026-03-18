@@ -102,6 +102,58 @@ func (s *GoogleLoginRequest) SetIdToken(val string) {
 	s.IdToken = val
 }
 
+// Ref: #/components/schemas/LoginWithEmailRequest
+type LoginWithEmailRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+// GetEmail returns the value of Email.
+func (s *LoginWithEmailRequest) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *LoginWithEmailRequest) GetPassword() string {
+	return s.Password
+}
+
+// SetEmail sets the value of Email.
+func (s *LoginWithEmailRequest) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *LoginWithEmailRequest) SetPassword(val string) {
+	s.Password = val
+}
+
+// Ref: #/components/schemas/SignupWithEmailRequest
+type SignupWithEmailRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+// GetEmail returns the value of Email.
+func (s *SignupWithEmailRequest) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *SignupWithEmailRequest) GetPassword() string {
+	return s.Password
+}
+
+// SetEmail sets the value of Email.
+func (s *SignupWithEmailRequest) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *SignupWithEmailRequest) SetPassword(val string) {
+	s.Password = val
+}
+
 // Ref: #/components/schemas/User
 type User struct {
 	ID    string `json:"id"`
@@ -159,8 +211,32 @@ func (s *V1IdentityErrorsPostReq) SetMessage(val string) {
 // V1IdentityGooglePostOK is response for V1IdentityGooglePost operation.
 type V1IdentityGooglePostOK struct{}
 
+// V1IdentityLoginPostOK is response for V1IdentityLoginPost operation.
+type V1IdentityLoginPostOK struct{}
+
 // V1IdentityLogoutPostOK is response for V1IdentityLogoutPost operation.
 type V1IdentityLogoutPostOK struct{}
 
 // V1IdentityMeDeleteOK is response for V1IdentityMeDelete operation.
 type V1IdentityMeDeleteOK struct{}
+
+// V1IdentitySignupPostOK is response for V1IdentitySignupPost operation.
+type V1IdentitySignupPostOK struct{}
+
+// V1IdentityVerifyEmailPostOK is response for V1IdentityVerifyEmailPost operation.
+type V1IdentityVerifyEmailPostOK struct{}
+
+// Ref: #/components/schemas/VerifyEmailRequest
+type VerifyEmailRequest struct {
+	Token string `json:"token"`
+}
+
+// GetToken returns the value of Token.
+func (s *VerifyEmailRequest) GetToken() string {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *VerifyEmailRequest) SetToken(val string) {
+	s.Token = val
+}

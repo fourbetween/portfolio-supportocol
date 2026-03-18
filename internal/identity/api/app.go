@@ -46,6 +46,24 @@ func (h *appHandler) V1IdentityGooglePost(ctx context.Context, req *oas.GoogleLo
 	return nil
 }
 
+func (h *appHandler) V1IdentitySignupPost(ctx context.Context, req *oas.SignupWithEmailRequest) error {
+	return h.con.SignupWithEmail.Execute(ctx, req.Email, req.Password)
+}
+
+func (h *appHandler) V1IdentityLoginPost(ctx context.Context, req *oas.LoginWithEmailRequest) error {
+	token, err := h.con.LoginWithEmail.Execute(ctx, req.Email, req.Password)
+	if err != nil {
+		return err
+	}
+
+	h.setAuthCookie(ctx, token)
+	return nil
+}
+
+func (h *appHandler) V1IdentityVerifyEmailPost(ctx context.Context, req *oas.VerifyEmailRequest) error {
+	return h.con.VerifyEmail.Execute(ctx, req.Token)
+}
+
 func (h *appHandler) V1IdentityLogoutPost(ctx context.Context) error {
 	h.clearAuthCookie(ctx)
 	return nil
@@ -77,14 +95,20 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 	msg := err.Error()
 	if errors.Is(err, apperr.ErrUnauthenticated) ||
 		errors.Is(err, auth.ErrNotFound) ||
-		errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied) {
+		errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied) ||
+		errors.Is(err, auth.ErrInvalidCredentials) {
 		code = 401
-	} else if errors.Is(err, apperr.ErrPermissionDenied) {
+	} else if errors.Is(err, apperr.ErrPermissionDenied) ||
+		errors.Is(err, auth.ErrEmailNotVerified) {
 		code = 403
 	} else if errors.Is(err, apperr.ErrNotFound) {
 		code = 404
-	} else if errors.Is(err, apperr.ErrAlreadyExists) {
+	} else if errors.Is(err, apperr.ErrAlreadyExists) ||
+		errors.Is(err, auth.ErrEmailAlreadyExists) {
 		code = 409
+	} else if errors.Is(err, auth.ErrInvalidToken) ||
+		errors.Is(err, auth.ErrInvalidPassword) {
+		code = 400
 	} else if code == 500 {
 		slog.Error(err.Error())
 		msg = "internal server error"
