@@ -67,7 +67,10 @@ func NewContainer(
 		})
 	}
 
-	mailSrv := mail.NewSESService(sesFrom, fmt.Sprintf("https://%s", siteDomain), awscfg)
+	mailSrv, err := mail.NewSESService(sesFrom, fmt.Sprintf("https://%s/identity", siteDomain), awscfg)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create mail service: %w", err)
+	}
 
 	authSrv := auth.NewDefaultService(
 		password.NewDefaultService(),
