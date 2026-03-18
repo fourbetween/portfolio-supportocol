@@ -43,9 +43,9 @@ func NewContainer(
 		return nil, fmt.Errorf("failed to get SES from address from config: %w", err)
 	}
 
-	siteURL, err := appConf.Get("site/url")
+	siteDomain, err := appConf.Get("domain")
 	if err != nil {
-		return nil, fmt.Errorf("failed to get site URL from config: %w", err)
+		return nil, fmt.Errorf("failed to get domain from config: %w", err)
 	}
 
 	userFac := domain.NewFactory()
@@ -67,7 +67,7 @@ func NewContainer(
 		})
 	}
 
-	mailSrv := mail.NewSESService(sesFrom, siteURL, awscfg)
+	mailSrv := mail.NewSESService(sesFrom, fmt.Sprintf("https://%s", siteDomain), awscfg)
 
 	authSrv := auth.NewDefaultService(
 		password.NewDefaultService(),
