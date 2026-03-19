@@ -17,7 +17,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.41.4
 	github.com/aws/aws-sdk-go-v2/config v1.32.12
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
-	github.com/fourbetween/pkg-auth v0.4.0
+	github.com/fourbetween/pkg-auth v0.4.1
 	github.com/fourbetween/pkg-conf v0.2.0
 	github.com/fourbetween/pkg-queue v0.0.3
 	github.com/fourbetween/pkg-secret v0.0.3
