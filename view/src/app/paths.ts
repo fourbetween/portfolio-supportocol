@@ -18,6 +18,7 @@ export const paths = {
   },
   identity: {
     account: "/identity/account",
+    verifyEmail: "/identity/signup/verify-email",
   },
 };
 

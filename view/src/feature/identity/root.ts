@@ -19,6 +19,16 @@ export class IdentityRoot extends LitElement {
           <identity-account-page></identity-account-page>
         `,
       },
+      {
+        path: pathInFeature(paths.identity.verifyEmail),
+        enter: async () => {
+          await import("./page/verify-email-page");
+          return true;
+        },
+        render: () => html`
+          <identity-verify-email-page></identity-verify-email-page>
+        `,
+      },
     ],
     {
       fallback: {

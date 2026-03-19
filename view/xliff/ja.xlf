@@ -922,6 +922,26 @@
   <source>Please check your email to verify your account.</source>
   <target>アカウントを有効化するためにメールを確認してください。</target>
 </trans-unit>
+<trans-unit id="s509899ecfed8bebe">
+  <source>Email Verification</source>
+  <target>メール認証</target>
+</trans-unit>
+<trans-unit id="s65be01e9c1002ad3">
+  <source>Verifying your email...</source>
+  <target>メールを認証しています...</target>
+</trans-unit>
+<trans-unit id="se7f2d88b36214086">
+  <source>Your email has been verified.</source>
+  <target>メールの認証が完了しました。</target>
+</trans-unit>
+<trans-unit id="s29742f41758edc87">
+  <source>Go to home</source>
+  <target>ホームに移動</target>
+</trans-unit>
+<trans-unit id="sdd2c68f9f46e8fec">
+  <source>Email verification failed. The link may have expired or already been used.</source>
+  <target>メールの認証に失敗しました。リンクが期限切れになっているか、すでに使用されている可能性があります。</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
