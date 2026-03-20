@@ -146,7 +146,8 @@ export class IdentityAuthWidget extends LitElement {
         return;
       }
       this.close();
-      const checkEmailPath = `${paths.identity.checkEmail}?email=${encodeURIComponent(email)}`;
+      sessionStorage.setItem("signup_email", email);
+      const checkEmailPath = paths.identity.checkEmail;
       if (this._router) {
         navigate(this._router, checkEmailPath);
       }

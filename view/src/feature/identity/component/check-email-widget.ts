@@ -12,8 +12,7 @@ export class IdentityCheckEmailWidget extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
-    this._email =
-      new URLSearchParams(window.location.search).get("email") ?? "";
+    this._email = sessionStorage.getItem("signup_email") ?? "";
   }
 
   private async _handleResendVerifyEmail(e: IdentityResendVerifyEmailEvent) {
