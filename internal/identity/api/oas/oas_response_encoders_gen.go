@@ -53,6 +53,24 @@ func encodeV1IdentityMeGetResponse(response *User, w http.ResponseWriter) error 
 	return nil
 }
 
+func encodeV1IdentityMePasswordPutResponse(response *V1IdentityMePasswordPutOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
+func encodeV1IdentityPasswordResetConfirmPostResponse(response *V1IdentityPasswordResetConfirmPostOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
+func encodeV1IdentityPasswordResetPostResponse(response *V1IdentityPasswordResetPostOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
 func encodeV1IdentityResendVerifyEmailPostResponse(response *V1IdentityResendVerifyEmailPostOK, w http.ResponseWriter) error {
 	w.WriteHeader(200)
 

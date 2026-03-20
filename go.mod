@@ -17,7 +17,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.41.4
 	github.com/aws/aws-sdk-go-v2/config v1.32.12
 	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2
-	github.com/fourbetween/pkg-auth v0.4.1
+	github.com/fourbetween/pkg-auth v0.4.2
 	github.com/fourbetween/pkg-conf v0.2.0
 	github.com/fourbetween/pkg-queue v0.0.3
 	github.com/fourbetween/pkg-secret v0.0.3
@@ -63,7 +63,7 @@ require (
 	github.com/creack/pty v1.1.24 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
-	github.com/fatih/color v1.18.0 // indirect
+	github.com/fatih/color v1.19.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fourbetween/pkg-id v0.0.2 // indirect
 	github.com/fourbetween/tool-import-components v0.0.3 // indirect
@@ -119,7 +119,7 @@ require (
 	golang.org/x/tools v0.43.0 // indirect
 	golang.org/x/vuln v1.1.4 // indirect
 	google.golang.org/api v0.272.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260316180232-0b37fe3546d5 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260319201613-d00831a3d3e7 // indirect
 	google.golang.org/grpc v1.79.3 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect

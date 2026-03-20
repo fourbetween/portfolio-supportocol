@@ -44,6 +44,24 @@ type Handler interface {
 	//
 	// GET /v1/identity/me
 	V1IdentityMeGet(ctx context.Context) (*User, error)
+	// V1IdentityMePasswordPut implements PUT /v1/identity/me/password operation.
+	//
+	// Change password.
+	//
+	// PUT /v1/identity/me/password
+	V1IdentityMePasswordPut(ctx context.Context, req *ChangePasswordRequest) error
+	// V1IdentityPasswordResetConfirmPost implements POST /v1/identity/password-reset/confirm operation.
+	//
+	// Confirm password reset.
+	//
+	// POST /v1/identity/password-reset/confirm
+	V1IdentityPasswordResetConfirmPost(ctx context.Context, req *ConfirmPasswordResetRequest) error
+	// V1IdentityPasswordResetPost implements POST /v1/identity/password-reset operation.
+	//
+	// Request password reset.
+	//
+	// POST /v1/identity/password-reset
+	V1IdentityPasswordResetPost(ctx context.Context, req *RequestPasswordResetRequest) error
 	// V1IdentityResendVerifyEmailPost implements POST /v1/identity/resend-verify-email operation.
 	//
 	// Resend verification email.

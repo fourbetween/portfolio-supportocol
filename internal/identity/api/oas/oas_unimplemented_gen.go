@@ -67,6 +67,33 @@ func (UnimplementedHandler) V1IdentityMeGet(ctx context.Context) (r *User, _ err
 	return r, ht.ErrNotImplemented
 }
 
+// V1IdentityMePasswordPut implements PUT /v1/identity/me/password operation.
+//
+// Change password.
+//
+// PUT /v1/identity/me/password
+func (UnimplementedHandler) V1IdentityMePasswordPut(ctx context.Context, req *ChangePasswordRequest) error {
+	return ht.ErrNotImplemented
+}
+
+// V1IdentityPasswordResetConfirmPost implements POST /v1/identity/password-reset/confirm operation.
+//
+// Confirm password reset.
+//
+// POST /v1/identity/password-reset/confirm
+func (UnimplementedHandler) V1IdentityPasswordResetConfirmPost(ctx context.Context, req *ConfirmPasswordResetRequest) error {
+	return ht.ErrNotImplemented
+}
+
+// V1IdentityPasswordResetPost implements POST /v1/identity/password-reset operation.
+//
+// Request password reset.
+//
+// POST /v1/identity/password-reset
+func (UnimplementedHandler) V1IdentityPasswordResetPost(ctx context.Context, req *RequestPasswordResetRequest) error {
+	return ht.ErrNotImplemented
+}
+
 // V1IdentityResendVerifyEmailPost implements POST /v1/identity/resend-verify-email operation.
 //
 // Resend verification email.

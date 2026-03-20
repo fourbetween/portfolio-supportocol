@@ -39,6 +39,26 @@ export class IdentityRoot extends LitElement {
           <identity-check-email-page></identity-check-email-page>
         `,
       },
+      {
+        path: pathInFeature(paths.identity.requestPasswordReset),
+        enter: async () => {
+          await import("./page/request-password-reset-page");
+          return true;
+        },
+        render: () => html`
+          <identity-request-password-reset-page></identity-request-password-reset-page>
+        `,
+      },
+      {
+        path: pathInFeature(paths.identity.confirmPasswordReset),
+        enter: async () => {
+          await import("./page/confirm-password-reset-page");
+          return true;
+        },
+        render: () => html`
+          <identity-confirm-password-reset-page></identity-confirm-password-reset-page>
+        `,
+      },
     ],
     {
       fallback: {

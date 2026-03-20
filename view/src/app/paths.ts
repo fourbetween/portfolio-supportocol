@@ -20,6 +20,8 @@ export const paths = {
     account: "/identity/account",
     verifyEmail: "/identity/signup/verify-email",
     checkEmail: "/identity/check-email",
+    requestPasswordReset: "/identity/password/reset-request",
+    confirmPasswordReset: "/identity/password/reset",
   },
 };
 

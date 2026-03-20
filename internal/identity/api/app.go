@@ -100,6 +100,19 @@ func (h *appHandler) V1IdentityMeDelete(ctx context.Context) error {
 	return nil
 }
 
+func (h *appHandler) V1IdentityMePasswordPut(ctx context.Context, req *oas.ChangePasswordRequest) error {
+	uid := httpctx.GetUserID(ctx)
+	return h.con.ChangePassword.Execute(ctx, uid, req.CurrentPassword, req.NewPassword)
+}
+
+func (h *appHandler) V1IdentityPasswordResetPost(ctx context.Context, req *oas.RequestPasswordResetRequest) error {
+	return h.con.RequestPasswordReset.Execute(ctx, req.Email)
+}
+
+func (h *appHandler) V1IdentityPasswordResetConfirmPost(ctx context.Context, req *oas.ConfirmPasswordResetRequest) error {
+	return h.con.ConfirmPasswordReset.Execute(ctx, req.Token, req.NewPassword)
+}
+
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
 	code := 500
 	msg := err.Error()

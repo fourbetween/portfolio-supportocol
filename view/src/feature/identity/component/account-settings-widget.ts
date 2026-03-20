@@ -1,10 +1,12 @@
 import { consume } from "@lit/context";
+import { msg } from "@lit/localize";
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { userContext } from "../../../app/context/user";
 import { showToast } from "../../../shared/event/toast";
 import type {
   IdentityAccountDeleteEvent,
+  IdentityChangePasswordEvent,
   IdentityLogoutEvent,
 } from "../event/account";
 import { authService } from "../model/auth-service";
@@ -24,6 +26,18 @@ export class IdentityAccountSettingsWidget extends LitElement {
     authService.logout();
   }
 
+  private async _handleChangePassword(e: IdentityChangePasswordEvent) {
+    this.loading = true;
+    try {
+      await authService.changePassword(e.currentPassword, e.newPassword);
+      showToast(this, msg("Password changed successfully"), "success");
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    } finally {
+      this.loading = false;
+    }
+  }
+
   private async _handleDeleteAccount(_e: IdentityAccountDeleteEvent) {
     this.loading = true;
     try {
@@ -41,6 +55,7 @@ export class IdentityAccountSettingsWidget extends LitElement {
         .user=${this.user}
         .loading=${this.loading}
         @identity-logout=${this._handleLogout}
+        @identity-change-password=${this._handleChangePassword}
         @identity-account-delete=${this._handleDeleteAccount}
       ></identity-account-settings>
     `;

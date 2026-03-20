@@ -1,6 +1,7 @@
 import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { paths } from "../../../app/paths";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { inputStyle } from "../../../shared/style/input";
@@ -135,6 +136,18 @@ export class IdentityAuthPopup extends LitElement {
             required
           />
         </div>
+        ${this.mode === "login"
+          ? html`
+              <div class="forgot-password">
+                <a
+                  href=${paths.identity.requestPasswordReset}
+                  class="forgot-link"
+                >
+                  ${msg("Forgot password?")}
+                </a>
+              </div>
+            `
+          : ""}
         ${this.renderSignupFields()}
         <button type="submit" class="submit-button btn btn-primary">
           ${this.mode === "login" ? msg("Log in") : msg("Sign up")}
@@ -248,6 +261,20 @@ export class IdentityAuthPopup extends LitElement {
       .submit-button {
         margin-top: 8px;
         width: 100%;
+      }
+
+      .forgot-password {
+        text-align: right;
+        font-size: 12px;
+      }
+
+      .forgot-link {
+        color: #0969da;
+        text-decoration: none;
+      }
+
+      .forgot-link:hover {
+        text-decoration: underline;
       }
 
       .divider {
