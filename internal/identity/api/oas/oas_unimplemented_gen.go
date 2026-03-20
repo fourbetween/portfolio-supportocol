@@ -67,6 +67,15 @@ func (UnimplementedHandler) V1IdentityMeGet(ctx context.Context) (r *User, _ err
 	return r, ht.ErrNotImplemented
 }
 
+// V1IdentityResendVerifyEmailPost implements POST /v1/identity/resend-verify-email operation.
+//
+// Resend verification email.
+//
+// POST /v1/identity/resend-verify-email
+func (UnimplementedHandler) V1IdentityResendVerifyEmailPost(ctx context.Context, req *ResendVerifyEmailRequest) error {
+	return ht.ErrNotImplemented
+}
+
 // V1IdentitySignupPost implements POST /v1/identity/signup operation.
 //
 // Signup with email and password.

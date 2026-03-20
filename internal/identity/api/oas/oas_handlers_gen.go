@@ -687,6 +687,101 @@ func (s *Server) handleV1IdentityMeGetRequest(args [0]string, argsEscaped bool, 
 	}
 }
 
+// handleV1IdentityResendVerifyEmailPostRequest handles POST /v1/identity/resend-verify-email operation.
+//
+// Resend verification email.
+//
+// POST /v1/identity/resend-verify-email
+func (s *Server) handleV1IdentityResendVerifyEmailPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	ctx := r.Context()
+
+	var (
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: V1IdentityResendVerifyEmailPostOperation,
+			ID:   "",
+		}
+	)
+
+	var rawBody []byte
+	request, rawBody, close, err := s.decodeV1IdentityResendVerifyEmailPostRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response *V1IdentityResendVerifyEmailPostOK
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    V1IdentityResendVerifyEmailPostOperation,
+			OperationSummary: "",
+			OperationID:      "",
+			Body:             request,
+			RawBody:          rawBody,
+			Params:           middleware.Parameters{},
+			Raw:              r,
+		}
+
+		type (
+			Request  = *ResendVerifyEmailRequest
+			Params   = struct{}
+			Response = *V1IdentityResendVerifyEmailPostOK
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			nil,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				err = s.h.V1IdentityResendVerifyEmailPost(ctx, request)
+				return response, err
+			},
+		)
+	} else {
+		err = s.h.V1IdentityResendVerifyEmailPost(ctx, request)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1IdentityResendVerifyEmailPostResponse(response, w); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleV1IdentitySignupPostRequest handles POST /v1/identity/signup operation.
 //
 // Signup with email and password.

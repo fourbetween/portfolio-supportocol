@@ -71,6 +71,14 @@ components:
           type: string
       required:
         - token
+    ResendVerifyEmailRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+        - email
 paths:
   /v1/identity/google:
     post:
@@ -203,6 +211,24 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/VerifyEmailRequest"
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/resend-verify-email:
+    post:
+      description: resend verification email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResendVerifyEmailRequest"
       responses:
         "200":
           description: success response

@@ -44,6 +44,12 @@ type Handler interface {
 	//
 	// GET /v1/identity/me
 	V1IdentityMeGet(ctx context.Context) (*User, error)
+	// V1IdentityResendVerifyEmailPost implements POST /v1/identity/resend-verify-email operation.
+	//
+	// Resend verification email.
+	//
+	// POST /v1/identity/resend-verify-email
+	V1IdentityResendVerifyEmailPost(ctx context.Context, req *ResendVerifyEmailRequest) error
 	// V1IdentitySignupPost implements POST /v1/identity/signup operation.
 	//
 	// Signup with email and password.

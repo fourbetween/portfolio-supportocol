@@ -61,7 +61,17 @@ func (h *appHandler) V1IdentityLoginPost(ctx context.Context, req *oas.LoginWith
 }
 
 func (h *appHandler) V1IdentityVerifyEmailPost(ctx context.Context, req *oas.VerifyEmailRequest) error {
-	return h.con.VerifyEmail.Execute(ctx, req.Token)
+	token, err := h.con.VerifyEmail.Execute(ctx, req.Token)
+	if err != nil {
+		return err
+	}
+
+	h.setAuthCookie(ctx, token)
+	return nil
+}
+
+func (h *appHandler) V1IdentityResendVerifyEmailPost(ctx context.Context, req *oas.ResendVerifyEmailRequest) error {
+	return h.con.ResendVerifyEmail.Execute(ctx, req.Email)
 }
 
 func (h *appHandler) V1IdentityLogoutPost(ctx context.Context) error {

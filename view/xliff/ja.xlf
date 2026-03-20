@@ -930,17 +930,18 @@
   <source>Verifying your email...</source>
   <target>メールを認証しています...</target>
 </trans-unit>
-<trans-unit id="se7f2d88b36214086">
-  <source>Your email has been verified.</source>
-  <target>メールの認証が完了しました。</target>
-</trans-unit>
-<trans-unit id="s29742f41758edc87">
-  <source>Go to home</source>
-  <target>ホームに移動</target>
-</trans-unit>
 <trans-unit id="sdd2c68f9f46e8fec">
   <source>Email verification failed. The link may have expired or already been used.</source>
   <target>メールの認証に失敗しました。リンクが期限切れになっているか、すでに使用されている可能性があります。</target>
+</trans-unit>
+<trans-unit id="s84084dce695c331a">
+  <source>Verification email sent.</source>
+</trans-unit>
+<trans-unit id="s67a47f83f4c07f04">
+  <source>Enter your email</source>
+</trans-unit>
+<trans-unit id="s97ee1bd2cffede65">
+  <source>Resend verification email</source>
 </trans-unit>
 </body>
 </file>

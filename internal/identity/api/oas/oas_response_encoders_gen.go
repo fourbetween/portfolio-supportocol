@@ -53,6 +53,12 @@ func encodeV1IdentityMeGetResponse(response *User, w http.ResponseWriter) error 
 	return nil
 }
 
+func encodeV1IdentityResendVerifyEmailPostResponse(response *V1IdentityResendVerifyEmailPostOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
 func encodeV1IdentitySignupPostResponse(response *V1IdentitySignupPostOK, w http.ResponseWriter) error {
 	w.WriteHeader(200)
 

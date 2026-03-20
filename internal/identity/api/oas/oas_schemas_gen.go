@@ -128,6 +128,21 @@ func (s *LoginWithEmailRequest) SetPassword(val string) {
 	s.Password = val
 }
 
+// Ref: #/components/schemas/ResendVerifyEmailRequest
+type ResendVerifyEmailRequest struct {
+	Email string `json:"email"`
+}
+
+// GetEmail returns the value of Email.
+func (s *ResendVerifyEmailRequest) GetEmail() string {
+	return s.Email
+}
+
+// SetEmail sets the value of Email.
+func (s *ResendVerifyEmailRequest) SetEmail(val string) {
+	s.Email = val
+}
+
 // Ref: #/components/schemas/SignupWithEmailRequest
 type SignupWithEmailRequest struct {
 	Email    string `json:"email"`
@@ -219,6 +234,9 @@ type V1IdentityLogoutPostOK struct{}
 
 // V1IdentityMeDeleteOK is response for V1IdentityMeDelete operation.
 type V1IdentityMeDeleteOK struct{}
+
+// V1IdentityResendVerifyEmailPostOK is response for V1IdentityResendVerifyEmailPost operation.
+type V1IdentityResendVerifyEmailPostOK struct{}
 
 // V1IdentitySignupPostOK is response for V1IdentitySignupPost operation.
 type V1IdentitySignupPostOK struct{}

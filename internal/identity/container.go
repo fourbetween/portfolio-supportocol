@@ -17,12 +17,13 @@ import (
 )
 
 type Container struct {
-	LoginWithGoogle *usecase.LoginWithGoogleUsecase
-	SignupWithEmail *usecase.SignupWithEmailUsecase
-	LoginWithEmail  *usecase.LoginWithEmailUsecase
-	VerifyEmail     *usecase.VerifyEmailUsecase
-	GetUser         *usecase.GetUserUsecase
-	DeleteUser      *usecase.DeleteUserUsecase
+	LoginWithGoogle   *usecase.LoginWithGoogleUsecase
+	SignupWithEmail   *usecase.SignupWithEmailUsecase
+	LoginWithEmail    *usecase.LoginWithEmailUsecase
+	VerifyEmail       *usecase.VerifyEmailUsecase
+	ResendVerifyEmail *usecase.ResendVerifyEmailUsecase
+	GetUser           *usecase.GetUserUsecase
+	DeleteUser        *usecase.DeleteUserUsecase
 }
 
 func NewContainer(
@@ -81,11 +82,12 @@ func NewContainer(
 	)
 
 	return &Container{
-		LoginWithGoogle: usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv, userCreatedHandler, txManager),
-		SignupWithEmail: usecase.NewSignupWithEmailUsecase(authSrv, userCreatedHandler, txManager),
-		LoginWithEmail:  usecase.NewLoginWithEmailUsecase(authSrv, jwtSrv),
-		VerifyEmail:     usecase.NewVerifyEmailUsecase(authSrv),
-		GetUser:         usecase.NewGetUserUsecase(userRepo),
-		DeleteUser:      usecase.NewDeleteUserUsecase(userRepo, userDeletedHandler, txManager),
+		LoginWithGoogle:   usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv, userCreatedHandler, txManager),
+		SignupWithEmail:   usecase.NewSignupWithEmailUsecase(authSrv, userCreatedHandler, txManager),
+		LoginWithEmail:    usecase.NewLoginWithEmailUsecase(authSrv, jwtSrv),
+		VerifyEmail:       usecase.NewVerifyEmailUsecase(authSrv, userRepo, jwtSrv),
+		ResendVerifyEmail: usecase.NewResendVerifyEmailUsecase(authSrv),
+		GetUser:           usecase.NewGetUserUsecase(userRepo),
+		DeleteUser:        usecase.NewDeleteUserUsecase(userRepo, userDeletedHandler, txManager),
 	}, nil
 }
