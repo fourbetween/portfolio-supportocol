@@ -46,6 +46,34 @@ func (h *appHandler) V1IdentityGooglePost(ctx context.Context, req *oas.GoogleLo
 	return nil
 }
 
+func (h *appHandler) V1IdentitySignupPost(ctx context.Context, req *oas.SignupWithEmailRequest) error {
+	return h.con.SignupWithEmail.Execute(ctx, req.Email, req.Password)
+}
+
+func (h *appHandler) V1IdentityLoginPost(ctx context.Context, req *oas.LoginWithEmailRequest) error {
+	token, err := h.con.LoginWithEmail.Execute(ctx, req.Email, req.Password)
+	if err != nil {
+		return err
+	}
+
+	h.setAuthCookie(ctx, token)
+	return nil
+}
+
+func (h *appHandler) V1IdentityVerifyEmailPost(ctx context.Context, req *oas.VerifyEmailRequest) error {
+	token, err := h.con.VerifyEmail.Execute(ctx, req.Token)
+	if err != nil {
+		return err
+	}
+
+	h.setAuthCookie(ctx, token)
+	return nil
+}
+
+func (h *appHandler) V1IdentityResendVerifyEmailPost(ctx context.Context, req *oas.ResendVerifyEmailRequest) error {
+	return h.con.ResendVerifyEmail.Execute(ctx, req.Email)
+}
+
 func (h *appHandler) V1IdentityLogoutPost(ctx context.Context) error {
 	h.clearAuthCookie(ctx)
 	return nil
@@ -72,19 +100,38 @@ func (h *appHandler) V1IdentityMeDelete(ctx context.Context) error {
 	return nil
 }
 
+func (h *appHandler) V1IdentityMePasswordPut(ctx context.Context, req *oas.ChangePasswordRequest) error {
+	uid := httpctx.GetUserID(ctx)
+	return h.con.ChangePassword.Execute(ctx, uid, req.CurrentPassword, req.NewPassword)
+}
+
+func (h *appHandler) V1IdentityPasswordResetPost(ctx context.Context, req *oas.RequestPasswordResetRequest) error {
+	return h.con.RequestPasswordReset.Execute(ctx, req.Email)
+}
+
+func (h *appHandler) V1IdentityPasswordResetConfirmPost(ctx context.Context, req *oas.ConfirmPasswordResetRequest) error {
+	return h.con.ConfirmPasswordReset.Execute(ctx, req.Token, req.NewPassword)
+}
+
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
 	code := 500
 	msg := err.Error()
 	if errors.Is(err, apperr.ErrUnauthenticated) ||
 		errors.Is(err, auth.ErrNotFound) ||
-		errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied) {
+		errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied) ||
+		errors.Is(err, auth.ErrInvalidCredentials) {
 		code = 401
-	} else if errors.Is(err, apperr.ErrPermissionDenied) {
+	} else if errors.Is(err, apperr.ErrPermissionDenied) ||
+		errors.Is(err, auth.ErrEmailNotVerified) {
 		code = 403
 	} else if errors.Is(err, apperr.ErrNotFound) {
 		code = 404
-	} else if errors.Is(err, apperr.ErrAlreadyExists) {
+	} else if errors.Is(err, apperr.ErrAlreadyExists) ||
+		errors.Is(err, auth.ErrEmailAlreadyExists) {
 		code = 409
+	} else if errors.Is(err, auth.ErrInvalidToken) ||
+		errors.Is(err, auth.ErrInvalidPassword) {
+		code = 400
 	} else if code == 500 {
 		slog.Error(err.Error())
 		msg = "internal server error"

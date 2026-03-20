@@ -20,6 +20,12 @@ type Handler interface {
 	//
 	// POST /v1/identity/google
 	V1IdentityGooglePost(ctx context.Context, req *GoogleLoginRequest) error
+	// V1IdentityLoginPost implements POST /v1/identity/login operation.
+	//
+	// Login with email and password.
+	//
+	// POST /v1/identity/login
+	V1IdentityLoginPost(ctx context.Context, req *LoginWithEmailRequest) error
 	// V1IdentityLogoutPost implements POST /v1/identity/logout operation.
 	//
 	// Logout.
@@ -38,6 +44,42 @@ type Handler interface {
 	//
 	// GET /v1/identity/me
 	V1IdentityMeGet(ctx context.Context) (*User, error)
+	// V1IdentityMePasswordPut implements PUT /v1/identity/me/password operation.
+	//
+	// Change password.
+	//
+	// PUT /v1/identity/me/password
+	V1IdentityMePasswordPut(ctx context.Context, req *ChangePasswordRequest) error
+	// V1IdentityPasswordResetConfirmPost implements POST /v1/identity/password-reset/confirm operation.
+	//
+	// Confirm password reset.
+	//
+	// POST /v1/identity/password-reset/confirm
+	V1IdentityPasswordResetConfirmPost(ctx context.Context, req *ConfirmPasswordResetRequest) error
+	// V1IdentityPasswordResetPost implements POST /v1/identity/password-reset operation.
+	//
+	// Request password reset.
+	//
+	// POST /v1/identity/password-reset
+	V1IdentityPasswordResetPost(ctx context.Context, req *RequestPasswordResetRequest) error
+	// V1IdentityResendVerifyEmailPost implements POST /v1/identity/resend-verify-email operation.
+	//
+	// Resend verification email.
+	//
+	// POST /v1/identity/resend-verify-email
+	V1IdentityResendVerifyEmailPost(ctx context.Context, req *ResendVerifyEmailRequest) error
+	// V1IdentitySignupPost implements POST /v1/identity/signup operation.
+	//
+	// Signup with email and password.
+	//
+	// POST /v1/identity/signup
+	V1IdentitySignupPost(ctx context.Context, req *SignupWithEmailRequest) error
+	// V1IdentityVerifyEmailPost implements POST /v1/identity/verify-email operation.
+	//
+	// Verify email address.
+	//
+	// POST /v1/identity/verify-email
+	V1IdentityVerifyEmailPost(ctx context.Context, req *VerifyEmailRequest) error
 	// NewError creates *ErrorStatusCode from error returned by handler.
 	//
 	// Used for common default response.

@@ -10,6 +10,58 @@ func (s *ErrorStatusCode) Error() string {
 	return fmt.Sprintf("code %d: %+v", s.StatusCode, s.Response)
 }
 
+// Ref: #/components/schemas/ChangePasswordRequest
+type ChangePasswordRequest struct {
+	CurrentPassword string `json:"currentPassword"`
+	NewPassword     string `json:"newPassword"`
+}
+
+// GetCurrentPassword returns the value of CurrentPassword.
+func (s *ChangePasswordRequest) GetCurrentPassword() string {
+	return s.CurrentPassword
+}
+
+// GetNewPassword returns the value of NewPassword.
+func (s *ChangePasswordRequest) GetNewPassword() string {
+	return s.NewPassword
+}
+
+// SetCurrentPassword sets the value of CurrentPassword.
+func (s *ChangePasswordRequest) SetCurrentPassword(val string) {
+	s.CurrentPassword = val
+}
+
+// SetNewPassword sets the value of NewPassword.
+func (s *ChangePasswordRequest) SetNewPassword(val string) {
+	s.NewPassword = val
+}
+
+// Ref: #/components/schemas/ConfirmPasswordResetRequest
+type ConfirmPasswordResetRequest struct {
+	Token       string `json:"token"`
+	NewPassword string `json:"newPassword"`
+}
+
+// GetToken returns the value of Token.
+func (s *ConfirmPasswordResetRequest) GetToken() string {
+	return s.Token
+}
+
+// GetNewPassword returns the value of NewPassword.
+func (s *ConfirmPasswordResetRequest) GetNewPassword() string {
+	return s.NewPassword
+}
+
+// SetToken sets the value of Token.
+func (s *ConfirmPasswordResetRequest) SetToken(val string) {
+	s.Token = val
+}
+
+// SetNewPassword sets the value of NewPassword.
+func (s *ConfirmPasswordResetRequest) SetNewPassword(val string) {
+	s.NewPassword = val
+}
+
 type CookieAuth struct {
 	APIKey string
 	Roles  []string
@@ -102,6 +154,88 @@ func (s *GoogleLoginRequest) SetIdToken(val string) {
 	s.IdToken = val
 }
 
+// Ref: #/components/schemas/LoginWithEmailRequest
+type LoginWithEmailRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+// GetEmail returns the value of Email.
+func (s *LoginWithEmailRequest) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *LoginWithEmailRequest) GetPassword() string {
+	return s.Password
+}
+
+// SetEmail sets the value of Email.
+func (s *LoginWithEmailRequest) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *LoginWithEmailRequest) SetPassword(val string) {
+	s.Password = val
+}
+
+// Ref: #/components/schemas/RequestPasswordResetRequest
+type RequestPasswordResetRequest struct {
+	Email string `json:"email"`
+}
+
+// GetEmail returns the value of Email.
+func (s *RequestPasswordResetRequest) GetEmail() string {
+	return s.Email
+}
+
+// SetEmail sets the value of Email.
+func (s *RequestPasswordResetRequest) SetEmail(val string) {
+	s.Email = val
+}
+
+// Ref: #/components/schemas/ResendVerifyEmailRequest
+type ResendVerifyEmailRequest struct {
+	Email string `json:"email"`
+}
+
+// GetEmail returns the value of Email.
+func (s *ResendVerifyEmailRequest) GetEmail() string {
+	return s.Email
+}
+
+// SetEmail sets the value of Email.
+func (s *ResendVerifyEmailRequest) SetEmail(val string) {
+	s.Email = val
+}
+
+// Ref: #/components/schemas/SignupWithEmailRequest
+type SignupWithEmailRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+// GetEmail returns the value of Email.
+func (s *SignupWithEmailRequest) GetEmail() string {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *SignupWithEmailRequest) GetPassword() string {
+	return s.Password
+}
+
+// SetEmail sets the value of Email.
+func (s *SignupWithEmailRequest) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *SignupWithEmailRequest) SetPassword(val string) {
+	s.Password = val
+}
+
 // Ref: #/components/schemas/User
 type User struct {
 	ID    string `json:"id"`
@@ -159,8 +293,44 @@ func (s *V1IdentityErrorsPostReq) SetMessage(val string) {
 // V1IdentityGooglePostOK is response for V1IdentityGooglePost operation.
 type V1IdentityGooglePostOK struct{}
 
+// V1IdentityLoginPostOK is response for V1IdentityLoginPost operation.
+type V1IdentityLoginPostOK struct{}
+
 // V1IdentityLogoutPostOK is response for V1IdentityLogoutPost operation.
 type V1IdentityLogoutPostOK struct{}
 
 // V1IdentityMeDeleteOK is response for V1IdentityMeDelete operation.
 type V1IdentityMeDeleteOK struct{}
+
+// V1IdentityMePasswordPutOK is response for V1IdentityMePasswordPut operation.
+type V1IdentityMePasswordPutOK struct{}
+
+// V1IdentityPasswordResetConfirmPostOK is response for V1IdentityPasswordResetConfirmPost operation.
+type V1IdentityPasswordResetConfirmPostOK struct{}
+
+// V1IdentityPasswordResetPostOK is response for V1IdentityPasswordResetPost operation.
+type V1IdentityPasswordResetPostOK struct{}
+
+// V1IdentityResendVerifyEmailPostOK is response for V1IdentityResendVerifyEmailPost operation.
+type V1IdentityResendVerifyEmailPostOK struct{}
+
+// V1IdentitySignupPostOK is response for V1IdentitySignupPost operation.
+type V1IdentitySignupPostOK struct{}
+
+// V1IdentityVerifyEmailPostOK is response for V1IdentityVerifyEmailPost operation.
+type V1IdentityVerifyEmailPostOK struct{}
+
+// Ref: #/components/schemas/VerifyEmailRequest
+type VerifyEmailRequest struct {
+	Token string `json:"token"`
+}
+
+// GetToken returns the value of Token.
+func (s *VerifyEmailRequest) GetToken() string {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *VerifyEmailRequest) SetToken(val string) {
+	s.Token = val
+}

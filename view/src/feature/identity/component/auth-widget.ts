@@ -1,6 +1,11 @@
+import type { Router } from "@lit-labs/router";
+import { consume } from "@lit/context";
 import { LitElement, html, type PropertyValues } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
+import { routerContext } from "../../../app/context/router";
+import { navigate, paths } from "../../../app/paths";
 import { baseStyle } from "../../../shared/style/base";
+import { client } from "../api/client";
 import { GoogleAuthService } from "../api/google-auth";
 import {
   IdentityAuthLoginEvent,
@@ -13,6 +18,10 @@ import type { IdentityAuthPopup } from "../ui/auth-popup";
 
 @customElement("identity-auth-widget")
 export class IdentityAuthWidget extends LitElement {
+  @consume({ context: routerContext, subscribe: true })
+  @state()
+  private _router?: Router;
+
   @state()
   private currentMode: AuthMode = "login";
 
@@ -105,14 +114,48 @@ export class IdentityAuthWidget extends LitElement {
     this.errorMessage = "";
   }
 
-  private handleLogin(email: string, _password: string) {
-    console.log("Login attempt:", email);
-    // TODO: Implement email/password login
+  private async handleLogin(email: string, password: string) {
+    this.isLoading = true;
+    this.errorMessage = "";
+    try {
+      const { error } = await client.POST("/v1/identity/login", {
+        body: { email, password },
+      });
+      if (error) {
+        this.errorMessage = error.message;
+        return;
+      }
+      this.close();
+      window.location.reload();
+    } catch (e) {
+      this.errorMessage = String(e);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
-  private handleSignup(email: string, _password: string) {
-    console.log("Signup attempt:", email);
-    // TODO: Implement email/password signup
+  private async handleSignup(email: string, password: string) {
+    this.isLoading = true;
+    this.errorMessage = "";
+    try {
+      const { error } = await client.POST("/v1/identity/signup", {
+        body: { email, password },
+      });
+      if (error) {
+        this.errorMessage = error.message;
+        return;
+      }
+      this.close();
+      sessionStorage.setItem("signup_email", email);
+      const checkEmailPath = paths.identity.checkEmail;
+      if (this._router) {
+        navigate(this._router, checkEmailPath);
+      }
+    } catch (e) {
+      this.errorMessage = String(e);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   private renderGoogleButton() {
@@ -130,6 +173,7 @@ export class IdentityAuthWidget extends LitElement {
     return html`
       <identity-auth-popup
         .mode=${this.currentMode}
+        .selfSignupEnabled=${true}
         .errorMessage=${this.errorMessage}
         .loading=${this.isLoading}
         @popup-closed=${() => this.close()}

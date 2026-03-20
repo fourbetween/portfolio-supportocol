@@ -10,6 +10,36 @@ import (
 	"github.com/ogen-go/ogen/uri"
 )
 
+var (
+	rn1AllowedHeaders = map[string]string{
+		"POST": "Content-Type",
+	}
+	rn3AllowedHeaders = map[string]string{
+		"POST": "Content-Type",
+	}
+	rn4AllowedHeaders = map[string]string{
+		"POST": "Content-Type",
+	}
+	rn8AllowedHeaders = map[string]string{
+		"PUT": "Content-Type",
+	}
+	rn10AllowedHeaders = map[string]string{
+		"POST": "Content-Type",
+	}
+	rn9AllowedHeaders = map[string]string{
+		"POST": "Content-Type",
+	}
+	rn11AllowedHeaders = map[string]string{
+		"POST": "Content-Type",
+	}
+	rn12AllowedHeaders = map[string]string{
+		"POST": "Content-Type",
+	}
+	rn13AllowedHeaders = map[string]string{
+		"POST": "Content-Type",
+	}
+)
+
 func (s *Server) cutPrefix(path string) (string, bool) {
 	prefix := s.cfg.Prefix
 	if prefix == "" {
@@ -74,7 +104,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					case "POST":
 						s.handleV1IdentityErrorsPostRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "POST")
+						s.notAllowed(w, r, notAllowedParams{
+							allowedMethods: "POST",
+							allowedHeaders: rn1AllowedHeaders,
+							acceptPost:     "application/json",
+							acceptPatch:    "",
+						})
 					}
 
 					return
@@ -94,30 +129,79 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					case "POST":
 						s.handleV1IdentityGooglePostRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "POST")
+						s.notAllowed(w, r, notAllowedParams{
+							allowedMethods: "POST",
+							allowedHeaders: rn3AllowedHeaders,
+							acceptPost:     "application/json",
+							acceptPatch:    "",
+						})
 					}
 
 					return
 				}
 
-			case 'l': // Prefix: "logout"
+			case 'l': // Prefix: "log"
 
-				if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
+				if l := len("log"); len(elem) >= l && elem[0:l] == "log" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleV1IdentityLogoutPostRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
+					break
+				}
+				switch elem[0] {
+				case 'i': // Prefix: "in"
+
+					if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+						elem = elem[l:]
+					} else {
+						break
 					}
 
-					return
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1IdentityLoginPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: rn4AllowedHeaders,
+								acceptPost:     "application/json",
+								acceptPatch:    "",
+							})
+						}
+
+						return
+					}
+
+				case 'o': // Prefix: "out"
+
+					if l := len("out"); len(elem) >= l && elem[0:l] == "out" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1IdentityLogoutPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: nil,
+								acceptPost:     "",
+								acceptPatch:    "",
+							})
+						}
+
+						return
+					}
+
 				}
 
 			case 'm': // Prefix: "me"
@@ -129,14 +213,171 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
 					switch r.Method {
 					case "DELETE":
 						s.handleV1IdentityMeDeleteRequest([0]string{}, elemIsEscaped, w, r)
 					case "GET":
 						s.handleV1IdentityMeGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "DELETE,GET")
+						s.notAllowed(w, r, notAllowedParams{
+							allowedMethods: "DELETE,GET",
+							allowedHeaders: nil,
+							acceptPost:     "",
+							acceptPatch:    "",
+						})
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/password"
+
+					if l := len("/password"); len(elem) >= l && elem[0:l] == "/password" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "PUT":
+							s.handleV1IdentityMePasswordPutRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "PUT",
+								allowedHeaders: rn8AllowedHeaders,
+								acceptPost:     "",
+								acceptPatch:    "",
+							})
+						}
+
+						return
+					}
+
+				}
+
+			case 'p': // Prefix: "password-reset"
+
+				if l := len("password-reset"); len(elem) >= l && elem[0:l] == "password-reset" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch r.Method {
+					case "POST":
+						s.handleV1IdentityPasswordResetPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, notAllowedParams{
+							allowedMethods: "POST",
+							allowedHeaders: rn10AllowedHeaders,
+							acceptPost:     "application/json",
+							acceptPatch:    "",
+						})
+					}
+
+					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/confirm"
+
+					if l := len("/confirm"); len(elem) >= l && elem[0:l] == "/confirm" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1IdentityPasswordResetConfirmPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, notAllowedParams{
+								allowedMethods: "POST",
+								allowedHeaders: rn9AllowedHeaders,
+								acceptPost:     "application/json",
+								acceptPatch:    "",
+							})
+						}
+
+						return
+					}
+
+				}
+
+			case 'r': // Prefix: "resend-verify-email"
+
+				if l := len("resend-verify-email"); len(elem) >= l && elem[0:l] == "resend-verify-email" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleV1IdentityResendVerifyEmailPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, notAllowedParams{
+							allowedMethods: "POST",
+							allowedHeaders: rn11AllowedHeaders,
+							acceptPost:     "application/json",
+							acceptPatch:    "",
+						})
+					}
+
+					return
+				}
+
+			case 's': // Prefix: "signup"
+
+				if l := len("signup"); len(elem) >= l && elem[0:l] == "signup" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleV1IdentitySignupPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, notAllowedParams{
+							allowedMethods: "POST",
+							allowedHeaders: rn12AllowedHeaders,
+							acceptPost:     "application/json",
+							acceptPatch:    "",
+						})
+					}
+
+					return
+				}
+
+			case 'v': // Prefix: "verify-email"
+
+				if l := len("verify-email"); len(elem) >= l && elem[0:l] == "verify-email" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleV1IdentityVerifyEmailPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, notAllowedParams{
+							allowedMethods: "POST",
+							allowedHeaders: rn13AllowedHeaders,
+							acceptPost:     "application/json",
+							acceptPatch:    "",
+						})
 					}
 
 					return
@@ -292,29 +533,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 				}
 
-			case 'l': // Prefix: "logout"
+			case 'l': // Prefix: "log"
 
-				if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
+				if l := len("log"); len(elem) >= l && elem[0:l] == "log" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "POST":
-						r.name = V1IdentityLogoutPostOperation
-						r.summary = ""
-						r.operationID = ""
-						r.operationGroup = ""
-						r.pathPattern = "/v1/identity/logout"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
+					break
+				}
+				switch elem[0] {
+				case 'i': // Prefix: "in"
+
+					if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+						elem = elem[l:]
+					} else {
+						break
 					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = V1IdentityLoginPostOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/v1/identity/login"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				case 'o': // Prefix: "out"
+
+					if l := len("out"); len(elem) >= l && elem[0:l] == "out" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = V1IdentityLogoutPostOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/v1/identity/logout"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
 				}
 
 			case 'm': // Prefix: "me"
@@ -326,7 +606,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
 					switch method {
 					case "DELETE":
 						r.name = V1IdentityMeDeleteOperation
@@ -343,6 +622,159 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.operationID = ""
 						r.operationGroup = ""
 						r.pathPattern = "/v1/identity/me"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/password"
+
+					if l := len("/password"); len(elem) >= l && elem[0:l] == "/password" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "PUT":
+							r.name = V1IdentityMePasswordPutOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/v1/identity/me/password"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				}
+
+			case 'p': // Prefix: "password-reset"
+
+				if l := len("password-reset"); len(elem) >= l && elem[0:l] == "password-reset" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					switch method {
+					case "POST":
+						r.name = V1IdentityPasswordResetPostOperation
+						r.summary = ""
+						r.operationID = ""
+						r.operationGroup = ""
+						r.pathPattern = "/v1/identity/password-reset"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/confirm"
+
+					if l := len("/confirm"); len(elem) >= l && elem[0:l] == "/confirm" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = V1IdentityPasswordResetConfirmPostOperation
+							r.summary = ""
+							r.operationID = ""
+							r.operationGroup = ""
+							r.pathPattern = "/v1/identity/password-reset/confirm"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+				}
+
+			case 'r': // Prefix: "resend-verify-email"
+
+				if l := len("resend-verify-email"); len(elem) >= l && elem[0:l] == "resend-verify-email" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = V1IdentityResendVerifyEmailPostOperation
+						r.summary = ""
+						r.operationID = ""
+						r.operationGroup = ""
+						r.pathPattern = "/v1/identity/resend-verify-email"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
+			case 's': // Prefix: "signup"
+
+				if l := len("signup"); len(elem) >= l && elem[0:l] == "signup" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = V1IdentitySignupPostOperation
+						r.summary = ""
+						r.operationID = ""
+						r.operationGroup = ""
+						r.pathPattern = "/v1/identity/signup"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
+			case 'v': // Prefix: "verify-email"
+
+				if l := len("verify-email"); len(elem) >= l && elem[0:l] == "verify-email" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = V1IdentityVerifyEmailPostOperation
+						r.summary = ""
+						r.operationID = ""
+						r.operationGroup = ""
+						r.pathPattern = "/v1/identity/verify-email"
 						r.args = args
 						r.count = 0
 						return r, true

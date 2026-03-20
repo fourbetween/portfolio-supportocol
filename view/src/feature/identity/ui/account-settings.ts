@@ -11,6 +11,7 @@ import {
   IdentityLogoutEvent,
 } from "../event/account";
 import type { User } from "../model/user";
+import "./change-password-form";
 
 @customElement("identity-account-settings")
 export class IdentityAccountSettings extends LitElement {
@@ -68,6 +69,11 @@ export class IdentityAccountSettings extends LitElement {
             ${msg("Logout")}
           </button>
         </div>
+      </div>
+
+      <div class="password-section">
+        <h2>${msg("Change Password")}</h2>
+        <identity-change-password-form></identity-change-password-form>
       </div>
 
       <div class="danger-zone">
@@ -189,6 +195,15 @@ export class IdentityAccountSettings extends LitElement {
         border: 1px solid var(--color-danger-fg);
         border-radius: 6px;
         padding: 16px;
+      }
+
+      .password-section {
+        margin-bottom: 32px;
+      }
+
+      .password-section h2 {
+        margin-top: 0;
+        margin-bottom: 16px;
       }
 
       .danger-zone h2 {

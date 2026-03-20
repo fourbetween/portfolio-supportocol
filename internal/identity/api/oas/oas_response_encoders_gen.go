@@ -22,6 +22,12 @@ func encodeV1IdentityGooglePostResponse(response *V1IdentityGooglePostOK, w http
 	return nil
 }
 
+func encodeV1IdentityLoginPostResponse(response *V1IdentityLoginPostOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
 func encodeV1IdentityLogoutPostResponse(response *V1IdentityLogoutPostOK, w http.ResponseWriter) error {
 	w.WriteHeader(200)
 
@@ -43,6 +49,42 @@ func encodeV1IdentityMeGetResponse(response *User, w http.ResponseWriter) error 
 	if _, err := e.WriteTo(w); err != nil {
 		return errors.Wrap(err, "write")
 	}
+
+	return nil
+}
+
+func encodeV1IdentityMePasswordPutResponse(response *V1IdentityMePasswordPutOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
+func encodeV1IdentityPasswordResetConfirmPostResponse(response *V1IdentityPasswordResetConfirmPostOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
+func encodeV1IdentityPasswordResetPostResponse(response *V1IdentityPasswordResetPostOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
+func encodeV1IdentityResendVerifyEmailPostResponse(response *V1IdentityResendVerifyEmailPostOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
+func encodeV1IdentitySignupPostResponse(response *V1IdentitySignupPostOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
+
+	return nil
+}
+
+func encodeV1IdentityVerifyEmailPostResponse(response *V1IdentityVerifyEmailPostOK, w http.ResponseWriter) error {
+	w.WriteHeader(200)
 
 	return nil
 }

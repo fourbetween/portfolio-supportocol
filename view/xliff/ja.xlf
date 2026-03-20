@@ -918,6 +918,122 @@
   <source>Select Child Type</source>
   <target>子種類を選択</target>
 </trans-unit>
+<trans-unit id="s509899ecfed8bebe">
+  <source>Email Verification</source>
+  <target>メール認証</target>
+</trans-unit>
+<trans-unit id="s65be01e9c1002ad3">
+  <source>Verifying your email...</source>
+  <target>メールを認証しています...</target>
+</trans-unit>
+<trans-unit id="sdd2c68f9f46e8fec">
+  <source>Email verification failed. The link may have expired or already been used.</source>
+  <target>メールの認証に失敗しました。リンクが期限切れになっているか、すでに使用されている可能性があります。</target>
+</trans-unit>
+<trans-unit id="s84084dce695c331a">
+  <source>Verification email sent.</source>
+  <target>認証メールを送信しました。</target>
+</trans-unit>
+<trans-unit id="s67a47f83f4c07f04">
+  <source>Enter your email</source>
+  <target>メールアドレスを入力</target>
+</trans-unit>
+<trans-unit id="s97ee1bd2cffede65">
+  <source>Resend verification email</source>
+  <target>認証メールを再送</target>
+</trans-unit>
+<trans-unit id="scdc939a808ad12be">
+  <source>Please check your email to verify your account.</source>
+  <target>アカウントを確認するためにメールを確認してください。</target>
+</trans-unit>
+<trans-unit id="s3ada82c61fb6ef56">
+  <source>If you did not receive the email, you can request a new one.</source>
+  <target>メールが届かない場合は、新しいメールをリクエストできます。</target>
+</trans-unit>
+<trans-unit id="s35d5b3d2701861aa">
+  <source>Check Your Email</source>
+  <target>メールを確認してください</target>
+</trans-unit>
+<trans-unit id="s07f07b015a0ee529">
+  <source>Password changed successfully</source>
+  <target>パスワードが正常に変更されました</target>
+</trans-unit>
+<trans-unit id="s2015b1bc6db45bf9">
+  <source>Password reset successfully. Please log in.</source>
+  <target>パスワードが正常にリセットされました。ログインしてください。</target>
+</trans-unit>
+<trans-unit id="s4fc6aacb742c0214">
+  <source>Invalid or expired password reset link.</source>
+  <target>無効または期限切れのパスワードリセットリンクです。</target>
+</trans-unit>
+<trans-unit id="s55ace54060eaf496">
+  <source>Set New Password</source>
+  <target>新しいパスワードの設定</target>
+</trans-unit>
+<trans-unit id="scca74d9bc3cda0f0">
+  <source>Enter your new password below.</source>
+  <target>以下に新しいパスワードを入力してください。</target>
+</trans-unit>
+<trans-unit id="sf3d5428a5800492a">
+  <source>Check your email</source>
+  <target>メールを確認してください</target>
+</trans-unit>
+<trans-unit id="sebff56e2cf2d411c">
+  <source>If an account with that email exists, we've sent a password reset link.</source>
+  <target>そのメールアドレスのアカウントが存在する場合、パスワードリセットリンクを送信しました。</target>
+</trans-unit>
+<trans-unit id="sed80a99ca1491909">
+  <source>Reset Password</source>
+  <target>パスワードのリセット</target>
+</trans-unit>
+<trans-unit id="s7ad1cede157438b5">
+  <source>Enter your email to receive a password reset link.</source>
+  <target>パスワードリセットリンクを受け取るためのメールアドレスを入力してください。</target>
+</trans-unit>
+<trans-unit id="s16ba889483d4940e">
+  <source>Change Password</source>
+  <target>パスワードの変更</target>
+</trans-unit>
+<trans-unit id="s85366fac18679f28">
+  <source>Forgot password?</source>
+  <target>パスワードをお忘れですか？</target>
+</trans-unit>
+<trans-unit id="sfee74640068abc13">
+  <source>Current password</source>
+  <target>現在のパスワード</target>
+</trans-unit>
+<trans-unit id="s62f6bee152650e51">
+  <source>Enter current password</source>
+  <target>現在のパスワードを入力してください</target>
+</trans-unit>
+<trans-unit id="s3490e2c8b9ec6ad2">
+  <source>New password</source>
+  <target>新しいパスワード</target>
+</trans-unit>
+<trans-unit id="sf151c44c3a52a448">
+  <source>Enter new password</source>
+  <target>新しいパスワードを入力してください</target>
+</trans-unit>
+<trans-unit id="s418f15154f4671aa">
+  <source>Confirm new password</source>
+  <target>新しいパスワードの確認</target>
+</trans-unit>
+<trans-unit id="sfbe20517502040e6">
+  <source>Re-enter new password</source>
+  <target>新しいパスワードを再入力してください</target>
+</trans-unit>
+<trans-unit id="sff50532a2d85e32e">
+  <source>Change password</source>
+  <target>パスワードを変更する</target>
+</trans-unit>
+<trans-unit id="s3e538c7535f6f129">
+  <source>Reset password</source>
+  <target>パスワードをリセットする</target>
+</trans-unit>
+<trans-unit id="sfdcab1c5b4664260">
+  <source>Send reset email</source>
+  <target>リセットメールを送信する</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

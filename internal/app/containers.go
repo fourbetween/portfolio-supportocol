@@ -31,7 +31,7 @@ func NewContainers(dbCon *sql.DB, appConf conf.Service, awscfg aws.Config, jwtSr
 		return nil, fmt.Errorf("failed to create workspace api container: %w", err)
 	}
 
-	identityCon, err := identity.NewContainer(dbCon, appConf, jwtSrv, workspaceCon.UserCreatedHandler, workspaceCon.UserDeletedHandler)
+	identityCon, err := identity.NewContainer(dbCon, appConf, jwtSrv, awscfg, workspaceCon.UserCreatedHandler, workspaceCon.UserDeletedHandler)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create identity api container: %w", err)
 	}

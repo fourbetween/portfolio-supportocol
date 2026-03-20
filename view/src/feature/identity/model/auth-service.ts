@@ -46,6 +46,48 @@ class AuthService {
   }
 
   /**
+   * パスワードを変更します。
+   */
+  async changePassword(
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    const { error } = await client.PUT("/v1/identity/me/password", {
+      body: { currentPassword, newPassword },
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  /**
+   * パスワードリセットメールを送信します。
+   */
+  async requestPasswordReset(email: string): Promise<void> {
+    const { error } = await client.POST("/v1/identity/password-reset", {
+      body: { email },
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  /**
+   * パスワードリセットを確定します。
+   */
+  async confirmPasswordReset(
+    token: string,
+    newPassword: string,
+  ): Promise<void> {
+    const { error } = await client.POST("/v1/identity/password-reset/confirm", {
+      body: { token, newPassword },
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  /**
    * 認証が必要な操作を行う前に呼び出します。
    * 未認証の場合はログイン画面を表示します。
    */

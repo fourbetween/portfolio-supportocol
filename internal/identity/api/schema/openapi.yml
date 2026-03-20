@@ -42,6 +42,71 @@ components:
         - id
         - email
         - name
+    SignupWithEmailRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+    LoginWithEmailRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - email
+        - password
+    VerifyEmailRequest:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+        - token
+    ResendVerifyEmailRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+        - email
+    ChangePasswordRequest:
+      type: object
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+      required:
+        - currentPassword
+        - newPassword
+    RequestPasswordResetRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+        - email
+    ConfirmPasswordResetRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        newPassword:
+          type: string
+      required:
+        - token
+        - newPassword
 paths:
   /v1/identity/google:
     post:
@@ -120,6 +185,134 @@ paths:
                   type: string
               required:
                 - message
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/signup:
+    post:
+      description: signup with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupWithEmailRequest"
+      responses:
+        "200":
+          description: success response (email verification required)
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/login:
+    post:
+      description: login with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginWithEmailRequest"
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/verify-email:
+    post:
+      description: verify email address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyEmailRequest"
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/resend-verify-email:
+    post:
+      description: resend verification email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResendVerifyEmailRequest"
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/me/password:
+    put:
+      description: change password
+      security:
+        - cookie_auth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordRequest"
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/password-reset:
+    post:
+      description: request password reset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestPasswordResetRequest"
+      responses:
+        "200":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/identity/password-reset/confirm:
+    post:
+      description: confirm password reset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConfirmPasswordResetRequest"
       responses:
         "200":
           description: success response
