@@ -2,6 +2,8 @@ import { msg } from "@lit/localize";
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
+import { buttonStyle } from "../../../shared/style/button";
+import { inputStyle } from "../../../shared/style/input";
 import { IdentityResendVerifyEmailEvent } from "../event/auth";
 
 export type VerifyEmailStatus = "loading" | "error";
@@ -37,6 +39,7 @@ export class IdentityVerifyEmail extends LitElement {
               placeholder=${msg("Enter your email")}
             />
             <button
+              class="btn btn-primary"
               @click=${() =>
                 this.dispatchEvent(
                   new IdentityResendVerifyEmailEvent(this._email),
@@ -55,5 +58,5 @@ export class IdentityVerifyEmail extends LitElement {
     `;
   }
 
-  static styles = [baseStyle];
+  static styles = [baseStyle, inputStyle, buttonStyle];
 }

@@ -918,10 +918,6 @@
   <source>Select Child Type</source>
   <target>子種類を選択</target>
 </trans-unit>
-<trans-unit id="scdc939a808ad12be">
-  <source>Please check your email to verify your account.</source>
-  <target>アカウントを有効化するためにメールを確認してください。</target>
-</trans-unit>
 <trans-unit id="s509899ecfed8bebe">
   <source>Email Verification</source>
   <target>メール認証</target>

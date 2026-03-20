@@ -1,7 +1,6 @@
-import { msg } from "@lit/localize";
 import { LitElement, html, type PropertyValues } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
-import { showToast } from "../../../shared/event/toast";
+import { paths } from "../../../app/paths";
 import { baseStyle } from "../../../shared/style/base";
 import { client } from "../api/client";
 import { GoogleAuthService } from "../api/google-auth";
@@ -140,11 +139,8 @@ export class IdentityAuthWidget extends LitElement {
         return;
       }
       this.close();
-      showToast(
-        this,
-        msg("Please check your email to verify your account."),
-        "success",
-        30000,
+      window.location.replace(
+        `${paths.identity.checkEmail}?email=${encodeURIComponent(email)}`,
       );
     } catch (e) {
       this.errorMessage = String(e);
