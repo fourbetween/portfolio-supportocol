@@ -932,12 +932,27 @@
 </trans-unit>
 <trans-unit id="s84084dce695c331a">
   <source>Verification email sent.</source>
+  <target>認証メールを送信しました。</target>
 </trans-unit>
 <trans-unit id="s67a47f83f4c07f04">
   <source>Enter your email</source>
+  <target>メールアドレスを入力</target>
 </trans-unit>
 <trans-unit id="s97ee1bd2cffede65">
   <source>Resend verification email</source>
+  <target>認証メールを再送</target>
+</trans-unit>
+<trans-unit id="scdc939a808ad12be">
+  <source>Please check your email to verify your account.</source>
+  <target>アカウントを確認するためにメールを確認してください。</target>
+</trans-unit>
+<trans-unit id="s3ada82c61fb6ef56">
+  <source>If you did not receive the email, you can request a new one.</source>
+  <target>メールが届かない場合は、新しいメールをリクエストできます。</target>
+</trans-unit>
+<trans-unit id="s35d5b3d2701861aa">
+  <source>Check Your Email</source>
+  <target>メールを確認してください</target>
 </trans-unit>
 </body>
 </file>

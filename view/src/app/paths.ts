@@ -40,13 +40,10 @@ export const navigate = async (
   path: string,
   params?: Record<string, string>,
 ) => {
-  const buildedPath = buildPath(path, params);
-  await router.goto(buildedPath);
-  const url = new URL(window.location.href);
-  url.search = "";
-  url.hash = "";
-  url.pathname = buildedPath;
+  const builtPath = buildPath(path, params);
+  const url = new URL(builtPath, window.location.origin);
   window.history.pushState({}, "", url.toString());
+  await router.goto(url.pathname);
 };
 
 export const pathInFeature = (path: string): string => {

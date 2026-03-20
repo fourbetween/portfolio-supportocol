@@ -1,6 +1,9 @@
+import type { Router } from "@lit-labs/router";
+import { consume } from "@lit/context";
 import { LitElement, html, type PropertyValues } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
-import { paths } from "../../../app/paths";
+import { routerContext } from "../../../app/context/router";
+import { navigate, paths } from "../../../app/paths";
 import { baseStyle } from "../../../shared/style/base";
 import { client } from "../api/client";
 import { GoogleAuthService } from "../api/google-auth";
@@ -15,6 +18,10 @@ import type { IdentityAuthPopup } from "../ui/auth-popup";
 
 @customElement("identity-auth-widget")
 export class IdentityAuthWidget extends LitElement {
+  @consume({ context: routerContext, subscribe: true })
+  @state()
+  private _router?: Router;
+
   @state()
   private currentMode: AuthMode = "login";
 
@@ -139,9 +146,10 @@ export class IdentityAuthWidget extends LitElement {
         return;
       }
       this.close();
-      window.location.replace(
-        `${paths.identity.checkEmail}?email=${encodeURIComponent(email)}`,
-      );
+      const checkEmailPath = `${paths.identity.checkEmail}?email=${encodeURIComponent(email)}`;
+      if (this._router) {
+        navigate(this._router, checkEmailPath);
+      }
     } catch (e) {
       this.errorMessage = String(e);
     } finally {

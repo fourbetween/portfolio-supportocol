@@ -1,10 +1,8 @@
 import { msg } from "@lit/localize";
-import { LitElement, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { LitElement, css, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
-import { buttonStyle } from "../../../shared/style/button";
-import { inputStyle } from "../../../shared/style/input";
-import { IdentityResendVerifyEmailEvent } from "../event/auth";
+import "./resend-verify-email-form";
 
 export type VerifyEmailStatus = "loading" | "error";
 
@@ -12,9 +10,6 @@ export type VerifyEmailStatus = "loading" | "error";
 export class IdentityVerifyEmail extends LitElement {
   @property()
   status: VerifyEmailStatus = "loading";
-
-  @state()
-  private _email = "";
 
   private _renderContent() {
     switch (this.status) {
@@ -29,25 +24,7 @@ export class IdentityVerifyEmail extends LitElement {
               "Email verification failed. The link may have expired or already been used.",
             )}
           </p>
-          <div>
-            <input
-              type="email"
-              .value=${this._email}
-              @input=${(e: InputEvent) => {
-                this._email = (e.target as HTMLInputElement).value;
-              }}
-              placeholder=${msg("Enter your email")}
-            />
-            <button
-              class="btn btn-primary"
-              @click=${() =>
-                this.dispatchEvent(
-                  new IdentityResendVerifyEmailEvent(this._email),
-                )}
-            >
-              ${msg("Resend verification email")}
-            </button>
-          </div>
+          <identity-resend-verify-email-form></identity-resend-verify-email-form>
         `;
     }
   }
@@ -58,5 +35,14 @@ export class IdentityVerifyEmail extends LitElement {
     `;
   }
 
-  static styles = [baseStyle, inputStyle, buttonStyle];
+  static styles = [
+    baseStyle,
+    css`
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+    `,
+  ];
 }
