@@ -77,10 +77,10 @@ func (r *UserRepository) FindByID(ctx context.Context, id string) (*domain.User,
 	return r.findByCondition(ctx, cond)
 }
 
-func (r *UserRepository) Delete(ctx context.Context, u *domain.User) error {
+func (r *UserRepository) Delete(ctx context.Context, id string) error {
 	stmt := table.Users.
 		DELETE().
-		WHERE(table.Users.ID.EQ(mysql.String(u.ID())))
+		WHERE(table.Users.ID.EQ(mysql.String(id)))
 
 	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
 		return fmt.Errorf("failed to delete user: %w", err)

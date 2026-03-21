@@ -44,7 +44,10 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 		return nil, fmt.Errorf("failed to get JWT secret from config: %w", err)
 	}
 
-	jwtSrv := jwt.NewDefaultService(jwtSecret, httpcookie.CookieMaxAge)
+	jwtSrv, err := jwt.NewDefaultService(jwtSecret, httpcookie.CookieMaxAge)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create JWT service: %w", err)
+	}
 
 	cons, err := app.NewContainers(dbCon, appConf, awscfg, jwtSrv)
 	if err != nil {

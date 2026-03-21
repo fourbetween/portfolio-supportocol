@@ -36,6 +36,6 @@ func (u *DeleteUserUsecase) Execute(ctx context.Context, userID string) error {
 			return err
 		}
 
-		return u.userRepo.Delete(ctx, user)
+		return u.userRepo.Delete(ctx, user.ID())
 	})
 }

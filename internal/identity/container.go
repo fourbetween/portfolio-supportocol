@@ -10,6 +10,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/identity/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 	"github.com/fourbetween/pkg-auth/auth"
+	"github.com/fourbetween/pkg-auth/google"
 	"github.com/fourbetween/pkg-auth/jwt"
 	"github.com/fourbetween/pkg-auth/mail"
 	"github.com/fourbetween/pkg-auth/password"
@@ -81,7 +82,7 @@ func NewContainer(
 		mailSrv,
 		userRepo,
 		buildUser,
-		googleClientID,
+		google.NewDefaultService(googleClientID),
 	)
 
 	return &Container{
