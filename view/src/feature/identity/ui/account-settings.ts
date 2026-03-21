@@ -52,49 +52,64 @@ export class IdentityAccountSettings extends LitElement {
     }
 
     return html`
-      <div class="account-info">
-        <dl class="info-list">
-          <div class="info-item">
-            <dt>${msg("Email")}</dt>
-            <dd>${this.user.email}</dd>
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">${msg("Account")}</h2>
+        </div>
+        <div class="section-body">
+          <dl class="info-list">
+            <div class="info-item">
+              <dt>${msg("Email")}</dt>
+              <dd>${this.user.email}</dd>
+            </div>
+          </dl>
+          <div class="section-actions">
+            <button
+              class="btn"
+              @click=${this._handleLogoutClick}
+              ?disabled=${this.loading}
+            >
+              <ui-icon-logout></ui-icon-logout>
+              ${msg("Logout")}
+            </button>
           </div>
-        </dl>
-        <div class="account-actions">
-          <button
-            class="btn"
-            @click=${this._handleLogoutClick}
-            ?disabled=${this.loading}
-          >
-            <ui-icon-logout></ui-icon-logout>
-            ${msg("Logout")}
-          </button>
         </div>
       </div>
 
-      <div class="password-section">
-        <h2>${msg("Change Password")}</h2>
-        <identity-change-password-form></identity-change-password-form>
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">${msg("Change Password")}</h2>
+        </div>
+        <div class="section-body">
+          <identity-change-password-form></identity-change-password-form>
+        </div>
       </div>
 
-      <div class="danger-zone">
-        <h2>${msg("Danger Zone")}</h2>
-        <div class="danger-zone-content">
-          <div class="danger-zone-description">
-            <strong>${msg("Delete Account")}</strong>
-            <p>
-              ${msg(
-                "Once you delete your account, there is no going back. Please be certain.",
-              )}
-            </p>
+      <div class="section section-danger">
+        <div class="section-header">
+          <h2 class="section-title section-title-danger">
+            ${msg("Danger Zone")}
+          </h2>
+        </div>
+        <div class="section-body">
+          <div class="danger-zone-content">
+            <div class="danger-zone-description">
+              <strong>${msg("Delete Account")}</strong>
+              <p>
+                ${msg(
+                  "Once you delete your account, there is no going back. Please be certain.",
+                )}
+              </p>
+            </div>
+            <button
+              class="btn btn-danger"
+              @click=${this._handleDeleteClick}
+              ?disabled=${this.loading}
+            >
+              <ui-icon-delete-forever></ui-icon-delete-forever>
+              ${msg("Delete Account")}
+            </button>
           </div>
-          <button
-            class="btn btn-danger"
-            @click=${this._handleDeleteClick}
-            ?disabled=${this.loading}
-          >
-            <ui-icon-delete-forever></ui-icon-delete-forever>
-            ${msg("Delete Account")}
-          </button>
         </div>
       </div>
 
@@ -140,24 +155,62 @@ export class IdentityAccountSettings extends LitElement {
         font-size: 14px;
       }
 
-      .account-info {
-        margin-bottom: 32px;
+      .section {
+        border: 1px solid var(--color-border-default);
+        border-radius: 6px;
+        margin-bottom: 24px;
+        overflow: hidden;
+      }
+
+      .section-header {
+        padding: 12px 16px;
+        background-color: var(--color-canvas-subtle);
+        border-bottom: 1px solid var(--color-border-default);
+      }
+
+      .section-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin: 0;
+        color: var(--color-fg-default);
+      }
+
+      .section-title-danger {
+        color: var(--color-danger-fg);
+      }
+
+      .section-body {
+        padding: 16px;
+      }
+
+      .section-danger {
+        border-color: var(--color-danger-fg);
+      }
+
+      .section-danger .section-header {
+        background-color: #fff0f0;
+        border-bottom-color: var(--color-danger-fg);
       }
 
       .info-list {
-        margin: 0;
+        margin: 0 0 16px 0;
         padding: 0;
       }
 
       .info-item {
         display: flex;
-        padding: 12px 0;
+        padding: 8px 0;
         border-bottom: 1px solid var(--color-border-muted);
+      }
+
+      .info-item:last-child {
+        border-bottom: none;
       }
 
       .info-item dt {
         font-weight: 500;
         color: var(--color-fg-muted);
+        font-size: 13px;
         width: 120px;
         flex-shrink: 0;
       }
@@ -165,12 +218,13 @@ export class IdentityAccountSettings extends LitElement {
       .info-item dd {
         margin: 0;
         color: var(--color-fg-default);
+        font-size: 13px;
       }
 
       @media (max-width: 600px) {
         .info-item {
           flex-direction: column;
-          gap: 4px;
+          gap: 2px;
         }
 
         .info-item dt {
@@ -178,36 +232,16 @@ export class IdentityAccountSettings extends LitElement {
         }
       }
 
-      .account-actions {
-        margin-top: 24px;
+      .section-actions {
         display: flex;
         justify-content: flex-start;
       }
 
       @media (max-width: 600px) {
-        .account-actions .btn {
+        .section-actions .btn {
           width: 100%;
           justify-content: center;
         }
-      }
-
-      .danger-zone {
-        border: 1px solid var(--color-danger-fg);
-        border-radius: 6px;
-        padding: 16px;
-      }
-
-      .password-section {
-        margin-bottom: 32px;
-      }
-
-      .password-section h2 {
-        margin-top: 0;
-        margin-bottom: 16px;
-      }
-
-      .danger-zone h2 {
-        color: var(--color-danger-fg);
       }
 
       .danger-zone-content {
@@ -221,7 +255,7 @@ export class IdentityAccountSettings extends LitElement {
         .danger-zone-content {
           flex-direction: column;
           align-items: flex-start;
-          gap: 16px;
+          gap: 12px;
         }
 
         .danger-zone-content .btn-danger {
@@ -231,7 +265,7 @@ export class IdentityAccountSettings extends LitElement {
       }
 
       .danger-zone-description p {
-        font-size: 14px;
+        font-size: 13px;
         color: var(--color-fg-muted);
         margin-top: 4px;
       }
@@ -240,6 +274,7 @@ export class IdentityAccountSettings extends LitElement {
         color: var(--color-danger-fg);
         border-color: var(--color-danger-fg);
         background-color: var(--color-canvas-default);
+        white-space: nowrap;
       }
 
       .btn-danger:hover {
