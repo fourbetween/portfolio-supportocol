@@ -310,6 +310,16 @@ func (c *AppContainer) buildApiFunction() {
 			ProvisionedConcurrentExecutions: jsii.Number(1),
 		},
 	)
+	f.AddToRolePolicy(
+		awsiam.NewPolicyStatement(&awsiam.PolicyStatementProps{
+			Actions: jsii.Strings(
+				"ses:SendEmail",
+				"ses:SendRawEmail",
+				"ses:SendTemplatedEmail",
+			),
+			Resources: jsii.Strings("arn:aws:ses:ap-northeast-1:966392475035:identity/supportocol.com"),
+		}),
+	)
 	c.commentGenQueue.GrantSendMessages(f)
 	c.setLambdaBasePermissions(f)
 	c.apiFunc = alias
