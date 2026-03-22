@@ -99,11 +99,9 @@ export class IdentityAuthPopup extends LitElement {
     }
 
     const hasLowerCase = /[a-z]/.test(password);
-    const hasUpperCase = /[A-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
-
-    if (!hasLowerCase || !hasUpperCase || !hasNumber) {
-      return msg("Password must include lowercase, uppercase, and numbers");
+    if (!hasLowerCase || !hasNumber) {
+      return msg("Password must include lowercase letters and numbers");
     }
 
     return null;

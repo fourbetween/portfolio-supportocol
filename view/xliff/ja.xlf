@@ -166,10 +166,6 @@
   <source>Passwords do not match</source>
   <target>パスワードが一致しません</target>
 </trans-unit>
-<trans-unit id="sadeb71ff96f1bbe7">
-  <source>Password must include lowercase, uppercase, and numbers</source>
-  <target>パスワードには小文字、大文字、数字を含めてください</target>
-</trans-unit>
 <trans-unit id="s38887b94b3320533">
   <source>Email address</source>
   <target>メールアドレス</target>
@@ -1033,6 +1029,10 @@
 <trans-unit id="sfdcab1c5b4664260">
   <source>Send reset email</source>
   <target>リセットメールを送信する</target>
+</trans-unit>
+<trans-unit id="sbcb2510de2af75fe">
+  <source>Password must include lowercase letters and numbers</source>
+  <target>パスワードには小文字の英字と数字を含める必要があります</target>
 </trans-unit>
 </body>
 </file>
