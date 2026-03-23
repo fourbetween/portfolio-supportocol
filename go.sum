@@ -138,6 +138,8 @@ github.com/fourbetween/pkg-auth v0.4.2 h1:hxILKsnGGI1dlkSPW3Oma3FYSiHCmhT8Z+bCyv
 github.com/fourbetween/pkg-auth v0.4.2/go.mod h1:68P2NPmV5VLV+3oozK1aXScrQ7fwLoB0LXhPf+u6gaU=
 github.com/fourbetween/pkg-auth v0.5.0 h1:tCV6GgiNw68wxR5L1u6jgQeaOrqEViT3F4CGgxHXBzM=
 github.com/fourbetween/pkg-auth v0.5.0/go.mod h1:68P2NPmV5VLV+3oozK1aXScrQ7fwLoB0LXhPf+u6gaU=
+github.com/fourbetween/pkg-auth v0.6.0 h1:rbBfuYzMGox1fcvl8sKIHXPEzyyegufTcO0RA9xSDSA=
+github.com/fourbetween/pkg-auth v0.6.0/go.mod h1:68P2NPmV5VLV+3oozK1aXScrQ7fwLoB0LXhPf+u6gaU=
 github.com/fourbetween/pkg-conf v0.2.0 h1:I++BOdUZMCz6PoRx84POBMmfN/JSVvuDxi74+UrobPw=
 github.com/fourbetween/pkg-conf v0.2.0/go.mod h1:NiGj19riXbkM1o5oa+dBIBwh6dWLaacxha4PPxOiwSg=
 github.com/fourbetween/pkg-id v0.0.2 h1:yOVFM0bPSfTmmRndtmESoaby0QnwfaBQdNDwPdYCuyA=

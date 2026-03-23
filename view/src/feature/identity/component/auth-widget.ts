@@ -13,6 +13,7 @@ import {
   IdentityAuthSignupEvent,
   type AuthMode,
 } from "../event/auth";
+import { getCurrentLocale } from "../model/locale";
 import "../ui/auth-popup";
 import type { IdentityAuthPopup } from "../ui/auth-popup";
 
@@ -139,7 +140,7 @@ export class IdentityAuthWidget extends LitElement {
     this.errorMessage = "";
     try {
       const { error } = await client.POST("/v1/identity/signup", {
-        body: { email, password },
+        body: { email, password, locale: getCurrentLocale() },
       });
       if (error) {
         this.errorMessage = error.message;

@@ -32,6 +32,7 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 	return "", false
 }
 
+// operationRolesCookieAuth is a private map storing roles per operation.
 var operationRolesCookieAuth = map[string][]string{
 	V1DialogueDiscussionsGetOperation: []string{},
 	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesPostOperation: []string{},
@@ -39,6 +40,27 @@ var operationRolesCookieAuth = map[string][]string{
 	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation:                []string{},
 	V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGetOperation:                         []string{},
 	V1DialogueWorkspacesWorkspaceIdDiscussionsGetOperation:                                     []string{},
+}
+
+// GetRolesForCookieAuth returns the required roles for the given operation.
+//
+// This is useful for authorization scenarios where you need to know which roles
+// are required for an operation.
+//
+// Example:
+//
+//	requiredRoles := GetRolesForCookieAuth(AddPetOperation)
+//
+// Returns nil if the operation has no role requirements or if the operation is unknown.
+func GetRolesForCookieAuth(operation string) []string {
+	roles, ok := operationRolesCookieAuth[operation]
+	if !ok {
+		return nil
+	}
+	// Return a copy to prevent external modification
+	result := make([]string, len(roles))
+	copy(result, roles)
+	return result
 }
 
 func (s *Server) securityCookieAuth(ctx context.Context, operationName OperationName, req *http.Request) (context.Context, bool, error) {

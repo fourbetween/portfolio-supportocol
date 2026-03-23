@@ -446,6 +446,46 @@ func (s *GoogleLoginRequest) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes Locale as json.
+func (s Locale) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes Locale from json.
+func (s *Locale) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode Locale to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch Locale(v) {
+	case LocaleEn:
+		*s = LocaleEn
+	case LocaleJa:
+		*s = LocaleJa
+	default:
+		*s = Locale(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s Locale) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *Locale) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
 func (s *LoginWithEmailRequest) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -559,6 +599,39 @@ func (s *LoginWithEmailRequest) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes Locale as json.
+func (o OptLocale) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes Locale from json.
+func (o *OptLocale) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptLocale to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptLocale) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptLocale) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode implements json.Marshaler.
 func (s *RequestPasswordResetRequest) Encode(e *jx.Encoder) {
 	e.ObjStart()
@@ -572,10 +645,17 @@ func (s *RequestPasswordResetRequest) encodeFields(e *jx.Encoder) {
 		e.FieldStart("email")
 		e.Str(s.Email)
 	}
+	{
+		if s.Locale.Set {
+			e.FieldStart("locale")
+			s.Locale.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfRequestPasswordResetRequest = [1]string{
+var jsonFieldsNameOfRequestPasswordResetRequest = [2]string{
 	0: "email",
+	1: "locale",
 }
 
 // Decode decodes RequestPasswordResetRequest from json.
@@ -598,6 +678,16 @@ func (s *RequestPasswordResetRequest) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"email\"")
+			}
+		case "locale":
+			if err := func() error {
+				s.Locale.Reset()
+				if err := s.Locale.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"locale\"")
 			}
 		default:
 			return d.Skip()
@@ -668,10 +758,17 @@ func (s *ResendVerifyEmailRequest) encodeFields(e *jx.Encoder) {
 		e.FieldStart("email")
 		e.Str(s.Email)
 	}
+	{
+		if s.Locale.Set {
+			e.FieldStart("locale")
+			s.Locale.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfResendVerifyEmailRequest = [1]string{
+var jsonFieldsNameOfResendVerifyEmailRequest = [2]string{
 	0: "email",
+	1: "locale",
 }
 
 // Decode decodes ResendVerifyEmailRequest from json.
@@ -694,6 +791,16 @@ func (s *ResendVerifyEmailRequest) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"email\"")
+			}
+		case "locale":
+			if err := func() error {
+				s.Locale.Reset()
+				if err := s.Locale.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"locale\"")
 			}
 		default:
 			return d.Skip()
@@ -768,11 +875,18 @@ func (s *SignupWithEmailRequest) encodeFields(e *jx.Encoder) {
 		e.FieldStart("password")
 		e.Str(s.Password)
 	}
+	{
+		if s.Locale.Set {
+			e.FieldStart("locale")
+			s.Locale.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfSignupWithEmailRequest = [2]string{
+var jsonFieldsNameOfSignupWithEmailRequest = [3]string{
 	0: "email",
 	1: "password",
+	2: "locale",
 }
 
 // Decode decodes SignupWithEmailRequest from json.
@@ -807,6 +921,16 @@ func (s *SignupWithEmailRequest) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"password\"")
+			}
+		case "locale":
+			if err := func() error {
+				s.Locale.Reset()
+				if err := s.Locale.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"locale\"")
 			}
 		default:
 			return d.Skip()

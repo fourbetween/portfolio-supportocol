@@ -3,6 +3,7 @@ import { customElement, state } from "lit/decorators.js";
 import { showToast } from "../../../shared/event/toast";
 import { client } from "../api/client";
 import { IdentityResendVerifyEmailEvent } from "../event/auth";
+import { getCurrentLocale } from "../model/locale";
 import "../ui/check-email";
 
 @customElement("identity-check-email-widget")
@@ -17,7 +18,7 @@ export class IdentityCheckEmailWidget extends LitElement {
 
   private async _handleResendVerifyEmail(e: IdentityResendVerifyEmailEvent) {
     const { error } = await client.POST("/v1/identity/resend-verify-email", {
-      body: { email: e.email },
+      body: { email: e.email, locale: getCurrentLocale() },
     });
     if (error) {
       showToast(this, error.message, "error");

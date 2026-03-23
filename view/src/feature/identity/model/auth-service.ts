@@ -1,5 +1,6 @@
 import { client } from "../api/client";
 import { IdentityAuthPopupOpenEvent } from "../event/auth";
+import { getCurrentLocale } from "./locale";
 import type { User } from "./user";
 
 /**
@@ -65,7 +66,7 @@ class AuthService {
    */
   async requestPasswordReset(email: string): Promise<void> {
     const { error } = await client.POST("/v1/identity/password-reset", {
-      body: { email },
+      body: { email, locale: getCurrentLocale() },
     });
     if (error) {
       throw new Error(error.message);

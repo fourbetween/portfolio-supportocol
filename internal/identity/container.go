@@ -9,6 +9,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/identity/infra/db"
 	"github.com/fourbetween/app-supportocol/internal/identity/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
+	"github.com/fourbetween/app-supportocol/internal/pkg/env"
 	"github.com/fourbetween/pkg-auth/auth"
 	"github.com/fourbetween/pkg-auth/google"
 	"github.com/fourbetween/pkg-auth/jwt"
@@ -72,7 +73,7 @@ func NewContainer(
 		})
 	}
 
-	mailSrv, err := mail.NewSESService(sesFrom, fmt.Sprintf("https://%s/identity", siteDomain), awscfg)
+	mailSrv, err := mail.NewSESService(sesFrom, env.AppName(), fmt.Sprintf("https://%s/identity", siteDomain), awscfg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create mail service: %w", err)
 	}

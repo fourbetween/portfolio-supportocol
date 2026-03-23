@@ -4,6 +4,8 @@ package oas
 
 import (
 	"fmt"
+
+	"github.com/go-faster/errors"
 )
 
 func (s *ErrorStatusCode) Error() string {
@@ -154,6 +156,48 @@ func (s *GoogleLoginRequest) SetIdToken(val string) {
 	s.IdToken = val
 }
 
+// Ref: #/components/schemas/Locale
+type Locale string
+
+const (
+	LocaleEn Locale = "en"
+	LocaleJa Locale = "ja"
+)
+
+// AllValues returns all Locale values.
+func (Locale) AllValues() []Locale {
+	return []Locale{
+		LocaleEn,
+		LocaleJa,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s Locale) MarshalText() ([]byte, error) {
+	switch s {
+	case LocaleEn:
+		return []byte(s), nil
+	case LocaleJa:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *Locale) UnmarshalText(data []byte) error {
+	switch Locale(data) {
+	case LocaleEn:
+		*s = LocaleEn
+		return nil
+	case LocaleJa:
+		*s = LocaleJa
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/LoginWithEmailRequest
 type LoginWithEmailRequest struct {
 	Email    string `json:"email"`
@@ -180,9 +224,56 @@ func (s *LoginWithEmailRequest) SetPassword(val string) {
 	s.Password = val
 }
 
+// NewOptLocale returns new OptLocale with value set to v.
+func NewOptLocale(v Locale) OptLocale {
+	return OptLocale{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptLocale is optional Locale.
+type OptLocale struct {
+	Value Locale
+	Set   bool
+}
+
+// IsSet returns true if OptLocale was set.
+func (o OptLocale) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptLocale) Reset() {
+	var v Locale
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptLocale) SetTo(v Locale) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptLocale) Get() (v Locale, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptLocale) Or(d Locale) Locale {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // Ref: #/components/schemas/RequestPasswordResetRequest
 type RequestPasswordResetRequest struct {
-	Email string `json:"email"`
+	Email  string    `json:"email"`
+	Locale OptLocale `json:"locale"`
 }
 
 // GetEmail returns the value of Email.
@@ -190,14 +281,25 @@ func (s *RequestPasswordResetRequest) GetEmail() string {
 	return s.Email
 }
 
+// GetLocale returns the value of Locale.
+func (s *RequestPasswordResetRequest) GetLocale() OptLocale {
+	return s.Locale
+}
+
 // SetEmail sets the value of Email.
 func (s *RequestPasswordResetRequest) SetEmail(val string) {
 	s.Email = val
 }
 
+// SetLocale sets the value of Locale.
+func (s *RequestPasswordResetRequest) SetLocale(val OptLocale) {
+	s.Locale = val
+}
+
 // Ref: #/components/schemas/ResendVerifyEmailRequest
 type ResendVerifyEmailRequest struct {
-	Email string `json:"email"`
+	Email  string    `json:"email"`
+	Locale OptLocale `json:"locale"`
 }
 
 // GetEmail returns the value of Email.
@@ -205,15 +307,26 @@ func (s *ResendVerifyEmailRequest) GetEmail() string {
 	return s.Email
 }
 
+// GetLocale returns the value of Locale.
+func (s *ResendVerifyEmailRequest) GetLocale() OptLocale {
+	return s.Locale
+}
+
 // SetEmail sets the value of Email.
 func (s *ResendVerifyEmailRequest) SetEmail(val string) {
 	s.Email = val
 }
 
+// SetLocale sets the value of Locale.
+func (s *ResendVerifyEmailRequest) SetLocale(val OptLocale) {
+	s.Locale = val
+}
+
 // Ref: #/components/schemas/SignupWithEmailRequest
 type SignupWithEmailRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string    `json:"email"`
+	Password string    `json:"password"`
+	Locale   OptLocale `json:"locale"`
 }
 
 // GetEmail returns the value of Email.
@@ -226,6 +339,11 @@ func (s *SignupWithEmailRequest) GetPassword() string {
 	return s.Password
 }
 
+// GetLocale returns the value of Locale.
+func (s *SignupWithEmailRequest) GetLocale() OptLocale {
+	return s.Locale
+}
+
 // SetEmail sets the value of Email.
 func (s *SignupWithEmailRequest) SetEmail(val string) {
 	s.Email = val
@@ -234,6 +352,11 @@ func (s *SignupWithEmailRequest) SetEmail(val string) {
 // SetPassword sets the value of Password.
 func (s *SignupWithEmailRequest) SetPassword(val string) {
 	s.Password = val
+}
+
+// SetLocale sets the value of Locale.
+func (s *SignupWithEmailRequest) SetLocale(val OptLocale) {
+	s.Locale = val
 }
 
 // Ref: #/components/schemas/User

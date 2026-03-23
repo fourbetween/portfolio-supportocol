@@ -552,6 +552,8 @@ export interface components {
             code: number;
             message: string;
         };
+        /** @enum {string} */
+        Locale: "en" | "ja";
         GoogleLoginRequest: {
             idToken: string;
         };
@@ -565,6 +567,7 @@ export interface components {
             /** Format: email */
             email: string;
             password: string;
+            locale?: components["schemas"]["Locale"];
         };
         LoginWithEmailRequest: {
             /** Format: email */
@@ -577,6 +580,7 @@ export interface components {
         ResendVerifyEmailRequest: {
             /** Format: email */
             email: string;
+            locale?: components["schemas"]["Locale"];
         };
         ChangePasswordRequest: {
             currentPassword: string;
@@ -585,6 +589,7 @@ export interface components {
         RequestPasswordResetRequest: {
             /** Format: email */
             email: string;
+            locale?: components["schemas"]["Locale"];
         };
         ConfirmPasswordResetRequest: {
             token: string;

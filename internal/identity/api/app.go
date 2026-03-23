@@ -15,6 +15,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
 	"github.com/fourbetween/pkg-auth/auth"
+	"github.com/fourbetween/pkg-auth/mail"
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
@@ -47,6 +48,9 @@ func (h *appHandler) V1IdentityGooglePost(ctx context.Context, req *oas.GoogleLo
 }
 
 func (h *appHandler) V1IdentitySignupPost(ctx context.Context, req *oas.SignupWithEmailRequest) error {
+	if req.Locale.IsSet() {
+		ctx = mail.WithLang(ctx, mail.Language(string(req.Locale.Value)))
+	}
 	return h.con.SignupWithEmail.Execute(ctx, req.Email, req.Password)
 }
 
@@ -71,6 +75,9 @@ func (h *appHandler) V1IdentityVerifyEmailPost(ctx context.Context, req *oas.Ver
 }
 
 func (h *appHandler) V1IdentityResendVerifyEmailPost(ctx context.Context, req *oas.ResendVerifyEmailRequest) error {
+	if req.Locale.IsSet() {
+		ctx = mail.WithLang(ctx, mail.Language(string(req.Locale.Value)))
+	}
 	return h.con.ResendVerifyEmail.Execute(ctx, req.Email)
 }
 
@@ -106,6 +113,9 @@ func (h *appHandler) V1IdentityMePasswordPut(ctx context.Context, req *oas.Chang
 }
 
 func (h *appHandler) V1IdentityPasswordResetPost(ctx context.Context, req *oas.RequestPasswordResetRequest) error {
+	if req.Locale.IsSet() {
+		ctx = mail.WithLang(ctx, mail.Language(string(req.Locale.Value)))
+	}
 	return h.con.RequestPasswordReset.Execute(ctx, req.Email)
 }
 

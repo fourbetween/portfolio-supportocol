@@ -21,6 +21,9 @@ components:
       required:
         - code
         - message
+    Locale:
+      type: string
+      enum: [en, ja]
     GoogleLoginRequest:
       type: object
       properties:
@@ -50,6 +53,8 @@ components:
           format: email
         password:
           type: string
+        locale:
+          $ref: "#/components/schemas/Locale"
       required:
         - email
         - password
@@ -77,6 +82,8 @@ components:
         email:
           type: string
           format: email
+        locale:
+          $ref: "#/components/schemas/Locale"
       required:
         - email
     ChangePasswordRequest:
@@ -95,6 +102,8 @@ components:
         email:
           type: string
           format: email
+        locale:
+          $ref: "#/components/schemas/Locale"
       required:
         - email
     ConfirmPasswordResetRequest:
