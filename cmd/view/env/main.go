@@ -22,7 +22,6 @@ type envConfig struct {
 	SiteTitle       string
 	SiteURL         string
 	SiteLogo        string
-	SiteFavicon     string
 	GoogleClientID  string
 }
 
@@ -87,7 +86,6 @@ func fetchConfig() (*envConfig, error) {
 		SiteTitle:       siteName,
 		SiteURL:         "https://" + domain,
 		SiteLogo:        "/images/logo.webp",
-		SiteFavicon:     "/favicon.ico",
 		GoogleClientID:  googleClientID,
 	}, nil
 }
@@ -129,7 +127,6 @@ func buildEnvData(cfg *envConfig) map[string]string {
 		"VITE_SITE_TITLE":       cfg.SiteTitle,
 		"VITE_SITE_URL":         cfg.SiteURL,
 		"VITE_SITE_LOGO":        cfg.SiteLogo,
-		"VITE_SITE_FAVICON":     cfg.SiteFavicon,
 		"VITE_GOOGLE_CLIENT_ID": cfg.GoogleClientID,
 	}
 }
