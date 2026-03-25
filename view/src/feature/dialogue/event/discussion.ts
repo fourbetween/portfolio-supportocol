@@ -1,17 +1,12 @@
 import type { DiscussionSort } from "../model/discussion";
 
-const DIALOGUE_DISCUSSION_SELECT_EVENT_NAME = "dialogue-discussion-select";
-const DIALOGUE_DISCUSSION_SORT_CHANGE_EVENT_NAME =
-  "dialogue-discussion-sort-change";
-const DIALOGUE_FAVORITE_CREATE_EVENT_NAME = "dialogue-favorite-create";
-const DIALOGUE_FAVORITE_DELETE_EVENT_NAME = "dialogue-favorite-delete";
-
 export class DialogueDiscussionSelectEvent extends Event {
+  static get eventName() { return "dialogue-discussion-select" as const; }
   public readonly workspaceId: string;
   public readonly discussionId: string;
 
   constructor(workspaceId: string, discussionId: string) {
-    super(DIALOGUE_DISCUSSION_SELECT_EVENT_NAME, {
+    super(DialogueDiscussionSelectEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -21,10 +16,11 @@ export class DialogueDiscussionSelectEvent extends Event {
 }
 
 export class DialogueDiscussionSortChangeEvent extends Event {
+  static get eventName() { return "dialogue-discussion-sort-change" as const; }
   public readonly sort: DiscussionSort;
 
   constructor(sort: DiscussionSort) {
-    super(DIALOGUE_DISCUSSION_SORT_CHANGE_EVENT_NAME, {
+    super(DialogueDiscussionSortChangeEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -33,11 +29,12 @@ export class DialogueDiscussionSortChangeEvent extends Event {
 }
 
 export class DialogueFavoriteCreateEvent extends Event {
+  static get eventName() { return "dialogue-favorite-create" as const; }
   public readonly workspaceId: string;
   public readonly discussionId: string;
 
   constructor(workspaceId: string, discussionId: string) {
-    super(DIALOGUE_FAVORITE_CREATE_EVENT_NAME, {
+    super(DialogueFavoriteCreateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -47,11 +44,12 @@ export class DialogueFavoriteCreateEvent extends Event {
 }
 
 export class DialogueFavoriteDeleteEvent extends Event {
+  static get eventName() { return "dialogue-favorite-delete" as const; }
   public readonly workspaceId: string;
   public readonly discussionId: string;
 
   constructor(workspaceId: string, discussionId: string) {
-    super(DIALOGUE_FAVORITE_DELETE_EVENT_NAME, {
+    super(DialogueFavoriteDeleteEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -62,9 +60,9 @@ export class DialogueFavoriteDeleteEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [DIALOGUE_DISCUSSION_SELECT_EVENT_NAME]: DialogueDiscussionSelectEvent;
-    [DIALOGUE_DISCUSSION_SORT_CHANGE_EVENT_NAME]: DialogueDiscussionSortChangeEvent;
-    [DIALOGUE_FAVORITE_CREATE_EVENT_NAME]: DialogueFavoriteCreateEvent;
-    [DIALOGUE_FAVORITE_DELETE_EVENT_NAME]: DialogueFavoriteDeleteEvent;
+    [DialogueDiscussionSelectEvent.eventName]: DialogueDiscussionSelectEvent;
+    [DialogueDiscussionSortChangeEvent.eventName]: DialogueDiscussionSortChangeEvent;
+    [DialogueFavoriteCreateEvent.eventName]: DialogueFavoriteCreateEvent;
+    [DialogueFavoriteDeleteEvent.eventName]: DialogueFavoriteDeleteEvent;
   }
 }

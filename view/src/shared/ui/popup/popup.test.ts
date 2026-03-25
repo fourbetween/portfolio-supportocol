@@ -1,7 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import { POPUP_CLOSED_EVENT_NAME } from "../../event/popup";
+import { PopupClosedEvent } from "../../event/popup";
 import "./popup";
 
 describe("ui-popup", () => {
@@ -94,7 +94,7 @@ describe("ui-popup", () => {
     );
     const popup = container.querySelector("ui-popup")!;
     const handler = vi.fn();
-    popup.addEventListener(POPUP_CLOSED_EVENT_NAME, handler);
+    popup.addEventListener(PopupClosedEvent.eventName, handler);
 
     const closeButton = page.getByRole("button", { name: "Close" });
     await closeButton.click();

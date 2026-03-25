@@ -1,18 +1,11 @@
 import type { Project } from "../model/project";
 
-export const WORKSPACE_PROJECT_SELECT_EVENT_NAME = "workspace-project-select";
-export const WORKSPACE_PROJECT_CREATE_EVENT_NAME = "workspace-project-create";
-export const WORKSPACE_PROJECT_CREATED_EVENT_NAME = "workspace-project-created";
-export const WORKSPACE_PROJECT_UPDATE_EVENT_NAME = "workspace-project-update";
-export const WORKSPACE_PROJECT_UPDATED_EVENT_NAME = "workspace-project-updated";
-export const WORKSPACE_PROJECT_DELETE_EVENT_NAME = "workspace-project-delete";
-export const WORKSPACE_PROJECT_DELETED_EVENT_NAME = "workspace-project-deleted";
-
 export class WorkspaceProjectSelectEvent extends Event {
+  static get eventName() { return "workspace-project-select" as const; }
   public readonly projectId: string;
 
   constructor(projectId: string) {
-    super(WORKSPACE_PROJECT_SELECT_EVENT_NAME, {
+    super(WorkspaceProjectSelectEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -21,10 +14,11 @@ export class WorkspaceProjectSelectEvent extends Event {
 }
 
 export class WorkspaceProjectCreateEvent extends Event {
+  static get eventName() { return "workspace-project-create" as const; }
   public readonly name: string;
 
   constructor(name: string) {
-    super(WORKSPACE_PROJECT_CREATE_EVENT_NAME, {
+    super(WorkspaceProjectCreateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -33,10 +27,11 @@ export class WorkspaceProjectCreateEvent extends Event {
 }
 
 export class WorkspaceProjectCreatedEvent extends Event {
+  static get eventName() { return "workspace-project-created" as const; }
   public readonly project: Project;
 
   constructor(project: Project) {
-    super(WORKSPACE_PROJECT_CREATED_EVENT_NAME, {
+    super(WorkspaceProjectCreatedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -45,12 +40,13 @@ export class WorkspaceProjectCreatedEvent extends Event {
 }
 
 export class WorkspaceProjectUpdateEvent extends Event {
+  static get eventName() { return "workspace-project-update" as const; }
   public readonly projectId: string;
   public readonly name: string;
   public readonly premise: string;
 
   constructor(projectId: string, name: string, premise: string) {
-    super(WORKSPACE_PROJECT_UPDATE_EVENT_NAME, {
+    super(WorkspaceProjectUpdateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -61,10 +57,11 @@ export class WorkspaceProjectUpdateEvent extends Event {
 }
 
 export class WorkspaceProjectUpdatedEvent extends Event {
+  static get eventName() { return "workspace-project-updated" as const; }
   public readonly project: Project;
 
   constructor(project: Project) {
-    super(WORKSPACE_PROJECT_UPDATED_EVENT_NAME, {
+    super(WorkspaceProjectUpdatedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -73,10 +70,11 @@ export class WorkspaceProjectUpdatedEvent extends Event {
 }
 
 export class WorkspaceProjectDeleteEvent extends Event {
+  static get eventName() { return "workspace-project-delete" as const; }
   public readonly projectId: string;
 
   constructor(projectId: string) {
-    super(WORKSPACE_PROJECT_DELETE_EVENT_NAME, {
+    super(WorkspaceProjectDeleteEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -85,10 +83,11 @@ export class WorkspaceProjectDeleteEvent extends Event {
 }
 
 export class WorkspaceProjectDeletedEvent extends Event {
+  static get eventName() { return "workspace-project-deleted" as const; }
   public readonly projectId: string;
 
   constructor(projectId: string) {
-    super(WORKSPACE_PROJECT_DELETED_EVENT_NAME, {
+    super(WorkspaceProjectDeletedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -98,12 +97,12 @@ export class WorkspaceProjectDeletedEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [WORKSPACE_PROJECT_SELECT_EVENT_NAME]: WorkspaceProjectSelectEvent;
-    [WORKSPACE_PROJECT_CREATE_EVENT_NAME]: WorkspaceProjectCreateEvent;
-    [WORKSPACE_PROJECT_CREATED_EVENT_NAME]: WorkspaceProjectCreatedEvent;
-    [WORKSPACE_PROJECT_UPDATE_EVENT_NAME]: WorkspaceProjectUpdateEvent;
-    [WORKSPACE_PROJECT_UPDATED_EVENT_NAME]: WorkspaceProjectUpdatedEvent;
-    [WORKSPACE_PROJECT_DELETE_EVENT_NAME]: WorkspaceProjectDeleteEvent;
-    [WORKSPACE_PROJECT_DELETED_EVENT_NAME]: WorkspaceProjectDeletedEvent;
+    [WorkspaceProjectSelectEvent.eventName]: WorkspaceProjectSelectEvent;
+    [WorkspaceProjectCreateEvent.eventName]: WorkspaceProjectCreateEvent;
+    [WorkspaceProjectCreatedEvent.eventName]: WorkspaceProjectCreatedEvent;
+    [WorkspaceProjectUpdateEvent.eventName]: WorkspaceProjectUpdateEvent;
+    [WorkspaceProjectUpdatedEvent.eventName]: WorkspaceProjectUpdatedEvent;
+    [WorkspaceProjectDeleteEvent.eventName]: WorkspaceProjectDeleteEvent;
+    [WorkspaceProjectDeletedEvent.eventName]: WorkspaceProjectDeletedEvent;
   }
 }

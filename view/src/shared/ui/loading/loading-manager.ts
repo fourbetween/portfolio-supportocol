@@ -1,6 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { LOADING_SHOW_EVENT_NAME, LoadingShowEvent } from "../../event/loading";
+import { LoadingShowEvent } from "../../event/loading";
 import "./loading";
 
 @customElement("loading-manager")
@@ -14,7 +14,7 @@ export class LoadingManager extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     document.addEventListener(
-      LOADING_SHOW_EVENT_NAME,
+      LoadingShowEvent.eventName,
       this.handleLoading as EventListener
     );
   }
@@ -22,7 +22,7 @@ export class LoadingManager extends LitElement {
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener(
-      LOADING_SHOW_EVENT_NAME,
+      LoadingShowEvent.eventName,
       this.handleLoading as EventListener
     );
   }

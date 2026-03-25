@@ -1,14 +1,13 @@
 import type { ToastType } from "../ui/toast/toast";
 
-export const TOAST_SHOW_EVENT_NAME = "toast-show";
-
 export class ToastShowEvent extends Event {
+  static get eventName() { return "toast-show" as const; }
   public readonly message: string;
   public readonly toastType: ToastType;
   public readonly duration?: number;
 
   constructor(message: string, toastType: ToastType, duration?: number) {
-    super(TOAST_SHOW_EVENT_NAME, { bubbles: true, composed: true });
+    super(ToastShowEvent.eventName, { bubbles: true, composed: true });
     this.message = message;
     this.toastType = toastType;
     this.duration = duration;
@@ -17,7 +16,7 @@ export class ToastShowEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [TOAST_SHOW_EVENT_NAME]: ToastShowEvent;
+    [ToastShowEvent.eventName]: ToastShowEvent;
   }
 }
 

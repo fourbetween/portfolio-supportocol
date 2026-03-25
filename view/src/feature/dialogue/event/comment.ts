@@ -1,19 +1,11 @@
 import type { Comment } from "../model/comment";
 
-const DIALOGUE_COMMENT_SELECT_EVENT_NAME = "dialogue-comment-select";
-const DIALOGUE_COMMENT_CREATE_EVENT_NAME = "dialogue-comment-create";
-const DIALOGUE_COMMENT_CREATE_CANCEL_EVENT_NAME =
-  "dialogue-comment-create-cancel";
-const DIALOGUE_COMMENT_CREATED_EVENT_NAME = "dialogue-comment-created";
-const DIALOGUE_COMMENT_UPDATED_EVENT_NAME = "dialogue-comment-updated";
-const DIALOGUE_COMMENT_ISSUE_REQUEST_EVENT_NAME =
-  "dialogue-comment-issue-request";
-
 export class DialogueCommentSelectEvent extends Event {
+  static get eventName() { return "dialogue-comment-select" as const; }
   public readonly commentId?: string;
 
   constructor(commentId?: string) {
-    super(DIALOGUE_COMMENT_SELECT_EVENT_NAME, {
+    super(DialogueCommentSelectEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -22,6 +14,7 @@ export class DialogueCommentSelectEvent extends Event {
 }
 
 export class DialogueCommentCreateEvent extends Event {
+  static get eventName() { return "dialogue-comment-create" as const; }
   public readonly parentCommentId: string | null;
   public readonly commentType: string;
   public readonly content: string;
@@ -31,7 +24,7 @@ export class DialogueCommentCreateEvent extends Event {
     commentType: string,
     content: string,
   ) {
-    super(DIALOGUE_COMMENT_CREATE_EVENT_NAME, {
+    super(DialogueCommentCreateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -42,8 +35,9 @@ export class DialogueCommentCreateEvent extends Event {
 }
 
 export class DialogueCommentCreateCancelEvent extends Event {
+  static get eventName() { return "dialogue-comment-create-cancel" as const; }
   constructor() {
-    super(DIALOGUE_COMMENT_CREATE_CANCEL_EVENT_NAME, {
+    super(DialogueCommentCreateCancelEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -51,10 +45,11 @@ export class DialogueCommentCreateCancelEvent extends Event {
 }
 
 export class DialogueCommentCreatedEvent extends Event {
+  static get eventName() { return "dialogue-comment-created" as const; }
   public readonly comment: Comment;
 
   constructor(comment: Comment) {
-    super(DIALOGUE_COMMENT_CREATED_EVENT_NAME, {
+    super(DialogueCommentCreatedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -63,10 +58,11 @@ export class DialogueCommentCreatedEvent extends Event {
 }
 
 export class DialogueCommentUpdatedEvent extends Event {
+  static get eventName() { return "dialogue-comment-updated" as const; }
   public readonly comment: Comment;
 
   constructor(comment: Comment) {
-    super(DIALOGUE_COMMENT_UPDATED_EVENT_NAME, {
+    super(DialogueCommentUpdatedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -75,10 +71,11 @@ export class DialogueCommentUpdatedEvent extends Event {
 }
 
 export class DialogueCommentIssueRequestEvent extends Event {
+  static get eventName() { return "dialogue-comment-issue-request" as const; }
   public readonly commentId: string;
 
   constructor(commentId: string) {
-    super(DIALOGUE_COMMENT_ISSUE_REQUEST_EVENT_NAME, {
+    super(DialogueCommentIssueRequestEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -88,11 +85,11 @@ export class DialogueCommentIssueRequestEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [DIALOGUE_COMMENT_SELECT_EVENT_NAME]: DialogueCommentSelectEvent;
-    [DIALOGUE_COMMENT_CREATE_EVENT_NAME]: DialogueCommentCreateEvent;
-    [DIALOGUE_COMMENT_CREATE_CANCEL_EVENT_NAME]: DialogueCommentCreateCancelEvent;
-    [DIALOGUE_COMMENT_CREATED_EVENT_NAME]: DialogueCommentCreatedEvent;
-    [DIALOGUE_COMMENT_UPDATED_EVENT_NAME]: DialogueCommentUpdatedEvent;
-    [DIALOGUE_COMMENT_ISSUE_REQUEST_EVENT_NAME]: DialogueCommentIssueRequestEvent;
+    [DialogueCommentSelectEvent.eventName]: DialogueCommentSelectEvent;
+    [DialogueCommentCreateEvent.eventName]: DialogueCommentCreateEvent;
+    [DialogueCommentCreateCancelEvent.eventName]: DialogueCommentCreateCancelEvent;
+    [DialogueCommentCreatedEvent.eventName]: DialogueCommentCreatedEvent;
+    [DialogueCommentUpdatedEvent.eventName]: DialogueCommentUpdatedEvent;
+    [DialogueCommentIssueRequestEvent.eventName]: DialogueCommentIssueRequestEvent;
   }
 }

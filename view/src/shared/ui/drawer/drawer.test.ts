@@ -1,7 +1,7 @@
 import { html, render } from "lit";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { page } from "vitest/browser";
-import { DRAWER_CLOSE_EVENT_NAME } from "../../event/drawer";
+import { DrawerCloseEvent } from "../../event/drawer";
 import "./drawer";
 import { Drawer } from "./drawer";
 
@@ -93,7 +93,7 @@ describe("ui-drawer", () => {
     await drawer.updateComplete;
 
     const onClose = vi.fn();
-    drawer.addEventListener(DRAWER_CLOSE_EVENT_NAME, onClose);
+    drawer.addEventListener(DrawerCloseEvent.eventName, onClose);
 
     const closeButton = page.getByRole("button");
     await closeButton.click();

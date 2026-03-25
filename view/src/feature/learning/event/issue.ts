@@ -1,11 +1,10 @@
-export const LEARNING_ISSUE_REMOVE_EVENT_NAME = "learning-issue-remove";
-
 export class LearningIssueRemoveEvent extends Event {
+  static get eventName() { return "learning-issue-remove" as const; }
   public readonly commentId: string;
   public readonly issueId: string;
 
   constructor(commentId: string, issueId: string) {
-    super(LEARNING_ISSUE_REMOVE_EVENT_NAME, { bubbles: true, composed: true });
+    super(LearningIssueRemoveEvent.eventName, { bubbles: true, composed: true });
     this.commentId = commentId;
     this.issueId = issueId;
   }
@@ -13,6 +12,6 @@ export class LearningIssueRemoveEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [LEARNING_ISSUE_REMOVE_EVENT_NAME]: LearningIssueRemoveEvent;
+    [LearningIssueRemoveEvent.eventName]: LearningIssueRemoveEvent;
   }
 }

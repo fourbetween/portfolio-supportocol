@@ -1,30 +1,13 @@
 import type { Comment } from "../model/comment";
 
-const LEARNING_COMMENT_SELECT_EVENT_NAME = "learning-comment-select";
-const LEARNING_PROPOSED_COMMENT_ACCEPT_EVENT_NAME =
-  "learning-proposed-comment-accept";
-const LEARNING_PROPOSED_COMMENT_REJECT_EVENT_NAME =
-  "learning-proposed-comment-reject";
-const LEARNING_COMMENT_CREATE_EVENT_NAME = "learning-comment-create";
-const LEARNING_COMMENT_CREATED_EVENT_NAME = "learning-comment-created";
-const LEARNING_COMMENT_UPDATE_EVENT_NAME = "learning-comment-update";
-const LEARNING_COMMENT_UPDATED_EVENT_NAME = "learning-comment-updated";
-const LEARNING_COMMENT_DELETE_EVENT_NAME = "learning-comment-delete";
-const LEARNING_COMMENT_DELETED_EVENT_NAME = "learning-comment-deleted";
-const LEARNING_COMMENT_GENERATE_EVENT_NAME = "learning-comment-generate";
-const LEARNING_COMMENT_GENERATED_EVENT_NAME = "learning-comment-generated";
-const LEARNING_COMMENT_ARCHIVE_EVENT_NAME = "learning-comment-archive";
-const LEARNING_COMMENT_UNARCHIVE_EVENT_NAME = "learning-comment-unarchive";
-const LEARNING_COMMENT_CUT_EVENT_NAME = "learning-comment-cut";
-const LEARNING_COMMENT_MOVE_EVENT_NAME = "learning-comment-move";
-const LEARNING_COMMENT_FORM_CLOSE_EVENT_NAME = "learning-comment-form-close";
-const LEARNING_COMMENT_TYPE_SELECT_EVENT_NAME = "learning-comment-type-select";
-
 export class LearningCommentSelectEvent extends Event {
+  static get eventName() {
+    return "learning-comment-select" as const;
+  }
   public readonly commentId?: string;
 
   constructor(commentId?: string) {
-    super(LEARNING_COMMENT_SELECT_EVENT_NAME, {
+    super(LearningCommentSelectEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -33,10 +16,13 @@ export class LearningCommentSelectEvent extends Event {
 }
 
 export class LearningProposedCommentAcceptEvent extends Event {
+  static get eventName() {
+    return "learning-proposed-comment-accept" as const;
+  }
   public readonly comment: Comment;
 
   constructor(comment: Comment) {
-    super(LEARNING_PROPOSED_COMMENT_ACCEPT_EVENT_NAME, {
+    super(LearningProposedCommentAcceptEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -45,10 +31,13 @@ export class LearningProposedCommentAcceptEvent extends Event {
 }
 
 export class LearningProposedCommentRejectEvent extends Event {
+  static get eventName() {
+    return "learning-proposed-comment-reject" as const;
+  }
   public readonly comment: Comment;
 
   constructor(comment: Comment) {
-    super(LEARNING_PROPOSED_COMMENT_REJECT_EVENT_NAME, {
+    super(LearningProposedCommentRejectEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -57,6 +46,9 @@ export class LearningProposedCommentRejectEvent extends Event {
 }
 
 export class LearningCommentCreateEvent extends Event {
+  static get eventName() {
+    return "learning-comment-create" as const;
+  }
   public readonly parentCommentId: string | null;
   public readonly commentType: string;
   public readonly content: string;
@@ -66,7 +58,7 @@ export class LearningCommentCreateEvent extends Event {
     commentType: string,
     content: string,
   ) {
-    super(LEARNING_COMMENT_CREATE_EVENT_NAME, {
+    super(LearningCommentCreateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -77,10 +69,13 @@ export class LearningCommentCreateEvent extends Event {
 }
 
 export class LearningCommentCreatedEvent extends Event {
+  static get eventName() {
+    return "learning-comment-created" as const;
+  }
   public readonly comment: Comment;
 
   constructor(comment: Comment) {
-    super(LEARNING_COMMENT_CREATED_EVENT_NAME, {
+    super(LearningCommentCreatedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -89,12 +84,15 @@ export class LearningCommentCreatedEvent extends Event {
 }
 
 export class LearningCommentUpdateEvent extends Event {
+  static get eventName() {
+    return "learning-comment-update" as const;
+  }
   public readonly commentId: string;
   public readonly commentType: string;
   public readonly content: string;
 
   constructor(commentId: string, commentType: string, content: string) {
-    super(LEARNING_COMMENT_UPDATE_EVENT_NAME, {
+    super(LearningCommentUpdateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -105,10 +103,13 @@ export class LearningCommentUpdateEvent extends Event {
 }
 
 export class LearningCommentUpdatedEvent extends Event {
+  static get eventName() {
+    return "learning-comment-updated" as const;
+  }
   public readonly comment: Comment;
 
   constructor(comment: Comment) {
-    super(LEARNING_COMMENT_UPDATED_EVENT_NAME, {
+    super(LearningCommentUpdatedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -117,10 +118,13 @@ export class LearningCommentUpdatedEvent extends Event {
 }
 
 export class LearningCommentDeleteEvent extends Event {
+  static get eventName() {
+    return "learning-comment-delete" as const;
+  }
   public readonly commentId: string;
 
   constructor(commentId: string) {
-    super(LEARNING_COMMENT_DELETE_EVENT_NAME, {
+    super(LearningCommentDeleteEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -129,10 +133,13 @@ export class LearningCommentDeleteEvent extends Event {
 }
 
 export class LearningCommentDeletedEvent extends Event {
+  static get eventName() {
+    return "learning-comment-deleted" as const;
+  }
   public readonly commentId: string;
 
   constructor(commentId: string) {
-    super(LEARNING_COMMENT_DELETED_EVENT_NAME, {
+    super(LearningCommentDeletedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -141,11 +148,14 @@ export class LearningCommentDeletedEvent extends Event {
 }
 
 export class LearningCommentGenerateEvent extends Event {
+  static get eventName() {
+    return "learning-comment-generate" as const;
+  }
   public readonly parentCommentId?: string | null;
   public readonly commentType?: string;
 
   constructor(parentCommentId?: string | null, commentType?: string) {
-    super(LEARNING_COMMENT_GENERATE_EVENT_NAME, {
+    super(LearningCommentGenerateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -155,11 +165,14 @@ export class LearningCommentGenerateEvent extends Event {
 }
 
 export class LearningCommentGeneratedEvent extends Event {
+  static get eventName() {
+    return "learning-comment-generated" as const;
+  }
   public readonly parentCommentId?: string | null;
   public readonly commentType?: string;
 
   constructor(parentCommentId?: string | null, commentType?: string) {
-    super(LEARNING_COMMENT_GENERATED_EVENT_NAME, {
+    super(LearningCommentGeneratedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -169,8 +182,11 @@ export class LearningCommentGeneratedEvent extends Event {
 }
 
 export class LearningCommentFormCloseEvent extends Event {
+  static get eventName() {
+    return "learning-comment-form-close" as const;
+  }
   constructor() {
-    super(LEARNING_COMMENT_FORM_CLOSE_EVENT_NAME, {
+    super(LearningCommentFormCloseEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -178,10 +194,13 @@ export class LearningCommentFormCloseEvent extends Event {
 }
 
 export class LearningCommentTypeSelectEvent extends Event {
+  static get eventName() {
+    return "learning-comment-type-select" as const;
+  }
   public readonly commentType: string;
 
   constructor(commentType: string) {
-    super(LEARNING_COMMENT_TYPE_SELECT_EVENT_NAME, {
+    super(LearningCommentTypeSelectEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -190,10 +209,13 @@ export class LearningCommentTypeSelectEvent extends Event {
 }
 
 export class LearningCommentArchiveEvent extends Event {
+  static get eventName() {
+    return "learning-comment-archive" as const;
+  }
   public readonly commentId: string;
 
   constructor(commentId: string) {
-    super(LEARNING_COMMENT_ARCHIVE_EVENT_NAME, {
+    super(LearningCommentArchiveEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -202,10 +224,13 @@ export class LearningCommentArchiveEvent extends Event {
 }
 
 export class LearningCommentUnarchiveEvent extends Event {
+  static get eventName() {
+    return "learning-comment-unarchive" as const;
+  }
   public readonly commentId: string;
 
   constructor(commentId: string) {
-    super(LEARNING_COMMENT_UNARCHIVE_EVENT_NAME, {
+    super(LearningCommentUnarchiveEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -214,10 +239,13 @@ export class LearningCommentUnarchiveEvent extends Event {
 }
 
 export class LearningCommentCutEvent extends Event {
+  static get eventName() {
+    return "learning-comment-cut" as const;
+  }
   public readonly commentId?: string;
 
   constructor(commentId?: string) {
-    super(LEARNING_COMMENT_CUT_EVENT_NAME, {
+    super(LearningCommentCutEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -226,11 +254,14 @@ export class LearningCommentCutEvent extends Event {
 }
 
 export class LearningCommentMoveEvent extends Event {
+  static get eventName() {
+    return "learning-comment-move" as const;
+  }
   public readonly commentId: string;
   public readonly parentCommentId: string | null;
 
   constructor(commentId: string, parentCommentId: string | null) {
-    super(LEARNING_COMMENT_MOVE_EVENT_NAME, {
+    super(LearningCommentMoveEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -241,22 +272,22 @@ export class LearningCommentMoveEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [LEARNING_COMMENT_SELECT_EVENT_NAME]: LearningCommentSelectEvent;
-    [LEARNING_PROPOSED_COMMENT_ACCEPT_EVENT_NAME]: LearningProposedCommentAcceptEvent;
-    [LEARNING_PROPOSED_COMMENT_REJECT_EVENT_NAME]: LearningProposedCommentRejectEvent;
-    [LEARNING_COMMENT_CREATE_EVENT_NAME]: LearningCommentCreateEvent;
-    [LEARNING_COMMENT_CREATED_EVENT_NAME]: LearningCommentCreatedEvent;
-    [LEARNING_COMMENT_UPDATE_EVENT_NAME]: LearningCommentUpdateEvent;
-    [LEARNING_COMMENT_UPDATED_EVENT_NAME]: LearningCommentUpdatedEvent;
-    [LEARNING_COMMENT_DELETE_EVENT_NAME]: LearningCommentDeleteEvent;
-    [LEARNING_COMMENT_DELETED_EVENT_NAME]: LearningCommentDeletedEvent;
-    [LEARNING_COMMENT_GENERATE_EVENT_NAME]: LearningCommentGenerateEvent;
-    [LEARNING_COMMENT_GENERATED_EVENT_NAME]: LearningCommentGeneratedEvent;
-    [LEARNING_COMMENT_ARCHIVE_EVENT_NAME]: LearningCommentArchiveEvent;
-    [LEARNING_COMMENT_UNARCHIVE_EVENT_NAME]: LearningCommentUnarchiveEvent;
-    [LEARNING_COMMENT_CUT_EVENT_NAME]: LearningCommentCutEvent;
-    [LEARNING_COMMENT_MOVE_EVENT_NAME]: LearningCommentMoveEvent;
-    [LEARNING_COMMENT_FORM_CLOSE_EVENT_NAME]: LearningCommentFormCloseEvent;
-    [LEARNING_COMMENT_TYPE_SELECT_EVENT_NAME]: LearningCommentTypeSelectEvent;
+    [LearningCommentSelectEvent.eventName]: LearningCommentSelectEvent;
+    [LearningProposedCommentAcceptEvent.eventName]: LearningProposedCommentAcceptEvent;
+    [LearningProposedCommentRejectEvent.eventName]: LearningProposedCommentRejectEvent;
+    [LearningCommentCreateEvent.eventName]: LearningCommentCreateEvent;
+    [LearningCommentCreatedEvent.eventName]: LearningCommentCreatedEvent;
+    [LearningCommentUpdateEvent.eventName]: LearningCommentUpdateEvent;
+    [LearningCommentUpdatedEvent.eventName]: LearningCommentUpdatedEvent;
+    [LearningCommentDeleteEvent.eventName]: LearningCommentDeleteEvent;
+    [LearningCommentDeletedEvent.eventName]: LearningCommentDeletedEvent;
+    [LearningCommentGenerateEvent.eventName]: LearningCommentGenerateEvent;
+    [LearningCommentGeneratedEvent.eventName]: LearningCommentGeneratedEvent;
+    [LearningCommentArchiveEvent.eventName]: LearningCommentArchiveEvent;
+    [LearningCommentUnarchiveEvent.eventName]: LearningCommentUnarchiveEvent;
+    [LearningCommentCutEvent.eventName]: LearningCommentCutEvent;
+    [LearningCommentMoveEvent.eventName]: LearningCommentMoveEvent;
+    [LearningCommentFormCloseEvent.eventName]: LearningCommentFormCloseEvent;
+    [LearningCommentTypeSelectEvent.eventName]: LearningCommentTypeSelectEvent;
   }
 }

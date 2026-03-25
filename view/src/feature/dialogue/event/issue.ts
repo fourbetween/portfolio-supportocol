@@ -3,14 +3,13 @@ import type {
   CommentIssueTitle,
 } from "../model/comment";
 
-const DIALOGUE_ISSUE_CREATE_EVENT_NAME = "dialogue-issue-create";
-
 export class DialogueIssueCreateEvent extends Event {
+  static get eventName() { return "dialogue-issue-create" as const; }
   public readonly title: CommentIssueTitle;
   public readonly description: CommentIssueDescription;
 
   constructor(title: CommentIssueTitle, description: CommentIssueDescription) {
-    super(DIALOGUE_ISSUE_CREATE_EVENT_NAME, {
+    super(DialogueIssueCreateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -21,6 +20,6 @@ export class DialogueIssueCreateEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [DIALOGUE_ISSUE_CREATE_EVENT_NAME]: DialogueIssueCreateEvent;
+    [DialogueIssueCreateEvent.eventName]: DialogueIssueCreateEvent;
   }
 }

@@ -1,13 +1,12 @@
-export const DRAWER_CLOSE_EVENT_NAME = "drawer-close";
-
 export class DrawerCloseEvent extends Event {
+  static get eventName() { return "drawer-close" as const; }
   constructor() {
-    super(DRAWER_CLOSE_EVENT_NAME, { bubbles: true, composed: true });
+    super(DrawerCloseEvent.eventName, { bubbles: true, composed: true });
   }
 }
 
 declare global {
   interface HTMLElementEventMap {
-    [DRAWER_CLOSE_EVENT_NAME]: DrawerCloseEvent;
+    [DrawerCloseEvent.eventName]: DrawerCloseEvent;
   }
 }

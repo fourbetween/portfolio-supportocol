@@ -1,13 +1,11 @@
 import type { WorkspaceWithMember } from "../model/workspace";
 
-export const WORKSPACE_WORKSPACE_SELECT_EVENT_NAME =
-  "workspace-workspace-select";
-
 export class WorkspaceWorkspaceSelectEvent extends Event {
+  static get eventName() { return "workspace-workspace-select" as const; }
   public readonly workspace?: WorkspaceWithMember;
 
   constructor(workspace?: WorkspaceWithMember) {
-    super(WORKSPACE_WORKSPACE_SELECT_EVENT_NAME, {
+    super(WorkspaceWorkspaceSelectEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -17,6 +15,6 @@ export class WorkspaceWorkspaceSelectEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [WORKSPACE_WORKSPACE_SELECT_EVENT_NAME]: WorkspaceWorkspaceSelectEvent;
+    [WorkspaceWorkspaceSelectEvent.eventName]: WorkspaceWorkspaceSelectEvent;
   }
 }

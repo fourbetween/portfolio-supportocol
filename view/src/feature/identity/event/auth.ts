@@ -1,18 +1,9 @@
 export type AuthMode = "login" | "signup";
 
-const IDENTITY_AUTH_POPUP_OPEN_EVENT_NAME = "identity-auth-popup-open";
-const IDENTITY_AUTH_MODE_SWITCH_EVENT_NAME = "identity-auth-mode-switch";
-const IDENTITY_AUTH_LOGIN_EVENT_NAME = "identity-auth-login";
-const IDENTITY_AUTH_SIGNUP_EVENT_NAME = "identity-auth-signup";
-const IDENTITY_RESEND_VERIFY_EMAIL_EVENT_NAME = "identity-resend-verify-email";
-const IDENTITY_REQUEST_PASSWORD_RESET_EVENT_NAME =
-  "identity-request-password-reset";
-const IDENTITY_CONFIRM_PASSWORD_RESET_EVENT_NAME =
-  "identity-confirm-password-reset";
-
 export class IdentityAuthPopupOpenEvent extends Event {
+  static get eventName() { return "identity-auth-popup-open" as const; }
   constructor() {
-    super(IDENTITY_AUTH_POPUP_OPEN_EVENT_NAME, {
+    super(IdentityAuthPopupOpenEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -20,10 +11,11 @@ export class IdentityAuthPopupOpenEvent extends Event {
 }
 
 export class IdentityAuthModeSwitchEvent extends Event {
+  static get eventName() { return "identity-auth-mode-switch" as const; }
   public readonly mode: AuthMode;
 
   constructor(mode: AuthMode) {
-    super(IDENTITY_AUTH_MODE_SWITCH_EVENT_NAME, {
+    super(IdentityAuthModeSwitchEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -32,32 +24,35 @@ export class IdentityAuthModeSwitchEvent extends Event {
 }
 
 export class IdentityAuthLoginEvent extends Event {
+  static get eventName() { return "identity-auth-login" as const; }
   public readonly email: string;
   public readonly password: string;
 
   constructor(email: string, password: string) {
-    super(IDENTITY_AUTH_LOGIN_EVENT_NAME, { bubbles: true, composed: true });
+    super(IdentityAuthLoginEvent.eventName, { bubbles: true, composed: true });
     this.email = email;
     this.password = password;
   }
 }
 
 export class IdentityAuthSignupEvent extends Event {
+  static get eventName() { return "identity-auth-signup" as const; }
   public readonly email: string;
   public readonly password: string;
 
   constructor(email: string, password: string) {
-    super(IDENTITY_AUTH_SIGNUP_EVENT_NAME, { bubbles: true, composed: true });
+    super(IdentityAuthSignupEvent.eventName, { bubbles: true, composed: true });
     this.email = email;
     this.password = password;
   }
 }
 
 export class IdentityResendVerifyEmailEvent extends Event {
+  static get eventName() { return "identity-resend-verify-email" as const; }
   public readonly email: string;
 
   constructor(email: string) {
-    super(IDENTITY_RESEND_VERIFY_EMAIL_EVENT_NAME, {
+    super(IdentityResendVerifyEmailEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -66,10 +61,11 @@ export class IdentityResendVerifyEmailEvent extends Event {
 }
 
 export class IdentityRequestPasswordResetEvent extends Event {
+  static get eventName() { return "identity-request-password-reset" as const; }
   public readonly email: string;
 
   constructor(email: string) {
-    super(IDENTITY_REQUEST_PASSWORD_RESET_EVENT_NAME, {
+    super(IdentityRequestPasswordResetEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -78,11 +74,12 @@ export class IdentityRequestPasswordResetEvent extends Event {
 }
 
 export class IdentityConfirmPasswordResetEvent extends Event {
+  static get eventName() { return "identity-confirm-password-reset" as const; }
   public readonly token: string;
   public readonly newPassword: string;
 
   constructor(token: string, newPassword: string) {
-    super(IDENTITY_CONFIRM_PASSWORD_RESET_EVENT_NAME, {
+    super(IdentityConfirmPasswordResetEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -93,12 +90,12 @@ export class IdentityConfirmPasswordResetEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [IDENTITY_AUTH_POPUP_OPEN_EVENT_NAME]: IdentityAuthPopupOpenEvent;
-    [IDENTITY_AUTH_MODE_SWITCH_EVENT_NAME]: IdentityAuthModeSwitchEvent;
-    [IDENTITY_AUTH_LOGIN_EVENT_NAME]: IdentityAuthLoginEvent;
-    [IDENTITY_AUTH_SIGNUP_EVENT_NAME]: IdentityAuthSignupEvent;
-    [IDENTITY_RESEND_VERIFY_EMAIL_EVENT_NAME]: IdentityResendVerifyEmailEvent;
-    [IDENTITY_REQUEST_PASSWORD_RESET_EVENT_NAME]: IdentityRequestPasswordResetEvent;
-    [IDENTITY_CONFIRM_PASSWORD_RESET_EVENT_NAME]: IdentityConfirmPasswordResetEvent;
+    [IdentityAuthPopupOpenEvent.eventName]: IdentityAuthPopupOpenEvent;
+    [IdentityAuthModeSwitchEvent.eventName]: IdentityAuthModeSwitchEvent;
+    [IdentityAuthLoginEvent.eventName]: IdentityAuthLoginEvent;
+    [IdentityAuthSignupEvent.eventName]: IdentityAuthSignupEvent;
+    [IdentityResendVerifyEmailEvent.eventName]: IdentityResendVerifyEmailEvent;
+    [IdentityRequestPasswordResetEvent.eventName]: IdentityRequestPasswordResetEvent;
+    [IdentityConfirmPasswordResetEvent.eventName]: IdentityConfirmPasswordResetEvent;
   }
 }

@@ -1,10 +1,7 @@
-const IDENTITY_ACCOUNT_DELETE_EVENT_NAME = "identity-account-delete";
-const IDENTITY_LOGOUT_EVENT_NAME = "identity-logout";
-const IDENTITY_CHANGE_PASSWORD_EVENT_NAME = "identity-change-password";
-
 export class IdentityAccountDeleteEvent extends Event {
+  static get eventName() { return "identity-account-delete" as const; }
   constructor() {
-    super(IDENTITY_ACCOUNT_DELETE_EVENT_NAME, {
+    super(IdentityAccountDeleteEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -12,8 +9,9 @@ export class IdentityAccountDeleteEvent extends Event {
 }
 
 export class IdentityLogoutEvent extends Event {
+  static get eventName() { return "identity-logout" as const; }
   constructor() {
-    super(IDENTITY_LOGOUT_EVENT_NAME, {
+    super(IdentityLogoutEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -21,11 +19,12 @@ export class IdentityLogoutEvent extends Event {
 }
 
 export class IdentityChangePasswordEvent extends Event {
+  static get eventName() { return "identity-change-password" as const; }
   public readonly currentPassword: string;
   public readonly newPassword: string;
 
   constructor(currentPassword: string, newPassword: string) {
-    super(IDENTITY_CHANGE_PASSWORD_EVENT_NAME, {
+    super(IdentityChangePasswordEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -36,8 +35,8 @@ export class IdentityChangePasswordEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [IDENTITY_ACCOUNT_DELETE_EVENT_NAME]: IdentityAccountDeleteEvent;
-    [IDENTITY_LOGOUT_EVENT_NAME]: IdentityLogoutEvent;
-    [IDENTITY_CHANGE_PASSWORD_EVENT_NAME]: IdentityChangePasswordEvent;
+    [IdentityAccountDeleteEvent.eventName]: IdentityAccountDeleteEvent;
+    [IdentityLogoutEvent.eventName]: IdentityLogoutEvent;
+    [IdentityChangePasswordEvent.eventName]: IdentityChangePasswordEvent;
   }
 }

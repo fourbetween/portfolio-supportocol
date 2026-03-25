@@ -1,34 +1,13 @@
 import type { DialogueSettings, Discussion } from "../model/discussion";
 
-const LEARNING_DISCUSSION_SELECT_EVENT_NAME = "learning-discussion-select";
-const LEARNING_DISCUSSION_CREATE_EVENT_NAME = "learning-discussion-create";
-const LEARNING_DISCUSSION_CREATED_EVENT_NAME = "learning-discussion-created";
-const LEARNING_DISCUSSION_UPDATE_EVENT_NAME = "learning-discussion-update";
-const LEARNING_DISCUSSION_UPDATED_EVENT_NAME = "learning-discussion-updated";
-const LEARNING_DISCUSSION_DELETE_EVENT_NAME = "learning-discussion-delete";
-const LEARNING_DISCUSSION_DELETED_EVENT_NAME = "learning-discussion-deleted";
-const LEARNING_DISCUSSION_SEARCH_EVENT_NAME = "learning-discussion-search";
-const LEARNING_DISCUSSION_ARCHIVE_FILTER_EVENT_NAME =
-  "learning-discussion-archive-filter";
-const LEARNING_DISCUSSION_UPDATE_STATUS_EVENT_NAME =
-  "learning-discussion-update-status";
-const LEARNING_DISCUSSION_UPDATE_DIALOGUE_SETTINGS_EVENT_NAME =
-  "learning-discussion-update-dialogue-settings";
-const LEARNING_DISCUSSION_RENAME_COMMENT_TYPE_EVENT_NAME =
-  "learning-discussion-rename-comment-type";
-const LEARNING_DISCUSSION_ARCHIVE_EVENT_NAME = "learning-discussion-archive";
-const LEARNING_DISCUSSION_UNARCHIVE_EVENT_NAME =
-  "learning-discussion-unarchive";
-const LEARNING_DISCUSSION_FORM_OPEN_EVENT_NAME =
-  "learning-discussion-form-open";
-const LEARNING_DISCUSSION_FORM_CLOSE_EVENT_NAME =
-  "learning-discussion-form-close";
-
 export class LearningDiscussionSelectEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-select" as const;
+  }
   public readonly discussionId: string;
 
   constructor(discussionId: string) {
-    super(LEARNING_DISCUSSION_SELECT_EVENT_NAME, {
+    super(LearningDiscussionSelectEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -37,11 +16,14 @@ export class LearningDiscussionSelectEvent extends Event {
 }
 
 export class LearningDiscussionCreateEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-create" as const;
+  }
   public readonly theme: string;
   public readonly status: Discussion["status"];
 
   constructor(theme: string, status: Discussion["status"]) {
-    super(LEARNING_DISCUSSION_CREATE_EVENT_NAME, {
+    super(LearningDiscussionCreateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -51,10 +33,13 @@ export class LearningDiscussionCreateEvent extends Event {
 }
 
 export class LearningDiscussionCreatedEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-created" as const;
+  }
   public readonly discussion: Discussion;
 
   constructor(discussion: Discussion) {
-    super(LEARNING_DISCUSSION_CREATED_EVENT_NAME, {
+    super(LearningDiscussionCreatedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -63,12 +48,15 @@ export class LearningDiscussionCreatedEvent extends Event {
 }
 
 export class LearningDiscussionUpdateEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-update" as const;
+  }
   public readonly theme: string;
   public readonly premise: string;
   public readonly conclusion: string;
 
   constructor(theme: string, premise: string, conclusion: string) {
-    super(LEARNING_DISCUSSION_UPDATE_EVENT_NAME, {
+    super(LearningDiscussionUpdateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -79,10 +67,13 @@ export class LearningDiscussionUpdateEvent extends Event {
 }
 
 export class LearningDiscussionUpdatedEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-updated" as const;
+  }
   public readonly discussion: Discussion;
 
   constructor(discussion: Discussion) {
-    super(LEARNING_DISCUSSION_UPDATED_EVENT_NAME, {
+    super(LearningDiscussionUpdatedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -91,10 +82,13 @@ export class LearningDiscussionUpdatedEvent extends Event {
 }
 
 export class LearningDiscussionDeleteEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-delete" as const;
+  }
   public readonly discussionId: string;
 
   constructor(discussionId: string) {
-    super(LEARNING_DISCUSSION_DELETE_EVENT_NAME, {
+    super(LearningDiscussionDeleteEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -103,10 +97,13 @@ export class LearningDiscussionDeleteEvent extends Event {
 }
 
 export class LearningDiscussionDeletedEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-deleted" as const;
+  }
   public readonly discussionId: string;
 
   constructor(discussionId: string) {
-    super(LEARNING_DISCUSSION_DELETED_EVENT_NAME, {
+    super(LearningDiscussionDeletedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -115,30 +112,41 @@ export class LearningDiscussionDeletedEvent extends Event {
 }
 
 export class LearningDiscussionSearchEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-search" as const;
+  }
   public readonly query: string;
 
   constructor(query: string) {
-    super(LEARNING_DISCUSSION_SEARCH_EVENT_NAME, {
+    super(LearningDiscussionSearchEvent.eventName, {
       bubbles: true,
       composed: true,
     });
     this.query = query;
   }
 }
+
 export class LearningDiscussionArchiveFilterEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-archive-filter" as const;
+  }
   public readonly archived: boolean;
 
   constructor(archived: boolean) {
-    super(LEARNING_DISCUSSION_ARCHIVE_FILTER_EVENT_NAME, {
+    super(LearningDiscussionArchiveFilterEvent.eventName, {
       bubbles: true,
       composed: true,
     });
     this.archived = archived;
   }
 }
+
 export class LearningDiscussionFormOpenEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-form-open" as const;
+  }
   constructor() {
-    super(LEARNING_DISCUSSION_FORM_OPEN_EVENT_NAME, {
+    super(LearningDiscussionFormOpenEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -146,8 +154,11 @@ export class LearningDiscussionFormOpenEvent extends Event {
 }
 
 export class LearningDiscussionFormCloseEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-form-close" as const;
+  }
   constructor() {
-    super(LEARNING_DISCUSSION_FORM_CLOSE_EVENT_NAME, {
+    super(LearningDiscussionFormCloseEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -155,10 +166,13 @@ export class LearningDiscussionFormCloseEvent extends Event {
 }
 
 export class LearningDiscussionUpdateStatusEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-update-status" as const;
+  }
   public readonly status: Discussion["status"];
 
   constructor(status: Discussion["status"]) {
-    super(LEARNING_DISCUSSION_UPDATE_STATUS_EVENT_NAME, {
+    super(LearningDiscussionUpdateStatusEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -167,10 +181,13 @@ export class LearningDiscussionUpdateStatusEvent extends Event {
 }
 
 export class LearningDiscussionUpdateDialogueSettingsEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-update-dialogue-settings" as const;
+  }
   public readonly settings: DialogueSettings;
 
   constructor(settings: DialogueSettings) {
-    super(LEARNING_DISCUSSION_UPDATE_DIALOGUE_SETTINGS_EVENT_NAME, {
+    super(LearningDiscussionUpdateDialogueSettingsEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -179,11 +196,14 @@ export class LearningDiscussionUpdateDialogueSettingsEvent extends Event {
 }
 
 export class LearningDiscussionRenameCommentTypeEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-rename-comment-type" as const;
+  }
   public readonly oldType: string;
   public readonly newType: string;
 
   constructor(oldType: string, newType: string) {
-    super(LEARNING_DISCUSSION_RENAME_COMMENT_TYPE_EVENT_NAME, {
+    super(LearningDiscussionRenameCommentTypeEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -193,10 +213,13 @@ export class LearningDiscussionRenameCommentTypeEvent extends Event {
 }
 
 export class LearningDiscussionArchiveEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-archive" as const;
+  }
   public readonly discussionId: string;
 
   constructor(discussionId: string) {
-    super(LEARNING_DISCUSSION_ARCHIVE_EVENT_NAME, {
+    super(LearningDiscussionArchiveEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -205,10 +228,13 @@ export class LearningDiscussionArchiveEvent extends Event {
 }
 
 export class LearningDiscussionUnarchiveEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-unarchive" as const;
+  }
   public readonly discussionId: string;
 
   constructor(discussionId: string) {
-    super(LEARNING_DISCUSSION_UNARCHIVE_EVENT_NAME, {
+    super(LearningDiscussionUnarchiveEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -218,21 +244,21 @@ export class LearningDiscussionUnarchiveEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [LEARNING_DISCUSSION_SELECT_EVENT_NAME]: LearningDiscussionSelectEvent;
-    [LEARNING_DISCUSSION_CREATE_EVENT_NAME]: LearningDiscussionCreateEvent;
-    [LEARNING_DISCUSSION_CREATED_EVENT_NAME]: LearningDiscussionCreatedEvent;
-    [LEARNING_DISCUSSION_UPDATE_EVENT_NAME]: LearningDiscussionUpdateEvent;
-    [LEARNING_DISCUSSION_UPDATED_EVENT_NAME]: LearningDiscussionUpdatedEvent;
-    [LEARNING_DISCUSSION_DELETE_EVENT_NAME]: LearningDiscussionDeleteEvent;
-    [LEARNING_DISCUSSION_DELETED_EVENT_NAME]: LearningDiscussionDeletedEvent;
-    [LEARNING_DISCUSSION_SEARCH_EVENT_NAME]: LearningDiscussionSearchEvent;
-    [LEARNING_DISCUSSION_ARCHIVE_FILTER_EVENT_NAME]: LearningDiscussionArchiveFilterEvent;
-    [LEARNING_DISCUSSION_UPDATE_STATUS_EVENT_NAME]: LearningDiscussionUpdateStatusEvent;
-    [LEARNING_DISCUSSION_UPDATE_DIALOGUE_SETTINGS_EVENT_NAME]: LearningDiscussionUpdateDialogueSettingsEvent;
-    [LEARNING_DISCUSSION_RENAME_COMMENT_TYPE_EVENT_NAME]: LearningDiscussionRenameCommentTypeEvent;
-    [LEARNING_DISCUSSION_ARCHIVE_EVENT_NAME]: LearningDiscussionArchiveEvent;
-    [LEARNING_DISCUSSION_UNARCHIVE_EVENT_NAME]: LearningDiscussionUnarchiveEvent;
-    [LEARNING_DISCUSSION_FORM_OPEN_EVENT_NAME]: LearningDiscussionFormOpenEvent;
-    [LEARNING_DISCUSSION_FORM_CLOSE_EVENT_NAME]: LearningDiscussionFormCloseEvent;
+    [LearningDiscussionSelectEvent.eventName]: LearningDiscussionSelectEvent;
+    [LearningDiscussionCreateEvent.eventName]: LearningDiscussionCreateEvent;
+    [LearningDiscussionCreatedEvent.eventName]: LearningDiscussionCreatedEvent;
+    [LearningDiscussionUpdateEvent.eventName]: LearningDiscussionUpdateEvent;
+    [LearningDiscussionUpdatedEvent.eventName]: LearningDiscussionUpdatedEvent;
+    [LearningDiscussionDeleteEvent.eventName]: LearningDiscussionDeleteEvent;
+    [LearningDiscussionDeletedEvent.eventName]: LearningDiscussionDeletedEvent;
+    [LearningDiscussionSearchEvent.eventName]: LearningDiscussionSearchEvent;
+    [LearningDiscussionArchiveFilterEvent.eventName]: LearningDiscussionArchiveFilterEvent;
+    [LearningDiscussionUpdateStatusEvent.eventName]: LearningDiscussionUpdateStatusEvent;
+    [LearningDiscussionUpdateDialogueSettingsEvent.eventName]: LearningDiscussionUpdateDialogueSettingsEvent;
+    [LearningDiscussionRenameCommentTypeEvent.eventName]: LearningDiscussionRenameCommentTypeEvent;
+    [LearningDiscussionArchiveEvent.eventName]: LearningDiscussionArchiveEvent;
+    [LearningDiscussionUnarchiveEvent.eventName]: LearningDiscussionUnarchiveEvent;
+    [LearningDiscussionFormOpenEvent.eventName]: LearningDiscussionFormOpenEvent;
+    [LearningDiscussionFormCloseEvent.eventName]: LearningDiscussionFormCloseEvent;
   }
 }

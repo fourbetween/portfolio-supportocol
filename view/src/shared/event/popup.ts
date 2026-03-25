@@ -1,13 +1,12 @@
-export const POPUP_CLOSED_EVENT_NAME = "popup-closed";
-
 export class PopupClosedEvent extends Event {
+  static get eventName() { return "popup-closed" as const; }
   constructor() {
-    super(POPUP_CLOSED_EVENT_NAME, { bubbles: true, composed: true });
+    super(PopupClosedEvent.eventName, { bubbles: true, composed: true });
   }
 }
 
 declare global {
   interface HTMLElementEventMap {
-    [POPUP_CLOSED_EVENT_NAME]: PopupClosedEvent;
+    [PopupClosedEvent.eventName]: PopupClosedEvent;
   }
 }

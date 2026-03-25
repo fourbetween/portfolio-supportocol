@@ -1,17 +1,10 @@
-export const WORKSPACE_DISCUSSION_MOVE_EVENT_NAME = "workspace-discussion-move";
-export const WORKSPACE_DISCUSSION_MOVED_EVENT_NAME =
-  "workspace-discussion-moved";
-export const WORKSPACE_DISCUSSION_SELECT_TOGGLE_EVENT_NAME =
-  "workspace-discussion-select-toggle";
-export const WORKSPACE_DISCUSSION_CLEAR_SELECTION_EVENT_NAME =
-  "workspace-discussion-clear-selection";
-
 export class WorkspaceDiscussionMoveEvent extends Event {
+  static get eventName() { return "workspace-discussion-move" as const; }
   public readonly discussionIds: string[];
   public readonly targetProjectId: string;
 
   constructor(discussionIds: string[], targetProjectId: string) {
-    super(WORKSPACE_DISCUSSION_MOVE_EVENT_NAME, {
+    super(WorkspaceDiscussionMoveEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -21,11 +14,12 @@ export class WorkspaceDiscussionMoveEvent extends Event {
 }
 
 export class WorkspaceDiscussionMovedEvent extends Event {
+  static get eventName() { return "workspace-discussion-moved" as const; }
   public readonly discussionIds: string[];
   public readonly targetProjectId: string;
 
   constructor(discussionIds: string[], targetProjectId: string) {
-    super(WORKSPACE_DISCUSSION_MOVED_EVENT_NAME, {
+    super(WorkspaceDiscussionMovedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -35,10 +29,11 @@ export class WorkspaceDiscussionMovedEvent extends Event {
 }
 
 export class WorkspaceDiscussionSelectToggleEvent extends Event {
+  static get eventName() { return "workspace-discussion-select-toggle" as const; }
   public readonly discussionId: string;
 
   constructor(discussionId: string) {
-    super(WORKSPACE_DISCUSSION_SELECT_TOGGLE_EVENT_NAME, {
+    super(WorkspaceDiscussionSelectToggleEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -47,8 +42,9 @@ export class WorkspaceDiscussionSelectToggleEvent extends Event {
 }
 
 export class WorkspaceDiscussionClearSelectionEvent extends Event {
+  static get eventName() { return "workspace-discussion-clear-selection" as const; }
   constructor() {
-    super(WORKSPACE_DISCUSSION_CLEAR_SELECTION_EVENT_NAME, {
+    super(WorkspaceDiscussionClearSelectionEvent.eventName, {
       bubbles: true,
       composed: true,
     });
@@ -57,9 +53,9 @@ export class WorkspaceDiscussionClearSelectionEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
-    [WORKSPACE_DISCUSSION_MOVE_EVENT_NAME]: WorkspaceDiscussionMoveEvent;
-    [WORKSPACE_DISCUSSION_MOVED_EVENT_NAME]: WorkspaceDiscussionMovedEvent;
-    [WORKSPACE_DISCUSSION_SELECT_TOGGLE_EVENT_NAME]: WorkspaceDiscussionSelectToggleEvent;
-    [WORKSPACE_DISCUSSION_CLEAR_SELECTION_EVENT_NAME]: WorkspaceDiscussionClearSelectionEvent;
+    [WorkspaceDiscussionMoveEvent.eventName]: WorkspaceDiscussionMoveEvent;
+    [WorkspaceDiscussionMovedEvent.eventName]: WorkspaceDiscussionMovedEvent;
+    [WorkspaceDiscussionSelectToggleEvent.eventName]: WorkspaceDiscussionSelectToggleEvent;
+    [WorkspaceDiscussionClearSelectionEvent.eventName]: WorkspaceDiscussionClearSelectionEvent;
   }
 }
