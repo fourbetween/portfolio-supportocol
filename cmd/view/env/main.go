@@ -81,7 +81,7 @@ func fetchConfig() (*envConfig, error) {
 
 	return &envConfig{
 		Stage:           stage,
-		APIURL:          "https://" + domain + "/api",
+		APIURL:          "https://api." + domain,
 		SiteDescription: siteDesc,
 		SiteTitle:       siteName,
 		SiteURL:         "https://" + domain,

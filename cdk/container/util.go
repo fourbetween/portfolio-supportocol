@@ -25,6 +25,10 @@ func getDomain(app, stage string) string {
 	return fmt.Sprintf("%s.%s.%s", app, stage, base)
 }
 
+func getAPIDomain(appName, stage string) string {
+	return "api." + getDomain(appName, stage)
+}
+
 func setParam(stack awscdk.Stack, app, key, value string) {
 	id := "Param" + strings.ReplaceAll(key, "/", "")
 	name := "/" + app + "/" + strings.Trim(key, "/")

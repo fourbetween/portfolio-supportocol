@@ -4,6 +4,7 @@ import type { paths } from "./schema";
 
 export const client = createClient<paths>({
   baseUrl: import.meta.env.VITE_API_URL,
+  credentials: "include",
 });
 
 const middleware: Middleware = {

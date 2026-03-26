@@ -42,6 +42,7 @@ type (
 		apiFunc         awslambda.Alias
 		mainApi         awsapigatewayv2.HttpApi
 		cdn             awscloudfront.Distribution
+		apiCdn          awscloudfront.Distribution
 		dns             awsroute53.IHostedZone
 	}
 
@@ -84,9 +85,11 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 		c.buildViewBucket()
 		c.buildApiFunction()
 		c.buildMainAPI()
+		c.buildApiCDN()
 		c.buildCDN()
 		c.deployView()
 		c.buildMainRecord()
+		c.buildApiRecord()
 	}
 
 	return c
@@ -229,6 +232,10 @@ func (c *AppContainer) buildCDN() {
 			},
 		})
 
+	c.cdn = cdn
+}
+
+func (c *AppContainer) buildApiCDN() {
 	apigDomain := fmt.Sprintf("%s.execute-api.%s.amazonaws.com", *c.mainApi.ApiId(), *c.stack.Region())
 	apigOrigin := awscloudfrontorigins.NewHttpOrigin(jsii.String(apigDomain), &awscloudfrontorigins.HttpOriginProps{})
 	apiCachePolicy := awscloudfront.NewCachePolicy(
@@ -245,16 +252,25 @@ func (c *AppContainer) buildCDN() {
 			EnableAcceptEncodingGzip:   jsii.Bool(true),
 		},
 	)
-	cacheDisableOptions := &awscloudfront.AddBehaviorOptions{
-		OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
-		ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
-		AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
-		CachedMethods:        awscloudfront.CachedMethods_CACHE_GET_HEAD_OPTIONS(),
-		CachePolicy:          apiCachePolicy,
-	}
-	cdn.AddBehavior(jsii.String("/api/*"), apigOrigin, cacheDisableOptions)
-
-	c.cdn = cdn
+	apiCdn := awscloudfront.NewDistribution(
+		c.stack,
+		jsii.String("ApiCdn"),
+		&awscloudfront.DistributionProps{
+			EnableIpv6:  jsii.Bool(true),
+			PriceClass:  awscloudfront.PriceClass_PRICE_CLASS_200,
+			Certificate: c.certContainer.ApiCert,
+			DefaultBehavior: &awscloudfront.BehaviorOptions{
+				Origin:               apigOrigin,
+				OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
+				ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
+				AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
+				CachedMethods:        awscloudfront.CachedMethods_CACHE_GET_HEAD_OPTIONS(),
+				CachePolicy:          apiCachePolicy,
+			},
+			DomainNames: jsii.Strings(getAPIDomain(c.appName, c.stage)),
+		},
+	)
+	c.apiCdn = apiCdn
 }
 
 func (c *AppContainer) buildMainAPI() {
@@ -276,7 +292,7 @@ func (c *AppContainer) buildMainAPI() {
 	)
 	api.AddRoutes(&awsapigatewayv2.AddRoutesOptions{
 		Integration: integration,
-		Path:        jsii.String("/api/{proxy+}"),
+		Path:        jsii.String("/{proxy+}"),
 	})
 	c.mainApi = api
 }
@@ -433,6 +449,30 @@ func (c *AppContainer) buildMainRecord() {
 			Zone:       c.dns,
 			Target:     target,
 			RecordName: jsii.String(c.domain()),
+		},
+	)
+}
+
+func (c *AppContainer) buildApiRecord() {
+	target := awsroute53.RecordTarget_FromAlias(
+		awsroute53targets.NewCloudFrontTarget(c.apiCdn),
+	)
+	awsroute53.NewARecord(
+		c.stack,
+		jsii.String("ApiDnsRecord"),
+		&awsroute53.ARecordProps{
+			Zone:       c.dns,
+			Target:     target,
+			RecordName: jsii.String(getAPIDomain(c.appName, c.stage)),
+		},
+	)
+	awsroute53.NewAaaaRecord(
+		c.stack,
+		jsii.String("ApiDnsRecordV6"),
+		&awsroute53.AaaaRecordProps{
+			Zone:       c.dns,
+			Target:     target,
+			RecordName: jsii.String(getAPIDomain(c.appName, c.stage)),
 		},
 	)
 }

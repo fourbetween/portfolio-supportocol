@@ -14,6 +14,7 @@ type (
 		stage   string
 		dns     awsroute53.IHostedZone
 		Cert    awscertificatemanager.Certificate
+		ApiCert awscertificatemanager.Certificate
 	}
 
 	CertContainerProps struct {
@@ -36,7 +37,7 @@ func NewCertContainer(p CertContainerProps) *CertContainer {
 	}
 
 	c.buildDNS()
-	c.buildCert()
+	c.buildCerts()
 
 	return c
 }
@@ -52,9 +53,9 @@ func (c *CertContainer) buildDNS() {
 	c.dns = dns
 }
 
-func (c *CertContainer) buildCert() {
-	cert := c.cert("AppCertificate", c.domain(c.appName))
-	c.Cert = cert
+func (c *CertContainer) buildCerts() {
+	c.Cert = c.cert("AppCertificate", c.domain(c.appName))
+	c.ApiCert = c.cert("ApiCertificate", getAPIDomain(c.appName, c.stage))
 }
 
 func (c *CertContainer) cert(id, domain string) awscertificatemanager.Certificate {

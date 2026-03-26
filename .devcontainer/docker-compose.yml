@@ -16,13 +16,10 @@ services:
       - "traefik.docker.network=traefik-public"
       # api
       - "traefik.http.routers.${APP_NAME}-api.entrypoints=websecure"
-      - "traefik.http.routers.${APP_NAME}-api.rule=Host(`${APP_DOMAIN}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.${APP_NAME}-api.rule=Host(`api.${APP_DOMAIN}`)"
       - "traefik.http.routers.${APP_NAME}-api.tls=true"
       - "traefik.http.routers.${APP_NAME}-api.tls.certresolver=myresolver"
       - "traefik.http.routers.${APP_NAME}-api.service=${APP_NAME}-api-svc"
-      - "traefik.http.routers.${APP_NAME}-api.priority=20"
-      - "traefik.http.routers.${APP_NAME}-api.middlewares=${APP_NAME}-api-strip"
-      - "traefik.http.middlewares.${APP_NAME}-api-strip.stripprefix.prefixes=/api"
       - "traefik.http.services.${APP_NAME}-api-svc.loadbalancer.server.port=9000"
       # view
       - "traefik.http.routers.${APP_NAME}-view.entrypoints=websecure"
@@ -30,7 +27,6 @@ services:
       - "traefik.http.routers.${APP_NAME}-view.tls=true"
       - "traefik.http.routers.${APP_NAME}-view.tls.certresolver=myresolver"
       - "traefik.http.routers.${APP_NAME}-view.service=${APP_NAME}-view-svc"
-      - "traefik.http.routers.${APP_NAME}-view.priority=10"
       - "traefik.http.services.${APP_NAME}-view-svc.loadbalancer.server.port=3000"
 
   mysql:
