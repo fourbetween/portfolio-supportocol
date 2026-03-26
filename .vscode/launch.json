@@ -17,6 +17,13 @@
       "request": "launch",
       "mode": "debug",
       "program": "${fileDirname}"
+    },
+    {
+      "name": "Debug View",
+      "type": "editor-browser",
+      "request": "launch",
+      "url": "https://supportocol.dev.hick-r.com",
+      "webRoot": "${workspaceFolder}/view"
     }
   ]
 }
