@@ -40,8 +40,8 @@ type (
 		viewBucket      awss3.Bucket
 		commentGenQueue awssqs.IQueue
 		apiFunc         awslambda.Alias
-		mainApi         awsapigatewayv2.HttpApi
-		cdn             awscloudfront.Distribution
+		apiApig         awsapigatewayv2.HttpApi
+		viewCdn         awscloudfront.Distribution
 		apiCdn          awscloudfront.Distribution
 		dns             awsroute53.IHostedZone
 	}
@@ -84,11 +84,11 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 		c.buildCommentGenFunction()
 		c.buildViewBucket()
 		c.buildApiFunction()
-		c.buildMainAPI()
+		c.buildApiApig()
 		c.buildApiCDN()
-		c.buildCDN()
+		c.buildViewCDN()
 		c.deployView()
-		c.buildMainRecord()
+		c.buildViewRecord()
 		c.buildApiRecord()
 	}
 
@@ -198,14 +198,14 @@ func (c *AppContainer) buildLogGroup() {
 	c.logGroup = awslogs.LogGroup_FromLogGroupArn(c.stack, jsii.String("ShareLogGroup"), jsii.String(loggroupArn))
 }
 
-func (c *AppContainer) buildCDN() {
+func (c *AppContainer) buildViewCDN() {
 	cdn := awscloudfront.NewDistribution(
 		c.stack,
-		jsii.String("Cdn"),
+		jsii.String("ViewCdn"),
 		&awscloudfront.DistributionProps{
 			EnableIpv6:        jsii.Bool(true),
 			PriceClass:        awscloudfront.PriceClass_PRICE_CLASS_200,
-			Certificate:       c.certContainer.Cert,
+			Certificate:       c.certContainer.AppCert,
 			DefaultRootObject: jsii.String("index.html"),
 			DefaultBehavior: &awscloudfront.BehaviorOptions{
 				Origin: awscloudfrontorigins.S3BucketOrigin_WithOriginAccessControl(
@@ -232,11 +232,11 @@ func (c *AppContainer) buildCDN() {
 			},
 		})
 
-	c.cdn = cdn
+	c.viewCdn = cdn
 }
 
 func (c *AppContainer) buildApiCDN() {
-	apigDomain := fmt.Sprintf("%s.execute-api.%s.amazonaws.com", *c.mainApi.ApiId(), *c.stack.Region())
+	apigDomain := fmt.Sprintf("%s.execute-api.%s.amazonaws.com", *c.apiApig.ApiId(), *c.stack.Region())
 	apigOrigin := awscloudfrontorigins.NewHttpOrigin(jsii.String(apigDomain), &awscloudfrontorigins.HttpOriginProps{})
 	apiCachePolicy := awscloudfront.NewCachePolicy(
 		c.stack,
@@ -273,14 +273,14 @@ func (c *AppContainer) buildApiCDN() {
 	c.apiCdn = apiCdn
 }
 
-func (c *AppContainer) buildMainAPI() {
+func (c *AppContainer) buildApiApig() {
 	api := awsapigatewayv2.NewHttpApi(
 		c.stack,
-		jsii.Sprintf("%s-main-api", c.appName),
+		jsii.Sprintf("%s-api-apig", c.appName),
 		nil,
 	)
 	integration := awsapigatewayv2integrations.NewHttpLambdaIntegration(
-		jsii.String("MainLambdaIntegration"),
+		jsii.String("ApiLambdaIntegration"),
 		c.apiFunc,
 		&awsapigatewayv2integrations.HttpLambdaIntegrationProps{
 			ParameterMapping: awsapigatewayv2.
@@ -294,7 +294,7 @@ func (c *AppContainer) buildMainAPI() {
 		Integration: integration,
 		Path:        jsii.String("/{proxy+}"),
 	})
-	c.mainApi = api
+	c.apiApig = api
 }
 
 func (c *AppContainer) buildApiFunction() {
@@ -389,7 +389,7 @@ func (c *AppContainer) deployView() {
 				awss3deployment.CacheControl_MaxAge(awscdk.Duration_Days(jsii.Number(1))),
 				awss3deployment.CacheControl_StaleWhileRevalidate(awscdk.Duration_Days(jsii.Number(7))),
 			},
-			Distribution:      c.cdn,
+			Distribution:      c.viewCdn,
 			DistributionPaths: jsii.Strings("/favicon.ico", "/images/*"),
 			Prune:             jsii.Bool(false),
 		})
@@ -412,7 +412,7 @@ func (c *AppContainer) deployView() {
 				awss3deployment.CacheControl_MustRevalidate(),
 				awss3deployment.CacheControl_MaxAge(awscdk.Duration_Seconds(jsii.Number(0))),
 			},
-			Distribution:      c.cdn,
+			Distribution:      c.viewCdn,
 			DistributionPaths: jsii.Strings("/", "/index.html", "/sw.js", "/registerSW.js", "/manifest.webmanifest"),
 			Prune:             jsii.Bool(false),
 		})
@@ -428,13 +428,13 @@ func (c *AppContainer) buildDNS() {
 	c.dns = dns
 }
 
-func (c *AppContainer) buildMainRecord() {
+func (c *AppContainer) buildViewRecord() {
 	target := awsroute53.RecordTarget_FromAlias(
-		awsroute53targets.NewCloudFrontTarget(c.cdn),
+		awsroute53targets.NewCloudFrontTarget(c.viewCdn),
 	)
 	awsroute53.NewARecord(
 		c.stack,
-		jsii.String("MainDnsRecord"),
+		jsii.String("ViewDnsRecord"),
 		&awsroute53.ARecordProps{
 			Zone:       c.dns,
 			Target:     target,
@@ -444,7 +444,7 @@ func (c *AppContainer) buildMainRecord() {
 
 	awsroute53.NewAaaaRecord(
 		c.stack,
-		jsii.String("MainDnsRecordV6"),
+		jsii.String("ViewDnsRecordV6"),
 		&awsroute53.AaaaRecordProps{
 			Zone:       c.dns,
 			Target:     target,
