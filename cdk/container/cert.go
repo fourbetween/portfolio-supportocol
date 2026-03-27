@@ -13,7 +13,7 @@ type (
 		stack   awscdk.Stack
 		stage   string
 		dns     awsroute53.IHostedZone
-		Cert    awscertificatemanager.Certificate
+		AppCert awscertificatemanager.Certificate
 		ApiCert awscertificatemanager.Certificate
 	}
 
@@ -54,7 +54,7 @@ func (c *CertContainer) buildDNS() {
 }
 
 func (c *CertContainer) buildCerts() {
-	c.Cert = c.cert("AppCertificate", c.domain(c.appName))
+	c.AppCert = c.cert("AppCertificate", getDomain(c.appName, c.stage))
 	c.ApiCert = c.cert("ApiCertificate", getAPIDomain(c.appName, c.stage))
 }
 
@@ -66,8 +66,4 @@ func (c *CertContainer) cert(id, domain string) awscertificatemanager.Certificat
 			DomainName: jsii.String(domain),
 			Validation: awscertificatemanager.CertificateValidation_FromDns(c.dns),
 		})
-}
-
-func (c *CertContainer) domain(appName string) string {
-	return getDomain(appName, c.stage)
 }
