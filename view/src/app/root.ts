@@ -13,6 +13,7 @@ import "../feature/learning/root";
 import "../feature/marketing/root";
 import type { WorkspaceWorkspaceSelectEvent } from "../feature/workspace/event/workspace";
 import "../feature/workspace/root";
+import "../localization.ts";
 import { showToast } from "../shared/event/toast";
 import "../shared/ui/loading/loading-manager";
 import "../shared/ui/toast/toast-manager";
