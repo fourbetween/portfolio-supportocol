@@ -6,7 +6,6 @@ import (
 	"context"
 	"errors"
 	"log/slog"
-	"net/http"
 
 	"github.com/fourbetween/app-supportocol/internal/identity"
 	"github.com/fourbetween/app-supportocol/internal/identity/api/oas"
@@ -43,7 +42,7 @@ func (h *appHandler) V1IdentityGooglePost(ctx context.Context, req *oas.GoogleLo
 		return err
 	}
 
-	h.setAuthCookie(ctx, token)
+	httpcookie.SetAuthCookie(ctx, token)
 	return nil
 }
 
@@ -60,7 +59,7 @@ func (h *appHandler) V1IdentityLoginPost(ctx context.Context, req *oas.LoginWith
 		return err
 	}
 
-	h.setAuthCookie(ctx, token)
+	httpcookie.SetAuthCookie(ctx, token)
 	return nil
 }
 
@@ -70,7 +69,7 @@ func (h *appHandler) V1IdentityVerifyEmailPost(ctx context.Context, req *oas.Ver
 		return err
 	}
 
-	h.setAuthCookie(ctx, token)
+	httpcookie.SetAuthCookie(ctx, token)
 	return nil
 }
 
@@ -82,7 +81,7 @@ func (h *appHandler) V1IdentityResendVerifyEmailPost(ctx context.Context, req *o
 }
 
 func (h *appHandler) V1IdentityLogoutPost(ctx context.Context) error {
-	h.clearAuthCookie(ctx)
+	httpcookie.ClearAuthCookie(ctx)
 	return nil
 }
 
@@ -103,7 +102,7 @@ func (h *appHandler) V1IdentityMeDelete(ctx context.Context) error {
 		return err
 	}
 
-	h.clearAuthCookie(ctx)
+	httpcookie.ClearAuthCookie(ctx)
 	return nil
 }
 
@@ -153,32 +152,6 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 			Message: msg,
 		},
 	}
-}
-
-func (h *appHandler) setAuthCookie(ctx context.Context, token string) {
-	w := httpctx.GetResponseWriter(ctx)
-	http.SetCookie(w, &http.Cookie{
-		Name:     httpcookie.AuthCookieName,
-		Value:    token,
-		Path:     "/",
-		MaxAge:   int(httpcookie.CookieMaxAge.Seconds()),
-		HttpOnly: true,
-		Secure:   true,
-		SameSite: http.SameSiteLaxMode,
-	})
-}
-
-func (h *appHandler) clearAuthCookie(ctx context.Context) {
-	w := httpctx.GetResponseWriter(ctx)
-	http.SetCookie(w, &http.Cookie{
-		Name:     httpcookie.AuthCookieName,
-		Value:    "",
-		Path:     "/",
-		MaxAge:   -1,
-		HttpOnly: true,
-		Secure:   true,
-		SameSite: http.SameSiteLaxMode,
-	})
 }
 
 func (h *appHandler) toOasUser(u *domain.User) oas.User {
