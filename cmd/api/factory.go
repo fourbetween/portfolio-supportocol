@@ -80,8 +80,8 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 	mux.Handle("/v1/learning/", learningHandler)
 	mux.Handle("/v1/dialogue/", dialogueHandler)
 
-	csrfHandler := middleware.CSRFMiddleware(domain)(mux)
-	return middleware.CORSMiddleware("https://" + domain)(csrfHandler), nil
+	csrfHandler := middleware.CSRF(domain)(mux)
+	return middleware.CORS("https://" + domain)(csrfHandler), nil
 }
 
 func newIdentityHandler(
