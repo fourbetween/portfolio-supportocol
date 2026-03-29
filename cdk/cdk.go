@@ -42,6 +42,7 @@ func main() {
 		StackProps: awscdk.StackProps{
 			Env:                   awsEnvForCert(),
 			CrossRegionReferences: jsii.Bool(true),
+			TerminationProtection: jsii.Bool(stage == "prod"),
 		},
 		Stage: stage,
 	})
@@ -52,6 +53,7 @@ func main() {
 		StackProps: awscdk.StackProps{
 			Env:                   awsEnv(),
 			CrossRegionReferences: jsii.Bool(true),
+			TerminationProtection: jsii.Bool(stage == "prod"),
 		},
 		Stage:         stage,
 		CertContainer: certContainer,
