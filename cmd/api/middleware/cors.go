@@ -4,6 +4,8 @@ import (
 	"net/http"
 )
 
+const preflightMaxAge = "86400"
+
 func CORS(allowedOrigin string) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -14,6 +16,7 @@ func CORS(allowedOrigin string) func(http.Handler) http.Handler {
 			w.Header().Add("Vary", "Origin")
 
 			if r.Method == http.MethodOptions {
+				w.Header().Set("Access-Control-Max-Age", preflightMaxAge)
 				w.WriteHeader(http.StatusOK)
 				return
 			}
