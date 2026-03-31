@@ -264,7 +264,7 @@ func (c *AppContainer) buildApiCDN() {
 				OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
 				ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
 				AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
-				CachedMethods:        awscloudfront.CachedMethods_CACHE_GET_HEAD_OPTIONS(),
+				CachedMethods:        awscloudfront.CachedMethods_CACHE_GET_HEAD(),
 				CachePolicy:          apiCachePolicy,
 			},
 			DomainNames: jsii.Strings(getAPIDomain(c.appName, c.stage)),
