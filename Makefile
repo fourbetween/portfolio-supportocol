@@ -3,7 +3,7 @@ BASE_DIR := ${CURDIR}
 VIEW_DIR := ${BASE_DIR}/view
 CDK_DIR  := ${BASE_DIR}/cdk
 
-.PHONY: dev-api dev-view dev watch-view build-lambda build-view build build-deploy deploy destroy gen test-api test-view test setup-view storybook deadcode vulncheck upgrade-tools upgrade-go upgrade-view %
+.PHONY: dev-api dev-view dev build-lambda build-view build build-deploy deploy destroy gen test-api test-view test setup-view storybook deadcode vulncheck upgrade-tools upgrade-go upgrade-view %
 
 # ===== 開発サーバー =====
 dev-api:
@@ -17,9 +17,6 @@ dev-commentgen:
 
 dev:
 	npx concurrently --kill-others --prefix "[{name}]" -n "api,view,commentgen" -c "blue,cyan,magenta" "make dev-api" "make dev-view" "make dev-commentgen"
-
-watch-view:
-	cd ${VIEW_DIR} && npm run watch:all
 
 # ===== ビルド =====
 build-lambda:
