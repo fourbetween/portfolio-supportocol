@@ -115,9 +115,11 @@ export class CommentRepository {
 
     const cached = this._cache.get(discussionId);
     if (cached) {
+      const idsToRemove = this._collectDescendantIds(cached, commentId);
+      idsToRemove.add(commentId);
       this._cache.set(
         discussionId,
-        cached.filter((c) => c.id !== commentId),
+        cached.filter((c) => !idsToRemove.has(c.id)),
       );
     }
   }
@@ -275,6 +277,26 @@ export class CommentRepository {
     }
 
     return data;
+  }
+
+  private _collectDescendantIds(
+    comments: Comment[],
+    rootId: string,
+  ): Set<string> {
+    const result = new Set<string>();
+    const queue = [rootId];
+
+    while (queue.length > 0) {
+      const parentId = queue.shift()!;
+      for (const comment of comments) {
+        if (comment.parentCommentId === parentId && !result.has(comment.id)) {
+          result.add(comment.id);
+          queue.push(comment.id);
+        }
+      }
+    }
+
+    return result;
   }
 }
 

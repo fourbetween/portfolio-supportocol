@@ -216,9 +216,19 @@ export class LearningDashboardPage extends LitElement {
     }
   }
 
-  private _handleCommentDeleted(e: LearningCommentDeletedEvent) {
-    this._comments = this._comments.filter((c) => c.id !== e.commentId);
-    if (this._selectedCommentId === e.commentId) {
+  private async _handleCommentDeleted(_e: LearningCommentDeletedEvent) {
+    if (!this.workspace || !this._selectedDiscussionId) return;
+
+    const comments = await commentRepository.list(
+      this.workspace.workspace.id,
+      this._selectedDiscussionId,
+    );
+    this._comments = comments;
+
+    if (
+      this._selectedCommentId &&
+      !comments.some((comment) => comment.id === this._selectedCommentId)
+    ) {
       this._selectedCommentId = undefined;
     }
   }
