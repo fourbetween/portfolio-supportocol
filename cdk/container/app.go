@@ -238,20 +238,6 @@ func (c *AppContainer) buildViewCDN() {
 func (c *AppContainer) buildApiCDN() {
 	apigDomain := fmt.Sprintf("%s.execute-api.%s.amazonaws.com", *c.apiApig.ApiId(), *c.stack.Region())
 	apigOrigin := awscloudfrontorigins.NewHttpOrigin(jsii.String(apigDomain), &awscloudfrontorigins.HttpOriginProps{})
-	apiCachePolicy := awscloudfront.NewCachePolicy(
-		c.stack,
-		jsii.String("ApiCachePolicy"),
-		&awscloudfront.CachePolicyProps{
-			MinTtl:                     awscdk.Duration_Seconds(jsii.Number(0)),
-			DefaultTtl:                 awscdk.Duration_Seconds(jsii.Number(0)),
-			MaxTtl:                     awscdk.Duration_Minutes(jsii.Number(5)),
-			CookieBehavior:             awscloudfront.CacheCookieBehavior_None(),
-			HeaderBehavior:             awscloudfront.CacheHeaderBehavior_None(),
-			QueryStringBehavior:        awscloudfront.CacheQueryStringBehavior_All(),
-			EnableAcceptEncodingBrotli: jsii.Bool(true),
-			EnableAcceptEncodingGzip:   jsii.Bool(true),
-		},
-	)
 	apiCdn := awscloudfront.NewDistribution(
 		c.stack,
 		jsii.String("ApiCdn"),
@@ -264,8 +250,8 @@ func (c *AppContainer) buildApiCDN() {
 				OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
 				ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
 				AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
-				CachedMethods:        awscloudfront.CachedMethods_CACHE_GET_HEAD(),
-				CachePolicy:          apiCachePolicy,
+				CachedMethods:        awscloudfront.CachedMethods_CACHE_GET_HEAD_OPTIONS(),
+				CachePolicy:          awscloudfront.CachePolicy_CACHING_DISABLED(),
 			},
 			DomainNames: jsii.Strings(getAPIDomain(c.appName, c.stage)),
 		},
