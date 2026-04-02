@@ -6,7 +6,6 @@ import (
 	"context"
 	"errors"
 	"log/slog"
-	"net/http"
 	"strings"
 	"time"
 
@@ -221,9 +220,6 @@ func (h *appHandler) setReadCacheControl(ctx context.Context, cacheable bool, he
 	}
 	if w.Header().Get("Expires") == "" {
 		w.Header().Set("Expires", "0")
-	}
-	if w.Header().Get("Vary") == "" {
-		w.Header().Set("Vary", http.CanonicalHeaderKey("Cookie"))
 	}
 }
 
