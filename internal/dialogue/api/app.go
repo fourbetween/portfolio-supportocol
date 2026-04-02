@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
+	"net/http"
 	"strings"
 	"time"
 
@@ -18,6 +19,12 @@ import (
 	"github.com/fourbetween/pkg-auth/auth"
 	"github.com/google/uuid"
 	"github.com/ogen-go/ogen/ogenerrors"
+)
+
+const (
+	readCacheControlHeader        = "public, max-age=0, s-maxage=30, stale-while-revalidate=60"
+	commentListCacheControlHeader = "public, max-age=0, s-maxage=10, stale-while-revalidate=30"
+	noStoreCacheControlHeader     = "no-store"
 )
 
 type appHandler struct {
@@ -44,6 +51,7 @@ func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context, params oas.V1
 	if err != nil {
 		return nil, err
 	}
+	h.setReadCacheControl(ctx, output.Cacheable, readCacheControlHeader)
 
 	return h.toOasPaginatedDiscussionSummary(output, paging), nil
 }
@@ -69,6 +77,7 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsGet(
 	if err != nil {
 		return nil, err
 	}
+	h.setReadCacheControl(ctx, output.Cacheable, readCacheControlHeader)
 
 	return h.toOasPaginatedDiscussionSummary(output, paging), nil
 }
@@ -85,6 +94,7 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdGet(
 	if err != nil {
 		return nil, err
 	}
+	h.setReadCacheControl(ctx, output.Cacheable, readCacheControlHeader)
 
 	res := h.toOasDiscussion(output.Discussion)
 	return &res, nil
@@ -108,6 +118,7 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	if err != nil {
 		return nil, err
 	}
+	h.setReadCacheControl(ctx, output.Cacheable, commentListCacheControlHeader)
 
 	res := make([]oas.Comment, len(output.Items))
 	for i, item := range output.Items {
@@ -190,6 +201,29 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 			Code:    code,
 			Message: msg,
 		},
+	}
+}
+
+func (h *appHandler) setReadCacheControl(ctx context.Context, cacheable bool, headerValue string) {
+	w := httpctx.GetResponseWriter(ctx)
+	if w == nil {
+		return
+	}
+
+	if cacheable {
+		w.Header().Set("Cache-Control", headerValue)
+		return
+	}
+
+	w.Header().Set("Cache-Control", noStoreCacheControlHeader)
+	if w.Header().Get("Pragma") == "" {
+		w.Header().Set("Pragma", "no-cache")
+	}
+	if w.Header().Get("Expires") == "" {
+		w.Header().Set("Expires", "0")
+	}
+	if w.Header().Get("Vary") == "" {
+		w.Header().Set("Vary", http.CanonicalHeaderKey("Cookie"))
 	}
 }
 
