@@ -501,7 +501,7 @@ func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.
 	if item.ArchivedAt != nil {
 		res.ArchivedAt.SetTo(*item.ArchivedAt)
 	} else {
-		res.ArchivedAt.Null = true
+		res.ArchivedAt.SetToNull()
 	}
 	return res
 }
@@ -515,12 +515,12 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
 		Status:     oas.DiscussionStatus(item.Status()),
 	}
-	if item.ArchivedAt() != nil {
-		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	if t, ok := item.ArchivedAt(); ok {
+		res.ArchivedAt.SetTo(t)
 	} else {
-		res.ArchivedAt.Null = true
+		res.ArchivedAt.SetToNull()
 	}
-	if ds := item.DialogueSettings(); ds != nil {
+	if ds, ok := item.DialogueSettings(); ok {
 		paths := make([]oas.CommentPath, len(ds.CommentFrame.Paths))
 		for i, p := range ds.CommentFrame.Paths {
 			paths[i] = oas.CommentPath{
@@ -541,17 +541,17 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 			IssuePermission:   oas.PermissionLevel(ds.IssuePermission),
 		})
 	} else {
-		res.DialogueSettings.Null = true
+		res.DialogueSettings.SetToNull()
 	}
 	return res
 }
 
 func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 	var parentCommentID oas.NilID
-	if item.ParentCommentID() != nil {
-		parentCommentID.SetTo(oas.ID(uuid.MustParse(*item.ParentCommentID())))
+	if id, ok := item.ParentCommentID(); ok {
+		parentCommentID.SetTo(oas.ID(uuid.MustParse(id)))
 	} else {
-		parentCommentID.Null = true
+		parentCommentID.SetToNull()
 	}
 
 	issues := make([]oas.CommentIssue, len(item.Issues()))
@@ -573,10 +573,10 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		Issues:          issues,
 		CreatedAt:       item.CreatedAt(),
 	}
-	if item.ArchivedAt() != nil {
-		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	if t, ok := item.ArchivedAt(); ok {
+		res.ArchivedAt.SetTo(t)
 	} else {
-		res.ArchivedAt.Null = true
+		res.ArchivedAt.SetToNull()
 	}
 	return res
 }

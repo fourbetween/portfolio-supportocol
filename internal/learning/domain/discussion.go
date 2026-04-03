@@ -184,12 +184,18 @@ func (d *Discussion) CreatedAt() time.Time {
 	return d.activity.CreatedAt
 }
 
-func (d *Discussion) DialogueSettings() *DialogueSettings {
-	return d.dialogueSettings
+func (d *Discussion) DialogueSettings() (DialogueSettings, bool) {
+	if d.dialogueSettings == nil {
+		return DialogueSettings{}, false
+	}
+	return *d.dialogueSettings, true
 }
 
-func (d *Discussion) ArchivedAt() *time.Time {
-	return d.activity.ArchivedAt
+func (d *Discussion) ArchivedAt() (time.Time, bool) {
+	if d.activity.ArchivedAt == nil {
+		return time.Time{}, false
+	}
+	return *d.activity.ArchivedAt, true
 }
 
 func (d *Discussion) IsArchived() bool {
@@ -618,8 +624,8 @@ func (cf CommentFrame) Supplement(comments []*Comment) CommentFrame {
 		}
 
 		var parentType string
-		if c.ParentCommentID() != nil {
-			if parent, ok := commentMap[*c.ParentCommentID()]; ok {
+		if parentID, ok := c.ParentCommentID(); ok {
+			if parent, ok := commentMap[parentID]; ok {
 				parentType = parent.Type()
 			}
 		}

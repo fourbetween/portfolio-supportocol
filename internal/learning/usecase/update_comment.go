@@ -77,8 +77,8 @@ func (u *UpdateCommentUsecase) Execute(ctx context.Context, input UpdateCommentI
 		}
 
 		var parentType string
-		if discussion.Status().IsPublic() && comment.ParentCommentID() != nil {
-			parent, err := u.commentRepo.Load(ctx, *comment.ParentCommentID())
+		if parentID, ok := comment.ParentCommentID(); discussion.Status().IsPublic() && ok {
+			parent, err := u.commentRepo.Load(ctx, parentID)
 			if err != nil {
 				return err
 			}

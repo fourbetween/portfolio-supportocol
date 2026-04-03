@@ -84,7 +84,11 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 	}
 
 	if d.Status().RequiresDialogueSettings() {
-		settingsModel, err := r.toDialogueSettingsModel(d.ID(), d.DialogueSettings())
+		ds, ok := d.DialogueSettings()
+		if !ok {
+			return fmt.Errorf("dialogue settings is required but missing: %w", apperr.ErrInvalidArgument)
+		}
+		settingsModel, err := r.toDialogueSettingsModel(d.ID(), ds)
 		if err != nil {
 			return fmt.Errorf("failed to convert dialogue settings to model: %w", err)
 		}
@@ -193,7 +197,7 @@ func (r *DiscussionRepository) toDialogueSettingsDomain(row *model.DialogueSetti
 }
 
 func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Discussions {
-	return model.Discussions{
+	m := model.Discussions{
 		ID:                    d.ID(),
 		WorkspaceID:           d.WorkspaceID(),
 		ProjectID:             d.ProjectID(),
@@ -205,13 +209,16 @@ func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Dis
 		ProposedCommentsCount: int32(d.ProposedCommentsCount()),
 		IssuesCount:           int32(d.IssuesCount()),
 		LastCommentedAt:       d.LastCommentedAt(),
-		ArchivedAt:            d.ArchivedAt(),
 		CreatedBy:             d.CreatedBy(),
 		CreatedAt:             d.CreatedAt(),
 	}
+	if t, ok := d.ArchivedAt(); ok {
+		m.ArchivedAt = &t
+	}
+	return m
 }
 
-func (r *DiscussionRepository) toDialogueSettingsModel(discussionID string, settings *domain.DialogueSettings) (model.DialogueSettings, error) {
+func (r *DiscussionRepository) toDialogueSettingsModel(discussionID string, settings domain.DialogueSettings) (model.DialogueSettings, error) {
 	commentFrameJSON, err := json.Marshal(settings.CommentFrame)
 	if err != nil {
 		return model.DialogueSettings{}, fmt.Errorf("failed to marshal comment frame: %w", err)
