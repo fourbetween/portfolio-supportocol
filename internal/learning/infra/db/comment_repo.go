@@ -296,17 +296,24 @@ type commentModel struct {
 }
 
 func (r *CommentRepository) toCommentModel(c *domain.Comment) model.Comments {
-	return model.Comments{
-		ID:              c.ID(),
-		DiscussionID:    c.DiscussionID(),
-		ParentCommentID: c.ParentCommentID(),
-		Type:            c.Type(),
-		Content:         c.Content(),
-		Status:          string(c.Status()),
-		ArchivedAt:      c.ArchivedAt(),
-		CreatedBy:       c.CreatedBy(),
-		CreatedAt:       c.CreatedAt(),
+	m := model.Comments{
+		ID:           c.ID(),
+		DiscussionID: c.DiscussionID(),
+		Type:         c.Type(),
+		Content:      c.Content(),
+		Status:       string(c.Status()),
+		CreatedAt:    c.CreatedAt(),
 	}
+	if id, ok := c.ParentCommentID(); ok {
+		m.ParentCommentID = &id
+	}
+	if by, ok := c.CreatedBy(); ok {
+		m.CreatedBy = &by
+	}
+	if t, ok := c.ArchivedAt(); ok {
+		m.ArchivedAt = &t
+	}
+	return m
 }
 
 func (r *CommentRepository) selectCommentWithIssues() mysql.SelectStatement {

@@ -14,11 +14,9 @@ func NewSlogAuditService() domain.AuditService {
 }
 
 func (s *slogAuditService) LogCommentCreated(ctx context.Context, comment *domain.Comment) {
-	var createdBy string
-	if comment.CreatedBy() == nil {
+	createdBy, ok := comment.CreatedBy()
+	if !ok {
 		createdBy = "anonymous"
-	} else {
-		createdBy = *comment.CreatedBy()
 	}
 
 	slog.InfoContext(ctx, "comment created",

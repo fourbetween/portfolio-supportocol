@@ -287,8 +287,8 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 			},
 		},
 	}
-	if item.ArchivedAt() != nil {
-		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	if t, ok := item.ArchivedAt(); ok {
+		res.ArchivedAt.SetTo(t)
 	} else {
 		res.ArchivedAt.SetToNull()
 	}
@@ -297,10 +297,10 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 
 func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 	var parentCommentID oas.NilID
-	if item.ParentCommentID() != nil {
-		parentCommentID.SetTo(oas.ID(uuid.MustParse(*item.ParentCommentID())))
+	if id, ok := item.ParentCommentID(); ok {
+		parentCommentID.SetTo(oas.ID(uuid.MustParse(id)))
 	} else {
-		parentCommentID.Null = true
+		parentCommentID.SetToNull()
 	}
 
 	issues := make([]oas.CommentIssue, len(item.Issues()))
@@ -322,8 +322,8 @@ func (h *appHandler) toOasComment(item *domain.Comment) oas.Comment {
 		Issues:          issues,
 		CreatedAt:       item.CreatedAt(),
 	}
-	if item.ArchivedAt() != nil {
-		res.ArchivedAt.SetTo(*item.ArchivedAt())
+	if t, ok := item.ArchivedAt(); ok {
+		res.ArchivedAt.SetTo(t)
 	} else {
 		res.ArchivedAt.SetToNull()
 	}

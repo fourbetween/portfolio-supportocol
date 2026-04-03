@@ -109,8 +109,11 @@ func (d *Discussion) LastCommentedAt() time.Time {
 	return d.activity.LastCommentedAt
 }
 
-func (d *Discussion) ArchivedAt() *time.Time {
-	return d.activity.ArchivedAt
+func (d *Discussion) ArchivedAt() (time.Time, bool) {
+	if d.activity.ArchivedAt == nil {
+		return time.Time{}, false
+	}
+	return *d.activity.ArchivedAt, true
 }
 
 func (d *Discussion) IsArchived() bool {

@@ -112,8 +112,11 @@ func (c *Comment) DiscussionID() string {
 	return c.discussionID
 }
 
-func (c *Comment) ParentCommentID() *string {
-	return c.parentCommentID
+func (c *Comment) ParentCommentID() (string, bool) {
+	if c.parentCommentID == nil {
+		return "", false
+	}
+	return *c.parentCommentID, true
 }
 
 func (c *Comment) Type() string {
@@ -128,16 +131,22 @@ func (c *Comment) Status() CommentStatus {
 	return c.status
 }
 
-func (c *Comment) ArchivedAt() *time.Time {
-	return c.activity.ArchivedAt
+func (c *Comment) ArchivedAt() (time.Time, bool) {
+	if c.activity.ArchivedAt == nil {
+		return time.Time{}, false
+	}
+	return *c.activity.ArchivedAt, true
 }
 
 func (c *Comment) IsArchived() bool {
 	return c.activity.ArchivedAt != nil
 }
 
-func (c *Comment) CreatedBy() *string {
-	return c.activity.CreatedBy
+func (c *Comment) CreatedBy() (string, bool) {
+	if c.activity.CreatedBy == nil {
+		return "", false
+	}
+	return *c.activity.CreatedBy, true
 }
 
 func (c *Comment) CreatedAt() time.Time {
