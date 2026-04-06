@@ -192,14 +192,14 @@ func (d *Discussion) DialogueSettings() (DialogueSettings, bool) {
 }
 
 func (d *Discussion) ArchivedAt() (time.Time, bool) {
-	if d.activity.ArchivedAt == nil {
+	if d.activity.ArchivedAt.IsZero() {
 		return time.Time{}, false
 	}
-	return *d.activity.ArchivedAt, true
+	return d.activity.ArchivedAt, true
 }
 
 func (d *Discussion) IsArchived() bool {
-	return d.activity.ArchivedAt != nil
+	return !d.activity.ArchivedAt.IsZero()
 }
 
 func (d *Discussion) CanAddComment() error {
@@ -313,7 +313,7 @@ func (d *Discussion) Archive(now time.Time) error {
 	if d.IsArchived() {
 		return fmt.Errorf("discussion is already archived: %w", apperr.ErrInvalidArgument)
 	}
-	d.activity.ArchivedAt = &now
+	d.activity.ArchivedAt = now
 	return nil
 }
 
@@ -321,7 +321,7 @@ func (d *Discussion) Unarchive() error {
 	if !d.IsArchived() {
 		return fmt.Errorf("discussion is not archived: %w", apperr.ErrInvalidArgument)
 	}
-	d.activity.ArchivedAt = nil
+	d.activity.ArchivedAt = time.Time{}
 	return nil
 }
 
@@ -401,7 +401,7 @@ type DiscussionStats struct {
 type DiscussionActivity struct {
 	CreatedBy       string
 	CreatedAt       time.Time
-	ArchivedAt      *time.Time
+	ArchivedAt      time.Time
 	LastCommentedAt time.Time
 }
 

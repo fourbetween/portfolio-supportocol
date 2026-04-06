@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/db/schema/app-supportocol/model"
@@ -174,9 +175,14 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 			IssuesCount:           int(row.IssuesCount),
 		},
 		Activity: domain.DiscussionActivity{
-			CreatedBy:       row.CreatedBy,
-			CreatedAt:       row.CreatedAt,
-			ArchivedAt:      row.ArchivedAt,
+			CreatedBy: row.CreatedBy,
+			CreatedAt: row.CreatedAt,
+			ArchivedAt: func() time.Time {
+				if row.ArchivedAt != nil {
+					return *row.ArchivedAt
+				}
+				return time.Time{}
+			}(),
 			LastCommentedAt: row.LastCommentedAt,
 		},
 		DialogueSettings: dialogueSettings,

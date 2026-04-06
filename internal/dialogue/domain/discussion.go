@@ -110,14 +110,14 @@ func (d *Discussion) LastCommentedAt() time.Time {
 }
 
 func (d *Discussion) ArchivedAt() (time.Time, bool) {
-	if d.activity.ArchivedAt == nil {
+	if d.activity.ArchivedAt.IsZero() {
 		return time.Time{}, false
 	}
-	return *d.activity.ArchivedAt, true
+	return d.activity.ArchivedAt, true
 }
 
 func (d *Discussion) IsArchived() bool {
-	return d.activity.ArchivedAt != nil
+	return !d.activity.ArchivedAt.IsZero()
 }
 
 func (d *Discussion) CreatedBy() string {
@@ -178,7 +178,7 @@ type DiscussionStats struct {
 type DiscussionActivity struct {
 	CreatedBy       string
 	CreatedAt       time.Time
-	ArchivedAt      *time.Time
+	ArchivedAt      time.Time
 	LastCommentedAt time.Time
 }
 

@@ -179,14 +179,14 @@ func (c *Comment) Issues() []CommentIssue {
 }
 
 func (c *Comment) ArchivedAt() (time.Time, bool) {
-	if c.activity.ArchivedAt == nil {
+	if c.activity.ArchivedAt.IsZero() {
 		return time.Time{}, false
 	}
-	return *c.activity.ArchivedAt, true
+	return c.activity.ArchivedAt, true
 }
 
 func (c *Comment) IsArchived() bool {
-	return c.activity.ArchivedAt != nil
+	return !c.activity.ArchivedAt.IsZero()
 }
 
 type UpdateCommentParams struct {
@@ -251,7 +251,7 @@ func (c *Comment) Archive(now time.Time) error {
 	if c.IsArchived() {
 		return apperr.ErrInvalidArgument
 	}
-	c.activity.ArchivedAt = &now
+	c.activity.ArchivedAt = now
 	return nil
 }
 
@@ -259,7 +259,7 @@ func (c *Comment) Unarchive() error {
 	if !c.IsArchived() {
 		return apperr.ErrInvalidArgument
 	}
-	c.activity.ArchivedAt = nil
+	c.activity.ArchivedAt = time.Time{}
 	return nil
 }
 
@@ -271,7 +271,7 @@ type CommentBody struct {
 type CommentActivity struct {
 	CreatedBy  *string
 	CreatedAt  time.Time
-	ArchivedAt *time.Time
+	ArchivedAt time.Time
 }
 
 type CommentStatus string

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/db/schema/app-supportocol/model"
@@ -282,9 +283,14 @@ func (r *CommentRepository) toCommentDomain(row model.Comments, issueRows []mode
 		},
 		Status: domain.CommentStatus(row.Status),
 		Activity: domain.CommentActivity{
-			CreatedBy:  row.CreatedBy,
-			CreatedAt:  row.CreatedAt,
-			ArchivedAt: row.ArchivedAt,
+			CreatedBy: row.CreatedBy,
+			CreatedAt: row.CreatedAt,
+			ArchivedAt: func() time.Time {
+				if row.ArchivedAt != nil {
+					return *row.ArchivedAt
+				}
+				return time.Time{}
+			}(),
 		},
 		Issues: issues,
 	})
