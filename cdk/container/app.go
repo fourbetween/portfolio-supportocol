@@ -156,27 +156,11 @@ func (c *AppContainer) buildCommentGenFunction() {
 
 func (c *AppContainer) buildVPC() {
 	vpcID, _ := c.shareConf.Get("vpc/id")
-	publicIDs := []*string{}
-	privateIDs := []*string{}
-	isolatedIDs := []*string{}
-	for i := range 2 {
-		publicID, _ := c.shareConf.Get(fmt.Sprintf("vpc/subnet/public/%d/id", i))
-		privateID, _ := c.shareConf.Get(fmt.Sprintf("vpc/subnet/private/%d/id", i))
-		isolatedID, _ := c.shareConf.Get(fmt.Sprintf("vpc/subnet/isolated/%d/id", i))
-		publicIDs = append(publicIDs, jsii.String(publicID))
-		privateIDs = append(privateIDs, jsii.String(privateID))
-		isolatedIDs = append(isolatedIDs, jsii.String(isolatedID))
-	}
-
-	c.vpc = awsec2.Vpc_FromVpcAttributes(
+	c.vpc = awsec2.Vpc_FromLookup(
 		c.stack,
 		jsii.String("VPC"),
-		&awsec2.VpcAttributes{
-			AvailabilityZones: jsii.Strings("ap-northeast-1a", "ap-northeast-1c"),
-			VpcId:             jsii.String(vpcID),
-			PublicSubnetIds:   &publicIDs,
-			PrivateSubnetIds:  &privateIDs,
-			IsolatedSubnetIds: &isolatedIDs,
+		&awsec2.VpcLookupOptions{
+			VpcId: jsii.String(vpcID),
 		},
 	)
 }
