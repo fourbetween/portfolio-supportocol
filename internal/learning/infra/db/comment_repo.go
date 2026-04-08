@@ -42,8 +42,8 @@ func (r *CommentRepository) Load(ctx context.Context, id string) (*domain.Commen
 
 func (r *CommentRepository) Search(ctx context.Context, params domain.SearchCommentsParams) ([]*domain.Comment, error) {
 	cond := table.Comments.DiscussionID.EQ(mysql.String(params.DiscussionID))
-	if params.Since != nil {
-		cond = cond.AND(table.Comments.CreatedAt.GT(mysql.TimestampT(*params.Since)))
+	if !params.Since.IsZero() {
+		cond = cond.AND(table.Comments.CreatedAt.GT(mysql.TimestampT(params.Since)))
 	}
 
 	stmt := r.selectCommentWithIssues().
@@ -172,11 +172,11 @@ func (r *CommentRepository) GetPathToRoot(ctx context.Context, commentID string)
 
 func (r *CommentRepository) ListChildren(ctx context.Context, params domain.ListCommentChildrenParams) ([]*domain.Comment, error) {
 	var condition mysql.BoolExpression
-	if params.ParentCommentID == nil {
+	if params.ParentCommentID == "" {
 		condition = table.Comments.DiscussionID.EQ(mysql.String(params.DiscussionID)).
 			AND(table.Comments.ParentCommentID.IS_NULL())
 	} else {
-		condition = table.Comments.ParentCommentID.EQ(mysql.String(*params.ParentCommentID))
+		condition = table.Comments.ParentCommentID.EQ(mysql.String(params.ParentCommentID))
 	}
 
 	if params.CommentType != "" {
@@ -270,20 +270,20 @@ func (r *CommentRepository) toCommentDomain(row model.Comments, issueRows []mode
 			ID:          ir.ID,
 			Title:       ir.Title,
 			Description: ir.Description,
-			CreatedBy:   ir.CreatedBy,
+			CreatedBy:   ptrToString(ir.CreatedBy),
 		}
 	}
 	return r.fac.Reconstruct(domain.ReconstructCommentParams{
 		ID:              row.ID,
 		DiscussionID:    row.DiscussionID,
-		ParentCommentID: row.ParentCommentID,
+		ParentCommentID: ptrToString(row.ParentCommentID),
 		Body: domain.CommentBody{
 			Type:    row.Type,
 			Content: row.Content,
 		},
 		Status: domain.CommentStatus(row.Status),
 		Activity: domain.CommentActivity{
-			CreatedBy: row.CreatedBy,
+			CreatedBy: ptrToString(row.CreatedBy),
 			CreatedAt: row.CreatedAt,
 			ArchivedAt: func() time.Time {
 				if row.ArchivedAt != nil {
@@ -342,7 +342,7 @@ func (r *CommentRepository) toCommentIssueModels(commentID string, issues []doma
 			CommentID:   commentID,
 			Title:       is.Title,
 			Description: is.Description,
-			CreatedBy:   is.CreatedBy,
+			CreatedBy:   new(is.CreatedBy),
 		}
 	}
 	return issueModels

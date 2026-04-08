@@ -84,8 +84,8 @@ func (cg *CommentGenerator) fetchContext(
 	}
 
 	var path []*domain.Comment
-	if params.ParentCommentID != nil {
-		p, err := cg.commentRepo.GetPathToRoot(ctx, *params.ParentCommentID)
+	if params.ParentCommentID != "" {
+		p, err := cg.commentRepo.GetPathToRoot(ctx, params.ParentCommentID)
 		if err != nil {
 			return nil, "", nil, nil, err
 		}
@@ -158,7 +158,7 @@ func (cg *CommentGenerator) createComments(params domain.GenerateCommentParams, 
 				Content: content,
 			},
 			Status:    domain.CommentStatusProposed,
-			CreatedBy: &params.UserID,
+			CreatedBy: params.UserID,
 		})
 		if err != nil {
 			return nil, err

@@ -84,14 +84,13 @@ func (u *ReplaceCommentsUsecase) Execute(ctx context.Context, input ReplaceComme
 
 		comments = make([]*domain.Comment, len(input.Comments))
 		for i, item := range input.Comments {
-			var parentCommentID *string
+			var parentCommentID string
 			if item.ParentIndex != nil {
 				idx := *item.ParentIndex
 				if idx < 0 || idx >= i {
 					return fmt.Errorf("invalid parent index %d for comment at index %d: %w", idx, i, apperr.ErrInvalidArgument)
 				}
-				id := comments[idx].ID()
-				parentCommentID = &id
+				parentCommentID = comments[idx].ID()
 			}
 
 			comment, err := u.fac.Create(domain.CreateCommentParams{
@@ -102,7 +101,7 @@ func (u *ReplaceCommentsUsecase) Execute(ctx context.Context, input ReplaceComme
 					Content: item.Content,
 				},
 				Status:    domain.CommentStatusActive,
-				CreatedBy: &input.UserID,
+				CreatedBy: input.UserID,
 			})
 			if err != nil {
 				return err

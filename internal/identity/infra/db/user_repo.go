@@ -35,12 +35,12 @@ func (r *UserRepository) Save(ctx context.Context, u *domain.User) error {
 		ID:                          u.ID(),
 		Email:                       u.Email(),
 		Name:                        u.Name(),
-		PasswordHash:                stringToPtr(u.PasswordHash()),
-		GoogleSub:                   stringToPtr(u.GoogleSub()),
+		PasswordHash:                new(u.PasswordHash()),
+		GoogleSub:                   new(u.GoogleSub()),
 		EmailVerifiedAt:             u.EmailVerifiedAt(),
-		EmailVerifyTokenHash:        stringToPtr(u.EmailVerifyTokenHash()),
+		EmailVerifyTokenHash:        new(u.EmailVerifyTokenHash()),
 		EmailVerifyTokenExpiresAt:   u.EmailVerifyTokenExpiresAt(),
-		PasswordResetTokenHash:      stringToPtr(u.PasswordResetTokenHash()),
+		PasswordResetTokenHash:      new(u.PasswordResetTokenHash()),
 		PasswordResetTokenExpiresAt: u.PasswordResetTokenExpiresAt(),
 	}
 
@@ -129,10 +129,10 @@ func (r *UserRepository) findByCondition(ctx context.Context, cond mysql.BoolExp
 		Name:                        dest.Name,
 		PasswordHash:                ptrToString(dest.PasswordHash),
 		GoogleSub:                   ptrToString(dest.GoogleSub),
-		EmailVerifiedAt:             dest.EmailVerifiedAt,
+		EmailVerifiedAt:             ptrToTime(dest.EmailVerifiedAt),
 		EmailVerifyTokenHash:        ptrToString(dest.EmailVerifyTokenHash),
-		EmailVerifyTokenExpiresAt:   dest.EmailVerifyTokenExpiresAt,
+		EmailVerifyTokenExpiresAt:   ptrToTime(dest.EmailVerifyTokenExpiresAt),
 		PasswordResetTokenHash:      ptrToString(dest.PasswordResetTokenHash),
-		PasswordResetTokenExpiresAt: dest.PasswordResetTokenExpiresAt,
+		PasswordResetTokenExpiresAt: ptrToTime(dest.PasswordResetTokenExpiresAt),
 	}), nil
 }

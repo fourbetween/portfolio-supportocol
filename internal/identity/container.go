@@ -3,6 +3,7 @@ package identity
 import (
 	"database/sql"
 	"fmt"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/fourbetween/app-supportocol/internal/identity/domain"
@@ -58,17 +59,23 @@ func NewContainer(
 	txManager := dbtx.NewManager(dbCon)
 
 	buildUser := func(p auth.BuildParams) *domain.User {
+		ptrToTime := func(t *time.Time) time.Time {
+			if t == nil {
+				return time.Time{}
+			}
+			return *t
+		}
 		return userFac.Reconstruct(domain.ReconstructParams{
 			ID:                          p.ID,
 			Email:                       p.Email,
 			Name:                        p.Name,
 			PasswordHash:                p.PasswordHash,
 			GoogleSub:                   p.GoogleSub,
-			EmailVerifiedAt:             p.EmailVerifiedAt,
+			EmailVerifiedAt:             ptrToTime(p.EmailVerifiedAt),
 			EmailVerifyTokenHash:        p.EmailVerifyTokenHash,
-			EmailVerifyTokenExpiresAt:   p.EmailVerifyTokenExpiresAt,
+			EmailVerifyTokenExpiresAt:   ptrToTime(p.EmailVerifyTokenExpiresAt),
 			PasswordResetTokenHash:      p.PasswordResetTokenHash,
-			PasswordResetTokenExpiresAt: p.PasswordResetTokenExpiresAt,
+			PasswordResetTokenExpiresAt: ptrToTime(p.PasswordResetTokenExpiresAt),
 		})
 	}
 

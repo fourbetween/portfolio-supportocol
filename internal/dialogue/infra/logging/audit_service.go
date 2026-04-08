@@ -31,11 +31,9 @@ func (s *slogAuditService) LogCommentCreated(ctx context.Context, comment *domai
 }
 
 func (s *slogAuditService) LogCommentIssueAdded(ctx context.Context, comment *domain.Comment, issue domain.CommentIssue) {
-	var createdBy string
-	if issue.CreatedBy == nil {
+	createdBy := issue.CreatedBy
+	if createdBy == "" {
 		createdBy = "anonymous"
-	} else {
-		createdBy = *issue.CreatedBy
 	}
 
 	slog.InfoContext(ctx, "comment issue added ",

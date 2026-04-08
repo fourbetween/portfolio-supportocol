@@ -209,9 +209,9 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	ctx context.Context,
 	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams,
 ) ([]oas.Comment, error) {
-	var since *time.Time
+	var since time.Time
 	if params.Since.Set {
-		since = &params.Since.Value
+		since = params.Since.Value
 	}
 
 	items, err := h.con.ListComments.Execute(ctx, usecase.ListCommentsInput{
@@ -271,10 +271,9 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq,
 	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams,
 ) (*oas.Comment, error) {
-	var parentCommentID *string
+	var parentCommentID string
 	if !req.ParentCommentId.Null {
-		s := uuid.UUID(req.ParentCommentId.Value).String()
-		parentCommentID = &s
+		parentCommentID = uuid.UUID(req.ParentCommentId.Value).String()
 	}
 
 	item, err := h.con.CreateComment.Execute(ctx, usecase.CreateCommentInput{
@@ -319,10 +318,9 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutReq,
 	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutParams,
 ) (*oas.Comment, error) {
-	var parentCommentID *string
+	var parentCommentID string
 	if !req.ParentCommentId.Null {
-		s := uuid.UUID(req.ParentCommentId.Value).String()
-		parentCommentID = &s
+		parentCommentID = uuid.UUID(req.ParentCommentId.Value).String()
 	}
 
 	item, err := h.con.MoveComment.Execute(ctx, usecase.MoveCommentInput{
@@ -446,10 +444,9 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq,
 	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams,
 ) error {
-	var parentCommentID *string
+	var parentCommentID string
 	if !req.ParentCommentId.Null {
-		s := uuid.UUID(req.ParentCommentId.Value).String()
-		parentCommentID = &s
+		parentCommentID = uuid.UUID(req.ParentCommentId.Value).String()
 	}
 
 	return h.con.EnqueueCommentGeneration.Execute(ctx, usecase.GenerateCommentInput{

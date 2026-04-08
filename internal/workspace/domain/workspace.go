@@ -257,7 +257,7 @@ type Subscription struct {
 	Status               SubscriptionStatus
 	CurrentPeriodStart   time.Time
 	CurrentPeriodEnd     time.Time
-	StripeSubscriptionID *string
+	StripeSubscriptionID string
 }
 
 func (s Subscription) Validate() error {

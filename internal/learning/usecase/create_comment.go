@@ -43,7 +43,7 @@ func NewCreateCommentUsecase(
 type CreateCommentInput struct {
 	DiscussionID    string
 	WorkspaceID     string
-	ParentCommentID *string
+	ParentCommentID string
 	CommentType     string
 	Content         string
 	UserID          string
@@ -78,8 +78,8 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		}
 
 		var parentType string
-		if discussion.Status().IsPublic() && input.ParentCommentID != nil {
-			parent, err := u.commentRepo.Load(ctx, *input.ParentCommentID)
+		if discussion.Status().IsPublic() && input.ParentCommentID != "" {
+			parent, err := u.commentRepo.Load(ctx, input.ParentCommentID)
 			if err != nil {
 				return err
 			}
@@ -95,7 +95,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 				Content: input.Content,
 			},
 			Status:    domain.CommentStatusActive,
-			CreatedBy: &input.UserID,
+			CreatedBy: input.UserID,
 		})
 		if createErr != nil {
 			return createErr

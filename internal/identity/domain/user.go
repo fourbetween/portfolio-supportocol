@@ -35,11 +35,11 @@ type (
 		Name                        string
 		PasswordHash                string
 		GoogleSub                   string
-		EmailVerifiedAt             *time.Time
+		EmailVerifiedAt             time.Time
 		EmailVerifyTokenHash        string
-		EmailVerifyTokenExpiresAt   *time.Time
+		EmailVerifyTokenExpiresAt   time.Time
 		PasswordResetTokenHash      string
-		PasswordResetTokenExpiresAt *time.Time
+		PasswordResetTokenExpiresAt time.Time
 	}
 )
 
@@ -68,11 +68,11 @@ type User struct {
 	name                        string
 	passwordHash                string
 	googleSub                   string
-	emailVerifiedAt             *time.Time
+	emailVerifiedAt             time.Time
 	emailVerifyTokenHash        string
-	emailVerifyTokenExpiresAt   *time.Time
+	emailVerifyTokenExpiresAt   time.Time
 	passwordResetTokenHash      string
-	passwordResetTokenExpiresAt *time.Time
+	passwordResetTokenExpiresAt time.Time
 }
 
 func (u *User) ID() string {
@@ -96,11 +96,14 @@ func (u *User) GoogleSub() string {
 }
 
 func (u *User) EmailVerifiedAt() *time.Time {
-	return u.emailVerifiedAt
+	if u.emailVerifiedAt.IsZero() {
+		return nil
+	}
+	return &u.emailVerifiedAt
 }
 
 func (u *User) IsEmailVerified() bool {
-	return u.emailVerifiedAt != nil
+	return !u.emailVerifiedAt.IsZero()
 }
 
 func (u *User) EmailVerifyTokenHash() string {
@@ -108,7 +111,10 @@ func (u *User) EmailVerifyTokenHash() string {
 }
 
 func (u *User) EmailVerifyTokenExpiresAt() *time.Time {
-	return u.emailVerifyTokenExpiresAt
+	if u.emailVerifyTokenExpiresAt.IsZero() {
+		return nil
+	}
+	return &u.emailVerifyTokenExpiresAt
 }
 
 func (u *User) PasswordResetTokenHash() string {
@@ -116,7 +122,10 @@ func (u *User) PasswordResetTokenHash() string {
 }
 
 func (u *User) PasswordResetTokenExpiresAt() *time.Time {
-	return u.passwordResetTokenExpiresAt
+	if u.passwordResetTokenExpiresAt.IsZero() {
+		return nil
+	}
+	return &u.passwordResetTokenExpiresAt
 }
 
 func (u *User) HasPassword() bool {

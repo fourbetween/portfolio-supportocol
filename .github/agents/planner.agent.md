@@ -3,7 +3,6 @@ name: Planner
 description: 機能要求を実装タスクへ分解する内部専用プランナー
 tools: [vscode/askQuestions, execute, read, search, web, "dbhub/*"]
 agents: []
-model: Claude Opus 4.6 (copilot)
 user-invocable: false
 disable-model-invocation: true
 ---

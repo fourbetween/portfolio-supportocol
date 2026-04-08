@@ -79,16 +79,11 @@ func (u *AddCommentIssueUsecase) Execute(ctx context.Context, input AddCommentIs
 			return err
 		}
 
-		var createdBy *string
-		if input.UserID != "" {
-			createdBy = &input.UserID
-		}
-
 		addedIssue = domain.CommentIssue{
 			ID:          u.idSrv.Generate(),
 			Title:       input.Title,
 			Description: input.Description,
-			CreatedBy:   createdBy,
+			CreatedBy:   input.UserID,
 		}
 		comment.AddIssue(addedIssue)
 

@@ -141,7 +141,7 @@ func (r *WorkspaceRepository) Save(ctx context.Context, w *domain.Workspace) err
 		Status:               sub.Status.String(),
 		CurrentPeriodStart:   sub.CurrentPeriodStart,
 		CurrentPeriodEnd:     sub.CurrentPeriodEnd,
-		StripeSubscriptionID: sub.StripeSubscriptionID,
+		StripeSubscriptionID: new(sub.StripeSubscriptionID),
 	}
 
 	subscriptionStmt := table.Subscriptions.
@@ -196,7 +196,7 @@ func (r *WorkspaceRepository) toDomain(row workspaceWithSubscriptionModel) (*dom
 			Status:               domain.SubscriptionStatus(row.Subscriptions.Status),
 			CurrentPeriodStart:   row.Subscriptions.CurrentPeriodStart,
 			CurrentPeriodEnd:     row.Subscriptions.CurrentPeriodEnd,
-			StripeSubscriptionID: row.Subscriptions.StripeSubscriptionID,
+			StripeSubscriptionID: ptrToString(row.Subscriptions.StripeSubscriptionID),
 		},
 		CreatedAt: row.Workspaces.CreatedAt,
 	})

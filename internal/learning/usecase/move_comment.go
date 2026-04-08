@@ -37,7 +37,7 @@ type MoveCommentInput struct {
 	ID              string
 	DiscussionID    string
 	WorkspaceID     string
-	ParentCommentID *string
+	ParentCommentID string
 	UserID          string
 }
 
@@ -74,8 +74,8 @@ func (u *MoveCommentUsecase) Execute(ctx context.Context, input MoveCommentInput
 		}
 
 		var parentType string
-		if input.ParentCommentID != nil {
-			parent, err := u.commentRepo.Load(ctx, *input.ParentCommentID)
+		if input.ParentCommentID != "" {
+			parent, err := u.commentRepo.Load(ctx, input.ParentCommentID)
 			if err != nil {
 				return err
 			}

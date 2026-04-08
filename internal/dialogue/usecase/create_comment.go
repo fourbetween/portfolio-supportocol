@@ -43,7 +43,7 @@ func NewCreateCommentUsecase(
 type CreateCommentInput struct {
 	DiscussionID    string
 	WorkspaceID     string
-	ParentCommentID *string
+	ParentCommentID string
 	CommentType     string
 	Content         string
 	UserID          string
@@ -74,8 +74,8 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 		}
 
 		var parent *domain.Comment
-		if input.ParentCommentID != nil {
-			path, err := u.commentRepo.GetPathToRoot(ctx, *input.ParentCommentID)
+		if input.ParentCommentID != "" {
+			path, err := u.commentRepo.GetPathToRoot(ctx, input.ParentCommentID)
 			if err != nil {
 				return err
 			}
@@ -85,7 +85,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 				}
 			}
 
-			parent, err = u.commentRepo.Load(ctx, *input.ParentCommentID)
+			parent, err = u.commentRepo.Load(ctx, input.ParentCommentID)
 			if err != nil {
 				return err
 			}
@@ -93,11 +93,6 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 
 		if err := discussion.ValidateComment(input.CommentType, parent); err != nil {
 			return err
-		}
-
-		var createdBy *string
-		if input.UserID != "" {
-			createdBy = &input.UserID
 		}
 
 		var createErr error
@@ -109,7 +104,7 @@ func (u *CreateCommentUsecase) Execute(ctx context.Context, input CreateCommentI
 				Content: input.Content,
 			},
 			Status:    domain.CommentStatusProposed,
-			CreatedBy: createdBy,
+			CreatedBy: input.UserID,
 		})
 		if createErr != nil {
 			return createErr

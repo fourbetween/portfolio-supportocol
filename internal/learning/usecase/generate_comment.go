@@ -43,7 +43,7 @@ func NewGenerateCommentUsecase(
 type GenerateCommentInput struct {
 	DiscussionID    string
 	WorkspaceID     string
-	ParentCommentID *string
+	ParentCommentID string
 	CommentType     string
 	UserID          string
 }

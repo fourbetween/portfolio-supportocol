@@ -31,7 +31,7 @@ type ListCommentsInput struct {
 	DiscussionID string
 	WorkspaceID  string
 	UserID       string
-	Since        *time.Time
+	Since        time.Time
 }
 
 func (u *ListCommentsUsecase) Execute(ctx context.Context, input ListCommentsInput) ([]*domain.Comment, error) {

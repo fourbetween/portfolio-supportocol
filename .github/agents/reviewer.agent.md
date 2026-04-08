@@ -3,7 +3,6 @@ name: Reviewer
 description: 実装結果をレビューして問題点を抽出する内部専用レビュアー
 tools: [execute, read, search, web]
 agents: []
-model: Claude Opus 4.6 (copilot)
 user-invocable: false
 disable-model-invocation: true
 ---

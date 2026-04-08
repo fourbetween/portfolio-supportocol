@@ -26,12 +26,12 @@ type (
 
 	SearchCommentsParams struct {
 		DiscussionID string
-		Since        *time.Time
+		Since        time.Time
 	}
 
 	ListCommentChildrenParams struct {
 		DiscussionID    string
-		ParentCommentID *string
+		ParentCommentID string
 		CommentType     string
 	}
 )
@@ -43,7 +43,7 @@ type CommentGenerationQueue interface {
 type GenerateCommentParams struct {
 	DiscussionID    string
 	WorkspaceID     string
-	ParentCommentID *string
+	ParentCommentID string
 	CommentType     string
 	UserID          string
 }
@@ -64,17 +64,17 @@ type (
 
 	CreateCommentParams struct {
 		DiscussionID    string
-		ParentCommentID *string
+		ParentCommentID string
 		Body            CommentBody
 		Status          CommentStatus
-		CreatedBy       *string
+		CreatedBy       string
 		Issues          []CommentIssue
 	}
 
 	ReconstructCommentParams struct {
 		ID              string
 		DiscussionID    string
-		ParentCommentID *string
+		ParentCommentID string
 		Body            CommentBody
 		Status          CommentStatus
 		Activity        CommentActivity
@@ -129,7 +129,7 @@ func (f *CommentFactory) Reconstruct(params ReconstructCommentParams) (*Comment,
 type Comment struct {
 	id              string
 	discussionID    string
-	parentCommentID *string
+	parentCommentID string
 	body            CommentBody
 	status          CommentStatus
 	activity        CommentActivity
@@ -145,10 +145,10 @@ func (c *Comment) DiscussionID() string {
 }
 
 func (c *Comment) ParentCommentID() (string, bool) {
-	if c.parentCommentID == nil {
+	if c.parentCommentID == "" {
 		return "", false
 	}
-	return *c.parentCommentID, true
+	return c.parentCommentID, true
 }
 
 func (c *Comment) Type() string {
@@ -164,10 +164,10 @@ func (c *Comment) Status() CommentStatus {
 }
 
 func (c *Comment) CreatedBy() (string, bool) {
-	if c.activity.CreatedBy == nil {
+	if c.activity.CreatedBy == "" {
 		return "", false
 	}
-	return *c.activity.CreatedBy, true
+	return c.activity.CreatedBy, true
 }
 
 func (c *Comment) CreatedAt() time.Time {
@@ -200,8 +200,8 @@ func (c *Comment) Update(params UpdateCommentParams) error {
 	return nil
 }
 
-func (c *Comment) ChangeParent(parentCommentID *string) error {
-	if parentCommentID != nil && *parentCommentID == c.id {
+func (c *Comment) ChangeParent(parentCommentID string) error {
+	if parentCommentID != "" && parentCommentID == c.id {
 		return apperr.ErrInvalidArgument
 	}
 	c.parentCommentID = parentCommentID
@@ -269,7 +269,7 @@ type CommentBody struct {
 }
 
 type CommentActivity struct {
-	CreatedBy  *string
+	CreatedBy  string
 	CreatedAt  time.Time
 	ArchivedAt time.Time
 }
@@ -294,5 +294,5 @@ type CommentIssue struct {
 	ID          string
 	Title       string
 	Description string
-	CreatedBy   *string
+	CreatedBy   string
 }

@@ -103,9 +103,9 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	ctx context.Context,
 	params oas.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetParams,
 ) ([]oas.Comment, error) {
-	var since *time.Time
+	var since time.Time
 	if params.Since.Set {
-		since = &params.Since.Value
+		since = params.Since.Value
 	}
 
 	output, err := h.con.ListComments.Execute(ctx, usecase.ListCommentsInput{
@@ -131,10 +131,9 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	req *oas.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq,
 	params oas.V1DialogueWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams,
 ) (*oas.Comment, error) {
-	var parentCommentID *string
+	var parentCommentID string
 	if !req.ParentCommentId.Null {
-		s := uuid.UUID(req.ParentCommentId.Value).String()
-		parentCommentID = &s
+		parentCommentID = uuid.UUID(req.ParentCommentId.Value).String()
 	}
 
 	item, err := h.con.CreateComment.Execute(ctx, usecase.CreateCommentInput{

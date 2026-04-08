@@ -3,7 +3,6 @@ name: Plan Architect
 description: 計画を既存コードベースの構造と照合する内部専用アーキテクト
 tools: [execute, read, search, web]
 agents: []
-model: Claude Opus 4.6 (copilot)
 user-invocable: false
 disable-model-invocation: true
 ---

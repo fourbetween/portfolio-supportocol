@@ -152,13 +152,12 @@ func (d *Discussion) ValidateComment(commentType string, parent *Comment) error 
 	if err := d.CanAddComment(); err != nil {
 		return err
 	}
-	var parentType *string
+	var parentType string
 	if parent != nil {
 		if parent.DiscussionID() != d.id {
 			return apperr.ErrInvalidArgument
 		}
-		pt := parent.Type()
-		parentType = &pt
+		parentType = parent.Type()
 	}
 	return d.settings.CommentFrame.ValidateComment(commentType, parentType)
 }
@@ -222,15 +221,12 @@ type CommentPath struct {
 	Parent string
 }
 
-func (cf CommentFrame) ValidateComment(commentType string, parentType *string) error {
+func (cf CommentFrame) ValidateComment(commentType string, parentType string) error {
 	if !slices.Contains(cf.Types, commentType) {
 		return fmt.Errorf("invalid comment type: %s: %w", commentType, apperr.ErrInvalidArgument)
 	}
 
-	parent := ""
-	if parentType != nil {
-		parent = *parentType
-	}
+	parent := parentType
 
 	pathAllowed := false
 	for _, p := range cf.Paths {
