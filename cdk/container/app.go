@@ -301,7 +301,7 @@ func (c *AppContainer) buildApiFunction() {
 			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
 			Code: awslambda.AssetCode_FromAsset(
 				jsii.String("../cmd/api/lambda/build"),
-				nil,
+				&awss3assets.AssetOptions{},
 			),
 			Environment:             c.lambdaEnv(),
 			Vpc:                     c.vpc,
