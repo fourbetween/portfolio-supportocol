@@ -83,13 +83,13 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 		// app resources
 		c.buildCommentGenFunction()
 		c.buildViewBucket()
-		c.buildApiFunction()
-		c.buildApiApig()
-		c.buildApiCDN()
+		c.buildAPIFunction()
+		c.buildAPIApig()
+		c.buildAPICDN()
 		c.buildViewCDN()
 		c.deployView()
 		c.buildViewRecord()
-		c.buildApiRecord()
+		c.buildAPIRecord()
 	}
 
 	return c
@@ -219,7 +219,7 @@ func (c *AppContainer) buildViewCDN() {
 	c.viewCdn = cdn
 }
 
-func (c *AppContainer) buildApiCDN() {
+func (c *AppContainer) buildAPICDN() {
 	apigDomain := fmt.Sprintf("%s.execute-api.%s.amazonaws.com", *c.apiApig.ApiId(), *c.stack.Region())
 	apigOrigin := awscloudfrontorigins.NewHttpOrigin(jsii.String(apigDomain), &awscloudfrontorigins.HttpOriginProps{})
 	apiCdn := awscloudfront.NewDistribution(
@@ -264,7 +264,7 @@ func (c *AppContainer) buildApiCDN() {
 	c.apiCdn = apiCdn
 }
 
-func (c *AppContainer) buildApiApig() {
+func (c *AppContainer) buildAPIApig() {
 	api := awsapigatewayv2.NewHttpApi(
 		c.stack,
 		jsii.Sprintf("%s-api-apig", c.appName),
@@ -288,7 +288,7 @@ func (c *AppContainer) buildApiApig() {
 	c.apiApig = api
 }
 
-func (c *AppContainer) buildApiFunction() {
+func (c *AppContainer) buildAPIFunction() {
 	f := awslambda.NewFunction(
 		c.stack,
 		jsii.String("ApiFunc"),
@@ -444,7 +444,7 @@ func (c *AppContainer) buildViewRecord() {
 	)
 }
 
-func (c *AppContainer) buildApiRecord() {
+func (c *AppContainer) buildAPIRecord() {
 	target := awsroute53.RecordTarget_FromAlias(
 		awsroute53targets.NewCloudFrontTarget(c.apiCdn),
 	)
