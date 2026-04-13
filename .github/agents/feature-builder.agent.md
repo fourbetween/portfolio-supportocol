@@ -2,7 +2,7 @@
 name: Feature Builder
 description: 機能開発を計画、検証、実装、レビューまで調停するコーディネーター
 argument-hint: 実装したい機能、要件、制約、対象ファイルや関連背景を入力してください
-tools: ["agent"]
+tools: [read, agent, search]
 agents: ["Planner", "Plan Architect", "Implementer", "Reviewer"]
 ---
 
