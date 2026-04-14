@@ -1,4 +1,5 @@
 import createClient, { type Middleware } from "openapi-fetch";
+import { loadingMiddleware } from "../../../shared/api/loading-middleware";
 import { authService } from "../../identity/model/auth-service";
 import type { paths } from "./schema";
 
@@ -6,6 +7,8 @@ export const client = createClient<paths>({
   baseUrl: import.meta.env.VITE_API_URL,
   credentials: "include",
 });
+
+client.use(loadingMiddleware);
 
 const middleware: Middleware = {
   async onResponse({ response }) {
