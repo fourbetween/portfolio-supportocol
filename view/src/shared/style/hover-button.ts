@@ -16,8 +16,20 @@ export const hoverButtonStyle = css`
     opacity: 0;
     transition: all 0.2s;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-    z-index: 1;
+    z-index: 100;
     overflow: hidden;
+  }
+
+  .btn-hover.attention {
+    opacity: 1;
+    color: var(--color-accent-fg);
+    border-color: var(--color-accent-fg);
+    animation: btn-hover-attention 1.4s ease-in-out infinite;
+  }
+
+  .btn-hover.attention:hover {
+    color: var(--color-accent-fg);
+    border-color: var(--color-accent-fg);
   }
 
   .btn-hover:hover {
@@ -56,5 +68,25 @@ export const hoverButtonStyle = css`
   /* Container hover trigger */
   .hover-container:hover .btn-hover {
     opacity: 1;
+  }
+
+  @keyframes btn-hover-attention {
+    0%,
+    100% {
+      background: var(--color-canvas-default);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    }
+
+    50% {
+      background: rgba(9, 105, 218, 0.12);
+      box-shadow: 0 0 0 4px rgba(9, 105, 218, 0.18);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-hover.attention {
+      animation: none;
+      background: rgba(9, 105, 218, 0.08);
+    }
   }
 `;

@@ -43,6 +43,12 @@ import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
 
 const PROJECT_ID_STORAGE_KEY = "learning:selected-project-id";
+const LEFT_DRAWER_OPENED_STORAGE_KEY =
+  "learning:dashboard-page:left-drawer-opened";
+const RIGHT_DRAWER_OPENED_STORAGE_KEY =
+  "learning:dashboard-page:right-drawer-opened";
+
+type DrawerSide = "left" | "right";
 
 @customElement("learning-dashboard-page")
 export class LearningDashboardPage extends LitElement {
@@ -75,6 +81,12 @@ export class LearningDashboardPage extends LitElement {
   @state()
   private _activeDrawer?: "left" | "right";
 
+  @state()
+  private _hasOpenedLeftDrawer = false;
+
+  @state()
+  private _hasOpenedRightDrawer = false;
+
   private summariesTask = new Task(this, {
     task: async ([workspace, projectId, showArchived]) => {
       if (!workspace || !projectId) return [] as DiscussionSummary[];
@@ -95,6 +107,8 @@ export class LearningDashboardPage extends LitElement {
 
   constructor() {
     super();
+    this._hasOpenedLeftDrawer = this._hasOpenedDrawer("left");
+    this._hasOpenedRightDrawer = this._hasOpenedDrawer("right");
 
     new Task(this, {
       task: async ([workspace, discussionId]) => {
@@ -125,6 +139,51 @@ export class LearningDashboardPage extends LitElement {
     });
   }
 
+  private _getDrawerOpenedStorageKey(side: DrawerSide) {
+    return side === "left"
+      ? LEFT_DRAWER_OPENED_STORAGE_KEY
+      : RIGHT_DRAWER_OPENED_STORAGE_KEY;
+  }
+
+  private _hasOpenedDrawer(side: DrawerSide) {
+    return (
+      localStorage.getItem(this._getDrawerOpenedStorageKey(side)) === "true"
+    );
+  }
+
+  private _markDrawerOpened(side: DrawerSide) {
+    if (side === "left") {
+      if (this._hasOpenedLeftDrawer) return;
+      this._hasOpenedLeftDrawer = true;
+    } else {
+      if (this._hasOpenedRightDrawer) return;
+      this._hasOpenedRightDrawer = true;
+    }
+
+    localStorage.setItem(this._getDrawerOpenedStorageKey(side), "true");
+  }
+
+  private _openDrawer(side: DrawerSide) {
+    this._markDrawerOpened(side);
+    this._activeDrawer = side;
+  }
+
+  private _getDrawerButtonClass(side: DrawerSide, shouldAttention: boolean) {
+    return `btn-hover btn-${side}${shouldAttention ? " attention" : ""}`;
+  }
+
+  private get _shouldHighlightLeftDrawerButton() {
+    return !this._hasOpenedLeftDrawer && this._activeDrawer !== "left";
+  }
+
+  private get _shouldHighlightRightDrawerButton() {
+    return (
+      this._hasRightSidebarContent &&
+      !this._hasOpenedRightDrawer &&
+      this._activeDrawer !== "right"
+    );
+  }
+
   connectedCallback() {
     super.connectedCallback();
     const params = new URLSearchParams(window.location.search);
@@ -132,7 +191,7 @@ export class LearningDashboardPage extends LitElement {
     if (id) {
       this._selectedDiscussionId = id;
     } else if (this._touch.isTouchDevice) {
-      this._activeDrawer = "left";
+      this._openDrawer("left");
     }
 
     const savedProjectId = localStorage.getItem(PROJECT_ID_STORAGE_KEY);
@@ -152,7 +211,7 @@ export class LearningDashboardPage extends LitElement {
     const params = new URLSearchParams(window.location.search);
     this._selectedDiscussionId = params.get("id") || undefined;
     if (!this._selectedDiscussionId && this._touch.isTouchDevice) {
-      this._activeDrawer = "left";
+      this._openDrawer("left");
     }
   };
 
@@ -195,7 +254,7 @@ export class LearningDashboardPage extends LitElement {
       window.history.pushState({}, "", url);
 
       if (this._touch.isTouchDevice) {
-        this._activeDrawer = "left";
+        this._openDrawer("left");
       }
     }
     this._summaries = this._summaries.filter((d) => d.id !== e.discussionId);
@@ -436,16 +495,22 @@ export class LearningDashboardPage extends LitElement {
 
     return html`
       <button
-        class="btn-hover btn-left"
-        @click=${() => (this._activeDrawer = "left")}
+        class=${this._getDrawerButtonClass(
+          "left",
+          this._shouldHighlightLeftDrawerButton,
+        )}
+        @click=${() => this._openDrawer("left")}
       >
         <ui-icon-menu></ui-icon-menu>
       </button>
       ${this._hasRightSidebarContent
         ? html`
             <button
-              class="btn-hover btn-right"
-              @click=${() => (this._activeDrawer = "right")}
+              class=${this._getDrawerButtonClass(
+                "right",
+                this._shouldHighlightRightDrawerButton,
+              )}
+              @click=${() => this._openDrawer("right")}
             >
               <ui-icon-reviews></ui-icon-reviews>
             </button>

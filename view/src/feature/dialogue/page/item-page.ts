@@ -41,6 +41,12 @@ import "../ui/comment-list";
 import "../ui/discussion-detail";
 import "../ui/favorite-list";
 
+const LEFT_DRAWER_OPENED_STORAGE_KEY = "dialogue:item-page:left-drawer-opened";
+const RIGHT_DRAWER_OPENED_STORAGE_KEY =
+  "dialogue:item-page:right-drawer-opened";
+
+type DrawerSide = "left" | "right";
+
 @customElement("dialogue-item-page")
 export class DialogueItemPage extends LitElement {
   private _touch = new TouchController(this);
@@ -75,8 +81,16 @@ export class DialogueItemPage extends LitElement {
   @state()
   private _activeDrawer?: "left" | "right";
 
+  @state()
+  private _hasOpenedLeftDrawer = false;
+
+  @state()
+  private _hasOpenedRightDrawer = false;
+
   constructor() {
     super();
+    this._hasOpenedLeftDrawer = this._hasOpenedDrawer("left");
+    this._hasOpenedRightDrawer = this._hasOpenedDrawer("right");
 
     new Task(this, {
       task: async ([workspaceId, discussionId]) => {
@@ -119,6 +133,51 @@ export class DialogueItemPage extends LitElement {
       },
       args: () => [this.workspaceId, this._user],
     });
+  }
+
+  private _getDrawerOpenedStorageKey(side: DrawerSide) {
+    return side === "left"
+      ? LEFT_DRAWER_OPENED_STORAGE_KEY
+      : RIGHT_DRAWER_OPENED_STORAGE_KEY;
+  }
+
+  private _hasOpenedDrawer(side: DrawerSide) {
+    return (
+      localStorage.getItem(this._getDrawerOpenedStorageKey(side)) === "true"
+    );
+  }
+
+  private _markDrawerOpened(side: DrawerSide) {
+    if (side === "left") {
+      if (this._hasOpenedLeftDrawer) return;
+      this._hasOpenedLeftDrawer = true;
+    } else {
+      if (this._hasOpenedRightDrawer) return;
+      this._hasOpenedRightDrawer = true;
+    }
+
+    localStorage.setItem(this._getDrawerOpenedStorageKey(side), "true");
+  }
+
+  private _openDrawer(side: DrawerSide) {
+    this._markDrawerOpened(side);
+    this._activeDrawer = side;
+  }
+
+  private _getDrawerButtonClass(side: DrawerSide, shouldAttention: boolean) {
+    return `btn-hover btn-${side}${shouldAttention ? " attention" : ""}`;
+  }
+
+  private get _shouldHighlightLeftDrawerButton() {
+    return (
+      this._favorites.length > 0 &&
+      !this._hasOpenedLeftDrawer &&
+      this._activeDrawer !== "left"
+    );
+  }
+
+  private get _shouldHighlightRightDrawerButton() {
+    return !this._hasOpenedRightDrawer && this._activeDrawer !== "right";
   }
 
   private _handleCommentSelect(e: DialogueCommentSelectEvent) {
@@ -276,16 +335,22 @@ export class DialogueItemPage extends LitElement {
       ${this._user && this._favorites.length > 0
         ? html`
             <button
-              class="btn-hover btn-left"
-              @click=${() => (this._activeDrawer = "left")}
+              class=${this._getDrawerButtonClass(
+                "left",
+                this._shouldHighlightLeftDrawerButton,
+              )}
+              @click=${() => this._openDrawer("left")}
             >
               <ui-icon-star></ui-icon-star>
             </button>
           `
         : nothing}
       <button
-        class="btn-hover btn-right"
-        @click=${() => (this._activeDrawer = "right")}
+        class=${this._getDrawerButtonClass(
+          "right",
+          this._shouldHighlightRightDrawerButton,
+        )}
+        @click=${() => this._openDrawer("right")}
       >
         <ui-icon-menu></ui-icon-menu>
       </button>
