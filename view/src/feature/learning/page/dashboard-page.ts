@@ -163,8 +163,10 @@ export class LearningDashboardPage extends LitElement {
     localStorage.setItem(this._getDrawerOpenedStorageKey(side), "true");
   }
 
-  private _openDrawer(side: DrawerSide) {
-    this._markDrawerOpened(side);
+  private _openDrawer(side: DrawerSide, manual = false) {
+    if (manual) {
+      this._markDrawerOpened(side);
+    }
     this._activeDrawer = side;
   }
 
@@ -499,7 +501,7 @@ export class LearningDashboardPage extends LitElement {
           "left",
           this._shouldHighlightLeftDrawerButton,
         )}
-        @click=${() => this._openDrawer("left")}
+        @click=${() => this._openDrawer("left", true)}
       >
         <ui-icon-menu></ui-icon-menu>
       </button>
@@ -510,7 +512,7 @@ export class LearningDashboardPage extends LitElement {
                 "right",
                 this._shouldHighlightRightDrawerButton,
               )}
-              @click=${() => this._openDrawer("right")}
+              @click=${() => this._openDrawer("right", true)}
             >
               <ui-icon-reviews></ui-icon-reviews>
             </button>
