@@ -1,7 +1,7 @@
 ---
 name: Reviewer
 description: 実装結果をレビューして問題点を抽出する内部専用レビュアー
-tools: [execute, read, search, web]
+tools: [execute, read, browser, search, web]
 agents: []
 user-invocable: false
 disable-model-invocation: true
@@ -16,6 +16,7 @@ disable-model-invocation: true
 - 可読性と理解しやすさ
 - 重複実装
 - ドメイン駆動設計の原則への準拠
+- viewに関する変更は統合ブラウザを用いて動作確認すること（URLは view/.env.dev を参照）
 
 出力ルール:
 

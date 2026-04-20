@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"github.com/fourbetween/app-supportocol/internal/dialogue/api/oas"
+	"github.com/fourbetween/app-supportocol/internal/pkg/env"
+	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
 	"github.com/fourbetween/pkg-auth/jwt"
 )
@@ -20,14 +22,17 @@ func NewSecurityHandler(jwtSrv jwt.Service) *securityHandler {
 	}
 }
 
-// HandleCookieAuth handles optional cookie authentication.
-// Unlike the learning context, dialogue allows unauthenticated access,
-// so it returns the context without error when the token is missing or invalid.
 func (h *securityHandler) HandleCookieAuth(
 	ctx context.Context,
 	operationName string,
 	t oas.CookieAuth,
 ) (context.Context, error) {
+	if env.IsDev() && t.APIKey == httpcookie.DevDummyToken {
+		if userID := env.DevUserID(); userID != "" {
+			return httpctx.WithUserID(ctx, userID), nil
+		}
+	}
+
 	if t.APIKey == "" {
 		return ctx, nil
 	}
