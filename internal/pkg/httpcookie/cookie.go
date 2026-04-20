@@ -11,6 +11,7 @@ import (
 const (
 	AuthCookieName = "auth_token"
 	CookieMaxAge   = 30 * 24 * time.Hour
+	DevDummyToken  = "dev-dummy-token"
 )
 
 func SetAuthCookie(ctx context.Context, token string) {

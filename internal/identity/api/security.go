@@ -5,6 +5,8 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal/identity/api/oas"
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
+	"github.com/fourbetween/app-supportocol/internal/pkg/env"
+	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
 	"github.com/fourbetween/pkg-auth/jwt"
 )
@@ -26,6 +28,12 @@ func (h *securityHandler) HandleCookieAuth(
 	operationName string,
 	t oas.CookieAuth,
 ) (context.Context, error) {
+	if env.IsDev() && t.APIKey == httpcookie.DevDummyToken {
+		if userID := env.DevUserID(); userID != "" {
+			return httpctx.WithUserID(ctx, userID), nil
+		}
+	}
+
 	if t.APIKey == "" {
 		return ctx, apperr.ErrUnauthenticated
 	}

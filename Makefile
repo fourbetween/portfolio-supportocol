@@ -9,7 +9,7 @@ CDK_DIR  := ${BASE_DIR}/cdk
 dev-api:
 	go tool air -c .air.toml
 
-dev-view: setup-view
+dev-view:
 	cd ${VIEW_DIR} && npm run dev --mode=dev
 
 dev-commentgen:

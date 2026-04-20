@@ -13,3 +13,7 @@ func IsDev() bool {
 func IsLambda() bool {
 	return os.Getenv("AWS_LAMBDA_FUNCTION_NAME") != ""
 }
+
+func DevUserID() string {
+	return "019c8fab-a62c-7203-8210-633df0a30bed"
+}

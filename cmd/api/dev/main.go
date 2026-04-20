@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/fourbetween/app-supportocol/cmd/api"
+	"github.com/fourbetween/app-supportocol/cmd/api/middleware"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbcon"
 )
 
@@ -28,7 +29,7 @@ func main() {
 		panic(err)
 	}
 
-	if err := http.ListenAndServe(":9000", handler); err != nil {
+	if err := http.ListenAndServe(":9000", middleware.DevCookie(handler)); err != nil {
 		panic(err)
 	}
 }
