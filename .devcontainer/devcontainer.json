@@ -10,7 +10,6 @@
         "esbenp.prettier-vscode",
         "golang.go",
         "redhat.vscode-yaml",
-        "ms-vscode.live-server",
         "runem.lit-plugin",
         "vitest.explorer",
         "GitHub.vscode-pull-request-github"
