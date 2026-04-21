@@ -86,7 +86,7 @@ components:
       maxLength: 1000
     DiscussionPremise:
       type: string
-      maxLength: 1000
+      maxLength: 4000
     CommentType:
       type: string
       maxLength: 20

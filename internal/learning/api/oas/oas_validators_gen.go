@@ -453,7 +453,7 @@ func (s DiscussionPremise) Validate() error {
 	if err := (validate.String{
 		MinLength:     0,
 		MinLengthSet:  false,
-		MaxLength:     1000,
+		MaxLength:     4000,
 		MaxLengthSet:  true,
 		Email:         false,
 		Hostname:      false,
