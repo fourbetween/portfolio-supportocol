@@ -1,5 +1,5 @@
 import { msg } from "@lit/localize";
-import { LitElement, css, html, nothing } from "lit";
+import { LitElement, type PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
@@ -20,6 +20,15 @@ export class LearningCommentTypePopup extends LitElement {
 
   @query("ui-popup")
   private popup!: Popup;
+
+  @query("input")
+  private _input?: HTMLInputElement;
+
+  protected override updated(changedProperties: PropertyValues) {
+    if (changedProperties.has("isOtherSelected") && this.isOtherSelected) {
+      this.updateComplete.then(() => this._input?.focus());
+    }
+  }
 
   open() {
     this.isOtherSelected = false;
@@ -53,6 +62,13 @@ export class LearningCommentTypePopup extends LitElement {
     this.otherValue = (e.target as HTMLInputElement).value;
   }
 
+  private handleOtherKeyDown(e: KeyboardEvent) {
+    if (e.key === "Enter" && !e.isComposing) {
+      e.preventDefault();
+      this.handleOtherSubmit();
+    }
+  }
+
   private renderTypeList() {
     return html`
       <div class="type-list">
@@ -83,6 +99,7 @@ export class LearningCommentTypePopup extends LitElement {
         class="other-input form-control"
         .value=${this.otherValue}
         @input=${this.handleOtherInput}
+        @keydown=${this.handleOtherKeyDown}
         placeholder=${msg("Type here...")}
       />
     `;
