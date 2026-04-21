@@ -1,0 +1,43 @@
+import DOMPurify from "dompurify";
+import githubMarkdownCss from "github-markdown-css/github-markdown-light.css?inline";
+import { LitElement, css, html, unsafeCSS } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
+import { marked } from "marked";
+import { baseStyle } from "../../style/base";
+
+@customElement("ui-markdown-viewer")
+export class MarkdownViewer extends LitElement {
+  @property({ type: String })
+  content = "";
+
+  render() {
+    const html_ = DOMPurify.sanitize(
+      marked.parse(this.content, { async: false }),
+    );
+    return html`
+      <div class="markdown-body">${unsafeHTML(html_)}</div>
+    `;
+  }
+
+  static styles = [
+    baseStyle,
+    unsafeCSS(githubMarkdownCss),
+    css`
+      :host {
+        display: block;
+        font-size: 14px;
+        color: var(--color-fg-default);
+        background-color: var(--color-canvas-subtle);
+        padding: 12px;
+        border-radius: 4px;
+        border: 1px solid var(--color-border-muted);
+      }
+      .markdown-body {
+        background-color: transparent;
+        font-size: inherit;
+        font-family: "Noto Sans JP", "Noto Sans", sans-serif;
+      }
+    `,
+  ];
+}

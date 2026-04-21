@@ -8,6 +8,7 @@ import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/discussion-archive-badge/discussion-archive-badge";
 import "../../../shared/ui/icons/icon-star";
 import "../../../shared/ui/icons/icon-star-filled";
+import "../../../shared/ui/markdown-viewer/markdown-viewer";
 import {
   DialogueFavoriteCreateEvent,
   DialogueFavoriteDeleteEvent,
@@ -100,7 +101,9 @@ export class DialogueDiscussionDetail extends LitElement {
           ? html`
               <div class="premise-row">
                 <div class="section-title">${msg("Premise")}</div>
-                <p class="premise">${this.discussion.premise}</p>
+                <ui-markdown-viewer
+                  .content=${this.discussion.premise}
+                ></ui-markdown-viewer>
               </div>
             `
           : html``}
@@ -108,7 +111,9 @@ export class DialogueDiscussionDetail extends LitElement {
           ? html`
               <div class="conclusion-row">
                 <div class="section-title">${msg("Conclusion")}</div>
-                <p class="conclusion">${this.discussion.conclusion}</p>
+                <ui-markdown-viewer
+                  .content=${this.discussion.conclusion}
+                ></ui-markdown-viewer>
               </div>
             `
           : html``}

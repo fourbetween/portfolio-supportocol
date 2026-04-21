@@ -33,17 +33,4 @@ export const discussionDetailStyle = css`
     line-height: 1.4;
     color: var(--color-fg-default);
   }
-
-  .premise,
-  .conclusion {
-    font-size: 14px;
-    margin: 0;
-    white-space: pre-wrap;
-    line-height: 1.6;
-    color: var(--color-fg-default);
-    background-color: var(--color-canvas-subtle);
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid var(--color-border-muted);
-  }
 `;

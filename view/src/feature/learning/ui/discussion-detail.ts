@@ -10,6 +10,7 @@ import "../../../shared/ui/icons/icon-archive";
 import "../../../shared/ui/icons/icon-delete";
 import "../../../shared/ui/icons/icon-edit";
 import "../../../shared/ui/icons/icon-unarchive";
+import "../../../shared/ui/markdown-viewer/markdown-viewer";
 import {
   LearningDiscussionArchiveEvent,
   LearningDiscussionDeleteEvent,
@@ -123,7 +124,9 @@ export class LearningDiscussionDetail extends LitElement {
           ? html`
               <div class="premise-row">
                 <div class="section-title">${msg("Premise")}</div>
-                <p class="premise">${this.discussion.premise}</p>
+                <ui-markdown-viewer
+                  .content=${this.discussion.premise}
+                ></ui-markdown-viewer>
               </div>
             `
           : html``}
@@ -131,7 +134,9 @@ export class LearningDiscussionDetail extends LitElement {
           ? html`
               <div class="conclusion-row">
                 <div class="section-title">${msg("Conclusion")}</div>
-                <p class="conclusion">${this.discussion.conclusion}</p>
+                <ui-markdown-viewer
+                  .content=${this.discussion.conclusion}
+                ></ui-markdown-viewer>
               </div>
             `
           : html``}
