@@ -1034,6 +1034,14 @@
   <source>Password must include lowercase letters and numbers</source>
   <target>パスワードには小文字の英字と数字を含める必要があります</target>
 </trans-unit>
+<trans-unit id="sa50a6326530d8a0d">
+  <source>Show less</source>
+  <target>表示を減らす</target>
+</trans-unit>
+<trans-unit id="sb2c57b2d347203dd">
+  <source>Show more</source>
+  <target>さらに表示</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

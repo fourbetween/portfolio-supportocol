@@ -5,6 +5,7 @@ import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import { discussionDetailStyle } from "../../../shared/style/discussion-detail";
 import { titleStyle } from "../../../shared/style/title";
+import "../../../shared/ui/collapsible-section/collapsible-section";
 import "../../../shared/ui/discussion-archive-badge/discussion-archive-badge";
 import "../../../shared/ui/icons/icon-archive";
 import "../../../shared/ui/icons/icon-delete";
@@ -124,9 +125,11 @@ export class LearningDiscussionDetail extends LitElement {
           ? html`
               <div class="premise-row">
                 <div class="section-title">${msg("Premise")}</div>
-                <ui-markdown-viewer
-                  .content=${this.discussion.premise}
-                ></ui-markdown-viewer>
+                <ui-collapsible-section>
+                  <ui-markdown-viewer
+                    .content=${this.discussion.premise}
+                  ></ui-markdown-viewer>
+                </ui-collapsible-section>
               </div>
             `
           : html``}
@@ -134,9 +137,11 @@ export class LearningDiscussionDetail extends LitElement {
           ? html`
               <div class="conclusion-row">
                 <div class="section-title">${msg("Conclusion")}</div>
-                <ui-markdown-viewer
-                  .content=${this.discussion.conclusion}
-                ></ui-markdown-viewer>
+                <ui-collapsible-section>
+                  <ui-markdown-viewer
+                    .content=${this.discussion.conclusion}
+                  ></ui-markdown-viewer>
+                </ui-collapsible-section>
               </div>
             `
           : html``}

@@ -68,7 +68,7 @@ export class LearningDiscussionEditForm extends LitElement {
             class="premise-input"
             .value=${this.premise}
             placeholder=${msg("Enter discussion premise")}
-            rows="3"
+            rows="20"
           ></textarea>
         </div>
         <div class="field">
@@ -77,7 +77,7 @@ export class LearningDiscussionEditForm extends LitElement {
             class="conclusion-input"
             .value=${this.conclusion}
             placeholder=${msg("Enter discussion conclusion")}
-            rows="3"
+            rows="10"
           ></textarea>
         </div>
         <div class="actions">
