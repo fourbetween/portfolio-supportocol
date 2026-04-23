@@ -170,14 +170,20 @@ export class LearningCommentGeneratedEvent extends Event {
   }
   public readonly parentCommentId?: string | null;
   public readonly commentType?: string;
+  public readonly comments: Comment[];
 
-  constructor(parentCommentId?: string | null, commentType?: string) {
+  constructor(
+    parentCommentId?: string | null,
+    commentType?: string,
+    comments: Comment[] = [],
+  ) {
     super(LearningCommentGeneratedEvent.eventName, {
       bubbles: true,
       composed: true,
     });
     this.parentCommentId = parentCommentId;
     this.commentType = commentType;
+    this.comments = comments;
   }
 }
 

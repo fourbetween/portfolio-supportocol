@@ -902,7 +902,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate": {
+    "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate": {
         parameters: {
             query?: never;
             header?: never;
@@ -935,11 +935,13 @@ export interface paths {
             };
             responses: {
                 /** @description success response */
-                202: {
+                201: {
                     headers: {
                         [name: string]: unknown;
                     };
-                    content?: never;
+                    content: {
+                        "application/json": components["schemas"]["Comment"][];
+                    };
                 };
                 /** @description default error */
                 default: {

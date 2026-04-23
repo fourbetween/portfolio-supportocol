@@ -99,7 +99,7 @@ export class UiCollapsibleSection extends LitElement {
 
       .toggle-container {
         display: flex;
-        justify-content: flex-end;
+        justify-content: center;
       }
 
       .toggle-btn {

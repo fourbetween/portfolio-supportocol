@@ -1,17 +1,12 @@
 package container
 
 import (
-	"fmt"
-
 	"github.com/aws/aws-cdk-go/awscdk/v2"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awsapigatewayv2"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awsapigatewayv2integrations"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awscloudfront"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awscloudfrontorigins"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsec2"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsiam"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awslambdaeventsources"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslogs"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsrds"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsroute53"
@@ -20,7 +15,6 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3assets"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awss3deployment"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awssecretsmanager"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
 	"github.com/aws/jsii-runtime-go"
 	"github.com/fourbetween/pkg-conf/conf"
 )
@@ -33,17 +27,16 @@ type (
 		certContainer *CertContainer
 		shareConf     conf.Service
 
-		vpc             awsec2.IVpc
-		secret          awssecretsmanager.ISecret
-		rds             awsrds.IDatabaseInstance
-		logGroup        awslogs.ILogGroup
-		viewBucket      awss3.Bucket
-		commentGenQueue awssqs.IQueue
-		apiFunc         awslambda.Alias
-		apiApig         awsapigatewayv2.HttpApi
-		viewCdn         awscloudfront.Distribution
-		apiCdn          awscloudfront.Distribution
-		dns             awsroute53.IHostedZone
+		vpc          awsec2.IVpc
+		secret       awssecretsmanager.ISecret
+		rds          awsrds.IDatabaseInstance
+		logGroup     awslogs.ILogGroup
+		viewBucket   awss3.Bucket
+		apiFuncURL   awslambda.FunctionUrl
+		apiAIFuncURL awslambda.FunctionUrl
+		viewCdn      awscloudfront.Distribution
+		apiCdn       awscloudfront.Distribution
+		dns          awsroute53.IHostedZone
 	}
 
 	AppContainerProps struct {
@@ -70,7 +63,6 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 	}
 
 	c.setParam("domain", c.domain())
-	c.buildCommentGenQueue()
 
 	if c.stage != "dev" {
 		// shared resources
@@ -81,10 +73,9 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 		c.buildDNS()
 
 		// app resources
-		c.buildCommentGenFunction()
 		c.buildViewBucket()
 		c.buildAPIFunction()
-		c.buildAPIApig()
+		c.buildAPIAIFunction()
 		c.buildAPICDN()
 		c.buildViewCDN()
 		c.deployView()
@@ -93,65 +84,6 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 	}
 
 	return c
-}
-
-func (c *AppContainer) buildCommentGenQueue() {
-	dlq := awssqs.NewQueue(
-		c.stack,
-		jsii.String("CommentGenDeadLetterQueue"),
-		&awssqs.QueueProps{
-			Fifo:                      jsii.Bool(true),
-			ContentBasedDeduplication: jsii.Bool(true),
-		},
-	)
-	queue := awssqs.NewQueue(
-		c.stack,
-		jsii.String("CommentGenQueue"),
-		&awssqs.QueueProps{
-			Fifo:                      jsii.Bool(true),
-			ContentBasedDeduplication: jsii.Bool(true),
-			VisibilityTimeout:         awscdk.Duration_Seconds(jsii.Number(121)),
-			DeadLetterQueue: &awssqs.DeadLetterQueue{
-				MaxReceiveCount: jsii.Number(3),
-				Queue:           dlq,
-			},
-			ReceiveMessageWaitTime: awscdk.Duration_Seconds(jsii.Number(20)),
-		},
-	)
-	c.commentGenQueue = queue
-	c.setParam("sqs/comment-generation/url", *queue.QueueUrl())
-}
-
-func (c *AppContainer) buildCommentGenFunction() {
-	f := awslambda.NewFunction(
-		c.stack,
-		jsii.String("CommentGenFunc"),
-		&awslambda.FunctionProps{
-			Architecture:  awslambda.Architecture_ARM_64(),
-			LogGroup:      c.logGroup,
-			LoggingFormat: awslambda.LoggingFormat_JSON,
-			Timeout:       awscdk.Duration_Seconds(jsii.Number(120)),
-			Handler:       jsii.String("bootstrap"),
-			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
-			Code: awslambda.AssetCode_FromAsset(
-				jsii.String("../cmd/comment-generation/lambda/build"),
-				nil,
-			),
-			Environment:             c.lambdaEnv(),
-			Vpc:                     c.vpc,
-			Ipv6AllowedForDualStack: jsii.Bool(true),
-			AllowAllIpv6Outbound:    jsii.Bool(true),
-		})
-	f.AddEventSource(awslambdaeventsources.NewSqsEventSource(
-		c.commentGenQueue,
-		&awslambdaeventsources.SqsEventSourceProps{
-			BatchSize:               jsii.Number(1),
-			MaxConcurrency:          jsii.Number(5),
-			ReportBatchItemFailures: jsii.Bool(true),
-		},
-	))
-	c.commentGenQueue.GrantConsumeMessages(f)
-	c.setLambdaBasePermissions(f)
 }
 
 func (c *AppContainer) buildVPC() {
@@ -220,8 +152,10 @@ func (c *AppContainer) buildViewCDN() {
 }
 
 func (c *AppContainer) buildAPICDN() {
-	apigDomain := fmt.Sprintf("%s.execute-api.%s.amazonaws.com", *c.apiApig.ApiId(), *c.stack.Region())
-	apigOrigin := awscloudfrontorigins.NewHttpOrigin(jsii.String(apigDomain), &awscloudfrontorigins.HttpOriginProps{})
+	apiFuncOrigin := awscloudfrontorigins.NewFunctionUrlOrigin(c.apiFuncURL, nil)
+	apiAIFuncOrigin := awscloudfrontorigins.NewFunctionUrlOrigin(c.apiAIFuncURL, &awscloudfrontorigins.FunctionUrlOriginProps{
+		ReadTimeout: awscdk.Duration_Seconds(jsii.Number(60)),
+	})
 	apiCdn := awscloudfront.NewDistribution(
 		c.stack,
 		jsii.String("ApiCdn"),
@@ -230,7 +164,7 @@ func (c *AppContainer) buildAPICDN() {
 			PriceClass:  awscloudfront.PriceClass_PRICE_CLASS_200,
 			Certificate: c.certContainer.ApiCert,
 			DefaultBehavior: &awscloudfront.BehaviorOptions{
-				Origin:               apigOrigin,
+				Origin:               apiFuncOrigin,
 				OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
 				ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
 				AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
@@ -238,7 +172,7 @@ func (c *AppContainer) buildAPICDN() {
 			},
 			AdditionalBehaviors: &map[string]*awscloudfront.BehaviorOptions{
 				"/v1/dialogue/*": {
-					Origin:               apigOrigin,
+					Origin:               apiFuncOrigin,
 					OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
 					ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
 					AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
@@ -257,35 +191,18 @@ func (c *AppContainer) buildAPICDN() {
 						},
 					),
 				},
+				"/v1/ai/*": {
+					Origin:               apiAIFuncOrigin,
+					OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
+					ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
+					AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
+					CachePolicy:          awscloudfront.CachePolicy_CACHING_DISABLED(),
+				},
 			},
 			DomainNames: jsii.Strings(getAPIDomain(c.appName, c.stage)),
 		},
 	)
 	c.apiCdn = apiCdn
-}
-
-func (c *AppContainer) buildAPIApig() {
-	api := awsapigatewayv2.NewHttpApi(
-		c.stack,
-		jsii.Sprintf("%s-api-apig", c.appName),
-		nil,
-	)
-	integration := awsapigatewayv2integrations.NewHttpLambdaIntegration(
-		jsii.String("ApiLambdaIntegration"),
-		c.apiFunc,
-		&awsapigatewayv2integrations.HttpLambdaIntegrationProps{
-			ParameterMapping: awsapigatewayv2.
-				NewParameterMapping().
-				OverwritePath(
-					awsapigatewayv2.NewMappingValue(jsii.String("$request.path.proxy")),
-				),
-		},
-	)
-	api.AddRoutes(&awsapigatewayv2.AddRoutesOptions{
-		Integration: integration,
-		Path:        jsii.String("/{proxy+}"),
-	})
-	c.apiApig = api
 }
 
 func (c *AppContainer) buildAPIFunction() {
@@ -296,7 +213,6 @@ func (c *AppContainer) buildAPIFunction() {
 			Architecture:  awslambda.Architecture_ARM_64(),
 			LogGroup:      c.logGroup,
 			LoggingFormat: awslambda.LoggingFormat_JSON,
-			Timeout:       awscdk.Duration_Seconds(jsii.Number(5)),
 			Handler:       jsii.String("bootstrap"),
 			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
 			Code: awslambda.AssetCode_FromAsset(
@@ -308,15 +224,6 @@ func (c *AppContainer) buildAPIFunction() {
 			Ipv6AllowedForDualStack: jsii.Bool(true),
 			AllowAllIpv6Outbound:    jsii.Bool(true),
 		})
-	alias := awslambda.NewAlias(
-		c.stack,
-		jsii.String("ApiFuncAlias"),
-		&awslambda.AliasProps{
-			AliasName:                       jsii.String("prod"),
-			Version:                         f.CurrentVersion(),
-			ProvisionedConcurrentExecutions: jsii.Number(1),
-		},
-	)
 	f.AddToRolePolicy(
 		awsiam.NewPolicyStatement(&awsiam.PolicyStatementProps{
 			Actions: jsii.Strings(
@@ -327,9 +234,36 @@ func (c *AppContainer) buildAPIFunction() {
 			Resources: jsii.Strings("arn:aws:ses:ap-northeast-1:966392475035:identity/supportocol.com"),
 		}),
 	)
-	c.commentGenQueue.GrantSendMessages(f)
 	c.setLambdaBasePermissions(f)
-	c.apiFunc = alias
+	c.apiFuncURL = f.AddFunctionUrl(&awslambda.FunctionUrlOptions{
+		AuthType: awslambda.FunctionUrlAuthType_NONE,
+	})
+}
+
+func (c *AppContainer) buildAPIAIFunction() {
+	f := awslambda.NewFunction(
+		c.stack,
+		jsii.String("ApiAIFunc"),
+		&awslambda.FunctionProps{
+			Architecture:  awslambda.Architecture_ARM_64(),
+			LogGroup:      c.logGroup,
+			LoggingFormat: awslambda.LoggingFormat_JSON,
+			Timeout:       awscdk.Duration_Seconds(jsii.Number(60)),
+			Handler:       jsii.String("bootstrap"),
+			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
+			Code: awslambda.AssetCode_FromAsset(
+				jsii.String("../cmd/api/lambda/build"),
+				&awss3assets.AssetOptions{},
+			),
+			Environment:             c.lambdaEnv(),
+			Vpc:                     c.vpc,
+			Ipv6AllowedForDualStack: jsii.Bool(true),
+			AllowAllIpv6Outbound:    jsii.Bool(true),
+		})
+	c.setLambdaBasePermissions(f)
+	c.apiAIFuncURL = f.AddFunctionUrl(&awslambda.FunctionUrlOptions{
+		AuthType: awslambda.FunctionUrlAuthType_NONE,
+	})
 }
 
 func (c *AppContainer) buildViewBucket() {

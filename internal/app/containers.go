@@ -11,7 +11,11 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/identity"
 	"github.com/fourbetween/app-supportocol/internal/learning"
 	learningadapter "github.com/fourbetween/app-supportocol/internal/learning/infra/adapter"
+	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
+	"github.com/fourbetween/app-supportocol/internal/pkg/id"
 	"github.com/fourbetween/app-supportocol/internal/workspace"
+	wsdomain "github.com/fourbetween/app-supportocol/internal/workspace/domain"
+	wsdb "github.com/fourbetween/app-supportocol/internal/workspace/infra/db"
 	"github.com/fourbetween/pkg-auth/jwt"
 	"github.com/fourbetween/pkg-conf/conf"
 )
@@ -38,7 +42,14 @@ func NewContainers(dbCon *sql.DB, appConf conf.Service, awscfg aws.Config, jwtSr
 
 	learningPermSv := learningadapter.NewWorkspacePermissionAdapter(workspaceCon.WorkspaceQueryService)
 	learningAIUsageSv := learningadapter.NewAIUsageAdapter(workspaceCon.AIUsageService)
-	learningCon, err := learning.NewContainer(dbCon, appConf, awscfg, learningPermSv, learningAIUsageSv)
+
+	idSrv := id.NewUUIDService()
+	clockSrv := clock.NewRealService()
+	projectFac := wsdomain.NewProjectFactory(idSrv, clockSrv)
+	projectRepo := wsdb.NewProjectRepository(dbCon, projectFac)
+	learningProjectPremiseProv := learningadapter.NewProjectPremiseAdapter(projectRepo)
+
+	learningCon, err := learning.NewContainer(dbCon, appConf, awscfg, learningPermSv, learningAIUsageSv, learningProjectPremiseProv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning api container: %w", err)
 	}

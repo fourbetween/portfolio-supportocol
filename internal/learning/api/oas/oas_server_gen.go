@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost implements POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
+	//
+	// Generate comments using AI.
+	//
+	// POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate
+	V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq, params V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams) ([]Comment, error)
 	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDelete implements DELETE /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive operation.
 	//
 	// Unarchive discussion.
@@ -68,12 +74,6 @@ type Handler interface {
 	//
 	// PUT /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePut(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutParams) error
-	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost implements POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
-	//
-	// Generate comments using AI.
-	//
-	// POST /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate
-	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq, params V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams) error
 	// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGet implements GET /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
 	//
 	// Get comments for a discussion.

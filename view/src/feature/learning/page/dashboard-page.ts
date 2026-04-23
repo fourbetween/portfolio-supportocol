@@ -26,6 +26,7 @@ import "../component/discussion-list-widget";
 import {
   type LearningCommentCreatedEvent,
   type LearningCommentDeletedEvent,
+  type LearningCommentGeneratedEvent,
   type LearningCommentSelectEvent,
   type LearningCommentUpdatedEvent,
 } from "../event/comment";
@@ -347,38 +348,9 @@ export class LearningDashboardPage extends LitElement {
     return this._hasProposedComments || this._hasCommentsWithIssues;
   }
 
-  private _handleCommentGenerated() {
-    setTimeout(async () => {
-      if (!this.isConnected || !this._selectedDiscussionId) return;
-
-      const since =
-        this._comments.length > 0
-          ? this._comments.reduce(
-              (max, c) => (c.createdAt > max ? c.createdAt : max),
-              this._comments[0].createdAt,
-            )
-          : undefined;
-
-      try {
-        if (!this.workspace) return;
-
-        const newComments = await commentRepository.list(
-          this.workspace.workspace.id,
-          this._selectedDiscussionId,
-          since,
-        );
-        const existingIds = new Set(this._comments.map((c) => c.id));
-        const filteredNewComments = newComments.filter(
-          (c) => !existingIds.has(c.id),
-        );
-
-        if (filteredNewComments.length > 0) {
-          this._comments = [...this._comments, ...filteredNewComments];
-        }
-      } catch (e) {
-        showToast(this, String(e), "error");
-      }
-    }, 15000);
+  private _handleCommentGenerated(e: LearningCommentGeneratedEvent) {
+    if (e.comments.length === 0) return;
+    this._comments = [...this._comments, ...e.comments];
   }
 
   private _renderDiscussionList() {

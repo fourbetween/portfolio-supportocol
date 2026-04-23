@@ -34,6 +34,7 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 
 // operationRolesCookieAuth is a private map storing roles per operation.
 var operationRolesCookieAuth = map[string][]string{
+	V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation:               []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteOperation:                        []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostOperation:                          []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation:       []string{},
@@ -44,7 +45,6 @@ var operationRolesCookieAuth = map[string][]string{
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutOperation:                 []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation:           []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutOperation:               []string{},
-	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation:                 []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetOperation:                          []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation:                         []string{},
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutOperation:                          []string{},

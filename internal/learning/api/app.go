@@ -439,23 +439,32 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	})
 }
 
-func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(
+func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(
 	ctx context.Context,
-	req *oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq,
-	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams,
-) error {
+	req *oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq,
+	params oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams,
+) ([]oas.Comment, error) {
 	var parentCommentID string
 	if !req.ParentCommentId.Null {
 		parentCommentID = uuid.UUID(req.ParentCommentId.Value).String()
 	}
 
-	return h.con.EnqueueCommentGeneration.Execute(ctx, usecase.GenerateCommentInput{
+	comments, err := h.con.GenerateComment.Execute(ctx, usecase.GenerateCommentInput{
 		DiscussionID:    uuid.UUID(params.DiscussionId).String(),
 		WorkspaceID:     uuid.UUID(params.WorkspaceId).String(),
 		ParentCommentID: parentCommentID,
 		CommentType:     string(req.CommentType),
 		UserID:          httpctx.GetUserID(ctx),
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]oas.Comment, len(comments))
+	for i, c := range comments {
+		res[i] = h.toOasComment(c)
+	}
+	return res, nil
 }
 
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {

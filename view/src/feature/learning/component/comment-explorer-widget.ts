@@ -209,7 +209,7 @@ export class LearningCommentExplorerWidget extends LitElement {
     )
       return;
     try {
-      await commentRepository.generate(
+      const comments = await commentRepository.generate(
         this.workspace.workspace.id,
         this.discussionId,
         {
@@ -220,7 +220,11 @@ export class LearningCommentExplorerWidget extends LitElement {
 
       showToast(this, msg("Comments generated."), "success", 2000);
       this.dispatchEvent(
-        new LearningCommentGeneratedEvent(e.parentCommentId, e.commentType),
+        new LearningCommentGeneratedEvent(
+          e.parentCommentId,
+          e.commentType,
+          comments,
+        ),
       );
     } catch (error: any) {
       showToast(this, error.message, "error");

@@ -1070,6 +1070,31 @@ func (s *PermissionLevel) UnmarshalText(data []byte) error {
 	}
 }
 
+type V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq struct {
+	ParentCommentId NilID       `json:"parentCommentId"`
+	CommentType     CommentType `json:"commentType"`
+}
+
+// GetParentCommentId returns the value of ParentCommentId.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) GetParentCommentId() NilID {
+	return s.ParentCommentId
+}
+
+// GetCommentType returns the value of CommentType.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) GetCommentType() CommentType {
+	return s.CommentType
+}
+
+// SetParentCommentId sets the value of ParentCommentId.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) SetParentCommentId(val NilID) {
+	s.ParentCommentId = val
+}
+
+// SetCommentType sets the value of CommentType.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) SetCommentType(val CommentType) {
+	s.CommentType = val
+}
+
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete operation.
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent struct{}
 
@@ -1152,34 +1177,6 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTy
 // SetNewType sets the value of NewType.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutReq) SetNewType(val CommentType) {
 	s.NewType = val
-}
-
-// V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostAccepted is response for V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost operation.
-type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostAccepted struct{}
-
-type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq struct {
-	ParentCommentId NilID       `json:"parentCommentId"`
-	CommentType     CommentType `json:"commentType"`
-}
-
-// GetParentCommentId returns the value of ParentCommentId.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) GetParentCommentId() NilID {
-	return s.ParentCommentId
-}
-
-// GetCommentType returns the value of CommentType.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) GetCommentType() CommentType {
-	return s.CommentType
-}
-
-// SetParentCommentId sets the value of ParentCommentId.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) SetParentCommentId(val NilID) {
-	s.ParentCommentId = val
-}
-
-// SetCommentType sets the value of CommentType.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) SetCommentType(val CommentType) {
-	s.CommentType = val
 }
 
 type V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq struct {

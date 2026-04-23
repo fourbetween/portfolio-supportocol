@@ -11,32 +11,32 @@ import (
 )
 
 var (
-	rn19AllowedHeaders = map[string]string{
+	rn5AllowedHeaders = map[string]string{
 		"POST": "Content-Type",
 	}
-	rn4AllowedHeaders = map[string]string{
+	rn24AllowedHeaders = map[string]string{
+		"POST": "Content-Type",
+	}
+	rn10AllowedHeaders = map[string]string{
 		"PUT": "Content-Type",
 	}
-	rn17AllowedHeaders = map[string]string{
+	rn22AllowedHeaders = map[string]string{
 		"POST": "Content-Type",
 		"PUT":  "Content-Type",
 	}
-	rn15AllowedHeaders = map[string]string{
-		"PUT": "Content-Type",
-	}
-	rn16AllowedHeaders = map[string]string{
-		"POST": "Content-Type",
-	}
-	rn8AllowedHeaders = map[string]string{
-		"PUT": "Content-Type",
-	}
-	rn13AllowedHeaders = map[string]string{
+	rn21AllowedHeaders = map[string]string{
 		"PUT": "Content-Type",
 	}
 	rn14AllowedHeaders = map[string]string{
 		"PUT": "Content-Type",
 	}
-	rn18AllowedHeaders = map[string]string{
+	rn19AllowedHeaders = map[string]string{
+		"PUT": "Content-Type",
+	}
+	rn20AllowedHeaders = map[string]string{
+		"PUT": "Content-Type",
+	}
+	rn23AllowedHeaders = map[string]string{
 		"PUT": "Content-Type",
 	}
 )
@@ -80,60 +80,42 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/v1/learning/workspaces/"
+		case '/': // Prefix: "/v1/"
 
-			if l := len("/v1/learning/workspaces/"); len(elem) >= l && elem[0:l] == "/v1/learning/workspaces/" {
+			if l := len("/v1/"); len(elem) >= l && elem[0:l] == "/v1/" {
 				elem = elem[l:]
 			} else {
 				break
 			}
 
-			// Param: "workspaceId"
-			// Match until "/"
-			idx := strings.IndexByte(elem, '/')
-			if idx < 0 {
-				idx = len(elem)
-			}
-			args[0] = elem[:idx]
-			elem = elem[idx:]
-
 			if len(elem) == 0 {
 				break
 			}
 			switch elem[0] {
-			case '/': // Prefix: "/discussions"
+			case 'a': // Prefix: "ai/learning/workspaces/"
 
-				if l := len("/discussions"); len(elem) >= l && elem[0:l] == "/discussions" {
+				if l := len("ai/learning/workspaces/"); len(elem) >= l && elem[0:l] == "ai/learning/workspaces/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				if len(elem) == 0 {
-					switch r.Method {
-					case "GET":
-						s.handleV1LearningWorkspacesWorkspaceIdDiscussionsGetRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
-					case "POST":
-						s.handleV1LearningWorkspacesWorkspaceIdDiscussionsPostRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, notAllowedParams{
-							allowedMethods: "GET,POST",
-							allowedHeaders: rn19AllowedHeaders,
-							acceptPost:     "application/json",
-							acceptPatch:    "",
-						})
-					}
+				// Param: "workspaceId"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
 
-					return
+				if len(elem) == 0 {
+					break
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/"
+				case '/': // Prefix: "/discussions/"
 
-					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+					if l := len("/discussions/"); len(elem) >= l && elem[0:l] == "/discussions/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -149,27 +131,85 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/comments/generate"
+
+						if l := len("/comments/generate"); len(elem) >= l && elem[0:l] == "/comments/generate" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostRequest([2]string{
+									args[0],
+									args[1],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, notAllowedParams{
+									allowedMethods: "POST",
+									allowedHeaders: rn5AllowedHeaders,
+									acceptPost:     "application/json",
+									acceptPatch:    "",
+								})
+							}
+
+							return
+						}
+
+					}
+
+				}
+
+			case 'l': // Prefix: "learning/workspaces/"
+
+				if l := len("learning/workspaces/"); len(elem) >= l && elem[0:l] == "learning/workspaces/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				// Param: "workspaceId"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/discussions"
+
+					if l := len("/discussions"); len(elem) >= l && elem[0:l] == "/discussions" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
 						switch r.Method {
-						case "DELETE":
-							s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteRequest([2]string{
-								args[0],
-								args[1],
-							}, elemIsEscaped, w, r)
 						case "GET":
-							s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetRequest([2]string{
+							s.handleV1LearningWorkspacesWorkspaceIdDiscussionsGetRequest([1]string{
 								args[0],
-								args[1],
 							}, elemIsEscaped, w, r)
-						case "PUT":
-							s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutRequest([2]string{
+						case "POST":
+							s.handleV1LearningWorkspacesWorkspaceIdDiscussionsPostRequest([1]string{
 								args[0],
-								args[1],
 							}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, notAllowedParams{
-								allowedMethods: "DELETE,GET,PUT",
-								allowedHeaders: rn4AllowedHeaders,
-								acceptPost:     "",
+								allowedMethods: "GET,POST",
+								allowedHeaders: rn24AllowedHeaders,
+								acceptPost:     "application/json",
 								acceptPatch:    "",
 							})
 						}
@@ -185,179 +225,119 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 
+						// Param: "discussionId"
+						// Match until "/"
+						idx := strings.IndexByte(elem, '/')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[1] = elem[:idx]
+						elem = elem[idx:]
+
 						if len(elem) == 0 {
-							break
+							switch r.Method {
+							case "DELETE":
+								s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteRequest([2]string{
+									args[0],
+									args[1],
+								}, elemIsEscaped, w, r)
+							case "GET":
+								s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetRequest([2]string{
+									args[0],
+									args[1],
+								}, elemIsEscaped, w, r)
+							case "PUT":
+								s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutRequest([2]string{
+									args[0],
+									args[1],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, notAllowedParams{
+									allowedMethods: "DELETE,GET,PUT",
+									allowedHeaders: rn10AllowedHeaders,
+									acceptPost:     "",
+									acceptPatch:    "",
+								})
+							}
+
+							return
 						}
 						switch elem[0] {
-						case 'a': // Prefix: "archive"
+						case '/': // Prefix: "/"
 
-							if l := len("archive"); len(elem) >= l && elem[0:l] == "archive" {
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "DELETE":
-									s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								case "POST":
-									s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, notAllowedParams{
-										allowedMethods: "DELETE,POST",
-										allowedHeaders: nil,
-										acceptPost:     "",
-										acceptPatch:    "",
-									})
-								}
-
-								return
-							}
-
-						case 'c': // Prefix: "comments"
-
-							if l := len("comments"); len(elem) >= l && elem[0:l] == "comments" {
-								elem = elem[l:]
-							} else {
 								break
-							}
-
-							if len(elem) == 0 {
-								switch r.Method {
-								case "GET":
-									s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								case "POST":
-									s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								case "PUT":
-									s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, notAllowedParams{
-										allowedMethods: "GET,POST,PUT",
-										allowedHeaders: rn17AllowedHeaders,
-										acceptPost:     "application/json",
-										acceptPatch:    "",
-									})
-								}
-
-								return
 							}
 							switch elem[0] {
-							case '/': // Prefix: "/"
+							case 'a': // Prefix: "archive"
 
-								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								if l := len("archive"); len(elem) >= l && elem[0:l] == "archive" {
 									elem = elem[l:]
 								} else {
 									break
 								}
 
 								if len(elem) == 0 {
-									break
-								}
-								switch elem[0] {
-								case 'c': // Prefix: "comment-type"
-									origElem := elem
-									if l := len("comment-type"); len(elem) >= l && elem[0:l] == "comment-type" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch r.Method {
-										case "PUT":
-											s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutRequest([2]string{
-												args[0],
-												args[1],
-											}, elemIsEscaped, w, r)
-										default:
-											s.notAllowed(w, r, notAllowedParams{
-												allowedMethods: "PUT",
-												allowedHeaders: rn15AllowedHeaders,
-												acceptPost:     "",
-												acceptPatch:    "",
-											})
-										}
-
-										return
-									}
-
-									elem = origElem
-								case 'g': // Prefix: "generate"
-									origElem := elem
-									if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch r.Method {
-										case "POST":
-											s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostRequest([2]string{
-												args[0],
-												args[1],
-											}, elemIsEscaped, w, r)
-										default:
-											s.notAllowed(w, r, notAllowedParams{
-												allowedMethods: "POST",
-												allowedHeaders: rn16AllowedHeaders,
-												acceptPost:     "application/json",
-												acceptPatch:    "",
-											})
-										}
-
-										return
-									}
-
-									elem = origElem
-								}
-								// Param: "commentId"
-								// Match until "/"
-								idx := strings.IndexByte(elem, '/')
-								if idx < 0 {
-									idx = len(elem)
-								}
-								args[2] = elem[:idx]
-								elem = elem[idx:]
-
-								if len(elem) == 0 {
+									// Leaf node.
 									switch r.Method {
 									case "DELETE":
-										s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteRequest([3]string{
+										s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteRequest([2]string{
 											args[0],
 											args[1],
-											args[2],
 										}, elemIsEscaped, w, r)
-									case "PUT":
-										s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutRequest([3]string{
+									case "POST":
+										s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostRequest([2]string{
 											args[0],
 											args[1],
-											args[2],
 										}, elemIsEscaped, w, r)
 									default:
 										s.notAllowed(w, r, notAllowedParams{
-											allowedMethods: "DELETE,PUT",
-											allowedHeaders: rn8AllowedHeaders,
+											allowedMethods: "DELETE,POST",
+											allowedHeaders: nil,
 											acceptPost:     "",
+											acceptPatch:    "",
+										})
+									}
+
+									return
+								}
+
+							case 'c': // Prefix: "comments"
+
+								if l := len("comments"); len(elem) >= l && elem[0:l] == "comments" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									switch r.Method {
+									case "GET":
+										s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetRequest([2]string{
+											args[0],
+											args[1],
+										}, elemIsEscaped, w, r)
+									case "POST":
+										s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostRequest([2]string{
+											args[0],
+											args[1],
+										}, elemIsEscaped, w, r)
+									case "PUT":
+										s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutRequest([2]string{
+											args[0],
+											args[1],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, notAllowedParams{
+											allowedMethods: "GET,POST,PUT",
+											allowedHeaders: rn22AllowedHeaders,
+											acceptPost:     "application/json",
 											acceptPatch:    "",
 										})
 									}
@@ -377,83 +357,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										break
 									}
 									switch elem[0] {
-									case 'a': // Prefix: "archive"
-
-										if l := len("archive"); len(elem) >= l && elem[0:l] == "archive" {
-											elem = elem[l:]
-										} else {
-											break
-										}
-
-										if len(elem) == 0 {
-											// Leaf node.
-											switch r.Method {
-											case "DELETE":
-												s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteRequest([3]string{
-													args[0],
-													args[1],
-													args[2],
-												}, elemIsEscaped, w, r)
-											case "POST":
-												s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostRequest([3]string{
-													args[0],
-													args[1],
-													args[2],
-												}, elemIsEscaped, w, r)
-											default:
-												s.notAllowed(w, r, notAllowedParams{
-													allowedMethods: "DELETE,POST",
-													allowedHeaders: nil,
-													acceptPost:     "",
-													acceptPatch:    "",
-												})
-											}
-
-											return
-										}
-
-									case 'i': // Prefix: "issues/"
-
-										if l := len("issues/"); len(elem) >= l && elem[0:l] == "issues/" {
-											elem = elem[l:]
-										} else {
-											break
-										}
-
-										// Param: "issueId"
-										// Leaf parameter, slashes are prohibited
-										idx := strings.IndexByte(elem, '/')
-										if idx >= 0 {
-											break
-										}
-										args[3] = elem
-										elem = ""
-
-										if len(elem) == 0 {
-											// Leaf node.
-											switch r.Method {
-											case "DELETE":
-												s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteRequest([4]string{
-													args[0],
-													args[1],
-													args[2],
-													args[3],
-												}, elemIsEscaped, w, r)
-											default:
-												s.notAllowed(w, r, notAllowedParams{
-													allowedMethods: "DELETE",
-													allowedHeaders: nil,
-													acceptPost:     "",
-													acceptPatch:    "",
-												})
-											}
-
-											return
-										}
-
-									case 'p': // Prefix: "parent"
-
-										if l := len("parent"); len(elem) >= l && elem[0:l] == "parent" {
+									case 'c': // Prefix: "comment-type"
+										origElem := elem
+										if l := len("comment-type"); len(elem) >= l && elem[0:l] == "comment-type" {
 											elem = elem[l:]
 										} else {
 											break
@@ -463,15 +369,14 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											// Leaf node.
 											switch r.Method {
 											case "PUT":
-												s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutRequest([3]string{
+												s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutRequest([2]string{
 													args[0],
 													args[1],
-													args[2],
 												}, elemIsEscaped, w, r)
 											default:
 												s.notAllowed(w, r, notAllowedParams{
 													allowedMethods: "PUT",
-													allowedHeaders: rn13AllowedHeaders,
+													allowedHeaders: rn21AllowedHeaders,
 													acceptPost:     "",
 													acceptPatch:    "",
 												})
@@ -480,67 +385,221 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											return
 										}
 
-									case 's': // Prefix: "status"
+										elem = origElem
+									}
+									// Param: "commentId"
+									// Match until "/"
+									idx := strings.IndexByte(elem, '/')
+									if idx < 0 {
+										idx = len(elem)
+									}
+									args[2] = elem[:idx]
+									elem = elem[idx:]
 
-										if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+									if len(elem) == 0 {
+										switch r.Method {
+										case "DELETE":
+											s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteRequest([3]string{
+												args[0],
+												args[1],
+												args[2],
+											}, elemIsEscaped, w, r)
+										case "PUT":
+											s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutRequest([3]string{
+												args[0],
+												args[1],
+												args[2],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, notAllowedParams{
+												allowedMethods: "DELETE,PUT",
+												allowedHeaders: rn14AllowedHeaders,
+												acceptPost:     "",
+												acceptPatch:    "",
+											})
+										}
+
+										return
+									}
+									switch elem[0] {
+									case '/': // Prefix: "/"
+
+										if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 											elem = elem[l:]
 										} else {
 											break
 										}
 
 										if len(elem) == 0 {
-											// Leaf node.
-											switch r.Method {
-											case "PUT":
-												s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest([3]string{
-													args[0],
-													args[1],
-													args[2],
-												}, elemIsEscaped, w, r)
-											default:
-												s.notAllowed(w, r, notAllowedParams{
-													allowedMethods: "PUT",
-													allowedHeaders: rn14AllowedHeaders,
-													acceptPost:     "",
-													acceptPatch:    "",
-												})
+											break
+										}
+										switch elem[0] {
+										case 'a': // Prefix: "archive"
+
+											if l := len("archive"); len(elem) >= l && elem[0:l] == "archive" {
+												elem = elem[l:]
+											} else {
+												break
 											}
 
-											return
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "DELETE":
+													s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteRequest([3]string{
+														args[0],
+														args[1],
+														args[2],
+													}, elemIsEscaped, w, r)
+												case "POST":
+													s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostRequest([3]string{
+														args[0],
+														args[1],
+														args[2],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, notAllowedParams{
+														allowedMethods: "DELETE,POST",
+														allowedHeaders: nil,
+														acceptPost:     "",
+														acceptPatch:    "",
+													})
+												}
+
+												return
+											}
+
+										case 'i': // Prefix: "issues/"
+
+											if l := len("issues/"); len(elem) >= l && elem[0:l] == "issues/" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											// Param: "issueId"
+											// Leaf parameter, slashes are prohibited
+											idx := strings.IndexByte(elem, '/')
+											if idx >= 0 {
+												break
+											}
+											args[3] = elem
+											elem = ""
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "DELETE":
+													s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteRequest([4]string{
+														args[0],
+														args[1],
+														args[2],
+														args[3],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, notAllowedParams{
+														allowedMethods: "DELETE",
+														allowedHeaders: nil,
+														acceptPost:     "",
+														acceptPatch:    "",
+													})
+												}
+
+												return
+											}
+
+										case 'p': // Prefix: "parent"
+
+											if l := len("parent"); len(elem) >= l && elem[0:l] == "parent" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "PUT":
+													s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutRequest([3]string{
+														args[0],
+														args[1],
+														args[2],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, notAllowedParams{
+														allowedMethods: "PUT",
+														allowedHeaders: rn19AllowedHeaders,
+														acceptPost:     "",
+														acceptPatch:    "",
+													})
+												}
+
+												return
+											}
+
+										case 's': // Prefix: "status"
+
+											if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "PUT":
+													s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutRequest([3]string{
+														args[0],
+														args[1],
+														args[2],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, notAllowedParams{
+														allowedMethods: "PUT",
+														allowedHeaders: rn20AllowedHeaders,
+														acceptPost:     "",
+														acceptPatch:    "",
+													})
+												}
+
+												return
+											}
+
 										}
 
 									}
 
 								}
 
-							}
+							case 's': // Prefix: "status"
 
-						case 's': // Prefix: "status"
-
-							if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "PUT":
-									s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, notAllowedParams{
-										allowedMethods: "PUT",
-										allowedHeaders: rn18AllowedHeaders,
-										acceptPost:     "",
-										acceptPatch:    "",
-									})
+								if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+									elem = elem[l:]
+								} else {
+									break
 								}
 
-								return
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "PUT":
+										s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutRequest([2]string{
+											args[0],
+											args[1],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, notAllowedParams{
+											allowedMethods: "PUT",
+											allowedHeaders: rn23AllowedHeaders,
+											acceptPost:     "",
+											acceptPatch:    "",
+										})
+									}
+
+									return
+								}
+
 							}
 
 						}
@@ -637,63 +696,42 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/v1/learning/workspaces/"
+		case '/': // Prefix: "/v1/"
 
-			if l := len("/v1/learning/workspaces/"); len(elem) >= l && elem[0:l] == "/v1/learning/workspaces/" {
+			if l := len("/v1/"); len(elem) >= l && elem[0:l] == "/v1/" {
 				elem = elem[l:]
 			} else {
 				break
 			}
 
-			// Param: "workspaceId"
-			// Match until "/"
-			idx := strings.IndexByte(elem, '/')
-			if idx < 0 {
-				idx = len(elem)
-			}
-			args[0] = elem[:idx]
-			elem = elem[idx:]
-
 			if len(elem) == 0 {
 				break
 			}
 			switch elem[0] {
-			case '/': // Prefix: "/discussions"
+			case 'a': // Prefix: "ai/learning/workspaces/"
 
-				if l := len("/discussions"); len(elem) >= l && elem[0:l] == "/discussions" {
+				if l := len("ai/learning/workspaces/"); len(elem) >= l && elem[0:l] == "ai/learning/workspaces/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
+				// Param: "workspaceId"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
 				if len(elem) == 0 {
-					switch method {
-					case "GET":
-						r.name = V1LearningWorkspacesWorkspaceIdDiscussionsGetOperation
-						r.summary = ""
-						r.operationID = ""
-						r.operationGroup = ""
-						r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions"
-						r.args = args
-						r.count = 1
-						return r, true
-					case "POST":
-						r.name = V1LearningWorkspacesWorkspaceIdDiscussionsPostOperation
-						r.summary = ""
-						r.operationID = ""
-						r.operationGroup = ""
-						r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions"
-						r.args = args
-						r.count = 1
-						return r, true
-					default:
-						return
-					}
+					break
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/"
+				case '/': // Prefix: "/discussions/"
 
-					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+					if l := len("/discussions/"); len(elem) >= l && elem[0:l] == "/discussions/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -709,33 +747,86 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					elem = elem[idx:]
 
 					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/comments/generate"
+
+						if l := len("/comments/generate"); len(elem) >= l && elem[0:l] == "/comments/generate" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation
+								r.summary = ""
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate"
+								r.args = args
+								r.count = 2
+								return r, true
+							default:
+								return
+							}
+						}
+
+					}
+
+				}
+
+			case 'l': // Prefix: "learning/workspaces/"
+
+				if l := len("learning/workspaces/"); len(elem) >= l && elem[0:l] == "learning/workspaces/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				// Param: "workspaceId"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/discussions"
+
+					if l := len("/discussions"); len(elem) >= l && elem[0:l] == "/discussions" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
 						switch method {
-						case "DELETE":
-							r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteOperation
-							r.summary = ""
-							r.operationID = ""
-							r.operationGroup = ""
-							r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}"
-							r.args = args
-							r.count = 2
-							return r, true
 						case "GET":
-							r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetOperation
+							r.name = V1LearningWorkspacesWorkspaceIdDiscussionsGetOperation
 							r.summary = ""
 							r.operationID = ""
 							r.operationGroup = ""
-							r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}"
+							r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions"
 							r.args = args
-							r.count = 2
+							r.count = 1
 							return r, true
-						case "PUT":
-							r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutOperation
+						case "POST":
+							r.name = V1LearningWorkspacesWorkspaceIdDiscussionsPostOperation
 							r.summary = ""
 							r.operationID = ""
 							r.operationGroup = ""
-							r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}"
+							r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions"
 							r.args = args
-							r.count = 2
+							r.count = 1
 							return r, true
 						default:
 							return
@@ -750,179 +841,131 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 
+						// Param: "discussionId"
+						// Match until "/"
+						idx := strings.IndexByte(elem, '/')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[1] = elem[:idx]
+						elem = elem[idx:]
+
 						if len(elem) == 0 {
-							break
+							switch method {
+							case "DELETE":
+								r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdDeleteOperation
+								r.summary = ""
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}"
+								r.args = args
+								r.count = 2
+								return r, true
+							case "GET":
+								r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdGetOperation
+								r.summary = ""
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}"
+								r.args = args
+								r.count = 2
+								return r, true
+							case "PUT":
+								r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPutOperation
+								r.summary = ""
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}"
+								r.args = args
+								r.count = 2
+								return r, true
+							default:
+								return
+							}
 						}
 						switch elem[0] {
-						case 'a': // Prefix: "archive"
+						case '/': // Prefix: "/"
 
-							if l := len("archive"); len(elem) >= l && elem[0:l] == "archive" {
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "DELETE":
-									r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive"
-									r.args = args
-									r.count = 2
-									return r, true
-								case "POST":
-									r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive"
-									r.args = args
-									r.count = 2
-									return r, true
-								default:
-									return
-								}
-							}
-
-						case 'c': // Prefix: "comments"
-
-							if l := len("comments"); len(elem) >= l && elem[0:l] == "comments" {
-								elem = elem[l:]
-							} else {
 								break
-							}
-
-							if len(elem) == 0 {
-								switch method {
-								case "GET":
-									r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments"
-									r.args = args
-									r.count = 2
-									return r, true
-								case "POST":
-									r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments"
-									r.args = args
-									r.count = 2
-									return r, true
-								case "PUT":
-									r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments"
-									r.args = args
-									r.count = 2
-									return r, true
-								default:
-									return
-								}
 							}
 							switch elem[0] {
-							case '/': // Prefix: "/"
+							case 'a': // Prefix: "archive"
 
-								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								if l := len("archive"); len(elem) >= l && elem[0:l] == "archive" {
 									elem = elem[l:]
 								} else {
 									break
 								}
 
 								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "DELETE":
+										r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteOperation
+										r.summary = ""
+										r.operationID = ""
+										r.operationGroup = ""
+										r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive"
+										r.args = args
+										r.count = 2
+										return r, true
+									case "POST":
+										r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostOperation
+										r.summary = ""
+										r.operationID = ""
+										r.operationGroup = ""
+										r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/archive"
+										r.args = args
+										r.count = 2
+										return r, true
+									default:
+										return
+									}
+								}
+
+							case 'c': // Prefix: "comments"
+
+								if l := len("comments"); len(elem) >= l && elem[0:l] == "comments" {
+									elem = elem[l:]
+								} else {
 									break
 								}
-								switch elem[0] {
-								case 'c': // Prefix: "comment-type"
-									origElem := elem
-									if l := len("comment-type"); len(elem) >= l && elem[0:l] == "comment-type" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch method {
-										case "PUT":
-											r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutOperation
-											r.summary = ""
-											r.operationID = ""
-											r.operationGroup = ""
-											r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type"
-											r.args = args
-											r.count = 2
-											return r, true
-										default:
-											return
-										}
-									}
-
-									elem = origElem
-								case 'g': // Prefix: "generate"
-									origElem := elem
-									if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch method {
-										case "POST":
-											r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation
-											r.summary = ""
-											r.operationID = ""
-											r.operationGroup = ""
-											r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate"
-											r.args = args
-											r.count = 2
-											return r, true
-										default:
-											return
-										}
-									}
-
-									elem = origElem
-								}
-								// Param: "commentId"
-								// Match until "/"
-								idx := strings.IndexByte(elem, '/')
-								if idx < 0 {
-									idx = len(elem)
-								}
-								args[2] = elem[:idx]
-								elem = elem[idx:]
 
 								if len(elem) == 0 {
 									switch method {
-									case "DELETE":
-										r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteOperation
+									case "GET":
+										r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGetOperation
 										r.summary = ""
 										r.operationID = ""
 										r.operationGroup = ""
-										r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}"
+										r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments"
 										r.args = args
-										r.count = 3
+										r.count = 2
+										return r, true
+									case "POST":
+										r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostOperation
+										r.summary = ""
+										r.operationID = ""
+										r.operationGroup = ""
+										r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments"
+										r.args = args
+										r.count = 2
 										return r, true
 									case "PUT":
-										r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutOperation
+										r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPutOperation
 										r.summary = ""
 										r.operationID = ""
 										r.operationGroup = ""
-										r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}"
+										r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments"
 										r.args = args
-										r.count = 3
+										r.count = 2
 										return r, true
 									default:
 										return
@@ -941,77 +984,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										break
 									}
 									switch elem[0] {
-									case 'a': // Prefix: "archive"
-
-										if l := len("archive"); len(elem) >= l && elem[0:l] == "archive" {
-											elem = elem[l:]
-										} else {
-											break
-										}
-
-										if len(elem) == 0 {
-											// Leaf node.
-											switch method {
-											case "DELETE":
-												r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation
-												r.summary = ""
-												r.operationID = ""
-												r.operationGroup = ""
-												r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive"
-												r.args = args
-												r.count = 3
-												return r, true
-											case "POST":
-												r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation
-												r.summary = ""
-												r.operationID = ""
-												r.operationGroup = ""
-												r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive"
-												r.args = args
-												r.count = 3
-												return r, true
-											default:
-												return
-											}
-										}
-
-									case 'i': // Prefix: "issues/"
-
-										if l := len("issues/"); len(elem) >= l && elem[0:l] == "issues/" {
-											elem = elem[l:]
-										} else {
-											break
-										}
-
-										// Param: "issueId"
-										// Leaf parameter, slashes are prohibited
-										idx := strings.IndexByte(elem, '/')
-										if idx >= 0 {
-											break
-										}
-										args[3] = elem
-										elem = ""
-
-										if len(elem) == 0 {
-											// Leaf node.
-											switch method {
-											case "DELETE":
-												r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteOperation
-												r.summary = ""
-												r.operationID = ""
-												r.operationGroup = ""
-												r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}"
-												r.args = args
-												r.count = 4
-												return r, true
-											default:
-												return
-											}
-										}
-
-									case 'p': // Prefix: "parent"
-
-										if l := len("parent"); len(elem) >= l && elem[0:l] == "parent" {
+									case 'c': // Prefix: "comment-type"
+										origElem := elem
+										if l := len("comment-type"); len(elem) >= l && elem[0:l] == "comment-type" {
 											elem = elem[l:]
 										} else {
 											break
@@ -1021,73 +996,216 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											// Leaf node.
 											switch method {
 											case "PUT":
-												r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutOperation
+												r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentTypePutOperation
 												r.summary = ""
 												r.operationID = ""
 												r.operationGroup = ""
-												r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/parent"
+												r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/comment-type"
 												r.args = args
-												r.count = 3
+												r.count = 2
 												return r, true
 											default:
 												return
 											}
 										}
 
-									case 's': // Prefix: "status"
+										elem = origElem
+									}
+									// Param: "commentId"
+									// Match until "/"
+									idx := strings.IndexByte(elem, '/')
+									if idx < 0 {
+										idx = len(elem)
+									}
+									args[2] = elem[:idx]
+									elem = elem[idx:]
 
-										if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+									if len(elem) == 0 {
+										switch method {
+										case "DELETE":
+											r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteOperation
+											r.summary = ""
+											r.operationID = ""
+											r.operationGroup = ""
+											r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}"
+											r.args = args
+											r.count = 3
+											return r, true
+										case "PUT":
+											r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutOperation
+											r.summary = ""
+											r.operationID = ""
+											r.operationGroup = ""
+											r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}"
+											r.args = args
+											r.count = 3
+											return r, true
+										default:
+											return
+										}
+									}
+									switch elem[0] {
+									case '/': // Prefix: "/"
+
+										if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 											elem = elem[l:]
 										} else {
 											break
 										}
 
 										if len(elem) == 0 {
-											// Leaf node.
-											switch method {
-											case "PUT":
-												r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation
-												r.summary = ""
-												r.operationID = ""
-												r.operationGroup = ""
-												r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/status"
-												r.args = args
-												r.count = 3
-												return r, true
-											default:
-												return
+											break
+										}
+										switch elem[0] {
+										case 'a': // Prefix: "archive"
+
+											if l := len("archive"); len(elem) >= l && elem[0:l] == "archive" {
+												elem = elem[l:]
+											} else {
+												break
 											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "DELETE":
+													r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation
+													r.summary = ""
+													r.operationID = ""
+													r.operationGroup = ""
+													r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive"
+													r.args = args
+													r.count = 3
+													return r, true
+												case "POST":
+													r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchivePostOperation
+													r.summary = ""
+													r.operationID = ""
+													r.operationGroup = ""
+													r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive"
+													r.args = args
+													r.count = 3
+													return r, true
+												default:
+													return
+												}
+											}
+
+										case 'i': // Prefix: "issues/"
+
+											if l := len("issues/"); len(elem) >= l && elem[0:l] == "issues/" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											// Param: "issueId"
+											// Leaf parameter, slashes are prohibited
+											idx := strings.IndexByte(elem, '/')
+											if idx >= 0 {
+												break
+											}
+											args[3] = elem
+											elem = ""
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "DELETE":
+													r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdIssuesIssueIdDeleteOperation
+													r.summary = ""
+													r.operationID = ""
+													r.operationGroup = ""
+													r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}"
+													r.args = args
+													r.count = 4
+													return r, true
+												default:
+													return
+												}
+											}
+
+										case 'p': // Prefix: "parent"
+
+											if l := len("parent"); len(elem) >= l && elem[0:l] == "parent" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "PUT":
+													r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutOperation
+													r.summary = ""
+													r.operationID = ""
+													r.operationGroup = ""
+													r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/parent"
+													r.args = args
+													r.count = 3
+													return r, true
+												default:
+													return
+												}
+											}
+
+										case 's': // Prefix: "status"
+
+											if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "PUT":
+													r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdStatusPutOperation
+													r.summary = ""
+													r.operationID = ""
+													r.operationGroup = ""
+													r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/status"
+													r.args = args
+													r.count = 3
+													return r, true
+												default:
+													return
+												}
+											}
+
 										}
 
 									}
 
 								}
 
-							}
+							case 's': // Prefix: "status"
 
-						case 's': // Prefix: "status"
-
-							if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "PUT":
-									r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/status"
-									r.args = args
-									r.count = 2
-									return r, true
-								default:
-									return
+								if l := len("status"); len(elem) >= l && elem[0:l] == "status" {
+									elem = elem[l:]
+								} else {
+									break
 								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "PUT":
+										r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutOperation
+										r.summary = ""
+										r.operationID = ""
+										r.operationGroup = ""
+										r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/status"
+										r.args = args
+										r.count = 2
+										return r, true
+									default:
+										return
+									}
+								}
+
 							}
 
 						}

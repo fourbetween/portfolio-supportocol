@@ -78,6 +78,7 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 	mux.Handle("/v1/identity/", identityHandler)
 	mux.Handle("/v1/workspace/", workspaceHandler)
 	mux.Handle("/v1/learning/", learningHandler)
+	mux.Handle("/v1/ai/learning/", learningHandler) // CloudfrontのパスパターンでLambdaを切り替えるため、同じハンドラーを複数のパスに割り当てる
 	mux.Handle("/v1/dialogue/", dialogueHandler)
 
 	csrfHandler := middleware.CSRF(domain)(mux)

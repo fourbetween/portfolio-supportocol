@@ -745,7 +745,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate:
+  /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate:
     parameters:
       - $ref: "#/components/parameters/workspaceId"
       - $ref: "#/components/parameters/discussionId"
@@ -768,8 +768,14 @@ paths:
                 - parentCommentId
                 - commentType
       responses:
-        "202":
+        "201":
           description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
         default:
           description: default error
           content:

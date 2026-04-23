@@ -12,16 +12,12 @@ dev-api:
 dev-view:
 	cd ${VIEW_DIR} && npm run dev --mode=dev
 
-dev-commentgen:
-	cd ${BASE_DIR}/cmd/comment-generation/dev && AWS_PROFILE=${STAGE} go run .
-
 dev:
-	npx concurrently --kill-others --prefix "[{name}]" -n "api,view,commentgen" -c "blue,cyan,magenta" "make dev-api" "make dev-view" "make dev-commentgen"
+	npx concurrently --kill-others --prefix "[{name}]" -n "api,view" -c "blue,cyan" "make dev-api" "make dev-view"
 
 # ===== ビルド =====
 build-lambda:
 	cd ${BASE_DIR}/cmd/api/lambda && GOOS=linux GOARCH=arm64 go build -o build/bootstrap
-	cd ${BASE_DIR}/cmd/comment-generation/lambda && GOOS=linux GOARCH=arm64 go build -o build/bootstrap
 
 build-view: view/env setup-view
 	cd ${VIEW_DIR} && npm run build --mode=${STAGE}

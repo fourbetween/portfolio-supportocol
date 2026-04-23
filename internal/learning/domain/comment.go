@@ -36,10 +36,6 @@ type (
 	}
 )
 
-type CommentGenerationQueue interface {
-	Enqueue(params []GenerateCommentParams) error
-}
-
 type GenerateCommentParams struct {
 	DiscussionID    string
 	WorkspaceID     string
