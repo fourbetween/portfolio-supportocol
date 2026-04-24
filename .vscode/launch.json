@@ -22,7 +22,7 @@
       "name": "Debug View",
       "type": "editor-browser",
       "request": "launch",
-      "url": "https://supportocol.dev.hick-r.com",
+      "url": "https://${env:APP_DOMAIN}",
       "webRoot": "${workspaceFolder}/view"
     }
   ]

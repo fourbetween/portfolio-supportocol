@@ -10,7 +10,7 @@ dev-api:
 	go tool air -c .air.toml
 
 dev-view:
-	cd ${VIEW_DIR} && echo "SiteURL: https://${APP_DOMAIN}" && npm run dev --mode=dev
+	cd ${VIEW_DIR} && npm run dev --mode=dev
 
 dev:
 	npx concurrently --kill-others --prefix "[{name}]" -n "api,view" -c "blue,cyan" "make dev-api" "make dev-view"
