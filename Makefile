@@ -51,7 +51,7 @@ test: test-api test-view
 
 # ===== ユーティリティ =====
 setup-view:
-	cd ${VIEW_DIR} && npm install && npm audit fix && npm run localize:extract && npm run localize:build 
+	cd ${VIEW_DIR} && npm install && npm audit fix && npm run localize:extract && npm run localize:build
 
 storybook:
 	cd ${VIEW_DIR} && npm run storybook -- -p $${PORT:-6006}
