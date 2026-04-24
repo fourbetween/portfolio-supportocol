@@ -75,4 +75,7 @@ export const commentTreeStyle = css`
     cursor: pointer;
     user-select: none;
   }
+  .tree {
+    padding-bottom: 150px;
+  }
 `;
