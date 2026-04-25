@@ -152,10 +152,17 @@ func (c *AppContainer) buildViewCDN() {
 }
 
 func (c *AppContainer) buildAPICDN() {
-	apiFuncOrigin := awscloudfrontorigins.NewFunctionUrlOrigin(c.apiFuncURL, nil)
-	apiAIFuncOrigin := awscloudfrontorigins.NewFunctionUrlOrigin(c.apiAIFuncURL, &awscloudfrontorigins.FunctionUrlOriginProps{
-		ReadTimeout: awscdk.Duration_Seconds(jsii.Number(60)),
-	})
+	apiFuncOrigin := awscloudfrontorigins.NewFunctionUrlOrigin(
+		c.apiFuncURL,
+		&awscloudfrontorigins.FunctionUrlOriginProps{},
+	)
+	apiAIFuncOrigin := awscloudfrontorigins.NewFunctionUrlOrigin(
+		c.apiAIFuncURL,
+		&awscloudfrontorigins.FunctionUrlOriginProps{
+			ReadTimeout: awscdk.Duration_Seconds(jsii.Number(60)),
+		},
+	)
+
 	apiCdn := awscloudfront.NewDistribution(
 		c.stack,
 		jsii.String("ApiCdn"),
@@ -163,6 +170,7 @@ func (c *AppContainer) buildAPICDN() {
 			EnableIpv6:  jsii.Bool(true),
 			PriceClass:  awscloudfront.PriceClass_PRICE_CLASS_200,
 			Certificate: c.certContainer.ApiCert,
+			DomainNames: jsii.Strings(getAPIDomain(c.appName, c.stage)),
 			DefaultBehavior: &awscloudfront.BehaviorOptions{
 				Origin:               apiFuncOrigin,
 				OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
@@ -199,7 +207,6 @@ func (c *AppContainer) buildAPICDN() {
 					CachePolicy:          awscloudfront.CachePolicy_CACHING_DISABLED(),
 				},
 			},
-			DomainNames: jsii.Strings(getAPIDomain(c.appName, c.stage)),
 		},
 	)
 	c.apiCdn = apiCdn
