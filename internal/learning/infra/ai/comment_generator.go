@@ -107,6 +107,9 @@ func (cg *CommentGenerator) fetchContext(
 
 func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) ([]string, error) {
 	config := &genai.GenerateContentConfig{
+		ThinkingConfig: &genai.ThinkingConfig{
+			ThinkingLevel: genai.ThinkingLevelMedium,
+		},
 		ResponseMIMEType: "application/json",
 		ResponseSchema: &genai.Schema{
 			Type: genai.TypeArray,
