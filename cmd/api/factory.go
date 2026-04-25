@@ -17,7 +17,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/learning"
 	learningapi "github.com/fourbetween/app-supportocol/internal/learning/api"
 	learningoas "github.com/fourbetween/app-supportocol/internal/learning/api/oas"
-	"github.com/fourbetween/app-supportocol/internal/pkg/env"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpcookie"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httperr"
@@ -28,12 +27,7 @@ import (
 	"github.com/fourbetween/pkg-conf/conf"
 )
 
-func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
-	appConf, err := conf.NewSSMService(env.AppName(), awscfg)
-	if err != nil {
-		return nil, fmt.Errorf("failed to load app config: %w", err)
-	}
-
+func NewHTTPHandler(dbCon *sql.DB, appConf conf.Service, awscfg aws.Config) (http.Handler, error) {
 	domain, err := appConf.Get("domain")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get domain from config: %w", err)
@@ -81,8 +75,7 @@ func NewHTTPHandler(dbCon *sql.DB, awscfg aws.Config) (http.Handler, error) {
 	mux.Handle("/v1/ai/learning/", learningHandler) // CloudfrontのパスパターンでLambdaを切り替えるため、同じハンドラーを複数のパスに割り当てる
 	mux.Handle("/v1/dialogue/", dialogueHandler)
 
-	csrfHandler := middleware.CSRF(domain)(mux)
-	return middleware.CORS("https://" + domain)(csrfHandler), nil
+	return middleware.CSRF(domain)(mux), nil
 }
 
 func newIdentityHandler(

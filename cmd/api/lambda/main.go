@@ -13,6 +13,8 @@ import (
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/fourbetween/app-supportocol/cmd/api"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbcon"
+	"github.com/fourbetween/app-supportocol/internal/pkg/env"
+	"github.com/fourbetween/pkg-conf/conf"
 )
 
 func main() {
@@ -34,7 +36,12 @@ func main() {
 		panic(fmt.Errorf("failed to load AWS config: %w", err))
 	}
 
-	handler, err := api.NewHTTPHandler(dbCon, awscfg)
+	appConf, err := conf.NewSSMService(env.AppName(), awscfg)
+	if err != nil {
+		panic(fmt.Errorf("failed to load app config: %w", err))
+	}
+
+	handler, err := api.NewHTTPHandler(dbCon, appConf, awscfg)
 	if err != nil {
 		panic(err)
 	}

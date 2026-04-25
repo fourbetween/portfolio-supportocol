@@ -163,6 +163,21 @@ func (c *AppContainer) buildAPICDN() {
 		},
 	)
 
+	corsPolicy := awscloudfront.NewResponseHeadersPolicy(
+		c.stack,
+		jsii.String("ApiCorsPolicy"),
+		&awscloudfront.ResponseHeadersPolicyProps{
+			CorsBehavior: &awscloudfront.ResponseHeadersCorsBehavior{
+				AccessControlAllowCredentials: jsii.Bool(true),
+				AccessControlAllowHeaders:     jsii.Strings("Content-Type"),
+				AccessControlAllowMethods:     jsii.Strings("ALL"),
+				AccessControlAllowOrigins:     jsii.Strings("https://" + getDomain(c.appName, c.stage)),
+				AccessControlMaxAge:           awscdk.Duration_Seconds(jsii.Number(86400)),
+				OriginOverride:                jsii.Bool(true),
+			},
+		},
+	)
+
 	apiCdn := awscloudfront.NewDistribution(
 		c.stack,
 		jsii.String("ApiCdn"),
@@ -172,18 +187,20 @@ func (c *AppContainer) buildAPICDN() {
 			Certificate: c.certContainer.ApiCert,
 			DomainNames: jsii.Strings(getAPIDomain(c.appName, c.stage)),
 			DefaultBehavior: &awscloudfront.BehaviorOptions{
-				Origin:               apiFuncOrigin,
-				OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
-				ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
-				AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
-				CachePolicy:          awscloudfront.CachePolicy_CACHING_DISABLED(),
+				Origin:                apiFuncOrigin,
+				OriginRequestPolicy:   awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
+				ViewerProtocolPolicy:  awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
+				AllowedMethods:        awscloudfront.AllowedMethods_ALLOW_ALL(),
+				CachePolicy:           awscloudfront.CachePolicy_CACHING_DISABLED(),
+				ResponseHeadersPolicy: corsPolicy,
 			},
 			AdditionalBehaviors: &map[string]*awscloudfront.BehaviorOptions{
 				"/v1/dialogue/*": {
-					Origin:               apiFuncOrigin,
-					OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
-					ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
-					AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
+					Origin:                apiFuncOrigin,
+					OriginRequestPolicy:   awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
+					ViewerProtocolPolicy:  awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
+					AllowedMethods:        awscloudfront.AllowedMethods_ALLOW_ALL(),
+					ResponseHeadersPolicy: corsPolicy,
 					CachePolicy: awscloudfront.NewCachePolicy(
 						c.stack,
 						jsii.String("DialogueCachePolicy"),
@@ -200,11 +217,12 @@ func (c *AppContainer) buildAPICDN() {
 					),
 				},
 				"/v1/ai/*": {
-					Origin:               apiAIFuncOrigin,
-					OriginRequestPolicy:  awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
-					ViewerProtocolPolicy: awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
-					AllowedMethods:       awscloudfront.AllowedMethods_ALLOW_ALL(),
-					CachePolicy:          awscloudfront.CachePolicy_CACHING_DISABLED(),
+					Origin:                apiAIFuncOrigin,
+					OriginRequestPolicy:   awscloudfront.OriginRequestPolicy_ALL_VIEWER_EXCEPT_HOST_HEADER(),
+					ViewerProtocolPolicy:  awscloudfront.ViewerProtocolPolicy_REDIRECT_TO_HTTPS,
+					AllowedMethods:        awscloudfront.AllowedMethods_ALLOW_ALL(),
+					CachePolicy:           awscloudfront.CachePolicy_CACHING_DISABLED(),
+					ResponseHeadersPolicy: corsPolicy,
 				},
 			},
 		},

@@ -9,6 +9,8 @@ import (
 	"github.com/fourbetween/app-supportocol/cmd/api"
 	"github.com/fourbetween/app-supportocol/cmd/api/middleware"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbcon"
+	"github.com/fourbetween/app-supportocol/internal/pkg/env"
+	conf "github.com/fourbetween/pkg-conf/conf"
 )
 
 func main() {
@@ -24,12 +26,25 @@ func main() {
 		panic(fmt.Errorf("failed to load AWS config: %w", err))
 	}
 
-	handler, err := api.NewHTTPHandler(dbCon, awscfg)
+	appConf, err := conf.NewSSMService(env.AppName(), awscfg)
+	if err != nil {
+		panic(fmt.Errorf("failed to load app config: %w", err))
+	}
+
+	handler, err := api.NewHTTPHandler(dbCon, appConf, awscfg)
 	if err != nil {
 		panic(err)
 	}
 
-	if err := http.ListenAndServe(":9000", middleware.DevCookie(handler)); err != nil {
+	appDomain, err := appConf.Get("domain")
+	if err != nil {
+		panic(fmt.Errorf("failed to get app domain from config: %w", err))
+	}
+
+	handler = middleware.CORS("https://" + appDomain)(handler)
+	handler = middleware.DevCookie(handler)
+
+	if err := http.ListenAndServe(":9000", handler); err != nil {
 		panic(err)
 	}
 }
