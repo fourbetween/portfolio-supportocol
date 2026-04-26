@@ -154,12 +154,15 @@ func (c *AppContainer) buildViewCDN() {
 func (c *AppContainer) buildAPICDN() {
 	apiFuncOrigin := awscloudfrontorigins.NewFunctionUrlOrigin(
 		c.apiFuncURL,
-		&awscloudfrontorigins.FunctionUrlOriginProps{},
+		&awscloudfrontorigins.FunctionUrlOriginProps{
+			IpAddressType: awscloudfront.OriginIpAddressType_DUALSTACK,
+		},
 	)
 	apiAIFuncOrigin := awscloudfrontorigins.NewFunctionUrlOrigin(
 		c.apiAIFuncURL,
 		&awscloudfrontorigins.FunctionUrlOriginProps{
-			ReadTimeout: awscdk.Duration_Seconds(jsii.Number(60)),
+			IpAddressType: awscloudfront.OriginIpAddressType_DUALSTACK,
+			ReadTimeout:   awscdk.Duration_Seconds(jsii.Number(60)),
 		},
 	)
 
