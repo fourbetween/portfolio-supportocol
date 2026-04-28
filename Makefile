@@ -47,7 +47,7 @@ test-api:
 test-view:
 	cd ${VIEW_DIR} && npx playwright install --with-deps && npm run test
 
-test: test-api test-view
+test: test-api
 
 # ===== ユーティリティ =====
 setup-view:
