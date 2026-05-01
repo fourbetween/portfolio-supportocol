@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
+	"net/http"
 
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
@@ -191,20 +192,22 @@ func (h *appHandler) V1WorkspaceWorkspacesWorkspaceIdFavoritesGet(
 // Error handling
 
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
-	code := 500
+	code := http.StatusInternalServerError
 	msg := err.Error()
+	var secErr *ogenerrors.SecurityError
 	if errors.Is(err, apperr.ErrUnauthenticated) ||
-		errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied) {
-		code = 401
+		errors.As(err, &secErr) {
+		code = http.StatusUnauthorized
 	} else if errors.Is(err, apperr.ErrPermissionDenied) {
-		code = 403
+		code = http.StatusForbidden
 	} else if errors.Is(err, apperr.ErrNotFound) {
-		code = 404
-	} else if errors.Is(err, apperr.ErrAlreadyExists) {
-		code = 409
+		code = http.StatusNotFound
+	} else if errors.Is(err, apperr.ErrAlreadyExists) ||
+		errors.Is(err, apperr.ErrLimitExceeded) {
+		code = http.StatusConflict
 	} else if errors.Is(err, apperr.ErrInvalidArgument) {
-		code = 400
-	} else if code == 500 {
+		code = http.StatusBadRequest
+	} else if code == http.StatusInternalServerError {
 		slog.Error(err.Error())
 		msg = "internal server error"
 	}

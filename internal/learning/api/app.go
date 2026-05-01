@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
+	"net/http"
 	"strings"
 	"time"
 
@@ -15,7 +16,6 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/learning/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 	"github.com/fourbetween/app-supportocol/internal/pkg/httpctx"
-	"github.com/fourbetween/pkg-auth/auth"
 	"github.com/google/uuid"
 	"github.com/ogen-go/ogen/ogenerrors"
 )
@@ -468,20 +468,22 @@ func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 }
 
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
-	code := 500
+	code := http.StatusInternalServerError
 	msg := strings.Split(err.Error(), ":")[0]
+	var secErr *ogenerrors.SecurityError
 	if errors.Is(err, apperr.ErrUnauthenticated) ||
-		errors.Is(err, auth.ErrNotFound) ||
-		errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied) {
-		code = 401
+		errors.As(err, &secErr) {
+		code = http.StatusUnauthorized
 	} else if errors.Is(err, apperr.ErrPermissionDenied) {
-		code = 403
+		code = http.StatusForbidden
 	} else if errors.Is(err, apperr.ErrNotFound) {
-		code = 404
+		code = http.StatusNotFound
 	} else if errors.Is(err, apperr.ErrAlreadyExists) ||
 		errors.Is(err, apperr.ErrLimitExceeded) {
-		code = 409
-	} else if code == 500 {
+		code = http.StatusConflict
+	} else if errors.Is(err, apperr.ErrInvalidArgument) {
+		code = http.StatusBadRequest
+	} else if code == http.StatusInternalServerError {
 		slog.Error(err.Error())
 		msg = "internal server error"
 	}

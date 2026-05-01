@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"log/slog"
+	"net/http"
 
 	"github.com/fourbetween/app-supportocol/internal/identity"
 	"github.com/fourbetween/app-supportocol/internal/identity/api/oas"
@@ -123,25 +124,24 @@ func (h *appHandler) V1IdentityPasswordResetConfirmPost(ctx context.Context, req
 }
 
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
-	code := 500
+	code := http.StatusInternalServerError
 	msg := err.Error()
+	var secErr *ogenerrors.SecurityError
 	if errors.Is(err, apperr.ErrUnauthenticated) ||
-		errors.Is(err, auth.ErrNotFound) ||
-		errors.Is(err, ogenerrors.ErrSecurityRequirementIsNotSatisfied) ||
-		errors.Is(err, auth.ErrInvalidCredentials) {
-		code = 401
-	} else if errors.Is(err, apperr.ErrPermissionDenied) ||
-		errors.Is(err, auth.ErrEmailNotVerified) {
-		code = 403
+		errors.As(err, &secErr) {
+		code = http.StatusUnauthorized
+	} else if errors.Is(err, apperr.ErrPermissionDenied) {
+		code = http.StatusForbidden
 	} else if errors.Is(err, apperr.ErrNotFound) {
-		code = 404
+		code = http.StatusNotFound
 	} else if errors.Is(err, apperr.ErrAlreadyExists) ||
-		errors.Is(err, auth.ErrEmailAlreadyExists) {
-		code = 409
-	} else if errors.Is(err, auth.ErrInvalidToken) ||
+		errors.Is(err, apperr.ErrLimitExceeded) {
+		code = http.StatusConflict
+	} else if errors.Is(err, apperr.ErrInvalidArgument) ||
+		errors.Is(err, auth.ErrInvalidToken) ||
 		errors.Is(err, auth.ErrInvalidPassword) {
-		code = 400
-	} else if code == 500 {
+		code = http.StatusBadRequest
+	} else if code == http.StatusInternalServerError {
 		slog.Error(err.Error())
 		msg = "internal server error"
 	}
