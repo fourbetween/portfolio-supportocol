@@ -271,5 +271,11 @@
 'sfee74640068abc13': `現在のパスワード`,
 'sff329d6e90ca964d': `コメントを入力...`,
 'sff50532a2d85e32e': `パスワードを変更する`,
+'s1b3df84d79ec8b00': `Source type`,
+'sd375661ee0628b83': `No source`,
+'s61eacb19db252f5e': `URL`,
+'s2492f5fb1b05b45e': `Text`,
+'sa39e9b837556f159': `Source URL`,
+'s3f45ad4d8eb9658f': `Source text`,
     };
   

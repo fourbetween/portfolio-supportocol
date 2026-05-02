@@ -21,14 +21,23 @@ export class LearningDiscussionCreateEvent extends Event {
   }
   public readonly theme: string;
   public readonly premise: string;
+  public readonly sourceType?: "text" | "url";
+  public readonly sourceBody?: string;
 
-  constructor(theme: string, premise: string) {
+  constructor(
+    theme: string,
+    premise: string,
+    sourceType?: "text" | "url",
+    sourceBody?: string,
+  ) {
     super(LearningDiscussionCreateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
     this.theme = theme;
     this.premise = premise;
+    this.sourceType = sourceType;
+    this.sourceBody = sourceBody;
   }
 }
 

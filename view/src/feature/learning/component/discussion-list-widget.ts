@@ -48,6 +48,8 @@ export class LearningDiscussionListWidget extends LitElement {
         this.projectId,
         e.theme,
         e.premise,
+        e.sourceType,
+        e.sourceBody,
       );
       this.dispatchEvent(new LearningDiscussionCreatedEvent(data));
     } catch (error: any) {
