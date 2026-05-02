@@ -48,7 +48,6 @@ type (
 		ProjectID   string
 		Theme       string
 		Premise     string
-		Status      DiscussionStatus
 		CreatedBy   string
 	}
 
@@ -89,7 +88,7 @@ func (f *DiscussionFactory) Create(params CreateDiscussionParams, count int) (*D
 			Theme:   params.Theme,
 			Premise: params.Premise,
 		},
-		Status: params.Status,
+		Status: DiscussionStatusPrivate,
 		Activity: DiscussionActivity{
 			CreatedBy:       params.CreatedBy,
 			CreatedAt:       now,

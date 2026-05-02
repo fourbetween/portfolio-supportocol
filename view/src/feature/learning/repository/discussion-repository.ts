@@ -74,7 +74,7 @@ export class DiscussionRepository {
     workspaceId: string,
     projectId: string,
     theme: string,
-    status: Discussion["status"],
+    premise?: string,
   ): Promise<Discussion> {
     const { data, error } = await client.POST(
       "/v1/learning/workspaces/{workspaceId}/discussions",
@@ -82,7 +82,7 @@ export class DiscussionRepository {
         params: {
           path: { workspaceId },
         },
-        body: { projectId, theme, status },
+        body: { projectId, theme, premise: premise || "" },
       },
     );
     if (error) throw new Error(error.message);

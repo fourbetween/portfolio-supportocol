@@ -291,12 +291,16 @@ paths:
                   $ref: "#/components/schemas/DiscussionTheme"
                 premise:
                   $ref: "#/components/schemas/DiscussionPremise"
-                status:
-                  $ref: "#/components/schemas/DiscussionStatus"
+                sourceType:
+                  type: string
+                  enum:
+                    - text
+                    - url
+                sourceBody:
+                  type: string
               required:
                 - projectId
                 - theme
-                - status
       responses:
         "201":
           description: success response

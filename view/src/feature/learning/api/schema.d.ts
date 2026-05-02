@@ -65,7 +65,9 @@ export interface paths {
                         projectId: components["schemas"]["Id"];
                         theme: components["schemas"]["DiscussionTheme"];
                         premise?: components["schemas"]["DiscussionPremise"];
-                        status: components["schemas"]["DiscussionStatus"];
+                        /** @enum {string} */
+                        sourceType?: "text" | "url";
+                        sourceBody?: string;
                     };
                 };
             };

@@ -5,6 +5,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { workspaceContext } from "../../../app/context/workspace";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
+import { buttonStyle } from "../../../shared/style/button";
+import "../../../shared/ui/icons/icon-add";
 import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
   LearningDiscussionArchiveFilterEvent,
@@ -14,7 +16,7 @@ import {
 } from "../event/discussion";
 import type { DiscussionSummary } from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
-import "../ui/discussion-add-form";
+import "../ui/discussion-create-popup";
 import "../ui/discussion-list";
 import "../ui/discussion-search-bar";
 
@@ -35,6 +37,9 @@ export class LearningDiscussionListWidget extends LitElement {
   @state()
   private _archived = false;
 
+  @state()
+  private _createPopupOpen = false;
+
   private async _handleAddDiscussion(e: LearningDiscussionCreateEvent) {
     if (!this.workspace || !this.projectId) return;
     try {
@@ -42,7 +47,7 @@ export class LearningDiscussionListWidget extends LitElement {
         this.workspace.workspace.id,
         this.projectId,
         e.theme,
-        e.status,
+        e.premise,
       );
       this.dispatchEvent(new LearningDiscussionCreatedEvent(data));
     } catch (error: any) {
@@ -81,27 +86,37 @@ export class LearningDiscussionListWidget extends LitElement {
               ${msg("Show archived")}
             </label>
           </div>
-          <learning-discussion-search-bar
-            .value=${this._searchQuery}
-            @learning-discussion-search=${this._handleSearch}
-          ></learning-discussion-search-bar>
-        </div>
-        <div class="add-form">
-          <learning-discussion-add-form
-            @learning-discussion-create=${this._handleAddDiscussion}
-          ></learning-discussion-add-form>
+          <div class="search-row">
+            <learning-discussion-search-bar
+              .value=${this._searchQuery}
+              @learning-discussion-search=${this._handleSearch}
+            ></learning-discussion-search-bar>
+            <button
+              class="btn btn-primary add-button"
+              @click=${() => (this._createPopupOpen = true)}
+              title=${msg("New discussion")}
+            >
+              <ui-icon-add></ui-icon-add>
+            </button>
+          </div>
         </div>
         <div class="content">
           <learning-discussion-list
             .summaries=${this._filteredSummaries}
           ></learning-discussion-list>
         </div>
+        <learning-discussion-create-popup
+          .open=${this._createPopupOpen}
+          @popup-closed=${() => (this._createPopupOpen = false)}
+          @learning-discussion-create=${this._handleAddDiscussion}
+        ></learning-discussion-create-popup>
       </div>
     `;
   }
 
   static styles = [
     baseStyle,
+    buttonStyle,
     css`
       .widget {
         display: flex;
@@ -127,6 +142,18 @@ export class LearningDiscussionListWidget extends LitElement {
         align-items: center;
         gap: 4px;
         cursor: pointer;
+      }
+      .search-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .search-row learning-discussion-search-bar {
+        flex: 1;
+        min-width: 0;
+      }
+      .add-button {
+        flex-shrink: 0;
       }
       .content {
         flex: 1;

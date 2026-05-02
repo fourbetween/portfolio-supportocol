@@ -1021,6 +1021,98 @@ func (o OptPermissionLevel) Or(d PermissionLevel) PermissionLevel {
 	return d
 }
 
+// NewOptString returns new OptString with value set to v.
+func NewOptString(v string) OptString {
+	return OptString{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptString is optional string.
+type OptString struct {
+	Value string
+	Set   bool
+}
+
+// IsSet returns true if OptString was set.
+func (o OptString) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptString) Reset() {
+	var v string
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptString) SetTo(v string) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptString) Get() (v string, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptString) Or(d string) string {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType returns new OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType with value set to v.
+func NewOptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType(v V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType {
+	return OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType is optional V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType.
+type OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType struct {
+	Value V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType
+	Set   bool
+}
+
+// IsSet returns true if OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType was set.
+func (o OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Reset() {
+	var v V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) SetTo(v V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Get() (v V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Or(d V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // Ref: #/components/schemas/PermissionLevel
 type PermissionLevel string
 
@@ -1363,10 +1455,11 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Set
 }
 
 type V1LearningWorkspacesWorkspaceIdDiscussionsPostReq struct {
-	ProjectId ID                   `json:"projectId"`
-	Theme     DiscussionTheme      `json:"theme"`
-	Premise   OptDiscussionPremise `json:"premise"`
-	Status    DiscussionStatus     `json:"status"`
+	ProjectId  ID                                                             `json:"projectId"`
+	Theme      DiscussionTheme                                                `json:"theme"`
+	Premise    OptDiscussionPremise                                           `json:"premise"`
+	SourceType OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType `json:"sourceType"`
+	SourceBody OptString                                                      `json:"sourceBody"`
 }
 
 // GetProjectId returns the value of ProjectId.
@@ -1384,9 +1477,14 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetPremise() OptDisc
 	return s.Premise
 }
 
-// GetStatus returns the value of Status.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetStatus() DiscussionStatus {
-	return s.Status
+// GetSourceType returns the value of SourceType.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetSourceType() OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType {
+	return s.SourceType
+}
+
+// GetSourceBody returns the value of SourceBody.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetSourceBody() OptString {
+	return s.SourceBody
 }
 
 // SetProjectId sets the value of ProjectId.
@@ -1404,7 +1502,53 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetPremise(val OptDi
 	s.Premise = val
 }
 
-// SetStatus sets the value of Status.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetStatus(val DiscussionStatus) {
-	s.Status = val
+// SetSourceType sets the value of SourceType.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetSourceType(val OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) {
+	s.SourceType = val
+}
+
+// SetSourceBody sets the value of SourceBody.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetSourceBody(val OptString) {
+	s.SourceBody = val
+}
+
+type V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType string
+
+const (
+	V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType = "text"
+	V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL  V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType = "url"
+)
+
+// AllValues returns all V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType values.
+func (V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) AllValues() []V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType {
+	return []V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType{
+		V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText,
+		V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) MarshalText() ([]byte, error) {
+	switch s {
+	case V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText:
+		return []byte(s), nil
+	case V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) UnmarshalText(data []byte) error {
+	switch V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType(data) {
+	case V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText:
+		*s = V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText
+		return nil
+	case V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL:
+		*s = V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }

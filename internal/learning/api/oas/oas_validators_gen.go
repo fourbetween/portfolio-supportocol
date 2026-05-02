@@ -1012,13 +1012,20 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := s.Status.Validate(); err != nil {
-			return err
+		if value, ok := s.SourceType.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "status",
+			Name:  "sourceType",
 			Error: err,
 		})
 	}
@@ -1026,4 +1033,15 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
+}
+
+func (s V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Validate() error {
+	switch s {
+	case "text":
+		return nil
+	case "url":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/fourbetween/app-supportocol/internal/app"
-	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 	"github.com/fourbetween/app-supportocol/internal/learning/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbcon"
 	"github.com/fourbetween/app-supportocol/internal/pkg/env"
@@ -433,7 +432,6 @@ func main() {
 			ProjectID:   project.ID(),
 			Theme:       seed.Theme,
 			Premise:     seed.Premise,
-			Status:      domain.DiscussionStatusPrivate,
 			UserID:      seedUserID,
 		})
 		if err != nil {

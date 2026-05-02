@@ -59,7 +59,6 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsPost(
 		ProjectID:   uuid.UUID(req.ProjectId).String(),
 		Theme:       string(req.Theme),
 		Premise:     string(req.Premise.Or("")),
-		Status:      domain.DiscussionStatus(req.Status),
 		UserID:      httpctx.GetUserID(ctx),
 	})
 	if err != nil {

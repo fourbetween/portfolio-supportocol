@@ -3,73 +3,77 @@ import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { live } from "lit/directives/live.js";
 import { baseStyle } from "../../../shared/style/base";
-import { buttonStyle } from "../../../shared/style/button";
 import { inputStyle } from "../../../shared/style/input";
-import "../../../shared/ui/icons/icon-add";
-import { LearningDiscussionCreateEvent } from "../event/discussion";
 
 @customElement("learning-discussion-add-form")
 export class LearningDiscussionAddForm extends LitElement {
   @state()
   private _theme = "";
 
-  private get _canSubmit() {
+  @state()
+  private _premise = "";
+
+  get value(): { theme: string; premise: string } {
+    return { theme: this._theme, premise: this._premise };
+  }
+
+  get isValid(): boolean {
     return this._theme.trim().length > 0;
   }
 
-  private _handleInput(e: InputEvent) {
+  private _handleThemeInput(e: InputEvent) {
     const input = e.target as HTMLInputElement;
     this._theme = input.value;
   }
 
-  private _handleSubmit(e: Event) {
-    e.preventDefault();
-    if (this._canSubmit) {
-      this.dispatchEvent(
-        new LearningDiscussionCreateEvent(this._theme, "private"),
-      );
-      this._theme = "";
-    }
+  private _handlePremiseInput(e: InputEvent) {
+    const textarea = e.target as HTMLTextAreaElement;
+    this._premise = textarea.value;
+  }
+
+  reset() {
+    this._theme = "";
+    this._premise = "";
   }
 
   render() {
     return html`
-      <form @submit=${this._handleSubmit}>
-        <input
-          type="text"
-          .value=${live(this._theme)}
-          @input=${this._handleInput}
-          placeholder=${msg("New discussion theme")}
-          aria-label=${msg("New discussion theme")}
-        />
-        <button
-          type="submit"
-          class="btn btn-primary"
-          ?disabled=${!this._canSubmit}
-          title=${msg("New discussion")}
-        >
-          <ui-icon-add></ui-icon-add>
-        </button>
-      </form>
+      <div class="fields">
+        <div class="field">
+          <input
+            type="text"
+            .value=${live(this._theme)}
+            @input=${this._handleThemeInput}
+            placeholder=${msg("Theme")}
+            aria-label=${msg("Theme")}
+          />
+        </div>
+        <div class="field">
+          <textarea
+            .value=${live(this._premise)}
+            @input=${this._handlePremiseInput}
+            placeholder=${msg("Premise (optional)")}
+            aria-label=${msg("Premise")}
+            rows="4"
+          ></textarea>
+        </div>
+      </div>
     `;
   }
 
   static styles = [
     baseStyle,
-    buttonStyle,
     inputStyle,
     css`
-      form {
+      .fields {
         display: flex;
-        gap: 8px;
+        flex-direction: column;
+        gap: 12px;
+      }
+      input,
+      textarea {
         width: 100%;
-      }
-      input {
-        flex: 1;
-        min-width: 0;
-      }
-      button {
-        flex-shrink: 0;
+        box-sizing: border-box;
       }
     `,
   ];

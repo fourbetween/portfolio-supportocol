@@ -38,7 +38,6 @@ type CreateDiscussionInput struct {
 	ProjectID   string
 	Theme       string
 	Premise     string
-	Status      domain.DiscussionStatus
 	UserID      string
 }
 
@@ -49,17 +48,6 @@ func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscu
 	}
 	if !canAccess {
 		return nil, apperr.ErrPermissionDenied
-	}
-
-	isPersonal, err := u.permSv.IsPersonalWorkspace(ctx, input.WorkspaceID)
-	if err != nil {
-		return nil, fmt.Errorf("failed to check workspace type: %w", err)
-	}
-	if input.Status.IsPublic() && !isPersonal {
-		return nil, fmt.Errorf("public status is only allowed for personal workspace: %w", apperr.ErrInvalidArgument)
-	}
-	if input.Status.IsInternal() && isPersonal {
-		return nil, fmt.Errorf("internal status is only allowed for organization workspace: %w", apperr.ErrInvalidArgument)
 	}
 
 	var discussion *domain.Discussion
@@ -74,7 +62,6 @@ func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscu
 			ProjectID:   input.ProjectID,
 			Theme:       input.Theme,
 			Premise:     input.Premise,
-			Status:      input.Status,
 			CreatedBy:   input.UserID,
 		}, count)
 		if err != nil {

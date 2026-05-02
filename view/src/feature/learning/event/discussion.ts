@@ -20,15 +20,15 @@ export class LearningDiscussionCreateEvent extends Event {
     return "learning-discussion-create" as const;
   }
   public readonly theme: string;
-  public readonly status: Discussion["status"];
+  public readonly premise: string;
 
-  constructor(theme: string, status: Discussion["status"]) {
+  constructor(theme: string, premise: string) {
     super(LearningDiscussionCreateEvent.eventName, {
       bubbles: true,
       composed: true,
     });
     this.theme = theme;
-    this.status = status;
+    this.premise = premise;
   }
 }
 

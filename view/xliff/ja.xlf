@@ -354,10 +354,6 @@
   <source>Edit Dialogue Settings</source>
   <target>対話設定を編集</target>
 </trans-unit>
-<trans-unit id="s5fc1520a5b5a8832">
-  <source>New discussion theme</source>
-  <target>新しい議論テーマ</target>
-</trans-unit>
 <trans-unit id="s25ff03c1f284fb67">
   <source>New discussion</source>
   <target>新しい議論</target>
@@ -1041,6 +1037,18 @@
 <trans-unit id="sb2c57b2d347203dd">
   <source>Show more</source>
   <target>さらに表示</target>
+</trans-unit>
+<trans-unit id="sd28b1ad8b626bf03">
+  <source>Premise (optional)</source>
+  <target>前提（オプション）</target>
+</trans-unit>
+<trans-unit id="s911f4ae35e20d587">
+  <source>New Discussion</source>
+  <target>新しい議論</target>
+</trans-unit>
+<trans-unit id="s382a2aa3984474dd">
+  <source>Create</source>
+  <target>作成</target>
 </trans-unit>
 </body>
 </file>
