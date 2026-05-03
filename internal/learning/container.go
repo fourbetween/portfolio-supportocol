@@ -87,7 +87,7 @@ func NewContainer(
 	auditSv := logging.NewSlogAuditService()
 
 	return &Container{
-		CreateDiscussion:       usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac, permSv, txManager, auditSv),
+		CreateDiscussion:       usecase.NewCreateDiscussionUsecase(discussionRepo, discussionFac, permSv, txManager, auditSv, commentRepo, generator, aiUsageSv, clockSrv),
 		GetDiscussion:          usecase.NewGetDiscussionUsecase(discussionRepo, permSv),
 		ListDiscussions:        usecase.NewListDiscussionsUsecase(discussionQS, permSv),
 		UpdateDiscussion:       usecase.NewUpdateDiscussionUsecase(discussionRepo, permSv, txManager, auditSv),

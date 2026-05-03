@@ -36,21 +36,32 @@ type (
 	}
 )
 
-type GenerateCommentParams struct {
-	DiscussionID    string
-	WorkspaceID     string
-	ParentCommentID string
-	CommentType     string
-	UserID          string
-}
+type (
+	CommentGenerator interface {
+		GenerateComments(ctx context.Context, params GenerateCommentParams) ([]*Comment, error)
+		GenerateDiscussionComments(ctx context.Context, params GenerateDiscussionCommentsParams) ([]*Comment, error)
+	}
 
-type CommentGenerator interface {
-	Generate(ctx context.Context, params GenerateCommentParams) ([]*Comment, error)
-}
+	GenerateCommentParams struct {
+		DiscussionID    string
+		WorkspaceID     string
+		ParentCommentID string
+		CommentType     string
+		UserID          string
+	}
 
-type ProjectPremiseProvider interface {
-	GetProjectPremise(ctx context.Context, workspaceID, projectID string) (string, error)
-}
+	GenerateDiscussionCommentsParams struct {
+		DiscussionID string
+		WorkspaceID  string
+		SourceType   string
+		SourceBody   string
+		UserID       string
+	}
+
+	ProjectPremiseProvider interface {
+		GetProjectPremise(ctx context.Context, workspaceID, projectID string) (string, error)
+	}
+)
 
 type (
 	CommentFactory struct {

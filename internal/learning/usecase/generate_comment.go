@@ -77,7 +77,7 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 		return nil, err
 	}
 
-	comments, err := u.generator.Generate(ctx, domain.GenerateCommentParams{
+	comments, err := u.generator.GenerateComments(ctx, domain.GenerateCommentParams{
 		DiscussionID:    input.DiscussionID,
 		WorkspaceID:     input.WorkspaceID,
 		ParentCommentID: input.ParentCommentID,

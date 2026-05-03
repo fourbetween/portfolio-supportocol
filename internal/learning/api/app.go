@@ -60,6 +60,8 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsPost(
 		Theme:       string(req.Theme),
 		Premise:     string(req.Premise.Or("")),
 		UserID:      httpctx.GetUserID(ctx),
+		SourceType:  string(req.SourceType.Value),
+		SourceBody:  string(req.SourceBody.Value),
 	})
 	if err != nil {
 		return nil, err
