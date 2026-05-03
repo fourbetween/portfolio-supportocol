@@ -690,6 +690,10 @@ func (s *Plan) encodeFields(e *jx.Encoder) {
 		e.Str(s.Name)
 	}
 	{
+		e.FieldStart("isFree")
+		e.Bool(s.IsFree)
+	}
+	{
 		e.FieldStart("monthlyAiLimit")
 		e.Int(s.MonthlyAiLimit)
 	}
@@ -703,12 +707,13 @@ func (s *Plan) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfPlan = [5]string{
+var jsonFieldsNameOfPlan = [6]string{
 	0: "id",
 	1: "name",
-	2: "monthlyAiLimit",
-	3: "maxProjects",
-	4: "maxFavorites",
+	2: "isFree",
+	3: "monthlyAiLimit",
+	4: "maxProjects",
+	5: "maxFavorites",
 }
 
 // Decode decodes Plan from json.
@@ -742,8 +747,20 @@ func (s *Plan) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
-		case "monthlyAiLimit":
+		case "isFree":
 			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Bool()
+				s.IsFree = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"isFree\"")
+			}
+		case "monthlyAiLimit":
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				v, err := d.Int()
 				s.MonthlyAiLimit = int(v)
@@ -755,7 +772,7 @@ func (s *Plan) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"monthlyAiLimit\"")
 			}
 		case "maxProjects":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Int()
 				s.MaxProjects = int(v)
@@ -767,7 +784,7 @@ func (s *Plan) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"maxProjects\"")
 			}
 		case "maxFavorites":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := d.Int()
 				s.MaxFavorites = int(v)
@@ -788,7 +805,7 @@ func (s *Plan) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011111,
+		0b00111111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

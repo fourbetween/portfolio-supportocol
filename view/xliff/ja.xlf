@@ -1052,21 +1052,27 @@
 </trans-unit>
 <trans-unit id="s1b3df84d79ec8b00">
   <source>Source type</source>
+  <target>ソースの種類</target>
 </trans-unit>
 <trans-unit id="sd375661ee0628b83">
   <source>No source</source>
+  <target>ソースなし</target>
 </trans-unit>
 <trans-unit id="s61eacb19db252f5e">
   <source>URL</source>
+  <target>URL</target>
 </trans-unit>
 <trans-unit id="s2492f5fb1b05b45e">
   <source>Text</source>
+  <target>テキスト</target>
 </trans-unit>
 <trans-unit id="sa39e9b837556f159">
   <source>Source URL</source>
+  <target>ソースURL</target>
 </trans-unit>
 <trans-unit id="s3f45ad4d8eb9658f">
   <source>Source text</source>
+  <target>ソーステキスト</target>
 </trans-unit>
 </body>
 </file>

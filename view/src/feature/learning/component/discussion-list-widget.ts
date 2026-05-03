@@ -109,6 +109,7 @@ export class LearningDiscussionListWidget extends LitElement {
         </div>
         <learning-discussion-create-popup
           .open=${this._createPopupOpen}
+          .isFree=${this.workspace?.workspace.subscription.plan.isFree ?? true}
           @popup-closed=${() => (this._createPopupOpen = false)}
           @learning-discussion-create=${this._handleAddDiscussion}
         ></learning-discussion-create-popup>

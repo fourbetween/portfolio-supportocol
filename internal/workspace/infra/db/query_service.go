@@ -190,6 +190,7 @@ func (m workspaceWithMemberModel) toUseCase() usecase.WorkspaceWithMember {
 		MemberCreatedAt:    m.Members.CreatedAt,
 		PlanID:             m.Plans.ID,
 		PlanName:           m.Plans.Name,
+		PlanIsFree:         m.Plans.ID == domain.PlanIDFree,
 		MonthlyAILimit:     int(m.Plans.MonthlyAiLimit),
 		MaxProjects:        int(m.Plans.MaxProjects),
 		MaxFavorites:       int(m.Plans.MaxFavorites),

@@ -419,6 +419,7 @@ export interface components {
         Plan: {
             id: components["schemas"]["Id"];
             name: string;
+            isFree: boolean;
             monthlyAiLimit: number;
             maxProjects: number;
             maxFavorites: number;

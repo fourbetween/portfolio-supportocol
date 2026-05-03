@@ -376,6 +376,7 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 type Plan struct {
 	ID             ID     `json:"id"`
 	Name           string `json:"name"`
+	IsFree         bool   `json:"isFree"`
 	MonthlyAiLimit int    `json:"monthlyAiLimit"`
 	MaxProjects    int    `json:"maxProjects"`
 	MaxFavorites   int    `json:"maxFavorites"`
@@ -389,6 +390,11 @@ func (s *Plan) GetID() ID {
 // GetName returns the value of Name.
 func (s *Plan) GetName() string {
 	return s.Name
+}
+
+// GetIsFree returns the value of IsFree.
+func (s *Plan) GetIsFree() bool {
+	return s.IsFree
 }
 
 // GetMonthlyAiLimit returns the value of MonthlyAiLimit.
@@ -414,6 +420,11 @@ func (s *Plan) SetID(val ID) {
 // SetName sets the value of Name.
 func (s *Plan) SetName(val string) {
 	s.Name = val
+}
+
+// SetIsFree sets the value of IsFree.
+func (s *Plan) SetIsFree(val bool) {
+	s.IsFree = val
 }
 
 // SetMonthlyAiLimit sets the value of MonthlyAiLimit.
