@@ -233,6 +233,7 @@ func (h *appHandler) toOasWorkspaceWithMember(w usecase.WorkspaceWithMember, use
 				Plan: oas.Plan{
 					ID:             oas.ID(uuid.MustParse(w.PlanID)),
 					Name:           w.PlanName,
+					IsFree:         w.PlanIsFree,
 					MonthlyAiLimit: w.MonthlyAILimit,
 					MaxProjects:    w.MaxProjects,
 					MaxFavorites:   w.MaxFavorites,

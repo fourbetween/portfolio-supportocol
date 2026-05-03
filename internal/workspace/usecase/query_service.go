@@ -16,6 +16,7 @@ type WorkspaceWithMember struct {
 	// Subscription
 	PlanID             string
 	PlanName           string
+	PlanIsFree         bool
 	MonthlyAILimit     int
 	MaxProjects        int
 	MaxFavorites       int

@@ -1,12 +1,15 @@
 import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { live } from "lit/directives/live.js";
 import { baseStyle } from "../../../shared/style/base";
 import { inputStyle } from "../../../shared/style/input";
 
 @customElement("learning-discussion-add-form")
 export class LearningDiscussionAddForm extends LitElement {
+  @property({ type: Boolean })
+  isFree = false;
+
   @state()
   private _theme = "";
 
@@ -87,41 +90,45 @@ export class LearningDiscussionAddForm extends LitElement {
             rows="4"
           ></textarea>
         </div>
-        <div class="field">
-          <select
-            .value=${live(this._sourceType)}
-            @change=${this._handleSourceTypeChange}
-            aria-label=${msg("Source type")}
-          >
-            <option value="">${msg("No source")}</option>
-            <option value="url">${msg("URL")}</option>
-            <option value="text">${msg("Text")}</option>
-          </select>
-        </div>
-        ${this._sourceType === "url"
+        ${!this.isFree
           ? html`
               <div class="field">
-                <input
-                  type="url"
-                  .value=${live(this._sourceBody)}
-                  @input=${this._handleSourceBodyInput}
-                  placeholder=${msg("Source URL")}
-                  aria-label=${msg("Source URL")}
-                />
+                <select
+                  .value=${live(this._sourceType)}
+                  @change=${this._handleSourceTypeChange}
+                  aria-label=${msg("Source type")}
+                >
+                  <option value="">${msg("No source")}</option>
+                  <option value="url">${msg("URL")}</option>
+                  <option value="text">${msg("Text")}</option>
+                </select>
               </div>
-            `
-          : ""}
-        ${this._sourceType === "text"
-          ? html`
-              <div class="field">
-                <textarea
-                  .value=${live(this._sourceBody)}
-                  @input=${this._handleSourceBodyInput}
-                  placeholder=${msg("Source text")}
-                  aria-label=${msg("Source text")}
-                  rows="8"
-                ></textarea>
-              </div>
+              ${this._sourceType === "url"
+                ? html`
+                    <div class="field">
+                      <input
+                        type="url"
+                        .value=${live(this._sourceBody)}
+                        @input=${this._handleSourceBodyInput}
+                        placeholder=${msg("Source URL")}
+                        aria-label=${msg("Source URL")}
+                      />
+                    </div>
+                  `
+                : ""}
+              ${this._sourceType === "text"
+                ? html`
+                    <div class="field">
+                      <textarea
+                        .value=${live(this._sourceBody)}
+                        @input=${this._handleSourceBodyInput}
+                        placeholder=${msg("Source text")}
+                        aria-label=${msg("Source text")}
+                        rows="8"
+                      ></textarea>
+                    </div>
+                  `
+                : ""}
             `
           : ""}
       </div>

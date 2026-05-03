@@ -13,6 +13,9 @@ export class LearningDiscussionCreatePopup extends LitElement {
   @property({ type: Boolean })
   open = false;
 
+  @property({ type: Boolean })
+  isFree = false;
+
   @query("learning-discussion-add-form")
   private _form!: LearningDiscussionAddForm;
 
@@ -35,7 +38,9 @@ export class LearningDiscussionCreatePopup extends LitElement {
       <ui-popup .open=${this.open} @popup-closed=${this._handleClose}>
         <div slot="header">${msg("New Discussion")}</div>
         <div slot="main">
-          <learning-discussion-add-form></learning-discussion-add-form>
+          <learning-discussion-add-form
+            .isFree=${this.isFree}
+          ></learning-discussion-add-form>
         </div>
         <div slot="footer">
           <button class="btn" @click=${this._handleClose}>
