@@ -24,6 +24,15 @@ type Plan struct {
 	MaxFavorites   int
 }
 
+const (
+	PlanIDFree     = "4c4ca77d-4a51-463e-9345-da27010cb450"
+	PlanIDStandard = "cbe0d635-c20c-4c06-9933-1979fac9f5af"
+)
+
+func (p Plan) IsFree() bool {
+	return p.ID == PlanIDFree
+}
+
 func (p Plan) Validate() error {
 	if p.ID == "" {
 		return fmt.Errorf("plan id is required: %w", apperr.ErrInvalidArgument)
