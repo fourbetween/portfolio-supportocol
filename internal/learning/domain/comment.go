@@ -37,9 +37,14 @@ type (
 )
 
 type (
+	CommentGenerationResult struct {
+		Comments []*Comment
+		Tokens   int32
+	}
+
 	CommentGenerator interface {
-		GenerateComments(ctx context.Context, params GenerateCommentParams) ([]*Comment, error)
-		GenerateDiscussionComments(ctx context.Context, params GenerateDiscussionCommentsParams) ([]*Comment, error)
+		GenerateComments(ctx context.Context, params GenerateCommentParams) (CommentGenerationResult, error)
+		GenerateDiscussionComments(ctx context.Context, params GenerateDiscussionCommentsParams) (CommentGenerationResult, error)
 	}
 
 	GenerateCommentParams struct {

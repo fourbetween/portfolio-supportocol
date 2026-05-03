@@ -18,9 +18,10 @@ func (a *AIUsageAdapter) CheckCommentGenerationLimit(ctx context.Context, worksp
 	return a.ws.CheckAIUsageLimit(ctx, workspaceID)
 }
 
-func (a *AIUsageAdapter) RecordCommentGeneration(ctx context.Context, workspaceID, discussionID string) error {
+func (a *AIUsageAdapter) RecordCommentGeneration(ctx context.Context, workspaceID, discussionID string, tokens int32) error {
 	return a.ws.RecordAIUsage(ctx, usecase.RecordAIUsageParams{
 		WorkspaceID:  workspaceID,
 		DiscussionID: discussionID,
+		Tokens:       tokens,
 	})
 }

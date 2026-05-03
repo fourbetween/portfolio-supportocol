@@ -40,12 +40,12 @@ func (s *aiUsageService) CheckAIUsageLimit(ctx context.Context, workspaceID stri
 	}
 
 	sub := ws.Subscription()
-	count, err := s.countUsage(ctx, workspaceID, sub.CurrentPeriodStart, sub.CurrentPeriodEnd)
+	totalTokens, err := s.sumTokens(ctx, workspaceID, sub.CurrentPeriodStart, sub.CurrentPeriodEnd)
 	if err != nil {
-		return fmt.Errorf("failed to count AI usage: %w", err)
+		return fmt.Errorf("failed to sum AI tokens: %w", err)
 	}
 
-	return ws.CanUseAI(count)
+	return ws.CanUseAI(totalTokens)
 }
 
 func (s *aiUsageService) RecordAIUsage(ctx context.Context, params usecase.RecordAIUsageParams) error {
@@ -54,7 +54,7 @@ func (s *aiUsageService) RecordAIUsage(ctx context.Context, params usecase.Recor
 		ID:           s.idSrv.Generate(),
 		WorkspaceID:  params.WorkspaceID,
 		DiscussionID: &params.DiscussionID,
-		Tokens:       0,
+		Tokens:       params.Tokens,
 		CreatedAt:    now,
 	}
 
@@ -69,9 +69,9 @@ func (s *aiUsageService) RecordAIUsage(ctx context.Context, params usecase.Recor
 	return nil
 }
 
-func (s *aiUsageService) countUsage(ctx context.Context, workspaceID string, from, to time.Time) (int, error) {
+func (s *aiUsageService) sumTokens(ctx context.Context, workspaceID string, from, to time.Time) (int64, error) {
 	stmt := mysql.SELECT(
-		mysql.COUNT(table.AiUsageLogs.ID).AS("count"),
+		mysql.CAST(mysql.COALESCE(mysql.SUMi(table.AiUsageLogs.Tokens), mysql.Int64(0))).AS_SIGNED().AS("total_tokens"),
 	).FROM(
 		table.AiUsageLogs,
 	).WHERE(
@@ -81,12 +81,12 @@ func (s *aiUsageService) countUsage(ctx context.Context, workspaceID string, fro
 	)
 
 	var dest struct {
-		Count int64 `alias:"count"`
+		TotalTokens int64 `alias:"total_tokens"`
 	}
 
 	if err := stmt.QueryContext(ctx, dbtx.GetExecutor(ctx, s.db), &dest); err != nil {
-		return 0, fmt.Errorf("failed to count AI usage logs: %w", err)
+		return 0, fmt.Errorf("failed to sum AI usage tokens: %w", err)
 	}
 
-	return int(dest.Count), nil
+	return dest.TotalTokens, nil
 }

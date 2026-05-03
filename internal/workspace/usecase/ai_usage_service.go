@@ -5,6 +5,7 @@ import "context"
 type RecordAIUsageParams struct {
 	WorkspaceID  string
 	DiscussionID string
+	Tokens       int32
 }
 
 type AIUsageService interface {

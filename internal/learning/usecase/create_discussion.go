@@ -108,7 +108,7 @@ func (u *CreateDiscussionUsecase) generateAndSaveComments(ctx context.Context, d
 		return err
 	}
 
-	comments, err := u.generator.GenerateDiscussionComments(ctx, domain.GenerateDiscussionCommentsParams{
+	result, err := u.generator.GenerateDiscussionComments(ctx, domain.GenerateDiscussionCommentsParams{
 		DiscussionID: discussion.ID(),
 		WorkspaceID:  input.WorkspaceID,
 		SourceType:   input.SourceType,
@@ -120,15 +120,15 @@ func (u *CreateDiscussionUsecase) generateAndSaveComments(ctx context.Context, d
 	}
 
 	return u.tx.RunInTx(ctx, func(ctx context.Context) error {
-		if err := u.commentRepo.BatchCreate(ctx, comments); err != nil {
+		if err := u.commentRepo.BatchCreate(ctx, result.Comments); err != nil {
 			return err
 		}
 
-		discussion.AddComments(len(comments), u.clockSrv.Now())
+		discussion.AddComments(len(result.Comments), u.clockSrv.Now())
 		if err := u.repo.Save(ctx, discussion); err != nil {
 			return err
 		}
 
-		return u.aiUsageSv.RecordCommentGeneration(ctx, input.WorkspaceID, discussion.ID())
+		return u.aiUsageSv.RecordCommentGeneration(ctx, input.WorkspaceID, discussion.ID(), result.Tokens)
 	})
 }

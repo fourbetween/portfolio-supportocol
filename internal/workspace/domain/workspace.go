@@ -160,10 +160,10 @@ func (w *Workspace) CanAddFavorite(currentCount int) error {
 	return nil
 }
 
-func (w *Workspace) CanUseAI(currentUsageCount int) error {
+func (w *Workspace) CanUseAI(currentTokens int64) error {
 	limit := w.subscription.Plan.MonthlyAILimit
-	if currentUsageCount >= limit {
-		return fmt.Errorf("monthly AI usage limit exceeded (%d/%d): %w", currentUsageCount, limit, apperr.ErrLimitExceeded)
+	if limit > 0 && currentTokens >= int64(limit) {
+		return fmt.Errorf("monthly AI token limit exceeded (%d/%d): %w", currentTokens, limit, apperr.ErrLimitExceeded)
 	}
 	return nil
 }

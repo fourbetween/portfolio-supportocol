@@ -77,7 +77,7 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 		return nil, err
 	}
 
-	comments, err := u.generator.GenerateComments(ctx, domain.GenerateCommentParams{
+	result, err := u.generator.GenerateComments(ctx, domain.GenerateCommentParams{
 		DiscussionID:    input.DiscussionID,
 		WorkspaceID:     input.WorkspaceID,
 		ParentCommentID: input.ParentCommentID,
@@ -89,20 +89,20 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 	}
 
 	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
-		if err := u.commentRepo.BatchCreate(ctx, comments); err != nil {
+		if err := u.commentRepo.BatchCreate(ctx, result.Comments); err != nil {
 			return err
 		}
 
-		discussion.AddComments(len(comments), u.clock.Now())
+		discussion.AddComments(len(result.Comments), u.clock.Now())
 		if err := u.discussionRepo.Save(ctx, discussion); err != nil {
 			return err
 		}
 
-		return u.aiUsageSv.RecordCommentGeneration(ctx, input.WorkspaceID, input.DiscussionID)
+		return u.aiUsageSv.RecordCommentGeneration(ctx, input.WorkspaceID, input.DiscussionID, result.Tokens)
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	return comments, nil
+	return result.Comments, nil
 }

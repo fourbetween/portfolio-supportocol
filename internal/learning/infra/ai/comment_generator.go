@@ -50,20 +50,24 @@ func NewCommentGenerator(
 	}, nil
 }
 
-func (cg *CommentGenerator) GenerateComments(ctx context.Context, params domain.GenerateCommentParams) ([]*domain.Comment, error) {
+func (cg *CommentGenerator) GenerateComments(ctx context.Context, params domain.GenerateCommentParams) (domain.CommentGenerationResult, error) {
 	discussion, projectPremise, path, children, err := cg.fetchContext(ctx, params)
 	if err != nil {
-		return nil, err
+		return domain.CommentGenerationResult{}, err
 	}
 
 	prompt := cg.buildPrompt(discussion, projectPremise, path, children, params.CommentType)
 
-	contents, err := cg.generateWithAI(ctx, prompt)
+	contents, tokens, err := cg.generateWithAI(ctx, prompt)
 	if err != nil {
-		return nil, err
+		return domain.CommentGenerationResult{}, err
 	}
 
-	return cg.createComments(params, contents)
+	comments, err := cg.createComments(params, contents)
+	if err != nil {
+		return domain.CommentGenerationResult{}, err
+	}
+	return domain.CommentGenerationResult{Comments: comments, Tokens: tokens}, nil
 }
 
 func (cg *CommentGenerator) fetchContext(
@@ -105,7 +109,7 @@ func (cg *CommentGenerator) fetchContext(
 	return discussion, projectPremise, path, children, nil
 }
 
-func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) ([]string, error) {
+func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) ([]string, int32, error) {
 	config := &genai.GenerateContentConfig{
 		ThinkingConfig: &genai.ThinkingConfig{
 			ThinkingLevel: genai.ThinkingLevelMedium,
@@ -132,7 +136,7 @@ func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) (
 		config,
 	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to generate content: %w", err)
+		return nil, 0, fmt.Errorf("failed to generate content: %w", err)
 	}
 
 	var generated []struct {
@@ -140,14 +144,19 @@ func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) (
 	}
 
 	if err := json.Unmarshal([]byte(resp.Text()), &generated); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal AI response: %w, response: %s", err, resp.Text())
+		return nil, 0, fmt.Errorf("failed to unmarshal AI response: %w, response: %s", err, resp.Text())
 	}
 
 	contents := make([]string, len(generated))
 	for i, g := range generated {
 		contents[i] = g.Content
 	}
-	return contents, nil
+
+	var tokens int32
+	if resp.UsageMetadata != nil {
+		tokens = resp.UsageMetadata.TotalTokenCount
+	}
+	return contents, tokens, nil
 }
 
 func (cg *CommentGenerator) createComments(params domain.GenerateCommentParams, contents []string) ([]*domain.Comment, error) {
@@ -233,28 +242,32 @@ type generatedDiscussionComment struct {
 	ParentIndex int    `json:"parent_index"`
 }
 
-func (cg *CommentGenerator) GenerateDiscussionComments(ctx context.Context, params domain.GenerateDiscussionCommentsParams) ([]*domain.Comment, error) {
+func (cg *CommentGenerator) GenerateDiscussionComments(ctx context.Context, params domain.GenerateDiscussionCommentsParams) (domain.CommentGenerationResult, error) {
 	discussion, err := cg.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:          params.DiscussionID,
 		WorkspaceID: params.WorkspaceID,
 	})
 	if err != nil {
-		return nil, err
+		return domain.CommentGenerationResult{}, err
 	}
 
 	projectPremise, err := cg.projectPremiseProv.GetProjectPremise(ctx, params.WorkspaceID, discussion.ProjectID())
 	if err != nil {
-		return nil, err
+		return domain.CommentGenerationResult{}, err
 	}
 
 	prompt := cg.buildDiscussionPrompt(discussion, projectPremise, params.SourceType, params.SourceBody)
 
-	generated, err := cg.generateDiscussionWithAI(ctx, prompt)
+	generated, tokens, err := cg.generateDiscussionWithAI(ctx, prompt)
 	if err != nil {
-		return nil, err
+		return domain.CommentGenerationResult{}, err
 	}
 
-	return cg.createDiscussionComments(params, generated)
+	comments, err := cg.createDiscussionComments(params, generated)
+	if err != nil {
+		return domain.CommentGenerationResult{}, err
+	}
+	return domain.CommentGenerationResult{Comments: comments, Tokens: tokens}, nil
 }
 
 func (cg *CommentGenerator) buildDiscussionPrompt(discussion *domain.Discussion, projectPremise, sourceType, sourceBody string) string {
@@ -277,7 +290,7 @@ func (cg *CommentGenerator) writeDiscussionInstructions(sb *strings.Builder) {
 	sb.WriteString("</instructions>")
 }
 
-func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt string) ([]generatedDiscussionComment, error) {
+func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt string) ([]generatedDiscussionComment, int32, error) {
 	config := &genai.GenerateContentConfig{
 		ThinkingConfig: &genai.ThinkingConfig{
 			ThinkingLevel: genai.ThinkingLevelMedium,
@@ -310,15 +323,19 @@ func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt
 		config,
 	)
 	if err != nil {
-		return nil, fmt.Errorf("failed to generate discussion content: %w", err)
+		return nil, 0, fmt.Errorf("failed to generate discussion content: %w", err)
 	}
 
 	var generated []generatedDiscussionComment
 	if err := json.Unmarshal([]byte(resp.Text()), &generated); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal AI response: %w, response: %s", err, resp.Text())
+		return nil, 0, fmt.Errorf("failed to unmarshal AI response: %w, response: %s", err, resp.Text())
 	}
 
-	return generated, nil
+	var tokens int32
+	if resp.UsageMetadata != nil {
+		tokens = resp.UsageMetadata.TotalTokenCount
+	}
+	return generated, tokens, nil
 }
 
 func (cg *CommentGenerator) createDiscussionComments(params domain.GenerateDiscussionCommentsParams, generated []generatedDiscussionComment) ([]*domain.Comment, error) {
