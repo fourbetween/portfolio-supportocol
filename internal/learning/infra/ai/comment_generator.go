@@ -281,12 +281,24 @@ func (cg *CommentGenerator) buildDiscussionPrompt(discussion *domain.Discussion,
 
 func (cg *CommentGenerator) writeDiscussionInstructions(sb *strings.Builder) {
 	sb.WriteString("<instructions>\n")
-	sb.WriteString("Based on the source document above, generate a structured discussion tree for the given discussion theme.\n")
-	sb.WriteString("Generate as many comments as necessary to fully cover the content of the source document, with no fixed limit.\n")
-	sb.WriteString("Use parent_index to indicate the 0-based index of the parent comment in the output array, or -1 for root-level comments.\n")
-	sb.WriteString("Each comment must be a single, concise sentence. Express the logical relationship between comments through the comment type, not through sentence connectors.\n")
-	sb.WriteString("The language of the generated content must match the language of the discussion theme and source document.\n")
-	sb.WriteString("The comment type must be in the same language as the comment content.\n")
+	// ステップ・バイ・ステップの思考プロセスを導入
+	sb.WriteString("Follow these steps to ensure the highest level of detail and logical depth:\n")
+	sb.WriteString("1. Analyze the source document and extract every single fact, data point, specific example, and sub-argument.\n")
+	sb.WriteString("2. Organize these points into a logical hierarchy (a discussion tree) where each branch dives deep into 'why', 'how', and 'evidence'.\n")
+	sb.WriteString("3. Convert each atomic point into a structured comment following the rules below.\n")
+
+	sb.WriteString("\nRules for generation:\n")
+	// 詳細さと網羅性の指示
+	sb.WriteString("- Generate as many comments as necessary to fully represent the entire content of the source document. Do not summarize; be exhaustive.\n")
+	sb.WriteString("- Each comment must be a single, concise sentence focusing on one 'atomic' idea. If a point is complex, break it into multiple child comments.\n")
+
+	// 構造とフォーマットの指示
+	sb.WriteString("- Use 'parent_index' to indicate the 0-based index of the parent comment (-1 for root-level comments).\n")
+	sb.WriteString("- Create deep branches: for every main point, include child comments for supporting evidence, numerical data, and specific nuances from the text.\n")
+	sb.WriteString("- Express logical relationships (e.g., support, contrast, evidence) through the comment type, never through sentence connectors.\n")
+
+	// 言語設定
+	sb.WriteString("- The language of the comments and the comment types must strictly match the language of the discussion theme.\n")
 	sb.WriteString("</instructions>")
 }
 
