@@ -276,6 +276,7 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 		Theme:       oas.DiscussionTheme(item.Theme()),
 		Premise:     oas.DiscussionPremise(item.Premise()),
 		Conclusion:  oas.DiscussionConclusion(item.Conclusion()),
+		Language:    oas.DiscussionLanguage(item.Language()),
 		Status:      oas.DiscussionStatus(item.Status()),
 		DialogueSettings: oas.DialogueSettings{
 			CommentPermission: oas.PermissionLevel(settings.CommentPermission),

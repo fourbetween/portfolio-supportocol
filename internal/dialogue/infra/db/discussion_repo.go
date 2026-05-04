@@ -75,6 +75,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 			Theme:      row.Theme,
 			Premise:    row.Premise,
 			Conclusion: row.Conclusion,
+			Language:   domain.DiscussionLanguage(row.Language),
 		},
 		Status:   domain.DiscussionStatus(row.Status),
 		Settings: settings,

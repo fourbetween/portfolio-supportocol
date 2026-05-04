@@ -325,6 +325,7 @@ type Discussion struct {
 	Theme            DiscussionTheme      `json:"theme"`
 	Premise          DiscussionPremise    `json:"premise"`
 	Conclusion       DiscussionConclusion `json:"conclusion"`
+	Language         DiscussionLanguage   `json:"language"`
 	Status           DiscussionStatus     `json:"status"`
 	ArchivedAt       NilDateTime          `json:"archivedAt"`
 	DialogueSettings DialogueSettings     `json:"dialogueSettings"`
@@ -353,6 +354,11 @@ func (s *Discussion) GetPremise() DiscussionPremise {
 // GetConclusion returns the value of Conclusion.
 func (s *Discussion) GetConclusion() DiscussionConclusion {
 	return s.Conclusion
+}
+
+// GetLanguage returns the value of Language.
+func (s *Discussion) GetLanguage() DiscussionLanguage {
+	return s.Language
 }
 
 // GetStatus returns the value of Status.
@@ -395,6 +401,11 @@ func (s *Discussion) SetConclusion(val DiscussionConclusion) {
 	s.Conclusion = val
 }
 
+// SetLanguage sets the value of Language.
+func (s *Discussion) SetLanguage(val DiscussionLanguage) {
+	s.Language = val
+}
+
 // SetStatus sets the value of Status.
 func (s *Discussion) SetStatus(val DiscussionStatus) {
 	s.Status = val
@@ -411,6 +422,48 @@ func (s *Discussion) SetDialogueSettings(val DialogueSettings) {
 }
 
 type DiscussionConclusion string
+
+// Ref: #/components/schemas/DiscussionLanguage
+type DiscussionLanguage string
+
+const (
+	DiscussionLanguageEn DiscussionLanguage = "en"
+	DiscussionLanguageJa DiscussionLanguage = "ja"
+)
+
+// AllValues returns all DiscussionLanguage values.
+func (DiscussionLanguage) AllValues() []DiscussionLanguage {
+	return []DiscussionLanguage{
+		DiscussionLanguageEn,
+		DiscussionLanguageJa,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s DiscussionLanguage) MarshalText() ([]byte, error) {
+	switch s {
+	case DiscussionLanguageEn:
+		return []byte(s), nil
+	case DiscussionLanguageJa:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *DiscussionLanguage) UnmarshalText(data []byte) error {
+	switch DiscussionLanguage(data) {
+	case DiscussionLanguageEn:
+		*s = DiscussionLanguageEn
+		return nil
+	case DiscussionLanguageJa:
+		*s = DiscussionLanguageJa
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type DiscussionPremise string
 

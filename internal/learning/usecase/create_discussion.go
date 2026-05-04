@@ -51,6 +51,7 @@ type CreateDiscussionInput struct {
 	ProjectID   string
 	Theme       string
 	Premise     string
+	Language    string
 	UserID      string
 	SourceType  domain.SourceType
 	SourceBody  string
@@ -77,6 +78,7 @@ func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscu
 			ProjectID:   input.ProjectID,
 			Theme:       input.Theme,
 			Premise:     input.Premise,
+			Language:    domain.DiscussionLanguage(input.Language),
 			CreatedBy:   input.UserID,
 		}, count)
 		if err != nil {

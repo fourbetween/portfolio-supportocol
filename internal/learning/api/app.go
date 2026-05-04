@@ -59,6 +59,7 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsPost(
 		ProjectID:   uuid.UUID(req.ProjectId).String(),
 		Theme:       string(req.Theme),
 		Premise:     string(req.Premise.Or("")),
+		Language:    string(req.Language),
 		UserID:      httpctx.GetUserID(ctx),
 		SourceType:  domain.SourceType(req.SourceType.Value),
 		SourceBody:  string(req.SourceBody.Value),
@@ -100,6 +101,7 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdPut(
 		Theme:       string(req.Theme),
 		Premise:     string(req.Premise),
 		Conclusion:  string(req.Conclusion),
+		Language:    string(req.Language),
 	})
 	if err != nil {
 		return nil, err
@@ -522,6 +524,7 @@ func (h *appHandler) toOasDiscussion(item *domain.Discussion) oas.Discussion {
 		Theme:      oas.DiscussionTheme(item.Theme()),
 		Premise:    oas.DiscussionPremise(item.Premise()),
 		Conclusion: oas.DiscussionConclusion(item.Conclusion()),
+		Language:   oas.DiscussionLanguage(item.Language()),
 		Status:     oas.DiscussionStatus(item.Status()),
 	}
 	if t, ok := item.ArchivedAt(); ok {

@@ -86,6 +86,11 @@ components:
     DiscussionPremise:
       type: string
       maxLength: 1000
+    DiscussionLanguage:
+      type: string
+      enum:
+        - en
+        - ja
     CommentType:
       type: string
       maxLength: 20
@@ -175,6 +180,8 @@ components:
           $ref: "#/components/schemas/DiscussionPremise"
         conclusion:
           $ref: "#/components/schemas/DiscussionConclusion"
+        language:
+          $ref: "#/components/schemas/DiscussionLanguage"
         status:
           $ref: "#/components/schemas/DiscussionStatus"
         archivedAt:
@@ -190,6 +197,7 @@ components:
         - theme
         - premise
         - conclusion
+        - language
         - status
         - archivedAt
         - dialogueSettings

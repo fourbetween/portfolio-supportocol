@@ -18,6 +18,7 @@ type Discussions struct {
 	Theme                 string
 	Premise               string
 	Conclusion            string
+	Language              string
 	Status                string
 	CommentsCount         int32
 	ProposedCommentsCount int32
