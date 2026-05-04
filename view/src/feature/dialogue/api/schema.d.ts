@@ -16,6 +16,7 @@ export interface paths {
             parameters: {
                 query: {
                     sort: components["schemas"]["DiscussionSort"];
+                    language?: components["schemas"]["DiscussionLanguage"];
                     page?: components["schemas"]["Page"];
                     pageSize?: components["schemas"]["PageSize"];
                 };
@@ -364,6 +365,7 @@ export interface components {
             id: components["schemas"]["Id"];
             workspaceId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
+            language: components["schemas"]["DiscussionLanguage"];
             status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;
             /** Format: date-time */

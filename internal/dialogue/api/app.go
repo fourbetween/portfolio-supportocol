@@ -44,8 +44,9 @@ func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context, params oas.V1
 	}
 
 	output, err := h.con.ListDiscussions.Execute(ctx, usecase.ListDiscussionsInput{
-		Sort:   domain.DiscussionSort(params.Sort),
-		Paging: paging,
+		Language: string(params.Language.Or("")),
+		Sort:     domain.DiscussionSort(params.Sort),
+		Paging:   paging,
 	})
 	if err != nil {
 		return nil, err
@@ -240,6 +241,7 @@ func (h *appHandler) toOasDiscussionSummary(item usecase.DiscussionSummary) oas.
 		ID:              oas.ID(uuid.MustParse(item.ID)),
 		WorkspaceId:     oas.ID(uuid.MustParse(item.WorkspaceID)),
 		Theme:           oas.DiscussionTheme(item.Theme),
+		Language:        oas.DiscussionLanguage(item.Language),
 		Status:          oas.DiscussionStatus(item.Status),
 		LastCommentedAt: item.LastCommentedAt,
 		CommentsCount:   item.CommentsCount,

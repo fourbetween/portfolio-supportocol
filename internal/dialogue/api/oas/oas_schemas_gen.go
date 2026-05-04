@@ -553,14 +553,15 @@ func (s *DiscussionStatus) UnmarshalText(data []byte) error {
 
 // Ref: #/components/schemas/DiscussionSummary
 type DiscussionSummary struct {
-	ID              ID               `json:"id"`
-	WorkspaceId     ID               `json:"workspaceId"`
-	Theme           DiscussionTheme  `json:"theme"`
-	Status          DiscussionStatus `json:"status"`
-	ArchivedAt      NilDateTime      `json:"archivedAt"`
-	LastCommentedAt time.Time        `json:"lastCommentedAt"`
-	CommentsCount   int              `json:"commentsCount"`
-	FavoritesCount  int              `json:"favoritesCount"`
+	ID              ID                 `json:"id"`
+	WorkspaceId     ID                 `json:"workspaceId"`
+	Theme           DiscussionTheme    `json:"theme"`
+	Language        DiscussionLanguage `json:"language"`
+	Status          DiscussionStatus   `json:"status"`
+	ArchivedAt      NilDateTime        `json:"archivedAt"`
+	LastCommentedAt time.Time          `json:"lastCommentedAt"`
+	CommentsCount   int                `json:"commentsCount"`
+	FavoritesCount  int                `json:"favoritesCount"`
 }
 
 // GetID returns the value of ID.
@@ -576,6 +577,11 @@ func (s *DiscussionSummary) GetWorkspaceId() ID {
 // GetTheme returns the value of Theme.
 func (s *DiscussionSummary) GetTheme() DiscussionTheme {
 	return s.Theme
+}
+
+// GetLanguage returns the value of Language.
+func (s *DiscussionSummary) GetLanguage() DiscussionLanguage {
+	return s.Language
 }
 
 // GetStatus returns the value of Status.
@@ -616,6 +622,11 @@ func (s *DiscussionSummary) SetWorkspaceId(val ID) {
 // SetTheme sets the value of Theme.
 func (s *DiscussionSummary) SetTheme(val DiscussionTheme) {
 	s.Theme = val
+}
+
+// SetLanguage sets the value of Language.
+func (s *DiscussionSummary) SetLanguage(val DiscussionLanguage) {
+	s.Language = val
 }
 
 // SetStatus sets the value of Status.
@@ -829,6 +840,52 @@ func (o OptDateTime) Get() (v time.Time, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptDateTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDiscussionLanguage returns new OptDiscussionLanguage with value set to v.
+func NewOptDiscussionLanguage(v DiscussionLanguage) OptDiscussionLanguage {
+	return OptDiscussionLanguage{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionLanguage is optional DiscussionLanguage.
+type OptDiscussionLanguage struct {
+	Value DiscussionLanguage
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionLanguage was set.
+func (o OptDiscussionLanguage) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionLanguage) Reset() {
+	var v DiscussionLanguage
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionLanguage) SetTo(v DiscussionLanguage) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionLanguage) Get() (v DiscussionLanguage, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionLanguage) Or(d DiscussionLanguage) DiscussionLanguage {
 	if v, ok := o.Get(); ok {
 		return v
 	}

@@ -23,10 +23,11 @@ func NewDiscussionQueryService(db *sql.DB) *DiscussionQueryService {
 
 func (s *DiscussionQueryService) ListPublicDiscussions(
 	ctx context.Context,
+	language string,
 	sort domain.DiscussionSort,
 	paging domain.Paging,
 ) (usecase.DiscussionListResult, error) {
-	return s.listDiscussionsByStatus(ctx, "public", nil, sort, paging)
+	return s.listDiscussionsByStatus(ctx, "public", nil, language, sort, paging)
 }
 
 func (s *DiscussionQueryService) ListInternalDiscussions(
@@ -35,7 +36,7 @@ func (s *DiscussionQueryService) ListInternalDiscussions(
 	sort domain.DiscussionSort,
 	paging domain.Paging,
 ) (usecase.DiscussionListResult, error) {
-	return s.listDiscussionsByStatus(ctx, "internal", &workspaceID, sort, paging)
+	return s.listDiscussionsByStatus(ctx, "internal", &workspaceID, "", sort, paging)
 }
 
 func (s *DiscussionQueryService) orderBySort(sort domain.DiscussionSort) mysql.OrderByClause {
@@ -51,12 +52,16 @@ func (s *DiscussionQueryService) listDiscussionsByStatus(
 	ctx context.Context,
 	status string,
 	workspaceID *string,
+	language string,
 	sort domain.DiscussionSort,
 	paging domain.Paging,
 ) (usecase.DiscussionListResult, error) {
 	cond := table.Discussions.Status.EQ(mysql.String(status))
 	if workspaceID != nil {
 		cond = cond.AND(table.Discussions.WorkspaceID.EQ(mysql.String(*workspaceID)))
+	}
+	if language != "" {
+		cond = cond.AND(table.Discussions.Language.EQ(mysql.String(language)))
 	}
 
 	executor := dbtx.GetExecutor(ctx, s.db)
@@ -78,6 +83,7 @@ func (s *DiscussionQueryService) listDiscussionsByStatus(
 			table.Discussions.ID,
 			table.Discussions.WorkspaceID,
 			table.Discussions.Theme,
+			table.Discussions.Language,
 			table.Discussions.Status,
 			table.Discussions.ArchivedAt,
 			table.Discussions.LastCommentedAt,
@@ -101,6 +107,7 @@ func (s *DiscussionQueryService) listDiscussionsByStatus(
 			ID:              d.ID,
 			WorkspaceID:     d.WorkspaceID,
 			Theme:           d.Theme,
+			Language:        d.Language,
 			Status:          d.Status,
 			ArchivedAt:      d.ArchivedAt,
 			LastCommentedAt: d.LastCommentedAt,

@@ -25,6 +25,7 @@ type ListDiscussionsInput struct {
 	// If empty, lists all public discussions.
 	WorkspaceID string
 	UserID      string
+	Language    string
 	Sort        domain.DiscussionSort
 	Paging      domain.Paging
 }
@@ -41,7 +42,7 @@ func (u *ListDiscussionsUsecase) Execute(ctx context.Context, input ListDiscussi
 	}
 
 	if input.WorkspaceID == "" {
-		result, err := u.qs.ListPublicDiscussions(ctx, input.Sort, input.Paging)
+		result, err := u.qs.ListPublicDiscussions(ctx, input.Language, input.Sort, input.Paging)
 		if err != nil {
 			return ListDiscussionsOutput{}, err
 		}

@@ -120,6 +120,10 @@ func (s *Server) handleV1DialogueDiscussionsGetRequest(args [0]string, argsEscap
 					In:   "query",
 				}: params.Sort,
 				{
+					Name: "language",
+					In:   "query",
+				}: params.Language,
+				{
 					Name: "page",
 					In:   "query",
 				}: params.Page,

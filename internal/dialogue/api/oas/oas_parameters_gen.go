@@ -19,8 +19,9 @@ import (
 // V1DialogueDiscussionsGetParams is parameters of GET /v1/dialogue/discussions operation.
 type V1DialogueDiscussionsGetParams struct {
 	Sort     DiscussionSort
-	Page     OptPage     `json:",omitempty,omitzero"`
-	PageSize OptPageSize `json:",omitempty,omitzero"`
+	Language OptDiscussionLanguage `json:",omitempty,omitzero"`
+	Page     OptPage               `json:",omitempty,omitzero"`
+	PageSize OptPageSize           `json:",omitempty,omitzero"`
 }
 
 func unpackV1DialogueDiscussionsGetParams(packed middleware.Parameters) (params V1DialogueDiscussionsGetParams) {
@@ -30,6 +31,15 @@ func unpackV1DialogueDiscussionsGetParams(packed middleware.Parameters) (params 
 			In:   "query",
 		}
 		params.Sort = packed[key].(DiscussionSort)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "language",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Language = v.(OptDiscussionLanguage)
+		}
 	}
 	{
 		key := middleware.ParameterKey{
@@ -94,6 +104,62 @@ func decodeV1DialogueDiscussionsGetParams(args [0]string, argsEscaped bool, r *h
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "sort",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode query: language.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "language",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotLanguageVal DiscussionLanguage
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotLanguageVal = DiscussionLanguage(c)
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Language.SetTo(paramsDotLanguageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.Language.Get(); ok {
+					if err := func() error {
+						if err := value.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "language",
 			In:   "query",
 			Err:  err,
 		}
