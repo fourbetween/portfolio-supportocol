@@ -3,6 +3,7 @@ import { LitElement, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
+import "../../../shared/ui/icons/icon-add";
 import "../../../shared/ui/popup/popup";
 import { LearningDiscussionCreateEvent } from "../event/discussion";
 import "./discussion-add-form";
@@ -47,6 +48,7 @@ export class LearningDiscussionCreatePopup extends LitElement {
             ${msg("Cancel")}
           </button>
           <button class="btn btn-primary" @click=${this._handleCreate}>
+            <ui-icon-add></ui-icon-add>
             ${msg("Create")}
           </button>
         </div>

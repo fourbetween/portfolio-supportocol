@@ -1074,6 +1074,14 @@
   <source>Source text</source>
   <target>ソーステキスト</target>
 </trans-unit>
+<trans-unit id="s0df937b23e1ccebe">
+  <source>Export as Markdown</source>
+  <target>マークダウンとしてエクスポート</target>
+</trans-unit>
+<trans-unit id="s3687049d1af562c4">
+  <source>Copy</source>
+  <target>コピー</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

@@ -8,6 +8,7 @@ import { titleStyle } from "../../../shared/style/title";
 import "../../../shared/ui/collapsible-section/collapsible-section";
 import "../../../shared/ui/discussion-archive-badge/discussion-archive-badge";
 import "../../../shared/ui/icons/icon-archive";
+import "../../../shared/ui/icons/icon-content-copy";
 import "../../../shared/ui/icons/icon-delete";
 import "../../../shared/ui/icons/icon-edit";
 import "../../../shared/ui/icons/icon-unarchive";
@@ -18,12 +19,15 @@ import {
   LearningDiscussionFormOpenEvent,
   LearningDiscussionUnarchiveEvent,
 } from "../event/discussion";
+import type { Comment } from "../model/comment";
 import type { CommentFrame } from "../model/comment-frame";
 import type { Discussion } from "../model/discussion";
 import "./comment-frame-badge";
 import "./dialogue-settings-popup";
 import type { LearningDialogueSettingsPopup } from "./dialogue-settings-popup";
 import "./discussion-edit-form";
+import "./discussion-markdown-popup";
+import type { LearningDiscussionMarkdownPopup } from "./discussion-markdown-popup";
 import "./discussion-status-badge";
 import "./discussion-status-popup";
 import type { DiscussionStatusPopup } from "./discussion-status-popup";
@@ -36,6 +40,9 @@ export class LearningDiscussionDetail extends LitElement {
   @property({ type: Object })
   usedFrame?: CommentFrame;
 
+  @property({ type: Array })
+  comments: Comment[] = [];
+
   @property({ type: Boolean })
   isEditing = false;
 
@@ -44,6 +51,9 @@ export class LearningDiscussionDetail extends LitElement {
 
   @query("learning-dialogue-settings-popup")
   private dialogueSettingsPopup!: LearningDialogueSettingsPopup;
+
+  @query("learning-discussion-markdown-popup")
+  private markdownPopup!: LearningDiscussionMarkdownPopup;
 
   render() {
     if (!this.discussion && !this.isEditing) {
@@ -63,6 +73,10 @@ export class LearningDiscussionDetail extends LitElement {
         .initialSettings=${this.discussion?.dialogueSettings}
         .usedFrame=${this.usedFrame}
       ></learning-dialogue-settings-popup>
+      <learning-discussion-markdown-popup
+        .discussion=${this.discussion}
+        .comments=${this.comments}
+      ></learning-discussion-markdown-popup>
     `;
   }
 
@@ -100,6 +114,9 @@ export class LearningDiscussionDetail extends LitElement {
           <div class="actions">
             <button class="btn danger" @click=${this._handleDeleteClick}>
               <ui-icon-delete></ui-icon-delete>
+            </button>
+            <button class="btn" @click=${this._handleMarkdownClick}>
+              <ui-icon-content-copy></ui-icon-content-copy>
             </button>
             ${this.discussion?.archivedAt
               ? html`
@@ -176,6 +193,10 @@ export class LearningDiscussionDetail extends LitElement {
 
   private _handleEditClick() {
     this.dispatchEvent(new LearningDiscussionFormOpenEvent());
+  }
+
+  private _handleMarkdownClick() {
+    this.markdownPopup.open = true;
   }
 
   static styles = [

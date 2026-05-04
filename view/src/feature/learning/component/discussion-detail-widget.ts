@@ -176,6 +176,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
     return html`
       <learning-discussion-detail
         .discussion=${this.discussion}
+        .comments=${this.comments}
         .usedFrame=${this._usedFrame}
         .isEditing=${this._isEditing}
         @learning-discussion-form-open=${() => (this._isEditing = true)}
