@@ -11,8 +11,6 @@ import (
 	"google.golang.org/genai"
 )
 
-const defaultModel = "gemini-3.1-flash-lite-preview"
-
 type CommentGenerator struct {
 	discussionRepo     domain.DiscussionRepository
 	commentRepo        domain.CommentRepository
@@ -131,7 +129,7 @@ func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) (
 
 	resp, err := cg.client.Models.GenerateContent(
 		ctx,
-		defaultModel,
+		"gemini-3.1-flash-lite-preview",
 		genai.Text(prompt),
 		config,
 	)
@@ -258,7 +256,12 @@ func (cg *CommentGenerator) GenerateDiscussionComments(ctx context.Context, para
 
 	prompt := cg.buildDiscussionPrompt(discussion, projectPremise, params.SourceType, params.SourceBody)
 
-	generated, tokens, err := cg.generateDiscussionWithAI(ctx, prompt)
+	var tools []*genai.Tool
+	if params.SourceType == domain.SourceTypeURL {
+		tools = []*genai.Tool{{URLContext: &genai.URLContext{}}}
+	}
+
+	generated, tokens, err := cg.generateDiscussionWithAI(ctx, prompt, tools)
 	if err != nil {
 		return domain.CommentGenerationResult{}, err
 	}
@@ -270,7 +273,7 @@ func (cg *CommentGenerator) GenerateDiscussionComments(ctx context.Context, para
 	return domain.CommentGenerationResult{Comments: comments, Tokens: tokens}, nil
 }
 
-func (cg *CommentGenerator) buildDiscussionPrompt(discussion *domain.Discussion, projectPremise, sourceType, sourceBody string) string {
+func (cg *CommentGenerator) buildDiscussionPrompt(discussion *domain.Discussion, projectPremise string, sourceType domain.SourceType, sourceBody string) string {
 	var sb strings.Builder
 	cg.writePremises(&sb, projectPremise, discussion.Premise())
 	cg.writeDiscussionTheme(&sb, discussion)
@@ -302,7 +305,7 @@ func (cg *CommentGenerator) writeDiscussionInstructions(sb *strings.Builder) {
 	sb.WriteString("</instructions>")
 }
 
-func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt string) ([]generatedDiscussionComment, int32, error) {
+func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt string, tools []*genai.Tool) ([]generatedDiscussionComment, int32, error) {
 	config := &genai.GenerateContentConfig{
 		ThinkingConfig: &genai.ThinkingConfig{
 			ThinkingLevel: genai.ThinkingLevelMedium,
@@ -326,11 +329,12 @@ func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt
 				Required: []string{"type", "content", "parent_index"},
 			},
 		},
+		Tools: tools,
 	}
 
 	resp, err := cg.client.Models.GenerateContent(
 		ctx,
-		defaultModel,
+		"gemini-3.1-pro-preview",
 		genai.Text(prompt),
 		config,
 	)

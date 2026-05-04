@@ -52,7 +52,7 @@ type CreateDiscussionInput struct {
 	Theme       string
 	Premise     string
 	UserID      string
-	SourceType  string
+	SourceType  domain.SourceType
 	SourceBody  string
 }
 

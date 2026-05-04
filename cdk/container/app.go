@@ -19,6 +19,10 @@ import (
 	"github.com/fourbetween/pkg-conf/conf"
 )
 
+const (
+	AIWorkerTimeout = 180
+)
+
 type (
 	AppContainer struct {
 		appName       string
@@ -162,7 +166,7 @@ func (c *AppContainer) buildAPICDN() {
 		c.apiAIFuncURL,
 		&awscloudfrontorigins.FunctionUrlOriginProps{
 			IpAddressType: awscloudfront.OriginIpAddressType_DUALSTACK,
-			ReadTimeout:   awscdk.Duration_Seconds(jsii.Number(60)),
+			ReadTimeout:   awscdk.Duration_Seconds(jsii.Number(AIWorkerTimeout)),
 		},
 	)
 
@@ -276,7 +280,7 @@ func (c *AppContainer) buildAPIAIFunction() {
 			Architecture:  awslambda.Architecture_ARM_64(),
 			LogGroup:      c.logGroup,
 			LoggingFormat: awslambda.LoggingFormat_JSON,
-			Timeout:       awscdk.Duration_Seconds(jsii.Number(60)),
+			Timeout:       awscdk.Duration_Seconds(jsii.Number(AIWorkerTimeout)),
 			Handler:       jsii.String("bootstrap"),
 			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
 			Code: awslambda.AssetCode_FromAsset(
