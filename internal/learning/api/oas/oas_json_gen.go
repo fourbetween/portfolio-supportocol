@@ -1921,39 +1921,6 @@ func (s *OptCommentFrame) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes DiscussionPremise as json.
-func (o OptDiscussionPremise) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes DiscussionPremise from json.
-func (o *OptDiscussionPremise) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptDiscussionPremise to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptDiscussionPremise) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptDiscussionPremise) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode encodes PermissionLevel as json.
 func (o OptPermissionLevel) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -1983,74 +1950,6 @@ func (s OptPermissionLevel) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptPermissionLevel) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes string as json.
-func (o OptString) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	e.Str(string(o.Value))
-}
-
-// Decode decodes string from json.
-func (o *OptString) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptString to nil")
-	}
-	o.Set = true
-	v, err := d.Str()
-	if err != nil {
-		return err
-	}
-	o.Value = string(v)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptString) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptString) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType as json.
-func (o OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	e.Str(string(o.Value))
-}
-
-// Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType from json.
-func (o *OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -2098,6 +1997,100 @@ func (s *PermissionLevel) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("commentType")
+		s.CommentType.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq = [1]string{
+	0: "commentType",
+}
+
+// Decode decodes V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq from json.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "commentType":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.CommentType.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"commentType\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq) {
+					name = jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -2107,18 +2100,18 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 // encodeFields encodes fields.
 func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("parentCommentId")
-		s.ParentCommentId.Encode(e)
+		e.FieldStart("sourceType")
+		s.SourceType.Encode(e)
 	}
 	{
-		e.FieldStart("commentType")
-		s.CommentType.Encode(e)
+		e.FieldStart("sourceBody")
+		e.Str(s.SourceBody)
 	}
 }
 
 var jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq = [2]string{
-	0: "parentCommentId",
-	1: "commentType",
+	0: "sourceType",
+	1: "sourceBody",
 }
 
 // Decode decodes V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq from json.
@@ -2130,25 +2123,27 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "parentCommentId":
+		case "sourceType":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.ParentCommentId.Decode(d); err != nil {
+				if err := s.SourceType.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"parentCommentId\"")
+				return errors.Wrap(err, "decode field \"sourceType\"")
 			}
-		case "commentType":
+		case "sourceBody":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				if err := s.CommentType.Decode(d); err != nil {
+				v, err := d.Str()
+				s.SourceBody = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"commentType\"")
+				return errors.Wrap(err, "decode field \"sourceBody\"")
 			}
 		default:
 			return d.Skip()
@@ -2202,6 +2197,46 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType as json.
+func (s V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType from json.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType(v) {
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeText:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeText
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeURL:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeURL
+	default:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -3283,36 +3318,20 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) encodeFields(e *jx.E
 		s.Theme.Encode(e)
 	}
 	{
-		if s.Premise.Set {
-			e.FieldStart("premise")
-			s.Premise.Encode(e)
-		}
+		e.FieldStart("premise")
+		s.Premise.Encode(e)
 	}
 	{
 		e.FieldStart("language")
 		s.Language.Encode(e)
 	}
-	{
-		if s.SourceType.Set {
-			e.FieldStart("sourceType")
-			s.SourceType.Encode(e)
-		}
-	}
-	{
-		if s.SourceBody.Set {
-			e.FieldStart("sourceBody")
-			s.SourceBody.Encode(e)
-		}
-	}
 }
 
-var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsPostReq = [6]string{
+var jsonFieldsNameOfV1LearningWorkspacesWorkspaceIdDiscussionsPostReq = [4]string{
 	0: "projectId",
 	1: "theme",
 	2: "premise",
 	3: "language",
-	4: "sourceType",
-	5: "sourceBody",
 }
 
 // Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsPostReq from json.
@@ -3345,8 +3364,8 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Decode(d *jx.Decoder
 				return errors.Wrap(err, "decode field \"theme\"")
 			}
 		case "premise":
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				s.Premise.Reset()
 				if err := s.Premise.Decode(d); err != nil {
 					return err
 				}
@@ -3364,26 +3383,6 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Decode(d *jx.Decoder
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"language\"")
 			}
-		case "sourceType":
-			if err := func() error {
-				s.SourceType.Reset()
-				if err := s.SourceType.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sourceType\"")
-			}
-		case "sourceBody":
-			if err := func() error {
-				s.SourceBody.Reset()
-				if err := s.SourceBody.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sourceBody\"")
-			}
 		default:
 			return d.Skip()
 		}
@@ -3394,7 +3393,7 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Decode(d *jx.Decoder
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001011,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -3436,46 +3435,6 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) MarshalJSON() ([]byt
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType as json.
-func (s V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType from json.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType(v) {
-	case V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText:
-		*s = V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText
-	case V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL:
-		*s = V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL
-	default:
-		*s = V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

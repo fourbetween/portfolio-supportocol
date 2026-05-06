@@ -301,16 +301,10 @@ paths:
                   $ref: "#/components/schemas/DiscussionPremise"
                 language:
                   $ref: "#/components/schemas/DiscussionLanguage"
-                sourceType:
-                  type: string
-                  enum:
-                    - text
-                    - url
-                sourceBody:
-                  type: string
               required:
                 - projectId
                 - theme
+                - premise
                 - language
       responses:
         "201":
@@ -768,7 +762,7 @@ paths:
       - $ref: "#/components/parameters/workspaceId"
       - $ref: "#/components/parameters/discussionId"
     post:
-      description: generate comments using AI
+      description: generate comments using AI based on a discussion
       requestBody:
         required: true
         content:
@@ -776,14 +770,48 @@ paths:
             schema:
               type: object
               properties:
-                parentCommentId:
-                  anyOf:
-                    - $ref: "#/components/schemas/Id"
-                    - type: "null"
+                sourceType:
+                  type: string
+                  enum:
+                    - text
+                    - url
+                sourceBody:
+                  type: string
+              required:
+                - sourceType
+                - sourceBody
+      responses:
+        "201":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/generate:
+    parameters:
+      - $ref: "#/components/parameters/workspaceId"
+      - $ref: "#/components/parameters/discussionId"
+      - $ref: "#/components/parameters/commentId"
+    post:
+      description: generate comments using AI based on a comment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
                 commentType:
                   $ref: "#/components/schemas/CommentType"
               required:
-                - parentCommentId
                 - commentType
       responses:
         "201":

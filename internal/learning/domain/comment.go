@@ -43,11 +43,11 @@ type (
 	}
 
 	CommentGenerator interface {
-		GenerateComments(ctx context.Context, params GenerateCommentParams) (CommentGenerationResult, error)
+		GenerateChildComments(ctx context.Context, params GenerateChildCommentsParams) (CommentGenerationResult, error)
 		GenerateDiscussionComments(ctx context.Context, params GenerateDiscussionCommentsParams) (CommentGenerationResult, error)
 	}
 
-	GenerateCommentParams struct {
+	GenerateChildCommentsParams struct {
 		DiscussionID    string
 		WorkspaceID     string
 		ParentCommentID string

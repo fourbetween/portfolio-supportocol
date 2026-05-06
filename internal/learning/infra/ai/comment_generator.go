@@ -48,7 +48,7 @@ func NewCommentGenerator(
 	}, nil
 }
 
-func (cg *CommentGenerator) GenerateComments(ctx context.Context, params domain.GenerateCommentParams) (domain.CommentGenerationResult, error) {
+func (cg *CommentGenerator) GenerateChildComments(ctx context.Context, params domain.GenerateChildCommentsParams) (domain.CommentGenerationResult, error) {
 	discussion, projectPremise, path, children, err := cg.fetchContext(ctx, params)
 	if err != nil {
 		return domain.CommentGenerationResult{}, err
@@ -70,7 +70,7 @@ func (cg *CommentGenerator) GenerateComments(ctx context.Context, params domain.
 
 func (cg *CommentGenerator) fetchContext(
 	ctx context.Context,
-	params domain.GenerateCommentParams,
+	params domain.GenerateChildCommentsParams,
 ) (*domain.Discussion, string, []*domain.Comment, []*domain.Comment, error) {
 	discussion, err := cg.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:          params.DiscussionID,
@@ -157,7 +157,7 @@ func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) (
 	return contents, tokens, nil
 }
 
-func (cg *CommentGenerator) createComments(params domain.GenerateCommentParams, contents []string) ([]*domain.Comment, error) {
+func (cg *CommentGenerator) createComments(params domain.GenerateChildCommentsParams, contents []string) ([]*domain.Comment, error) {
 	result := make([]*domain.Comment, 0, len(contents))
 	for _, content := range contents {
 		c, err := cg.factory.Create(domain.CreateCommentParams{

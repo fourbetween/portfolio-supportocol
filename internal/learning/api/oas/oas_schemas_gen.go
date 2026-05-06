@@ -982,52 +982,6 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
-// NewOptDiscussionPremise returns new OptDiscussionPremise with value set to v.
-func NewOptDiscussionPremise(v DiscussionPremise) OptDiscussionPremise {
-	return OptDiscussionPremise{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptDiscussionPremise is optional DiscussionPremise.
-type OptDiscussionPremise struct {
-	Value DiscussionPremise
-	Set   bool
-}
-
-// IsSet returns true if OptDiscussionPremise was set.
-func (o OptDiscussionPremise) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptDiscussionPremise) Reset() {
-	var v DiscussionPremise
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptDiscussionPremise) SetTo(v DiscussionPremise) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptDiscussionPremise) Get() (v DiscussionPremise, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptDiscussionPremise) Or(d DiscussionPremise) DiscussionPremise {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptPermissionLevel returns new OptPermissionLevel with value set to v.
 func NewOptPermissionLevel(v PermissionLevel) OptPermissionLevel {
 	return OptPermissionLevel{
@@ -1068,98 +1022,6 @@ func (o OptPermissionLevel) Get() (v PermissionLevel, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptPermissionLevel) Or(d PermissionLevel) PermissionLevel {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptString returns new OptString with value set to v.
-func NewOptString(v string) OptString {
-	return OptString{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptString is optional string.
-type OptString struct {
-	Value string
-	Set   bool
-}
-
-// IsSet returns true if OptString was set.
-func (o OptString) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptString) Reset() {
-	var v string
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptString) SetTo(v string) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptString) Get() (v string, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptString) Or(d string) string {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType returns new OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType with value set to v.
-func NewOptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType(v V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType {
-	return OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType is optional V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType.
-type OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType struct {
-	Value V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType
-	Set   bool
-}
-
-// IsSet returns true if OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType was set.
-func (o OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Reset() {
-	var v V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) SetTo(v V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Get() (v V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Or(d V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -1215,29 +1077,84 @@ func (s *PermissionLevel) UnmarshalText(data []byte) error {
 	}
 }
 
-type V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq struct {
-	ParentCommentId NilID       `json:"parentCommentId"`
-	CommentType     CommentType `json:"commentType"`
-}
-
-// GetParentCommentId returns the value of ParentCommentId.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) GetParentCommentId() NilID {
-	return s.ParentCommentId
+type V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq struct {
+	CommentType CommentType `json:"commentType"`
 }
 
 // GetCommentType returns the value of CommentType.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) GetCommentType() CommentType {
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq) GetCommentType() CommentType {
 	return s.CommentType
 }
 
-// SetParentCommentId sets the value of ParentCommentId.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) SetParentCommentId(val NilID) {
-	s.ParentCommentId = val
+// SetCommentType sets the value of CommentType.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq) SetCommentType(val CommentType) {
+	s.CommentType = val
 }
 
-// SetCommentType sets the value of CommentType.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) SetCommentType(val CommentType) {
-	s.CommentType = val
+type V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq struct {
+	SourceType V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType `json:"sourceType"`
+	SourceBody string                                                                                    `json:"sourceBody"`
+}
+
+// GetSourceType returns the value of SourceType.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) GetSourceType() V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType {
+	return s.SourceType
+}
+
+// GetSourceBody returns the value of SourceBody.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) GetSourceBody() string {
+	return s.SourceBody
+}
+
+// SetSourceType sets the value of SourceType.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) SetSourceType(val V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType) {
+	s.SourceType = val
+}
+
+// SetSourceBody sets the value of SourceBody.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) SetSourceBody(val string) {
+	s.SourceBody = val
+}
+
+type V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType string
+
+const (
+	V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeText V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType = "text"
+	V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeURL  V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType = "url"
+)
+
+// AllValues returns all V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType values.
+func (V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType) AllValues() []V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType {
+	return []V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType{
+		V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeText,
+		V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeURL,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType) MarshalText() ([]byte, error) {
+	switch s {
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeText:
+		return []byte(s), nil
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeURL:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType) UnmarshalText(data []byte) error {
+	switch V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType(data) {
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeText:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeText
+		return nil
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeURL:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceTypeURL
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete operation.
@@ -1519,12 +1436,10 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdStatusPutReq) Set
 }
 
 type V1LearningWorkspacesWorkspaceIdDiscussionsPostReq struct {
-	ProjectId  ID                                                             `json:"projectId"`
-	Theme      DiscussionTheme                                                `json:"theme"`
-	Premise    OptDiscussionPremise                                           `json:"premise"`
-	Language   DiscussionLanguage                                             `json:"language"`
-	SourceType OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType `json:"sourceType"`
-	SourceBody OptString                                                      `json:"sourceBody"`
+	ProjectId ID                 `json:"projectId"`
+	Theme     DiscussionTheme    `json:"theme"`
+	Premise   DiscussionPremise  `json:"premise"`
+	Language  DiscussionLanguage `json:"language"`
 }
 
 // GetProjectId returns the value of ProjectId.
@@ -1538,23 +1453,13 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetTheme() Discussio
 }
 
 // GetPremise returns the value of Premise.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetPremise() OptDiscussionPremise {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetPremise() DiscussionPremise {
 	return s.Premise
 }
 
 // GetLanguage returns the value of Language.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetLanguage() DiscussionLanguage {
 	return s.Language
-}
-
-// GetSourceType returns the value of SourceType.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetSourceType() OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType {
-	return s.SourceType
-}
-
-// GetSourceBody returns the value of SourceBody.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) GetSourceBody() OptString {
-	return s.SourceBody
 }
 
 // SetProjectId sets the value of ProjectId.
@@ -1568,62 +1473,11 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetTheme(val Discuss
 }
 
 // SetPremise sets the value of Premise.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetPremise(val OptDiscussionPremise) {
+func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetPremise(val DiscussionPremise) {
 	s.Premise = val
 }
 
 // SetLanguage sets the value of Language.
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetLanguage(val DiscussionLanguage) {
 	s.Language = val
-}
-
-// SetSourceType sets the value of SourceType.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetSourceType(val OptV1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) {
-	s.SourceType = val
-}
-
-// SetSourceBody sets the value of SourceBody.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) SetSourceBody(val OptString) {
-	s.SourceBody = val
-}
-
-type V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType string
-
-const (
-	V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType = "text"
-	V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL  V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType = "url"
-)
-
-// AllValues returns all V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType values.
-func (V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) AllValues() []V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType {
-	return []V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType{
-		V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText,
-		V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) MarshalText() ([]byte, error) {
-	switch s {
-	case V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText:
-		return []byte(s), nil
-	case V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) UnmarshalText(data []byte) error {
-	switch V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType(data) {
-	case V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText:
-		*s = V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeText
-		return nil
-	case V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL:
-		*s = V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceTypeURL
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
 }

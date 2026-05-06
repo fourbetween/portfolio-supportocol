@@ -626,7 +626,7 @@ func (s PermissionLevel) Validate() error {
 	}
 }
 
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) Validate() error {
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -647,6 +647,40 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 		return &validate.Error{Fields: failures}
 	}
 	return nil
+}
+
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.SourceType.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "sourceType",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType) Validate() error {
+	switch s {
+	case "text":
+		return nil
+	case "url":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }
 
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {
@@ -1027,15 +1061,8 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if value, ok := s.Premise.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
+		if err := s.Premise.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -1055,37 +1082,8 @@ func (s *V1LearningWorkspacesWorkspaceIdDiscussionsPostReq) Validate() error {
 			Error: err,
 		})
 	}
-	if err := func() error {
-		if value, ok := s.SourceType.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "sourceType",
-			Error: err,
-		})
-	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s V1LearningWorkspacesWorkspaceIdDiscussionsPostReqSourceType) Validate() error {
-	switch s {
-	case "text":
-		return nil
-	case "url":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }

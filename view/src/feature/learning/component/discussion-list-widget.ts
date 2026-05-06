@@ -15,6 +15,7 @@ import {
   LearningDiscussionSearchEvent,
 } from "../event/discussion";
 import type { DiscussionSummary } from "../model/discussion";
+import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-create-popup";
 import "../ui/discussion-list";
@@ -49,9 +50,15 @@ export class LearningDiscussionListWidget extends LitElement {
         e.theme,
         e.language,
         e.premise,
-        e.sourceType,
-        e.sourceBody,
       );
+      if (e.sourceType && e.sourceBody) {
+        await commentRepository.generateFromSource(
+          this.workspace.workspace.id,
+          data.id,
+          e.sourceType,
+          e.sourceBody,
+        );
+      }
       this.dispatchEvent(new LearningDiscussionCreatedEvent(data));
     } catch (error: any) {
       showToast(this, error.message, "error");

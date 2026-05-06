@@ -58,11 +58,9 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsPost(
 		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
 		ProjectID:   uuid.UUID(req.ProjectId).String(),
 		Theme:       string(req.Theme),
-		Premise:     string(req.Premise.Or("")),
+		Premise:     string(req.Premise),
 		Language:    string(req.Language),
 		UserID:      httpctx.GetUserID(ctx),
-		SourceType:  domain.SourceType(req.SourceType.Value),
-		SourceBody:  string(req.SourceBody.Value),
 	})
 	if err != nil {
 		return nil, err
@@ -447,15 +445,33 @@ func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 	req *oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq,
 	params oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams,
 ) ([]oas.Comment, error) {
-	var parentCommentID string
-	if !req.ParentCommentId.Null {
-		parentCommentID = uuid.UUID(req.ParentCommentId.Value).String()
+	comments, err := h.con.GenerateDiscussionComments.Execute(ctx, usecase.GenerateDiscussionCommentsInput{
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		SourceType:   domain.SourceType(req.SourceType),
+		SourceBody:   req.SourceBody,
+		UserID:       httpctx.GetUserID(ctx),
+	})
+	if err != nil {
+		return nil, err
 	}
 
-	comments, err := h.con.GenerateComment.Execute(ctx, usecase.GenerateCommentInput{
+	res := make([]oas.Comment, len(comments))
+	for i, c := range comments {
+		res[i] = h.toOasComment(c)
+	}
+	return res, nil
+}
+
+func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePost(
+	ctx context.Context,
+	req *oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq,
+	params oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostParams,
+) ([]oas.Comment, error) {
+	comments, err := h.con.GenerateComment.Execute(ctx, usecase.GenerateChildCommentsInput{
 		DiscussionID:    uuid.UUID(params.DiscussionId).String(),
 		WorkspaceID:     uuid.UUID(params.WorkspaceId).String(),
-		ParentCommentID: parentCommentID,
+		ParentCommentID: uuid.UUID(params.CommentId).String(),
 		CommentType:     string(req.CommentType),
 		UserID:          httpctx.GetUserID(ctx),
 	})
