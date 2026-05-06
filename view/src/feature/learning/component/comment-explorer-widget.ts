@@ -209,13 +209,11 @@ export class LearningCommentExplorerWidget extends LitElement {
     )
       return;
     try {
-      const comments = await commentRepository.generate(
+      const comments = await commentRepository.generateChildren(
         this.workspace.workspace.id,
         this.discussionId,
-        {
-          parentCommentId: e.parentCommentId,
-          commentType: e.commentType,
-        },
+        e.parentCommentId,
+        e.commentType,
       );
 
       showToast(this, msg("Comments generated."), "success", 2000);

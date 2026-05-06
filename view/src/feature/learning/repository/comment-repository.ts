@@ -124,13 +124,37 @@ export class CommentRepository {
     }
   }
 
-  async generate(
+  async generateChildren(
     workspaceId: string,
     discussionId: string,
-    body: {
-      parentCommentId: string | null;
-      commentType: string;
-    },
+    commentId: string,
+    commentType: string,
+  ): Promise<Comment[]> {
+    const { data, error } = await client.POST(
+      "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/generate",
+      {
+        params: {
+          path: { workspaceId, discussionId, commentId },
+        },
+        body: { commentType },
+      },
+    );
+    if (error) throw new Error(error.message);
+
+    const comments = data || [];
+    const cached = this._cache.get(discussionId);
+    if (cached && comments.length > 0) {
+      this._cache.set(discussionId, [...cached, ...comments]);
+    }
+
+    return comments;
+  }
+
+  async generateFromSource(
+    workspaceId: string,
+    discussionId: string,
+    sourceType: "text" | "url",
+    sourceBody: string,
   ): Promise<Comment[]> {
     const { data, error } = await client.POST(
       "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate",
@@ -138,17 +162,15 @@ export class CommentRepository {
         params: {
           path: { workspaceId, discussionId },
         },
-        body,
+        body: { sourceType, sourceBody },
       },
     );
     if (error) throw new Error(error.message);
 
     const comments = data || [];
     const cached = this._cache.get(discussionId);
-    if (cached) {
-      if (comments.length > 0) {
-        this._cache.set(discussionId, [...cached, ...comments]);
-      }
+    if (cached && comments.length > 0) {
+      this._cache.set(discussionId, [...cached, ...comments]);
     }
 
     return comments;

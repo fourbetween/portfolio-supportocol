@@ -77,8 +77,6 @@ export class DiscussionRepository {
     theme: string,
     language: DiscussionLanguage,
     premise?: string,
-    sourceType?: "text" | "url",
-    sourceBody?: string,
   ): Promise<Discussion> {
     const { data, error } = await client.POST(
       "/v1/learning/workspaces/{workspaceId}/discussions",
@@ -91,7 +89,6 @@ export class DiscussionRepository {
           theme,
           language,
           premise: premise || "",
-          ...(sourceType ? { sourceType, sourceBody } : {}),
         },
       },
     );
