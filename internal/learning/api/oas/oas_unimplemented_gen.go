@@ -13,9 +13,18 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePost implements POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/generate operation.
+//
+// Generate comments using AI based on a comment.
+//
+// POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/generate
+func (UnimplementedHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePost(ctx context.Context, req *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq, params V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostParams) (r []Comment, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost implements POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
 //
-// Generate comments using AI.
+// Generate comments using AI based on a discussion.
 //
 // POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate
 func (UnimplementedHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq, params V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams) (r []Comment, _ error) {

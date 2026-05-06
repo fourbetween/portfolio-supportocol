@@ -64,11 +64,8 @@ export interface paths {
                     "application/json": {
                         projectId: components["schemas"]["Id"];
                         theme: components["schemas"]["DiscussionTheme"];
-                        premise?: components["schemas"]["DiscussionPremise"];
+                        premise: components["schemas"]["DiscussionPremise"];
                         language: components["schemas"]["DiscussionLanguage"];
-                        /** @enum {string} */
-                        sourceType?: "text" | "url";
-                        sourceBody?: string;
                     };
                 };
             };
@@ -918,7 +915,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description generate comments using AI */
+        /** @description generate comments using AI based on a discussion */
         post: {
             parameters: {
                 query?: never;
@@ -932,7 +929,67 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        parentCommentId: components["schemas"]["Id"] | null;
+                        /** @enum {string} */
+                        sourceType: "text" | "url";
+                        sourceBody: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"][];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+                commentId: components["parameters"]["commentId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description generate comments using AI based on a comment */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                    commentId: components["parameters"]["commentId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
                         commentType: components["schemas"]["CommentType"];
                     };
                 };

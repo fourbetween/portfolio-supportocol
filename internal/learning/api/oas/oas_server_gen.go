@@ -8,9 +8,15 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePost implements POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/generate operation.
+	//
+	// Generate comments using AI based on a comment.
+	//
+	// POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/generate
+	V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePost(ctx context.Context, req *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq, params V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostParams) ([]Comment, error)
 	// V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost implements POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
 	//
-	// Generate comments using AI.
+	// Generate comments using AI based on a discussion.
 	//
 	// POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate
 	V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq, params V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams) ([]Comment, error)

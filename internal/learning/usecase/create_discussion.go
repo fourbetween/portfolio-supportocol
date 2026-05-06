@@ -6,20 +6,15 @@ import (
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
-	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
 type CreateDiscussionUsecase struct {
-	repo        domain.DiscussionRepository
-	fac         *domain.DiscussionFactory
-	permSv      domain.PermissionService
-	tx          dbtx.Manager
-	auditSv     domain.AuditService
-	commentRepo domain.CommentRepository
-	generator   domain.CommentGenerator
-	aiUsageSv   domain.AIUsageService
-	clockSrv    clock.Service
+	repo    domain.DiscussionRepository
+	fac     *domain.DiscussionFactory
+	permSv  domain.PermissionService
+	tx      dbtx.Manager
+	auditSv domain.AuditService
 }
 
 func NewCreateDiscussionUsecase(
@@ -28,21 +23,13 @@ func NewCreateDiscussionUsecase(
 	permSv domain.PermissionService,
 	tx dbtx.Manager,
 	auditSv domain.AuditService,
-	commentRepo domain.CommentRepository,
-	generator domain.CommentGenerator,
-	aiUsageSv domain.AIUsageService,
-	clockSrv clock.Service,
 ) *CreateDiscussionUsecase {
 	return &CreateDiscussionUsecase{
-		repo:        repo,
-		fac:         fac,
-		permSv:      permSv,
-		tx:          tx,
-		auditSv:     auditSv,
-		commentRepo: commentRepo,
-		generator:   generator,
-		aiUsageSv:   aiUsageSv,
-		clockSrv:    clockSrv,
+		repo:    repo,
+		fac:     fac,
+		permSv:  permSv,
+		tx:      tx,
+		auditSv: auditSv,
 	}
 }
 
@@ -53,8 +40,6 @@ type CreateDiscussionInput struct {
 	Premise     string
 	Language    string
 	UserID      string
-	SourceType  domain.SourceType
-	SourceBody  string
 }
 
 func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscussionInput) (*domain.Discussion, error) {
@@ -96,41 +81,5 @@ func (u *CreateDiscussionUsecase) Execute(ctx context.Context, input CreateDiscu
 
 	u.auditSv.LogDiscussionCreated(ctx, discussion)
 
-	if input.SourceType != "" && input.SourceBody != "" {
-		if err := u.generateAndSaveComments(ctx, discussion, input); err != nil {
-			return nil, err
-		}
-	}
-
 	return discussion, nil
-}
-
-func (u *CreateDiscussionUsecase) generateAndSaveComments(ctx context.Context, discussion *domain.Discussion, input CreateDiscussionInput) error {
-	if err := u.aiUsageSv.CheckCommentGenerationLimit(ctx, input.WorkspaceID); err != nil {
-		return err
-	}
-
-	result, err := u.generator.GenerateDiscussionComments(ctx, domain.GenerateDiscussionCommentsParams{
-		DiscussionID: discussion.ID(),
-		WorkspaceID:  input.WorkspaceID,
-		SourceType:   input.SourceType,
-		SourceBody:   input.SourceBody,
-		UserID:       input.UserID,
-	})
-	if err != nil {
-		return err
-	}
-
-	return u.tx.RunInTx(ctx, func(ctx context.Context) error {
-		if err := u.commentRepo.BatchCreate(ctx, result.Comments); err != nil {
-			return err
-		}
-
-		discussion.AddComments(len(result.Comments), u.clockSrv.Now())
-		if err := u.repo.Save(ctx, discussion); err != nil {
-			return err
-		}
-
-		return u.aiUsageSv.RecordCommentGeneration(ctx, input.WorkspaceID, discussion.ID(), result.Tokens)
-	})
 }

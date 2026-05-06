@@ -10,7 +10,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
 )
 
-type GenerateCommentUsecase struct {
+type GenerateDiscussionCommentsUsecase struct {
 	discussionRepo domain.DiscussionRepository
 	commentRepo    domain.CommentRepository
 	generator      domain.CommentGenerator
@@ -20,7 +20,7 @@ type GenerateCommentUsecase struct {
 	tx             dbtx.Manager
 }
 
-func NewGenerateCommentUsecase(
+func NewGenerateDiscussionCommentsUsecase(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
 	generator domain.CommentGenerator,
@@ -28,8 +28,8 @@ func NewGenerateCommentUsecase(
 	aiUsageSv domain.AIUsageService,
 	clock clock.Service,
 	tx dbtx.Manager,
-) *GenerateCommentUsecase {
-	return &GenerateCommentUsecase{
+) *GenerateDiscussionCommentsUsecase {
+	return &GenerateDiscussionCommentsUsecase{
 		discussionRepo: discussionRepo,
 		commentRepo:    commentRepo,
 		generator:      generator,
@@ -40,15 +40,15 @@ func NewGenerateCommentUsecase(
 	}
 }
 
-type GenerateCommentInput struct {
-	DiscussionID    string
-	WorkspaceID     string
-	ParentCommentID string
-	CommentType     string
-	UserID          string
+type GenerateDiscussionCommentsInput struct {
+	DiscussionID string
+	WorkspaceID  string
+	SourceType   domain.SourceType
+	SourceBody   string
+	UserID       string
 }
 
-func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateCommentInput) ([]*domain.Comment, error) {
+func (u *GenerateDiscussionCommentsUsecase) Execute(ctx context.Context, input GenerateDiscussionCommentsInput) ([]*domain.Comment, error) {
 	access, err := u.permSv.CheckWorkspaceAccess(ctx, input.UserID, input.WorkspaceID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check workspace access: %w", err)
@@ -69,20 +69,20 @@ func (u *GenerateCommentUsecase) Execute(ctx context.Context, input GenerateComm
 		return nil, apperr.ErrPermissionDenied
 	}
 
-	if err := discussion.CanAddComment(); err != nil {
-		return nil, err
+	if discussion.CommentsCount() != 0 {
+		return nil, fmt.Errorf("comments already exist for this discussion")
 	}
 
 	if err := u.aiUsageSv.CheckCommentGenerationLimit(ctx, input.WorkspaceID); err != nil {
 		return nil, err
 	}
 
-	result, err := u.generator.GenerateComments(ctx, domain.GenerateCommentParams{
-		DiscussionID:    input.DiscussionID,
-		WorkspaceID:     input.WorkspaceID,
-		ParentCommentID: input.ParentCommentID,
-		CommentType:     input.CommentType,
-		UserID:          input.UserID,
+	result, err := u.generator.GenerateDiscussionComments(ctx, domain.GenerateDiscussionCommentsParams{
+		DiscussionID: input.DiscussionID,
+		WorkspaceID:  input.WorkspaceID,
+		SourceType:   input.SourceType,
+		SourceBody:   input.SourceBody,
+		UserID:       input.UserID,
 	})
 	if err != nil {
 		return nil, err
