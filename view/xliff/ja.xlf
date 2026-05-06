@@ -1082,6 +1082,22 @@
   <source>Copy</source>
   <target>コピー</target>
 </trans-unit>
+<trans-unit id="sefcf950b3cc4fc3b">
+  <source>Language</source>
+  <target>言語</target>
+</trans-unit>
+<trans-unit id="sf993bb199fefbe04">
+  <source>All</source>
+  <target>すべて</target>
+</trans-unit>
+<trans-unit id="s4caed5b7a7e5d89b">
+  <source>English</source>
+  <target>英語</target>
+</trans-unit>
+<trans-unit id="sdd35b688281b6dea">
+  <source>Japanese</source>
+  <target>日本語</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

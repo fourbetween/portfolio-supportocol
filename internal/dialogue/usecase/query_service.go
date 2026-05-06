@@ -11,6 +11,7 @@ type DiscussionSummary struct {
 	ID              string
 	WorkspaceID     string
 	Theme           string
+	Language        string
 	Status          string
 	ArchivedAt      *time.Time
 	LastCommentedAt time.Time
@@ -29,8 +30,10 @@ type ReadCachePolicy struct {
 
 type DiscussionQueryService interface {
 	// ListPublicDiscussions lists all public discussions (accessible by everyone).
+	// language is optional; if empty, all languages are returned.
 	ListPublicDiscussions(
 		ctx context.Context,
+		language string,
 		sort domain.DiscussionSort,
 		paging domain.Paging,
 	) (DiscussionListResult, error)

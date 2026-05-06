@@ -72,6 +72,7 @@ func (r *DiscussionRepository) Save(ctx context.Context, d *domain.Discussion) e
 			table.Discussions.Theme.SET(table.Discussions.NEW.Theme),
 			table.Discussions.Premise.SET(table.Discussions.NEW.Premise),
 			table.Discussions.Conclusion.SET(table.Discussions.NEW.Conclusion),
+			table.Discussions.Language.SET(table.Discussions.NEW.Language),
 			table.Discussions.Status.SET(table.Discussions.NEW.Status),
 			table.Discussions.CommentsCount.SET(table.Discussions.NEW.CommentsCount),
 			table.Discussions.ProposedCommentsCount.SET(table.Discussions.NEW.ProposedCommentsCount),
@@ -167,6 +168,7 @@ func (r *DiscussionRepository) toDomain(row discussionWithSettings) (*domain.Dis
 			Theme:      row.Theme,
 			Premise:    row.Premise,
 			Conclusion: row.Conclusion,
+			Language:   domain.DiscussionLanguage(row.Language),
 		},
 		Status: domain.DiscussionStatus(row.Status),
 		Stats: domain.DiscussionStats{
@@ -210,6 +212,7 @@ func (r *DiscussionRepository) toDiscussionModel(d *domain.Discussion) model.Dis
 		Theme:                 d.Theme(),
 		Premise:               d.Premise(),
 		Conclusion:            d.Conclusion(),
+		Language:              string(d.Language()),
 		Status:                string(d.Status()),
 		CommentsCount:         int32(d.CommentsCount()),
 		ProposedCommentsCount: int32(d.ProposedCommentsCount()),

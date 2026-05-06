@@ -26,9 +26,16 @@ export class LearningDiscussionCreatePopup extends LitElement {
 
   private _handleCreate() {
     if (!this._form.isValid) return;
-    const { theme, premise, sourceType, sourceBody } = this._form.value;
+    const { theme, premise, language, sourceType, sourceBody } =
+      this._form.value;
     this.dispatchEvent(
-      new LearningDiscussionCreateEvent(theme, premise, sourceType, sourceBody),
+      new LearningDiscussionCreateEvent(
+        theme,
+        premise,
+        language,
+        sourceType,
+        sourceBody,
+      ),
     );
     this._form.reset();
     this.open = false;

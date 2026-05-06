@@ -65,6 +65,7 @@ export interface paths {
                         projectId: components["schemas"]["Id"];
                         theme: components["schemas"]["DiscussionTheme"];
                         premise?: components["schemas"]["DiscussionPremise"];
+                        language: components["schemas"]["DiscussionLanguage"];
                         /** @enum {string} */
                         sourceType?: "text" | "url";
                         sourceBody?: string;
@@ -159,6 +160,7 @@ export interface paths {
                         theme: components["schemas"]["DiscussionTheme"];
                         premise: components["schemas"]["DiscussionPremise"];
                         conclusion: components["schemas"]["DiscussionConclusion"];
+                        language: components["schemas"]["DiscussionLanguage"];
                     };
                 };
             };
@@ -994,6 +996,8 @@ export interface components {
         DiscussionTheme: string;
         DiscussionConclusion: string;
         DiscussionPremise: string;
+        /** @enum {string} */
+        DiscussionLanguage: "en" | "ja";
         CommentType: string;
         CommentContent: string;
         CommentIssueTitle: string;
@@ -1015,6 +1019,7 @@ export interface components {
             theme: components["schemas"]["DiscussionTheme"];
             premise: components["schemas"]["DiscussionPremise"];
             conclusion: components["schemas"]["DiscussionConclusion"];
+            language: components["schemas"]["DiscussionLanguage"];
             status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;
             dialogueSettings: null | components["schemas"]["DialogueSettings"];

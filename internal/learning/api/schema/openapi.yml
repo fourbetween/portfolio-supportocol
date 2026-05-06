@@ -87,6 +87,11 @@ components:
     DiscussionPremise:
       type: string
       maxLength: 4000
+    DiscussionLanguage:
+      type: string
+      enum:
+        - en
+        - ja
     CommentType:
       type: string
       maxLength: 20
@@ -144,6 +149,8 @@ components:
           $ref: "#/components/schemas/DiscussionPremise"
         conclusion:
           $ref: "#/components/schemas/DiscussionConclusion"
+        language:
+          $ref: "#/components/schemas/DiscussionLanguage"
         status:
           $ref: "#/components/schemas/DiscussionStatus"
         archivedAt:
@@ -161,6 +168,7 @@ components:
         - theme
         - premise
         - conclusion
+        - language
         - status
         - archivedAt
         - dialogueSettings
@@ -291,6 +299,8 @@ paths:
                   $ref: "#/components/schemas/DiscussionTheme"
                 premise:
                   $ref: "#/components/schemas/DiscussionPremise"
+                language:
+                  $ref: "#/components/schemas/DiscussionLanguage"
                 sourceType:
                   type: string
                   enum:
@@ -301,6 +311,7 @@ paths:
               required:
                 - projectId
                 - theme
+                - language
       responses:
         "201":
           description: success response
@@ -350,11 +361,14 @@ paths:
                   $ref: "#/components/schemas/DiscussionPremise"
                 conclusion:
                   $ref: "#/components/schemas/DiscussionConclusion"
+                language:
+                  $ref: "#/components/schemas/DiscussionLanguage"
               required:
                 - projectId
                 - theme
                 - premise
                 - conclusion
+                - language
       responses:
         "200":
           description: success response

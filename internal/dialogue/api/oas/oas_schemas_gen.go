@@ -325,6 +325,7 @@ type Discussion struct {
 	Theme            DiscussionTheme      `json:"theme"`
 	Premise          DiscussionPremise    `json:"premise"`
 	Conclusion       DiscussionConclusion `json:"conclusion"`
+	Language         DiscussionLanguage   `json:"language"`
 	Status           DiscussionStatus     `json:"status"`
 	ArchivedAt       NilDateTime          `json:"archivedAt"`
 	DialogueSettings DialogueSettings     `json:"dialogueSettings"`
@@ -353,6 +354,11 @@ func (s *Discussion) GetPremise() DiscussionPremise {
 // GetConclusion returns the value of Conclusion.
 func (s *Discussion) GetConclusion() DiscussionConclusion {
 	return s.Conclusion
+}
+
+// GetLanguage returns the value of Language.
+func (s *Discussion) GetLanguage() DiscussionLanguage {
+	return s.Language
 }
 
 // GetStatus returns the value of Status.
@@ -395,6 +401,11 @@ func (s *Discussion) SetConclusion(val DiscussionConclusion) {
 	s.Conclusion = val
 }
 
+// SetLanguage sets the value of Language.
+func (s *Discussion) SetLanguage(val DiscussionLanguage) {
+	s.Language = val
+}
+
 // SetStatus sets the value of Status.
 func (s *Discussion) SetStatus(val DiscussionStatus) {
 	s.Status = val
@@ -411,6 +422,48 @@ func (s *Discussion) SetDialogueSettings(val DialogueSettings) {
 }
 
 type DiscussionConclusion string
+
+// Ref: #/components/schemas/DiscussionLanguage
+type DiscussionLanguage string
+
+const (
+	DiscussionLanguageEn DiscussionLanguage = "en"
+	DiscussionLanguageJa DiscussionLanguage = "ja"
+)
+
+// AllValues returns all DiscussionLanguage values.
+func (DiscussionLanguage) AllValues() []DiscussionLanguage {
+	return []DiscussionLanguage{
+		DiscussionLanguageEn,
+		DiscussionLanguageJa,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s DiscussionLanguage) MarshalText() ([]byte, error) {
+	switch s {
+	case DiscussionLanguageEn:
+		return []byte(s), nil
+	case DiscussionLanguageJa:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *DiscussionLanguage) UnmarshalText(data []byte) error {
+	switch DiscussionLanguage(data) {
+	case DiscussionLanguageEn:
+		*s = DiscussionLanguageEn
+		return nil
+	case DiscussionLanguageJa:
+		*s = DiscussionLanguageJa
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
 
 type DiscussionPremise string
 
@@ -500,14 +553,15 @@ func (s *DiscussionStatus) UnmarshalText(data []byte) error {
 
 // Ref: #/components/schemas/DiscussionSummary
 type DiscussionSummary struct {
-	ID              ID               `json:"id"`
-	WorkspaceId     ID               `json:"workspaceId"`
-	Theme           DiscussionTheme  `json:"theme"`
-	Status          DiscussionStatus `json:"status"`
-	ArchivedAt      NilDateTime      `json:"archivedAt"`
-	LastCommentedAt time.Time        `json:"lastCommentedAt"`
-	CommentsCount   int              `json:"commentsCount"`
-	FavoritesCount  int              `json:"favoritesCount"`
+	ID              ID                 `json:"id"`
+	WorkspaceId     ID                 `json:"workspaceId"`
+	Theme           DiscussionTheme    `json:"theme"`
+	Language        DiscussionLanguage `json:"language"`
+	Status          DiscussionStatus   `json:"status"`
+	ArchivedAt      NilDateTime        `json:"archivedAt"`
+	LastCommentedAt time.Time          `json:"lastCommentedAt"`
+	CommentsCount   int                `json:"commentsCount"`
+	FavoritesCount  int                `json:"favoritesCount"`
 }
 
 // GetID returns the value of ID.
@@ -523,6 +577,11 @@ func (s *DiscussionSummary) GetWorkspaceId() ID {
 // GetTheme returns the value of Theme.
 func (s *DiscussionSummary) GetTheme() DiscussionTheme {
 	return s.Theme
+}
+
+// GetLanguage returns the value of Language.
+func (s *DiscussionSummary) GetLanguage() DiscussionLanguage {
+	return s.Language
 }
 
 // GetStatus returns the value of Status.
@@ -563,6 +622,11 @@ func (s *DiscussionSummary) SetWorkspaceId(val ID) {
 // SetTheme sets the value of Theme.
 func (s *DiscussionSummary) SetTheme(val DiscussionTheme) {
 	s.Theme = val
+}
+
+// SetLanguage sets the value of Language.
+func (s *DiscussionSummary) SetLanguage(val DiscussionLanguage) {
+	s.Language = val
 }
 
 // SetStatus sets the value of Status.
@@ -776,6 +840,52 @@ func (o OptDateTime) Get() (v time.Time, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptDateTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDiscussionLanguage returns new OptDiscussionLanguage with value set to v.
+func NewOptDiscussionLanguage(v DiscussionLanguage) OptDiscussionLanguage {
+	return OptDiscussionLanguage{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionLanguage is optional DiscussionLanguage.
+type OptDiscussionLanguage struct {
+	Value DiscussionLanguage
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionLanguage was set.
+func (o OptDiscussionLanguage) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionLanguage) Reset() {
+	var v DiscussionLanguage
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionLanguage) SetTo(v DiscussionLanguage) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionLanguage) Get() (v DiscussionLanguage, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionLanguage) Or(d DiscussionLanguage) DiscussionLanguage {
 	if v, ok := o.Get(); ok {
 		return v
 	}

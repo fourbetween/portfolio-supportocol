@@ -86,6 +86,11 @@ components:
     DiscussionPremise:
       type: string
       maxLength: 1000
+    DiscussionLanguage:
+      type: string
+      enum:
+        - en
+        - ja
     CommentType:
       type: string
       maxLength: 20
@@ -139,6 +144,8 @@ components:
           $ref: "#/components/schemas/Id"
         theme:
           $ref: "#/components/schemas/DiscussionTheme"
+        language:
+          $ref: "#/components/schemas/DiscussionLanguage"
         status:
           $ref: "#/components/schemas/DiscussionStatus"
         archivedAt:
@@ -157,6 +164,7 @@ components:
         - id
         - workspaceId
         - theme
+        - language
         - status
         - archivedAt
         - lastCommentedAt
@@ -175,6 +183,8 @@ components:
           $ref: "#/components/schemas/DiscussionPremise"
         conclusion:
           $ref: "#/components/schemas/DiscussionConclusion"
+        language:
+          $ref: "#/components/schemas/DiscussionLanguage"
         status:
           $ref: "#/components/schemas/DiscussionStatus"
         archivedAt:
@@ -190,6 +200,7 @@ components:
         - theme
         - premise
         - conclusion
+        - language
         - status
         - archivedAt
         - dialogueSettings
@@ -276,6 +287,11 @@ paths:
             $ref: "#/components/schemas/DiscussionSort"
           required: true
           name: sort
+          in: query
+        - schema:
+            $ref: "#/components/schemas/DiscussionLanguage"
+          required: false
+          name: language
           in: query
         - schema:
             $ref: "#/components/schemas/Page"

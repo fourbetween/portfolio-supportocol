@@ -394,6 +394,17 @@ func (s *Discussion) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := s.Language.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "language",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if err := s.Status.Validate(); err != nil {
 			return err
 		}
@@ -439,6 +450,17 @@ func (s DiscussionConclusion) Validate() error {
 		return errors.Wrap(err, "string")
 	}
 	return nil
+}
+
+func (s DiscussionLanguage) Validate() error {
+	switch s {
+	case "en":
+		return nil
+	case "ja":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }
 
 func (s DiscussionPremise) Validate() error {
@@ -497,6 +519,17 @@ func (s *DiscussionSummary) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "theme",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Language.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "language",
 			Error: err,
 		})
 	}

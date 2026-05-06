@@ -23,6 +23,7 @@ type discussionsTable struct {
 	Theme                 mysql.ColumnString
 	Premise               mysql.ColumnString
 	Conclusion            mysql.ColumnString
+	Language              mysql.ColumnString
 	Status                mysql.ColumnString
 	CommentsCount         mysql.ColumnInteger
 	ProposedCommentsCount mysql.ColumnInteger
@@ -80,6 +81,7 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		ThemeColumn                 = mysql.StringColumn("theme")
 		PremiseColumn               = mysql.StringColumn("premise")
 		ConclusionColumn            = mysql.StringColumn("conclusion")
+		LanguageColumn              = mysql.StringColumn("language")
 		StatusColumn                = mysql.StringColumn("status")
 		CommentsCountColumn         = mysql.IntegerColumn("comments_count")
 		ProposedCommentsCountColumn = mysql.IntegerColumn("proposed_comments_count")
@@ -90,9 +92,9 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		CreatedByColumn             = mysql.StringColumn("created_by")
 		CreatedAtColumn             = mysql.TimestampColumn("created_at")
 		UpdatedAtColumn             = mysql.TimestampColumn("updated_at")
-		allColumns                  = mysql.ColumnList{IDColumn, WorkspaceIDColumn, ProjectIDColumn, ThemeColumn, PremiseColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, ProposedCommentsCountColumn, IssuesCountColumn, FavoritesCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		mutableColumns              = mysql.ColumnList{WorkspaceIDColumn, ProjectIDColumn, ThemeColumn, PremiseColumn, ConclusionColumn, StatusColumn, CommentsCountColumn, ProposedCommentsCountColumn, IssuesCountColumn, FavoritesCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
-		defaultColumns              = mysql.ColumnList{StatusColumn, CommentsCountColumn, ProposedCommentsCountColumn, IssuesCountColumn, FavoritesCountColumn, LastCommentedAtColumn, CreatedAtColumn, UpdatedAtColumn}
+		allColumns                  = mysql.ColumnList{IDColumn, WorkspaceIDColumn, ProjectIDColumn, ThemeColumn, PremiseColumn, ConclusionColumn, LanguageColumn, StatusColumn, CommentsCountColumn, ProposedCommentsCountColumn, IssuesCountColumn, FavoritesCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		mutableColumns              = mysql.ColumnList{WorkspaceIDColumn, ProjectIDColumn, ThemeColumn, PremiseColumn, ConclusionColumn, LanguageColumn, StatusColumn, CommentsCountColumn, ProposedCommentsCountColumn, IssuesCountColumn, FavoritesCountColumn, LastCommentedAtColumn, ArchivedAtColumn, CreatedByColumn, CreatedAtColumn, UpdatedAtColumn}
+		defaultColumns              = mysql.ColumnList{LanguageColumn, StatusColumn, CommentsCountColumn, ProposedCommentsCountColumn, IssuesCountColumn, FavoritesCountColumn, LastCommentedAtColumn, CreatedAtColumn, UpdatedAtColumn}
 	)
 
 	return discussionsTable{
@@ -105,6 +107,7 @@ func newDiscussionsTableImpl(schemaName, tableName, alias string) discussionsTab
 		Theme:                 ThemeColumn,
 		Premise:               PremiseColumn,
 		Conclusion:            ConclusionColumn,
+		Language:              LanguageColumn,
 		Status:                StatusColumn,
 		CommentsCount:         CommentsCountColumn,
 		ProposedCommentsCount: ProposedCommentsCountColumn,

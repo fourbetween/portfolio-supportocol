@@ -10,6 +10,7 @@ import {
   LearningDiscussionFormCloseEvent,
   LearningDiscussionUpdateEvent,
 } from "../event/discussion";
+import type { DiscussionLanguage } from "../model/discussion";
 
 @customElement("learning-discussion-edit-form")
 export class LearningDiscussionEditForm extends LitElement {
@@ -21,6 +22,9 @@ export class LearningDiscussionEditForm extends LitElement {
 
   @property({ type: String })
   conclusion = "";
+
+  @property({ type: String })
+  language: DiscussionLanguage = "ja";
 
   @query(".theme-input")
   private inputElement?: HTMLInputElement;
@@ -42,6 +46,7 @@ export class LearningDiscussionEditForm extends LitElement {
         this.inputElement?.value ?? "",
         this.premiseElement?.value ?? "",
         this.conclusionElement?.value ?? "",
+        this.language,
       ),
     );
   }

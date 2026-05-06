@@ -16,6 +16,7 @@ export interface paths {
             parameters: {
                 query: {
                     sort: components["schemas"]["DiscussionSort"];
+                    language?: components["schemas"]["DiscussionLanguage"];
                     page?: components["schemas"]["Page"];
                     pageSize?: components["schemas"]["PageSize"];
                 };
@@ -342,6 +343,8 @@ export interface components {
         DiscussionTheme: string;
         DiscussionConclusion: string;
         DiscussionPremise: string;
+        /** @enum {string} */
+        DiscussionLanguage: "en" | "ja";
         CommentType: string;
         CommentContent: string;
         CommentIssueTitle: string;
@@ -362,6 +365,7 @@ export interface components {
             id: components["schemas"]["Id"];
             workspaceId: components["schemas"]["Id"];
             theme: components["schemas"]["DiscussionTheme"];
+            language: components["schemas"]["DiscussionLanguage"];
             status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;
             /** Format: date-time */
@@ -375,6 +379,7 @@ export interface components {
             theme: components["schemas"]["DiscussionTheme"];
             premise: components["schemas"]["DiscussionPremise"];
             conclusion: components["schemas"]["DiscussionConclusion"];
+            language: components["schemas"]["DiscussionLanguage"];
             status: components["schemas"]["DiscussionStatus"];
             archivedAt: string | null;
             dialogueSettings: components["schemas"]["DialogueSettings"];

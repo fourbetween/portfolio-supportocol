@@ -1,6 +1,7 @@
 import { client } from "../api/client";
 import type {
   Discussion,
+  DiscussionLanguage,
   DiscussionSort,
   PaginatedDiscussionSummary,
 } from "../model/discussion";
@@ -10,9 +11,10 @@ export class DiscussionRepository {
     sort: DiscussionSort = "lastCommentedAt",
     page = 1,
     pageSize = 20,
+    language?: DiscussionLanguage,
   ): Promise<PaginatedDiscussionSummary> {
     const { data, error } = await client.GET("/v1/dialogue/discussions", {
-      params: { query: { sort, page, pageSize } },
+      params: { query: { sort, page, pageSize, language } },
     });
     if (error) throw new Error(error.message);
     return data;

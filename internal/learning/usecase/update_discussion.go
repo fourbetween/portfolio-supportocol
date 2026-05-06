@@ -32,6 +32,7 @@ type UpdateDiscussionInput struct {
 	Theme       string
 	Premise     string
 	Conclusion  string
+	Language    string
 }
 
 func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscussionInput) (*domain.Discussion, error) {
@@ -62,6 +63,7 @@ func (u *UpdateDiscussionUsecase) Execute(ctx context.Context, input UpdateDiscu
 			Theme:      input.Theme,
 			Premise:    input.Premise,
 			Conclusion: input.Conclusion,
+			Language:   domain.DiscussionLanguage(input.Language),
 		}); err != nil {
 			return err
 		}

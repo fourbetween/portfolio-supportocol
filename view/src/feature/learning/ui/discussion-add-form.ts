@@ -2,8 +2,10 @@ import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { live } from "lit/directives/live.js";
+import { getLocale } from "../../../localization";
 import { baseStyle } from "../../../shared/style/base";
 import { inputStyle } from "../../../shared/style/input";
+import type { DiscussionLanguage } from "../model/discussion";
 
 @customElement("learning-discussion-add-form")
 export class LearningDiscussionAddForm extends LitElement {
@@ -17,6 +19,9 @@ export class LearningDiscussionAddForm extends LitElement {
   private _premise = "";
 
   @state()
+  private _language: DiscussionLanguage = getLocale() === "ja" ? "ja" : "en";
+
+  @state()
   private _sourceType: "text" | "url" | "" = "";
 
   @state()
@@ -25,12 +30,14 @@ export class LearningDiscussionAddForm extends LitElement {
   get value(): {
     theme: string;
     premise: string;
+    language: DiscussionLanguage;
     sourceType?: "text" | "url";
     sourceBody?: string;
   } {
     return {
       theme: this._theme,
       premise: this._premise,
+      language: this._language,
       ...(this._sourceType
         ? { sourceType: this._sourceType, sourceBody: this._sourceBody }
         : {}),

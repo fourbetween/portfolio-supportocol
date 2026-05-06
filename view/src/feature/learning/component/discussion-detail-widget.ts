@@ -46,6 +46,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
         e.theme,
         e.premise,
         e.conclusion,
+        e.language,
       );
       this.discussion = data;
       this._isEditing = false;

@@ -5,17 +5,24 @@ import { html, LitElement } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { routerContext } from "../../../app/context/router";
 import { navigate, paths } from "../../../app/paths";
+import { getLocale } from "../../../localization";
 import type { PageChangeEvent } from "../../../shared/event/page";
 import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { widgetStyle } from "../../../shared/style/widget";
 import "../../../shared/ui/pagination/pagination";
 import type {
+  DialogueDiscussionLanguageChangeEvent,
   DialogueDiscussionSelectEvent,
   DialogueDiscussionSortChangeEvent,
 } from "../event/discussion";
-import type { DiscussionSort, DiscussionSummary } from "../model/discussion";
+import type {
+  DiscussionLanguage,
+  DiscussionSort,
+  DiscussionSummary,
+} from "../model/discussion";
 import { discussionRepository } from "../repository/discussion-repository";
+import "../ui/discussion-language-selector";
 import "../ui/discussion-list";
 import "../ui/discussion-sort-selector";
 
@@ -38,6 +45,10 @@ export class DialogueDiscussionListWidget extends LitElement {
   private sort: DiscussionSort = "lastCommentedAt";
 
   @state()
+  private language: DiscussionLanguage | undefined =
+    getLocale() as DiscussionLanguage;
+
+  @state()
   private page = 1;
 
   @state()
@@ -47,8 +58,8 @@ export class DialogueDiscussionListWidget extends LitElement {
     super();
 
     new Task(this, {
-      task: async ([sort, page, pageSize]) => {
-        return discussionRepository.list(sort, page, pageSize);
+      task: async ([sort, page, pageSize, language]) => {
+        return discussionRepository.list(sort, page, pageSize, language);
       },
       onComplete: (result) => {
         this.summaries = result.items;
@@ -58,7 +69,7 @@ export class DialogueDiscussionListWidget extends LitElement {
       onError: (e: unknown) => {
         showToast(this, String(e), "error");
       },
-      args: () => [this.sort, this.page, this.pageSize] as const,
+      args: () => [this.sort, this.page, this.pageSize, this.language] as const,
     });
   }
 
@@ -72,6 +83,11 @@ export class DialogueDiscussionListWidget extends LitElement {
 
   private handleSortChange(event: DialogueDiscussionSortChangeEvent) {
     this.sort = event.sort;
+    this.page = 1;
+  }
+
+  private handleLanguageChange(event: DialogueDiscussionLanguageChangeEvent) {
+    this.language = event.language;
     this.page = 1;
   }
 
@@ -90,6 +106,10 @@ export class DialogueDiscussionListWidget extends LitElement {
             .sort=${this.sort}
             @dialogue-discussion-sort-change=${this.handleSortChange}
           ></dialogue-discussion-sort-selector>
+          <dialogue-discussion-language-selector
+            .language=${this.language}
+            @dialogue-discussion-language-change=${this.handleLanguageChange}
+          ></dialogue-discussion-language-selector>
         </div>
         <dialogue-discussion-list
           .summaries=${this.summaries}

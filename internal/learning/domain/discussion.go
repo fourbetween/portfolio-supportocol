@@ -37,6 +37,22 @@ type (
 	}
 )
 
+type DiscussionLanguage string
+
+const (
+	DiscussionLanguageEn DiscussionLanguage = "en"
+	DiscussionLanguageJa DiscussionLanguage = "ja"
+)
+
+func (l DiscussionLanguage) Validate() error {
+	switch l {
+	case DiscussionLanguageEn, DiscussionLanguageJa:
+		return nil
+	default:
+		return fmt.Errorf("invalid discussion language: %s: %w", l, apperr.ErrInvalidArgument)
+	}
+}
+
 type (
 	DiscussionFactory struct {
 		idSrv    id.Service
@@ -48,6 +64,7 @@ type (
 		ProjectID   string
 		Theme       string
 		Premise     string
+		Language    DiscussionLanguage
 		CreatedBy   string
 	}
 
@@ -85,8 +102,9 @@ func (f *DiscussionFactory) Create(params CreateDiscussionParams, count int) (*D
 		WorkspaceID: params.WorkspaceID,
 		ProjectID:   params.ProjectID,
 		Content: DiscussionContent{
-			Theme:   params.Theme,
-			Premise: params.Premise,
+			Theme:    params.Theme,
+			Premise:  params.Premise,
+			Language: params.Language,
 		},
 		Status: DiscussionStatusPrivate,
 		Activity: DiscussionActivity{
@@ -149,6 +167,10 @@ func (d *Discussion) Premise() string {
 
 func (d *Discussion) Conclusion() string {
 	return d.content.Conclusion
+}
+
+func (d *Discussion) Language() DiscussionLanguage {
+	return d.content.Language
 }
 
 func (d *Discussion) Status() DiscussionStatus {
@@ -252,12 +274,17 @@ type UpdateParams struct {
 	Theme      string
 	Premise    string
 	Conclusion string
+	Language   DiscussionLanguage
 }
 
 func (d *Discussion) Update(params UpdateParams) error {
+	if err := params.Language.Validate(); err != nil {
+		return err
+	}
 	d.content.Theme = params.Theme
 	d.content.Premise = params.Premise
 	d.content.Conclusion = params.Conclusion
+	d.content.Language = params.Language
 	return nil
 }
 
@@ -291,6 +318,9 @@ func (d *Discussion) UpdateStatus(params UpdateStatusParams) error {
 }
 
 func (d *Discussion) Validate() error {
+	if err := d.content.Language.Validate(); err != nil {
+		return err
+	}
 	if err := d.status.Validate(); err != nil {
 		return err
 	}
@@ -389,6 +419,7 @@ type DiscussionContent struct {
 	Theme      string
 	Premise    string
 	Conclusion string
+	Language   DiscussionLanguage
 }
 
 type DiscussionStats struct {

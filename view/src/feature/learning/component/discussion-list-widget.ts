@@ -47,6 +47,7 @@ export class LearningDiscussionListWidget extends LitElement {
         this.workspace.workspace.id,
         this.projectId,
         e.theme,
+        e.language,
         e.premise,
         e.sourceType,
         e.sourceBody,

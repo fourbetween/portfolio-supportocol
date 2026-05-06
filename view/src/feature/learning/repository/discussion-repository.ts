@@ -3,6 +3,7 @@ import { renameCommentFrameType } from "../model/comment-frame";
 import type {
   DialogueSettings,
   Discussion,
+  DiscussionLanguage,
   DiscussionSummary,
 } from "../model/discussion";
 
@@ -74,6 +75,7 @@ export class DiscussionRepository {
     workspaceId: string,
     projectId: string,
     theme: string,
+    language: DiscussionLanguage,
     premise?: string,
     sourceType?: "text" | "url",
     sourceBody?: string,
@@ -87,6 +89,7 @@ export class DiscussionRepository {
         body: {
           projectId,
           theme,
+          language,
           premise: premise || "",
           ...(sourceType ? { sourceType, sourceBody } : {}),
         },
@@ -105,6 +108,7 @@ export class DiscussionRepository {
     theme: string,
     premise: string,
     conclusion: string,
+    language: DiscussionLanguage,
   ): Promise<Discussion> {
     const { data, error } = await client.PUT(
       "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}",
@@ -112,7 +116,7 @@ export class DiscussionRepository {
         params: {
           path: { workspaceId, discussionId },
         },
-        body: { projectId, theme, premise, conclusion },
+        body: { projectId, theme, premise, conclusion, language },
       },
     );
     if (error) throw new Error(error.message);

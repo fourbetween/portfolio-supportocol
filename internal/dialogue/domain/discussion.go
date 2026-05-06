@@ -25,6 +25,22 @@ type (
 	}
 )
 
+type DiscussionLanguage string
+
+const (
+	DiscussionLanguageEn DiscussionLanguage = "en"
+	DiscussionLanguageJa DiscussionLanguage = "ja"
+)
+
+func (l DiscussionLanguage) Validate() error {
+	switch l {
+	case DiscussionLanguageEn, DiscussionLanguageJa:
+		return nil
+	default:
+		return fmt.Errorf("invalid discussion language: %s: %w", l, apperr.ErrInvalidArgument)
+	}
+}
+
 type (
 	DiscussionFactory struct{}
 
@@ -83,6 +99,10 @@ func (d *Discussion) Premise() string {
 
 func (d *Discussion) Conclusion() string {
 	return d.content.Conclusion
+}
+
+func (d *Discussion) Language() DiscussionLanguage {
+	return d.content.Language
 }
 
 func (d *Discussion) Status() DiscussionStatus {
@@ -166,6 +186,7 @@ type DiscussionContent struct {
 	Theme      string
 	Premise    string
 	Conclusion string
+	Language   DiscussionLanguage
 }
 
 type DiscussionStats struct {
