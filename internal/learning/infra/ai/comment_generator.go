@@ -110,7 +110,7 @@ func (cg *CommentGenerator) fetchContext(
 func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) ([]string, int32, error) {
 	config := &genai.GenerateContentConfig{
 		ThinkingConfig: &genai.ThinkingConfig{
-			ThinkingLevel: genai.ThinkingLevelMedium,
+			ThinkingLevel: genai.ThinkingLevelHigh,
 		},
 		ResponseMIMEType: "application/json",
 		ResponseSchema: &genai.Schema{
@@ -294,6 +294,7 @@ func (cg *CommentGenerator) writeDiscussionInstructions(sb *strings.Builder) {
 	// 詳細さと網羅性の指示
 	sb.WriteString("- Generate as many comments as necessary to fully represent the entire content of the source document. Do not summarize; be exhaustive.\n")
 	sb.WriteString("- Each comment must be a single, concise sentence focusing on one 'atomic' idea. If a point is complex, break it into multiple child comments.\n")
+	sb.WriteString("- Do NOT generate comments that merely restate or paraphrase the discussion theme itself. Comments must add new information or analysis beyond the theme.\n")
 
 	// 構造とフォーマットの指示
 	sb.WriteString("- Use 'parent_index' to indicate the 0-based index of the parent comment (-1 for root-level comments).\n")
@@ -308,7 +309,7 @@ func (cg *CommentGenerator) writeDiscussionInstructions(sb *strings.Builder) {
 func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt string, tools []*genai.Tool) ([]generatedDiscussionComment, int32, error) {
 	config := &genai.GenerateContentConfig{
 		ThinkingConfig: &genai.ThinkingConfig{
-			ThinkingLevel: genai.ThinkingLevelMedium,
+			ThinkingLevel: genai.ThinkingLevelHigh,
 		},
 		ResponseMIMEType: "application/json",
 		ResponseSchema: &genai.Schema{
@@ -334,7 +335,7 @@ func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt
 
 	resp, err := cg.client.Models.GenerateContent(
 		ctx,
-		"gemini-3.1-flash-lite-preview",
+		"gemini-3-flash-preview",
 		genai.Text(prompt),
 		config,
 	)
