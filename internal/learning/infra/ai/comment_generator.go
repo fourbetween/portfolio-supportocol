@@ -334,7 +334,7 @@ func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt
 
 	resp, err := cg.client.Models.GenerateContent(
 		ctx,
-		"gemini-3.1-pro-preview",
+		"gemini-3.1-flash-lite-preview",
 		genai.Text(prompt),
 		config,
 	)

@@ -20,7 +20,7 @@ import (
 )
 
 const (
-	AIWorkerTimeout = 180
+	AIWorkerTimeout = 60
 )
 
 type (
