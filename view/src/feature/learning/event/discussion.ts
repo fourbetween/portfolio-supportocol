@@ -1,4 +1,8 @@
-import type { DialogueSettings, Discussion } from "../model/discussion";
+import type {
+  DialogueSettings,
+  Discussion,
+  DiscussionLanguage,
+} from "../model/discussion";
 
 export class LearningDiscussionSelectEvent extends Event {
   static get eventName() {
@@ -21,12 +25,14 @@ export class LearningDiscussionCreateEvent extends Event {
   }
   public readonly theme: string;
   public readonly premise: string;
+  public readonly language: DiscussionLanguage;
   public readonly sourceType?: "text" | "url";
   public readonly sourceBody?: string;
 
   constructor(
     theme: string,
     premise: string,
+    language: DiscussionLanguage,
     sourceType?: "text" | "url",
     sourceBody?: string,
   ) {
@@ -36,6 +42,7 @@ export class LearningDiscussionCreateEvent extends Event {
     });
     this.theme = theme;
     this.premise = premise;
+    this.language = language;
     this.sourceType = sourceType;
     this.sourceBody = sourceBody;
   }
@@ -63,8 +70,14 @@ export class LearningDiscussionUpdateEvent extends Event {
   public readonly theme: string;
   public readonly premise: string;
   public readonly conclusion: string;
+  public readonly language: DiscussionLanguage;
 
-  constructor(theme: string, premise: string, conclusion: string) {
+  constructor(
+    theme: string,
+    premise: string,
+    conclusion: string,
+    language: DiscussionLanguage,
+  ) {
     super(LearningDiscussionUpdateEvent.eventName, {
       bubbles: true,
       composed: true,
@@ -72,6 +85,7 @@ export class LearningDiscussionUpdateEvent extends Event {
     this.theme = theme;
     this.premise = premise;
     this.conclusion = conclusion;
+    this.language = language;
   }
 }
 

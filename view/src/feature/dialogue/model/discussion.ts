@@ -6,6 +6,8 @@ export type DiscussionSummary = components["schemas"]["DiscussionSummary"];
 
 export type DiscussionSort = components["schemas"]["DiscussionSort"];
 
+export type DiscussionLanguage = components["schemas"]["DiscussionLanguage"];
+
 export type DialogueSettings = components["schemas"]["DialogueSettings"];
 
 export type PaginatedDiscussionSummary =

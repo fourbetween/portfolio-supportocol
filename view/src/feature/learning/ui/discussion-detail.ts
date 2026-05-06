@@ -86,6 +86,7 @@ export class LearningDiscussionDetail extends LitElement {
         .theme=${this.discussion?.theme ?? ""}
         .premise=${this.discussion?.premise ?? ""}
         .conclusion=${this.discussion?.conclusion ?? ""}
+        .language=${this.discussion?.language ?? "ja"}
       ></learning-discussion-edit-form>
     `;
   }
