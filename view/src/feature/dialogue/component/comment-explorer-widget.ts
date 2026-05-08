@@ -6,6 +6,7 @@ import { baseStyle } from "../../../shared/style/base";
 import { titleStyle } from "../../../shared/style/title";
 import { widgetStyle } from "../../../shared/style/widget";
 import "../../../shared/ui/icons/icon-close";
+import { buildSortedChildrenMap } from "../../../shared/util/comment-tree";
 import {
   DialogueCommentCreatedEvent,
   DialogueCommentSelectEvent,
@@ -90,12 +91,8 @@ export class DialogueCommentExplorerWidget extends LitElement {
     if (this.comments) {
       for (const comment of this.comments) {
         this.commentMap.set(comment.id, comment);
-        if (comment.parentCommentId) {
-          const children = this.childrenMap.get(comment.parentCommentId) || [];
-          children.push(comment);
-          this.childrenMap.set(comment.parentCommentId, children);
-        }
       }
+      this.childrenMap = buildSortedChildrenMap(this.comments);
 
       for (const [parentId, children] of this.childrenMap) {
         this.childCounts.set(

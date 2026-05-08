@@ -5,6 +5,7 @@ import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import "../../../shared/ui/icons/icon-content-copy";
 import "../../../shared/ui/popup/popup";
+import { buildSortedChildrenMap } from "../../../shared/util/comment-tree";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 
@@ -73,58 +74,85 @@ export class LearningDiscussionMarkdownPopup extends LitElement {
 }
 
 function toMarkdown(discussion: Discussion, comments: Comment[]): string {
-  const lines: string[] = [];
+  const parts: string[] = [];
 
-  lines.push(`# ${discussion.theme}\n\n`);
+  parts.push(`# ${discussion.theme}\n\n`);
 
   if (discussion.premise) {
-    lines.push(`${discussion.premise}\n\n`);
-  }
-
-  if (comments.length > 0) {
-    const childrenMap = buildChildrenMap(comments);
-    lines.push(renderCommentTree(childrenMap, null, 1));
+    parts.push(`## Premise\n\n${discussion.premise}\n\n`);
   }
 
   if (discussion.conclusion) {
-    lines.push(`## Conclusion\n\n${discussion.conclusion}\n`);
+    parts.push(`## Conclusion\n\n${discussion.conclusion}\n\n`);
   }
 
-  return lines.join("\n");
+  const activeComments = comments.filter((c) => !c.archivedAt);
+  if (activeComments.length > 0) {
+    const childrenMap = buildSortedChildrenMap(activeComments);
+    parts.push(renderCommentTree(childrenMap, "root", 1));
+  }
+
+  return parts.join("");
 }
 
-function buildChildrenMap(comments: Comment[]): Map<string | null, Comment[]> {
-  const map = new Map<string | null, Comment[]>();
-  const commentIds = new Set(comments.map((c) => c.id));
-  for (const comment of comments) {
-    if (comment.archivedAt) continue;
-    const parentId =
-      comment.parentCommentId && commentIds.has(comment.parentCommentId)
-        ? comment.parentCommentId
-        : null;
-    if (!map.has(parentId)) {
-      map.set(parentId, []);
-    }
-    map.get(parentId)!.push(comment);
+function circledNumber(n: number): string {
+  if (n >= 1 && n <= 20) {
+    return String.fromCharCode(0x245f + n);
   }
-  return map;
+  return `(${n})`;
 }
 
 function renderCommentTree(
-  childrenMap: Map<string | null, Comment[]>,
-  parentId: string | null,
+  childrenMap: Map<string, Comment[]>,
+  parentId: string,
   depth: number,
 ): string {
   const children = childrenMap.get(parentId);
   if (!children || children.length === 0) return "";
 
-  const prefix = "#".repeat(Math.min(depth + 1, 6));
+  const suffixes: string[] = new Array(children.length).fill("");
+  if (depth <= 2) {
+    let i = 0;
+    while (i < children.length) {
+      let j = i + 1;
+      while (j < children.length && children[j].type === children[i].type) {
+        j++;
+      }
+      const count = j - i;
+      if (count >= 2) {
+        for (let k = i; k < j; k++) {
+          suffixes[k] = circledNumber(k - i + 1);
+        }
+      }
+      i = j;
+    }
+  }
+
   return children
-    .map((comment) => {
-      const header = `${prefix} ${comment.type}\n\n`;
-      const body = `${comment.content}\n\n`;
-      const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
-      return `${header}${body}${nested}`;
+    .map((comment, idx) => {
+      const suffix = suffixes[idx];
+
+      if (depth === 1) {
+        // 階層0: ルートコメントを記事のタイトル・リード文として出力
+        const title = `\n## 【${comment.type}${suffix}】${comment.content}\n\n`;
+        const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
+        return `${title}${nested}`;
+      } else if (depth === 2) {
+        // 階層1: 章立て
+        const header = `\n### 【${comment.type}${suffix}】\n\n`;
+        const body = `${comment.content}\n\n`;
+        const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
+        return `${header}${body}${nested}`;
+      } else {
+        // 階層2以降: 箇条書きリスト
+        const indent = "  ".repeat(depth - 2);
+        const line = `${indent}- **${comment.type}**: ${comment.content}\n`;
+        const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
+        if (nested) {
+          return `${line}${nested}`;
+        }
+        return line;
+      }
     })
     .join("");
 }

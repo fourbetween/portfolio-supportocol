@@ -14,6 +14,7 @@ import {
   commentTreeStyle,
 } from "../../../shared/style/comment-tree";
 import "../../../shared/ui/comment-type-badge/comment-type-badge";
+import { buildSortedChildrenMap } from "../../../shared/util/comment-tree";
 import type { Comment } from "../model/comment";
 import type { DialogueSettings } from "../model/discussion";
 import "./comment-item";
@@ -74,20 +75,7 @@ export class DialogueCommentTree extends LitElement {
     this.childrenMap.clear();
 
     if (this.comments) {
-      const commentIds = new Set(this.comments.map((c) => c.id));
-      const sortedComments = [...this.comments].sort((a, b) =>
-        a.type.localeCompare(b.type),
-      );
-      for (const comment of sortedComments) {
-        const parentId =
-          comment.parentCommentId && commentIds.has(comment.parentCommentId)
-            ? comment.parentCommentId
-            : "root";
-
-        const children = this.childrenMap.get(parentId) || [];
-        children.push(comment);
-        this.childrenMap.set(parentId, children);
-      }
+      this.childrenMap = buildSortedChildrenMap(this.comments);
     }
   }
 
