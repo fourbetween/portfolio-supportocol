@@ -95,6 +95,13 @@ function toMarkdown(discussion: Discussion, comments: Comment[]): string {
   return parts.join("");
 }
 
+function circledNumber(n: number): string {
+  if (n >= 1 && n <= 20) {
+    return String.fromCharCode(0x245f + n);
+  }
+  return `(${n})`;
+}
+
 function renderCommentTree(
   childrenMap: Map<string, Comment[]>,
   parentId: string,
@@ -103,16 +110,36 @@ function renderCommentTree(
   const children = childrenMap.get(parentId);
   if (!children || children.length === 0) return "";
 
+  const suffixes: string[] = new Array(children.length).fill("");
+  if (depth <= 2) {
+    let i = 0;
+    while (i < children.length) {
+      let j = i + 1;
+      while (j < children.length && children[j].type === children[i].type) {
+        j++;
+      }
+      const count = j - i;
+      if (count >= 2) {
+        for (let k = i; k < j; k++) {
+          suffixes[k] = circledNumber(k - i + 1);
+        }
+      }
+      i = j;
+    }
+  }
+
   return children
-    .map((comment) => {
+    .map((comment, idx) => {
+      const suffix = suffixes[idx];
+
       if (depth === 1) {
         // 階層0: ルートコメントを記事のタイトル・リード文として出力
-        const title = `\n## 【${comment.type}】${comment.content}\n\n`;
+        const title = `\n## 【${comment.type}${suffix}】${comment.content}\n\n`;
         const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
         return `${title}${nested}`;
       } else if (depth === 2) {
         // 階層1: 章立て
-        const header = `\n### 【${comment.type}】\n\n`;
+        const header = `\n### 【${comment.type}${suffix}】\n\n`;
         const body = `${comment.content}\n\n`;
         const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
         return `${header}${body}${nested}`;
