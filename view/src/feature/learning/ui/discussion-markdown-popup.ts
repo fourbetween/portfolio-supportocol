@@ -73,24 +73,24 @@ export class LearningDiscussionMarkdownPopup extends LitElement {
 }
 
 function toMarkdown(discussion: Discussion, comments: Comment[]): string {
-  const lines: string[] = [];
+  const parts: string[] = [];
 
-  lines.push(`# ${discussion.theme}\n\n`);
+  parts.push(`# ${discussion.theme}\n\n`);
 
   if (discussion.premise) {
-    lines.push(`${discussion.premise}\n\n`);
+    parts.push(`${discussion.premise}\n\n`);
   }
 
   if (comments.length > 0) {
     const childrenMap = buildChildrenMap(comments);
-    lines.push(renderCommentTree(childrenMap, null, 1));
+    parts.push(renderCommentTree(childrenMap, null, 1));
   }
 
   if (discussion.conclusion) {
-    lines.push(`## Conclusion\n\n${discussion.conclusion}\n`);
+    parts.push(`## Conclusion\n\n${discussion.conclusion}\n`);
   }
 
-  return lines.join("\n");
+  return parts.join("");
 }
 
 function buildChildrenMap(comments: Comment[]): Map<string | null, Comment[]> {
@@ -118,13 +118,29 @@ function renderCommentTree(
   const children = childrenMap.get(parentId);
   if (!children || children.length === 0) return "";
 
-  const prefix = "#".repeat(Math.min(depth + 1, 6));
   return children
     .map((comment) => {
-      const header = `${prefix} ${comment.type}\n\n`;
-      const body = `${comment.content}\n\n`;
-      const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
-      return `${header}${body}${nested}`;
+      if (depth === 1) {
+        // 階層0: ルートコメントを記事のタイトル・リード文として出力
+        const title = `\n# 【${comment.type}】${comment.content}\n\n`;
+        const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
+        return `${title}${nested}`;
+      } else if (depth === 2) {
+        // 階層1: 章立て
+        const header = `\n## 【${comment.type}】\n\n`;
+        const body = `${comment.content}\n\n`;
+        const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
+        return `${header}${body}${nested}`;
+      } else {
+        // 階層2以降: 箇条書きリスト
+        const indent = "  ".repeat(depth - 2);
+        const line = `${indent}- **${comment.type}**: ${comment.content}\n`;
+        const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
+        if (nested) {
+          return `${line}${nested}`;
+        }
+        return line;
+      }
     })
     .join("");
 }
