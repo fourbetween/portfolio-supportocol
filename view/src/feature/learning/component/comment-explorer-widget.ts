@@ -21,6 +21,7 @@ import {
   LearningCommentDeletedEvent,
   LearningCommentGenerateEvent,
   LearningCommentGeneratedEvent,
+  LearningCommentLiftEvent,
   LearningCommentMoveEvent,
   LearningCommentSelectEvent,
   LearningCommentUnarchiveEvent,
@@ -153,6 +154,27 @@ export class LearningCommentExplorerWidget extends LitElement {
 
     try {
       await commentRepository.delete(
+        this.workspace.workspace.id,
+        this.discussionId,
+        e.commentId,
+      );
+
+      showToast(this, msg("Comment deleted."), "success", 2000);
+      this.dispatchEvent(new LearningCommentDeletedEvent(e.commentId));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
+  private async handleCommentLift(e: LearningCommentLiftEvent) {
+    if (!this.discussionId || !this.workspace) return;
+    if (
+      !confirm(msg("Delete this comment and lift its replies to its parent?"))
+    )
+      return;
+
+    try {
+      await commentRepository.lift(
         this.workspace.workspace.id,
         this.discussionId,
         e.commentId,
@@ -454,6 +476,7 @@ export class LearningCommentExplorerWidget extends LitElement {
             @learning-comment-create=${this.handleCommentCreate}
             @learning-comment-update=${this.handleCommentUpdate}
             @learning-comment-delete=${this.handleCommentDelete}
+            @learning-comment-lift=${this.handleCommentLift}
             @learning-comment-archive=${this.handleCommentArchive}
             @learning-comment-unarchive=${this.handleCommentUnarchive}
             @learning-comment-generate=${this.handleCommentGenerate}
@@ -494,6 +517,7 @@ export class LearningCommentExplorerWidget extends LitElement {
           @learning-comment-create=${this.handleCommentCreate}
           @learning-comment-update=${this.handleCommentUpdate}
           @learning-comment-delete=${this.handleCommentDelete}
+          @learning-comment-lift=${this.handleCommentLift}
           @learning-comment-archive=${this.handleCommentArchive}
           @learning-comment-unarchive=${this.handleCommentUnarchive}
           @learning-comment-generate=${this.handleCommentGenerate}

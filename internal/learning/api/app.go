@@ -339,6 +339,18 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	return &res, nil
 }
 
+func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdLiftDelete(
+	ctx context.Context,
+	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdLiftDeleteParams,
+) error {
+	return h.con.LiftComment.Execute(ctx, usecase.LiftCommentInput{
+		ID:           uuid.UUID(params.CommentId).String(),
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		UserID:       httpctx.GetUserID(ctx),
+	})
+}
+
 func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete(
 	ctx context.Context,
 	params oas.V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteParams,

@@ -17,29 +17,29 @@ var (
 	rn7AllowedHeaders = map[string]string{
 		"POST": "Content-Type",
 	}
-	rn27AllowedHeaders = map[string]string{
+	rn28AllowedHeaders = map[string]string{
 		"POST": "Content-Type",
 	}
 	rn13AllowedHeaders = map[string]string{
 		"PUT": "Content-Type",
 	}
-	rn25AllowedHeaders = map[string]string{
+	rn26AllowedHeaders = map[string]string{
 		"POST": "Content-Type",
 		"PUT":  "Content-Type",
 	}
-	rn24AllowedHeaders = map[string]string{
+	rn25AllowedHeaders = map[string]string{
 		"PUT": "Content-Type",
 	}
 	rn17AllowedHeaders = map[string]string{
 		"PUT": "Content-Type",
 	}
-	rn22AllowedHeaders = map[string]string{
-		"PUT": "Content-Type",
-	}
 	rn23AllowedHeaders = map[string]string{
 		"PUT": "Content-Type",
 	}
-	rn26AllowedHeaders = map[string]string{
+	rn24AllowedHeaders = map[string]string{
+		"PUT": "Content-Type",
+	}
+	rn27AllowedHeaders = map[string]string{
 		"PUT": "Content-Type",
 	}
 )
@@ -269,7 +269,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						default:
 							s.notAllowed(w, r, notAllowedParams{
 								allowedMethods: "GET,POST",
-								allowedHeaders: rn27AllowedHeaders,
+								allowedHeaders: rn28AllowedHeaders,
 								acceptPost:     "application/json",
 								acceptPatch:    "",
 							})
@@ -397,7 +397,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									default:
 										s.notAllowed(w, r, notAllowedParams{
 											allowedMethods: "GET,POST,PUT",
-											allowedHeaders: rn25AllowedHeaders,
+											allowedHeaders: rn26AllowedHeaders,
 											acceptPost:     "application/json",
 											acceptPatch:    "",
 										})
@@ -437,7 +437,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											default:
 												s.notAllowed(w, r, notAllowedParams{
 													allowedMethods: "PUT",
-													allowedHeaders: rn24AllowedHeaders,
+													allowedHeaders: rn25AllowedHeaders,
 													acceptPost:     "",
 													acceptPatch:    "",
 												})
@@ -569,6 +569,35 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 												return
 											}
 
+										case 'l': // Prefix: "lift"
+
+											if l := len("lift"); len(elem) >= l && elem[0:l] == "lift" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "DELETE":
+													s.handleV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdLiftDeleteRequest([3]string{
+														args[0],
+														args[1],
+														args[2],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, notAllowedParams{
+														allowedMethods: "DELETE",
+														allowedHeaders: nil,
+														acceptPost:     "",
+														acceptPatch:    "",
+													})
+												}
+
+												return
+											}
+
 										case 'p': // Prefix: "parent"
 
 											if l := len("parent"); len(elem) >= l && elem[0:l] == "parent" {
@@ -589,7 +618,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 												default:
 													s.notAllowed(w, r, notAllowedParams{
 														allowedMethods: "PUT",
-														allowedHeaders: rn22AllowedHeaders,
+														allowedHeaders: rn23AllowedHeaders,
 														acceptPost:     "",
 														acceptPatch:    "",
 													})
@@ -618,7 +647,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 												default:
 													s.notAllowed(w, r, notAllowedParams{
 														allowedMethods: "PUT",
-														allowedHeaders: rn23AllowedHeaders,
+														allowedHeaders: rn24AllowedHeaders,
 														acceptPost:     "",
 														acceptPatch:    "",
 													})
@@ -652,7 +681,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									default:
 										s.notAllowed(w, r, notAllowedParams{
 											allowedMethods: "PUT",
-											allowedHeaders: rn26AllowedHeaders,
+											allowedHeaders: rn27AllowedHeaders,
 											acceptPost:     "",
 											acceptPatch:    "",
 										})
@@ -1234,6 +1263,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 													r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/issues/{issueId}"
 													r.args = args
 													r.count = 4
+													return r, true
+												default:
+													return
+												}
+											}
+
+										case 'l': // Prefix: "lift"
+
+											if l := len("lift"); len(elem) >= l && elem[0:l] == "lift" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "DELETE":
+													r.name = V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdLiftDeleteOperation
+													r.summary = ""
+													r.operationID = ""
+													r.operationGroup = ""
+													r.pathPattern = "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/lift"
+													r.args = args
+													r.count = 3
 													return r, true
 												default:
 													return
