@@ -672,6 +672,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/lift:
+    parameters:
+      - $ref: "#/components/parameters/workspaceId"
+      - $ref: "#/components/parameters/discussionId"
+      - $ref: "#/components/parameters/commentId"
+    delete:
+      description: delete comment and lift its direct children to the deleted comment's parent
+      responses:
+        "204":
+          description: success response
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/archive:
     parameters:
       - $ref: "#/components/parameters/workspaceId"

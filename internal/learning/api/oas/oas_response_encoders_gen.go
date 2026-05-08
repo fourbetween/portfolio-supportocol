@@ -115,6 +115,12 @@ func encodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsComment
 	return nil
 }
 
+func encodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdLiftDeleteResponse(response *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdLiftDeleteNoContent, w http.ResponseWriter) error {
+	w.WriteHeader(204)
+
+	return nil
+}
+
 func encodeV1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdParentPutResponse(response *Comment, w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
