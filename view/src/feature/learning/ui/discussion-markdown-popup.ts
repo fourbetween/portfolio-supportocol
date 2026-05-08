@@ -5,6 +5,7 @@ import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import "../../../shared/ui/icons/icon-content-copy";
 import "../../../shared/ui/popup/popup";
+import { buildSortedChildrenMap } from "../../../shared/util/comment-tree";
 import type { Comment } from "../model/comment";
 import type { Discussion } from "../model/discussion";
 
@@ -78,41 +79,25 @@ function toMarkdown(discussion: Discussion, comments: Comment[]): string {
   parts.push(`# ${discussion.theme}\n\n`);
 
   if (discussion.premise) {
-    parts.push(`${discussion.premise}\n\n`);
-  }
-
-  if (comments.length > 0) {
-    const childrenMap = buildChildrenMap(comments);
-    parts.push(renderCommentTree(childrenMap, null, 1));
+    parts.push(`## Premise\n\n${discussion.premise}\n\n`);
   }
 
   if (discussion.conclusion) {
-    parts.push(`## Conclusion\n\n${discussion.conclusion}\n`);
+    parts.push(`## Conclusion\n\n${discussion.conclusion}\n\n`);
+  }
+
+  const activeComments = comments.filter((c) => !c.archivedAt);
+  if (activeComments.length > 0) {
+    const childrenMap = buildSortedChildrenMap(activeComments);
+    parts.push(renderCommentTree(childrenMap, "root", 1));
   }
 
   return parts.join("");
 }
 
-function buildChildrenMap(comments: Comment[]): Map<string | null, Comment[]> {
-  const map = new Map<string | null, Comment[]>();
-  const commentIds = new Set(comments.map((c) => c.id));
-  for (const comment of comments) {
-    if (comment.archivedAt) continue;
-    const parentId =
-      comment.parentCommentId && commentIds.has(comment.parentCommentId)
-        ? comment.parentCommentId
-        : null;
-    if (!map.has(parentId)) {
-      map.set(parentId, []);
-    }
-    map.get(parentId)!.push(comment);
-  }
-  return map;
-}
-
 function renderCommentTree(
-  childrenMap: Map<string | null, Comment[]>,
-  parentId: string | null,
+  childrenMap: Map<string, Comment[]>,
+  parentId: string,
   depth: number,
 ): string {
   const children = childrenMap.get(parentId);
@@ -122,12 +107,12 @@ function renderCommentTree(
     .map((comment) => {
       if (depth === 1) {
         // 階層0: ルートコメントを記事のタイトル・リード文として出力
-        const title = `\n# 【${comment.type}】${comment.content}\n\n`;
+        const title = `\n## 【${comment.type}】${comment.content}\n\n`;
         const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
         return `${title}${nested}`;
       } else if (depth === 2) {
         // 階層1: 章立て
-        const header = `\n## 【${comment.type}】\n\n`;
+        const header = `\n### 【${comment.type}】\n\n`;
         const body = `${comment.content}\n\n`;
         const nested = renderCommentTree(childrenMap, comment.id, depth + 1);
         return `${header}${body}${nested}`;
