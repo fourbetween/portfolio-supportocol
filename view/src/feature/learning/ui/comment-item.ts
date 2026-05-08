@@ -11,6 +11,7 @@ import "../../../shared/ui/icons/icon-content-paste";
 import "../../../shared/ui/icons/icon-delete";
 import "../../../shared/ui/icons/icon-edit";
 import "../../../shared/ui/icons/icon-more-horiz";
+import "../../../shared/ui/icons/icon-north";
 import "../../../shared/ui/icons/icon-psychology";
 import "../../../shared/ui/icons/icon-reply";
 import "../../../shared/ui/icons/icon-unarchive";
@@ -19,6 +20,7 @@ import {
   LearningCommentCutEvent,
   LearningCommentDeleteEvent,
   LearningCommentGenerateEvent,
+  LearningCommentLiftEvent,
   LearningCommentMoveEvent,
   LearningCommentSelectEvent,
   LearningCommentTypeSelectEvent,
@@ -107,6 +109,14 @@ export class LearningCommentItem extends LitElement {
     this.closeMenu();
     if (this.comment) {
       this.dispatchEvent(new LearningCommentDeleteEvent(this.comment.id));
+    }
+  }
+
+  private handleLiftClick(e: Event) {
+    e.stopPropagation();
+    this.closeMenu();
+    if (this.comment) {
+      this.dispatchEvent(new LearningCommentLiftEvent(this.comment.id));
     }
   }
 
@@ -364,6 +374,17 @@ export class LearningCommentItem extends LitElement {
         ),
       );
     }
+
+    items.push(
+      this.menuItem(
+        html`
+          <ui-icon-north></ui-icon-north>
+        `,
+        "Lift & Delete",
+        (e) => this.handleLiftClick(e),
+        "danger",
+      ),
+    );
 
     items.push(
       this.menuItem(

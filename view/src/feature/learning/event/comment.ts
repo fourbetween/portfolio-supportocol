@@ -276,6 +276,21 @@ export class LearningCommentMoveEvent extends Event {
   }
 }
 
+export class LearningCommentLiftEvent extends Event {
+  static get eventName() {
+    return "learning-comment-lift" as const;
+  }
+  public readonly commentId: string;
+
+  constructor(commentId: string) {
+    super(LearningCommentLiftEvent.eventName, {
+      bubbles: true,
+      composed: true,
+    });
+    this.commentId = commentId;
+  }
+}
+
 declare global {
   interface HTMLElementEventMap {
     [LearningCommentSelectEvent.eventName]: LearningCommentSelectEvent;
@@ -293,6 +308,7 @@ declare global {
     [LearningCommentUnarchiveEvent.eventName]: LearningCommentUnarchiveEvent;
     [LearningCommentCutEvent.eventName]: LearningCommentCutEvent;
     [LearningCommentMoveEvent.eventName]: LearningCommentMoveEvent;
+    [LearningCommentLiftEvent.eventName]: LearningCommentLiftEvent;
     [LearningCommentFormCloseEvent.eventName]: LearningCommentFormCloseEvent;
     [LearningCommentTypeSelectEvent.eventName]: LearningCommentTypeSelectEvent;
   }

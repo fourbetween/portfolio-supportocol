@@ -124,6 +124,40 @@ export class CommentRepository {
     }
   }
 
+  async lift(
+    workspaceId: string,
+    discussionId: string,
+    commentId: string,
+  ): Promise<void> {
+    const { error } = await client.DELETE(
+      "/v1/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/lift",
+      {
+        params: {
+          path: { workspaceId, discussionId, commentId },
+        },
+      },
+    );
+    if (error) throw new Error(error.message);
+
+    const cached = this._cache.get(discussionId);
+    if (cached) {
+      const liftedComment = cached.find((c) => c.id === commentId);
+      const grandparentId = liftedComment?.parentCommentId ?? null;
+      const directChildren = cached.filter(
+        (c) => c.parentCommentId === commentId,
+      );
+      const updated = cached
+        .filter((c) => c.id !== commentId)
+        .map((c) => {
+          if (directChildren.some((ch) => ch.id === c.id)) {
+            return { ...c, parentCommentId: grandparentId };
+          }
+          return c;
+        });
+      this._cache.set(discussionId, updated);
+    }
+  }
+
   async generateChildren(
     workspaceId: string,
     discussionId: string,

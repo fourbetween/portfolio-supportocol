@@ -1098,6 +1098,10 @@
   <source>Japanese</source>
   <target>日本語</target>
 </trans-unit>
+<trans-unit id="s692fe54decacf5b5">
+  <source>Delete this comment and lift its replies to its parent?</source>
+  <target>このコメントを削除し、その返信を親コメントに引き上げますか？</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
