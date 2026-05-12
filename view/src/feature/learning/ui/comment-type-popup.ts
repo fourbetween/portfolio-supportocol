@@ -3,6 +3,7 @@ import { LitElement, type PropertyValues, css, html, nothing } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
+import { inputStyle } from "../../../shared/style/input";
 import "../../../shared/ui/popup/popup";
 import type { Popup } from "../../../shared/ui/popup/popup";
 import { LearningCommentTypeSelectEvent } from "../event/comment";
@@ -147,6 +148,7 @@ export class LearningCommentTypePopup extends LitElement {
   static styles = [
     baseStyle,
     buttonStyle,
+    inputStyle,
     css`
       .footer-content {
         width: 100%;
