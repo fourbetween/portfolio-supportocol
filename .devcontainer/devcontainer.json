@@ -15,5 +15,11 @@
         "GitHub.vscode-pull-request-github"
       ]
     }
-  }
+  },
+  "postCreateCommand": {
+    "install-opencode": "curl -fsSL https://opencode.ai/install | bash"
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.local/share/opencode/auth.json,target=/root/.local/share/opencode/auth.json,type=bind"
+  ]
 }
