@@ -129,7 +129,7 @@ func (cg *CommentGenerator) generateWithAI(ctx context.Context, prompt string) (
 
 	resp, err := cg.client.Models.GenerateContent(
 		ctx,
-		"gemini-3.1-flash-lite-preview",
+		"gemini-3.1-flash-lite",
 		genai.Text(prompt),
 		config,
 	)
