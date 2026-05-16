@@ -1,4 +1,4 @@
-package domain
+package usecase
 
 import "github.com/fourbetween/app-supportocol/internal/pkg/apperr"
 

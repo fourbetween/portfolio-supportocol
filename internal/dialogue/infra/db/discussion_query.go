@@ -25,7 +25,7 @@ func (s *DiscussionQueryService) ListPublicDiscussions(
 	ctx context.Context,
 	language string,
 	sort domain.DiscussionSort,
-	paging domain.Paging,
+	paging usecase.Paging,
 ) (usecase.DiscussionListResult, error) {
 	return s.listDiscussionsByStatus(ctx, "public", nil, language, sort, paging)
 }
@@ -34,7 +34,7 @@ func (s *DiscussionQueryService) ListInternalDiscussions(
 	ctx context.Context,
 	workspaceID string,
 	sort domain.DiscussionSort,
-	paging domain.Paging,
+	paging usecase.Paging,
 ) (usecase.DiscussionListResult, error) {
 	return s.listDiscussionsByStatus(ctx, "internal", &workspaceID, "", sort, paging)
 }
@@ -54,7 +54,7 @@ func (s *DiscussionQueryService) listDiscussionsByStatus(
 	workspaceID *string,
 	language string,
 	sort domain.DiscussionSort,
-	paging domain.Paging,
+	paging usecase.Paging,
 ) (usecase.DiscussionListResult, error) {
 	cond := table.Discussions.Status.EQ(mysql.String(status))
 	if workspaceID != nil {

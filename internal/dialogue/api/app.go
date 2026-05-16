@@ -35,9 +35,9 @@ func NewHandler(con *dialogue.Container) oas.Handler {
 }
 
 func (h *appHandler) V1DialogueDiscussionsGet(ctx context.Context, params oas.V1DialogueDiscussionsGetParams) (*oas.PaginatedDiscussionSummary, error) {
-	paging, err := domain.NewPaging(
-		int(params.Page.Or(oas.Page(domain.DefaultPage))),
-		int(params.PageSize.Or(oas.PageSize(domain.DefaultPageSize))),
+	paging, err := usecase.NewPaging(
+		int(params.Page.Or(oas.Page(usecase.DefaultPage))),
+		int(params.PageSize.Or(oas.PageSize(usecase.DefaultPageSize))),
 	)
 	if err != nil {
 		return nil, err
@@ -60,9 +60,9 @@ func (h *appHandler) V1DialogueWorkspacesWorkspaceIdDiscussionsGet(
 	ctx context.Context,
 	params oas.V1DialogueWorkspacesWorkspaceIdDiscussionsGetParams,
 ) (*oas.PaginatedDiscussionSummary, error) {
-	paging, err := domain.NewPaging(
-		int(params.Page.Or(oas.Page(domain.DefaultPage))),
-		int(params.PageSize.Or(oas.PageSize(domain.DefaultPageSize))),
+	paging, err := usecase.NewPaging(
+		int(params.Page.Or(oas.Page(usecase.DefaultPage))),
+		int(params.PageSize.Or(oas.PageSize(usecase.DefaultPageSize))),
 	)
 	if err != nil {
 		return nil, err
@@ -223,7 +223,7 @@ func (h *appHandler) setReadCacheControl(ctx context.Context, cacheable bool, he
 	}
 }
 
-func (h *appHandler) toOasPaginatedDiscussionSummary(output usecase.ListDiscussionsOutput, paging domain.Paging) *oas.PaginatedDiscussionSummary {
+func (h *appHandler) toOasPaginatedDiscussionSummary(output usecase.ListDiscussionsOutput, paging usecase.Paging) *oas.PaginatedDiscussionSummary {
 	items := make([]oas.DiscussionSummary, len(output.Items))
 	for i, item := range output.Items {
 		items[i] = h.toOasDiscussionSummary(item)

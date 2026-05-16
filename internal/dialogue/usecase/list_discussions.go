@@ -27,7 +27,7 @@ type ListDiscussionsInput struct {
 	UserID      string
 	Language    string
 	Sort        domain.DiscussionSort
-	Paging      domain.Paging
+	Paging      Paging
 }
 
 type ListDiscussionsOutput struct {

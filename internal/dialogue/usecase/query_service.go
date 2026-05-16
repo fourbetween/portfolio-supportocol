@@ -35,7 +35,7 @@ type DiscussionQueryService interface {
 		ctx context.Context,
 		language string,
 		sort domain.DiscussionSort,
-		paging domain.Paging,
+		paging Paging,
 	) (DiscussionListResult, error)
 
 	// ListInternalDiscussions lists internal discussions for a specific workspace (accessible by members).
@@ -43,6 +43,6 @@ type DiscussionQueryService interface {
 		ctx context.Context,
 		workspaceID string,
 		sort domain.DiscussionSort,
-		paging domain.Paging,
+		paging Paging,
 	) (DiscussionListResult, error)
 }
