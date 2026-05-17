@@ -1,10 +1,10 @@
 ---
-name: Plan Architect
 description: 計画を既存コードベースの構造と照合する内部専用アーキテクト
-tools: [execute, read, search, web]
-agents: []
-user-invocable: false
-disable-model-invocation: true
+mode: subagent
+hidden: true
+permission:
+  edit: deny
+  write: deny
 ---
 
 あなたは計画を既存コードベースに照らして検証する専門エージェントです。

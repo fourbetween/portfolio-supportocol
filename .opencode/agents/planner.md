@@ -1,10 +1,10 @@
 ---
-name: Planner
 description: 機能要求を実装タスクへ分解する内部専用プランナー
-tools: [vscode/askQuestions, execute, read, search, web, "dbhub/*"]
-agents: []
-user-invocable: false
-disable-model-invocation: true
+mode: subagent
+hidden: true
+permission:
+  edit: deny
+  write: deny
 ---
 
 あなたは実装計画を作る専門エージェントです。

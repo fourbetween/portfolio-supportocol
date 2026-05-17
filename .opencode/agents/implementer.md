@@ -1,10 +1,9 @@
 ---
-name: Implementer
 description: 合意済みタスクを実装する内部専用エージェント
-tools: [execute, read, edit, search, web, "dbhub/*"]
-agents: []
-user-invocable: false
-disable-model-invocation: true
+mode: subagent
+hidden: true
+permission:
+  "*": allow
 ---
 
 あなたは与えられた実装タスクをコードへ落とし込む専門エージェントです。

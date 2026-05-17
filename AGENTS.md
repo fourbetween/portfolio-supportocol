@@ -1,6 +1,6 @@
 # Agent Instructions
 
-For detailed application concepts and terminology, see `.github/instructions/app.instructions.md`.
+For detailed application concepts and terminology, see `.opencode/instructions/app.instructions.md`.
 
 ## Architecture
 
@@ -57,6 +57,7 @@ make seed       # runs cmd/db/seed/* with AWS_PROFILE=$STAGE
 ## Code Generation
 
 **Backend** (`go generate ./...`):
+
 - `internal/{identity,workspace,learning,dialogue}/api/app.go` each contain:
   `//go:generate go tool ogen -package oas -target oas -clean -config ./schema/ogen.yml ./schema/openapi.yml`
 - `internal/pkg/{id,clock}/service.go` each contain:
@@ -64,6 +65,7 @@ make seed       # runs cmd/db/seed/* with AWS_PROFILE=$STAGE
 - `go-jet/jet/v2` schema files under `internal/*/infra/db/schema/` are generated but no `go:generate` directive is checked in.
 
 **Frontend** (`cd view && npm run gen`):
+
 - Generates `openapi-typescript` types from each domain's `../internal/*/api/schema/openapi.yml` into `src/feature/*/api/schema.d.ts`.
 
 ## Monorepo / Package Boundaries
