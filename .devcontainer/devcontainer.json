@@ -11,8 +11,7 @@
         "golang.go",
         "redhat.vscode-yaml",
         "runem.lit-plugin",
-        "vitest.explorer",
-        "GitHub.vscode-pull-request-github"
+        "vitest.explorer"
       ]
     }
   },
