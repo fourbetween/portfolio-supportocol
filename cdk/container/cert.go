@@ -47,7 +47,7 @@ func (c *CertContainer) buildDNS() {
 		c.stack,
 		jsii.String("Dns"),
 		&awsroute53.HostedZoneProviderProps{
-			DomainName: jsii.String(getRootDomain(c.stage)),
+			DomainName: jsii.String(getRootDomain()),
 		},
 	)
 	c.dns = dns

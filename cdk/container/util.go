@@ -9,19 +9,16 @@ import (
 	"github.com/aws/jsii-runtime-go"
 )
 
-func getRootDomain(stage string) string {
-	if stage == "prod" {
-		return "supportocol.com"
-	}
+func getRootDomain() string {
 	return "hick-r.com"
 }
 
 func getDomain(app, stage string) string {
-	base := getRootDomain(stage)
-	if stage == "prod" {
-		return base
-	}
+	base := getRootDomain()
 	app = strings.TrimPrefix(app, "app-")
+	if stage == "prod" {
+		return fmt.Sprintf("%s.%s", app, base)
+	}
 	return fmt.Sprintf("%s.%s.%s", app, stage, base)
 }
 

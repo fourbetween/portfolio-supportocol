@@ -263,7 +263,7 @@ func (c *AppContainer) buildAPIFunction() {
 				"ses:SendRawEmail",
 				"ses:SendTemplatedEmail",
 			),
-			Resources: jsii.Strings("arn:aws:ses:ap-northeast-1:966392475035:identity/supportocol.com"),
+			Resources: jsii.Strings("arn:aws:ses:ap-northeast-1:966392475035:identity/hick-r.com"),
 		}),
 	)
 	c.setLambdaBasePermissions(f)
@@ -380,7 +380,7 @@ func (c *AppContainer) buildDNS() {
 		c.stack,
 		jsii.String("DnsHostZone"),
 		&awsroute53.HostedZoneProviderProps{
-			DomainName: jsii.String(getRootDomain(c.stage)),
+			DomainName: jsii.String(getRootDomain()),
 		})
 	c.dns = dns
 }
