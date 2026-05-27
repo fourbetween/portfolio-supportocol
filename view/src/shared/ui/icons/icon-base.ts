@@ -26,6 +26,10 @@ export abstract class IconBase extends LitElement {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      color: inherit;
+    }
+    svg {
+      fill: currentColor;
     }
   `;
 }

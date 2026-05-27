@@ -1,5 +1,5 @@
 import DOMPurify from "dompurify";
-import githubMarkdownCss from "github-markdown-css/github-markdown-light.css?inline";
+import githubMarkdownCss from "github-markdown-css/github-markdown.css?inline";
 import { LitElement, css, html, unsafeCSS } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
@@ -35,8 +35,37 @@ export class MarkdownViewer extends LitElement {
       }
       .markdown-body {
         background-color: transparent;
+        color: var(--color-fg-default);
         font-size: inherit;
         font-family: "Noto Sans JP", "Noto Sans", sans-serif;
+      }
+      .markdown-body p,
+      .markdown-body span,
+      .markdown-body li,
+      .markdown-body blockquote {
+        color: var(--color-fg-default);
+      }
+      .markdown-body code {
+        background-color: var(--color-neutral-muted);
+        color: var(--color-fg-default);
+      }
+      .markdown-body pre {
+        background-color: var(--color-canvas-subtle);
+        color: var(--color-fg-default);
+      }
+      .markdown-body strong {
+        color: var(--color-fg-default);
+      }
+      .markdown-body em {
+        color: var(--color-fg-default);
+      }
+      .markdown-body h1,
+      .markdown-body h2,
+      .markdown-body h3,
+      .markdown-body h4,
+      .markdown-body h5,
+      .markdown-body h6 {
+        color: var(--color-fg-default);
       }
     `,
   ];

@@ -41,7 +41,7 @@ export const commentItemStyle = css`
     justify-content: center;
     cursor: pointer;
     transition: all 0.15s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 3px var(--color-shadow-default);
     padding: 0;
   }
   .toolbar-btn:hover {
@@ -79,7 +79,7 @@ export const commentItemStyle = css`
     background: var(--color-canvas-default);
     border: 1px solid var(--color-border-default);
     border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 16px var(--color-shadow-large);
     min-width: 160px;
     padding: 4px 0;
     display: flex;

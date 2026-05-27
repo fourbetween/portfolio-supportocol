@@ -216,12 +216,12 @@ export class LearningCommentEditForm extends LitElement {
       }
       .char-counter {
         font-size: 0.8rem;
-        color: var(--color-text-secondary, #666);
+        color: var(--color-fg-muted);
         text-align: right;
         margin-top: 4px;
       }
       .char-counter.error {
-        color: var(--color-error, #d32f2f);
+        color: var(--color-danger-fg);
       }
     `,
   ];

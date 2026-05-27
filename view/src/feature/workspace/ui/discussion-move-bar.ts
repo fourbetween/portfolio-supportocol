@@ -106,7 +106,7 @@ export class WorkspaceDiscussionMoveBar extends LitElement {
         background-color: var(--color-canvas-default);
         border: 1px solid var(--color-border-default);
         border-radius: 8px;
-        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 -2px 8px var(--color-shadow-large);
         animation: slideUp 0.2s ease-out;
       }
 

@@ -16,6 +16,7 @@ export const dashboardStyle = css`
   .sidebar {
     width: 300px;
     overflow-y: auto;
+    background-color: var(--color-canvas-default);
   }
 
   .sidebar-left {
@@ -36,6 +37,7 @@ export const dashboardStyle = css`
     flex-direction: column;
     overflow-y: auto;
     padding-bottom: 24px;
+    background-color: var(--color-canvas-default);
   }
 
   .detail,

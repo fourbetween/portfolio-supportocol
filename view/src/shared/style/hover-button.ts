@@ -15,7 +15,7 @@ export const hoverButtonStyle = css`
     cursor: pointer;
     opacity: 0;
     transition: all 0.2s;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 1px 3px var(--color-shadow-large);
     z-index: 100;
     overflow: hidden;
   }
@@ -74,19 +74,19 @@ export const hoverButtonStyle = css`
     0%,
     100% {
       background: var(--color-canvas-default);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 3px var(--color-shadow-large);
     }
 
     50% {
-      background: rgba(9, 105, 218, 0.12);
-      box-shadow: 0 0 0 4px rgba(9, 105, 218, 0.18);
+      background: var(--color-accent-muted);
+      box-shadow: 0 0 0 4px var(--color-accent-subtle);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .btn-hover.attention {
       animation: none;
-      background: rgba(9, 105, 218, 0.08);
+      background: var(--color-accent-faint);
     }
   }
 `;

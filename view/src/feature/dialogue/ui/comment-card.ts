@@ -120,7 +120,7 @@ export class DialogueCommentCard extends LitElement {
         cursor: default;
       }
       .issue-icon {
-        color: var(--color-error, #d32f2f);
+        color: var(--color-danger-fg);
         cursor: pointer;
       }
       .card-body.readonly .issue-icon {

@@ -188,7 +188,7 @@ export class IdentityAccountSettings extends LitElement {
       }
 
       .section-danger .section-header {
-        background-color: #fff0f0;
+        background-color: var(--color-danger-zone-bg);
         border-bottom-color: var(--color-danger-fg);
       }
 
@@ -270,6 +270,10 @@ export class IdentityAccountSettings extends LitElement {
         margin-top: 4px;
       }
 
+      .danger-zone-description strong {
+        color: var(--color-fg-default);
+      }
+
       .btn-danger {
         color: var(--color-danger-fg);
         border-color: var(--color-danger-fg);
@@ -278,7 +282,7 @@ export class IdentityAccountSettings extends LitElement {
       }
 
       .btn-danger:hover {
-        color: #ffffff;
+        color: var(--color-btn-primary-text);
         background-color: var(--color-danger-fg);
         border-color: var(--color-danger-fg);
       }

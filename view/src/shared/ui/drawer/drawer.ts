@@ -70,7 +70,7 @@ export class Drawer extends LitElement {
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: var(--color-overlay-backdrop);
         opacity: 0;
         visibility: hidden;
         transition:
@@ -102,13 +102,13 @@ export class Drawer extends LitElement {
       .drawer-content.right {
         right: 0;
         transform: translateX(100%);
-        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+        box-shadow: -2px 0 8px var(--color-shadow-medium);
       }
 
       .drawer-content.left {
         left: 0;
         transform: translateX(-100%);
-        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+        box-shadow: 2px 0 8px var(--color-shadow-medium);
       }
 
       .drawer-content.open {

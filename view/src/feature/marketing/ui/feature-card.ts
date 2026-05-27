@@ -18,7 +18,7 @@ export class MarketingFeatureCard extends LitElement {
 
   render() {
     const cardContent = html`
-      <slot name="icon"></slot>
+      <div class="icon-wrapper"><slot name="icon"></slot></div>
       <h3>${this.title}</h3>
       <p>${this.description}</p>
     `;
@@ -61,7 +61,7 @@ export class MarketingFeatureCard extends LitElement {
         box-shadow: var(--shadow-medium);
       }
 
-      ::slotted([slot="icon"]) {
+      .icon-wrapper {
         color: var(--color-accent-fg);
         margin-bottom: 16px;
         display: block;

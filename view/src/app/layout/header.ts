@@ -118,7 +118,7 @@ export class AppHeader extends LitElement {
       }
 
       .nav-item:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: var(--color-hover-overlay);
       }
 
       .nav-item .nav-icon {
@@ -147,7 +147,7 @@ export class AppHeader extends LitElement {
 
       .login-button:hover {
         opacity: 0.8;
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: var(--color-hover-overlay);
       }
 
       .account-link {
@@ -158,7 +158,7 @@ export class AppHeader extends LitElement {
       }
 
       .account-link:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: var(--color-hover-overlay);
       }
 
       @media (max-width: 600px) {

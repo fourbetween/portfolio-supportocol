@@ -120,7 +120,7 @@ export class LearningCommentCard extends LitElement {
       }
       .issue-icon {
         font-size: 16px;
-        color: var(--color-error, #d32f2f);
+        color: var(--color-danger-fg);
         cursor: pointer;
       }
       .card-body.readonly .issue-icon {

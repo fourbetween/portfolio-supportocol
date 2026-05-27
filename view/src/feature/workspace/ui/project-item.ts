@@ -39,10 +39,11 @@ export class WorkspaceProjectItem extends LitElement {
       .item {
         gap: 8px;
         text-decoration: none;
-        color: inherit;
+        color: var(--color-fg-default);
       }
       .name {
         flex: 1;
+        color: var(--color-fg-default);
       }
       .badge {
         font-size: 0.75rem;

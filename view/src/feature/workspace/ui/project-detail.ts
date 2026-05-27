@@ -185,7 +185,7 @@ export class WorkspaceProjectDetail extends LitElement {
       }
 
       .btn-delete:hover {
-        color: #fff;
+        color: var(--color-btn-primary-text);
         background-color: var(--color-danger-fg);
       }
 
@@ -234,7 +234,7 @@ export class WorkspaceProjectDetail extends LitElement {
       textarea:focus {
         outline: none;
         border-color: var(--color-accent-fg);
-        box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3);
+        box-shadow: 0 0 0 3px var(--color-accent-muted);
       }
     `,
   ];

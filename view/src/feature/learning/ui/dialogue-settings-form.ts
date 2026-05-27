@@ -334,7 +334,7 @@ export class LearningDialogueSettingsForm extends LitElement {
       .permission-field label {
         font-size: 12px;
         font-weight: bold;
-        color: var(--secondary-text-color, #666);
+        color: var(--color-fg-muted);
       }
       .types-form {
         display: flex;
@@ -370,7 +370,7 @@ export class LearningDialogueSettingsForm extends LitElement {
         background: transparent;
         border: none;
         cursor: pointer;
-        color: var(--error-color, #dc3545);
+        color: var(--color-danger-fg);
         padding: 4px;
         opacity: 0.6;
         transition: opacity 0.2s;

@@ -394,7 +394,7 @@ export class MarketingHowToUsePage extends LitElement {
         height: 32px;
         border-radius: 50%;
         background-color: var(--color-accent-fg);
-        color: #fff;
+        color: var(--color-btn-primary-text);
         font-weight: 600;
         font-size: 14px;
       }

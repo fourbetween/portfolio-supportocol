@@ -83,7 +83,7 @@ export class Popup extends LitElement {
       dialog {
         border: none;
         border-radius: 6px;
-        box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
+        box-shadow: 0 8px 24px var(--color-popup-shadow);
         padding: 0;
         width: calc(100% - 32px);
         max-width: 640px;
@@ -91,7 +91,7 @@ export class Popup extends LitElement {
         color: var(--color-fg-default);
       }
       dialog::backdrop {
-        background-color: rgba(0, 0, 0, 0.4);
+        background-color: var(--color-overlay-backdrop);
       }
       .header {
         padding: 16px;

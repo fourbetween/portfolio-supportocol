@@ -42,8 +42,8 @@ export class CommentTypeBadge extends LitElement {
         font-weight: 600;
         line-height: 18px;
         color: var(--color-accent-fg);
-        background-color: rgba(9, 105, 218, 0.1);
-        border: 1px solid rgba(9, 105, 218, 0.2);
+        background-color: var(--color-accent-muted);
+        border: 1px solid var(--color-accent-subtle);
         border-radius: 2em;
         white-space: nowrap;
         transition: all 0.2s ease-in-out;
@@ -52,8 +52,8 @@ export class CommentTypeBadge extends LitElement {
         cursor: pointer;
       }
       .type-label.clickable:hover {
-        background-color: rgba(9, 105, 218, 0.2);
-        border-color: rgba(9, 105, 218, 0.4);
+        background-color: var(--color-accent-subtle);
+        border-color: var(--color-accent-fg);
       }
       .type-label.active {
         color: var(--color-fg-on-emphasis);

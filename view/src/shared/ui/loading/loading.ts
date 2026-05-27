@@ -45,7 +45,7 @@ export class Loading extends LitElement {
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(0, 0, 0, 0.3);
+        background-color: var(--color-overlay-loading);
         display: flex;
         justify-content: center;
         align-items: center;

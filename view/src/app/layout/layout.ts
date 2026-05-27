@@ -1,5 +1,6 @@
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js";
+import { baseStyle } from "../../shared/style/base";
 import "./header";
 
 @customElement("app-layout")
@@ -16,7 +17,11 @@ export class AppLayout extends LitElement {
   }
 
   static styles = [
+    baseStyle,
     css`
+      :host {
+        background-color: var(--color-canvas-default);
+      }
       .layout {
         display: flex;
         flex-direction: column;
@@ -26,6 +31,7 @@ export class AppLayout extends LitElement {
       main {
         flex: 1;
         overflow-y: auto;
+        background-color: var(--color-canvas-default);
       }
     `,
   ];

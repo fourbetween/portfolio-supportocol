@@ -47,7 +47,7 @@ export const buttonStyle: CSSResultGroup = css`
   }
 
   .btn-primary:disabled {
-    background-color: #94d3a2;
+    background-color: var(--color-disabled-btn-bg);
     border-color: var(--color-btn-primary-border);
     color: var(--color-btn-primary-text);
   }

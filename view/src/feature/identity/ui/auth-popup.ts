@@ -221,16 +221,16 @@ export class IdentityAuthPopup extends LitElement {
       .popup-title {
         font-size: 20px;
         font-weight: 600;
-        color: #1f2328;
+        color: var(--color-fg-default);
       }
 
       .error-message {
-        background-color: #ffebe9;
-        border: 1px solid #ff818266;
+        background-color: var(--color-danger-bg);
+        border: 1px solid var(--color-danger-border);
         border-radius: 6px;
         padding: 12px;
         margin-bottom: 16px;
-        color: #cf222e;
+        color: var(--color-danger-fg);
         font-size: 14px;
       }
 
@@ -267,7 +267,7 @@ export class IdentityAuthPopup extends LitElement {
       }
 
       .forgot-link {
-        color: #0969da;
+        color: var(--color-accent-fg);
         text-decoration: none;
       }
 
@@ -279,7 +279,7 @@ export class IdentityAuthPopup extends LitElement {
         display: flex;
         align-items: center;
         margin: 24px 0;
-        color: #656d76;
+        color: var(--color-fg-muted);
         font-size: 12px;
       }
 
@@ -288,7 +288,7 @@ export class IdentityAuthPopup extends LitElement {
         content: "";
         flex: 1;
         height: 1px;
-        background-color: #d0d7de;
+        background-color: var(--color-border-default);
       }
 
       .divider span {
@@ -306,14 +306,14 @@ export class IdentityAuthPopup extends LitElement {
         margin-top: 24px;
         text-align: center;
         font-size: 12px;
-        color: #656d76;
+        color: var(--color-fg-muted);
       }
       .switch-prompt:empty {
         display: none;
       }
 
       .switch-link {
-        color: #0969da;
+        color: var(--color-accent-fg);
         text-decoration: none;
       }
 
@@ -327,7 +327,7 @@ export class IdentityAuthPopup extends LitElement {
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(255, 255, 255, 0.7);
+        background-color: var(--color-loading-overlay);
         z-index: 1001;
         cursor: wait;
         border-radius: 12px;

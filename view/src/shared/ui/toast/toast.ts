@@ -84,7 +84,7 @@ export class Toast extends LitElement {
         gap: 12px;
         padding: 12px 16px;
         border-radius: 6px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 12px var(--color-shadow-medium);
         background-color: var(--color-canvas-default);
         border: 1px solid var(--color-border-default);
         color: var(--color-fg-default);
@@ -103,7 +103,7 @@ export class Toast extends LitElement {
       }
 
       .toast.warning {
-        border-left: 4px solid #bf8700;
+        border-left: 4px solid var(--color-warning-fg);
       }
 
       .message {
