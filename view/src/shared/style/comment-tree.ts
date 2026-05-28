@@ -31,6 +31,9 @@ export const commentTreeStyle = css`
     cursor: pointer;
     pointer-events: auto;
   }
+  .group-header ui-comment-type-badge {
+    pointer-events: auto;
+  }
   .group-header:focus-visible {
     outline: 2px solid var(--color-accent-fg);
     outline-offset: 2px;

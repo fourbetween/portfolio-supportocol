@@ -1,7 +1,6 @@
 import { msg } from "@lit/localize";
 import {
   LitElement,
-  css,
   html,
   nothing,
   type HTMLTemplateResult,
@@ -38,6 +37,12 @@ export class DialogueCommentTree extends LitElement {
 
   @state()
   private childrenMap = new Map<string, Comment[]>();
+
+  @state()
+  private filterParentId?: string;
+
+  @state()
+  private filterType?: string;
 
   private _stickyObserver?: IntersectionObserver;
 
@@ -181,6 +186,16 @@ export class DialogueCommentTree extends LitElement {
     return root instanceof ShadowRoot ? root.host : null;
   }
 
+  private handleBadgeClick(parentId: string, type: string) {
+    if (this.filterParentId === parentId && this.filterType === type) {
+      this.filterParentId = undefined;
+      this.filterType = undefined;
+    } else {
+      this.filterParentId = parentId;
+      this.filterType = type;
+    }
+  }
+
   private handleStickyHeaderClick(commentId: string) {
     this.scrollToComment(commentId);
   }
@@ -217,16 +232,29 @@ export class DialogueCommentTree extends LitElement {
     const children = this.childrenMap.get(parentId) || [];
     if (children.length === 0) return nothing;
 
-    const filtered = this.showArchived
+    const isFiltering =
+      this.filterParentId === parentId && this.filterType !== undefined;
+
+    let filtered = this.showArchived
       ? children
       : children.filter((c) => !c.archivedAt);
+
+    if (isFiltering) {
+      filtered = filtered.filter((c) => c.type === this.filterType);
+    }
 
     if (filtered.length === 0) return nothing;
 
     return html`
       <div class="children">
         ${filtered.map((c) =>
-          this.renderCommentEntry(c, isParentArchived, depth),
+          this.renderCommentEntry(
+            c,
+            parentId,
+            isParentArchived,
+            depth,
+            isFiltering,
+          ),
         )}
       </div>
     `;
@@ -234,14 +262,18 @@ export class DialogueCommentTree extends LitElement {
 
   private renderCommentEntry(
     comment: Comment,
+    parentId: string,
     isParentArchived: boolean,
     depth: number,
+    isParentFiltering: boolean,
   ): HTMLTemplateResult {
     const isArchived = isParentArchived || !!comment.archivedAt;
     const children = this.childrenMap.get(comment.id) || [];
     const activeChildrenCount = children.filter(
       (c) => c.status === "active",
     ).length;
+    const isBadgeActive =
+      this.filterParentId === parentId && this.filterType === comment.type;
 
     return html`
       <div class="child-group">
@@ -258,7 +290,15 @@ export class DialogueCommentTree extends LitElement {
           @keydown=${(e: KeyboardEvent) =>
             this.handleStickyHeaderKeydown(e, comment.id)}
         >
-          <ui-comment-type-badge .type=${comment.type}></ui-comment-type-badge>
+          <ui-comment-type-badge
+            .type=${comment.type}
+            .clickable=${true}
+            .active=${isBadgeActive}
+            @click=${(e: Event) => {
+              e.stopPropagation();
+              this.handleBadgeClick(parentId, comment.type);
+            }}
+          ></ui-comment-type-badge>
           <span class="parent-content" title=${comment.content}>
             ${comment.content}
           </span>
@@ -273,12 +313,14 @@ export class DialogueCommentTree extends LitElement {
               .readonly=${this.readonly}
               .isAuthenticated=${this.isAuthenticated}
             ></dialogue-comment-item>
-            ${this.renderChildren(comment.id, isArchived, depth + 1)}
+            ${isParentFiltering
+              ? nothing
+              : this.renderChildren(comment.id, isArchived, depth + 1)}
           </div>
         </div>
       </div>
     `;
   }
 
-  static styles = [baseStyle, commentTreeStyle, css``];
+  static styles = [baseStyle, commentTreeStyle];
 }
