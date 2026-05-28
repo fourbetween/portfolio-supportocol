@@ -122,6 +122,7 @@ export class Drawer extends LitElement {
         justify-content: space-between;
         padding: 16px;
         border-bottom: 1px solid var(--color-border-default);
+        color: var(--color-fg-default);
       }
 
       .drawer-body {
