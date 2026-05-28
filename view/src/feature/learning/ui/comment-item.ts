@@ -1,3 +1,4 @@
+import { msg } from "@lit/localize";
 import { LitElement, css, html, nothing, type TemplateResult } from "lit";
 import { customElement, property, query, state } from "lit/decorators.js";
 import { baseStyle } from "../../../shared/style/base";
@@ -222,14 +223,14 @@ export class LearningCommentItem extends LitElement {
           <button
             class="toolbar-btn success"
             @click=${this.handleAcceptClick}
-            aria-label="accept"
+            aria-label=${msg("Accept")}
           >
             <ui-icon-check></ui-icon-check>
           </button>
           <button
             class="toolbar-btn danger"
             @click=${this.handleRejectClick}
-            aria-label="reject"
+            aria-label=${msg("Reject")}
           >
             <ui-icon-close></ui-icon-close>
           </button>
@@ -238,7 +239,7 @@ export class LearningCommentItem extends LitElement {
               html`
                 <ui-icon-ads-click></ui-icon-ads-click>
               `,
-              "Focus",
+              msg("Focus"),
               (e) => this.handleFocusClick(e),
             ),
           ])}
@@ -252,7 +253,7 @@ export class LearningCommentItem extends LitElement {
           <button
             class="toolbar-btn"
             @click=${(e: Event) => this.handleFocusClick(e)}
-            aria-label="focus"
+            aria-label=${msg("Focus")}
           >
             <ui-icon-ads-click></ui-icon-ads-click>
           </button>
@@ -277,7 +278,7 @@ export class LearningCommentItem extends LitElement {
               <button
                 class="toolbar-btn primary"
                 @click=${this.handlePasteClick}
-                aria-label="paste"
+                aria-label=${msg("Paste")}
               >
                 <ui-icon-content-paste></ui-icon-content-paste>
               </button>
@@ -286,7 +287,7 @@ export class LearningCommentItem extends LitElement {
         <button
           class="toolbar-btn"
           @click=${(e: Event) => this.handleOpenTypePopup(e, "reply")}
-          aria-label="reply"
+          aria-label=${msg("Reply")}
         >
           <ui-icon-reply></ui-icon-reply>
         </button>
@@ -305,7 +306,7 @@ export class LearningCommentItem extends LitElement {
         html`
           <ui-icon-ads-click></ui-icon-ads-click>
         `,
-        "Focus",
+        msg("Focus"),
         (e) => this.handleFocusClick(e),
       ),
     );
@@ -315,7 +316,7 @@ export class LearningCommentItem extends LitElement {
         html`
           <ui-icon-edit></ui-icon-edit>
         `,
-        "Edit",
+        msg("Edit"),
         (e) => this.handleEditClick(e),
       ),
     );
@@ -325,7 +326,7 @@ export class LearningCommentItem extends LitElement {
         html`
           <ui-icon-psychology></ui-icon-psychology>
         `,
-        "Generate",
+        msg("Generate"),
         (e) => this.handleOpenTypePopup(e, "generate"),
       ),
     );
@@ -336,7 +337,7 @@ export class LearningCommentItem extends LitElement {
           html`
             <ui-icon-content-cut></ui-icon-content-cut>
           `,
-          "Cancel cut",
+          msg("Cancel Cut"),
           (e) => this.handleCutClick(e),
           "primary",
         ),
@@ -347,7 +348,7 @@ export class LearningCommentItem extends LitElement {
           html`
             <ui-icon-content-cut></ui-icon-content-cut>
           `,
-          "Cut",
+          msg("Cut"),
           (e) => this.handleCutClick(e),
         ),
       );
@@ -359,7 +360,7 @@ export class LearningCommentItem extends LitElement {
           html`
             <ui-icon-unarchive></ui-icon-unarchive>
           `,
-          "Unarchive",
+          msg("Unarchive"),
           (e) => this.handleUnarchiveClick(e),
         ),
       );
@@ -369,7 +370,7 @@ export class LearningCommentItem extends LitElement {
           html`
             <ui-icon-archive></ui-icon-archive>
           `,
-          "Archive",
+          msg("Archive"),
           (e) => this.handleArchiveClick(e),
         ),
       );
@@ -380,7 +381,7 @@ export class LearningCommentItem extends LitElement {
         html`
           <ui-icon-north></ui-icon-north>
         `,
-        "Lift & Delete",
+        msg("Lift & Delete"),
         (e) => this.handleLiftClick(e),
         "danger",
       ),
@@ -391,7 +392,7 @@ export class LearningCommentItem extends LitElement {
         html`
           <ui-icon-delete></ui-icon-delete>
         `,
-        "Delete",
+        msg("Delete"),
         (e) => this.handleDeleteClick(e),
         "danger",
       ),

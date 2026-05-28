@@ -66,18 +66,6 @@
   <source>Root</source>
   <target>ルート</target>
 </trans-unit>
-<trans-unit id="sf53601f2b1e97107">
-  <source>reply</source>
-  <target>返信</target>
-</trans-unit>
-<trans-unit id="sa9357dff134f4450">
-  <source>report problem</source>
-  <target>問題を報告</target>
-</trans-unit>
-<trans-unit id="s65366faf6a291813">
-  <source>focus</source>
-  <target>フォーカス</target>
-</trans-unit>
 <trans-unit id="s9eb18ca6c32465be">
   <source>Enter your reply...</source>
   <target>返信を入力...</target>
@@ -1101,6 +1089,26 @@
 <trans-unit id="s692fe54decacf5b5">
   <source>Delete this comment and lift its replies to its parent?</source>
   <target>このコメントを削除し、その返信を親コメントに引き上げますか？</target>
+</trans-unit>
+<trans-unit id="s45cb501abd43ba52">
+  <source>Generate</source>
+  <target>生成</target>
+</trans-unit>
+<trans-unit id="s4a468fc73ca8f9a7">
+  <source>Cancel Cut</source>
+  <target>切り取りをキャンセル</target>
+</trans-unit>
+<trans-unit id="sc99d7c8a50b393fd">
+  <source>Lift &amp; Delete</source>
+  <target>引き上げて削除</target>
+</trans-unit>
+<trans-unit id="s13be1af9766661e9">
+  <source>Accept</source>
+  <target>承認</target>
+</trans-unit>
+<trans-unit id="s123da0f92f97dd86">
+  <source>Reject</source>
+  <target>拒否</target>
 </trans-unit>
 </body>
 </file>

@@ -146,7 +146,7 @@ export class DialogueCommentItem extends LitElement {
               <button
                 class="toolbar-btn"
                 @click=${this.handleReplyClick}
-                aria-label=${msg("reply")}
+                aria-label=${msg("Reply")}
               >
                 <ui-icon-reply></ui-icon-reply>
               </button>
@@ -163,7 +163,7 @@ export class DialogueCommentItem extends LitElement {
         html`
           <ui-icon-ads-click></ui-icon-ads-click>
         `,
-        msg("focus"),
+        msg("Focus"),
         (e) => this.handleFocusClick(e),
       ),
     ];
@@ -174,7 +174,7 @@ export class DialogueCommentItem extends LitElement {
           html`
             <ui-icon-report-problem></ui-icon-report-problem>
           `,
-          msg("report problem"),
+          msg("Report Problem"),
           (e) => this.handleIssueClick(e),
           "danger",
         ),
