@@ -85,8 +85,8 @@ func (s *Comment) Validate() error {
 func (s CommentContent) Validate() error {
 	alias := (string)(s)
 	if err := (validate.String{
-		MinLength:     0,
-		MinLengthSet:  false,
+		MinLength:     1,
+		MinLengthSet:  true,
 		MaxLength:     400,
 		MaxLengthSet:  true,
 		Email:         false,
@@ -227,8 +227,8 @@ func (s CommentIssueDescription) Validate() error {
 func (s CommentIssueTitle) Validate() error {
 	alias := (string)(s)
 	if err := (validate.String{
-		MinLength:     0,
-		MinLengthSet:  false,
+		MinLength:     1,
+		MinLengthSet:  true,
 		MaxLength:     255,
 		MaxLengthSet:  true,
 		Email:         false,
