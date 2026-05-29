@@ -59,6 +59,7 @@ export class UiCollapsibleSection extends LitElement {
       <div
         class="content${isCollapsed ? " collapsed" : ""}"
         style=${isCollapsed ? `max-height: ${this.collapsedHeight}px` : ""}
+        @click=${isCollapsed ? this._toggle : undefined}
       >
         <slot></slot>
       </div>
@@ -84,6 +85,10 @@ export class UiCollapsibleSection extends LitElement {
       .content {
         overflow: hidden;
         position: relative;
+      }
+
+      .content.collapsed {
+        cursor: pointer;
       }
 
       .content.collapsed::after {
