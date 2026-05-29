@@ -470,6 +470,7 @@ export class LearningCommentExplorerWidget extends LitElement {
           </div>
           <learning-comment-tree
             .comments=${descendants}
+            .availableTypes=${this.availableTypes}
             .readonly=${this.readonly}
             .cutCommentId=${this.cutCommentId}
             .invalidPasteTargetIds=${invalidPasteTargetIds}

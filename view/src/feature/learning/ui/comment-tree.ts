@@ -16,7 +16,6 @@ import {
 import "../../../shared/ui/comment-type-badge/comment-type-badge";
 import { buildSortedChildrenMap } from "../../../shared/util/comment-tree";
 import type { Comment } from "../model/comment";
-import { deriveCommentFrame } from "../model/comment-frame";
 import "./comment-item";
 
 @customElement("learning-comment-tree")
@@ -39,8 +38,8 @@ export class LearningCommentTree extends LitElement {
   @state()
   private childrenMap = new Map<string, Comment[]>();
 
-  @state()
-  private availableTypes: string[] = [];
+  @property({ type: Array })
+  availableTypes: string[] = [];
 
   @state()
   private filterParentId?: string;
@@ -111,10 +110,8 @@ export class LearningCommentTree extends LitElement {
 
   private updateTreeData() {
     this.childrenMap.clear();
-    this.availableTypes = [];
 
     if (this.comments) {
-      this.availableTypes = deriveCommentFrame(this.comments).types;
       this.childrenMap = buildSortedChildrenMap(this.comments);
     }
   }
