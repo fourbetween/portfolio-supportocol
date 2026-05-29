@@ -86,13 +86,45 @@ function toMarkdown(discussion: Discussion, comments: Comment[]): string {
     parts.push(`## Conclusion\n\n${discussion.conclusion}\n\n`);
   }
 
-  const activeComments = comments.filter((c) => !c.archivedAt);
+  const archivedIds = collectArchivedDescendantIds(comments);
+  const activeComments = comments.filter((c) => !archivedIds.has(c.id));
   if (activeComments.length > 0) {
     const childrenMap = buildSortedChildrenMap(activeComments);
     parts.push(renderCommentTree(childrenMap, "root", 1));
   }
 
   return parts.join("");
+}
+
+function collectArchivedDescendantIds(comments: Comment[]): Set<string> {
+  const archivedIds = new Set<string>();
+  for (const c of comments) {
+    if (c.archivedAt) {
+      archivedIds.add(c.id);
+    }
+  }
+
+  const childrenMap = new Map<string, Comment[]>();
+  for (const c of comments) {
+    const parentId = c.parentCommentId ?? "root";
+    const children = childrenMap.get(parentId) || [];
+    children.push(c);
+    childrenMap.set(parentId, children);
+  }
+
+  function addDescendants(id: string) {
+    const children = childrenMap.get(id) || [];
+    for (const child of children) {
+      archivedIds.add(child.id);
+      addDescendants(child.id);
+    }
+  }
+
+  for (const id of [...archivedIds]) {
+    addDescendants(id);
+  }
+
+  return archivedIds;
 }
 
 function circledNumber(n: number): string {
