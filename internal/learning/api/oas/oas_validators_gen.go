@@ -656,13 +656,13 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.SourceType.Validate(); err != nil {
-			return err
+		if s.Urls == nil {
+			return errors.New("nil is invalid value")
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "sourceType",
+			Name:  "urls",
 			Error: err,
 		})
 	}
@@ -670,17 +670,6 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReqSourceType) Validate() error {
-	switch s {
-	case "text":
-		return nil
-	case "url":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {

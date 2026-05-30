@@ -187,8 +187,8 @@ export class CommentRepository {
   async generateFromSource(
     workspaceId: string,
     discussionId: string,
-    sourceType: "text" | "url",
-    sourceBody: string,
+    text: string,
+    urls: string[],
   ): Promise<Comment[]> {
     const { data, error } = await client.POST(
       "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate",
@@ -196,7 +196,7 @@ export class CommentRepository {
         params: {
           path: { workspaceId, discussionId },
         },
-        body: { sourceType, sourceBody },
+        body: { text, urls },
       },
     );
     if (error) throw new Error(error.message);

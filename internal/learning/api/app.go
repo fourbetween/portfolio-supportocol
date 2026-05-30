@@ -457,11 +457,16 @@ func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 	req *oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq,
 	params oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams,
 ) ([]oas.Comment, error) {
+	urls := make([]string, len(req.Urls))
+	for i, u := range req.Urls {
+		urls[i] = u.String()
+	}
+
 	comments, err := h.con.GenerateDiscussionComments.Execute(ctx, usecase.GenerateDiscussionCommentsInput{
 		DiscussionID: uuid.UUID(params.DiscussionId).String(),
 		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
-		SourceType:   domain.SourceType(req.SourceType),
-		SourceBody:   req.SourceBody,
+		Text:         req.Text,
+		URLs:         urls,
 		UserID:       httpctx.GetUserID(ctx),
 	})
 	if err != nil {

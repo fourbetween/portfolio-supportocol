@@ -26,15 +26,15 @@ export class LearningDiscussionCreateEvent extends Event {
   public readonly theme: string;
   public readonly premise: string;
   public readonly language: DiscussionLanguage;
-  public readonly sourceType?: "text" | "url";
-  public readonly sourceBody?: string;
+  public readonly sourceText?: string;
+  public readonly sourceUrls?: string[];
 
   constructor(
     theme: string,
     premise: string,
     language: DiscussionLanguage,
-    sourceType?: "text" | "url",
-    sourceBody?: string,
+    sourceText?: string,
+    sourceUrls?: string[],
   ) {
     super(LearningDiscussionCreateEvent.eventName, {
       bubbles: true,
@@ -43,8 +43,8 @@ export class LearningDiscussionCreateEvent extends Event {
     this.theme = theme;
     this.premise = premise;
     this.language = language;
-    this.sourceType = sourceType;
-    this.sourceBody = sourceBody;
+    this.sourceText = sourceText;
+    this.sourceUrls = sourceUrls;
   }
 }
 

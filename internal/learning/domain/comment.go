@@ -58,21 +58,14 @@ type (
 	GenerateDiscussionCommentsParams struct {
 		DiscussionID string
 		WorkspaceID  string
-		SourceType   SourceType
-		SourceBody   string
+		Text         string
+		URLs         []string
 		UserID       string
 	}
-
-	SourceType string
 
 	ProjectPremiseProvider interface {
 		GetProjectPremise(ctx context.Context, workspaceID, projectID string) (string, error)
 	}
-)
-
-const (
-	SourceTypeText SourceType = "text"
-	SourceTypeURL  SourceType = "url"
 )
 
 type (

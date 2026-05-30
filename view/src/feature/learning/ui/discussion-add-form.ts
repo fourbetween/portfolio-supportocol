@@ -4,7 +4,10 @@ import { customElement, property, state } from "lit/decorators.js";
 import { live } from "lit/directives/live.js";
 import { getLocale } from "../../../localization";
 import { baseStyle } from "../../../shared/style/base";
+import { buttonStyle } from "../../../shared/style/button";
 import { inputStyle } from "../../../shared/style/input";
+import "../../../shared/ui/icons/icon-add";
+import "../../../shared/ui/icons/icon-delete";
 import type { DiscussionLanguage } from "../model/discussion";
 
 @customElement("learning-discussion-add-form")
@@ -22,24 +25,30 @@ export class LearningDiscussionAddForm extends LitElement {
   private _language: DiscussionLanguage = getLocale() === "ja" ? "ja" : "en";
 
   @state()
-  private _sourceType: "text" | "url" | "" = "";
+  private _sourceText = "";
 
   @state()
-  private _sourceBody = "";
+  private _sourceUrls: string[] = [];
+
+  @state()
+  private _newUrl = "";
 
   get value(): {
     theme: string;
     premise: string;
     language: DiscussionLanguage;
-    sourceType?: "text" | "url";
-    sourceBody?: string;
+    sourceText?: string;
+    sourceUrls?: string[];
   } {
     return {
       theme: this._theme,
       premise: this._premise,
       language: this._language,
-      ...(this._sourceType
-        ? { sourceType: this._sourceType, sourceBody: this._sourceBody }
+      ...(this._sourceText.trim() || this._sourceUrls.length > 0
+        ? {
+            sourceText: this._sourceText,
+            sourceUrls: this._sourceUrls,
+          }
         : {}),
     };
   }
@@ -58,22 +67,45 @@ export class LearningDiscussionAddForm extends LitElement {
     this._premise = textarea.value;
   }
 
-  private _handleSourceTypeChange(e: Event) {
-    const select = e.target as HTMLSelectElement;
-    this._sourceType = select.value as "text" | "url" | "";
-    this._sourceBody = "";
+  private _handleSourceTextInput(e: InputEvent) {
+    const textarea = e.target as HTMLTextAreaElement;
+    this._sourceText = textarea.value;
   }
 
-  private _handleSourceBodyInput(e: InputEvent) {
-    const el = e.target as HTMLInputElement | HTMLTextAreaElement;
-    this._sourceBody = el.value;
+  private _handleNewUrlInput(e: InputEvent) {
+    const input = e.target as HTMLInputElement;
+    this._newUrl = input.value;
+  }
+
+  private _handleAddUrl() {
+    const url = this._newUrl.trim();
+    if (url && !this._sourceUrls.includes(url)) {
+      this._sourceUrls = [...this._sourceUrls, url];
+      this._newUrl = "";
+    }
+  }
+
+  private _handleRemoveUrl(e: Event) {
+    const button = (e.target as HTMLElement).closest("button");
+    const urlToRemove = button?.dataset.url;
+    if (urlToRemove) {
+      this._sourceUrls = this._sourceUrls.filter((u) => u !== urlToRemove);
+    }
+  }
+
+  private _handleUrlKeyDown(e: KeyboardEvent) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      this._handleAddUrl();
+    }
   }
 
   reset() {
     this._theme = "";
     this._premise = "";
-    this._sourceType = "";
-    this._sourceBody = "";
+    this._sourceText = "";
+    this._sourceUrls = [];
+    this._newUrl = "";
   }
 
   render() {
@@ -100,42 +132,59 @@ export class LearningDiscussionAddForm extends LitElement {
         ${!this.isFree
           ? html`
               <div class="field">
-                <select
-                  .value=${live(this._sourceType)}
-                  @change=${this._handleSourceTypeChange}
-                  aria-label=${msg("Source type")}
-                >
-                  <option value="">${msg("No source")}</option>
-                  <option value="url">${msg("URL")}</option>
-                  <option value="text">${msg("Text")}</option>
-                </select>
+                <label class="source-label">${msg("Source text")}</label>
+                <textarea
+                  .value=${live(this._sourceText)}
+                  @input=${this._handleSourceTextInput}
+                  placeholder=${msg("Source text (optional)")}
+                  aria-label=${msg("Source text")}
+                  rows="4"
+                ></textarea>
               </div>
-              ${this._sourceType === "url"
-                ? html`
-                    <div class="field">
-                      <input
-                        type="url"
-                        .value=${live(this._sourceBody)}
-                        @input=${this._handleSourceBodyInput}
-                        placeholder=${msg("Source URL")}
-                        aria-label=${msg("Source URL")}
-                      />
-                    </div>
-                  `
-                : ""}
-              ${this._sourceType === "text"
-                ? html`
-                    <div class="field">
-                      <textarea
-                        .value=${live(this._sourceBody)}
-                        @input=${this._handleSourceBodyInput}
-                        placeholder=${msg("Source text")}
-                        aria-label=${msg("Source text")}
-                        rows="8"
-                      ></textarea>
-                    </div>
-                  `
-                : ""}
+              <div class="field">
+                <label class="source-label">${msg("Source URLs")}</label>
+                <div class="url-input-row">
+                  <input
+                    type="url"
+                    .value=${live(this._newUrl)}
+                    @input=${this._handleNewUrlInput}
+                    @keydown=${this._handleUrlKeyDown}
+                    placeholder=${msg("Add URL")}
+                    aria-label=${msg("Source URL")}
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    aria-label=${msg("Add URL")}
+                    @click=${this._handleAddUrl}
+                    ?disabled=${!this._newUrl.trim()}
+                  >
+                    <ui-icon-add></ui-icon-add>
+                  </button>
+                </div>
+                ${this._sourceUrls.length > 0
+                  ? html`
+                      <ul class="url-list">
+                        ${this._sourceUrls.map(
+                          (url) => html`
+                            <li class="url-item">
+                              <span class="url-text">${url}</span>
+                              <button
+                                type="button"
+                                class="delete-button"
+                                data-url=${url}
+                                @click=${this._handleRemoveUrl}
+                                aria-label=${msg("Remove URL")}
+                              >
+                                <ui-icon-delete></ui-icon-delete>
+                              </button>
+                            </li>
+                          `,
+                        )}
+                      </ul>
+                    `
+                  : ""}
+              </div>
             `
           : ""}
       </div>
@@ -144,6 +193,7 @@ export class LearningDiscussionAddForm extends LitElement {
 
   static styles = [
     baseStyle,
+    buttonStyle,
     inputStyle,
     css`
       .fields {
@@ -156,6 +206,58 @@ export class LearningDiscussionAddForm extends LitElement {
       select {
         width: 100%;
         box-sizing: border-box;
+      }
+      .source-label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 12px;
+        color: var(--color-fg-muted);
+      }
+      .url-input-row {
+        display: flex;
+        gap: 8px;
+      }
+      .url-input-row input {
+        flex: 1;
+        min-width: 0;
+      }
+      .url-list {
+        margin: 8px 0 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .url-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 8px;
+        background: var(--color-bg-subtle);
+        border-radius: 4px;
+        margin-bottom: 4px;
+      }
+      .url-text {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 13px;
+      }
+      .delete-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: var(--color-danger-fg);
+        padding: 4px;
+        opacity: 0.6;
+        transition: opacity 0.2s;
+        flex-shrink: 0;
+      }
+      .delete-button:hover {
+        opacity: 1;
       }
     `,
   ];

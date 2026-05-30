@@ -241,6 +241,13 @@ type generatedDiscussionComment struct {
 }
 
 func (cg *CommentGenerator) GenerateDiscussionComments(ctx context.Context, params domain.GenerateDiscussionCommentsParams) (domain.CommentGenerationResult, error) {
+	if params.Text != "" && len(params.URLs) != 0 {
+		return domain.CommentGenerationResult{}, fmt.Errorf("text and URLs cannot be provided at the same time")
+	}
+	if params.Text == "" && len(params.URLs) == 0 {
+		return domain.CommentGenerationResult{}, fmt.Errorf("either text or URLs must be provided")
+	}
+
 	discussion, err := cg.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
 		ID:          params.DiscussionID,
 		WorkspaceID: params.WorkspaceID,
@@ -254,10 +261,10 @@ func (cg *CommentGenerator) GenerateDiscussionComments(ctx context.Context, para
 		return domain.CommentGenerationResult{}, err
 	}
 
-	prompt := cg.buildDiscussionPrompt(discussion, projectPremise, params.SourceType, params.SourceBody)
+	prompt := cg.buildDiscussionPrompt(discussion, projectPremise, params.Text, params.URLs)
 
 	var tools []*genai.Tool
-	if params.SourceType == domain.SourceTypeURL {
+	if len(params.URLs) > 0 {
 		tools = []*genai.Tool{{URLContext: &genai.URLContext{}}}
 	}
 
@@ -273,11 +280,16 @@ func (cg *CommentGenerator) GenerateDiscussionComments(ctx context.Context, para
 	return domain.CommentGenerationResult{Comments: comments, Tokens: tokens}, nil
 }
 
-func (cg *CommentGenerator) buildDiscussionPrompt(discussion *domain.Discussion, projectPremise string, sourceType domain.SourceType, sourceBody string) string {
+func (cg *CommentGenerator) buildDiscussionPrompt(discussion *domain.Discussion, projectPremise string, text string, urls []string) string {
 	var sb strings.Builder
 	cg.writePremises(&sb, projectPremise, discussion.Premise())
 	cg.writeDiscussionTheme(&sb, discussion)
-	fmt.Fprintf(&sb, "<source type=\"%s\">\n%s\n</source>\n\n", sourceType, sourceBody)
+	if text != "" {
+		fmt.Fprintf(&sb, "<source type=\"text\">\n%s\n</source>\n\n", text)
+	}
+	for _, u := range urls {
+		fmt.Fprintf(&sb, "<source type=\"url\">\n%s\n</source>\n\n", u)
+	}
 	cg.writeDiscussionInstructions(&sb)
 	return sb.String()
 }

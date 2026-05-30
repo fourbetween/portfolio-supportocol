@@ -43,8 +43,8 @@ func NewGenerateDiscussionCommentsUsecase(
 type GenerateDiscussionCommentsInput struct {
 	DiscussionID string
 	WorkspaceID  string
-	SourceType   domain.SourceType
-	SourceBody   string
+	Text         string
+	URLs         []string
 	UserID       string
 }
 
@@ -80,8 +80,8 @@ func (u *GenerateDiscussionCommentsUsecase) Execute(ctx context.Context, input G
 	result, err := u.generator.GenerateDiscussionComments(ctx, domain.GenerateDiscussionCommentsParams{
 		DiscussionID: input.DiscussionID,
 		WorkspaceID:  input.WorkspaceID,
-		SourceType:   input.SourceType,
-		SourceBody:   input.SourceBody,
+		Text:         input.Text,
+		URLs:         input.URLs,
 		UserID:       input.UserID,
 	})
 	if err != nil {

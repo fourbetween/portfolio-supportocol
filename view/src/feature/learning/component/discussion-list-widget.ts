@@ -51,12 +51,12 @@ export class LearningDiscussionListWidget extends LitElement {
         e.language,
         e.premise,
       );
-      if (e.sourceType && e.sourceBody) {
+      if (e.sourceText || (e.sourceUrls && e.sourceUrls.length > 0)) {
         await commentRepository.generateFromSource(
           this.workspace.workspace.id,
           data.id,
-          e.sourceType,
-          e.sourceBody,
+          e.sourceText ?? "",
+          e.sourceUrls ?? [],
         );
       }
       this.dispatchEvent(new LearningDiscussionCreatedEvent(data));

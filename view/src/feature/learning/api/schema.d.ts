@@ -980,9 +980,8 @@ export interface paths {
             requestBody: {
                 content: {
                     "application/json": {
-                        /** @enum {string} */
-                        sourceType: "text" | "url";
-                        sourceBody: string;
+                        text: string;
+                        urls: string[];
                     };
                 };
             };

@@ -1038,22 +1038,6 @@
   <source>Create</source>
   <target>作成</target>
 </trans-unit>
-<trans-unit id="s1b3df84d79ec8b00">
-  <source>Source type</source>
-  <target>ソースの種類</target>
-</trans-unit>
-<trans-unit id="sd375661ee0628b83">
-  <source>No source</source>
-  <target>ソースなし</target>
-</trans-unit>
-<trans-unit id="s61eacb19db252f5e">
-  <source>URL</source>
-  <target>URL</target>
-</trans-unit>
-<trans-unit id="s2492f5fb1b05b45e">
-  <source>Text</source>
-  <target>テキスト</target>
-</trans-unit>
 <trans-unit id="sa39e9b837556f159">
   <source>Source URL</source>
   <target>ソースURL</target>
@@ -1109,6 +1093,26 @@
 <trans-unit id="s123da0f92f97dd86">
   <source>Reject</source>
   <target>拒否</target>
+</trans-unit>
+<trans-unit id="s4da219dfe3cf653a">
+  <source>Source text (optional)</source>
+  <target>ソーステキスト（オプション）</target>
+</trans-unit>
+<trans-unit id="s5d736a6062bbca5e">
+  <source>Source URLs</source>
+  <target>ソースURL</target>
+</trans-unit>
+<trans-unit id="s032a07c67d2ee7d5">
+  <source>Add URL</source>
+  <target>URLを追加</target>
+</trans-unit>
+<trans-unit id="sf9aee319a006c9b4">
+  <source>Add</source>
+  <target>追加</target>
+</trans-unit>
+<trans-unit id="s71143d946d056fa0">
+  <source>Remove URL</source>
+  <target>URLを削除</target>
 </trans-unit>
 </body>
 </file>

@@ -786,16 +786,16 @@ paths:
             schema:
               type: object
               properties:
-                sourceType:
+                text:
                   type: string
-                  enum:
-                    - text
-                    - url
-                sourceBody:
-                  type: string
+                urls:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
               required:
-                - sourceType
-                - sourceBody
+                - text
+                - urls
       responses:
         "201":
           description: success response
