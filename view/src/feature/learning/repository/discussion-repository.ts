@@ -98,6 +98,33 @@ export class DiscussionRepository {
     return data;
   }
 
+  async generate(
+    workspaceId: string,
+    projectId: string,
+    text: string,
+    urls: string[],
+    title?: string,
+  ): Promise<Discussion> {
+    const { data, error } = await client.POST(
+      "/v1/ai/learning/workspaces/{workspaceId}/discussions/generate",
+      {
+        params: {
+          path: { workspaceId },
+        },
+        body: {
+          projectId,
+          text,
+          urls,
+          ...(title ? { title } : {}),
+        },
+      },
+    );
+    if (error) throw new Error(error.message);
+    this._cache.set(data.discussion.id, data.discussion);
+    this._clearListCache(workspaceId, projectId);
+    return data.discussion;
+  }
+
   async update(
     workspaceId: string,
     discussionId: string,

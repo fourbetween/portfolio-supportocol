@@ -192,12 +192,12 @@ func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 	}
 }
 
-// handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostRequest handles POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
+// handleV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostRequest handles POST /v1/ai/learning/workspaces/{workspaceId}/discussions/generate operation.
 //
-// Generate comments using AI based on a discussion.
+// Generate a discussion with comments using AI from source text and URLs.
 //
-// POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate
-func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/ai/learning/workspaces/{workspaceId}/discussions/generate
+func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	statusWriter := &codeRecorder{ResponseWriter: w}
 	w = statusWriter
 	ctx := r.Context()
@@ -205,7 +205,7 @@ func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 	var (
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation,
+			Name: V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostOperation,
 			ID:   "",
 		}
 	)
@@ -213,7 +213,7 @@ func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation, r)
+			sctx, ok, err := s.securityCookieAuth(ctx, V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostOperation, r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -255,7 +255,7 @@ func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 			return
 		}
 	}
-	params, err := decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams(args, argsEscaped, r)
+	params, err := decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -267,7 +267,7 @@ func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 	}
 
 	var rawBody []byte
-	request, rawBody, close, err := s.decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostRequest(r)
+	request, rawBody, close, err := s.decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -283,11 +283,11 @@ func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 		}
 	}()
 
-	var response []Comment
+	var response *GeneratedDiscussion
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation,
+			OperationName:    V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostOperation,
 			OperationSummary: "",
 			OperationID:      "",
 			Body:             request,
@@ -297,18 +297,14 @@ func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 					Name: "workspaceId",
 					In:   "path",
 				}: params.WorkspaceId,
-				{
-					Name: "discussionId",
-					In:   "path",
-				}: params.DiscussionId,
 			},
 			Raw: r,
 		}
 
 		type (
-			Request  = *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq
-			Params   = V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams
-			Response = []Comment
+			Request  = *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq
+			Params   = V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams
+			Response = *GeneratedDiscussion
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -317,14 +313,14 @@ func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 		](
 			m,
 			mreq,
-			unpackV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams,
+			unpackV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(ctx, request, params)
+				response, err = s.h.V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePost(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(ctx, request, params)
+		response, err = s.h.V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePost(ctx, request, params)
 	}
 	if err != nil {
 		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
@@ -343,7 +339,7 @@ func (s *Server) handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 		return
 	}
 
-	if err := encodeV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostResponse(response, w); err != nil {
+	if err := encodeV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostResponse(response, w); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

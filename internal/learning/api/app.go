@@ -452,32 +452,43 @@ func (h *appHandler) V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdComme
 	})
 }
 
-func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(
+func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePost(
 	ctx context.Context,
-	req *oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq,
-	params oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams,
-) ([]oas.Comment, error) {
+	req *oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq,
+	params oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams,
+) (*oas.GeneratedDiscussion, error) {
 	urls := make([]string, len(req.Urls))
 	for i, u := range req.Urls {
 		urls[i] = u.String()
 	}
 
-	comments, err := h.con.GenerateDiscussionComments.Execute(ctx, usecase.GenerateDiscussionCommentsInput{
-		DiscussionID: uuid.UUID(params.DiscussionId).String(),
-		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
-		Text:         req.Text,
-		URLs:         urls,
-		UserID:       httpctx.GetUserID(ctx),
+	var title string
+	if t, ok := req.Title.Get(); ok {
+		title = string(t)
+	}
+
+	output, err := h.con.GenerateDiscussion.Execute(ctx, usecase.GenerateDiscussionInput{
+		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
+		ProjectID:   uuid.UUID(req.ProjectId).String(),
+		Title:       title,
+		Text:        req.Text,
+		URLs:        urls,
+		UserID:      httpctx.GetUserID(ctx),
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	res := make([]oas.Comment, len(comments))
-	for i, c := range comments {
-		res[i] = h.toOasComment(c)
+	discussion := h.toOasDiscussion(output.Discussion)
+	comments := make([]oas.Comment, len(output.Comments))
+	for i, c := range output.Comments {
+		comments[i] = h.toOasComment(c)
 	}
-	return res, nil
+
+	return &oas.GeneratedDiscussion{
+		Discussion: discussion,
+		Comments:   comments,
+	}, nil
 }
 
 func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePost(

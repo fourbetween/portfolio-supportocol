@@ -224,6 +224,18 @@ components:
         - id
         - title
         - description
+    GeneratedDiscussion:
+      type: object
+      properties:
+        discussion:
+          $ref: "#/components/schemas/Discussion"
+        comments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Comment"
+      required:
+        - discussion
+        - comments
   parameters:
     workspaceId:
       name: workspaceId
@@ -773,12 +785,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate:
+  /v1/ai/learning/workspaces/{workspaceId}/discussions/generate:
     parameters:
       - $ref: "#/components/parameters/workspaceId"
-      - $ref: "#/components/parameters/discussionId"
     post:
-      description: generate comments using AI based on a discussion
+      description: generate a discussion with comments using AI from source text and URLs
       requestBody:
         required: true
         content:
@@ -786,6 +797,10 @@ paths:
             schema:
               type: object
               properties:
+                projectId:
+                  $ref: "#/components/schemas/Id"
+                title:
+                  $ref: "#/components/schemas/DiscussionTheme"
                 text:
                   type: string
                 urls:
@@ -794,6 +809,7 @@ paths:
                     type: string
                     format: uri
               required:
+                - projectId
                 - text
                 - urls
       responses:
@@ -802,9 +818,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Comment"
+                $ref: "#/components/schemas/GeneratedDiscussion"
         default:
           description: default error
           content:

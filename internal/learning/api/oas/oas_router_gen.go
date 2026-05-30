@@ -124,6 +124,39 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'g': // Prefix: "generate"
+						origElem := elem
+						if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, notAllowedParams{
+									allowedMethods: "POST",
+									allowedHeaders: rn8AllowedHeaders,
+									acceptPost:     "application/json",
+									acceptPatch:    "",
+								})
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
 					// Param: "discussionId"
 					// Match until "/"
 					idx := strings.IndexByte(elem, '/')
@@ -145,40 +178,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 
-						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'g': // Prefix: "generate"
-							origElem := elem
-							if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostRequest([2]string{
-										args[0],
-										args[1],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, notAllowedParams{
-										allowedMethods: "POST",
-										allowedHeaders: rn8AllowedHeaders,
-										acceptPost:     "application/json",
-										acceptPatch:    "",
-									})
-								}
-
-								return
-							}
-
-							elem = origElem
-						}
 						// Param: "commentId"
 						// Match until "/"
 						idx := strings.IndexByte(elem, '/')
@@ -827,6 +826,37 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'g': // Prefix: "generate"
+						origElem := elem
+						if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostOperation
+								r.summary = ""
+								r.operationID = ""
+								r.operationGroup = ""
+								r.pathPattern = "/v1/ai/learning/workspaces/{workspaceId}/discussions/generate"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
 					// Param: "discussionId"
 					// Match until "/"
 					idx := strings.IndexByte(elem, '/')
@@ -848,37 +878,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 
-						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'g': // Prefix: "generate"
-							origElem := elem
-							if l := len("generate"); len(elem) >= l && elem[0:l] == "generate" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation
-									r.summary = ""
-									r.operationID = ""
-									r.operationGroup = ""
-									r.pathPattern = "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate"
-									r.args = args
-									r.count = 2
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						}
 						// Param: "commentId"
 						// Match until "/"
 						idx := strings.IndexByte(elem, '/')

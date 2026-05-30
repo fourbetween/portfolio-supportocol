@@ -22,12 +22,12 @@ func (UnimplementedHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussi
 	return r, ht.ErrNotImplemented
 }
 
-// V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost implements POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
+// V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePost implements POST /v1/ai/learning/workspaces/{workspaceId}/discussions/generate operation.
 //
-// Generate comments using AI based on a discussion.
+// Generate a discussion with comments using AI from source text and URLs.
 //
-// POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate
-func (UnimplementedHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost(ctx context.Context, req *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq, params V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams) (r []Comment, _ error) {
+// POST /v1/ai/learning/workspaces/{workspaceId}/discussions/generate
+func (UnimplementedHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePost(ctx context.Context, req *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq, params V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams) (r *GeneratedDiscussion, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

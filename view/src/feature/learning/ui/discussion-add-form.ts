@@ -19,10 +19,10 @@ export class LearningDiscussionAddForm extends LitElement {
   private _theme = "";
 
   @state()
-  private _premise = "";
+  private _language: DiscussionLanguage = getLocale() === "ja" ? "ja" : "en";
 
   @state()
-  private _language: DiscussionLanguage = getLocale() === "ja" ? "ja" : "en";
+  private _sourceMode: "text" | "urls" = "text";
 
   @state()
   private _sourceText = "";
@@ -35,14 +35,12 @@ export class LearningDiscussionAddForm extends LitElement {
 
   get value(): {
     theme: string;
-    premise: string;
     language: DiscussionLanguage;
     sourceText?: string;
     sourceUrls?: string[];
   } {
     return {
       theme: this._theme,
-      premise: this._premise,
       language: this._language,
       ...(this._sourceText.trim() || this._sourceUrls.length > 0
         ? {
@@ -54,7 +52,9 @@ export class LearningDiscussionAddForm extends LitElement {
   }
 
   get isValid(): boolean {
-    return this._theme.trim().length > 0;
+    const hasSource =
+      this._sourceText.trim().length > 0 || this._sourceUrls.length > 0;
+    return this._theme.trim().length > 0 || hasSource;
   }
 
   private _handleThemeInput(e: InputEvent) {
@@ -62,9 +62,8 @@ export class LearningDiscussionAddForm extends LitElement {
     this._theme = input.value;
   }
 
-  private _handlePremiseInput(e: InputEvent) {
-    const textarea = e.target as HTMLTextAreaElement;
-    this._premise = textarea.value;
+  private _handleSourceModeChange(mode: "text" | "urls") {
+    this._sourceMode = mode;
   }
 
   private _handleSourceTextInput(e: InputEvent) {
@@ -102,7 +101,7 @@ export class LearningDiscussionAddForm extends LitElement {
 
   reset() {
     this._theme = "";
-    this._premise = "";
+    this._sourceMode = "text";
     this._sourceText = "";
     this._sourceUrls = [];
     this._newUrl = "";
@@ -120,70 +119,79 @@ export class LearningDiscussionAddForm extends LitElement {
             aria-label=${msg("Theme")}
           />
         </div>
-        <div class="field">
-          <textarea
-            .value=${live(this._premise)}
-            @input=${this._handlePremiseInput}
-            placeholder=${msg("Premise (optional)")}
-            aria-label=${msg("Premise")}
-            rows="4"
-          ></textarea>
-        </div>
+
         ${!this.isFree
           ? html`
               <div class="field">
-                <label class="source-label">${msg("Source text")}</label>
-                <textarea
-                  .value=${live(this._sourceText)}
-                  @input=${this._handleSourceTextInput}
-                  placeholder=${msg("Source text (optional)")}
-                  aria-label=${msg("Source text")}
-                  rows="4"
-                ></textarea>
-              </div>
-              <div class="field">
-                <label class="source-label">${msg("Source URLs")}</label>
-                <div class="url-input-row">
-                  <input
-                    type="url"
-                    .value=${live(this._newUrl)}
-                    @input=${this._handleNewUrlInput}
-                    @keydown=${this._handleUrlKeyDown}
-                    placeholder=${msg("Add URL")}
-                    aria-label=${msg("Source URL")}
-                  />
+                <div class="source-tabs">
                   <button
                     type="button"
-                    class="btn btn-primary"
-                    aria-label=${msg("Add URL")}
-                    @click=${this._handleAddUrl}
-                    ?disabled=${!this._newUrl.trim()}
+                    class="source-tab ${this._sourceMode === "text" ? "active" : ""}"
+                    @click=${() => this._handleSourceModeChange("text")}
                   >
-                    <ui-icon-add></ui-icon-add>
+                    ${msg("Source text")}
+                  </button>
+                  <button
+                    type="button"
+                    class="source-tab ${this._sourceMode === "urls" ? "active" : ""}"
+                    @click=${() => this._handleSourceModeChange("urls")}
+                  >
+                    ${msg("Source URLs")}
                   </button>
                 </div>
-                ${this._sourceUrls.length > 0
+                ${this._sourceMode === "text"
                   ? html`
-                      <ul class="url-list">
-                        ${this._sourceUrls.map(
-                          (url) => html`
-                            <li class="url-item">
-                              <span class="url-text">${url}</span>
-                              <button
-                                type="button"
-                                class="delete-button"
-                                data-url=${url}
-                                @click=${this._handleRemoveUrl}
-                                aria-label=${msg("Remove URL")}
-                              >
-                                <ui-icon-delete></ui-icon-delete>
-                              </button>
-                            </li>
-                          `,
-                        )}
-                      </ul>
+                      <textarea
+                        .value=${live(this._sourceText)}
+                        @input=${this._handleSourceTextInput}
+                        placeholder=${msg("Source text (optional)")}
+                        aria-label=${msg("Source text")}
+                        rows="4"
+                      ></textarea>
                     `
-                  : ""}
+                  : html`
+                      <div class="url-input-row">
+                        <input
+                          type="url"
+                          .value=${live(this._newUrl)}
+                          @input=${this._handleNewUrlInput}
+                          @keydown=${this._handleUrlKeyDown}
+                          placeholder=${msg("Add URL")}
+                          aria-label=${msg("Source URL")}
+                        />
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          aria-label=${msg("Add URL")}
+                          @click=${this._handleAddUrl}
+                          ?disabled=${!this._newUrl.trim()}
+                        >
+                          <ui-icon-add></ui-icon-add>
+                        </button>
+                      </div>
+                      ${this._sourceUrls.length > 0
+                        ? html`
+                            <ul class="url-list">
+                              ${this._sourceUrls.map(
+                                (url) => html`
+                                  <li class="url-item">
+                                    <span class="url-text">${url}</span>
+                                    <button
+                                      type="button"
+                                      class="delete-button"
+                                      data-url=${url}
+                                      @click=${this._handleRemoveUrl}
+                                      aria-label=${msg("Remove URL")}
+                                    >
+                                      <ui-icon-delete></ui-icon-delete>
+                                    </button>
+                                  </li>
+                                `,
+                              )}
+                            </ul>
+                          `
+                        : ""}
+                    `}
               </div>
             `
           : ""}
@@ -207,11 +215,28 @@ export class LearningDiscussionAddForm extends LitElement {
         width: 100%;
         box-sizing: border-box;
       }
-      .source-label {
-        display: block;
-        margin-bottom: 4px;
-        font-size: 12px;
+      .source-tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+      .source-tab {
+        padding: 6px 12px;
+        border: 1px solid var(--color-border);
+        background: transparent;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
         color: var(--color-fg-muted);
+        transition: all 0.2s;
+      }
+      .source-tab:hover {
+        background: var(--color-bg-subtle);
+      }
+      .source-tab.active {
+        background: var(--color-primary);
+        border-color: var(--color-primary);
+        color: var(--color-fg-on-primary);
       }
       .url-input-row {
         display: flex;

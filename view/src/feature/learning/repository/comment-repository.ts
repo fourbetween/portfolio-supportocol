@@ -184,32 +184,6 @@ export class CommentRepository {
     return comments;
   }
 
-  async generateFromSource(
-    workspaceId: string,
-    discussionId: string,
-    text: string,
-    urls: string[],
-  ): Promise<Comment[]> {
-    const { data, error } = await client.POST(
-      "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate",
-      {
-        params: {
-          path: { workspaceId, discussionId },
-        },
-        body: { text, urls },
-      },
-    );
-    if (error) throw new Error(error.message);
-
-    const comments = data || [];
-    const cached = this._cache.get(discussionId);
-    if (cached && comments.length > 0) {
-      this._cache.set(discussionId, [...cached, ...comments]);
-    }
-
-    return comments;
-  }
-
   async archive(
     workspaceId: string,
     discussionId: string,

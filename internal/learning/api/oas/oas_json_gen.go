@@ -1669,6 +1669,127 @@ func (s *Error) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode implements json.Marshaler.
+func (s *GeneratedDiscussion) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GeneratedDiscussion) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("discussion")
+		s.Discussion.Encode(e)
+	}
+	{
+		e.FieldStart("comments")
+		e.ArrStart()
+		for _, elem := range s.Comments {
+			elem.Encode(e)
+		}
+		e.ArrEnd()
+	}
+}
+
+var jsonFieldsNameOfGeneratedDiscussion = [2]string{
+	0: "discussion",
+	1: "comments",
+}
+
+// Decode decodes GeneratedDiscussion from json.
+func (s *GeneratedDiscussion) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GeneratedDiscussion to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "discussion":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.Discussion.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"discussion\"")
+			}
+		case "comments":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				s.Comments = make([]Comment, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem Comment
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Comments = append(s.Comments, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"comments\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GeneratedDiscussion")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfGeneratedDiscussion) {
+					name = jsonFieldsNameOfGeneratedDiscussion[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GeneratedDiscussion) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GeneratedDiscussion) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes ID as json.
 func (s ID) Encode(e *jx.Encoder) {
 	unwrapped := uuid.UUID(s)
@@ -1922,6 +2043,39 @@ func (s *OptCommentFrame) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes DiscussionTheme as json.
+func (o OptDiscussionTheme) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes DiscussionTheme from json.
+func (o *OptDiscussionTheme) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptDiscussionTheme to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptDiscussionTheme) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptDiscussionTheme) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes PermissionLevel as json.
 func (o OptPermissionLevel) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -2092,14 +2246,24 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsComment
 }
 
 // Encode implements json.Marshaler.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) Encode(e *jx.Encoder) {
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) encodeFields(e *jx.Encoder) {
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("projectId")
+		s.ProjectId.Encode(e)
+	}
+	{
+		if s.Title.Set {
+			e.FieldStart("title")
+			s.Title.Encode(e)
+		}
+	}
 	{
 		e.FieldStart("text")
 		e.Str(s.Text)
@@ -2114,22 +2278,44 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 	}
 }
 
-var jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq = [2]string{
-	0: "text",
-	1: "urls",
+var jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq = [4]string{
+	0: "projectId",
+	1: "title",
+	2: "text",
+	3: "urls",
 }
 
-// Decode decodes V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq from json.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) Decode(d *jx.Decoder) error {
+// Decode decodes V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq from json.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq to nil")
+		return errors.New("invalid: unable to decode V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq to nil")
 	}
 	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "text":
+		case "projectId":
 			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.ProjectId.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"projectId\"")
+			}
+		case "title":
+			if err := func() error {
+				s.Title.Reset()
+				if err := s.Title.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"title\"")
+			}
+		case "text":
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				v, err := d.Str()
 				s.Text = string(v)
@@ -2141,7 +2327,7 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 				return errors.Wrap(err, "decode field \"text\"")
 			}
 		case "urls":
-			requiredBitSet[0] |= 1 << 1
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				s.Urls = make([]url.URL, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -2165,12 +2351,12 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq")
+		return errors.Wrap(err, "decode V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000011,
+		0b00001101,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2182,8 +2368,8 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) {
-					name = jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) {
+					name = jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -2204,14 +2390,14 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGenerat
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) MarshalJSON() ([]byte, error) {
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) UnmarshalJSON(data []byte) error {
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

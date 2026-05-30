@@ -208,13 +208,12 @@ func decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsComme
 	return params, nil
 }
 
-// V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams is parameters of POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate operation.
-type V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams struct {
-	WorkspaceId  ID
-	DiscussionId ID
+// V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams is parameters of POST /v1/ai/learning/workspaces/{workspaceId}/discussions/generate operation.
+type V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams struct {
+	WorkspaceId ID
 }
 
-func unpackV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams(packed middleware.Parameters) (params V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams) {
+func unpackV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams(packed middleware.Parameters) (params V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "workspaceId",
@@ -222,17 +221,10 @@ func unpackV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGener
 		}
 		params.WorkspaceId = packed[key].(ID)
 	}
-	{
-		key := middleware.ParameterKey{
-			Name: "discussionId",
-			In:   "path",
-		}
-		params.DiscussionId = packed[key].(ID)
-	}
 	return params
 }
 
-func decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams(args [2]string, argsEscaped bool, r *http.Request) (params V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostParams, _ error) {
+func decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostParams, _ error) {
 	// Decode path: workspaceId.
 	if err := func() error {
 		param := args[0]
@@ -281,58 +273,6 @@ func decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGener
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "workspaceId",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	// Decode path: discussionId.
-	if err := func() error {
-		param := args[1]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[1])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "discussionId",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				var paramsDotDiscussionIdVal uuid.UUID
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToUUID(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDiscussionIdVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.DiscussionId = ID(paramsDotDiscussionIdVal)
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "discussionId",
 			In:   "path",
 			Err:  err,
 		}

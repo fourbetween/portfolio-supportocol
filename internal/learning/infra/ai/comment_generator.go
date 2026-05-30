@@ -240,107 +240,148 @@ type generatedDiscussionComment struct {
 	ParentIndex int    `json:"parent_index"`
 }
 
-func (cg *CommentGenerator) GenerateDiscussionComments(ctx context.Context, params domain.GenerateDiscussionCommentsParams) (domain.CommentGenerationResult, error) {
+type generatedDiscussion struct {
+	Theme      string                       `json:"theme"`
+	Premise    string                       `json:"premise"`
+	Conclusion string                       `json:"conclusion"`
+	Language   string                       `json:"language"`
+	Comments   []generatedDiscussionComment `json:"comments"`
+}
+
+func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domain.GenerateDiscussionParams) (domain.DiscussionGenerationResult, error) {
 	if params.Text != "" && len(params.URLs) != 0 {
-		return domain.CommentGenerationResult{}, fmt.Errorf("text and URLs cannot be provided at the same time")
+		return domain.DiscussionGenerationResult{}, fmt.Errorf("text and URLs cannot be provided at the same time")
 	}
 	if params.Text == "" && len(params.URLs) == 0 {
-		return domain.CommentGenerationResult{}, fmt.Errorf("either text or URLs must be provided")
+		return domain.DiscussionGenerationResult{}, fmt.Errorf("either text or URLs must be provided")
 	}
 
-	discussion, err := cg.discussionRepo.Load(ctx, domain.LoadDiscussionParams{
-		ID:          params.DiscussionID,
-		WorkspaceID: params.WorkspaceID,
-	})
+	projectPremise, err := cg.projectPremiseProv.GetProjectPremise(ctx, params.WorkspaceID, params.ProjectID)
 	if err != nil {
-		return domain.CommentGenerationResult{}, err
+		return domain.DiscussionGenerationResult{}, err
 	}
 
-	projectPremise, err := cg.projectPremiseProv.GetProjectPremise(ctx, params.WorkspaceID, discussion.ProjectID())
-	if err != nil {
-		return domain.CommentGenerationResult{}, err
-	}
-
-	prompt := cg.buildDiscussionPrompt(discussion, projectPremise, params.Text, params.URLs)
+	prompt := cg.buildGenerateDiscussionPrompt(projectPremise, params.Title, params.Text, params.URLs)
 
 	var tools []*genai.Tool
 	if len(params.URLs) > 0 {
 		tools = []*genai.Tool{{URLContext: &genai.URLContext{}}}
 	}
 
-	generated, tokens, err := cg.generateDiscussionWithAI(ctx, prompt, tools)
+	generated, tokens, err := cg.generateFullDiscussionWithAI(ctx, prompt, tools)
 	if err != nil {
-		return domain.CommentGenerationResult{}, err
+		return domain.DiscussionGenerationResult{}, err
 	}
 
-	comments, err := cg.createDiscussionComments(params, generated)
-	if err != nil {
-		return domain.CommentGenerationResult{}, err
+	lang := domain.DiscussionLanguage(generated.Language)
+	if err := lang.Validate(); err != nil {
+		lang = domain.DiscussionLanguageJa
 	}
-	return domain.CommentGenerationResult{Comments: comments, Tokens: tokens}, nil
+
+	comments, err := cg.createGeneratedDiscussionComments(params, generated.Comments)
+	if err != nil {
+		return domain.DiscussionGenerationResult{}, err
+	}
+
+	return domain.DiscussionGenerationResult{
+		Theme:      generated.Theme,
+		Premise:    generated.Premise,
+		Conclusion: generated.Conclusion,
+		Language:   lang,
+		Comments:   comments,
+		Tokens:     tokens,
+	}, nil
 }
 
-func (cg *CommentGenerator) buildDiscussionPrompt(discussion *domain.Discussion, projectPremise string, text string, urls []string) string {
+func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string, title string, text string, urls []string) string {
 	var sb strings.Builder
-	cg.writePremises(&sb, projectPremise, discussion.Premise())
-	cg.writeDiscussionTheme(&sb, discussion)
+	if projectPremise != "" {
+		fmt.Fprintf(&sb, "<project_premise>\n%s\n</project_premise>\n\n", projectPremise)
+	}
+	if title != "" {
+		fmt.Fprintf(&sb, "<title>\n%s\n</title>\n\n", title)
+	}
 	if text != "" {
 		fmt.Fprintf(&sb, "<source type=\"text\">\n%s\n</source>\n\n", text)
 	}
 	for _, u := range urls {
 		fmt.Fprintf(&sb, "<source type=\"url\">\n%s\n</source>\n\n", u)
 	}
-	cg.writeDiscussionInstructions(&sb)
+	cg.writeGenerateDiscussionInstructions(&sb, title != "")
 	return sb.String()
 }
 
-func (cg *CommentGenerator) writeDiscussionInstructions(sb *strings.Builder) {
+func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Builder, hasTitle bool) {
 	sb.WriteString("<instructions>\n")
-	// ステップ・バイ・ステップの思考プロセスを導入
-	sb.WriteString("Follow these steps to ensure the highest level of detail and logical depth:\n")
+	sb.WriteString("Follow these steps to generate a complete discussion:\n")
 	sb.WriteString("1. Analyze the source document and extract every single fact, data point, specific example, and sub-argument.\n")
-	sb.WriteString("2. Organize these points into a logical hierarchy (a discussion tree) where each branch dives deep into 'why', 'how', and 'evidence'.\n")
-	sb.WriteString("3. Convert each atomic point into a structured comment following the rules below.\n")
+	if hasTitle {
+		sb.WriteString("2. Generate the discussion theme, premise, and conclusion from the perspective of the provided title. The title should guide how the source material is interpreted and structured into a discussion.\n")
+	} else {
+		sb.WriteString("2. Generate the discussion theme, premise, and conclusion based on the source material.\n")
+	}
+	sb.WriteString("3. Organize the extracted points into a logical hierarchy (a discussion tree) where each branch dives deep into 'why', 'how', and 'evidence'.\n")
+	sb.WriteString("4. Convert each atomic point into a structured comment following the rules below.\n")
 
-	sb.WriteString("\nRules for generation:\n")
-	// 詳細さと網羅性の指示
+	sb.WriteString("\nRules for discussion generation:\n")
+	sb.WriteString("- The theme must be a concise title for the discussion (max 255 characters).\n")
+	sb.WriteString("- The premise must summarize the foundational assumptions or context of the discussion (max 4000 characters).\n")
+	sb.WriteString("- The conclusion must synthesize the key findings or outcomes of the discussion (max 1000 characters).\n")
+	sb.WriteString("- Detect the language of the source material and use it consistently for the theme, premise, conclusion, comments, and comment types.\n")
+
+	sb.WriteString("\nRules for comment generation:\n")
 	sb.WriteString("- Generate as many comments as necessary to fully represent the entire content of the source document. Do not summarize; be exhaustive.\n")
 	sb.WriteString("- Each comment must be a single, concise sentence focusing on one 'atomic' idea. If a point is complex, break it into multiple child comments.\n")
 	sb.WriteString("- Do NOT generate comments that merely restate or paraphrase the discussion theme itself. Comments must add new information or analysis beyond the theme.\n")
-
-	// 構造とフォーマットの指示
 	sb.WriteString("- Use 'parent_index' to indicate the 0-based index of the parent comment (-1 for root-level comments).\n")
 	sb.WriteString("- Create deep branches: for every main point, include child comments for supporting evidence, numerical data, and specific nuances from the text.\n")
 	sb.WriteString("- Express logical relationships (e.g., support, contrast, evidence) through the comment type, never through sentence connectors.\n")
-
-	// 言語設定
-	sb.WriteString("- The language of the comments and the comment types must strictly match the language of the discussion theme.\n")
+	sb.WriteString("- The language of the comments and the comment types must strictly match the detected language.\n")
 	sb.WriteString("</instructions>")
 }
 
-func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt string, tools []*genai.Tool) ([]generatedDiscussionComment, int32, error) {
+func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, prompt string, tools []*genai.Tool) (generatedDiscussion, int32, error) {
 	config := &genai.GenerateContentConfig{
 		ThinkingConfig: &genai.ThinkingConfig{
 			ThinkingLevel: genai.ThinkingLevelHigh,
 		},
 		ResponseMIMEType: "application/json",
 		ResponseSchema: &genai.Schema{
-			Type: genai.TypeArray,
-			Items: &genai.Schema{
-				Type: genai.TypeObject,
-				Properties: map[string]*genai.Schema{
-					"type": {
-						Type: genai.TypeString,
-					},
-					"content": {
-						Type: genai.TypeString,
-					},
-					"parent_index": {
-						Type: genai.TypeInteger,
+			Type: genai.TypeObject,
+			Properties: map[string]*genai.Schema{
+				"theme": {
+					Type: genai.TypeString,
+				},
+				"premise": {
+					Type: genai.TypeString,
+				},
+				"conclusion": {
+					Type: genai.TypeString,
+				},
+				"language": {
+					Type: genai.TypeString,
+					Enum: []string{"en", "ja"},
+				},
+				"comments": {
+					Type: genai.TypeArray,
+					Items: &genai.Schema{
+						Type: genai.TypeObject,
+						Properties: map[string]*genai.Schema{
+							"type": {
+								Type: genai.TypeString,
+							},
+							"content": {
+								Type: genai.TypeString,
+							},
+							"parent_index": {
+								Type: genai.TypeInteger,
+							},
+						},
+						Required: []string{"type", "content", "parent_index"},
 					},
 				},
-				Required: []string{"type", "content", "parent_index"},
 			},
+			Required: []string{"theme", "premise", "conclusion", "language", "comments"},
 		},
 		Tools: tools,
 	}
@@ -352,12 +393,12 @@ func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt
 		config,
 	)
 	if err != nil {
-		return nil, 0, fmt.Errorf("failed to generate discussion content: %w", err)
+		return generatedDiscussion{}, 0, fmt.Errorf("failed to generate discussion: %w", err)
 	}
 
-	var generated []generatedDiscussionComment
+	var generated generatedDiscussion
 	if err := json.Unmarshal([]byte(resp.Text()), &generated); err != nil {
-		return nil, 0, fmt.Errorf("failed to unmarshal AI response: %w, response: %s", err, resp.Text())
+		return generatedDiscussion{}, 0, fmt.Errorf("failed to unmarshal AI response: %w, response: %s", err, resp.Text())
 	}
 
 	var tokens int32
@@ -367,7 +408,7 @@ func (cg *CommentGenerator) generateDiscussionWithAI(ctx context.Context, prompt
 	return generated, tokens, nil
 }
 
-func (cg *CommentGenerator) createDiscussionComments(params domain.GenerateDiscussionCommentsParams, generated []generatedDiscussionComment) ([]*domain.Comment, error) {
+func (cg *CommentGenerator) createGeneratedDiscussionComments(params domain.GenerateDiscussionParams, generated []generatedDiscussionComment) ([]*domain.Comment, error) {
 	result := make([]*domain.Comment, 0, len(generated))
 	idByIndex := make(map[int]string, len(generated))
 
@@ -382,7 +423,7 @@ func (cg *CommentGenerator) createDiscussionComments(params domain.GenerateDiscu
 		}
 
 		c, err := cg.factory.Create(domain.CreateCommentParams{
-			DiscussionID:    params.DiscussionID,
+			DiscussionID:    "",
 			ParentCommentID: parentCommentID,
 			Body: domain.CommentBody{
 				Type:    g.Type,
@@ -401,3 +442,5 @@ func (cg *CommentGenerator) createDiscussionComments(params domain.GenerateDiscu
 
 	return result, nil
 }
+
+

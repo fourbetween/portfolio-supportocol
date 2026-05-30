@@ -42,9 +42,18 @@ type (
 		Tokens   int32
 	}
 
+	DiscussionGenerationResult struct {
+		Theme      string
+		Premise    string
+		Conclusion string
+		Language   DiscussionLanguage
+		Comments   []*Comment
+		Tokens     int32
+	}
+
 	CommentGenerator interface {
 		GenerateChildComments(ctx context.Context, params GenerateChildCommentsParams) (CommentGenerationResult, error)
-		GenerateDiscussionComments(ctx context.Context, params GenerateDiscussionCommentsParams) (CommentGenerationResult, error)
+		GenerateDiscussion(ctx context.Context, params GenerateDiscussionParams) (DiscussionGenerationResult, error)
 	}
 
 	GenerateChildCommentsParams struct {
@@ -55,12 +64,13 @@ type (
 		UserID          string
 	}
 
-	GenerateDiscussionCommentsParams struct {
-		DiscussionID string
-		WorkspaceID  string
-		Text         string
-		URLs         []string
-		UserID       string
+	GenerateDiscussionParams struct {
+		WorkspaceID string
+		ProjectID   string
+		Title       string
+		Text        string
+		URLs        []string
+		UserID      string
 	}
 
 	ProjectPremiseProvider interface {
@@ -243,6 +253,10 @@ func (c *Comment) RemoveIssue(issueID string) bool {
 		}
 	}
 	return false
+}
+
+func (c *Comment) SetDiscussionID(discussionID string) {
+	c.discussionID = discussionID
 }
 
 func (c *Comment) CheckBelongsTo(discussionID string) error {

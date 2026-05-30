@@ -1106,10 +1106,6 @@
   <source>Add URL</source>
   <target>URLを追加</target>
 </trans-unit>
-<trans-unit id="sf9aee319a006c9b4">
-  <source>Add</source>
-  <target>追加</target>
-</trans-unit>
 <trans-unit id="s71143d946d056fa0">
   <source>Remove URL</source>
   <target>URLを削除</target>

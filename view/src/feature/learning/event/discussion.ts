@@ -23,16 +23,16 @@ export class LearningDiscussionCreateEvent extends Event {
   static get eventName() {
     return "learning-discussion-create" as const;
   }
-  public readonly theme: string;
-  public readonly premise: string;
-  public readonly language: DiscussionLanguage;
+  public readonly theme?: string;
+  public readonly premise?: string;
+  public readonly language?: DiscussionLanguage;
   public readonly sourceText?: string;
   public readonly sourceUrls?: string[];
 
   constructor(
-    theme: string,
-    premise: string,
-    language: DiscussionLanguage,
+    theme?: string,
+    premise?: string,
+    language?: DiscussionLanguage,
     sourceText?: string,
     sourceUrls?: string[],
   ) {

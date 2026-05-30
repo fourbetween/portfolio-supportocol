@@ -954,32 +954,32 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/generate": {
+    "/v1/ai/learning/workspaces/{workspaceId}/discussions/generate": {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 workspaceId: components["parameters"]["workspaceId"];
-                discussionId: components["parameters"]["discussionId"];
             };
             cookie?: never;
         };
         get?: never;
         put?: never;
-        /** @description generate comments using AI based on a discussion */
+        /** @description generate a discussion with comments using AI from source text and URLs */
         post: {
             parameters: {
                 query?: never;
                 header?: never;
                 path: {
                     workspaceId: components["parameters"]["workspaceId"];
-                    discussionId: components["parameters"]["discussionId"];
                 };
                 cookie?: never;
             };
             requestBody: {
                 content: {
                     "application/json": {
+                        projectId: components["schemas"]["Id"];
+                        title?: components["schemas"]["DiscussionTheme"];
                         text: string;
                         urls: string[];
                     };
@@ -992,7 +992,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": components["schemas"]["Comment"][];
+                        "application/json": components["schemas"]["GeneratedDiscussion"];
                     };
                 };
                 /** @description default error */
@@ -1147,6 +1147,10 @@ export interface components {
             id: components["schemas"]["Id"];
             title: components["schemas"]["CommentIssueTitle"];
             description: components["schemas"]["CommentIssueDescription"];
+        };
+        GeneratedDiscussion: {
+            discussion: components["schemas"]["Discussion"];
+            comments: components["schemas"]["Comment"][];
         };
     };
     responses: never;

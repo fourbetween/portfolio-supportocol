@@ -7,7 +7,7 @@ type OperationName = string
 
 const (
 	V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostOperation      OperationName = "V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePost"
-	V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostOperation               OperationName = "V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePost"
+	V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostOperation                                   OperationName = "V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePost"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDeleteOperation                        OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchiveDelete"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePostOperation                          OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdArchivePost"
 	V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDeleteOperation       OperationName = "V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdArchiveDelete"

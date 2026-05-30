@@ -37,8 +37,8 @@ type Container struct {
 	RemoveCommentIssue         *usecase.RemoveCommentIssueUsecase
 	ReplaceComments            *usecase.ReplaceCommentsUsecase
 	RenameCommentType          *usecase.RenameCommentTypeUsecase
-	GenerateComment            *usecase.GenerateChildCommentsUsecase
-	GenerateDiscussionComments *usecase.GenerateDiscussionCommentsUsecase
+	GenerateComment    *usecase.GenerateChildCommentsUsecase
+	GenerateDiscussion *usecase.GenerateDiscussionUsecase
 }
 
 func NewContainer(
@@ -109,7 +109,7 @@ func NewContainer(
 		RemoveCommentIssue:         usecase.NewRemoveCommentIssueUsecase(discussionRepo, commentRepo, permSv, txManager),
 		ReplaceComments:            usecase.NewReplaceCommentsUsecase(discussionRepo, commentRepo, commentFac, permSv, clockSrv, txManager, auditSv),
 		RenameCommentType:          usecase.NewRenameCommentTypeUsecase(discussionRepo, commentRepo, permSv, txManager, auditSv),
-		GenerateComment:            usecase.NewGenerateChildCommentsUsecase(discussionRepo, commentRepo, generator, permSv, aiUsageSv, clockSrv, txManager),
-		GenerateDiscussionComments: usecase.NewGenerateDiscussionCommentsUsecase(discussionRepo, commentRepo, generator, permSv, aiUsageSv, clockSrv, txManager),
+		GenerateComment:    usecase.NewGenerateChildCommentsUsecase(discussionRepo, commentRepo, generator, permSv, aiUsageSv, clockSrv, txManager),
+		GenerateDiscussion: usecase.NewGenerateDiscussionUsecase(discussionRepo, commentRepo, discussionFac, generator, permSv, aiUsageSv, clockSrv, txManager, auditSv),
 	}, nil
 }

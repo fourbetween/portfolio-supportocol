@@ -663,6 +663,32 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
+// Ref: #/components/schemas/GeneratedDiscussion
+type GeneratedDiscussion struct {
+	Discussion Discussion `json:"discussion"`
+	Comments   []Comment  `json:"comments"`
+}
+
+// GetDiscussion returns the value of Discussion.
+func (s *GeneratedDiscussion) GetDiscussion() Discussion {
+	return s.Discussion
+}
+
+// GetComments returns the value of Comments.
+func (s *GeneratedDiscussion) GetComments() []Comment {
+	return s.Comments
+}
+
+// SetDiscussion sets the value of Discussion.
+func (s *GeneratedDiscussion) SetDiscussion(val Discussion) {
+	s.Discussion = val
+}
+
+// SetComments sets the value of Comments.
+func (s *GeneratedDiscussion) SetComments(val []Comment) {
+	s.Comments = val
+}
+
 type ID uuid.UUID
 
 // NewNilDateTime returns new NilDateTime with value set to v.
@@ -983,6 +1009,52 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
+// NewOptDiscussionTheme returns new OptDiscussionTheme with value set to v.
+func NewOptDiscussionTheme(v DiscussionTheme) OptDiscussionTheme {
+	return OptDiscussionTheme{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDiscussionTheme is optional DiscussionTheme.
+type OptDiscussionTheme struct {
+	Value DiscussionTheme
+	Set   bool
+}
+
+// IsSet returns true if OptDiscussionTheme was set.
+func (o OptDiscussionTheme) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDiscussionTheme) Reset() {
+	var v DiscussionTheme
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDiscussionTheme) SetTo(v DiscussionTheme) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDiscussionTheme) Get() (v DiscussionTheme, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDiscussionTheme) Or(d DiscussionTheme) DiscussionTheme {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptPermissionLevel returns new OptPermissionLevel with value set to v.
 func NewOptPermissionLevel(v PermissionLevel) OptPermissionLevel {
 	return OptPermissionLevel{
@@ -1092,28 +1164,50 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsComment
 	s.CommentType = val
 }
 
-type V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq struct {
-	Text string    `json:"text"`
-	Urls []url.URL `json:"urls"`
+type V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq struct {
+	ProjectId ID                 `json:"projectId"`
+	Title     OptDiscussionTheme `json:"title"`
+	Text      string             `json:"text"`
+	Urls      []url.URL          `json:"urls"`
+}
+
+// GetProjectId returns the value of ProjectId.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetProjectId() ID {
+	return s.ProjectId
+}
+
+// GetTitle returns the value of Title.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetTitle() OptDiscussionTheme {
+	return s.Title
 }
 
 // GetText returns the value of Text.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) GetText() string {
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetText() string {
 	return s.Text
 }
 
 // GetUrls returns the value of Urls.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) GetUrls() []url.URL {
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetUrls() []url.URL {
 	return s.Urls
 }
 
+// SetProjectId sets the value of ProjectId.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetProjectId(val ID) {
+	s.ProjectId = val
+}
+
+// SetTitle sets the value of Title.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetTitle(val OptDiscussionTheme) {
+	s.Title = val
+}
+
 // SetText sets the value of Text.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) SetText(val string) {
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetText(val string) {
 	s.Text = val
 }
 
 // SetUrls sets the value of Urls.
-func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq) SetUrls(val []url.URL) {
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetUrls(val []url.URL) {
 	s.Urls = val
 }
 

@@ -93,8 +93,8 @@ func (s *Server) decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 	}
 }
 
-func (s *Server) decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostRequest(r *http.Request) (
-	req *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq,
+func (s *Server) decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostRequest(r *http.Request) (
+	req *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq,
 	rawBody []byte,
 	close func() error,
 	rerr error,
@@ -141,7 +141,7 @@ func (s *Server) decodeV1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdC
 		rawBody = append(rawBody, buf...)
 		d := jx.DecodeBytes(buf)
 
-		var request V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsGeneratePostReq
+		var request V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
