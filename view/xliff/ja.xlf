@@ -1026,10 +1026,6 @@
   <source>Show more</source>
   <target>さらに表示</target>
 </trans-unit>
-<trans-unit id="sd28b1ad8b626bf03">
-  <source>Premise (optional)</source>
-  <target>前提（オプション）</target>
-</trans-unit>
 <trans-unit id="s911f4ae35e20d587">
   <source>New Discussion</source>
   <target>新しい議論</target>
