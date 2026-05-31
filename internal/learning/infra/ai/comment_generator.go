@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"slices"
 	"strings"
 
@@ -55,6 +56,12 @@ func (cg *CommentGenerator) GenerateChildComments(ctx context.Context, params do
 	}
 
 	prompt := cg.buildPrompt(discussion, projectPremise, path, children, params.CommentType)
+
+	slog.Info(
+		"Generating child comments with AI",
+		slog.String("prompt", prompt),
+		slog.Int("prompt_length", len(prompt)),
+	)
 
 	contents, tokens, err := cg.generateWithAI(ctx, prompt)
 	if err != nil {
@@ -268,6 +275,13 @@ func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domai
 		tools = []*genai.Tool{{URLContext: &genai.URLContext{}}}
 	}
 
+	slog.Info(
+		"Generating discussion with AI",
+		slog.String("prompt", prompt),
+		slog.Int("prompt_length", len(prompt)),
+		slog.Int("num_tools", len(tools)),
+	)
+
 	generated, tokens, err := cg.generateFullDiscussionWithAI(ctx, prompt, tools)
 	if err != nil {
 		return domain.DiscussionGenerationResult{}, err
@@ -442,5 +456,3 @@ func (cg *CommentGenerator) createGeneratedDiscussionComments(params domain.Gene
 
 	return result, nil
 }
-
-
