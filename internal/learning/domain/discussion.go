@@ -64,6 +64,7 @@ type (
 		ProjectID   string
 		Theme       string
 		Premise     string
+		Conclusion  string
 		Language    DiscussionLanguage
 		CreatedBy   string
 	}
@@ -102,9 +103,10 @@ func (f *DiscussionFactory) Create(params CreateDiscussionParams, count int) (*D
 		WorkspaceID: params.WorkspaceID,
 		ProjectID:   params.ProjectID,
 		Content: DiscussionContent{
-			Theme:    params.Theme,
-			Premise:  params.Premise,
-			Language: params.Language,
+			Theme:      params.Theme,
+			Premise:    params.Premise,
+			Conclusion: params.Conclusion,
+			Language:   params.Language,
 		},
 		Status: DiscussionStatusPrivate,
 		Activity: DiscussionActivity{

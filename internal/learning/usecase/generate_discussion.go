@@ -105,6 +105,7 @@ func (u *GenerateDiscussionUsecase) Execute(ctx context.Context, input GenerateD
 			ProjectID:   input.ProjectID,
 			Theme:       result.Theme,
 			Premise:     result.Premise,
+			Conclusion:  result.Conclusion,
 			Language:    result.Language,
 			CreatedBy:   input.UserID,
 		}, count)
