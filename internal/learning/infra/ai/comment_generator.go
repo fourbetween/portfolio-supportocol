@@ -371,7 +371,8 @@ func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Buil
 	sb.WriteString("Create a hierarchical structure where:\n")
 	sb.WriteString("- Root-level comments introduce major themes, claims, or questions from the source.\n")
 	sb.WriteString("- Child comments deepen the analysis by providing evidence, examples, counterpoints, or implications.\n")
-	sb.WriteString("- Each branch explores 'why', 'how', 'evidence for', 'evidence against', and 'so what'.\n\n")
+	sb.WriteString("- Each branch explores 'why', 'how', 'evidence for', 'evidence against', and 'so what'.\n")
+	sb.WriteString("- Extract every piece of information from the source that relates to the discussion theme and represent it somewhere in the comment tree. Do not omit facts, data points, examples, or sub-arguments even if they seem minor.\n\n")
 
 	sb.WriteString("Comment type semantics (use consistently):\n")
 	sb.WriteString("- Use descriptive type names that match the source language (e.g., 'claim'/'主張', 'evidence'/'根拠', 'question'/'疑問', 'example'/'例', 'implication'/'含意', 'counterpoint'/'反論').\n")
@@ -382,7 +383,8 @@ func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Buil
 	sb.WriteString("- Be exhaustive: represent all substantive content from the source without summarization.\n")
 	sb.WriteString("- Never restate the theme or premise in a comment. Comments must add new information.\n")
 	sb.WriteString("- Express logical relationships through tree structure and comment type, not through connecting phrases within the text.\n")
-	sb.WriteString("- Include specific data, examples, and nuances from the source. Do not generalize away details.\n\n")
+	sb.WriteString("- Include specific data, examples, and nuances from the source. Do not generalize away details.\n")
+	sb.WriteString("- Generate as many comments as needed to fully capture the source content. More comments are preferable to fewer; there is no upper limit concern.\n\n")
 
 	sb.WriteString("Tree structure rules:\n")
 	sb.WriteString("- Use parent_index to establish hierarchy (-1 for root comments, 0-based index for children).\n")
