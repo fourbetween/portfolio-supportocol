@@ -105,6 +105,7 @@ export class DiscussionRepository {
     text: string,
     urls: string[],
     modelLevel: ModelLevel,
+    language: DiscussionLanguage,
     title?: string,
   ): Promise<Discussion> {
     const { data, error } = await client.POST(
@@ -118,6 +119,7 @@ export class DiscussionRepository {
           text,
           urls,
           model_level: modelLevel,
+          language,
           ...(title ? { title } : {}),
         },
       },

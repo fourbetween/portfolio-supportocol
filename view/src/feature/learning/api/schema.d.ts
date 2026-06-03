@@ -980,6 +980,7 @@ export interface paths {
                     "application/json": {
                         projectId: components["schemas"]["Id"];
                         title?: components["schemas"]["DiscussionTheme"];
+                        language: components["schemas"]["DiscussionLanguage"];
                         text: string;
                         urls: string[];
                         /** @enum {string} */

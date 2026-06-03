@@ -1167,6 +1167,7 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsComment
 type V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq struct {
 	ProjectId  ID                                                                    `json:"projectId"`
 	Title      OptDiscussionTheme                                                    `json:"title"`
+	Language   DiscussionLanguage                                                    `json:"language"`
 	Text       string                                                                `json:"text"`
 	Urls       []url.URL                                                             `json:"urls"`
 	ModelLevel V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel `json:"model_level"`
@@ -1180,6 +1181,11 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetProject
 // GetTitle returns the value of Title.
 func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetTitle() OptDiscussionTheme {
 	return s.Title
+}
+
+// GetLanguage returns the value of Language.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetLanguage() DiscussionLanguage {
+	return s.Language
 }
 
 // GetText returns the value of Text.
@@ -1205,6 +1211,11 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetProject
 // SetTitle sets the value of Title.
 func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetTitle(val OptDiscussionTheme) {
 	s.Title = val
+}
+
+// SetLanguage sets the value of Language.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetLanguage(val DiscussionLanguage) {
+	s.Language = val
 }
 
 // SetText sets the value of Text.

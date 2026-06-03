@@ -54,6 +54,7 @@ type GenerateDiscussionInput struct {
 	Text        string
 	URLs        []string
 	UserID      string
+	Language    string
 	ModelLevel  domain.ModelLevel
 }
 
@@ -83,6 +84,11 @@ func (u *GenerateDiscussionUsecase) Execute(ctx context.Context, input GenerateD
 		return GenerateDiscussionOutput{}, err
 	}
 
+	lang := domain.DiscussionLanguage(input.Language)
+	if err := lang.Validate(); err != nil {
+		return GenerateDiscussionOutput{}, err
+	}
+
 	result, err := u.generator.GenerateDiscussion(ctx, domain.GenerateDiscussionParams{
 		WorkspaceID: input.WorkspaceID,
 		ProjectID:   input.ProjectID,
@@ -90,6 +96,7 @@ func (u *GenerateDiscussionUsecase) Execute(ctx context.Context, input GenerateD
 		Text:        input.Text,
 		URLs:        input.URLs,
 		UserID:      input.UserID,
+		Language:    lang,
 		ModelLevel:  input.ModelLevel,
 	})
 	if err != nil {
@@ -100,7 +107,7 @@ func (u *GenerateDiscussionUsecase) Execute(ctx context.Context, input GenerateD
 	premise.WriteString(result.Premise)
 	if len(input.URLs) > 0 {
 		var refLabel string
-		if result.Language == domain.DiscussionLanguageJa {
+		if lang == domain.DiscussionLanguageJa {
 			refLabel = "引用："
 		} else {
 			refLabel = "References:"
@@ -126,7 +133,7 @@ func (u *GenerateDiscussionUsecase) Execute(ctx context.Context, input GenerateD
 			Theme:       result.Theme,
 			Premise:     premise.String(),
 			Conclusion:  result.Conclusion,
-			Language:    result.Language,
+			Language:    lang,
 			CreatedBy:   input.UserID,
 		}, count)
 		if err != nil {

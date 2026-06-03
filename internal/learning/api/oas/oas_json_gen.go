@@ -2265,6 +2265,10 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) encodeFiel
 		}
 	}
 	{
+		e.FieldStart("language")
+		s.Language.Encode(e)
+	}
+	{
 		e.FieldStart("text")
 		e.Str(s.Text)
 	}
@@ -2282,12 +2286,13 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) encodeFiel
 	}
 }
 
-var jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq = [5]string{
+var jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq = [6]string{
 	0: "projectId",
 	1: "title",
-	2: "text",
-	3: "urls",
-	4: "model_level",
+	2: "language",
+	3: "text",
+	4: "urls",
+	5: "model_level",
 }
 
 // Decode decodes V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq from json.
@@ -2319,8 +2324,18 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Decode(d *
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"title\"")
 			}
-		case "text":
+		case "language":
 			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Language.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"language\"")
+			}
+		case "text":
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				v, err := d.Str()
 				s.Text = string(v)
@@ -2332,7 +2347,7 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Decode(d *
 				return errors.Wrap(err, "decode field \"text\"")
 			}
 		case "urls":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				s.Urls = make([]url.URL, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -2352,7 +2367,7 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Decode(d *
 				return errors.Wrap(err, "decode field \"urls\"")
 			}
 		case "model_level":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				if err := s.ModelLevel.Decode(d); err != nil {
 					return err
@@ -2371,7 +2386,7 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Decode(d *
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011101,
+		0b00111101,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

@@ -71,6 +71,7 @@ type (
 		Text        string
 		URLs        []string
 		UserID      string
+		Language    DiscussionLanguage
 		ModelLevel  ModelLevel
 	}
 

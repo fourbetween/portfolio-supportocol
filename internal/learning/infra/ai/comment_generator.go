@@ -280,7 +280,6 @@ type generatedDiscussion struct {
 	Theme      string                       `json:"theme"`
 	Premise    string                       `json:"premise"`
 	Conclusion string                       `json:"conclusion"`
-	Language   string                       `json:"language"`
 	Comments   []generatedDiscussionComment `json:"comments"`
 }
 
@@ -297,7 +296,7 @@ func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domai
 		return domain.DiscussionGenerationResult{}, err
 	}
 
-	prompt := cg.buildGenerateDiscussionPrompt(projectPremise, params.Title, params.Text, params.URLs)
+	prompt := cg.buildGenerateDiscussionPrompt(projectPremise, params.Title, params.Text, params.URLs, params.Language)
 
 	var tools []*genai.Tool
 	if len(params.URLs) > 0 {
@@ -316,11 +315,6 @@ func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domai
 		return domain.DiscussionGenerationResult{}, err
 	}
 
-	lang := domain.DiscussionLanguage(generated.Language)
-	if err := lang.Validate(); err != nil {
-		lang = domain.DiscussionLanguageJa
-	}
-
 	comments, err := cg.createGeneratedDiscussionComments(params, generated.Comments)
 	if err != nil {
 		return domain.DiscussionGenerationResult{}, err
@@ -330,13 +324,13 @@ func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domai
 		Theme:      generated.Theme,
 		Premise:    generated.Premise,
 		Conclusion: generated.Conclusion,
-		Language:   lang,
+		Language:   params.Language,
 		Comments:   comments,
 		Tokens:     tokens,
 	}, nil
 }
 
-func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string, title string, text string, urls []string) string {
+func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string, title string, text string, urls []string, lang domain.DiscussionLanguage) string {
 	var sb strings.Builder
 	cg.writeSystemContext(&sb)
 	if projectPremise != "" {
@@ -351,11 +345,11 @@ func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string,
 	for _, u := range urls {
 		fmt.Fprintf(&sb, "<source type=\"url\">\n%s\n</source>\n\n", u)
 	}
-	cg.writeGenerateDiscussionInstructions(&sb, title != "")
+	cg.writeGenerateDiscussionInstructions(&sb, title != "", lang)
 	return sb.String()
 }
 
-func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Builder, hasTitle bool) {
+func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Builder, hasTitle bool, lang domain.DiscussionLanguage) {
 	sb.WriteString("<instructions>\n")
 	sb.WriteString("Transform the source material into a structured discussion tree that enables systematic exploration of the topic.\n\n")
 
@@ -397,7 +391,7 @@ func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Buil
 	sb.WriteString("- Ensure every major claim has supporting evidence as children, and every piece of evidence connects to a claim as parent.\n\n")
 
 	sb.WriteString("Language and style:\n")
-	sb.WriteString("- Detect the source language and use it consistently for theme, premise, conclusion, all comments, and comment types.\n")
+	fmt.Fprintf(sb, "- Use %s consistently for theme, premise, conclusion, all comments, and comment types.\n", lang)
 	sb.WriteString("- Write in a clear, factual, analytical tone appropriate to the source material.\n")
 	sb.WriteString("- Keep each comment concise (1-3 sentences) while preserving essential detail.\n")
 	sb.WriteString("</instructions>")
@@ -422,10 +416,6 @@ func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, pr
 				"conclusion": {
 					Type: genai.TypeString,
 				},
-				"language": {
-					Type: genai.TypeString,
-					Enum: []string{"en", "ja"},
-				},
 				"comments": {
 					Type: genai.TypeArray,
 					Items: &genai.Schema{
@@ -445,7 +435,7 @@ func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, pr
 					},
 				},
 			},
-			Required: []string{"theme", "premise", "conclusion", "language", "comments"},
+			Required: []string{"theme", "premise", "conclusion", "comments"},
 		},
 		Tools: tools,
 	}
