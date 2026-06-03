@@ -71,7 +71,10 @@ type (
 		Text        string
 		URLs        []string
 		UserID      string
+		ModelLevel  ModelLevel
 	}
+
+	ModelLevel string
 
 	ProjectPremiseProvider interface {
 		GetProjectPremise(ctx context.Context, workspaceID, projectID string) (string, error)
@@ -322,3 +325,9 @@ type CommentIssue struct {
 	Description string
 	CreatedBy   string
 }
+
+const (
+	ModelLevelLow    ModelLevel = "low"
+	ModelLevelMedium ModelLevel = "medium"
+	ModelLevelHigh   ModelLevel = "high"
+)

@@ -2276,13 +2276,18 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) encodeFiel
 		}
 		e.ArrEnd()
 	}
+	{
+		e.FieldStart("model_level")
+		s.ModelLevel.Encode(e)
+	}
 }
 
-var jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq = [4]string{
+var jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq = [5]string{
 	0: "projectId",
 	1: "title",
 	2: "text",
 	3: "urls",
+	4: "model_level",
 }
 
 // Decode decodes V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq from json.
@@ -2346,6 +2351,16 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Decode(d *
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"urls\"")
 			}
+		case "model_level":
+			requiredBitSet[0] |= 1 << 4
+			if err := func() error {
+				if err := s.ModelLevel.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"model_level\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -2356,7 +2371,7 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Decode(d *
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001101,
+		0b00011101,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2398,6 +2413,48 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) MarshalJSO
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel as json.
+func (s V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel from json.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel(v) {
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelLow:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelLow
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelMedium:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelMedium
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelHigh:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelHigh
+	default:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

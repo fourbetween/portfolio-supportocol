@@ -474,6 +474,7 @@ func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePost(
 		Text:        req.Text,
 		URLs:        urls,
 		UserID:      httpctx.GetUserID(ctx),
+		ModelLevel:  domain.ModelLevel(req.ModelLevel),
 	})
 	if err != nil {
 		return nil, err

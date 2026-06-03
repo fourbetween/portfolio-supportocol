@@ -1165,10 +1165,11 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsComment
 }
 
 type V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq struct {
-	ProjectId ID                 `json:"projectId"`
-	Title     OptDiscussionTheme `json:"title"`
-	Text      string             `json:"text"`
-	Urls      []url.URL          `json:"urls"`
+	ProjectId  ID                                                                    `json:"projectId"`
+	Title      OptDiscussionTheme                                                    `json:"title"`
+	Text       string                                                                `json:"text"`
+	Urls       []url.URL                                                             `json:"urls"`
+	ModelLevel V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel `json:"model_level"`
 }
 
 // GetProjectId returns the value of ProjectId.
@@ -1191,6 +1192,11 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetUrls() 
 	return s.Urls
 }
 
+// GetModelLevel returns the value of ModelLevel.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetModelLevel() V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel {
+	return s.ModelLevel
+}
+
 // SetProjectId sets the value of ProjectId.
 func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetProjectId(val ID) {
 	s.ProjectId = val
@@ -1209,6 +1215,59 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetText(va
 // SetUrls sets the value of Urls.
 func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetUrls(val []url.URL) {
 	s.Urls = val
+}
+
+// SetModelLevel sets the value of ModelLevel.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetModelLevel(val V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) {
+	s.ModelLevel = val
+}
+
+type V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel string
+
+const (
+	V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelLow    V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel = "low"
+	V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelMedium V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel = "medium"
+	V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelHigh   V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel = "high"
+)
+
+// AllValues returns all V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel values.
+func (V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) AllValues() []V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel {
+	return []V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel{
+		V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelLow,
+		V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelMedium,
+		V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelHigh,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) MarshalText() ([]byte, error) {
+	switch s {
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelLow:
+		return []byte(s), nil
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelMedium:
+		return []byte(s), nil
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelHigh:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) UnmarshalText(data []byte) error {
+	switch V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel(data) {
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelLow:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelLow
+		return nil
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelMedium:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelMedium
+		return nil
+	case V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelHigh:
+		*s = V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevelHigh
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 // V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDeleteNoContent is response for V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdDelete operation.

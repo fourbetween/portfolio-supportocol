@@ -735,10 +735,34 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Validate()
 			Error: err,
 		})
 	}
+	if err := func() error {
+		if err := s.ModelLevel.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "model_level",
+			Error: err,
+		})
+	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
+}
+
+func (s V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) Validate() error {
+	switch s {
+	case "low":
+		return nil
+	case "medium":
+		return nil
+	case "high":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
 }
 
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {

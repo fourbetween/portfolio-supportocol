@@ -306,7 +306,7 @@ func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domai
 		slog.Int("num_tools", len(tools)),
 	)
 
-	generated, tokens, err := cg.generateFullDiscussionWithAI(ctx, prompt, tools)
+	generated, tokens, err := cg.generateFullDiscussionWithAI(ctx, prompt, tools, params.ModelLevel)
 	if err != nil {
 		return domain.DiscussionGenerationResult{}, err
 	}
@@ -398,7 +398,8 @@ func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Buil
 	sb.WriteString("</instructions>")
 }
 
-func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, prompt string, tools []*genai.Tool) (generatedDiscussion, int32, error) {
+func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, prompt string, tools []*genai.Tool, modelLevel domain.ModelLevel) (generatedDiscussion, int32, error) {
+	modelName := cg.selectModel(modelLevel)
 	config := &genai.GenerateContentConfig{
 		ThinkingConfig: &genai.ThinkingConfig{
 			ThinkingLevel: genai.ThinkingLevelHigh,
@@ -446,7 +447,7 @@ func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, pr
 
 	resp, err := cg.client.Models.GenerateContent(
 		ctx,
-		"gemini-3-flash-preview",
+		modelName,
 		genai.Text(prompt),
 		config,
 	)
@@ -464,6 +465,17 @@ func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, pr
 		tokens = resp.UsageMetadata.TotalTokenCount
 	}
 	return generated, tokens, nil
+}
+
+func (cg *CommentGenerator) selectModel(level domain.ModelLevel) string {
+	switch level {
+	case domain.ModelLevelHigh:
+		return "gemini-3.5-flash"
+	case domain.ModelLevelMedium:
+		return "gemini-3-flash-preview"
+	default:
+		return "gemini-3.1-flash-lite"
+	}
 }
 
 func (cg *CommentGenerator) createGeneratedDiscussionComments(params domain.GenerateDiscussionParams, generated []generatedDiscussionComment) ([]*domain.Comment, error) {

@@ -982,6 +982,8 @@ export interface paths {
                         title?: components["schemas"]["DiscussionTheme"];
                         text: string;
                         urls: string[];
+                        /** @enum {string} */
+                        model_level: "low" | "medium" | "high";
                     };
                 };
             };

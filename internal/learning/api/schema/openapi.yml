@@ -808,10 +808,17 @@ paths:
                   items:
                     type: string
                     format: uri
+                model_level:
+                  type: string
+                  enum:
+                    - low
+                    - medium
+                    - high
               required:
                 - projectId
                 - text
                 - urls
+                - model_level
       responses:
         "201":
           description: success response

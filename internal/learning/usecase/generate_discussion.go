@@ -53,6 +53,7 @@ type GenerateDiscussionInput struct {
 	Text        string
 	URLs        []string
 	UserID      string
+	ModelLevel  domain.ModelLevel
 }
 
 type GenerateDiscussionOutput struct {
@@ -88,6 +89,7 @@ func (u *GenerateDiscussionUsecase) Execute(ctx context.Context, input GenerateD
 		Text:        input.Text,
 		URLs:        input.URLs,
 		UserID:      input.UserID,
+		ModelLevel:  input.ModelLevel,
 	})
 	if err != nil {
 		return GenerateDiscussionOutput{}, err
