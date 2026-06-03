@@ -1,6 +1,7 @@
 import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { showToast } from "../../../shared/event/toast";
 import { baseStyle } from "../../../shared/style/base";
 import { buttonStyle } from "../../../shared/style/button";
 import "../../../shared/ui/icons/icon-content-copy";
@@ -30,7 +31,12 @@ export class LearningDiscussionMarkdownPopup extends LitElement {
   }
 
   private async _handleCopy() {
-    await navigator.clipboard.writeText(this._markdown);
+    try {
+      await navigator.clipboard.writeText(this._markdown);
+      showToast(this, msg("Copied to clipboard."), "success", 2000);
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
   }
 
   render() {

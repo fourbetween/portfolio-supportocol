@@ -1122,6 +1122,10 @@
   <source>High quality</source>
   <target>高品質</target>
 </trans-unit>
+<trans-unit id="s6c98d1e4eff5c3a2">
+  <source>Copied to clipboard.</source>
+  <target>クリップボードにコピーしました。</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
