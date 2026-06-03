@@ -79,11 +79,11 @@ function toMarkdown(discussion: Discussion, comments: Comment[]): string {
   parts.push(`# ${discussion.theme}\n\n`);
 
   if (discussion.premise) {
-    parts.push(`## Premise\n\n${discussion.premise}\n\n`);
+    parts.push(`## ${msg("Premise")}\n\n${discussion.premise}\n\n`);
   }
 
   if (discussion.conclusion) {
-    parts.push(`## Conclusion\n\n${discussion.conclusion}\n\n`);
+    parts.push(`## ${msg("Conclusion")}\n\n${discussion.conclusion}\n\n`);
   }
 
   const archivedIds = collectArchivedDescendantIds(comments);
