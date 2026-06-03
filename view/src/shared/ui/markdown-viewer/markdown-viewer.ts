@@ -12,8 +12,14 @@ export class MarkdownViewer extends LitElement {
   content = "";
 
   render() {
+    const renderer = new marked.Renderer();
+    const defaultLink = renderer.link.bind(renderer);
+    renderer.link = (token) => {
+      return defaultLink(token).replace("<a ", '<a target="_blank" rel="noopener noreferrer" ');
+    };
     const html_ = DOMPurify.sanitize(
-      marked.parse(this.content, { async: false }),
+      marked.parse(this.content, { async: false, renderer }),
+      { ADD_ATTR: ["target"] },
     );
     return html`
       <div class="markdown-body">${unsafeHTML(html_)}</div>
