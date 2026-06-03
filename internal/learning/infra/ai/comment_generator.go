@@ -7,8 +7,10 @@ import (
 	"log/slog"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
+	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"google.golang.org/genai"
 )
 
@@ -17,6 +19,7 @@ type CommentGenerator struct {
 	commentRepo        domain.CommentRepository
 	projectPremiseProv domain.ProjectPremiseProvider
 	factory            *domain.CommentFactory
+	clockSrv           clock.Service
 	client             *genai.Client
 }
 
@@ -25,6 +28,7 @@ func NewCommentGenerator(
 	commentRepo domain.CommentRepository,
 	projectPremiseProv domain.ProjectPremiseProvider,
 	factory *domain.CommentFactory,
+	clockSrv clock.Service,
 	apiKey string,
 ) (*CommentGenerator, error) {
 	apiKey = strings.TrimSpace(apiKey)
@@ -45,6 +49,7 @@ func NewCommentGenerator(
 		commentRepo:        commentRepo,
 		projectPremiseProv: projectPremiseProv,
 		factory:            factory,
+		clockSrv:           clockSrv,
 		client:             client,
 	}, nil
 }
@@ -482,6 +487,21 @@ func (cg *CommentGenerator) createGeneratedDiscussionComments(params domain.Gene
 	result := make([]*domain.Comment, 0, len(generated))
 	idByIndex := make(map[int]string, len(generated))
 
+	depths := make([]int, len(generated))
+	maxDepth := 0
+	for i, g := range generated {
+		if g.ParentIndex < 0 {
+			depths[i] = 0
+		} else {
+			depths[i] = depths[g.ParentIndex] + 1
+		}
+		if depths[i] > maxDepth {
+			maxDepth = depths[i]
+		}
+	}
+
+	now := cg.clockSrv.Now()
+
 	for i, g := range generated {
 		parentCommentID := ""
 		if g.ParentIndex >= 0 {
@@ -492,6 +512,8 @@ func (cg *CommentGenerator) createGeneratedDiscussionComments(params domain.Gene
 			parentCommentID = parentID
 		}
 
+		createdAt := now.Add(-time.Duration(maxDepth-depths[i]) * time.Second)
+
 		c, err := cg.factory.Create(domain.CreateCommentParams{
 			DiscussionID:    "",
 			ParentCommentID: parentCommentID,
@@ -501,6 +523,7 @@ func (cg *CommentGenerator) createGeneratedDiscussionComments(params domain.Gene
 			},
 			Status:    domain.CommentStatusActive,
 			CreatedBy: params.UserID,
+			CreatedAt: createdAt,
 		})
 		if err != nil {
 			return nil, err

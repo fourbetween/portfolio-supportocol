@@ -93,6 +93,7 @@ type (
 		Body            CommentBody
 		Status          CommentStatus
 		CreatedBy       string
+		CreatedAt       time.Time
 		Issues          []CommentIssue
 	}
 
@@ -119,6 +120,10 @@ func NewCommentFactory(
 
 func (f *CommentFactory) Create(params CreateCommentParams) (*Comment, error) {
 	id := f.idSrv.Generate()
+	createdAt := params.CreatedAt
+	if createdAt.IsZero() {
+		createdAt = f.clockSrv.Now()
+	}
 	return f.Reconstruct(ReconstructCommentParams{
 		ID:              id,
 		DiscussionID:    params.DiscussionID,
@@ -127,7 +132,7 @@ func (f *CommentFactory) Create(params CreateCommentParams) (*Comment, error) {
 		Status:          params.Status,
 		Activity: CommentActivity{
 			CreatedBy: params.CreatedBy,
-			CreatedAt: f.clockSrv.Now(),
+			CreatedAt: createdAt,
 		},
 		Issues: params.Issues,
 	})

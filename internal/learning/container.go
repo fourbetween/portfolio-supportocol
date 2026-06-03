@@ -80,6 +80,7 @@ func NewContainer(
 		commentRepo,
 		projectPremiseProv,
 		commentFac,
+		clockSrv,
 		geminiAPIKey,
 	)
 	if err != nil {
