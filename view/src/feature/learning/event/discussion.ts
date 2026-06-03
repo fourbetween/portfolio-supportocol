@@ -2,6 +2,7 @@ import type {
   DialogueSettings,
   Discussion,
   DiscussionLanguage,
+  ModelLevel,
 } from "../model/discussion";
 
 export class LearningDiscussionSelectEvent extends Event {
@@ -28,6 +29,7 @@ export class LearningDiscussionCreateEvent extends Event {
   public readonly language?: DiscussionLanguage;
   public readonly sourceText?: string;
   public readonly sourceUrls?: string[];
+  public readonly modelLevel?: ModelLevel;
 
   constructor(
     theme?: string,
@@ -35,6 +37,7 @@ export class LearningDiscussionCreateEvent extends Event {
     language?: DiscussionLanguage,
     sourceText?: string,
     sourceUrls?: string[],
+    modelLevel?: ModelLevel,
   ) {
     super(LearningDiscussionCreateEvent.eventName, {
       bubbles: true,
@@ -45,6 +48,7 @@ export class LearningDiscussionCreateEvent extends Event {
     this.language = language;
     this.sourceText = sourceText;
     this.sourceUrls = sourceUrls;
+    this.modelLevel = modelLevel;
   }
 }
 

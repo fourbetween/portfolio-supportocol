@@ -5,6 +5,7 @@ import type {
   Discussion,
   DiscussionLanguage,
   DiscussionSummary,
+  ModelLevel,
 } from "../model/discussion";
 
 export class DiscussionRepository {
@@ -103,6 +104,7 @@ export class DiscussionRepository {
     projectId: string,
     text: string,
     urls: string[],
+    modelLevel: ModelLevel,
     title?: string,
   ): Promise<Discussion> {
     const { data, error } = await client.POST(
@@ -115,6 +117,7 @@ export class DiscussionRepository {
           projectId,
           text,
           urls,
+          model_level: modelLevel,
           ...(title ? { title } : {}),
         },
       },

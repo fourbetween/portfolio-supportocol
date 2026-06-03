@@ -6,3 +6,5 @@ export type DiscussionStatus = components["schemas"]["DiscussionStatus"];
 
 export type DiscussionSummary = components["schemas"]["DiscussionSummary"];
 export type DialogueSettings = components["schemas"]["DialogueSettings"];
+
+export type ModelLevel = "low" | "medium" | "high";

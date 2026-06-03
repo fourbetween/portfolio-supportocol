@@ -8,7 +8,7 @@ import { buttonStyle } from "../../../shared/style/button";
 import { inputStyle } from "../../../shared/style/input";
 import "../../../shared/ui/icons/icon-add";
 import "../../../shared/ui/icons/icon-delete";
-import type { DiscussionLanguage } from "../model/discussion";
+import type { DiscussionLanguage, ModelLevel } from "../model/discussion";
 
 @customElement("learning-discussion-add-form")
 export class LearningDiscussionAddForm extends LitElement {
@@ -33,19 +33,26 @@ export class LearningDiscussionAddForm extends LitElement {
   @state()
   private _newUrl = "";
 
+  @state()
+  private _modelLevel: ModelLevel = "medium";
+
   get value(): {
     theme: string;
     language: DiscussionLanguage;
     sourceText?: string;
     sourceUrls?: string[];
+    modelLevel?: ModelLevel;
   } {
+    const hasSource =
+      this._sourceText.trim().length > 0 || this._sourceUrls.length > 0;
     return {
       theme: this._theme,
       language: this._language,
-      ...(this._sourceText.trim() || this._sourceUrls.length > 0
+      ...(hasSource
         ? {
             sourceText: this._sourceText,
             sourceUrls: this._sourceUrls,
+            modelLevel: this._modelLevel,
           }
         : {}),
     };
@@ -99,12 +106,18 @@ export class LearningDiscussionAddForm extends LitElement {
     }
   }
 
+  private _handleModelLevelChange(e: InputEvent) {
+    const select = e.target as HTMLSelectElement;
+    this._modelLevel = select.value as ModelLevel;
+  }
+
   reset() {
     this._theme = "";
     this._sourceMode = "text";
     this._sourceText = "";
     this._sourceUrls = [];
     this._newUrl = "";
+    this._modelLevel = "medium";
   }
 
   render() {
@@ -192,6 +205,18 @@ export class LearningDiscussionAddForm extends LitElement {
                           `
                         : ""}
                     `}
+              </div>
+              <div class="field">
+                <label class="model-level-label">${msg("AI Model")}</label>
+                <select
+                  .value=${live(this._modelLevel)}
+                  @input=${this._handleModelLevelChange}
+                  aria-label=${msg("AI Model")}
+                >
+                  <option value="low">${msg("Fast")}</option>
+                  <option value="medium">${msg("Balanced")}</option>
+                  <option value="high">${msg("High quality")}</option>
+                </select>
               </div>
             `
           : ""}
@@ -283,6 +308,12 @@ export class LearningDiscussionAddForm extends LitElement {
       }
       .delete-button:hover {
         opacity: 1;
+      }
+      .model-level-label {
+        display: block;
+        font-size: 13px;
+        color: var(--color-fg-muted);
+        margin-bottom: 4px;
       }
     `,
   ];

@@ -1106,6 +1106,22 @@
   <source>Remove URL</source>
   <target>URLを削除</target>
 </trans-unit>
+<trans-unit id="sccba7c445a5e8202">
+  <source>AI Model</source>
+  <target>AIモデル</target>
+</trans-unit>
+<trans-unit id="s19e84b851836664f">
+  <source>Fast</source>
+  <target>高速</target>
+</trans-unit>
+<trans-unit id="sdac0c6c19733d37d">
+  <source>Balanced</source>
+  <target>バランス</target>
+</trans-unit>
+<trans-unit id="s2f097a6ab9e5686c">
+  <source>High quality</source>
+  <target>高品質</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
