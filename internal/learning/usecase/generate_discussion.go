@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
 	"github.com/fourbetween/app-supportocol/internal/pkg/apperr"
@@ -95,6 +96,23 @@ func (u *GenerateDiscussionUsecase) Execute(ctx context.Context, input GenerateD
 		return GenerateDiscussionOutput{}, err
 	}
 
+	var premise strings.Builder
+	premise.WriteString(result.Premise)
+	if len(input.URLs) > 0 {
+		var refLabel string
+		if result.Language == domain.DiscussionLanguageJa {
+			refLabel = "引用："
+		} else {
+			refLabel = "References:"
+		}
+		premise.WriteString("\n\n")
+		premise.WriteString(refLabel)
+		for _, url := range input.URLs {
+			premise.WriteString("\n- ")
+			premise.WriteString(url)
+		}
+	}
+
 	var discussion *domain.Discussion
 	err = u.tx.RunInTx(ctx, func(ctx context.Context) error {
 		count, err := u.discussionRepo.CountByProjectID(ctx, input.WorkspaceID, input.ProjectID)
@@ -106,7 +124,7 @@ func (u *GenerateDiscussionUsecase) Execute(ctx context.Context, input GenerateD
 			WorkspaceID: input.WorkspaceID,
 			ProjectID:   input.ProjectID,
 			Theme:       result.Theme,
-			Premise:     result.Premise,
+			Premise:     premise.String(),
 			Conclusion:  result.Conclusion,
 			Language:    result.Language,
 			CreatedBy:   input.UserID,
