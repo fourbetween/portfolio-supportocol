@@ -254,7 +254,7 @@ func (cg *CommentGenerator) writeInstructions(sb *strings.Builder, commentType s
 	sb.WriteString("- Respect the semantic meaning of the comment type. For example:\n")
 	sb.WriteString("  * \"support\"/\"賛成\": Provide specific evidence, examples, or reasoning that strengthens the parent.\n")
 	sb.WriteString("  * \"objection\"/\"反対\": Identify specific logical gaps, counterexamples, or alternative interpretations.\n")
-	sb.WriteString("  * \"question\"/\"質問\": Ask about unstated assumptions, implications, or clarifications needed.\n")
+	sb.WriteString("  * \"question\"/\"疑問\": Ask about unstated assumptions, implications, or clarifications needed.\n")
 	sb.WriteString("  * \"proposal\"/\"提案\": Suggest concrete actions, solutions, or next steps that follow from the context.\n\n")
 
 	sb.WriteString("Differentiation requirements:\n")
@@ -374,7 +374,7 @@ func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Buil
 	sb.WriteString("- Extract every piece of information from the source that relates to the discussion theme and represent it somewhere in the comment tree. Do not omit facts, data points, examples, or sub-arguments even if they seem minor.\n\n")
 
 	sb.WriteString("Comment type semantics (use consistently):\n")
-	sb.WriteString("- Use descriptive type names that match the source language (e.g., 'claim'/'主張', 'evidence'/'根拠', 'question'/'疑問', 'example'/'例', 'implication'/'含意', 'counterpoint'/'反論').\n")
+	sb.WriteString("- Use descriptive type names that match the source language (e.g., 'claim'/'主張', 'evidence'/'根拠', 'fact'/'事実', 'question'/'疑問', 'supplement'/'補足', 'example'/'例').\n")
 	sb.WriteString("- The type must accurately reflect the comment's role in the argument structure.\n\n")
 
 	sb.WriteString("Comment content rules:\n")
