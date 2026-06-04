@@ -9,6 +9,7 @@ import (
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/ai"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/db"
 	"github.com/fourbetween/app-supportocol/internal/learning/infra/logging"
+	"github.com/fourbetween/app-supportocol/internal/learning/infra/web"
 	"github.com/fourbetween/app-supportocol/internal/learning/usecase"
 	"github.com/fourbetween/app-supportocol/internal/pkg/clock"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbtx"
@@ -79,6 +80,7 @@ func NewContainer(
 		discussionRepo,
 		commentRepo,
 		projectPremiseProv,
+		web.NewURLContentFetcher(),
 		commentFac,
 		clockSrv,
 		geminiAPIKey,

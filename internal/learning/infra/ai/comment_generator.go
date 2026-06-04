@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"slices"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/fourbetween/app-supportocol/internal/learning/domain"
@@ -18,6 +19,7 @@ type CommentGenerator struct {
 	discussionRepo     domain.DiscussionRepository
 	commentRepo        domain.CommentRepository
 	projectPremiseProv domain.ProjectPremiseProvider
+	urlFetcher         domain.URLContentFetcher
 	factory            *domain.CommentFactory
 	clockSrv           clock.Service
 	client             *genai.Client
@@ -27,6 +29,7 @@ func NewCommentGenerator(
 	discussionRepo domain.DiscussionRepository,
 	commentRepo domain.CommentRepository,
 	projectPremiseProv domain.ProjectPremiseProvider,
+	urlFetcher domain.URLContentFetcher,
 	factory *domain.CommentFactory,
 	clockSrv clock.Service,
 	apiKey string,
@@ -48,6 +51,7 @@ func NewCommentGenerator(
 		discussionRepo:     discussionRepo,
 		commentRepo:        commentRepo,
 		projectPremiseProv: projectPremiseProv,
+		urlFetcher:         urlFetcher,
 		factory:            factory,
 		clockSrv:           clockSrv,
 		client:             client,
@@ -296,21 +300,30 @@ func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domai
 		return domain.DiscussionGenerationResult{}, err
 	}
 
-	prompt := cg.buildGenerateDiscussionPrompt(projectPremise, params.Title, params.Text, params.URLs, params.Language)
-
-	var tools []*genai.Tool
+	var fetchedContents []fetchedURLContent
 	if len(params.URLs) > 0 {
-		tools = []*genai.Tool{{URLContext: &genai.URLContext{}}}
+		results := cg.fetchURLContents(ctx, params.URLs)
+		for _, r := range results {
+			if r.err != nil {
+				slog.Warn("Failed to fetch URL content", slog.String("url", r.url), slog.String("error", r.err.Error()))
+				continue
+			}
+			fetchedContents = append(fetchedContents, fetchedURLContent{url: r.url, content: r.content})
+		}
+		if len(fetchedContents) == 0 && params.Text == "" {
+			return domain.DiscussionGenerationResult{}, fmt.Errorf("failed to fetch any URL content")
+		}
 	}
+
+	prompt := cg.buildGenerateDiscussionPrompt(projectPremise, params.Title, params.Text, fetchedContents, params.Language)
 
 	slog.Info(
 		"Generating discussion with AI",
 		slog.String("prompt", prompt),
 		slog.Int("prompt_length", len(prompt)),
-		slog.Int("num_tools", len(tools)),
 	)
 
-	generated, tokens, err := cg.generateFullDiscussionWithAI(ctx, prompt, tools, params.ModelLevel)
+	generated, tokens, err := cg.generateFullDiscussionWithAI(ctx, prompt, params.ModelLevel)
 	if err != nil {
 		return domain.DiscussionGenerationResult{}, err
 	}
@@ -330,7 +343,33 @@ func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domai
 	}, nil
 }
 
-func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string, title string, text string, urls []string, lang domain.DiscussionLanguage) string {
+type fetchedURLContent struct {
+	url     string
+	content string
+}
+
+type fetchResult struct {
+	url     string
+	content string
+	err     error
+}
+
+func (cg *CommentGenerator) fetchURLContents(ctx context.Context, urls []string) []fetchResult {
+	results := make([]fetchResult, len(urls))
+	var wg sync.WaitGroup
+	for i, u := range urls {
+		wg.Add(1)
+		go func(idx int, rawURL string) {
+			defer wg.Done()
+			content, err := cg.urlFetcher.Fetch(ctx, rawURL)
+			results[idx] = fetchResult{url: rawURL, content: content, err: err}
+		}(i, u)
+	}
+	wg.Wait()
+	return results
+}
+
+func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string, title string, text string, fetchedContents []fetchedURLContent, lang domain.DiscussionLanguage) string {
 	var sb strings.Builder
 	cg.writeSystemContext(&sb)
 	if projectPremise != "" {
@@ -342,8 +381,8 @@ func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string,
 	if text != "" {
 		fmt.Fprintf(&sb, "<source type=\"text\">\n%s\n</source>\n\n", text)
 	}
-	for _, u := range urls {
-		fmt.Fprintf(&sb, "<source type=\"url\">\n%s\n</source>\n\n", u)
+	for _, fc := range fetchedContents {
+		fmt.Fprintf(&sb, "<source type=\"url\" url=\"%s\">\n%s\n</source>\n\n", fc.url, fc.content)
 	}
 	cg.writeGenerateDiscussionInstructions(&sb, title != "", lang)
 	return sb.String()
@@ -397,7 +436,7 @@ func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Buil
 	sb.WriteString("</instructions>")
 }
 
-func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, prompt string, tools []*genai.Tool, modelLevel domain.ModelLevel) (generatedDiscussion, int32, error) {
+func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, prompt string, modelLevel domain.ModelLevel) (generatedDiscussion, int32, error) {
 	modelName := cg.selectModel(modelLevel)
 	config := &genai.GenerateContentConfig{
 		ThinkingConfig: &genai.ThinkingConfig{
@@ -437,7 +476,6 @@ func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, pr
 			},
 			Required: []string{"theme", "premise", "conclusion", "comments"},
 		},
-		Tools: tools,
 	}
 
 	resp, err := cg.client.Models.GenerateContent(
