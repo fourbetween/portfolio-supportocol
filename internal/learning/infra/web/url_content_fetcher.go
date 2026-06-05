@@ -69,37 +69,18 @@ func (f *URLContentFetcher) Fetch(ctx context.Context, rawURL string) (string, e
 		return "", fmt.Errorf("fetch lambda returned status %d: %s", resp.StatusCode, string(body))
 	}
 
-	respContentType := strings.ToLower(resp.Header.Get("Content-Type"))
-
-	var text string
-
-	switch {
-	case strings.Contains(respContentType, "text/html"):
-		text, err = convertHTMLToMarkdown(resp.Body)
-	case strings.Contains(respContentType, "application/json"):
-		var lambdaResp fetchHTMLResponse
-		if decodeErr := json.NewDecoder(resp.Body).Decode(&lambdaResp); decodeErr != nil {
-			return "", fmt.Errorf("failed to decode lambda response: %w", decodeErr)
-		}
-		if lambdaResp.Error != "" {
-			return "", fmt.Errorf("fetch lambda error: %s", lambdaResp.Error)
-		}
-		if lambdaResp.StatusCode != http.StatusOK {
-			return "", fmt.Errorf("unexpected status code: %d", lambdaResp.StatusCode)
-		}
-		innerContentType := strings.ToLower(lambdaResp.Headers["Content-Type"])
-		body := strings.NewReader(lambdaResp.Body)
-		switch {
-		case strings.Contains(innerContentType, "text/html"):
-			text, err = convertHTMLToMarkdown(body)
-		case strings.HasPrefix(innerContentType, "text/"):
-			text, err = extractPlainText(body)
-		default:
-			text, err = convertHTMLToMarkdown(body)
-		}
-	default:
-		text, err = convertHTMLToMarkdown(resp.Body)
+	var lambdaResp fetchHTMLResponse
+	if err := json.NewDecoder(resp.Body).Decode(&lambdaResp); err != nil {
+		return "", fmt.Errorf("failed to decode lambda response: %w", err)
 	}
+	if lambdaResp.Error != "" {
+		return "", fmt.Errorf("fetch lambda error: %s", lambdaResp.Error)
+	}
+	if lambdaResp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("unexpected status code: %d", lambdaResp.StatusCode)
+	}
+
+	text, err := convertHTMLToMarkdown(strings.NewReader(lambdaResp.Body))
 	if err != nil {
 		return "", err
 	}
@@ -149,14 +130,6 @@ func convertHTMLToMarkdown(r io.Reader) (string, error) {
 	}
 
 	return strings.TrimSpace(string(md)), nil
-}
-
-func extractPlainText(r io.Reader) (string, error) {
-	b, err := io.ReadAll(r)
-	if err != nil {
-		return "", fmt.Errorf("failed to read text: %w", err)
-	}
-	return string(b), nil
 }
 
 type removeElementsPlugin struct{}
