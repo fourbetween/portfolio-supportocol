@@ -810,6 +810,8 @@ paths:
                   items:
                     type: string
                     format: uri
+                  minItems: 0
+                  maxItems: 3
                 model_level:
                   type: string
                   enum:

@@ -739,6 +739,14 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Validate()
 		if s.Urls == nil {
 			return errors.New("nil is invalid value")
 		}
+		if err := (validate.Array{
+			MinLength:    0,
+			MinLengthSet: true,
+			MaxLength:    3,
+			MaxLengthSet: true,
+		}).ValidateLength(len(s.Urls)); err != nil {
+			return errors.Wrap(err, "array")
+		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{

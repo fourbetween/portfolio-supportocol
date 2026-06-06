@@ -97,7 +97,7 @@ export class LearningDiscussionAddForm extends LitElement {
 
   private _handleAddUrl() {
     const url = this._newUrl.trim();
-    if (url && !this._sourceUrls.includes(url)) {
+    if (url && !this._sourceUrls.includes(url) && this._sourceUrls.length < 3) {
       this._sourceUrls = [...this._sourceUrls, url];
       this._newUrl = "";
     }
@@ -190,17 +190,19 @@ export class LearningDiscussionAddForm extends LitElement {
                           @keydown=${this._handleUrlKeyDown}
                           placeholder=${msg("Add URL")}
                           aria-label=${msg("Source URL")}
+                          ?disabled=${this._sourceUrls.length >= 3}
                         />
                         <button
                           type="button"
                           class="btn btn-primary"
                           aria-label=${msg("Add URL")}
                           @click=${this._handleAddUrl}
-                          ?disabled=${!this._newUrl.trim()}
+                          ?disabled=${!this._newUrl.trim() || this._sourceUrls.length >= 3}
                         >
                           <ui-icon-add></ui-icon-add>
                         </button>
                       </div>
+                      <div class="url-count">${this._sourceUrls.length} / 3</div>
                       ${this._sourceUrls.length > 0
                         ? html`
                             <ul class="url-list">
@@ -297,6 +299,12 @@ export class LearningDiscussionAddForm extends LitElement {
       .url-input-row input {
         flex: 1;
         min-width: 0;
+      }
+      .url-count {
+        font-size: 12px;
+        color: var(--color-fg-muted);
+        text-align: right;
+        margin-top: 4px;
       }
       .url-list {
         margin: 8px 0 0 0;
