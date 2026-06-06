@@ -1,3 +1,4 @@
+import type { CommentFrame } from "../model/comment-frame";
 import type {
   DialogueSettings,
   Discussion,
@@ -30,6 +31,7 @@ export class LearningDiscussionCreateEvent extends Event {
   public readonly sourceText?: string;
   public readonly sourceUrls?: string[];
   public readonly modelLevel?: ModelLevel;
+  public readonly commentFrame?: CommentFrame;
 
   constructor(
     theme?: string,
@@ -38,6 +40,7 @@ export class LearningDiscussionCreateEvent extends Event {
     sourceText?: string,
     sourceUrls?: string[],
     modelLevel?: ModelLevel,
+    commentFrame?: CommentFrame,
   ) {
     super(LearningDiscussionCreateEvent.eventName, {
       bubbles: true,
@@ -49,6 +52,7 @@ export class LearningDiscussionCreateEvent extends Event {
     this.sourceText = sourceText;
     this.sourceUrls = sourceUrls;
     this.modelLevel = modelLevel;
+    this.commentFrame = commentFrame;
   }
 }
 

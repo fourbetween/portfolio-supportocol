@@ -2,7 +2,6 @@ package web
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -22,13 +21,6 @@ const (
 	maxContentLength = 1_000_000
 	fetchTimeout     = 30
 )
-
-type fetchHTMLResponse struct {
-	StatusCode int               `json:"statusCode"`
-	Body       string            `json:"body"`
-	Headers    map[string]string `json:"headers,omitempty"`
-	Error      string            `json:"error,omitempty"`
-}
 
 type URLContentFetcher struct {
 	functionURL string
@@ -69,18 +61,12 @@ func (f *URLContentFetcher) Fetch(ctx context.Context, rawURL string) (string, e
 		return "", fmt.Errorf("fetch lambda returned status %d: %s", resp.StatusCode, string(body))
 	}
 
-	var lambdaResp fetchHTMLResponse
-	if err := json.NewDecoder(resp.Body).Decode(&lambdaResp); err != nil {
-		return "", fmt.Errorf("failed to decode lambda response: %w", err)
-	}
-	if lambdaResp.Error != "" {
-		return "", fmt.Errorf("fetch lambda error: %s", lambdaResp.Error)
-	}
-	if lambdaResp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("unexpected status code: %d", lambdaResp.StatusCode)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response body: %w", err)
 	}
 
-	text, err := convertHTMLToMarkdown(strings.NewReader(lambdaResp.Body))
+	text, err := convertHTMLToMarkdown(strings.NewReader(string(body)))
 	if err != nil {
 		return "", err
 	}
@@ -137,7 +123,11 @@ type removeElementsPlugin struct{}
 func (p *removeElementsPlugin) Name() string { return "remove-elements" }
 
 func (p *removeElementsPlugin) Init(conv *converter.Converter) error {
-	for _, tag := range []string{"svg", "nav", "header", "footer", "aside", "form"} {
+	for _, tag := range []string{
+		"svg", "nav", "header", "footer", "aside", "form",
+		"style", "script", "noscript", "meta", "link",
+		"iframe", "object", "embed", "template",
+	} {
 		conv.Register.TagType(tag, converter.TagTypeRemove, converter.PriorityStandard)
 	}
 	return nil

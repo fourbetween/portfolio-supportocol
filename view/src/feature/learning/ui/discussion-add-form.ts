@@ -1,6 +1,6 @@
 import { msg } from "@lit/localize";
 import { LitElement, css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property, query, state } from "lit/decorators.js";
 import { live } from "lit/directives/live.js";
 import { getLocale } from "../../../localization";
 import { baseStyle } from "../../../shared/style/base";
@@ -8,7 +8,10 @@ import { buttonStyle } from "../../../shared/style/button";
 import { inputStyle } from "../../../shared/style/input";
 import "../../../shared/ui/icons/icon-add";
 import "../../../shared/ui/icons/icon-delete";
+import type { CommentFrame } from "../model/comment-frame";
 import type { DiscussionLanguage, ModelLevel } from "../model/discussion";
+import "./comment-frame-form";
+import type { LearningCommentFrameForm } from "./comment-frame-form";
 
 @customElement("learning-discussion-add-form")
 export class LearningDiscussionAddForm extends LitElement {
@@ -36,18 +39,23 @@ export class LearningDiscussionAddForm extends LitElement {
   @state()
   private _modelLevel: ModelLevel = "medium";
 
+  @query("learning-comment-frame-form")
+  private _commentFrameForm!: LearningCommentFrameForm;
+
   get value(): {
     theme: string;
     language: DiscussionLanguage;
     sourceText?: string;
     sourceUrls?: string[];
     modelLevel?: ModelLevel;
+    commentFrame: CommentFrame;
   } {
     const hasSource =
       this._sourceText.trim().length > 0 || this._sourceUrls.length > 0;
     return {
       theme: this._theme,
       language: this._language,
+      commentFrame: this._commentFrameForm?.value ?? { types: [], paths: [] },
       ...(hasSource
         ? {
             sourceText: this._sourceText,
@@ -62,6 +70,10 @@ export class LearningDiscussionAddForm extends LitElement {
     const hasSource =
       this._sourceText.trim().length > 0 || this._sourceUrls.length > 0;
     return this._theme.trim().length > 0 || hasSource;
+  }
+
+  private get _hasSource(): boolean {
+    return this._sourceText.trim().length > 0 || this._sourceUrls.length > 0;
   }
 
   private _handleThemeInput(e: InputEvent) {
@@ -118,6 +130,9 @@ export class LearningDiscussionAddForm extends LitElement {
     this._sourceUrls = [];
     this._newUrl = "";
     this._modelLevel = "medium";
+    if (this._commentFrameForm) {
+      this._commentFrameForm.initialFrame = null;
+    }
   }
 
   render() {
@@ -139,14 +154,18 @@ export class LearningDiscussionAddForm extends LitElement {
                 <div class="source-tabs">
                   <button
                     type="button"
-                    class="source-tab ${this._sourceMode === "text" ? "active" : ""}"
+                    class="source-tab ${this._sourceMode === "text"
+                      ? "active"
+                      : ""}"
                     @click=${() => this._handleSourceModeChange("text")}
                   >
                     ${msg("Source text")}
                   </button>
                   <button
                     type="button"
-                    class="source-tab ${this._sourceMode === "urls" ? "active" : ""}"
+                    class="source-tab ${this._sourceMode === "urls"
+                      ? "active"
+                      : ""}"
                     @click=${() => this._handleSourceModeChange("urls")}
                   >
                     ${msg("Source URLs")}
@@ -206,8 +225,12 @@ export class LearningDiscussionAddForm extends LitElement {
                         : ""}
                     `}
               </div>
+            `
+          : ""}
+        ${!this.isFree && this._hasSource
+          ? html`
               <div class="field">
-                <label class="model-level-label">${msg("AI Model")}</label>
+                <label class="field-label">${msg("AI Model")}</label>
                 <select
                   .value=${live(this._modelLevel)}
                   @input=${this._handleModelLevelChange}
@@ -217,6 +240,10 @@ export class LearningDiscussionAddForm extends LitElement {
                   <option value="medium">${msg("Balanced")}</option>
                   <option value="high">${msg("High quality")}</option>
                 </select>
+              </div>
+              <div class="field">
+                <label class="field-label">${msg("Comment Frame")}</label>
+                <learning-comment-frame-form></learning-comment-frame-form>
               </div>
             `
           : ""}
@@ -309,7 +336,7 @@ export class LearningDiscussionAddForm extends LitElement {
       .delete-button:hover {
         opacity: 1;
       }
-      .model-level-label {
+      .field-label {
         display: block;
         font-size: 13px;
         color: var(--color-fg-muted);

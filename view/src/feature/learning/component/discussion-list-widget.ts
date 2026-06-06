@@ -56,6 +56,7 @@ export class LearningDiscussionListWidget extends LitElement {
           e.sourceUrls ?? [],
           e.modelLevel ?? "medium",
           e.language ?? "ja",
+          e.commentFrame ?? { types: [], paths: [] },
           e.theme,
         );
       } else {

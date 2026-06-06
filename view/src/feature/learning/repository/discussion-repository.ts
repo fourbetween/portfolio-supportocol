@@ -1,4 +1,5 @@
 import { client } from "../api/client";
+import type { CommentFrame } from "../model/comment-frame";
 import { renameCommentFrameType } from "../model/comment-frame";
 import type {
   DialogueSettings,
@@ -106,6 +107,7 @@ export class DiscussionRepository {
     urls: string[],
     modelLevel: ModelLevel,
     language: DiscussionLanguage,
+    commentFrame: CommentFrame,
     title?: string,
   ): Promise<Discussion> {
     const { data, error } = await client.POST(
@@ -120,6 +122,7 @@ export class DiscussionRepository {
           urls,
           model_level: modelLevel,
           language,
+          commentFrame,
           ...(title ? { title } : {}),
         },
       },
