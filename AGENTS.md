@@ -39,12 +39,20 @@ make dev-api
 make dev-view   # equivalent to: npm run localize:extract && npm run localize:build && npm run dev --mode=dev
 
 # Full build pipeline
-deaddcode -> test-api -> build-lambda -> test-view -> build-view
+deadcode -> test-api -> build-lambda -> build-view
 make build
 
+# Lint / analysis
+make deadcode          # go tool deadcode ./...
+make vulncheck         # go tool govulncheck ./...
+cd view && npm run check:lit   # lit-analyzer (Lit template rules)
+
 # Tests
-make test-api   # go test -race -shuffle=on -cover ./...
+make test-api   # go test -race -shuffle=on -cover ./... (also: make test)
 make test-view  # npx playwright install --with-deps && npm run test
+
+# Storybook
+make storybook  # cd view && npm run storybook -- -p ${PORT:-6006}
 
 # Code generation (run after OpenAPI or DB schema changes)
 make gen        # cd view && npm run gen; go generate ./...
@@ -84,6 +92,7 @@ make seed       # runs cmd/db/seed/* with AWS_PROFILE=$STAGE
 - `AWS_PROFILE` is set to `$STAGE` for all deploys and generic `make <cmd>` targets.
 - Dev DB DSN is hardcoded to `root:password@tcp(mysql:3306)/app-supportocol` when `STAGE=dev`.
 - App config (domain, JWT secret, Google client ID) loaded from AWS SSM Parameter Store.
+- `build-view` depends on `view/env` (generates `view/.env.{stage}` from SSM) and `setup-view` (`npm install`).
 
 ## Deployment
 
