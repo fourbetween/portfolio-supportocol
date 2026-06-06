@@ -77,6 +77,12 @@ export class LearningCommentFrameForm extends LitElement {
     this._newTypeName = (e.target as HTMLInputElement).value;
   }
 
+  private _handleTypeNameKeydown(e: KeyboardEvent) {
+    if (e.key === "Enter" && !e.isComposing) {
+      this._handleAddType();
+    }
+  }
+
   private _handleAddType() {
     const type = this._newTypeName.trim();
     if (!type) return;
@@ -133,6 +139,7 @@ export class LearningCommentFrameForm extends LitElement {
               placeholder=${msg("New type...")}
               .value=${this._newTypeName}
               @input=${this._handleTypeNameInput}
+              @keydown=${this._handleTypeNameKeydown}
             />
             <button
               class="btn btn-primary"
