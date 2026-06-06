@@ -533,7 +533,7 @@ func (cg *CommentGenerator) writeCommentFrameConstraints(sb *strings.Builder, co
 	sb.WriteString("- A path with Parent = (Root) means the child comment is a root-level comment (parent_index = -1).\n")
 	sb.WriteString("- If a comment of type X has no allowed path from (Root) or any other type, it cannot be placed in the tree.\n")
 	sb.WriteString("- The comment type (\"type\" field) MUST be an exact, case-sensitive match to one of the strings listed in 'Allowed comment types'. Do NOT translate, rename, or localize type names — even if the output language differs. For example, if the allowed type is \"claim\", you MUST output \"claim\", not its translated equivalent.\n")
-	sb.WriteString("- NEVER alter, omit, or reinterpret the source material's content to fit the comment frame. If source content cannot be placed under the allowed paths, place it under the closest valid path without changing its meaning. The source material's fidelity always takes priority over structural elegance.\n")
+	sb.WriteString("- NEVER alter, omit, or reinterpret the source material's content to fit the comment frame. If any portion of the source material cannot be faithfully represented as a comment with an allowed type under an allowed path, exclude that portion from the output entirely. Do NOT force it into an invalid type or path, and do NOT reinterpret its meaning to fit the frame.\n")
 	sb.WriteString("</comment_frame>\n\n")
 }
 
