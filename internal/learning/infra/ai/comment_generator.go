@@ -462,6 +462,7 @@ func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Buil
 	}
 
 	sb.WriteString("### Comment Content Rules\n")
+	sb.WriteString("- **Fidelity to Source**: NEVER alter, paraphrase, omit, or reinterpret the source material's content — even to fit the comment frame structure. If the source says X, your comment must say X, not a simplified, generalized, or restructured version of X. Do NOT add information not present in the source. Do NOT remove or merge distinct points from the source to reduce comment count.\n")
 	sb.WriteString("- **Atomicity**: Each comment = exactly ONE idea. If a point has multiple facets, split into sibling or child comments.\n")
 	sb.WriteString("- **Exhaustiveness**: Represent ALL substantive content from the source. Every fact, data point, example, statistic, name, date, and nuance must appear somewhere in the tree. Do NOT summarize away details.\n")
 	sb.WriteString("- **No restatement**: Never restate the theme or premise in a comment. Every comment must add NEW information not already captured in ancestors.\n")
@@ -483,6 +484,7 @@ func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Buil
 	sb.WriteString("## Step 4: Self-Validation\n\n")
 	sb.WriteString("Before finalizing, verify:\n")
 	sb.WriteString("- Every piece of substantive information from the source appears somewhere in the tree.\n")
+	sb.WriteString("- No source content has been altered, paraphrased, generalized, or reinterpreted — all comments faithfully represent what the source actually says.\n")
 	sb.WriteString("- Every comment is atomic (one idea per comment).\n")
 	sb.WriteString("- No comment contradicts its ancestors (all ancestors are premises for their descendants).\n")
 	sb.WriteString("- No sibling comments overlap in meaning.\n")
@@ -531,6 +533,7 @@ func (cg *CommentGenerator) writeCommentFrameConstraints(sb *strings.Builder, co
 	sb.WriteString("- A path with Parent = (Root) means the child comment is a root-level comment (parent_index = -1).\n")
 	sb.WriteString("- If a comment of type X has no allowed path from (Root) or any other type, it cannot be placed in the tree.\n")
 	sb.WriteString("- The comment type (\"type\" field) MUST be an exact, case-sensitive match to one of the strings listed in 'Allowed comment types'. Do NOT translate, rename, or localize type names — even if the output language differs. For example, if the allowed type is \"claim\", you MUST output \"claim\", not its translated equivalent.\n")
+	sb.WriteString("- NEVER alter, omit, or reinterpret the source material's content to fit the comment frame. If source content cannot be placed under the allowed paths, place it under the closest valid path without changing its meaning. The source material's fidelity always takes priority over structural elegance.\n")
 	sb.WriteString("</comment_frame>\n\n")
 }
 
