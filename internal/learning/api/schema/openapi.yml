@@ -816,12 +816,15 @@ paths:
                     - low
                     - medium
                     - high
+                commentFrame:
+                  $ref: "#/components/schemas/CommentFrame"
               required:
                 - projectId
                 - text
                 - language
                 - urls
                 - model_level
+                - commentFrame
       responses:
         "201":
           description: success response

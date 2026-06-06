@@ -2284,15 +2284,20 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) encodeFiel
 		e.FieldStart("model_level")
 		s.ModelLevel.Encode(e)
 	}
+	{
+		e.FieldStart("commentFrame")
+		s.CommentFrame.Encode(e)
+	}
 }
 
-var jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq = [6]string{
+var jsonFieldsNameOfV1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq = [7]string{
 	0: "projectId",
 	1: "title",
 	2: "language",
 	3: "text",
 	4: "urls",
 	5: "model_level",
+	6: "commentFrame",
 }
 
 // Decode decodes V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq from json.
@@ -2376,6 +2381,16 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Decode(d *
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"model_level\"")
 			}
+		case "commentFrame":
+			requiredBitSet[0] |= 1 << 6
+			if err := func() error {
+				if err := s.CommentFrame.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"commentFrame\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -2386,7 +2401,7 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Decode(d *
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00111101,
+		0b01111101,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

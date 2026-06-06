@@ -65,14 +65,15 @@ type (
 	}
 
 	GenerateDiscussionParams struct {
-		WorkspaceID string
-		ProjectID   string
-		Title       string
-		Text        string
-		URLs        []string
-		UserID      string
-		Language    DiscussionLanguage
-		ModelLevel  ModelLevel
+		WorkspaceID  string
+		ProjectID    string
+		Title        string
+		Text         string
+		URLs         []string
+		UserID       string
+		Language     DiscussionLanguage
+		ModelLevel   ModelLevel
+		CommentFrame CommentFrame
 	}
 
 	ModelLevel string

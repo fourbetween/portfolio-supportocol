@@ -207,9 +207,14 @@ func (cg *CommentGenerator) buildPrompt(discussion *domain.Discussion, projectPr
 
 func (cg *CommentGenerator) writeSystemContext(sb *strings.Builder) {
 	sb.WriteString("<system_context>\n")
-	sb.WriteString("You are an AI assistant for a structured discussion platform that facilitates systematic thinking and constructive dialogue.\n")
-	sb.WriteString("This platform organizes discussions as tree structures where each comment has a specific type (e.g., question, answer, support, objection, proposal) and builds upon its ancestor comments as premises.\n")
-	sb.WriteString("Your role is to generate comments that advance the discussion by introducing new perspectives, evidence, or logical extensions while maintaining coherence with the established context.\n")
+	sb.WriteString("You are the core reasoning engine of a structured discussion platform. Your purpose is to help users organize complex thinking into rigorous, navigable argument trees.\n\n")
+	sb.WriteString("Platform mechanics you MUST understand:\n")
+	sb.WriteString("1. DISCUSSION STRUCTURE: Each discussion has a theme (central question), premise (foundational assumptions), and conclusion (synthesis). Comments form tree structures beneath the theme.\n")
+	sb.WriteString("2. COMMENT TREE: Comments form multiple trees. Each comment has exactly one parent (or is root-level). A comment's meaning is defined by its position in the tree and its type.\n")
+	sb.WriteString("3. PREMISE CHAIN: A comment implicitly accepts ALL its ancestors as premises. If root comment A has child B which has child C, then C assumes both A and B are true. Your generated comments MUST be logically consistent with every ancestor in the chain — never contradict them.\n")
+	sb.WriteString("4. COMMENT TYPES: Each comment has a type indicating its rhetorical role (e.g., claim, evidence, question, answer, objection, proposal). Types are dynamic per discussion — use only the types present in the context.\n")
+	sb.WriteString("5. ATOMICITY: Each comment expresses exactly ONE idea. Complex points must be split into multiple comments at the same tree level.\n")
+	sb.WriteString("6. DIRECTION: Comments flow from child to parent (child responds to parent). The tree structure itself encodes logical relationships — do not express relationships through connecting phrases within comment text.\n")
 	sb.WriteString("</system_context>\n\n")
 }
 
@@ -230,7 +235,7 @@ func (cg *CommentGenerator) writeContext(sb *strings.Builder, path []*domain.Com
 	if len(path) == 0 {
 		return
 	}
-	sb.WriteString("<ancestor_comments>\n")
+	sb.WriteString("<ancestor_comments description=\"These form a logical premise chain. Your comments MUST be consistent with ALL of them. They are ordered root (1) to immediate parent (last).\">\n")
 	for i, c := range path {
 		fmt.Fprintf(sb, "<comment index=\"%d\" type=\"%s\">\n%s\n</comment>\n", i+1, c.Type(), c.Content())
 	}
@@ -250,27 +255,53 @@ func (cg *CommentGenerator) writeChildren(sb *strings.Builder, children []*domai
 
 func (cg *CommentGenerator) writeInstructions(sb *strings.Builder, commentType string) {
 	sb.WriteString("<instructions>\n")
-	fmt.Fprintf(sb, "Generate exactly 3 comments of type \"%s\" that respond to the parent comment (or discussion theme if no parent exists).\n\n", commentType)
+	fmt.Fprintf(sb, "Generate exactly 3 comments of type \"%s\" that respond to the immediate parent comment (or the discussion theme if no parent exists).\n\n", commentType)
 
-	sb.WriteString("Core principles:\n")
-	sb.WriteString("- Each comment must be a single atomic idea: one clear point per comment, no compound statements.\n")
-	sb.WriteString("- Treat all ancestor comments as established premises. Your comments must logically extend from them, never contradict them.\n")
-	sb.WriteString("- Respect the semantic meaning of the comment type. For example:\n")
-	sb.WriteString("  * \"support\"/\"賛成\": Provide specific evidence, examples, or reasoning that strengthens the parent.\n")
-	sb.WriteString("  * \"objection\"/\"反対\": Identify specific logical gaps, counterexamples, or alternative interpretations.\n")
-	sb.WriteString("  * \"question\"/\"疑問\": Ask about unstated assumptions, implications, or clarifications needed.\n")
-	sb.WriteString("  * \"proposal\"/\"提案\": Suggest concrete actions, solutions, or next steps that follow from the context.\n\n")
+	sb.WriteString("## Generation Process\n\n")
 
-	sb.WriteString("Differentiation requirements:\n")
-	sb.WriteString("- Each of the 3 comments must approach the parent from a distinct angle (e.g., different evidence, different stakeholder perspective, different time horizon).\n")
-	sb.WriteString("- Do not duplicate, paraphrase, or overlap with existing sibling comments. Instead, fill gaps they leave.\n")
-	sb.WriteString("- Prefer specificity over generality: cite concrete examples, data, or scenarios rather than abstract statements.\n\n")
+	sb.WriteString("### Step 1: Analyze the premise chain\n")
+	sb.WriteString("- Read ALL ancestor comments from root to immediate parent. Each ancestor is an accepted premise.\n")
+	sb.WriteString("- Identify what is already established, what logical gaps remain, and what angles are unexplored.\n")
+	sb.WriteString("- Note which aspects the existing sibling comments already cover — you must NOT overlap with them.\n\n")
 
-	sb.WriteString("Style and format:\n")
+	sb.WriteString("### Step 2: Understand the target type\n")
+	fmt.Fprintf(sb, "- You are generating comments of type \"%s\". This type defines the rhetorical role your comments play relative to their parent.\n", commentType)
+	sb.WriteString("- Infer the meaning of this type from context: how it relates to the parent comment and the ancestor chain.\n")
+	sb.WriteString("- Each comment must clearly fulfill this rhetorical role — if the type is \"evidence\", provide concrete evidence; if \"question\", ask a genuine inquiry, etc.\n\n")
+
+	sb.WriteString("### Step 3: Generate 3 differentiated comments\n")
+	sb.WriteString("Each comment must approach the parent from a DISTINCT angle. Use different differentiation dimensions:\n")
+	sb.WriteString("- Different evidence or data points\n")
+	sb.WriteString("- Different stakeholder perspectives\n")
+	sb.WriteString("- Different time horizons (short-term vs long-term)\n")
+	sb.WriteString("- Different scopes (specific case vs general principle)\n")
+	sb.WriteString("- Different causal chains or mechanisms\n")
+	sb.WriteString("- Different domains of knowledge\n\n")
+
+	sb.WriteString("## Constraints\n\n")
+
+	sb.WriteString("### Logical consistency\n")
+	sb.WriteString("- ALL ancestor comments are established premises. Your comments MUST NOT contradict any of them.\n")
+	sb.WriteString("- Your comments must logically follow from or extend the premise chain.\n\n")
+
+	sb.WriteString("### Atomicity\n")
+	sb.WriteString("- Each comment expresses exactly ONE clear idea. If you have multiple points, each becomes its own comment.\n")
+	sb.WriteString("- No compound statements, no conjunctions linking independent ideas.\n\n")
+
+	sb.WriteString("### Non-overlap\n")
+	sb.WriteString("- NEVER duplicate, paraphrase, or semantically overlap with existing sibling comments.\n")
+	sb.WriteString("- Before generating, check what existing siblings already say and deliberately fill gaps they leave.\n\n")
+
+	sb.WriteString("### Specificity\n")
+	sb.WriteString("- Prefer concrete examples, data, scenarios, and named entities over abstract statements.\n")
+	sb.WriteString("- Avoid vague qualifiers (\"some people say\", \"it could be argued\") — be direct and specific.\n\n")
+
+	sb.WriteString("## Style\n")
 	sb.WriteString("- Match the language, tone, and formality of the existing comments exactly.\n")
-	sb.WriteString("- Keep each comment concise (1-3 sentences). Avoid meta-commentary, hedging phrases, or self-referential language.\n")
-	sb.WriteString("- Do not include greetings, sign-offs, or references to being an AI.\n")
-	sb.WriteString("- Use the same punctuation style and formatting conventions as the context.\n")
+	sb.WriteString("- Keep each comment concise (1-3 sentences).\n")
+	sb.WriteString("- No meta-commentary, hedging, greetings, sign-offs, or self-referential language.\n")
+	sb.WriteString("- Do not reference being an AI or reference the generation process.\n")
+	sb.WriteString("- Match the punctuation style and formatting conventions of the context.\n")
 	sb.WriteString("</instructions>")
 }
 
@@ -315,7 +346,7 @@ func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domai
 		}
 	}
 
-	prompt := cg.buildGenerateDiscussionPrompt(projectPremise, params.Title, params.Text, fetchedContents, params.Language)
+	prompt := cg.buildGenerateDiscussionPrompt(projectPremise, params.Title, params.Text, fetchedContents, params.Language, params.CommentFrame)
 
 	slog.Info(
 		"Generating discussion with AI",
@@ -369,7 +400,7 @@ func (cg *CommentGenerator) fetchURLContents(ctx context.Context, urls []string)
 	return results
 }
 
-func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string, title string, text string, fetchedContents []fetchedURLContent, lang domain.DiscussionLanguage) string {
+func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string, title string, text string, fetchedContents []fetchedURLContent, lang domain.DiscussionLanguage, commentFrame domain.CommentFrame) string {
 	var sb strings.Builder
 	cg.writeSystemContext(&sb)
 	if projectPremise != "" {
@@ -384,56 +415,123 @@ func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string,
 	for _, fc := range fetchedContents {
 		fmt.Fprintf(&sb, "<source type=\"url\" url=\"%s\">\n%s\n</source>\n\n", fc.url, fc.content)
 	}
-	cg.writeGenerateDiscussionInstructions(&sb, title != "", lang)
+	hasCommentFrame := len(commentFrame.Types) > 0
+	cg.writeGenerateDiscussionInstructions(&sb, title != "", lang, hasCommentFrame)
+	if hasCommentFrame {
+		cg.writeCommentFrameConstraints(&sb, commentFrame)
+	}
 	return sb.String()
 }
 
-func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Builder, hasTitle bool, lang domain.DiscussionLanguage) {
+func (cg *CommentGenerator) writeGenerateDiscussionInstructions(sb *strings.Builder, hasTitle bool, lang domain.DiscussionLanguage, hasCommentFrame bool) {
 	sb.WriteString("<instructions>\n")
-	sb.WriteString("Transform the source material into a structured discussion tree that enables systematic exploration of the topic.\n\n")
+	sb.WriteString("Transform the source material into a structured discussion tree that enables systematic exploration of the topic. Follow these steps precisely.\n\n")
 
-	sb.WriteString("Step 1: Extract and analyze\n")
-	sb.WriteString("- Identify every distinct claim, fact, data point, example, assumption, and sub-argument in the source.\n")
-	sb.WriteString("- Note relationships between ideas: support, contrast, causation, evidence, implications.\n\n")
+	sb.WriteString("## Step 1: Deep Source Analysis\n\n")
+	sb.WriteString("Before structuring, perform a thorough analysis of the source:\n")
+	sb.WriteString("- Extract EVERY distinct element: claims, facts, data points, statistics, examples, anecdotes, assumptions, definitions, causal relationships, counterarguments, and implications.\n")
+	sb.WriteString("- Classify each element by its argumentative role: Is it a main claim? Supporting evidence? A qualifier? A counterpoint? An illustration?\n")
+	sb.WriteString("- Map explicit and implicit relationships: What supports what? What contradicts what? What causes what? What remains unresolved?\n")
+	sb.WriteString("- Identify the source's underlying assumptions that are not directly stated but are necessary for its arguments to hold.\n\n")
 
-	sb.WriteString("Step 2: Define discussion structure\n")
+	sb.WriteString("## Step 2: Define Discussion Structure\n\n")
 	if hasTitle {
-		sb.WriteString("- Theme: A concise question or statement (max 255 chars) that captures the core issue, guided by the provided title.\n")
+		sb.WriteString("- **Theme**: A concise question or statement (max 255 chars) capturing the core issue. Use the provided title as guidance for focus.\n")
 	} else {
-		sb.WriteString("- Theme: A concise question or statement (max 255 chars) that captures the core issue to be explored.\n")
+		sb.WriteString("- **Theme**: A concise question or statement (max 255 chars) capturing the core issue to be explored. Derive it from the source material's central tension or question.\n")
 	}
-	sb.WriteString("- Premise: Summarize foundational assumptions, context, and constraints (max 4000 chars). This sets the stage for all comments.\n")
-	sb.WriteString("- Conclusion: Synthesize key findings, open questions, or decision points (max 1000 chars). This reflects what the discussion reveals.\n\n")
+	sb.WriteString("- **Premise**: Summarize the foundational assumptions, context, constraints, and definitions necessary to engage with the theme (max 4000 chars). This sets the stage — include relevant background that all commenters should accept as given.\n")
+	sb.WriteString("- **Conclusion**: Synthesize the key findings, open questions, decision points, or areas of consensus/tension that emerge from the full discussion (max 1000 chars). This should reflect what the tree reveals, not just restate the premise.\n\n")
 
-	sb.WriteString("Step 3: Build the comment tree\n")
-	sb.WriteString("Create a hierarchical structure where:\n")
-	sb.WriteString("- Root-level comments introduce major themes, claims, or questions from the source.\n")
-	sb.WriteString("- Child comments deepen the analysis by providing evidence, examples, counterpoints, or implications.\n")
-	sb.WriteString("- Each branch explores 'why', 'how', 'evidence for', 'evidence against', and 'so what'.\n")
-	sb.WriteString("- Extract every piece of information from the source that relates to the discussion theme and represent it somewhere in the comment tree. Do not omit facts, data points, examples, or sub-arguments even if they seem minor.\n\n")
+	sb.WriteString("## Step 3: Build the Comment Tree\n\n")
+	sb.WriteString("Create a hierarchical comment structure where:\n")
+	sb.WriteString("- **Root comments** (parent_index = -1): Introduce the major themes, primary claims, key questions, or central arguments from the source.\n")
+	sb.WriteString("- **Child comments**: Deepen the analysis by providing evidence, examples, counterpoints, implications, mechanisms, or sub-arguments for their parent.\n")
+	sb.WriteString("- **Each branch** should explore multiple dimensions: why (causation), how (mechanism), evidence for (support), evidence against (objection), so what (implications), and what if (alternatives).\n\n")
 
-	sb.WriteString("Comment type semantics (use consistently):\n")
-	sb.WriteString("- Use descriptive type names that match the source language (e.g., 'claim'/'主張', 'evidence'/'根拠', 'fact'/'事実', 'question'/'疑問', 'supplement'/'補足', 'example'/'例').\n")
-	sb.WriteString("- The type must accurately reflect the comment's role in the argument structure.\n\n")
+	if hasCommentFrame {
+		sb.WriteString("### Comment Type Semantics\n")
+		sb.WriteString("- You MUST use ONLY the comment types listed in <comment_frame>. Do NOT invent, rename, or translate any type name.\n")
+		sb.WriteString("- The type must precisely reflect the comment's rhetorical role in the argument structure relative to its parent.\n")
+		sb.WriteString("- Select the type from <comment_frame> that best fits each comment's role — never use a type outside that list.\n\n")
+	} else {
+		sb.WriteString("### Comment Type Semantics\n")
+		sb.WriteString("- Use descriptive type names that match the source language (e.g., 'claim'/'主張', 'evidence'/'根拠', 'fact'/'事実', 'question'/'疑問', 'supplement'/'補足', 'example'/'例', 'objection'/'反論', 'implication'/'含意').\n")
+		sb.WriteString("- The type must precisely reflect the comment's rhetorical role in the argument structure relative to its parent.\n")
+		sb.WriteString("- Types are dynamic — choose names that best fit the source material's domain and argumentation style.\n\n")
+	}
 
-	sb.WriteString("Comment content rules:\n")
-	sb.WriteString("- Each comment = one atomic idea. If a point has multiple facets, create sibling or child comments.\n")
-	sb.WriteString("- Be exhaustive: represent all substantive content from the source without summarization.\n")
-	sb.WriteString("- Never restate the theme or premise in a comment. Comments must add new information.\n")
-	sb.WriteString("- Express logical relationships through tree structure and comment type, not through connecting phrases within the text.\n")
-	sb.WriteString("- Include specific data, examples, and nuances from the source. Do not generalize away details.\n")
-	sb.WriteString("- Generate as many comments as needed to fully capture the source content. More comments are preferable to fewer; there is no upper limit concern.\n\n")
+	sb.WriteString("### Comment Content Rules\n")
+	sb.WriteString("- **Atomicity**: Each comment = exactly ONE idea. If a point has multiple facets, split into sibling or child comments.\n")
+	sb.WriteString("- **Exhaustiveness**: Represent ALL substantive content from the source. Every fact, data point, example, statistic, name, date, and nuance must appear somewhere in the tree. Do NOT summarize away details.\n")
+	sb.WriteString("- **No restatement**: Never restate the theme or premise in a comment. Every comment must add NEW information not already captured in ancestors.\n")
+	sb.WriteString("- **Structural logic**: Express logical relationships through tree structure and comment type, NOT through connecting phrases like \"because\", \"however\", \"therefore\" within the comment text.\n")
+	sb.WriteString("- **Specificity**: Preserve concrete details — specific numbers, names, dates, examples, and quotes from the source. Never generalize away precision.\n")
+	sb.WriteString("- **Volume**: Generate as many comments as needed to fully capture the source. More atomic comments are always preferable to fewer compound ones. There is no upper limit.\n\n")
 
-	sb.WriteString("Tree structure rules:\n")
-	sb.WriteString("- Use parent_index to establish hierarchy (-1 for root comments, 0-based index for children).\n")
-	sb.WriteString("- Create deep branches (3-5 levels) to explore ideas thoroughly.\n")
-	sb.WriteString("- Ensure every major claim has supporting evidence as children, and every piece of evidence connects to a claim as parent.\n\n")
+	sb.WriteString("### Tree Structure Rules\n")
+	sb.WriteString("- Use parent_index to establish hierarchy: -1 for root comments, 0-based index of the parent comment for children.\n")
+	if hasCommentFrame {
+		sb.WriteString("- Build branches as deeply as the allowed parent-child paths in <comment_frame> permit. Follow only the listed paths — never exceed them.\n")
+	} else {
+		sb.WriteString("- Create deep branches (3-5 levels minimum) to explore ideas thoroughly. Shallow trees miss nuance.\n")
+	}
+	sb.WriteString("- Every major claim must have supporting evidence as children. Every piece of evidence must connect to a claim as parent. No orphaned information.\n")
+	sb.WriteString("- Sibling comments at the same level must be DISTINCT — each covering a different facet, evidence, or angle. No paraphrasing between siblings.\n")
+	sb.WriteString("- Balance breadth (covering all major themes) with depth (exploring each theme's implications thoroughly).\n\n")
 
-	sb.WriteString("Language and style:\n")
-	fmt.Fprintf(sb, "- Use %s consistently for theme, premise, conclusion, all comments, and comment types.\n", lang)
+	sb.WriteString("## Step 4: Self-Validation\n\n")
+	sb.WriteString("Before finalizing, verify:\n")
+	sb.WriteString("- Every piece of substantive information from the source appears somewhere in the tree.\n")
+	sb.WriteString("- Every comment is atomic (one idea per comment).\n")
+	sb.WriteString("- No comment contradicts its ancestors (all ancestors are premises for their descendants).\n")
+	sb.WriteString("- No sibling comments overlap in meaning.\n")
+	sb.WriteString("- Comment types accurately reflect each comment's role relative to its parent.\n")
+	if hasCommentFrame {
+		sb.WriteString("- Every comment type is exactly one of the types listed in <comment_frame>, and every parent-child pair matches an allowed path.\n")
+	} else {
+		sb.WriteString("- The tree has sufficient depth (3-5 levels) and breadth (all major themes covered).\n")
+	}
+
+	sb.WriteString("\n## Language and Style\n")
+	fmt.Fprintf(sb, "- Use %s consistently for theme, premise, conclusion, and all comment content.\n", lang)
 	sb.WriteString("- Write in a clear, factual, analytical tone appropriate to the source material.\n")
 	sb.WriteString("- Keep each comment concise (1-3 sentences) while preserving essential detail.\n")
-	sb.WriteString("</instructions>")
+	sb.WriteString("- Do not include meta-commentary, hedging, or self-referential language.\n")
+	sb.WriteString("</instructions>\n\n")
+}
+
+func (cg *CommentGenerator) writeCommentFrameConstraints(sb *strings.Builder, commentFrame domain.CommentFrame) {
+	sb.WriteString("<comment_frame>\n")
+	sb.WriteString("You MUST strictly follow this comment frame. These are the ONLY allowed comment types and parent-child relationships.\n\n")
+
+	sb.WriteString("Allowed comment types:\n")
+	for _, t := range commentFrame.Types {
+		if t == "" {
+			sb.WriteString("- (Root): Represents the discussion theme itself.\n")
+		} else {
+			fmt.Fprintf(sb, "- %s\n", t)
+		}
+	}
+	sb.WriteString("\n")
+
+	sb.WriteString("Allowed parent-child paths (Parent ← Child):\n")
+	for _, p := range commentFrame.Paths {
+		parentLabel := p.Parent
+		if parentLabel == "" {
+			parentLabel = "(Root)"
+		}
+		fmt.Fprintf(sb, "- %s ← %s\n", parentLabel, p.Child)
+	}
+	sb.WriteString("\n")
+
+	sb.WriteString("Constraints:\n")
+	sb.WriteString("- NEVER use a comment type not listed in 'Allowed comment types'.\n")
+	sb.WriteString("- NEVER place a child comment under a parent if that (Parent ← Child) path is not listed in 'Allowed parent-child paths'.\n")
+	sb.WriteString("- A path with Parent = (Root) means the child comment is a root-level comment (parent_index = -1).\n")
+	sb.WriteString("- If a comment of type X has no allowed path from (Root) or any other type, it cannot be placed in the tree.\n")
+	sb.WriteString("- The comment type (\"type\" field) MUST be an exact, case-sensitive match to one of the strings listed in 'Allowed comment types'. Do NOT translate, rename, or localize type names — even if the output language differs. For example, if the allowed type is \"claim\", you MUST output \"claim\", not its translated equivalent.\n")
+	sb.WriteString("</comment_frame>\n\n")
 }
 
 func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, prompt string, modelLevel domain.ModelLevel) (generatedDiscussion, int32, error) {

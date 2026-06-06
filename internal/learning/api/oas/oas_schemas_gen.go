@@ -1165,12 +1165,13 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsComment
 }
 
 type V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq struct {
-	ProjectId  ID                                                                    `json:"projectId"`
-	Title      OptDiscussionTheme                                                    `json:"title"`
-	Language   DiscussionLanguage                                                    `json:"language"`
-	Text       string                                                                `json:"text"`
-	Urls       []url.URL                                                             `json:"urls"`
-	ModelLevel V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel `json:"model_level"`
+	ProjectId    ID                                                                    `json:"projectId"`
+	Title        OptDiscussionTheme                                                    `json:"title"`
+	Language     DiscussionLanguage                                                    `json:"language"`
+	Text         string                                                                `json:"text"`
+	Urls         []url.URL                                                             `json:"urls"`
+	ModelLevel   V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel `json:"model_level"`
+	CommentFrame CommentFrame                                                          `json:"commentFrame"`
 }
 
 // GetProjectId returns the value of ProjectId.
@@ -1203,6 +1204,11 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetModelLe
 	return s.ModelLevel
 }
 
+// GetCommentFrame returns the value of CommentFrame.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) GetCommentFrame() CommentFrame {
+	return s.CommentFrame
+}
+
 // SetProjectId sets the value of ProjectId.
 func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetProjectId(val ID) {
 	s.ProjectId = val
@@ -1231,6 +1237,11 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetUrls(va
 // SetModelLevel sets the value of ModelLevel.
 func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetModelLevel(val V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) {
 	s.ModelLevel = val
+}
+
+// SetCommentFrame sets the value of CommentFrame.
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) SetCommentFrame(val CommentFrame) {
+	s.CommentFrame = val
 }
 
 type V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel string

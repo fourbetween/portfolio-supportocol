@@ -467,15 +467,33 @@ func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePost(
 		title = string(t)
 	}
 
+	cf := req.CommentFrame
+	types := make([]string, len(cf.Types))
+	for i, t := range cf.Types {
+		types[i] = string(t)
+	}
+	paths := make([]domain.CommentPath, len(cf.Paths))
+	for i, p := range cf.Paths {
+		paths[i] = domain.CommentPath{
+			Child:  string(p.Child),
+			Parent: string(p.Parent),
+		}
+	}
+	commentFrame := domain.CommentFrame{
+		Types: types,
+		Paths: paths,
+	}
+
 	output, err := h.con.GenerateDiscussion.Execute(ctx, usecase.GenerateDiscussionInput{
-		WorkspaceID: uuid.UUID(params.WorkspaceId).String(),
-		ProjectID:   uuid.UUID(req.ProjectId).String(),
-		Title:       title,
-		Text:        req.Text,
-		URLs:        urls,
-		UserID:      httpctx.GetUserID(ctx),
-		Language:    string(req.Language),
-		ModelLevel:  domain.ModelLevel(req.ModelLevel),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		ProjectID:    uuid.UUID(req.ProjectId).String(),
+		Title:        title,
+		Text:         req.Text,
+		URLs:         urls,
+		UserID:       httpctx.GetUserID(ctx),
+		Language:     string(req.Language),
+		ModelLevel:   domain.ModelLevel(req.ModelLevel),
+		CommentFrame: commentFrame,
 	})
 	if err != nil {
 		return nil, err

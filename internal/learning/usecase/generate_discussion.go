@@ -48,14 +48,15 @@ func NewGenerateDiscussionUsecase(
 }
 
 type GenerateDiscussionInput struct {
-	WorkspaceID string
-	ProjectID   string
-	Title       string
-	Text        string
-	URLs        []string
-	UserID      string
-	Language    string
-	ModelLevel  domain.ModelLevel
+	WorkspaceID  string
+	ProjectID    string
+	Title        string
+	Text         string
+	URLs         []string
+	UserID       string
+	Language     string
+	ModelLevel   domain.ModelLevel
+	CommentFrame domain.CommentFrame
 }
 
 type GenerateDiscussionOutput struct {
@@ -90,14 +91,15 @@ func (u *GenerateDiscussionUsecase) Execute(ctx context.Context, input GenerateD
 	}
 
 	result, err := u.generator.GenerateDiscussion(ctx, domain.GenerateDiscussionParams{
-		WorkspaceID: input.WorkspaceID,
-		ProjectID:   input.ProjectID,
-		Title:       input.Title,
-		Text:        input.Text,
-		URLs:        input.URLs,
-		UserID:      input.UserID,
-		Language:    lang,
-		ModelLevel:  input.ModelLevel,
+		WorkspaceID:  input.WorkspaceID,
+		ProjectID:    input.ProjectID,
+		Title:        input.Title,
+		Text:         input.Text,
+		URLs:         input.URLs,
+		UserID:       input.UserID,
+		Language:     lang,
+		ModelLevel:   input.ModelLevel,
+		CommentFrame: input.CommentFrame,
 	})
 	if err != nil {
 		return GenerateDiscussionOutput{}, err

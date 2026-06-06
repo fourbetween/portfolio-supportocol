@@ -985,6 +985,7 @@ export interface paths {
                         urls: string[];
                         /** @enum {string} */
                         model_level: "low" | "medium" | "high";
+                        commentFrame: components["schemas"]["CommentFrame"];
                     };
                 };
             };
