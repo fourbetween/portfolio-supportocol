@@ -76,14 +76,6 @@ export class LearningCommentExplorerWidget extends LitElement {
     }
   }
 
-  updated(changedProperties: PropertyValues<this>) {
-    if (changedProperties.has("selectedCommentId") && this.selectedCommentId) {
-      requestAnimationFrame(() => {
-        this.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    }
-  }
-
   connectedCallback() {
     super.connectedCallback();
     document.addEventListener("keydown", this._handleKeyDown);

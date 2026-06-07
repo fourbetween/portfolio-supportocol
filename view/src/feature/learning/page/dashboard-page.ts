@@ -268,14 +268,9 @@ export class LearningDashboardPage extends LitElement {
   }
 
   private _handleCommentUpdated(e: LearningCommentUpdatedEvent) {
-    const oldComment = this._comments.find((c) => c.id === e.comment.id);
     this._comments = this._comments.map((c) =>
       c.id === e.comment.id ? e.comment : c,
     );
-    if (oldComment?.status === "proposed" && e.comment.status === "active") {
-      this._selectedCommentId = e.comment.id;
-      this._activeDrawer = undefined;
-    }
   }
 
   private async _handleCommentDeleted(_e: LearningCommentDeletedEvent) {
