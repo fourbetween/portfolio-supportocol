@@ -251,6 +251,14 @@ func (c *Comment) UpdateStatus(status CommentStatus) error {
 	return nil
 }
 
+func (c *Comment) SetStatus(status CommentStatus) error {
+	if err := status.Validate(); err != nil {
+		return err
+	}
+	c.status = status
+	return nil
+}
+
 func (c *Comment) AddIssue(issue CommentIssue) {
 	c.issues = append(c.issues, issue)
 }

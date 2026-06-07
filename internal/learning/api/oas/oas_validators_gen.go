@@ -664,6 +664,19 @@ func (s *GeneratedDiscussion) Validate() error {
 	return nil
 }
 
+func (s ModelLevel) Validate() error {
+	switch s {
+	case "low":
+		return nil
+	case "medium":
+		return nil
+	case "high":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s PermissionLevel) Validate() error {
 	switch s {
 	case "everyone":
@@ -691,6 +704,59 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsComment
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "commentType",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if s.Urls == nil {
+			return errors.New("nil is invalid value")
+		}
+		if err := (validate.Array{
+			MinLength:    0,
+			MinLengthSet: true,
+			MaxLength:    3,
+			MaxLengthSet: true,
+		}).ValidateLength(len(s.Urls)); err != nil {
+			return errors.Wrap(err, "array")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "urls",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.ModelLevel.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "model_level",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.CommentFrame.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "commentFrame",
 			Error: err,
 		})
 	}
@@ -780,19 +846,6 @@ func (s *V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReq) Validate()
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePostReqModelLevel) Validate() error {
-	switch s {
-	case "low":
-		return nil
-	case "medium":
-		return nil
-	case "high":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *V1LearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdPutReq) Validate() error {

@@ -983,8 +983,7 @@ export interface paths {
                         language: components["schemas"]["DiscussionLanguage"];
                         text: string;
                         urls: string[];
-                        /** @enum {string} */
-                        model_level: "low" | "medium" | "high";
+                        model_level: components["schemas"]["ModelLevel"];
                         commentFrame: components["schemas"]["CommentFrame"];
                     };
                 };
@@ -997,6 +996,66 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["GeneratedDiscussion"];
+                    };
+                };
+                /** @description default error */
+                default: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                workspaceId: components["parameters"]["workspaceId"];
+                discussionId: components["parameters"]["discussionId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description generate comments using AI from source text and URLs */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workspaceId: components["parameters"]["workspaceId"];
+                    discussionId: components["parameters"]["discussionId"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        text: string;
+                        urls: string[];
+                        model_level: components["schemas"]["ModelLevel"];
+                        commentFrame: components["schemas"]["CommentFrame"];
+                    };
+                };
+            };
+            responses: {
+                /** @description success response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Comment"][];
                     };
                 };
                 /** @description default error */
@@ -1113,6 +1172,8 @@ export interface components {
         CommentContent: string;
         CommentIssueTitle: string;
         CommentIssueDescription: string;
+        /** @enum {string} */
+        ModelLevel: "low" | "medium" | "high";
         DiscussionSummary: {
             id: components["schemas"]["Id"];
             projectId: components["schemas"]["Id"];

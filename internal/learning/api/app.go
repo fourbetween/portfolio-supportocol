@@ -534,6 +534,53 @@ func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCom
 	return res, nil
 }
 
+func (h *appHandler) V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(
+	ctx context.Context,
+	req *oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq,
+	params oas.V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams,
+) ([]oas.Comment, error) {
+	urls := make([]string, len(req.Urls))
+	for i, u := range req.Urls {
+		urls[i] = u.String()
+	}
+
+	cf := req.CommentFrame
+	types := make([]string, len(cf.Types))
+	for i, t := range cf.Types {
+		types[i] = string(t)
+	}
+	paths := make([]domain.CommentPath, len(cf.Paths))
+	for i, p := range cf.Paths {
+		paths[i] = domain.CommentPath{
+			Child:  string(p.Child),
+			Parent: string(p.Parent),
+		}
+	}
+	commentFrame := domain.CommentFrame{
+		Types: types,
+		Paths: paths,
+	}
+
+	comments, err := h.con.GenerateCommentsForDiscussion.Execute(ctx, usecase.GenerateCommentsForDiscussionInput{
+		DiscussionID: uuid.UUID(params.DiscussionId).String(),
+		WorkspaceID:  uuid.UUID(params.WorkspaceId).String(),
+		Text:         req.Text,
+		URLs:         urls,
+		UserID:       httpctx.GetUserID(ctx),
+		ModelLevel:   domain.ModelLevel(req.ModelLevel),
+		CommentFrame: commentFrame,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]oas.Comment, len(comments))
+	for i, c := range comments {
+		res[i] = h.toOasComment(c)
+	}
+	return res, nil
+}
+
 func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCode {
 	code := http.StatusInternalServerError
 	msg := strings.Split(err.Error(), ":")[0]

@@ -104,6 +104,12 @@ components:
     CommentIssueDescription:
       type: string
       maxLength: 1000
+    ModelLevel:
+      type: string
+      enum:
+        - low
+        - medium
+        - high
     DiscussionSummary:
       type: object
       properties:
@@ -813,11 +819,7 @@ paths:
                   minItems: 0
                   maxItems: 3
                 model_level:
-                  type: string
-                  enum:
-                    - low
-                    - medium
-                    - high
+                  $ref: "#/components/schemas/ModelLevel"
                 commentFrame:
                   $ref: "#/components/schemas/CommentFrame"
               required:
@@ -834,6 +836,52 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GeneratedDiscussion"
+        default:
+          description: default error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments:
+    parameters:
+      - $ref: "#/components/parameters/workspaceId"
+      - $ref: "#/components/parameters/discussionId"
+    post:
+      description: generate comments using AI from source text and URLs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                urls:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                  minItems: 0
+                  maxItems: 3
+                model_level:
+                  $ref: "#/components/schemas/ModelLevel"
+                commentFrame:
+                  $ref: "#/components/schemas/CommentFrame"
+              required:
+                - text
+                - urls
+                - model_level
+                - commentFrame
+      responses:
+        "201":
+          description: success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Comment"
         default:
           description: default error
           content:

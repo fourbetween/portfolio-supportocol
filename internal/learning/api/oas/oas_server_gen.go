@@ -14,6 +14,12 @@ type Handler interface {
 	//
 	// POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments/{commentId}/generate
 	V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePost(ctx context.Context, req *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostReq, params V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsCommentIdGeneratePostParams) ([]Comment, error)
+	// V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost implements POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments operation.
+	//
+	// Generate comments using AI from source text and URLs.
+	//
+	// POST /v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments
+	V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPost(ctx context.Context, req *V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostReq, params V1AiLearningWorkspacesWorkspaceIdDiscussionsDiscussionIdCommentsPostParams) ([]Comment, error)
 	// V1AiLearningWorkspacesWorkspaceIdDiscussionsGeneratePost implements POST /v1/ai/learning/workspaces/{workspaceId}/discussions/generate operation.
 	//
 	// Generate a discussion with comments using AI from source text and URLs.
