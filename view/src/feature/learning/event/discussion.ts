@@ -6,6 +6,32 @@ import type {
   ModelLevel,
 } from "../model/discussion";
 
+export class LearningDiscussionCommentGenerateEvent extends Event {
+  static get eventName() {
+    return "learning-discussion-comment-generate" as const;
+  }
+  public readonly sourceText: string;
+  public readonly sourceUrls: string[];
+  public readonly modelLevel: ModelLevel;
+  public readonly commentFrame: CommentFrame;
+
+  constructor(
+    sourceText: string,
+    sourceUrls: string[],
+    modelLevel: ModelLevel,
+    commentFrame: CommentFrame,
+  ) {
+    super(LearningDiscussionCommentGenerateEvent.eventName, {
+      bubbles: true,
+      composed: true,
+    });
+    this.sourceText = sourceText;
+    this.sourceUrls = sourceUrls;
+    this.modelLevel = modelLevel;
+    this.commentFrame = commentFrame;
+  }
+}
+
 export class LearningDiscussionSelectEvent extends Event {
   static get eventName() {
     return "learning-discussion-select" as const;
@@ -275,6 +301,7 @@ export class LearningDiscussionUnarchiveEvent extends Event {
 
 declare global {
   interface HTMLElementEventMap {
+    [LearningDiscussionCommentGenerateEvent.eventName]: LearningDiscussionCommentGenerateEvent;
     [LearningDiscussionSelectEvent.eventName]: LearningDiscussionSelectEvent;
     [LearningDiscussionCreateEvent.eventName]: LearningDiscussionCreateEvent;
     [LearningDiscussionCreatedEvent.eventName]: LearningDiscussionCreatedEvent;

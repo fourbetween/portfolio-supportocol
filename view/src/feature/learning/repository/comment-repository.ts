@@ -1,5 +1,7 @@
 import { client } from "../api/client";
+import type { CommentFrame } from "../model/comment-frame";
 import type { Comment, CommentStatus } from "../model/comment";
+import type { ModelLevel } from "../model/discussion";
 
 export class CommentRepository {
   private _cache = new Map<string, Comment[]>();
@@ -156,6 +158,39 @@ export class CommentRepository {
         });
       this._cache.set(discussionId, updated);
     }
+  }
+
+  async generateComments(
+    workspaceId: string,
+    discussionId: string,
+    text: string,
+    urls: string[],
+    modelLevel: ModelLevel,
+    commentFrame: CommentFrame,
+  ): Promise<Comment[]> {
+    const { data, error } = await client.POST(
+      "/v1/ai/learning/workspaces/{workspaceId}/discussions/{discussionId}/comments",
+      {
+        params: {
+          path: { workspaceId, discussionId },
+        },
+        body: {
+          text,
+          urls,
+          model_level: modelLevel,
+          commentFrame,
+        },
+      },
+    );
+    if (error) throw new Error(error.message);
+
+    const comments = data || [];
+    const cached = this._cache.get(discussionId);
+    if (cached && comments.length > 0) {
+      this._cache.set(discussionId, [...cached, ...comments]);
+    }
+
+    return comments;
   }
 
   async generateChildren(

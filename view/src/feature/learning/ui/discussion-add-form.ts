@@ -18,6 +18,15 @@ export class LearningDiscussionAddForm extends LitElement {
   @property({ type: Boolean })
   isFree = false;
 
+  @property({ type: Boolean })
+  hideTheme = false;
+
+  @property({ type: Object })
+  initialFrame?: CommentFrame | null;
+
+  @property({ type: Object })
+  usedFrame?: CommentFrame;
+
   @state()
   private _theme = "";
 
@@ -69,7 +78,7 @@ export class LearningDiscussionAddForm extends LitElement {
   get isValid(): boolean {
     const hasSource =
       this._sourceText.trim().length > 0 || this._sourceUrls.length > 0;
-    return this._theme.trim().length > 0 || hasSource;
+    return this.hideTheme || this._theme.trim().length > 0 || hasSource;
   }
 
   private get _hasSource(): boolean {
@@ -131,22 +140,28 @@ export class LearningDiscussionAddForm extends LitElement {
     this._newUrl = "";
     this._modelLevel = "medium";
     if (this._commentFrameForm) {
-      this._commentFrameForm.initialFrame = null;
+      this._commentFrameForm.initialFrame = this.usedFrame
+        ? { types: [...this.usedFrame.types], paths: [...this.usedFrame.paths] }
+        : null;
     }
   }
 
   render() {
     return html`
       <div class="fields">
-        <div class="field">
-          <input
-            type="text"
-            .value=${live(this._theme)}
-            @input=${this._handleThemeInput}
-            placeholder=${msg("Theme")}
-            aria-label=${msg("Theme")}
-          />
-        </div>
+        ${!this.hideTheme
+          ? html`
+              <div class="field">
+                <input
+                  type="text"
+                  .value=${live(this._theme)}
+                  @input=${this._handleThemeInput}
+                  placeholder=${msg("Theme")}
+                  aria-label=${msg("Theme")}
+                />
+              </div>
+            `
+          : ""}
 
         ${!this.isFree
           ? html`
@@ -245,7 +260,10 @@ export class LearningDiscussionAddForm extends LitElement {
               </div>
               <div class="field">
                 <label class="field-label">${msg("Comment Frame")}</label>
-                <learning-comment-frame-form></learning-comment-frame-form>
+                <learning-comment-frame-form
+                  .initialFrame=${this.initialFrame}
+                  .usedFrame=${this.usedFrame}
+                ></learning-comment-frame-form>
               </div>
             `
           : ""}

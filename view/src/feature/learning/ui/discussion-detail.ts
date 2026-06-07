@@ -11,6 +11,7 @@ import "../../../shared/ui/icons/icon-archive";
 import "../../../shared/ui/icons/icon-content-copy";
 import "../../../shared/ui/icons/icon-delete";
 import "../../../shared/ui/icons/icon-edit";
+import "../../../shared/ui/icons/icon-psychology";
 import "../../../shared/ui/icons/icon-unarchive";
 import "../../../shared/ui/markdown-viewer/markdown-viewer";
 import {
@@ -23,6 +24,8 @@ import type { Comment } from "../model/comment";
 import type { CommentFrame } from "../model/comment-frame";
 import type { Discussion } from "../model/discussion";
 import "./comment-frame-badge";
+import "./comment-generate-popup";
+import type { LearningCommentGeneratePopup } from "./comment-generate-popup";
 import "./dialogue-settings-popup";
 import type { LearningDialogueSettingsPopup } from "./dialogue-settings-popup";
 import "./discussion-edit-form";
@@ -46,6 +49,9 @@ export class LearningDiscussionDetail extends LitElement {
   @property({ type: Boolean })
   isEditing = false;
 
+  @property({ type: Boolean })
+  isFree = true;
+
   @query("learning-discussion-status-popup")
   private statusPopup!: DiscussionStatusPopup;
 
@@ -54,6 +60,9 @@ export class LearningDiscussionDetail extends LitElement {
 
   @query("learning-discussion-markdown-popup")
   private markdownPopup!: LearningDiscussionMarkdownPopup;
+
+  @query("learning-comment-generate-popup")
+  private generatePopup!: LearningCommentGeneratePopup;
 
   render() {
     if (!this.discussion && !this.isEditing) {
@@ -77,6 +86,10 @@ export class LearningDiscussionDetail extends LitElement {
         .discussion=${this.discussion}
         .comments=${this.comments}
       ></learning-discussion-markdown-popup>
+      <learning-comment-generate-popup
+        .initialFrame=${this.usedFrame}
+        .usedFrame=${this.usedFrame}
+      ></learning-comment-generate-popup>
     `;
   }
 
@@ -113,6 +126,13 @@ export class LearningDiscussionDetail extends LitElement {
             ></ui-discussion-archive-badge>
           </div>
           <div class="actions">
+            ${!this.isFree
+              ? html`
+                  <button class="btn" @click=${this._handleGenerateClick}>
+                    <ui-icon-psychology></ui-icon-psychology>
+                  </button>
+                `
+              : html``}
             <button class="btn danger" @click=${this._handleDeleteClick}>
               <ui-icon-delete></ui-icon-delete>
             </button>
@@ -198,6 +218,10 @@ export class LearningDiscussionDetail extends LitElement {
 
   private _handleMarkdownClick() {
     this.markdownPopup.open = true;
+  }
+
+  private _handleGenerateClick() {
+    this.generatePopup.open = true;
   }
 
   static styles = [

@@ -8,6 +8,7 @@ import { baseStyle } from "../../../shared/style/base";
 import type { WorkspaceWithMember } from "../../workspace/model/workspace";
 import {
   LearningDiscussionArchiveEvent,
+  LearningDiscussionCommentGenerateEvent,
   LearningDiscussionDeletedEvent,
   LearningDiscussionDeleteEvent,
   LearningDiscussionUnarchiveEvent,
@@ -16,9 +17,11 @@ import {
   LearningDiscussionUpdateEvent,
   LearningDiscussionUpdateStatusEvent,
 } from "../event/discussion";
+import { LearningCommentGeneratedEvent } from "../event/comment";
 import type { Comment } from "../model/comment";
 import { deriveCommentFrame } from "../model/comment-frame";
 import type { DialogueSettings, Discussion } from "../model/discussion";
+import { commentRepository } from "../repository/comment-repository";
 import { discussionRepository } from "../repository/discussion-repository";
 import "../ui/discussion-detail";
 
@@ -167,6 +170,27 @@ export class LearningDiscussionDetailWidget extends LitElement {
     }
   }
 
+  private async _handleCommentGenerate(
+    e: LearningDiscussionCommentGenerateEvent,
+  ) {
+    if (!this.discussion || !this.workspace) return;
+    try {
+      const comments = await commentRepository.generateComments(
+        this.workspace.workspace.id,
+        this.discussion.id,
+        e.sourceText,
+        e.sourceUrls,
+        e.modelLevel,
+        e.commentFrame,
+      );
+
+      showToast(this, msg("Comments generated."), "success", 2000);
+      this.dispatchEvent(new LearningCommentGeneratedEvent(undefined, undefined, comments));
+    } catch (error: any) {
+      showToast(this, error.message, "error");
+    }
+  }
+
   private get _usedFrame() {
     return deriveCommentFrame(this.comments);
   }
@@ -180,6 +204,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
         .comments=${this.comments}
         .usedFrame=${this._usedFrame}
         .isEditing=${this._isEditing}
+        .isFree=${this.workspace?.workspace.subscription.plan.isFree ?? true}
         @learning-discussion-form-open=${() => (this._isEditing = true)}
         @learning-discussion-update=${this._handleUpdateDiscussion}
         @learning-discussion-form-close=${() => (this._isEditing = false)}
@@ -189,6 +214,7 @@ export class LearningDiscussionDetailWidget extends LitElement {
         @learning-discussion-archive=${this._handleArchiveDiscussion}
         @learning-discussion-unarchive=${this._handleUnarchiveDiscussion}
         @learning-discussion-delete=${this._handleDeleteDiscussion}
+        @learning-discussion-comment-generate=${this._handleCommentGenerate}
       ></learning-discussion-detail>
     `;
   }
