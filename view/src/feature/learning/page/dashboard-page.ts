@@ -439,6 +439,7 @@ export class LearningDashboardPage extends LitElement {
             .comments=${this._comments}
             @learning-discussion-updated=${this._handleDiscussionUpdated}
             @learning-discussion-deleted=${this._handleDiscussionDeleted}
+            @learning-comment-generated=${this._handleCommentGenerated}
           ></learning-discussion-detail-widget>
         </div>
         <div class="comment-frame">
