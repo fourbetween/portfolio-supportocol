@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log/slog"
+	"net/url"
 	"slices"
 	"strings"
 	"sync"
@@ -332,21 +333,32 @@ func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domai
 	}
 
 	var fetchedContents []fetchedURLContent
+	var youtubeURLs []string
 	if len(params.URLs) > 0 {
-		results := cg.fetchURLContents(ctx, params.URLs)
-		for _, r := range results {
-			if r.err != nil {
-				slog.Warn("Failed to fetch URL content", slog.String("url", r.url), slog.String("error", r.err.Error()))
-				continue
+		var fetchURLs []string
+		for _, u := range params.URLs {
+			if isYouTubeURL(u) {
+				youtubeURLs = append(youtubeURLs, u)
+			} else {
+				fetchURLs = append(fetchURLs, u)
 			}
-			fetchedContents = append(fetchedContents, fetchedURLContent{url: r.url, content: r.content})
 		}
-		if len(fetchedContents) == 0 && params.Text == "" {
+		if len(fetchURLs) > 0 {
+			results := cg.fetchURLContents(ctx, fetchURLs)
+			for _, r := range results {
+				if r.err != nil {
+					slog.Warn("Failed to fetch URL content", slog.String("url", r.url), slog.String("error", r.err.Error()))
+					continue
+				}
+				fetchedContents = append(fetchedContents, fetchedURLContent{url: r.url, content: r.content})
+			}
+		}
+		if len(fetchedContents) == 0 && len(youtubeURLs) == 0 && params.Text == "" {
 			return domain.DiscussionGenerationResult{}, fmt.Errorf("failed to fetch any URL content")
 		}
 	}
 
-	prompt := cg.buildGenerateDiscussionPrompt(projectPremise, params.Title, params.Text, fetchedContents, params.Language, params.CommentFrame)
+	prompt := cg.buildGenerateDiscussionPrompt(projectPremise, params.Title, params.Text, fetchedContents, youtubeURLs, params.Language, params.CommentFrame)
 
 	slog.Info(
 		"Generating discussion with AI",
@@ -354,7 +366,7 @@ func (cg *CommentGenerator) GenerateDiscussion(ctx context.Context, params domai
 		slog.Int("prompt_length", len(prompt)),
 	)
 
-	generated, tokens, err := cg.generateFullDiscussionWithAI(ctx, prompt, params.ModelLevel)
+	generated, tokens, err := cg.generateFullDiscussionWithAI(ctx, prompt, youtubeURLs, params.ModelLevel)
 	if err != nil {
 		return domain.DiscussionGenerationResult{}, err
 	}
@@ -400,7 +412,7 @@ func (cg *CommentGenerator) fetchURLContents(ctx context.Context, urls []string)
 	return results
 }
 
-func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string, title string, text string, fetchedContents []fetchedURLContent, lang domain.DiscussionLanguage, commentFrame domain.CommentFrame) string {
+func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string, title string, text string, fetchedContents []fetchedURLContent, youtubeURLs []string, lang domain.DiscussionLanguage, commentFrame domain.CommentFrame) string {
 	var sb strings.Builder
 	cg.writeSystemContext(&sb)
 	if projectPremise != "" {
@@ -414,6 +426,9 @@ func (cg *CommentGenerator) buildGenerateDiscussionPrompt(projectPremise string,
 	}
 	for _, fc := range fetchedContents {
 		fmt.Fprintf(&sb, "<source type=\"url\" url=\"%s\">\n%s\n</source>\n\n", fc.url, fc.content)
+	}
+	for _, ytURL := range youtubeURLs {
+		fmt.Fprintf(&sb, "<source type=\"youtube\" url=\"%s\">\nA YouTube video is attached at this URL. Its video and audio content is provided as a separate data part — analyze it directly.\n</source>\n\n", ytURL)
 	}
 	hasCommentFrame := len(commentFrame.Types) > 0
 	cg.writeGenerateDiscussionInstructions(&sb, title != "", lang, hasCommentFrame)
@@ -537,7 +552,7 @@ func (cg *CommentGenerator) writeCommentFrameConstraints(sb *strings.Builder, co
 	sb.WriteString("</comment_frame>\n\n")
 }
 
-func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, prompt string, modelLevel domain.ModelLevel) (generatedDiscussion, int32, error) {
+func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, prompt string, youtubeURLs []string, modelLevel domain.ModelLevel) (generatedDiscussion, int32, error) {
 	modelName := cg.selectModel(modelLevel)
 	config := &genai.GenerateContentConfig{
 		ThinkingConfig: &genai.ThinkingConfig{
@@ -579,10 +594,16 @@ func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, pr
 		},
 	}
 
+	parts := []*genai.Part{genai.NewPartFromText(prompt)}
+	for _, ytURL := range youtubeURLs {
+		parts = append(parts, genai.NewPartFromURI(ytURL, "video/mp4"))
+	}
+	contents := []*genai.Content{genai.NewContentFromParts(parts, genai.RoleUser)}
+
 	resp, err := cg.client.Models.GenerateContent(
 		ctx,
 		modelName,
-		genai.Text(prompt),
+		contents,
 		config,
 	)
 	if err != nil {
@@ -599,6 +620,17 @@ func (cg *CommentGenerator) generateFullDiscussionWithAI(ctx context.Context, pr
 		tokens = resp.UsageMetadata.TotalTokenCount
 	}
 	return generated, tokens, nil
+}
+
+func isYouTubeURL(rawURL string) bool {
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		return false
+	}
+	host := strings.ToLower(u.Host)
+	host = strings.TrimPrefix(host, "www.")
+	host = strings.TrimPrefix(host, "m.")
+	return host == "youtube.com" || host == "youtu.be" || strings.HasSuffix(host, ".youtube.com")
 }
 
 func (cg *CommentGenerator) selectModel(level domain.ModelLevel) string {
