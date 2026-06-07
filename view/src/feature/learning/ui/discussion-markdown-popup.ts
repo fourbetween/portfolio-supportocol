@@ -96,7 +96,11 @@ function toMarkdown(discussion: Discussion, comments: Comment[]): string {
   const activeComments = comments.filter((c) => !archivedIds.has(c.id));
   if (activeComments.length > 0) {
     const childrenMap = buildSortedChildrenMap(activeComments);
-    parts.push(renderCommentTree(childrenMap, "root", 1));
+    if (hasSiblingsOnlyAtDepth1(childrenMap)) {
+      parts.push(renderCommentTreeLinear(childrenMap, "root", 1));
+    } else {
+      parts.push(renderCommentTree(childrenMap, "root", 1));
+    }
   }
 
   return parts.join("");
@@ -131,6 +135,59 @@ function collectArchivedDescendantIds(comments: Comment[]): Set<string> {
   }
 
   return archivedIds;
+}
+
+function hasSiblingsOnlyAtDepth1(
+  childrenMap: Map<string, Comment[]>,
+): boolean {
+  for (const [parentId, children] of childrenMap) {
+    if (parentId === "root") continue;
+    if (children.length >= 2) return false;
+  }
+  return true;
+}
+
+function renderCommentTreeLinear(
+  childrenMap: Map<string, Comment[]>,
+  parentId: string,
+  depth: number,
+): string {
+  const children = childrenMap.get(parentId);
+  if (!children || children.length === 0) return "";
+
+  return children
+    .map((comment) => {
+      if (depth === 1) {
+        const title = `\n## 【${comment.type}】${comment.content}\n\n`;
+        const nested = renderCommentTreeLinear(
+          childrenMap,
+          comment.id,
+          depth + 1,
+        );
+        return `${title}${nested}`;
+      } else if (depth === 2) {
+        const line = `**${comment.type}**: ${comment.content}\n\n`;
+        const nested = renderCommentTreeLinear(
+          childrenMap,
+          comment.id,
+          depth + 1,
+        );
+        return `${line}${nested}`;
+      } else {
+        const prefix = "> ".repeat(depth - 2);
+        const line = `${prefix}**${comment.type}**: ${comment.content}\n`;
+        const nested = renderCommentTreeLinear(
+          childrenMap,
+          comment.id,
+          depth + 1,
+        );
+        if (nested) {
+          return `${line}${prefix}\n${nested}`;
+        }
+        return line;
+      }
+    })
+    .join("");
 }
 
 function circledNumber(n: number): string {

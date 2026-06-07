@@ -1126,6 +1126,10 @@
   <source>Copied to clipboard.</source>
   <target>クリップボードにコピーしました。</target>
 </trans-unit>
+<trans-unit id="sbc030f6b7f3359f8">
+  <source>Generate Comments</source>
+  <target>コメントを生成</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
