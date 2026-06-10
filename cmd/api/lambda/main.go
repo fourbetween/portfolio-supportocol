@@ -12,6 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	"github.com/fourbetween/app-supportocol/cmd/api"
+	"github.com/fourbetween/app-supportocol/cmd/api/middleware"
 	"github.com/fourbetween/app-supportocol/internal/pkg/dbcon"
 	"github.com/fourbetween/app-supportocol/internal/pkg/env"
 	"github.com/fourbetween/pkg-conf/conf"
@@ -46,10 +47,17 @@ func main() {
 		panic(fmt.Errorf("failed to load share config: %w", err))
 	}
 
+	apiKey, err := shareConf.Get("lambda/apikey")
+	if err != nil {
+		panic(fmt.Errorf("failed to get API key: %w", err))
+	}
+
 	handler, err := api.NewHTTPHandler(dbCon, appConf, shareConf, awscfg)
 	if err != nil {
 		panic(err)
 	}
+
+	handler = middleware.APIKey(apiKey)(handler)
 
 	lambda.Start(httpadapter.NewV2(handler).ProxyWithContext)
 }

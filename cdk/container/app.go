@@ -91,7 +91,10 @@ func NewAppContainer(p AppContainerProps) *AppContainer {
 }
 
 func (c *AppContainer) buildVPC() {
-	vpcID, _ := c.shareConf.Get("vpc/id")
+	vpcID, err := c.shareConf.Get("vpc/id")
+	if err != nil {
+		panic(err)
+	}
 	c.vpc = awsec2.Vpc_FromLookup(
 		c.stack,
 		jsii.String("VPC"),
@@ -102,19 +105,28 @@ func (c *AppContainer) buildVPC() {
 }
 
 func (c *AppContainer) buildSecret() {
-	secretArn, _ := c.shareConf.Get("secret/arn")
+	secretArn, err := c.shareConf.Get("secret/arn")
+	if err != nil {
+		panic(err)
+	}
 	c.secret = awssecretsmanager.Secret_FromSecretCompleteArn(c.stack, jsii.String("ShareSecret"), jsii.String(secretArn))
 }
 
 func (c *AppContainer) buildRDS() {
-	rdsInstanceId, _ := c.shareConf.Get("rds/instance/id")
+	rdsInstanceId, err := c.shareConf.Get("rds/instance/id")
+	if err != nil {
+		panic(err)
+	}
 	c.rds = awsrds.DatabaseInstance_FromLookup(c.stack, jsii.String("ShareRDS"), &awsrds.DatabaseInstanceLookupOptions{
 		InstanceIdentifier: jsii.String(rdsInstanceId),
 	})
 }
 
 func (c *AppContainer) buildLogGroup() {
-	loggroupArn, _ := c.shareConf.Get("loggroup/arn")
+	loggroupArn, err := c.shareConf.Get("loggroup/arn")
+	if err != nil {
+		panic(err)
+	}
 	c.logGroup = awslogs.LogGroup_FromLogGroupArn(c.stack, jsii.String("ShareLogGroup"), jsii.String(loggroupArn))
 }
 
@@ -156,10 +168,18 @@ func (c *AppContainer) buildViewCDN() {
 }
 
 func (c *AppContainer) buildAPICDN() {
+	apiKey, err := c.shareConf.Get("lambda/apikey")
+	if err != nil {
+		panic(err)
+	}
 	apiFuncOrigin := awscloudfrontorigins.NewFunctionUrlOrigin(
 		c.apiFuncURL,
 		&awscloudfrontorigins.FunctionUrlOriginProps{
-			IpAddressType: awscloudfront.OriginIpAddressType_DUALSTACK,
+			IpAddressType:      awscloudfront.OriginIpAddressType_DUALSTACK,
+			ConnectionAttempts: jsii.Number(1),
+			CustomHeaders: &map[string]*string{
+				"X-Lambda-Api-Key": jsii.String(apiKey),
+			},
 		},
 	)
 	apiAIFuncOrigin := awscloudfrontorigins.NewFunctionUrlOrigin(
@@ -242,11 +262,12 @@ func (c *AppContainer) buildAPIFunction() {
 		c.stack,
 		jsii.String("ApiFunc"),
 		&awslambda.FunctionProps{
-			Architecture:  awslambda.Architecture_ARM_64(),
-			LogGroup:      c.logGroup,
-			LoggingFormat: awslambda.LoggingFormat_JSON,
-			Handler:       jsii.String("bootstrap"),
-			Runtime:       awslambda.Runtime_PROVIDED_AL2023(),
+			Architecture:                 awslambda.Architecture_ARM_64(),
+			LogGroup:                     c.logGroup,
+			LoggingFormat:                awslambda.LoggingFormat_JSON,
+			ReservedConcurrentExecutions: jsii.Number(30),
+			Handler:                      jsii.String("bootstrap"),
+			Runtime:                      awslambda.Runtime_PROVIDED_AL2023(),
 			Code: awslambda.AssetCode_FromAsset(
 				jsii.String("../cmd/api/lambda/build"),
 				&awss3assets.AssetOptions{},
