@@ -27,7 +27,7 @@ import (
 	"github.com/fourbetween/pkg-conf/conf"
 )
 
-func NewHTTPHandler(dbCon *sql.DB, appConf conf.Service, awscfg aws.Config) (http.Handler, error) {
+func NewHTTPHandler(dbCon *sql.DB, appConf conf.Service, shareConf conf.Service, awscfg aws.Config) (http.Handler, error) {
 	domain, err := appConf.Get("domain")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get domain from config: %w", err)
@@ -43,7 +43,7 @@ func NewHTTPHandler(dbCon *sql.DB, appConf conf.Service, awscfg aws.Config) (htt
 		return nil, fmt.Errorf("failed to create JWT service: %w", err)
 	}
 
-	cons, err := app.NewContainers(dbCon, appConf, awscfg, jwtSrv)
+	cons, err := app.NewContainers(dbCon, appConf, shareConf, awscfg, jwtSrv)
 	if err != nil {
 		return nil, err
 	}

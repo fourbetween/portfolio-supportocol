@@ -18,34 +18,35 @@ import (
 )
 
 type Container struct {
-	CreateDiscussion                *usecase.CreateDiscussionUsecase
-	GetDiscussion                   *usecase.GetDiscussionUsecase
-	ListDiscussions                 *usecase.ListDiscussionsUsecase
-	UpdateDiscussion                *usecase.UpdateDiscussionUsecase
-	UpdateDiscussionStatus          *usecase.UpdateDiscussionStatusUsecase
-	ArchiveDiscussion               *usecase.ArchiveDiscussionUsecase
-	UnarchiveDiscussion             *usecase.UnarchiveDiscussionUsecase
-	DeleteDiscussion                *usecase.DeleteDiscussionUsecase
-	CreateComment                   *usecase.CreateCommentUsecase
-	ListComments                    *usecase.ListCommentsUsecase
-	UpdateComment                   *usecase.UpdateCommentUsecase
-	MoveComment                     *usecase.MoveCommentUsecase
-	ArchiveComment                  *usecase.ArchiveCommentUsecase
-	UnarchiveComment                *usecase.UnarchiveCommentUsecase
-	DeleteComment                   *usecase.DeleteCommentUsecase
-	LiftComment                     *usecase.LiftCommentUsecase
-	UpdateCommentStatus             *usecase.UpdateCommentStatusUsecase
-	RemoveCommentIssue              *usecase.RemoveCommentIssueUsecase
-	ReplaceComments                 *usecase.ReplaceCommentsUsecase
-	RenameCommentType               *usecase.RenameCommentTypeUsecase
-	GenerateComment                 *usecase.GenerateChildCommentsUsecase
-	GenerateDiscussion              *usecase.GenerateDiscussionUsecase
-	GenerateCommentsForDiscussion   *usecase.GenerateCommentsForDiscussionUsecase
+	CreateDiscussion              *usecase.CreateDiscussionUsecase
+	GetDiscussion                 *usecase.GetDiscussionUsecase
+	ListDiscussions               *usecase.ListDiscussionsUsecase
+	UpdateDiscussion              *usecase.UpdateDiscussionUsecase
+	UpdateDiscussionStatus        *usecase.UpdateDiscussionStatusUsecase
+	ArchiveDiscussion             *usecase.ArchiveDiscussionUsecase
+	UnarchiveDiscussion           *usecase.UnarchiveDiscussionUsecase
+	DeleteDiscussion              *usecase.DeleteDiscussionUsecase
+	CreateComment                 *usecase.CreateCommentUsecase
+	ListComments                  *usecase.ListCommentsUsecase
+	UpdateComment                 *usecase.UpdateCommentUsecase
+	MoveComment                   *usecase.MoveCommentUsecase
+	ArchiveComment                *usecase.ArchiveCommentUsecase
+	UnarchiveComment              *usecase.UnarchiveCommentUsecase
+	DeleteComment                 *usecase.DeleteCommentUsecase
+	LiftComment                   *usecase.LiftCommentUsecase
+	UpdateCommentStatus           *usecase.UpdateCommentStatusUsecase
+	RemoveCommentIssue            *usecase.RemoveCommentIssueUsecase
+	ReplaceComments               *usecase.ReplaceCommentsUsecase
+	RenameCommentType             *usecase.RenameCommentTypeUsecase
+	GenerateComment               *usecase.GenerateChildCommentsUsecase
+	GenerateDiscussion            *usecase.GenerateDiscussionUsecase
+	GenerateCommentsForDiscussion *usecase.GenerateCommentsForDiscussionUsecase
 }
 
 func NewContainer(
 	dbCon *sql.DB,
 	appConf conf.Service,
+	shareConf conf.Service,
 	awscfg aws.Config,
 	permSv domain.PermissionService,
 	aiUsageSv domain.AIUsageService,
@@ -66,11 +67,6 @@ func NewContainer(
 	discussionRepo := db.NewDiscussionRepository(dbCon, discussionFac)
 	commentRepo := db.NewCommentRepository(dbCon, commentFac)
 	discussionQS := db.NewDiscussionQueryService(dbCon)
-
-	shareConf, err := conf.NewSSMService("share", awscfg)
-	if err != nil {
-		return nil, fmt.Errorf("failed to load share config: %w", err)
-	}
 
 	geminiAPIKey, err := shareConf.Get("google/gemini/apikey")
 	if err != nil {

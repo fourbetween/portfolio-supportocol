@@ -41,7 +41,12 @@ func main() {
 		panic(fmt.Errorf("failed to load app config: %w", err))
 	}
 
-	handler, err := api.NewHTTPHandler(dbCon, appConf, awscfg)
+	shareConf, err := conf.NewSSMService("share", awscfg)
+	if err != nil {
+		panic(fmt.Errorf("failed to load share config: %w", err))
+	}
+
+	handler, err := api.NewHTTPHandler(dbCon, appConf, shareConf, awscfg)
 	if err != nil {
 		panic(err)
 	}

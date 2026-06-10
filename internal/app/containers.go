@@ -27,7 +27,7 @@ type Containers struct {
 	Workspace *workspace.Container
 }
 
-func NewContainers(dbCon *sql.DB, appConf conf.Service, awscfg aws.Config, jwtSrv jwt.Service) (*Containers, error) {
+func NewContainers(dbCon *sql.DB, appConf conf.Service, shareConf conf.Service, awscfg aws.Config, jwtSrv jwt.Service) (*Containers, error) {
 	dialogueFavSvc := dialoguedb.NewDiscussionFavoritesService(dbCon)
 
 	workspaceCon, err := workspace.NewContainer(dbCon, dialogueFavSvc)
@@ -49,7 +49,7 @@ func NewContainers(dbCon *sql.DB, appConf conf.Service, awscfg aws.Config, jwtSr
 	projectRepo := wsdb.NewProjectRepository(dbCon, projectFac)
 	learningProjectPremiseProv := learningadapter.NewProjectPremiseAdapter(projectRepo)
 
-	learningCon, err := learning.NewContainer(dbCon, appConf, awscfg, learningPermSv, learningAIUsageSv, learningProjectPremiseProv)
+	learningCon, err := learning.NewContainer(dbCon, appConf, shareConf, awscfg, learningPermSv, learningAIUsageSv, learningProjectPremiseProv)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create learning api container: %w", err)
 	}
