@@ -1,6 +1,0 @@
-{
-  "chat.promptFilesRecommendations": {
-    "refactor-go": true,
-    "refactor-lit": true
-  }
-}
