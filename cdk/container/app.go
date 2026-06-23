@@ -284,7 +284,7 @@ func (c *AppContainer) buildAPIFunction() {
 				"ses:SendRawEmail",
 				"ses:SendTemplatedEmail",
 			),
-			Resources: jsii.Strings("arn:aws:ses:ap-northeast-1:966392475035:identity/hick-r.com"),
+			Resources: jsii.Strings("arn:aws:ses:ap-northeast-1:" + *c.stack.Account() + ":identity/hick-r.com"),
 		}),
 	)
 	c.setLambdaBasePermissions(f)
