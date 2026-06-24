@@ -105,6 +105,7 @@ export const baseStyle: CSSResultGroup = [
 
     p {
       margin: 0;
+      color: var(--color-fg-default);
     }
   `,
 ];
