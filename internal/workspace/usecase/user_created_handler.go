@@ -49,51 +49,45 @@ func (h *UserCreatedHandler) OnUserCreated(ctx context.Context, userID string) e
 		return err
 	}
 
-	if err := h.tx.RunInTx(ctx, func(ctx context.Context) error {
-		// 1. パーソナルワークスペースの作成
-		workspace, err := h.workspaceFac.Create(domain.CreateWorkspaceParams{
-			Slug: domain.NewPersonalWorkspaceID(userID),
-			Name: "Personal Workspace",
-			Type: domain.WorkspaceTypePersonal,
-			Plan: plan,
-		})
-		if err != nil {
-			return err
-		}
-		if err := h.workspaceRepo.Save(ctx, workspace); err != nil {
-			return err
-		}
-
-		// 2. メンバー（オーナー）の追加
-		member, err := h.memberFac.Create(domain.CreateMemberParams{
-			WorkspaceID: workspace.ID(),
-			UserID:      userID,
-			Role:        domain.MemberRoleOwner,
-		})
-		if err != nil {
-			return err
-		}
-		if err := h.memberRepo.Save(ctx, member); err != nil {
-			return err
-		}
-
-		// 3. 未分類プロジェクトの作成
-		project, err := h.projectFac.Create(domain.CreateProjectParams{
-			WorkspaceID: workspace.ID(),
-			Name:        "Uncategorized",
-			IsDefault:   true,
-		})
-		if err != nil {
-			return err
-		}
-		if err := h.projectRepo.Save(ctx, project); err != nil {
-			return err
-		}
-
-		return nil
-	}); err != nil {
-		slog.Error("failed to handle user created", "error", err)
+	// 1. パーソナルワークスペースの作成
+	workspace, err := h.workspaceFac.Create(domain.CreateWorkspaceParams{
+		Slug: domain.NewPersonalWorkspaceID(userID),
+		Name: "Personal Workspace",
+		Type: domain.WorkspaceTypePersonal,
+		Plan: plan,
+	})
+	if err != nil {
 		return err
 	}
+	if err := h.workspaceRepo.Save(ctx, workspace); err != nil {
+		return err
+	}
+
+	// 2. メンバー（オーナー）の追加
+	member, err := h.memberFac.Create(domain.CreateMemberParams{
+		WorkspaceID: workspace.ID(),
+		UserID:      userID,
+		Role:        domain.MemberRoleOwner,
+	})
+	if err != nil {
+		return err
+	}
+	if err := h.memberRepo.Save(ctx, member); err != nil {
+		return err
+	}
+
+	// 3. 未分類プロジェクトの作成
+	project, err := h.projectFac.Create(domain.CreateProjectParams{
+		WorkspaceID: workspace.ID(),
+		Name:        "Uncategorized",
+		IsDefault:   true,
+	})
+	if err != nil {
+		return err
+	}
+	if err := h.projectRepo.Save(ctx, project); err != nil {
+		return err
+	}
+
 	return nil
 }

@@ -37,34 +37,28 @@ func (h *UserDeletedHandler) OnUserDeleted(ctx context.Context, userID string) e
 		return err
 	}
 
-	if err := h.tx.RunInTx(ctx, func(ctx context.Context) error {
-		for _, member := range memberships {
-			if err := h.memberRepo.Delete(ctx, member); err != nil {
-				return err
-			}
+	for _, member := range memberships {
+		if err := h.memberRepo.Delete(ctx, member); err != nil {
+			return err
+		}
 
-			count, err := h.memberRepo.CountByWorkspaceID(ctx, member.WorkspaceID())
+		count, err := h.memberRepo.CountByWorkspaceID(ctx, member.WorkspaceID())
+		if err != nil {
+			return err
+		}
+
+		if count == 0 {
+			workspace, err := h.workspaceRepo.Load(ctx, member.WorkspaceID())
 			if err != nil {
+				if errors.Is(err, apperr.ErrNotFound) {
+					continue
+				}
 				return err
 			}
-
-			if count == 0 {
-				workspace, err := h.workspaceRepo.Load(ctx, member.WorkspaceID())
-				if err != nil {
-					if errors.Is(err, apperr.ErrNotFound) {
-						continue
-					}
-					return err
-				}
-				if err := h.workspaceRepo.Delete(ctx, workspace); err != nil {
-					return err
-				}
+			if err := h.workspaceRepo.Delete(ctx, workspace); err != nil {
+				return err
 			}
 		}
-		return nil
-	}); err != nil {
-		slog.Error("failed to handle user deleted", "userID", userID, "error", err)
-		return err
 	}
 	return nil
 }
