@@ -77,7 +77,7 @@ flowchart LR
 
   S3[("S3 (アセットファイル)")]
 
-  subgraph SharedVPC["共有 VPC (SSM参照)"]
+  subgraph SharedVPC["VPC"]
     subgraph Lambda["AWS Lambda"]
       ApiFunc["API サーバー"]
       ApiAIFunc["AI 処理用"]
