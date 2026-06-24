@@ -128,8 +128,11 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 	msg := err.Error()
 	var secErr *ogenerrors.SecurityError
 	if errors.Is(err, apperr.ErrUnauthenticated) ||
+		errors.Is(err, auth.ErrInvalidCredentials) ||
+		errors.Is(err, auth.ErrEmailNotVerified) ||
 		errors.As(err, &secErr) {
 		code = http.StatusUnauthorized
+		msg = "unauthenticated error"
 	} else if errors.Is(err, apperr.ErrPermissionDenied) {
 		code = http.StatusForbidden
 	} else if errors.Is(err, apperr.ErrNotFound) {
@@ -139,7 +142,8 @@ func (h *appHandler) NewError(ctx context.Context, err error) *oas.ErrorStatusCo
 		code = http.StatusConflict
 	} else if errors.Is(err, apperr.ErrInvalidArgument) ||
 		errors.Is(err, auth.ErrInvalidToken) ||
-		errors.Is(err, auth.ErrInvalidPassword) {
+		errors.Is(err, auth.ErrInvalidPassword) ||
+		errors.Is(err, auth.ErrInvalidEmail) {
 		code = http.StatusBadRequest
 	} else if code == http.StatusInternalServerError {
 		slog.Error(err.Error())
