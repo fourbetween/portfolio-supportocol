@@ -103,7 +103,6 @@ export class MarketingHowToUsePage extends LitElement {
           <div class="concept-list">
             <div class="concept-card">
               <div class="concept-header">
-                <ui-icon-account-tree .size=${32}></ui-icon-account-tree>
                 <h3>${msg("Tree-Structured Comments")}</h3>
               </div>
               <p>
@@ -115,7 +114,6 @@ export class MarketingHowToUsePage extends LitElement {
 
             <div class="concept-card">
               <div class="concept-header">
-                <ui-icon-chat-bubble .size=${32}></ui-icon-chat-bubble>
                 <h3>${msg("Comment Frames")}</h3>
               </div>
               <p>
@@ -127,10 +125,6 @@ export class MarketingHowToUsePage extends LitElement {
 
             <div class="concept-card">
               <div class="concept-header">
-                <div class="context-icons">
-                  <ui-icon-school .size=${24}></ui-icon-school>
-                  <ui-icon-forum .size=${24}></ui-icon-forum>
-                </div>
                 <h3>${msg("Flexibility vs Structure")}</h3>
               </div>
               <p>
