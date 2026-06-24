@@ -94,7 +94,7 @@ func NewContainer(
 
 	return &Container{
 		LoginWithGoogle:      usecase.NewLoginWithGoogleUsecase(authSrv, jwtSrv, userCreatedHandler, txManager),
-		SignupWithEmail:      usecase.NewSignupWithEmailUsecase(authSrv, userCreatedHandler, txManager),
+		SignupWithEmail:      usecase.NewSignupWithEmailUsecase(authSrv, userCreatedHandler, userRepo),
 		LoginWithEmail:       usecase.NewLoginWithEmailUsecase(authSrv, jwtSrv),
 		VerifyEmail:          usecase.NewVerifyEmailUsecase(authSrv, userRepo, jwtSrv),
 		ResendVerifyEmail:    usecase.NewResendVerifyEmailUsecase(authSrv),
