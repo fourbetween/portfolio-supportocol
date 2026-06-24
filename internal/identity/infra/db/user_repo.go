@@ -30,17 +30,17 @@ func NewUserRepository(
 	return &UserRepository{db: db, fac: fac}
 }
 
-func (r *UserRepository) Save(ctx context.Context, u *domain.User) error {
+func (r *UserRepository) Create(ctx context.Context, u *domain.User) error {
 	userRecord := model.Users{
 		ID:                          u.ID(),
 		Email:                       u.Email(),
 		Name:                        u.Name(),
-		PasswordHash:                new(u.PasswordHash()),
-		GoogleSub:                   new(u.GoogleSub()),
+		PasswordHash:                nullIfEmpty(u.PasswordHash()),
+		GoogleSub:                   nullIfEmpty(u.GoogleSub()),
 		EmailVerifiedAt:             u.EmailVerifiedAt(),
-		EmailVerifyTokenHash:        new(u.EmailVerifyTokenHash()),
+		EmailVerifyTokenHash:        nullIfEmpty(u.EmailVerifyTokenHash()),
 		EmailVerifyTokenExpiresAt:   u.EmailVerifyTokenExpiresAt(),
-		PasswordResetTokenHash:      new(u.PasswordResetTokenHash()),
+		PasswordResetTokenHash:      nullIfEmpty(u.PasswordResetTokenHash()),
 		PasswordResetTokenExpiresAt: u.PasswordResetTokenExpiresAt(),
 	}
 
@@ -51,30 +51,54 @@ func (r *UserRepository) Save(ctx context.Context, u *domain.User) error {
 				table.Users.UpdatedAt,
 			),
 		).
-		MODEL(userRecord).
-		AS_NEW().
-		ON_DUPLICATE_KEY_UPDATE(
-			table.Users.Name.SET(table.Users.NEW.Name),
-			table.Users.Email.SET(table.Users.NEW.Email),
-			table.Users.PasswordHash.SET(table.Users.NEW.PasswordHash),
-			table.Users.GoogleSub.SET(table.Users.NEW.GoogleSub),
-			table.Users.EmailVerifiedAt.SET(table.Users.NEW.EmailVerifiedAt),
-			table.Users.EmailVerifyTokenHash.SET(table.Users.NEW.EmailVerifyTokenHash),
-			table.Users.EmailVerifyTokenExpiresAt.SET(table.Users.NEW.EmailVerifyTokenExpiresAt),
-			table.Users.PasswordResetTokenHash.SET(table.Users.NEW.PasswordResetTokenHash),
-			table.Users.PasswordResetTokenExpiresAt.SET(table.Users.NEW.PasswordResetTokenExpiresAt),
-		)
+		MODEL(userRecord)
 
 	if _, err := userStmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
-		return fmt.Errorf("failed to save user: %w", err)
+		return fmt.Errorf("failed to create user: %w", err)
 	}
 
 	return nil
 }
 
-func (r *UserRepository) FindByID(ctx context.Context, id string) (*domain.User, error) {
-	cond := table.Users.ID.EQ(mysql.String(id))
-	return r.findByCondition(ctx, cond)
+func (r *UserRepository) Update(ctx context.Context, u *domain.User) error {
+	userRecord := model.Users{
+		ID:                          u.ID(),
+		Email:                       u.Email(),
+		Name:                        u.Name(),
+		PasswordHash:                nullIfEmpty(u.PasswordHash()),
+		GoogleSub:                   nullIfEmpty(u.GoogleSub()),
+		EmailVerifiedAt:             u.EmailVerifiedAt(),
+		EmailVerifyTokenHash:        nullIfEmpty(u.EmailVerifyTokenHash()),
+		EmailVerifyTokenExpiresAt:   u.EmailVerifyTokenExpiresAt(),
+		PasswordResetTokenHash:      nullIfEmpty(u.PasswordResetTokenHash()),
+		PasswordResetTokenExpiresAt: u.PasswordResetTokenExpiresAt(),
+	}
+	stmt := table.Users.
+		UPDATE(
+			table.Users.Name,
+			table.Users.Email,
+			table.Users.PasswordHash,
+			table.Users.GoogleSub,
+			table.Users.EmailVerifiedAt,
+			table.Users.EmailVerifyTokenHash,
+			table.Users.EmailVerifyTokenExpiresAt,
+			table.Users.PasswordResetTokenHash,
+			table.Users.PasswordResetTokenExpiresAt,
+		).
+		MODEL(userRecord).
+		WHERE(table.Users.ID.EQ(mysql.String(u.ID())))
+
+	if _, err := stmt.Exec(dbtx.GetExecutor(ctx, r.db)); err != nil {
+		return fmt.Errorf("failed to update user: %w", err)
+	}
+	return nil
+}
+
+func nullIfEmpty(s string) *string {
+	if s == "" {
+		return nil
+	}
+	return &s
 }
 
 func (r *UserRepository) Delete(ctx context.Context, id string) error {
@@ -87,6 +111,11 @@ func (r *UserRepository) Delete(ctx context.Context, id string) error {
 	}
 
 	return nil
+}
+
+func (r *UserRepository) FindByID(ctx context.Context, id string) (*domain.User, error) {
+	cond := table.Users.ID.EQ(mysql.String(id))
+	return r.findByCondition(ctx, cond)
 }
 
 func (r *UserRepository) FindByEmail(ctx context.Context, email string) (*domain.User, error) {

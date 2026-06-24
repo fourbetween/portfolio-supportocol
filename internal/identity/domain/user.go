@@ -7,7 +7,8 @@ import (
 
 type (
 	Repository interface {
-		Save(ctx context.Context, u *User) error
+		Create(ctx context.Context, u *User) error
+		Update(ctx context.Context, u *User) error
 		Delete(ctx context.Context, id string) error
 		FindByID(ctx context.Context, id string) (*User, error)
 		FindByEmail(ctx context.Context, email string) (*User, error)
