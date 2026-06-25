@@ -96,11 +96,8 @@ func (u *User) GoogleSub() string {
 	return u.googleSub
 }
 
-func (u *User) EmailVerifiedAt() *time.Time {
-	if u.emailVerifiedAt.IsZero() {
-		return nil
-	}
-	return &u.emailVerifiedAt
+func (u *User) EmailVerifiedAt() time.Time {
+	return u.emailVerifiedAt
 }
 
 func (u *User) IsEmailVerified() bool {
@@ -111,22 +108,16 @@ func (u *User) EmailVerifyTokenHash() string {
 	return u.emailVerifyTokenHash
 }
 
-func (u *User) EmailVerifyTokenExpiresAt() *time.Time {
-	if u.emailVerifyTokenExpiresAt.IsZero() {
-		return nil
-	}
-	return &u.emailVerifyTokenExpiresAt
+func (u *User) EmailVerifyTokenExpiresAt() time.Time {
+	return u.emailVerifyTokenExpiresAt
 }
 
 func (u *User) PasswordResetTokenHash() string {
 	return u.passwordResetTokenHash
 }
 
-func (u *User) PasswordResetTokenExpiresAt() *time.Time {
-	if u.passwordResetTokenExpiresAt.IsZero() {
-		return nil
-	}
-	return &u.passwordResetTokenExpiresAt
+func (u *User) PasswordResetTokenExpiresAt() time.Time {
+	return u.passwordResetTokenExpiresAt
 }
 
 func (u *User) HasPassword() bool {

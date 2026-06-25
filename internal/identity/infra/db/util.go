@@ -15,3 +15,17 @@ func ptrToTime(t *time.Time) time.Time {
 	}
 	return *t
 }
+
+func timeToPtr(t time.Time) *time.Time {
+	if t.IsZero() {
+		return nil
+	}
+	return &t
+}
+
+func strToPtr(s string) *string {
+	if s == "" {
+		return nil
+	}
+	return &s
+}

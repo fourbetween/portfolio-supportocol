@@ -35,13 +35,13 @@ func (r *UserRepository) Create(ctx context.Context, u *domain.User) error {
 		ID:                          u.ID(),
 		Email:                       u.Email(),
 		Name:                        u.Name(),
-		PasswordHash:                nullIfEmpty(u.PasswordHash()),
-		GoogleSub:                   nullIfEmpty(u.GoogleSub()),
-		EmailVerifiedAt:             u.EmailVerifiedAt(),
-		EmailVerifyTokenHash:        nullIfEmpty(u.EmailVerifyTokenHash()),
-		EmailVerifyTokenExpiresAt:   u.EmailVerifyTokenExpiresAt(),
-		PasswordResetTokenHash:      nullIfEmpty(u.PasswordResetTokenHash()),
-		PasswordResetTokenExpiresAt: u.PasswordResetTokenExpiresAt(),
+		PasswordHash:                strToPtr(u.PasswordHash()),
+		GoogleSub:                   strToPtr(u.GoogleSub()),
+		EmailVerifiedAt:             timeToPtr(u.EmailVerifiedAt()),
+		EmailVerifyTokenHash:        strToPtr(u.EmailVerifyTokenHash()),
+		EmailVerifyTokenExpiresAt:   timeToPtr(u.EmailVerifyTokenExpiresAt()),
+		PasswordResetTokenHash:      strToPtr(u.PasswordResetTokenHash()),
+		PasswordResetTokenExpiresAt: timeToPtr(u.PasswordResetTokenExpiresAt()),
 	}
 
 	userStmt := table.Users.
@@ -65,13 +65,13 @@ func (r *UserRepository) Update(ctx context.Context, u *domain.User) error {
 		ID:                          u.ID(),
 		Email:                       u.Email(),
 		Name:                        u.Name(),
-		PasswordHash:                nullIfEmpty(u.PasswordHash()),
-		GoogleSub:                   nullIfEmpty(u.GoogleSub()),
-		EmailVerifiedAt:             u.EmailVerifiedAt(),
-		EmailVerifyTokenHash:        nullIfEmpty(u.EmailVerifyTokenHash()),
-		EmailVerifyTokenExpiresAt:   u.EmailVerifyTokenExpiresAt(),
-		PasswordResetTokenHash:      nullIfEmpty(u.PasswordResetTokenHash()),
-		PasswordResetTokenExpiresAt: u.PasswordResetTokenExpiresAt(),
+		PasswordHash:                strToPtr(u.PasswordHash()),
+		GoogleSub:                   strToPtr(u.GoogleSub()),
+		EmailVerifiedAt:             timeToPtr(u.EmailVerifiedAt()),
+		EmailVerifyTokenHash:        strToPtr(u.EmailVerifyTokenHash()),
+		EmailVerifyTokenExpiresAt:   timeToPtr(u.EmailVerifyTokenExpiresAt()),
+		PasswordResetTokenHash:      strToPtr(u.PasswordResetTokenHash()),
+		PasswordResetTokenExpiresAt: timeToPtr(u.PasswordResetTokenExpiresAt()),
 	}
 	stmt := table.Users.
 		UPDATE(
@@ -92,13 +92,6 @@ func (r *UserRepository) Update(ctx context.Context, u *domain.User) error {
 		return fmt.Errorf("failed to update user: %w", err)
 	}
 	return nil
-}
-
-func nullIfEmpty(s string) *string {
-	if s == "" {
-		return nil
-	}
-	return &s
 }
 
 func (r *UserRepository) Delete(ctx context.Context, id string) error {
