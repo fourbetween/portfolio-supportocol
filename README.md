@@ -97,3 +97,10 @@ flowchart LR
   ApiFunc --> ExternalServices
   ApiAIFunc --> ExternalServices
 ```
+
+## その他
+
+- 多言語対応
+- ダークモード対応
+- 祖先コメントをsticky要素として上部に表示
+- APIエンドポイントのバージョン管理
