@@ -7,14 +7,8 @@ import (
 
 type (
 	Repository interface {
-		Create(ctx context.Context, u *User) error
-		Update(ctx context.Context, u *User) error
 		Delete(ctx context.Context, id string) error
 		FindByID(ctx context.Context, id string) (*User, error)
-		FindByEmail(ctx context.Context, email string) (*User, error)
-		FindByGoogleSub(ctx context.Context, googleSub string) (*User, error)
-		FindByEmailVerifyTokenHash(ctx context.Context, tokenHash string) (*User, error)
-		FindByPasswordResetTokenHash(ctx context.Context, tokenHash string) (*User, error)
 	}
 
 	LoadParams struct {
